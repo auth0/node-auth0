@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { GetSupplementalSignalsResponseContent } from "../../../types/GetSupplementalSignalsResponseContent.js";
+import type { UpdateSupplementalSignalsRequestContent } from "./requests/UpdateSupplementalSignalsRequestContent.js";
+import type { PatchSupplementalSignalsResponseContent } from "../../../types/PatchSupplementalSignalsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -45,23 +51,23 @@ export class SupplementalSignals {
      *
      * @param {SupplementalSignals.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.supplementalSignals.get()
      */
     public get(
         requestOptions?: SupplementalSignals.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetSupplementalSignalsResponseContent> {
+    ): core.HttpResponsePromise<GetSupplementalSignalsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(requestOptions));
     }
 
     private async __get(
         requestOptions?: SupplementalSignals.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetSupplementalSignalsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetSupplementalSignalsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -83,7 +89,7 @@ export class SupplementalSignals {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetSupplementalSignalsResponseContent,
+                data: _response.body as GetSupplementalSignalsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -91,13 +97,13 @@ export class SupplementalSignals {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -127,13 +133,13 @@ export class SupplementalSignals {
     /**
      * Update the supplemental signals configuration for a tenant.
      *
-     * @param {Management.UpdateSupplementalSignalsRequestContent} request
+     * @param {UpdateSupplementalSignalsRequestContent} request
      * @param {SupplementalSignals.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.supplementalSignals.patch({
@@ -141,16 +147,16 @@ export class SupplementalSignals {
      *     })
      */
     public patch(
-        request: Management.UpdateSupplementalSignalsRequestContent,
+        request: UpdateSupplementalSignalsRequestContent,
         requestOptions?: SupplementalSignals.RequestOptions,
-    ): core.HttpResponsePromise<Management.PatchSupplementalSignalsResponseContent> {
+    ): core.HttpResponsePromise<PatchSupplementalSignalsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__patch(request, requestOptions));
     }
 
     private async __patch(
-        request: Management.UpdateSupplementalSignalsRequestContent,
+        request: UpdateSupplementalSignalsRequestContent,
         requestOptions?: SupplementalSignals.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.PatchSupplementalSignalsResponseContent>> {
+    ): Promise<core.WithRawResponse<PatchSupplementalSignalsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -175,7 +181,7 @@ export class SupplementalSignals {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.PatchSupplementalSignalsResponseContent,
+                data: _response.body as PatchSupplementalSignalsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -183,13 +189,13 @@ export class SupplementalSignals {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

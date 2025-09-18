@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { PaymentRequiredError } from "../../../../../errors/PaymentRequiredError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetUniversalLoginTemplateResponseContent } from "../../../../../types/GetUniversalLoginTemplateResponseContent.js";
+import type { UpdateUniversalLoginTemplateRequestContent } from "../../../../../types/UpdateUniversalLoginTemplateRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { ConflictError } from "../../../../../errors/ConflictError.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,24 +51,24 @@ export class Templates {
     /**
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link PaymentRequiredError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.templates.getUniversalLogin()
      */
     public getUniversalLogin(
         requestOptions?: Templates.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetUniversalLoginTemplateResponseContent> {
+    ): core.HttpResponsePromise<GetUniversalLoginTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__getUniversalLogin(requestOptions));
     }
 
     private async __getUniversalLogin(
         requestOptions?: Templates.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetUniversalLoginTemplateResponseContent>> {
+    ): Promise<core.WithRawResponse<GetUniversalLoginTemplateResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -82,7 +90,7 @@ export class Templates {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetUniversalLoginTemplateResponseContent,
+                data: _response.body as GetUniversalLoginTemplateResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -90,15 +98,15 @@ export class Templates {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 402:
-                    throw new Management.PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
+                    throw new PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -154,28 +162,28 @@ export class Templates {
      * &lt;/code&gt;
      * </pre>
      *
-     * @param {Management.UpdateUniversalLoginTemplateRequestContent} request
+     * @param {UpdateUniversalLoginTemplateRequestContent} request
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link PaymentRequiredError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.templates.updateUniversalLogin("string")
      */
     public updateUniversalLogin(
-        request: Management.UpdateUniversalLoginTemplateRequestContent,
+        request: UpdateUniversalLoginTemplateRequestContent,
         requestOptions?: Templates.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__updateUniversalLogin(request, requestOptions));
     }
 
     private async __updateUniversalLogin(
-        request: Management.UpdateUniversalLoginTemplateRequestContent,
+        request: UpdateUniversalLoginTemplateRequestContent,
         requestOptions?: Templates.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -207,17 +215,17 @@ export class Templates {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 402:
-                    throw new Management.PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
+                    throw new PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -249,10 +257,10 @@ export class Templates {
     /**
      * @param {Templates.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link PaymentRequiredError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.templates.deleteUniversalLogin()
@@ -290,13 +298,13 @@ export class Templates {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 402:
-                    throw new Management.PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
+                    throw new PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

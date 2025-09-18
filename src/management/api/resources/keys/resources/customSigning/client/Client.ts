@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetCustomSigningKeysResponseContent } from "../../../../../types/GetCustomSigningKeysResponseContent.js";
+import type { SetCustomSigningKeysRequestContent } from "./requests/SetCustomSigningKeysRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import type { SetCustomSigningKeysResponseContent } from "../../../../../types/SetCustomSigningKeysResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -45,23 +52,23 @@ export class CustomSigning {
      *
      * @param {CustomSigning.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.keys.customSigning.get()
      */
     public get(
         requestOptions?: CustomSigning.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetCustomSigningKeysResponseContent> {
+    ): core.HttpResponsePromise<GetCustomSigningKeysResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(requestOptions));
     }
 
     private async __get(
         requestOptions?: CustomSigning.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetCustomSigningKeysResponseContent>> {
+    ): Promise<core.WithRawResponse<GetCustomSigningKeysResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -83,7 +90,7 @@ export class CustomSigning {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetCustomSigningKeysResponseContent,
+                data: _response.body as GetCustomSigningKeysResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -91,13 +98,13 @@ export class CustomSigning {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -127,13 +134,13 @@ export class CustomSigning {
     /**
      * Create or replace entire jwks representation of custom signing keys.
      *
-     * @param {Management.SetCustomSigningKeysRequestContent} request
+     * @param {SetCustomSigningKeysRequestContent} request
      * @param {CustomSigning.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.keys.customSigning.set({
@@ -143,16 +150,16 @@ export class CustomSigning {
      *     })
      */
     public set(
-        request: Management.SetCustomSigningKeysRequestContent,
+        request: SetCustomSigningKeysRequestContent,
         requestOptions?: CustomSigning.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetCustomSigningKeysResponseContent> {
+    ): core.HttpResponsePromise<SetCustomSigningKeysResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(request, requestOptions));
     }
 
     private async __set(
-        request: Management.SetCustomSigningKeysRequestContent,
+        request: SetCustomSigningKeysRequestContent,
         requestOptions?: CustomSigning.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetCustomSigningKeysResponseContent>> {
+    ): Promise<core.WithRawResponse<SetCustomSigningKeysResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -177,7 +184,7 @@ export class CustomSigning {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetCustomSigningKeysResponseContent,
+                data: _response.body as SetCustomSigningKeysResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -185,13 +192,13 @@ export class CustomSigning {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -223,9 +230,9 @@ export class CustomSigning {
      *
      * @param {CustomSigning.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.keys.customSigning.delete()
@@ -261,11 +268,11 @@ export class CustomSigning {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

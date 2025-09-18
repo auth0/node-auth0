@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { GetActiveUsersCountStatsResponseContent } from "../../../types/GetActiveUsersCountStatsResponseContent.js";
+// TODO: Why are these in a different directory?
+import type { GetDailyStatsRequestParameters } from "./requests/GetDailyStatsRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import type { DailyStats } from "../../../types/DailyStats.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -45,22 +52,22 @@ export class Stats {
      *
      * @param {Stats.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.stats.getActiveUsersCount()
      */
     public getActiveUsersCount(
         requestOptions?: Stats.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetActiveUsersCountStatsResponseContent> {
+    ): core.HttpResponsePromise<GetActiveUsersCountStatsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__getActiveUsersCount(requestOptions));
     }
 
     private async __getActiveUsersCount(
         requestOptions?: Stats.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetActiveUsersCountStatsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetActiveUsersCountStatsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -82,7 +89,7 @@ export class Stats {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetActiveUsersCountStatsResponseContent,
+                data: _response.body as GetActiveUsersCountStatsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -90,11 +97,11 @@ export class Stats {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -124,28 +131,28 @@ export class Stats {
     /**
      * Retrieve the number of logins, signups and breached-password detections (subscription required) that occurred each day within a specified date range.
      *
-     * @param {Management.GetDailyStatsRequestParameters} request
+     * @param {GetDailyStatsRequestParameters} request
      * @param {Stats.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.stats.getDaily()
      */
     public getDaily(
-        request: Management.GetDailyStatsRequestParameters = {},
+        request: GetDailyStatsRequestParameters = {},
         requestOptions?: Stats.RequestOptions,
-    ): core.HttpResponsePromise<Management.DailyStats[]> {
+    ): core.HttpResponsePromise<DailyStats[]> {
         return core.HttpResponsePromise.fromPromise(this.__getDaily(request, requestOptions));
     }
 
     private async __getDaily(
-        request: Management.GetDailyStatsRequestParameters = {},
+        request: GetDailyStatsRequestParameters = {},
         requestOptions?: Stats.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.DailyStats[]>> {
+    ): Promise<core.WithRawResponse<DailyStats[]>> {
         const { from: from_, to } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (from_ != null) {
@@ -176,19 +183,19 @@ export class Stats {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.DailyStats[], rawResponse: _response.rawResponse };
+            return { data: _response.body as DailyStats[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

@@ -4,7 +4,18 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { GetEmailProviderRequestParameters } from "./requests/GetEmailProviderRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetEmailProviderResponseContent } from "../../../../../types/GetEmailProviderResponseContent.js";
+import type { CreateEmailProviderRequestContent } from "./requests/CreateEmailProviderRequestContent.js";
+import { ConflictError } from "../../../../../errors/ConflictError.js";
+import type { CreateEmailProviderResponseContent } from "../../../../../types/CreateEmailProviderResponseContent.js";
+import type { UpdateEmailProviderRequestContent } from "./requests/UpdateEmailProviderRequestContent.js";
+import type { UpdateEmailProviderResponseContent } from "../../../../../types/UpdateEmailProviderResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,29 +54,29 @@ export class Provider {
     /**
      * Retrieve details of the <a href="https://auth0.com/docs/customize/email/smtp-email-providers">email provider configuration</a> in your tenant. A list of fields to include or exclude may also be specified.
      *
-     * @param {Management.GetEmailProviderRequestParameters} request
+     * @param {GetEmailProviderRequestParameters} request
      * @param {Provider.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emails.provider.get()
      */
     public get(
-        request: Management.GetEmailProviderRequestParameters = {},
+        request: GetEmailProviderRequestParameters = {},
         requestOptions?: Provider.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetEmailProviderResponseContent> {
+    ): core.HttpResponsePromise<GetEmailProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: Management.GetEmailProviderRequestParameters = {},
+        request: GetEmailProviderRequestParameters = {},
         requestOptions?: Provider.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetEmailProviderResponseContent>> {
+    ): Promise<core.WithRawResponse<GetEmailProviderResponseContent>> {
         const { fields, include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -97,7 +108,7 @@ export class Provider {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetEmailProviderResponseContent,
+                data: _response.body as GetEmailProviderResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -105,15 +116,15 @@ export class Provider {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -184,14 +195,14 @@ export class Provider {
      *   </li>
      * </ul>
      *
-     * @param {Management.CreateEmailProviderRequestContent} request
+     * @param {CreateEmailProviderRequestContent} request
      * @param {Provider.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emails.provider.create({
@@ -202,16 +213,16 @@ export class Provider {
      *     })
      */
     public create(
-        request: Management.CreateEmailProviderRequestContent,
+        request: CreateEmailProviderRequestContent,
         requestOptions?: Provider.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateEmailProviderResponseContent> {
+    ): core.HttpResponsePromise<CreateEmailProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateEmailProviderRequestContent,
+        request: CreateEmailProviderRequestContent,
         requestOptions?: Provider.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateEmailProviderResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateEmailProviderResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -236,7 +247,7 @@ export class Provider {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateEmailProviderResponseContent,
+                data: _response.body as CreateEmailProviderResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -244,15 +255,15 @@ export class Provider {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -284,11 +295,11 @@ export class Provider {
      *
      * @param {Provider.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emails.provider.delete()
@@ -324,15 +335,15 @@ export class Provider {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -401,30 +412,30 @@ export class Provider {
      *   </li>
      * </ul>
      *
-     * @param {Management.UpdateEmailProviderRequestContent} request
+     * @param {UpdateEmailProviderRequestContent} request
      * @param {Provider.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emails.provider.update()
      */
     public update(
-        request: Management.UpdateEmailProviderRequestContent = {},
+        request: UpdateEmailProviderRequestContent = {},
         requestOptions?: Provider.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateEmailProviderResponseContent> {
+    ): core.HttpResponsePromise<UpdateEmailProviderResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.UpdateEmailProviderRequestContent = {},
+        request: UpdateEmailProviderRequestContent = {},
         requestOptions?: Provider.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateEmailProviderResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateEmailProviderResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -449,7 +460,7 @@ export class Provider {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateEmailProviderResponseContent,
+                data: _response.body as UpdateEmailProviderResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -457,17 +468,17 @@ export class Provider {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

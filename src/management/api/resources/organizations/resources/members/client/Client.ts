@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListOrganizationMembersRequestParameters } from "./requests/ListOrganizationMembersRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { OrganizationMember } from "../../../../../types/OrganizationMember.js";
+import type { ListOrganizationMembersPaginatedResponseContent } from "../../../../../types/ListOrganizationMembersPaginatedResponseContent.js";
+import type { CreateOrganizationMemberRequestContent } from "./requests/CreateOrganizationMemberRequestContent.js";
+import type { DeleteOrganizationMembersRequestContent } from "./requests/DeleteOrganizationMembersRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 import { Roles } from "../resources/roles/client/Client.js";
@@ -71,26 +79,26 @@ export class Members {
      * To search by checkpoint, use the following parameters: - from: Optional id from which to start selection. - take: The total amount of entries to retrieve when using the from parameter. Defaults to 50. Note: The first time you call this endpoint using Checkpoint Pagination, you should omit the <code>from</code> parameter. If there are more results, a <code>next</code> value will be included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, this indicates there are no more pages remaining.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.ListOrganizationMembersRequestParameters} request
+     * @param {ListOrganizationMembersRequestParameters} request
      * @param {Members.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.members.list("id")
+     *     await client.members.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListOrganizationMembersRequestParameters = {},
+        request: ListOrganizationMembersRequestParameters = {},
         requestOptions?: Members.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationMember>> {
+    ): Promise<core.Page<OrganizationMember>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.organizations.ListOrganizationMembersRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListOrganizationMembersPaginatedResponseContent>> => {
+                request: ListOrganizationMembersRequestParameters,
+            ): Promise<core.WithRawResponse<ListOrganizationMembersPaginatedResponseContent>> => {
                 const { from: from_, take = 50, fields, include_fields: includeFields } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -127,29 +135,20 @@ export class Members {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListOrganizationMembersPaginatedResponseContent,
+                        data: _response.body as ListOrganizationMembersPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -178,10 +177,7 @@ export class Members {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationMembersPaginatedResponseContent,
-            Management.OrganizationMember
-        >({
+        return new core.Pageable<ListOrganizationMembersPaginatedResponseContent, OrganizationMember>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -199,22 +195,22 @@ export class Members {
      * To add a user to an Organization through this action, the user must already exist in your tenant. If a user does not yet exist, you can <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">invite them to create an account</a>, manually create them through the Auth0 Dashboard, or use the Management API.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.CreateOrganizationMemberRequestContent} request
+     * @param {CreateOrganizationMemberRequestContent} request
      * @param {Members.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.members.create("id", {
+     *     await client.members.create("id", {
      *         members: ["members"]
      *     })
      */
     public create(
         id: string,
-        request: Management.CreateOrganizationMemberRequestContent,
+        request: CreateOrganizationMemberRequestContent,
         requestOptions?: Members.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
@@ -222,7 +218,7 @@ export class Members {
 
     private async __create(
         id: string,
-        request: Management.CreateOrganizationMemberRequestContent,
+        request: CreateOrganizationMemberRequestContent,
         requestOptions?: Members.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -254,13 +250,13 @@ export class Members {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -291,22 +287,22 @@ export class Members {
 
     /**
      * @param {string} id - Organization identifier.
-     * @param {Management.DeleteOrganizationMembersRequestContent} request
+     * @param {DeleteOrganizationMembersRequestContent} request
      * @param {Members.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.members.delete("id", {
+     *     await client.members.delete("id", {
      *         members: ["members"]
      *     })
      */
     public delete(
         id: string,
-        request: Management.DeleteOrganizationMembersRequestContent,
+        request: DeleteOrganizationMembersRequestContent,
         requestOptions?: Members.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, request, requestOptions));
@@ -314,7 +310,7 @@ export class Members {
 
     private async __delete(
         id: string,
-        request: Management.DeleteOrganizationMembersRequestContent,
+        request: DeleteOrganizationMembersRequestContent,
         requestOptions?: Members.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -346,13 +342,13 @@ export class Members {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

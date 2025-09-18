@@ -4,7 +4,25 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListUsersRequestParameters } from "./requests/ListUsersRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import { ServiceUnavailableError } from "../../../errors/ServiceUnavailableError.js";
+import type { UserResponseSchema } from "../../../types/UserResponseSchema.js";
+import type { ListUsersOffsetPaginatedResponseContent } from "../../../types/ListUsersOffsetPaginatedResponseContent.js";
+import type { CreateUserRequestContent } from "./requests/CreateUserRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateUserResponseContent } from "../../../types/CreateUserResponseContent.js";
+import type { ListUsersByEmailRequestParameters } from "./requests/ListUsersByEmailRequestParameters.js";
+import type { GetUserRequestParameters } from "./requests/GetUserRequestParameters.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetUserResponseContent } from "../../../types/GetUserResponseContent.js";
+import type { UpdateUserRequestContent } from "./requests/UpdateUserRequestContent.js";
+import type { UpdateUserResponseContent } from "../../../types/UpdateUserResponseContent.js";
+import type { RegenerateUsersRecoveryCodeResponseContent } from "../../../types/RegenerateUsersRecoveryCodeResponseContent.js";
+import type { RevokeUserAccessRequestContent } from "./requests/RevokeUserAccessRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { AuthenticationMethods } from "../resources/authenticationMethods/client/Client.js";
@@ -140,26 +158,26 @@ export class Users {
      *
      * Auth0 limits the number of users you can return. If you exceed this threshold, please redefine your search, use the <a href="https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports">export job</a>, or the <a href="https://auth0.com/docs/extensions/user-import-export">User Import / Export</a> extension.
      *
-     * @param {Management.ListUsersRequestParameters} request
+     * @param {ListUsersRequestParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.ServiceUnavailableError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link ServiceUnavailableError}
      *
      * @example
      *     await client.users.list()
      */
     public async list(
-        request: Management.ListUsersRequestParameters = {},
+        request: ListUsersRequestParameters = {},
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.Page<Management.UserResponseSchema>> {
+    ): Promise<core.Page<UserResponseSchema>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListUsersRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListUsersOffsetPaginatedResponseContent>> => {
+                request: ListUsersRequestParameters,
+            ): Promise<core.WithRawResponse<ListUsersOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
                     per_page: perPage = 50,
@@ -225,34 +243,22 @@ export class Users {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListUsersOffsetPaginatedResponseContent,
+                        data: _response.body as ListUsersOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         case 503:
-                            throw new Management.ServiceUnavailableError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -280,7 +286,7 @@ export class Users {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListUsersOffsetPaginatedResponseContent, Management.UserResponseSchema>({
+        return new core.Pageable<ListUsersOffsetPaginatedResponseContent, UserResponseSchema>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.users ?? []).length > 0,
@@ -297,14 +303,14 @@ export class Users {
      *
      * Note: <code>connection</code> is required but other parameters such as <code>email</code> and <code>password</code> are dependent upon the type of connection.
      *
-     * @param {Management.CreateUserRequestContent} request
+     * @param {CreateUserRequestContent} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.create({
@@ -312,16 +318,16 @@ export class Users {
      *     })
      */
     public create(
-        request: Management.CreateUserRequestContent,
+        request: CreateUserRequestContent,
         requestOptions?: Users.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateUserResponseContent> {
+    ): core.HttpResponsePromise<CreateUserResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateUserRequestContent,
+        request: CreateUserRequestContent,
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateUserResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateUserResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -345,21 +351,21 @@ export class Users {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.CreateUserResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as CreateUserResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -393,13 +399,13 @@ export class Users {
      *
      * Therefore, when using this endpoint, make sure that you are searching for users via email addresses using the correct case.
      *
-     * @param {Management.ListUsersByEmailRequestParameters} request
+     * @param {ListUsersByEmailRequestParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.listUsersByEmail({
@@ -407,16 +413,16 @@ export class Users {
      *     })
      */
     public listUsersByEmail(
-        request: Management.ListUsersByEmailRequestParameters,
+        request: ListUsersByEmailRequestParameters,
         requestOptions?: Users.RequestOptions,
-    ): core.HttpResponsePromise<Management.UserResponseSchema[]> {
+    ): core.HttpResponsePromise<UserResponseSchema[]> {
         return core.HttpResponsePromise.fromPromise(this.__listUsersByEmail(request, requestOptions));
     }
 
     private async __listUsersByEmail(
-        request: Management.ListUsersByEmailRequestParameters,
+        request: ListUsersByEmailRequestParameters,
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UserResponseSchema[]>> {
+    ): Promise<core.WithRawResponse<UserResponseSchema[]>> {
         const { fields, include_fields: includeFields, email } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -448,19 +454,19 @@ export class Users {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UserResponseSchema[], rawResponse: _response.rawResponse };
+            return { data: _response.body as UserResponseSchema[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -491,31 +497,31 @@ export class Users {
      * Retrieve user details. A list of fields to include or exclude may also be specified. For more information, see <a href="https://auth0.com/docs/manage-users/user-search/retrieve-users-with-get-users-endpoint">Retrieve Users with the Get Users Endpoint</a>.
      *
      * @param {string} id - ID of the user to retrieve.
-     * @param {Management.GetUserRequestParameters} request
+     * @param {GetUserRequestParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.get("id")
      */
     public get(
         id: string,
-        request: Management.GetUserRequestParameters = {},
+        request: GetUserRequestParameters = {},
         requestOptions?: Users.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetUserResponseContent> {
+    ): core.HttpResponsePromise<GetUserResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetUserRequestParameters = {},
+        request: GetUserRequestParameters = {},
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetUserResponseContent>> {
+    ): Promise<core.WithRawResponse<GetUserResponseContent>> {
         const { fields, include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -546,21 +552,21 @@ export class Users {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetUserResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetUserResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -593,10 +599,10 @@ export class Users {
      * @param {string} id - ID of the user to delete.
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.delete("id")
@@ -632,13 +638,13 @@ export class Users {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -738,31 +744,31 @@ export class Users {
      * }</code></pre>
      *
      * @param {string} id - ID of the user to update.
-     * @param {Management.UpdateUserRequestContent} request
+     * @param {UpdateUserRequestContent} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateUserRequestContent = {},
+        request: UpdateUserRequestContent = {},
         requestOptions?: Users.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateUserResponseContent> {
+    ): core.HttpResponsePromise<UpdateUserResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateUserRequestContent = {},
+        request: UpdateUserRequestContent = {},
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateUserResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateUserResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -786,21 +792,21 @@ export class Users {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UpdateUserResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as UpdateUserResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -833,10 +839,10 @@ export class Users {
      * @param {string} id - ID of the user to regenerate a multi-factor authentication recovery code for.
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
      *
      * @example
      *     await client.users.regenerateRecoveryCode("id")
@@ -844,14 +850,14 @@ export class Users {
     public regenerateRecoveryCode(
         id: string,
         requestOptions?: Users.RequestOptions,
-    ): core.HttpResponsePromise<Management.RegenerateUsersRecoveryCodeResponseContent> {
+    ): core.HttpResponsePromise<RegenerateUsersRecoveryCodeResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__regenerateRecoveryCode(id, requestOptions));
     }
 
     private async __regenerateRecoveryCode(
         id: string,
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.RegenerateUsersRecoveryCodeResponseContent>> {
+    ): Promise<core.WithRawResponse<RegenerateUsersRecoveryCodeResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -873,7 +879,7 @@ export class Users {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.RegenerateUsersRecoveryCodeResponseContent,
+                data: _response.body as RegenerateUsersRecoveryCodeResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -881,13 +887,13 @@ export class Users {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -920,20 +926,20 @@ export class Users {
      * Revokes selected resources related to a user (sessions, refresh tokens, ...).
      *
      * @param {string} id - ID of the user.
-     * @param {Management.RevokeUserAccessRequestContent} request
+     * @param {RevokeUserAccessRequestContent} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.revokeAccess("id")
      */
     public revokeAccess(
         id: string,
-        request: Management.RevokeUserAccessRequestContent = {},
+        request: RevokeUserAccessRequestContent = {},
         requestOptions?: Users.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__revokeAccess(id, request, requestOptions));
@@ -941,7 +947,7 @@ export class Users {
 
     private async __revokeAccess(
         id: string,
-        request: Management.RevokeUserAccessRequestContent = {},
+        request: RevokeUserAccessRequestContent = {},
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -973,13 +979,13 @@ export class Users {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

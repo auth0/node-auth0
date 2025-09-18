@@ -4,7 +4,18 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListOrganizationInvitationsRequestParameters } from "./requests/ListOrganizationInvitationsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { OrganizationInvitation } from "../../../../../types/OrganizationInvitation.js";
+import type { ListOrganizationInvitationsOffsetPaginatedResponseContent } from "../../../../../types/ListOrganizationInvitationsOffsetPaginatedResponseContent.js";
+import type { CreateOrganizationInvitationRequestContent } from "./requests/CreateOrganizationInvitationRequestContent.js";
+import type { CreateOrganizationInvitationResponseContent } from "../../../../../types/CreateOrganizationInvitationResponseContent.js";
+import type { GetOrganizationInvitationRequestParameters } from "./requests/GetOrganizationInvitationRequestParameters.js";
+import type { GetOrganizationInvitationResponseContent } from "../../../../../types/GetOrganizationInvitationResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,27 +55,27 @@ export class Invitations {
      * Retrieve a detailed list of invitations sent to users for a specific Organization. The list includes details such as inviter and invitee information, invitation URLs, and dates of creation and expiration. To learn more about Organization invitations, review <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite Organization Members</a>.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.ListOrganizationInvitationsRequestParameters} request
+     * @param {ListOrganizationInvitationsRequestParameters} request
      * @param {Invitations.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.invitations.list("id")
+     *     await client.invitations.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListOrganizationInvitationsRequestParameters = {},
+        request: ListOrganizationInvitationsRequestParameters = {},
         requestOptions?: Invitations.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationInvitation>> {
+    ): Promise<core.Page<OrganizationInvitation>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.organizations.ListOrganizationInvitationsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListOrganizationInvitationsOffsetPaginatedResponseContent>> => {
+                request: ListOrganizationInvitationsRequestParameters,
+            ): Promise<core.WithRawResponse<ListOrganizationInvitationsOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
                     per_page: perPage = 50,
@@ -114,31 +125,22 @@ export class Invitations {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListOrganizationInvitationsOffsetPaginatedResponseContent,
+                        data: _response.body as ListOrganizationInvitationsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -168,10 +170,7 @@ export class Invitations {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationInvitationsOffsetPaginatedResponseContent,
-            Management.OrganizationInvitation
-        >({
+        return new core.Pageable<ListOrganizationInvitationsOffsetPaginatedResponseContent, OrganizationInvitation>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.invitations ?? []).length > 0,
@@ -187,17 +186,17 @@ export class Invitations {
      * Create a user invitation for a specific Organization. Upon creation, the listed user receives an email inviting them to join the Organization. To learn more about Organization invitations, review <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/invite-members">Invite Organization Members</a>.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.CreateOrganizationInvitationRequestContent} request
+     * @param {CreateOrganizationInvitationRequestContent} request
      * @param {Invitations.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.invitations.create("id", {
+     *     await client.invitations.create("id", {
      *         inviter: {
      *             name: "name"
      *         },
@@ -209,17 +208,17 @@ export class Invitations {
      */
     public create(
         id: string,
-        request: Management.CreateOrganizationInvitationRequestContent,
+        request: CreateOrganizationInvitationRequestContent,
         requestOptions?: Invitations.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateOrganizationInvitationResponseContent> {
+    ): core.HttpResponsePromise<CreateOrganizationInvitationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
     }
 
     private async __create(
         id: string,
-        request: Management.CreateOrganizationInvitationRequestContent,
+        request: CreateOrganizationInvitationRequestContent,
         requestOptions?: Invitations.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateOrganizationInvitationResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateOrganizationInvitationResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -244,7 +243,7 @@ export class Invitations {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateOrganizationInvitationResponseContent,
+                data: _response.body as CreateOrganizationInvitationResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -252,15 +251,15 @@ export class Invitations {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -292,33 +291,33 @@ export class Invitations {
     /**
      * @param {string} id - Organization identifier.
      * @param {string} invitationId - The id of the user invitation.
-     * @param {Management.GetOrganizationInvitationRequestParameters} request
+     * @param {GetOrganizationInvitationRequestParameters} request
      * @param {Invitations.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.invitations.get("id", "invitation_id")
+     *     await client.invitations.get("id", "invitation_id")
      */
     public get(
         id: string,
         invitationId: string,
-        request: Management.GetOrganizationInvitationRequestParameters = {},
+        request: GetOrganizationInvitationRequestParameters = {},
         requestOptions?: Invitations.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetOrganizationInvitationResponseContent> {
+    ): core.HttpResponsePromise<GetOrganizationInvitationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, invitationId, request, requestOptions));
     }
 
     private async __get(
         id: string,
         invitationId: string,
-        request: Management.GetOrganizationInvitationRequestParameters = {},
+        request: GetOrganizationInvitationRequestParameters = {},
         requestOptions?: Invitations.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetOrganizationInvitationResponseContent>> {
+    ): Promise<core.WithRawResponse<GetOrganizationInvitationResponseContent>> {
         const { fields, include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -350,7 +349,7 @@ export class Invitations {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetOrganizationInvitationResponseContent,
+                data: _response.body as GetOrganizationInvitationResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -358,15 +357,15 @@ export class Invitations {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -400,13 +399,13 @@ export class Invitations {
      * @param {string} invitationId - The id of the user invitation.
      * @param {Invitations.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.invitations.delete("id", "invitation_id")
+     *     await client.invitations.delete("id", "invitation_id")
      */
     public delete(
         id: string,
@@ -447,13 +446,13 @@ export class Invitations {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

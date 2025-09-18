@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListEventStreamDeliveriesRequestParameters } from "./requests/ListEventStreamDeliveriesRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { EventStreamDelivery } from "../../../../../types/EventStreamDelivery.js";
+import type { GetEventStreamDeliveryHistoryResponseContent } from "../../../../../types/GetEventStreamDeliveryHistoryResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -42,31 +49,31 @@ export class Deliveries {
 
     /**
      * @param {string} id - Unique identifier for the event stream.
-     * @param {Management.ListEventStreamDeliveriesRequestParameters} request
+     * @param {ListEventStreamDeliveriesRequestParameters} request
      * @param {Deliveries.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.deliveries.list("id")
      */
     public list(
         id: string,
-        request: Management.ListEventStreamDeliveriesRequestParameters = {},
+        request: ListEventStreamDeliveriesRequestParameters = {},
         requestOptions?: Deliveries.RequestOptions,
-    ): core.HttpResponsePromise<Management.EventStreamDelivery[]> {
+    ): core.HttpResponsePromise<EventStreamDelivery[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(id, request, requestOptions));
     }
 
     private async __list(
         id: string,
-        request: Management.ListEventStreamDeliveriesRequestParameters = {},
+        request: ListEventStreamDeliveriesRequestParameters = {},
         requestOptions?: Deliveries.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.EventStreamDelivery[]>> {
+    ): Promise<core.WithRawResponse<EventStreamDelivery[]>> {
         const {
             statuses,
             event_types: eventTypes,
@@ -120,21 +127,21 @@ export class Deliveries {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.EventStreamDelivery[], rawResponse: _response.rawResponse };
+            return { data: _response.body as EventStreamDelivery[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -168,10 +175,10 @@ export class Deliveries {
      * @param {string} eventId - Unique identifier for the event
      * @param {Deliveries.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.deliveries.getHistory("id", "event_id")
@@ -180,7 +187,7 @@ export class Deliveries {
         id: string,
         eventId: string,
         requestOptions?: Deliveries.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetEventStreamDeliveryHistoryResponseContent> {
+    ): core.HttpResponsePromise<GetEventStreamDeliveryHistoryResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__getHistory(id, eventId, requestOptions));
     }
 
@@ -188,7 +195,7 @@ export class Deliveries {
         id: string,
         eventId: string,
         requestOptions?: Deliveries.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetEventStreamDeliveryHistoryResponseContent>> {
+    ): Promise<core.WithRawResponse<GetEventStreamDeliveryHistoryResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -210,7 +217,7 @@ export class Deliveries {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetEventStreamDeliveryHistoryResponseContent,
+                data: _response.body as GetEventStreamDeliveryHistoryResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -218,13 +225,13 @@ export class Deliveries {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

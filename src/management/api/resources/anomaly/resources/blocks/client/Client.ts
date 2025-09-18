@@ -4,7 +4,12 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { AnomalyIpFormat } from "../../../../../types/AnomalyIpFormat.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,27 +48,24 @@ export class Blocks {
     /**
      * Check if the given IP address is blocked via the <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> due to multiple suspicious attempts.
      *
-     * @param {Management.AnomalyIpFormat} id - IP address to check.
+     * @param {AnomalyIpFormat} id - IP address to check.
      * @param {Blocks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.anomaly.blocks.checkIp("id")
      */
-    public checkIp(
-        id: Management.AnomalyIpFormat,
-        requestOptions?: Blocks.RequestOptions,
-    ): core.HttpResponsePromise<void> {
+    public checkIp(id: AnomalyIpFormat, requestOptions?: Blocks.RequestOptions): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__checkIp(id, requestOptions));
     }
 
     private async __checkIp(
-        id: Management.AnomalyIpFormat,
+        id: AnomalyIpFormat,
         requestOptions?: Blocks.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -92,15 +94,15 @@ export class Blocks {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -130,26 +132,23 @@ export class Blocks {
     /**
      * Remove a block imposed by <a href="https://auth0.com/docs/configure/attack-protection/suspicious-ip-throttling">Suspicious IP Throttling</a> for the given IP address.
      *
-     * @param {Management.AnomalyIpFormat} id - IP address to unblock.
+     * @param {AnomalyIpFormat} id - IP address to unblock.
      * @param {Blocks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.anomaly.blocks.unblockIp("id")
      */
-    public unblockIp(
-        id: Management.AnomalyIpFormat,
-        requestOptions?: Blocks.RequestOptions,
-    ): core.HttpResponsePromise<void> {
+    public unblockIp(id: AnomalyIpFormat, requestOptions?: Blocks.RequestOptions): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__unblockIp(id, requestOptions));
     }
 
     private async __unblockIp(
-        id: Management.AnomalyIpFormat,
+        id: AnomalyIpFormat,
         requestOptions?: Blocks.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -178,13 +177,13 @@ export class Blocks {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

@@ -4,7 +4,12 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListUserOrganizationsRequestParameters } from "./requests/ListUserOrganizationsRequestParameters.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { Organization } from "../../../../../types/Organization.js";
+import type { ListUserOrganizationsOffsetPaginatedResponseContent } from "../../../../../types/ListUserOrganizationsOffsetPaginatedResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,25 +49,25 @@ export class Organizations {
      * Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review <a href="https://auth0.com/docs/manage-users/organizations">Auth0 Organizations</a>.
      *
      * @param {string} id - ID of the user to retrieve the organizations for.
-     * @param {Management.ListUserOrganizationsRequestParameters} request
+     * @param {ListUserOrganizationsRequestParameters} request
      * @param {Organizations.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.organizations.list("id")
+     *     await client.organizations.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListUserOrganizationsRequestParameters = {},
+        request: ListUserOrganizationsRequestParameters = {},
         requestOptions?: Organizations.RequestOptions,
-    ): Promise<core.Page<Management.Organization>> {
+    ): Promise<core.Page<Organization>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.users.ListUserOrganizationsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListUserOrganizationsOffsetPaginatedResponseContent>> => {
+                request: ListUserOrganizationsRequestParameters,
+            ): Promise<core.WithRawResponse<ListUserOrganizationsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -96,24 +101,18 @@ export class Organizations {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListUserOrganizationsOffsetPaginatedResponseContent,
+                        data: _response.body as ListUserOrganizationsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -143,10 +142,7 @@ export class Organizations {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserOrganizationsOffsetPaginatedResponseContent,
-            Management.Organization
-        >({
+        return new core.Pageable<ListUserOrganizationsOffsetPaginatedResponseContent, Organization>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.organizations ?? []).length > 0,

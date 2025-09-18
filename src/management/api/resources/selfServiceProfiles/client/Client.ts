@@ -4,7 +4,21 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListSelfServiceProfilesRequestParameters } from "./requests/ListSelfServiceProfilesRequestParameters.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import { InternalServerError } from "../../../errors/InternalServerError.js";
+import type { SelfServiceProfile } from "../../../types/SelfServiceProfile.js";
+import type { ListSelfServiceProfilesPaginatedResponseContent } from "../../../types/ListSelfServiceProfilesPaginatedResponseContent.js";
+import type { CreateSelfServiceProfileRequestContent } from "./requests/CreateSelfServiceProfileRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateSelfServiceProfileResponseContent } from "../../../types/CreateSelfServiceProfileResponseContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetSelfServiceProfileResponseContent } from "../../../types/GetSelfServiceProfileResponseContent.js";
+import type { UpdateSelfServiceProfileRequestContent } from "./requests/UpdateSelfServiceProfileRequestContent.js";
+import type { UpdateSelfServiceProfileResponseContent } from "../../../types/UpdateSelfServiceProfileResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { CustomText } from "../resources/customText/client/Client.js";
@@ -55,25 +69,25 @@ export class SelfServiceProfiles {
     /**
      * Retrieves self-service profiles.
      *
-     * @param {Management.ListSelfServiceProfilesRequestParameters} request
+     * @param {ListSelfServiceProfilesRequestParameters} request
      * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link InternalServerError}
      *
      * @example
      *     await client.selfServiceProfiles.list()
      */
     public async list(
-        request: Management.ListSelfServiceProfilesRequestParameters = {},
+        request: ListSelfServiceProfilesRequestParameters = {},
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.Page<Management.SelfServiceProfile>> {
+    ): Promise<core.Page<SelfServiceProfile>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListSelfServiceProfilesRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListSelfServiceProfilesPaginatedResponseContent>> => {
+                request: ListSelfServiceProfilesRequestParameters,
+            ): Promise<core.WithRawResponse<ListSelfServiceProfilesPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -107,29 +121,20 @@ export class SelfServiceProfiles {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListSelfServiceProfilesPaginatedResponseContent,
+                        data: _response.body as ListSelfServiceProfilesPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         case 500:
-                            throw new Management.InternalServerError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new InternalServerError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -159,10 +164,7 @@ export class SelfServiceProfiles {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListSelfServiceProfilesPaginatedResponseContent,
-            Management.SelfServiceProfile
-        >({
+        return new core.Pageable<ListSelfServiceProfilesPaginatedResponseContent, SelfServiceProfile>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.self_service_profiles ?? []).length > 0,
@@ -177,15 +179,15 @@ export class SelfServiceProfiles {
     /**
      * Creates a self-service profile.
      *
-     * @param {Management.CreateSelfServiceProfileRequestContent} request
+     * @param {CreateSelfServiceProfileRequestContent} request
      * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link InternalServerError}
      *
      * @example
      *     await client.selfServiceProfiles.create({
@@ -193,16 +195,16 @@ export class SelfServiceProfiles {
      *     })
      */
     public create(
-        request: Management.CreateSelfServiceProfileRequestContent,
+        request: CreateSelfServiceProfileRequestContent,
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateSelfServiceProfileResponseContent> {
+    ): core.HttpResponsePromise<CreateSelfServiceProfileResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateSelfServiceProfileRequestContent,
+        request: CreateSelfServiceProfileRequestContent,
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateSelfServiceProfileResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateSelfServiceProfileResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -227,7 +229,7 @@ export class SelfServiceProfiles {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateSelfServiceProfileResponseContent,
+                data: _response.body as CreateSelfServiceProfileResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -235,17 +237,17 @@ export class SelfServiceProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                    throw new InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -278,12 +280,12 @@ export class SelfServiceProfiles {
      * @param {string} id - The id of the self-service profile to retrieve
      * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link InternalServerError}
      *
      * @example
      *     await client.selfServiceProfiles.get("id")
@@ -291,14 +293,14 @@ export class SelfServiceProfiles {
     public get(
         id: string,
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetSelfServiceProfileResponseContent> {
+    ): core.HttpResponsePromise<GetSelfServiceProfileResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetSelfServiceProfileResponseContent>> {
+    ): Promise<core.WithRawResponse<GetSelfServiceProfileResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -320,7 +322,7 @@ export class SelfServiceProfiles {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetSelfServiceProfileResponseContent,
+                data: _response.body as GetSelfServiceProfileResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -328,17 +330,17 @@ export class SelfServiceProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                    throw new InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -373,11 +375,11 @@ export class SelfServiceProfiles {
      * @param {string} id - The id of the self-service profile to delete
      * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link InternalServerError}
      *
      * @example
      *     await client.selfServiceProfiles.delete("id")
@@ -416,15 +418,15 @@ export class SelfServiceProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                    throw new InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -457,32 +459,32 @@ export class SelfServiceProfiles {
      * Updates a self-service profile.
      *
      * @param {string} id - The id of the self-service profile to update
-     * @param {Management.UpdateSelfServiceProfileRequestContent} request
+     * @param {UpdateSelfServiceProfileRequestContent} request
      * @param {SelfServiceProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link InternalServerError}
      *
      * @example
      *     await client.selfServiceProfiles.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateSelfServiceProfileRequestContent = {},
+        request: UpdateSelfServiceProfileRequestContent = {},
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateSelfServiceProfileResponseContent> {
+    ): core.HttpResponsePromise<UpdateSelfServiceProfileResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateSelfServiceProfileRequestContent = {},
+        request: UpdateSelfServiceProfileRequestContent = {},
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateSelfServiceProfileResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateSelfServiceProfileResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -507,7 +509,7 @@ export class SelfServiceProfiles {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateSelfServiceProfileResponseContent,
+                data: _response.body as UpdateSelfServiceProfileResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -515,17 +517,17 @@ export class SelfServiceProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                    throw new InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

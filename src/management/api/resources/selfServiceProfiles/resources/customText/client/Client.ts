@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { SelfServiceProfileCustomTextLanguageEnum } from "../../../../../types/SelfServiceProfileCustomTextLanguageEnum.js";
+import type { SelfServiceProfileCustomTextPageEnum } from "../../../../../types/SelfServiceProfileCustomTextPageEnum.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { ListSelfServiceProfileCustomTextResponseContent } from "../../../../../types/ListSelfServiceProfileCustomTextResponseContent.js";
+import type { SetSelfServiceProfileCustomTextRequestContent } from "../../../../../types/SetSelfServiceProfileCustomTextRequestContent.js";
+import type { SetSelfServiceProfileCustomTextResponseContent } from "../../../../../types/SetSelfServiceProfileCustomTextResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,33 +52,33 @@ export class CustomText {
      * Retrieves text customizations for a given self-service profile, language and Self Service SSO Flow page.
      *
      * @param {string} id - The id of the self-service profile.
-     * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
-     * @param {Management.SelfServiceProfileCustomTextPageEnum} page - The page where the custom text is shown.
+     * @param {SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
+     * @param {SelfServiceProfileCustomTextPageEnum} page - The page where the custom text is shown.
      * @param {CustomText.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.selfServiceProfiles.customText.list("id", "en", "get-started")
      */
     public list(
         id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
+        language: SelfServiceProfileCustomTextLanguageEnum,
+        page: SelfServiceProfileCustomTextPageEnum,
         requestOptions?: CustomText.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListSelfServiceProfileCustomTextResponseContent> {
+    ): core.HttpResponsePromise<ListSelfServiceProfileCustomTextResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__list(id, language, page, requestOptions));
     }
 
     private async __list(
         id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
+        language: SelfServiceProfileCustomTextLanguageEnum,
+        page: SelfServiceProfileCustomTextPageEnum,
         requestOptions?: CustomText.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListSelfServiceProfileCustomTextResponseContent>> {
+    ): Promise<core.WithRawResponse<ListSelfServiceProfileCustomTextResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -92,7 +100,7 @@ export class CustomText {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.ListSelfServiceProfileCustomTextResponseContent,
+                data: _response.body as ListSelfServiceProfileCustomTextResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -100,13 +108,13 @@ export class CustomText {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -139,15 +147,15 @@ export class CustomText {
      * Updates text customizations for a given self-service profile, language and Self Service SSO Flow page.
      *
      * @param {string} id - The id of the self-service profile.
-     * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
-     * @param {Management.SelfServiceProfileCustomTextPageEnum} page - The page where the custom text is shown.
-     * @param {Management.SetSelfServiceProfileCustomTextRequestContent} request
+     * @param {SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
+     * @param {SelfServiceProfileCustomTextPageEnum} page - The page where the custom text is shown.
+     * @param {SetSelfServiceProfileCustomTextRequestContent} request
      * @param {CustomText.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.selfServiceProfiles.customText.set("id", "en", "get-started", {
@@ -156,21 +164,21 @@ export class CustomText {
      */
     public set(
         id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
-        request: Management.SetSelfServiceProfileCustomTextRequestContent,
+        language: SelfServiceProfileCustomTextLanguageEnum,
+        page: SelfServiceProfileCustomTextPageEnum,
+        request: SetSelfServiceProfileCustomTextRequestContent,
         requestOptions?: CustomText.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetSelfServiceProfileCustomTextResponseContent> {
+    ): core.HttpResponsePromise<SetSelfServiceProfileCustomTextResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(id, language, page, request, requestOptions));
     }
 
     private async __set(
         id: string,
-        language: Management.SelfServiceProfileCustomTextLanguageEnum,
-        page: Management.SelfServiceProfileCustomTextPageEnum,
-        request: Management.SetSelfServiceProfileCustomTextRequestContent,
+        language: SelfServiceProfileCustomTextLanguageEnum,
+        page: SelfServiceProfileCustomTextPageEnum,
+        request: SetSelfServiceProfileCustomTextRequestContent,
         requestOptions?: CustomText.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetSelfServiceProfileCustomTextResponseContent>> {
+    ): Promise<core.WithRawResponse<SetSelfServiceProfileCustomTextResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -195,7 +203,7 @@ export class CustomText {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetSelfServiceProfileCustomTextResponseContent,
+                data: _response.body as SetSelfServiceProfileCustomTextResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -203,13 +211,13 @@ export class CustomText {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

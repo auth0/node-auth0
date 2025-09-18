@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { CreateImportUsersRequestContent } from "./requests/CreateImportUsersRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { ContentTooLargeError } from "../../../../../errors/ContentTooLargeError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import { InternalServerError } from "../../../../../errors/InternalServerError.js";
+import type { CreateImportUsersResponseContent } from "../../../../../types/CreateImportUsersResponseContent.js";
 import * as fs from "fs";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
@@ -44,15 +51,15 @@ export class UsersImports {
     /**
      * Import users from a <a href="https://auth0.com/docs/users/references/bulk-import-database-schema-examples">formatted file</a> into a connection via a long-running job. When importing users, with or without upsert, the `email_verified` is set to `false` when the email address is added or updated. Users must verify their email address. To avoid this behavior, set `email_verified` to `true` in the imported data.
      *
-     * @param {Management.CreateImportUsersRequestContent} request
+     * @param {CreateImportUsersRequestContent} request
      * @param {UsersImports.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ContentTooLargeError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ContentTooLargeError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link InternalServerError}
      *
      * @example
      *     import { createReadStream } from "fs";
@@ -62,16 +69,16 @@ export class UsersImports {
      *     })
      */
     public create(
-        request: Management.CreateImportUsersRequestContent,
+        request: CreateImportUsersRequestContent,
         requestOptions?: UsersImports.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateImportUsersResponseContent> {
+    ): core.HttpResponsePromise<CreateImportUsersResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateImportUsersRequestContent,
+        request: CreateImportUsersRequestContent,
         requestOptions?: UsersImports.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateImportUsersResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateImportUsersResponseContent>> {
         const _request = await core.newFormData();
         await _request.appendFile("users", request.users);
         _request.append("connection_id", request.connection_id);
@@ -115,7 +122,7 @@ export class UsersImports {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateImportUsersResponseContent,
+                data: _response.body as CreateImportUsersResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -123,17 +130,17 @@ export class UsersImports {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 413:
-                    throw new Management.ContentTooLargeError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ContentTooLargeError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                    throw new InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

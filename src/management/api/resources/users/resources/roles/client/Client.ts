@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListUserRolesRequestParameters } from "./requests/ListUserRolesRequestParameters.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { Role } from "../../../../../types/Role.js";
+import type { ListUserRolesOffsetPaginatedResponseContent } from "../../../../../types/ListUserRolesOffsetPaginatedResponseContent.js";
+import type { AssignUserRolesRequestContent } from "./requests/AssignUserRolesRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import type { DeleteUserRolesRequestContent } from "./requests/DeleteUserRolesRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -46,25 +54,25 @@ export class Roles {
      * <b>Note</b>: This action retrieves all roles assigned to a user in the context of your whole tenant. To retrieve Organization-specific roles, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/get-organization-member-roles">Get user roles assigned to an Organization member</a>.
      *
      * @param {string} id - ID of the user to list roles for.
-     * @param {Management.ListUserRolesRequestParameters} request
+     * @param {ListUserRolesRequestParameters} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.roles.list("id")
+     *     await client.roles.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListUserRolesRequestParameters = {},
+        request: ListUserRolesRequestParameters = {},
         requestOptions?: Roles.RequestOptions,
-    ): Promise<core.Page<Management.Role>> {
+    ): Promise<core.Page<Role>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.users.ListUserRolesRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListUserRolesOffsetPaginatedResponseContent>> => {
+                request: ListUserRolesRequestParameters,
+            ): Promise<core.WithRawResponse<ListUserRolesOffsetPaginatedResponseContent>> => {
                 const { per_page: perPage = 50, page = 0, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (perPage != null) {
@@ -98,24 +106,18 @@ export class Roles {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListUserRolesOffsetPaginatedResponseContent,
+                        data: _response.body as ListUserRolesOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -143,7 +145,7 @@ export class Roles {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListUserRolesOffsetPaginatedResponseContent, Management.Role>({
+        return new core.Pageable<ListUserRolesOffsetPaginatedResponseContent, Role>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.roles ?? []).length > 0,
@@ -161,22 +163,22 @@ export class Roles {
      * <b>Note</b>: New roles cannot be created through this action. Additionally, this action is used to assign roles to a user in the context of your whole tenant. To assign roles in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/post-organization-member-roles">Assign user roles to an Organization member</a>.
      *
      * @param {string} id - ID of the user to associate roles with.
-     * @param {Management.AssignUserRolesRequestContent} request
+     * @param {AssignUserRolesRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.roles.assign("id", {
+     *     await client.roles.assign("id", {
      *         roles: ["roles"]
      *     })
      */
     public assign(
         id: string,
-        request: Management.AssignUserRolesRequestContent,
+        request: AssignUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__assign(id, request, requestOptions));
@@ -184,7 +186,7 @@ export class Roles {
 
     private async __assign(
         id: string,
-        request: Management.AssignUserRolesRequestContent,
+        request: AssignUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -216,13 +218,13 @@ export class Roles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -255,21 +257,21 @@ export class Roles {
      * <b>Note</b>: This action removes a role from a user in the context of your whole tenant. If you want to unassign a role from a user in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/delete-organization-member-roles">Delete user roles from an Organization member</a>.
      *
      * @param {string} id - ID of the user to remove roles from.
-     * @param {Management.DeleteUserRolesRequestContent} request
+     * @param {DeleteUserRolesRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.roles.delete("id", {
+     *     await client.roles.delete("id", {
      *         roles: ["roles"]
      *     })
      */
     public delete(
         id: string,
-        request: Management.DeleteUserRolesRequestContent,
+        request: DeleteUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, request, requestOptions));
@@ -277,7 +279,7 @@ export class Roles {
 
     private async __delete(
         id: string,
-        request: Management.DeleteUserRolesRequestContent,
+        request: DeleteUserRolesRequestContent,
         requestOptions?: Roles.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -309,11 +311,11 @@ export class Roles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

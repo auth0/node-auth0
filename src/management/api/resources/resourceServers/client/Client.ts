@@ -4,7 +4,21 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListResourceServerRequestParameters } from "./requests/ListResourceServerRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { ResourceServer } from "../../../types/ResourceServer.js";
+import type { ListResourceServerOffsetPaginatedResponseContent } from "../../../types/ListResourceServerOffsetPaginatedResponseContent.js";
+import type { CreateResourceServerRequestContent } from "./requests/CreateResourceServerRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateResourceServerResponseContent } from "../../../types/CreateResourceServerResponseContent.js";
+import type { GetResourceServerRequestParameters } from "./requests/GetResourceServerRequestParameters.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetResourceServerResponseContent } from "../../../types/GetResourceServerResponseContent.js";
+import type { UpdateResourceServerRequestContent } from "./requests/UpdateResourceServerRequestContent.js";
+import type { UpdateResourceServerResponseContent } from "../../../types/UpdateResourceServerResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,25 +57,25 @@ export class ResourceServers {
     /**
      * Retrieve details of all APIs associated with your tenant.
      *
-     * @param {Management.ListResourceServerRequestParameters} request
+     * @param {ListResourceServerRequestParameters} request
      * @param {ResourceServers.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.resourceServers.list()
      */
     public async list(
-        request: Management.ListResourceServerRequestParameters = {},
+        request: ListResourceServerRequestParameters = {},
         requestOptions?: ResourceServers.RequestOptions,
-    ): Promise<core.Page<Management.ResourceServer>> {
+    ): Promise<core.Page<ResourceServer>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListResourceServerRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListResourceServerOffsetPaginatedResponseContent>> => {
+                request: ListResourceServerRequestParameters,
+            ): Promise<core.WithRawResponse<ListResourceServerOffsetPaginatedResponseContent>> => {
                 const {
                     identifiers,
                     page = 0,
@@ -111,29 +125,20 @@ export class ResourceServers {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListResourceServerOffsetPaginatedResponseContent,
+                        data: _response.body as ListResourceServerOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -161,10 +166,7 @@ export class ResourceServers {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListResourceServerOffsetPaginatedResponseContent,
-            Management.ResourceServer
-        >({
+        return new core.Pageable<ListResourceServerOffsetPaginatedResponseContent, ResourceServer>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.resource_servers ?? []).length > 0,
@@ -179,14 +181,14 @@ export class ResourceServers {
     /**
      * Create a new API associated with your tenant. Note that all new APIs must be registered with Auth0. For more information, read <a href="https://www.auth0.com/docs/get-started/apis"> APIs</a>.
      *
-     * @param {Management.CreateResourceServerRequestContent} request
+     * @param {CreateResourceServerRequestContent} request
      * @param {ResourceServers.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.resourceServers.create({
@@ -194,16 +196,16 @@ export class ResourceServers {
      *     })
      */
     public create(
-        request: Management.CreateResourceServerRequestContent,
+        request: CreateResourceServerRequestContent,
         requestOptions?: ResourceServers.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateResourceServerResponseContent> {
+    ): core.HttpResponsePromise<CreateResourceServerResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateResourceServerRequestContent,
+        request: CreateResourceServerRequestContent,
         requestOptions?: ResourceServers.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateResourceServerResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateResourceServerResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -228,7 +230,7 @@ export class ResourceServers {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateResourceServerResponseContent,
+                data: _response.body as CreateResourceServerResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -236,15 +238,15 @@ export class ResourceServers {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -275,31 +277,31 @@ export class ResourceServers {
      * Retrieve <a href="https://auth0.com/docs/apis">API</a> details with the given ID.
      *
      * @param {string} id - ID or audience of the resource server to retrieve.
-     * @param {Management.GetResourceServerRequestParameters} request
+     * @param {GetResourceServerRequestParameters} request
      * @param {ResourceServers.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.resourceServers.get("id")
      */
     public get(
         id: string,
-        request: Management.GetResourceServerRequestParameters = {},
+        request: GetResourceServerRequestParameters = {},
         requestOptions?: ResourceServers.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetResourceServerResponseContent> {
+    ): core.HttpResponsePromise<GetResourceServerResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetResourceServerRequestParameters = {},
+        request: GetResourceServerRequestParameters = {},
         requestOptions?: ResourceServers.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetResourceServerResponseContent>> {
+    ): Promise<core.WithRawResponse<GetResourceServerResponseContent>> {
         const { include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (includeFields != null) {
@@ -327,7 +329,7 @@ export class ResourceServers {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetResourceServerResponseContent,
+                data: _response.body as GetResourceServerResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -335,15 +337,15 @@ export class ResourceServers {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -376,10 +378,10 @@ export class ResourceServers {
      * @param {string} id - ID or the audience of the resource server to delete.
      * @param {ResourceServers.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.resourceServers.delete("id")
@@ -418,13 +420,13 @@ export class ResourceServers {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -455,31 +457,31 @@ export class ResourceServers {
      * Change an existing API setting by resource server ID. For more information, read <a href="https://www.auth0.com/docs/get-started/apis/api-settings">API Settings</a>.
      *
      * @param {string} id - ID or audience of the resource server to update.
-     * @param {Management.UpdateResourceServerRequestContent} request
+     * @param {UpdateResourceServerRequestContent} request
      * @param {ResourceServers.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.resourceServers.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateResourceServerRequestContent = {},
+        request: UpdateResourceServerRequestContent = {},
         requestOptions?: ResourceServers.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateResourceServerResponseContent> {
+    ): core.HttpResponsePromise<UpdateResourceServerResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateResourceServerRequestContent = {},
+        request: UpdateResourceServerRequestContent = {},
         requestOptions?: ResourceServers.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateResourceServerResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateResourceServerResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -504,7 +506,7 @@ export class ResourceServers {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateResourceServerResponseContent,
+                data: _response.body as UpdateResourceServerResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -512,15 +514,15 @@ export class ResourceServers {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

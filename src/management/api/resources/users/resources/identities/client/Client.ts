@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { LinkUserIdentityRequestContent } from "./requests/LinkUserIdentityRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { ConflictError } from "../../../../../errors/ConflictError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { UserIdentity } from "../../../../../types/UserIdentity.js";
+import type { UserIdentityProviderEnum } from "../../../../../types/UserIdentityProviderEnum.js";
+import type { DeleteUserIdentityResponseContent } from "../../../../../types/DeleteUserIdentityResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -71,31 +79,31 @@ export class Identities {
      * </ul>
      *
      * @param {string} id - ID of the primary user account to link a second user account to.
-     * @param {Management.LinkUserIdentityRequestContent} request
+     * @param {LinkUserIdentityRequestContent} request
      * @param {Identities.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.identities.link("id")
      */
     public link(
         id: string,
-        request: Management.LinkUserIdentityRequestContent = {},
+        request: LinkUserIdentityRequestContent = {},
         requestOptions?: Identities.RequestOptions,
-    ): core.HttpResponsePromise<Management.UserIdentity[]> {
+    ): core.HttpResponsePromise<UserIdentity[]> {
         return core.HttpResponsePromise.fromPromise(this.__link(id, request, requestOptions));
     }
 
     private async __link(
         id: string,
-        request: Management.LinkUserIdentityRequestContent = {},
+        request: LinkUserIdentityRequestContent = {},
         requestOptions?: Identities.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UserIdentity[]>> {
+    ): Promise<core.WithRawResponse<UserIdentity[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -119,21 +127,21 @@ export class Identities {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UserIdentity[], rawResponse: _response.rawResponse };
+            return { data: _response.body as UserIdentity[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -166,33 +174,33 @@ export class Identities {
      * Unlinking the secondary account removes it from the identities array of the target user and creates a new standalone profile for the secondary account. To learn more, review <a href="https://auth0.com/docs/manage-users/user-accounts/user-account-linking/unlink-user-accounts">Unlink User Accounts</a>.
      *
      * @param {string} id - ID of the primary user account.
-     * @param {Management.UserIdentityProviderEnum} provider - Identity provider name of the secondary linked account (e.g. `google-oauth2`).
+     * @param {UserIdentityProviderEnum} provider - Identity provider name of the secondary linked account (e.g. `google-oauth2`).
      * @param {string} userId - ID of the secondary linked account (e.g. `123456789081523216417` part after the `|` in `google-oauth2|123456789081523216417`).
      * @param {Identities.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.identities.delete("id", "ad", "user_id")
      */
     public delete(
         id: string,
-        provider: Management.UserIdentityProviderEnum,
+        provider: UserIdentityProviderEnum,
         userId: string,
         requestOptions?: Identities.RequestOptions,
-    ): core.HttpResponsePromise<Management.DeleteUserIdentityResponseContent> {
+    ): core.HttpResponsePromise<DeleteUserIdentityResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, provider, userId, requestOptions));
     }
 
     private async __delete(
         id: string,
-        provider: Management.UserIdentityProviderEnum,
+        provider: UserIdentityProviderEnum,
         userId: string,
         requestOptions?: Identities.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.DeleteUserIdentityResponseContent>> {
+    ): Promise<core.WithRawResponse<DeleteUserIdentityResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -214,7 +222,7 @@ export class Identities {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.DeleteUserIdentityResponseContent,
+                data: _response.body as DeleteUserIdentityResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -222,13 +230,13 @@ export class Identities {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

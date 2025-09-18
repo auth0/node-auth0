@@ -4,7 +4,20 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { FlowsListRequest } from "./requests/FlowsListRequest.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { FlowSummary } from "../../../types/FlowSummary.js";
+import type { ListFlowsOffsetPaginatedResponseContent } from "../../../types/ListFlowsOffsetPaginatedResponseContent.js";
+import type { CreateFlowRequestContent } from "./requests/CreateFlowRequestContent.js";
+import type { CreateFlowResponseContent } from "../../../types/CreateFlowResponseContent.js";
+import type { GetFlowRequestParameters } from "./requests/GetFlowRequestParameters.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetFlowResponseContent } from "../../../types/GetFlowResponseContent.js";
+import type { UpdateFlowRequestContent } from "./requests/UpdateFlowRequestContent.js";
+import type { UpdateFlowResponseContent } from "../../../types/UpdateFlowResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Executions } from "../resources/executions/client/Client.js";
@@ -53,25 +66,25 @@ export class Flows {
     }
 
     /**
-     * @param {Management.FlowsListRequest} request
+     * @param {FlowsListRequest} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.flows.list()
      */
     public async list(
-        request: Management.FlowsListRequest = {},
+        request: FlowsListRequest = {},
         requestOptions?: Flows.RequestOptions,
-    ): Promise<core.Page<Management.FlowSummary>> {
+    ): Promise<core.Page<FlowSummary>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.FlowsListRequest,
-            ): Promise<core.WithRawResponse<Management.ListFlowsOffsetPaginatedResponseContent>> => {
+                request: FlowsListRequest,
+            ): Promise<core.WithRawResponse<ListFlowsOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
                     per_page: perPage = 50,
@@ -121,29 +134,20 @@ export class Flows {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListFlowsOffsetPaginatedResponseContent,
+                        data: _response.body as ListFlowsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -171,7 +175,7 @@ export class Flows {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListFlowsOffsetPaginatedResponseContent, Management.FlowSummary>({
+        return new core.Pageable<ListFlowsOffsetPaginatedResponseContent, FlowSummary>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.flows ?? []).length > 0,
@@ -184,13 +188,13 @@ export class Flows {
     }
 
     /**
-     * @param {Management.CreateFlowRequestContent} request
+     * @param {CreateFlowRequestContent} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.flows.create({
@@ -198,16 +202,16 @@ export class Flows {
      *     })
      */
     public create(
-        request: Management.CreateFlowRequestContent,
+        request: CreateFlowRequestContent,
         requestOptions?: Flows.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateFlowResponseContent> {
+    ): core.HttpResponsePromise<CreateFlowResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateFlowRequestContent,
+        request: CreateFlowRequestContent,
         requestOptions?: Flows.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateFlowResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateFlowResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -231,19 +235,19 @@ export class Flows {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.CreateFlowResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as CreateFlowResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -272,31 +276,31 @@ export class Flows {
 
     /**
      * @param {string} id - Flow identifier
-     * @param {Management.GetFlowRequestParameters} request
+     * @param {GetFlowRequestParameters} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.flows.get("id")
      */
     public get(
         id: string,
-        request: Management.GetFlowRequestParameters = {},
+        request: GetFlowRequestParameters = {},
         requestOptions?: Flows.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetFlowResponseContent> {
+    ): core.HttpResponsePromise<GetFlowResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetFlowRequestParameters = {},
+        request: GetFlowRequestParameters = {},
         requestOptions?: Flows.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetFlowResponseContent>> {
+    ): Promise<core.WithRawResponse<GetFlowResponseContent>> {
         const { hydrate } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (hydrate != null) {
@@ -327,21 +331,21 @@ export class Flows {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetFlowResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetFlowResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -372,11 +376,11 @@ export class Flows {
      * @param {string} id - Flow id
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.flows.delete("id")
@@ -412,15 +416,15 @@ export class Flows {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -449,30 +453,30 @@ export class Flows {
 
     /**
      * @param {string} id - Flow identifier
-     * @param {Management.UpdateFlowRequestContent} request
+     * @param {UpdateFlowRequestContent} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.flows.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateFlowRequestContent = {},
+        request: UpdateFlowRequestContent = {},
         requestOptions?: Flows.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateFlowResponseContent> {
+    ): core.HttpResponsePromise<UpdateFlowResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateFlowRequestContent = {},
+        request: UpdateFlowRequestContent = {},
         requestOptions?: Flows.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateFlowResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateFlowResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -496,19 +500,19 @@ export class Flows {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UpdateFlowResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as UpdateFlowResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

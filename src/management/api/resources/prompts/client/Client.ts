@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { GetSettingsResponseContent } from "../../../types/GetSettingsResponseContent.js";
+import type { UpdateSettingsRequestContent } from "./requests/UpdateSettingsRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import type { UpdateSettingsResponseContent } from "../../../types/UpdateSettingsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Rendering } from "../resources/rendering/client/Client.js";
@@ -63,22 +69,20 @@ export class Prompts {
      *
      * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.prompts.getSettings()
      */
-    public getSettings(
-        requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetSettingsResponseContent> {
+    public getSettings(requestOptions?: Prompts.RequestOptions): core.HttpResponsePromise<GetSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__getSettings(requestOptions));
     }
 
     private async __getSettings(
         requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -100,7 +104,7 @@ export class Prompts {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetSettingsResponseContent,
+                data: _response.body as GetSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -108,11 +112,11 @@ export class Prompts {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -142,28 +146,28 @@ export class Prompts {
     /**
      * Update the Universal Login configuration of your tenant. This includes the <a href="https://auth0.com/docs/authenticate/login/auth0-universal-login/identifier-first">Identifier First Authentication</a> and <a href="https://auth0.com/docs/secure/multi-factor-authentication/fido-authentication-with-webauthn/configure-webauthn-device-biometrics-for-mfa">WebAuthn with Device Biometrics for MFA</a> features.
      *
-     * @param {Management.UpdateSettingsRequestContent} request
+     * @param {UpdateSettingsRequestContent} request
      * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.prompts.updateSettings()
      */
     public updateSettings(
-        request: Management.UpdateSettingsRequestContent = {},
+        request: UpdateSettingsRequestContent = {},
         requestOptions?: Prompts.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateSettingsResponseContent> {
+    ): core.HttpResponsePromise<UpdateSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__updateSettings(request, requestOptions));
     }
 
     private async __updateSettings(
-        request: Management.UpdateSettingsRequestContent = {},
+        request: UpdateSettingsRequestContent = {},
         requestOptions?: Prompts.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -188,7 +192,7 @@ export class Prompts {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateSettingsResponseContent,
+                data: _response.body as UpdateSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -196,13 +200,13 @@ export class Prompts {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

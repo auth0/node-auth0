@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListRefreshTokensRequestParameters } from "./requests/ListRefreshTokensRequestParameters.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { RefreshTokenResponseContent } from "../../../../../types/RefreshTokenResponseContent.js";
+import type { ListRefreshTokensPaginatedResponseContent } from "../../../../../types/ListRefreshTokensPaginatedResponseContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,26 +51,26 @@ export class RefreshToken {
      * Retrieve details for a user's refresh tokens.
      *
      * @param {string} userId - ID of the user to get refresh tokens for
-     * @param {Management.ListRefreshTokensRequestParameters} request
+     * @param {ListRefreshTokensRequestParameters} request
      * @param {RefreshToken.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.refreshToken.list("user_id")
+     *     await client.refreshToken.list("user_id")
      */
     public async list(
         userId: string,
-        request: Management.ListRefreshTokensRequestParameters = {},
+        request: ListRefreshTokensRequestParameters = {},
         requestOptions?: RefreshToken.RequestOptions,
-    ): Promise<core.Page<Management.RefreshTokenResponseContent>> {
+    ): Promise<core.Page<RefreshTokenResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.users.ListRefreshTokensRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRefreshTokensPaginatedResponseContent>> => {
+                request: ListRefreshTokensRequestParameters,
+            ): Promise<core.WithRawResponse<ListRefreshTokensPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -94,26 +101,20 @@ export class RefreshToken {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListRefreshTokensPaginatedResponseContent,
+                        data: _response.body as ListRefreshTokensPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -142,10 +143,7 @@ export class RefreshToken {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListRefreshTokensPaginatedResponseContent,
-            Management.RefreshTokenResponseContent
-        >({
+        return new core.Pageable<ListRefreshTokensPaginatedResponseContent, RefreshTokenResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -163,14 +161,14 @@ export class RefreshToken {
      * @param {string} userId - ID of the user to get remove refresh tokens for
      * @param {RefreshToken.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.refreshToken.delete("user_id")
+     *     await client.refreshToken.delete("user_id")
      */
     public delete(userId: string, requestOptions?: RefreshToken.RequestOptions): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(userId, requestOptions));
@@ -206,15 +204,15 @@ export class RefreshToken {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

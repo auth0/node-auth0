@@ -4,7 +4,19 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListClientGrantsRequestParameters } from "./requests/ListClientGrantsRequestParameters.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { ClientGrantResponseContent } from "../../../types/ClientGrantResponseContent.js";
+import type { ListClientGrantPaginatedResponseContent } from "../../../types/ListClientGrantPaginatedResponseContent.js";
+import type { CreateClientGrantRequestContent } from "./requests/CreateClientGrantRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateClientGrantResponseContent } from "../../../types/CreateClientGrantResponseContent.js";
+import type { UpdateClientGrantRequestContent } from "./requests/UpdateClientGrantRequestContent.js";
+import type { UpdateClientGrantResponseContent } from "../../../types/UpdateClientGrantResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Organizations } from "../resources/organizations/client/Client.js";
@@ -49,24 +61,24 @@ export class ClientGrants {
     /**
      * Retrieve a list of <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>, including the scopes associated with the application/API pair.
      *
-     * @param {Management.ListClientGrantsRequestParameters} request
+     * @param {ListClientGrantsRequestParameters} request
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clientGrants.list()
      */
     public async list(
-        request: Management.ListClientGrantsRequestParameters = {},
+        request: ListClientGrantsRequestParameters = {},
         requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.Page<Management.ClientGrantResponseContent>> {
+    ): Promise<core.Page<ClientGrantResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListClientGrantsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListClientGrantPaginatedResponseContent>> => {
+                request: ListClientGrantsRequestParameters,
+            ): Promise<core.WithRawResponse<ListClientGrantPaginatedResponseContent>> => {
                 const {
                     from: from_,
                     take = 50,
@@ -116,24 +128,18 @@ export class ClientGrants {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListClientGrantPaginatedResponseContent,
+                        data: _response.body as ListClientGrantPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -160,10 +166,7 @@ export class ClientGrants {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListClientGrantPaginatedResponseContent,
-            Management.ClientGrantResponseContent
-        >({
+        return new core.Pageable<ListClientGrantPaginatedResponseContent, ClientGrantResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -178,15 +181,15 @@ export class ClientGrants {
     /**
      * Create a client grant for a machine-to-machine login flow. To learn more, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
      *
-     * @param {Management.CreateClientGrantRequestContent} request
+     * @param {CreateClientGrantRequestContent} request
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clientGrants.create({
@@ -196,16 +199,16 @@ export class ClientGrants {
      *     })
      */
     public create(
-        request: Management.CreateClientGrantRequestContent,
+        request: CreateClientGrantRequestContent,
         requestOptions?: ClientGrants.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateClientGrantResponseContent> {
+    ): core.HttpResponsePromise<CreateClientGrantResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateClientGrantRequestContent,
+        request: CreateClientGrantRequestContent,
         requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateClientGrantResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateClientGrantResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -230,7 +233,7 @@ export class ClientGrants {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateClientGrantResponseContent,
+                data: _response.body as CreateClientGrantResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -238,17 +241,17 @@ export class ClientGrants {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -281,10 +284,10 @@ export class ClientGrants {
      * @param {string} id - ID of the client grant to delete.
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clientGrants.delete("id")
@@ -323,13 +326,13 @@ export class ClientGrants {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -360,31 +363,31 @@ export class ClientGrants {
      * Update a client grant.
      *
      * @param {string} id - ID of the client grant to update.
-     * @param {Management.UpdateClientGrantRequestContent} request
+     * @param {UpdateClientGrantRequestContent} request
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clientGrants.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateClientGrantRequestContent = {},
+        request: UpdateClientGrantRequestContent = {},
         requestOptions?: ClientGrants.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateClientGrantResponseContent> {
+    ): core.HttpResponsePromise<UpdateClientGrantResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateClientGrantRequestContent = {},
+        request: UpdateClientGrantRequestContent = {},
         requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateClientGrantResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateClientGrantResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -409,7 +412,7 @@ export class ClientGrants {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateClientGrantResponseContent,
+                data: _response.body as UpdateClientGrantResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -417,15 +420,15 @@ export class ClientGrants {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

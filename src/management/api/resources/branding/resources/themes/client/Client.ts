@@ -4,7 +4,18 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { CreateBrandingThemeRequestContent } from "./requests/CreateBrandingThemeRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { ConflictError } from "../../../../../errors/ConflictError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { CreateBrandingThemeResponseContent } from "../../../../../types/CreateBrandingThemeResponseContent.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import type { GetBrandingDefaultThemeResponseContent } from "../../../../../types/GetBrandingDefaultThemeResponseContent.js";
+import type { GetBrandingThemeResponseContent } from "../../../../../types/GetBrandingThemeResponseContent.js";
+import type { UpdateBrandingThemeRequestContent } from "./requests/UpdateBrandingThemeRequestContent.js";
+import type { UpdateBrandingThemeResponseContent } from "../../../../../types/UpdateBrandingThemeResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,14 +54,14 @@ export class Themes {
     /**
      * Create branding theme.
      *
-     * @param {Management.CreateBrandingThemeRequestContent} request
+     * @param {CreateBrandingThemeRequestContent} request
      * @param {Themes.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.themes.create({
@@ -127,16 +138,16 @@ export class Themes {
      *     })
      */
     public create(
-        request: Management.CreateBrandingThemeRequestContent,
+        request: CreateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateBrandingThemeResponseContent> {
+    ): core.HttpResponsePromise<CreateBrandingThemeResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateBrandingThemeRequestContent,
+        request: CreateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateBrandingThemeResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateBrandingThemeResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -161,7 +172,7 @@ export class Themes {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateBrandingThemeResponseContent,
+                data: _response.body as CreateBrandingThemeResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -169,15 +180,15 @@ export class Themes {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -209,23 +220,23 @@ export class Themes {
      *
      * @param {Themes.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.themes.getDefault()
      */
     public getDefault(
         requestOptions?: Themes.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetBrandingDefaultThemeResponseContent> {
+    ): core.HttpResponsePromise<GetBrandingDefaultThemeResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__getDefault(requestOptions));
     }
 
     private async __getDefault(
         requestOptions?: Themes.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetBrandingDefaultThemeResponseContent>> {
+    ): Promise<core.WithRawResponse<GetBrandingDefaultThemeResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -247,7 +258,7 @@ export class Themes {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetBrandingDefaultThemeResponseContent,
+                data: _response.body as GetBrandingDefaultThemeResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -255,13 +266,13 @@ export class Themes {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -294,10 +305,10 @@ export class Themes {
      * @param {string} themeId - The ID of the theme
      * @param {Themes.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.themes.get("themeId")
@@ -305,14 +316,14 @@ export class Themes {
     public get(
         themeId: string,
         requestOptions?: Themes.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetBrandingThemeResponseContent> {
+    ): core.HttpResponsePromise<GetBrandingThemeResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(themeId, requestOptions));
     }
 
     private async __get(
         themeId: string,
         requestOptions?: Themes.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetBrandingThemeResponseContent>> {
+    ): Promise<core.WithRawResponse<GetBrandingThemeResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -334,7 +345,7 @@ export class Themes {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetBrandingThemeResponseContent,
+                data: _response.body as GetBrandingThemeResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -342,13 +353,13 @@ export class Themes {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -383,10 +394,10 @@ export class Themes {
      * @param {string} themeId - The ID of the theme
      * @param {Themes.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.themes.delete("themeId")
@@ -425,13 +436,13 @@ export class Themes {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -464,14 +475,14 @@ export class Themes {
      * Update branding theme.
      *
      * @param {string} themeId - The ID of the theme
-     * @param {Management.UpdateBrandingThemeRequestContent} request
+     * @param {UpdateBrandingThemeRequestContent} request
      * @param {Themes.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.branding.themes.update("themeId", {
@@ -549,17 +560,17 @@ export class Themes {
      */
     public update(
         themeId: string,
-        request: Management.UpdateBrandingThemeRequestContent,
+        request: UpdateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateBrandingThemeResponseContent> {
+    ): core.HttpResponsePromise<UpdateBrandingThemeResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(themeId, request, requestOptions));
     }
 
     private async __update(
         themeId: string,
-        request: Management.UpdateBrandingThemeRequestContent,
+        request: UpdateBrandingThemeRequestContent,
         requestOptions?: Themes.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateBrandingThemeResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateBrandingThemeResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -584,7 +595,7 @@ export class Themes {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateBrandingThemeResponseContent,
+                data: _response.body as UpdateBrandingThemeResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -592,15 +603,15 @@ export class Themes {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

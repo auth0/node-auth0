@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { GetConnectionEnabledClientsRequestParameters } from "./requests/GetConnectionEnabledClientsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { ConnectionEnabledClient } from "../../../../../types/ConnectionEnabledClient.js";
+import type { GetConnectionEnabledClientsResponseContent } from "../../../../../types/GetConnectionEnabledClientsResponseContent.js";
+import type { UpdateEnabledClientConnectionsRequestContent } from "../../../../../types/UpdateEnabledClientConnectionsRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -46,27 +54,27 @@ export class Clients {
      * <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
      *
      * @param {string} id - The id of the connection for which enabled clients are to be retrieved
-     * @param {Management.GetConnectionEnabledClientsRequestParameters} request
+     * @param {GetConnectionEnabledClientsRequestParameters} request
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.connections.clients.get("id")
+     *     await client.clients.get("id")
      */
     public async get(
         id: string,
-        request: Management.GetConnectionEnabledClientsRequestParameters = {},
+        request: GetConnectionEnabledClientsRequestParameters = {},
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.Page<Management.ConnectionEnabledClient>> {
+    ): Promise<core.Page<ConnectionEnabledClient>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.connections.GetConnectionEnabledClientsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.GetConnectionEnabledClientsResponseContent>> => {
+                request: GetConnectionEnabledClientsRequestParameters,
+            ): Promise<core.WithRawResponse<GetConnectionEnabledClientsResponseContent>> => {
                 const { take = 50, from: from_ } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (take != null) {
@@ -97,31 +105,22 @@ export class Clients {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.GetConnectionEnabledClientsResponseContent,
+                        data: _response.body as GetConnectionEnabledClientsResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -150,10 +149,7 @@ export class Clients {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.GetConnectionEnabledClientsResponseContent,
-            Management.ConnectionEnabledClient
-        >({
+        return new core.Pageable<GetConnectionEnabledClientsResponseContent, ConnectionEnabledClient>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -167,24 +163,24 @@ export class Clients {
 
     /**
      * @param {string} id - The id of the connection to modify
-     * @param {Management.UpdateEnabledClientConnectionsRequestContent} request
+     * @param {UpdateEnabledClientConnectionsRequestContent} request
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.connections.clients.update("id", [{
+     *     await client.clients.update("id", [{
      *             client_id: "client_id",
      *             status: true
      *         }])
      */
     public update(
         id: string,
-        request: Management.UpdateEnabledClientConnectionsRequestContent,
+        request: UpdateEnabledClientConnectionsRequestContent,
         requestOptions?: Clients.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
@@ -192,7 +188,7 @@ export class Clients {
 
     private async __update(
         id: string,
-        request: Management.UpdateEnabledClientConnectionsRequestContent,
+        request: UpdateEnabledClientConnectionsRequestContent,
         requestOptions?: Clients.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -224,15 +220,15 @@ export class Clients {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListUserGrantsRequestParameters } from "./requests/ListUserGrantsRequestParameters.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { UserGrant } from "../../../types/UserGrant.js";
+import type { ListUserGrantsOffsetPaginatedResponseContent } from "../../../types/ListUserGrantsOffsetPaginatedResponseContent.js";
+import type { DeleteUserGrantByUserIdRequestParameters } from "./requests/DeleteUserGrantByUserIdRequestParameters.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,24 +49,24 @@ export class UserGrants {
     /**
      * Retrieve the <a href="https://auth0.com/docs/api-auth/which-oauth-flow-to-use">grants</a> associated with your account.
      *
-     * @param {Management.ListUserGrantsRequestParameters} request
+     * @param {ListUserGrantsRequestParameters} request
      * @param {UserGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.userGrants.list()
      */
     public async list(
-        request: Management.ListUserGrantsRequestParameters = {},
+        request: ListUserGrantsRequestParameters = {},
         requestOptions?: UserGrants.RequestOptions,
-    ): Promise<core.Page<Management.UserGrant>> {
+    ): Promise<core.Page<UserGrant>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListUserGrantsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListUserGrantsOffsetPaginatedResponseContent>> => {
+                request: ListUserGrantsRequestParameters,
+            ): Promise<core.WithRawResponse<ListUserGrantsOffsetPaginatedResponseContent>> => {
                 const {
                     per_page: perPage = 50,
                     page = 0,
@@ -110,24 +116,18 @@ export class UserGrants {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListUserGrantsOffsetPaginatedResponseContent,
+                        data: _response.body as ListUserGrantsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -155,7 +155,7 @@ export class UserGrants {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListUserGrantsOffsetPaginatedResponseContent, Management.UserGrant>({
+        return new core.Pageable<ListUserGrantsOffsetPaginatedResponseContent, UserGrant>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.grants ?? []).length > 0,
@@ -170,12 +170,12 @@ export class UserGrants {
     /**
      * Delete a grant associated with your account.
      *
-     * @param {Management.DeleteUserGrantByUserIdRequestParameters} request
+     * @param {DeleteUserGrantByUserIdRequestParameters} request
      * @param {UserGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.userGrants.deleteByUserId({
@@ -183,14 +183,14 @@ export class UserGrants {
      *     })
      */
     public deleteByUserId(
-        request: Management.DeleteUserGrantByUserIdRequestParameters,
+        request: DeleteUserGrantByUserIdRequestParameters,
         requestOptions?: UserGrants.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__deleteByUserId(request, requestOptions));
     }
 
     private async __deleteByUserId(
-        request: Management.DeleteUserGrantByUserIdRequestParameters,
+        request: DeleteUserGrantByUserIdRequestParameters,
         requestOptions?: UserGrants.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { user_id: userId } = request;
@@ -222,11 +222,11 @@ export class UserGrants {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -259,9 +259,9 @@ export class UserGrants {
      * @param {string} id - ID of the grant to delete.
      * @param {UserGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.userGrants.delete("id")
@@ -300,11 +300,11 @@ export class UserGrants {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

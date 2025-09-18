@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import type { GetBreachedPasswordDetectionSettingsResponseContent } from "../../../../../types/GetBreachedPasswordDetectionSettingsResponseContent.js";
+// TODO: Why is this import different from the others?
+import type { UpdateBreachedPasswordDetectionSettingsRequestContent } from "./requests/UpdateBreachedPasswordDetectionSettingsRequestContent.js";
+import type { UpdateBreachedPasswordDetectionSettingsResponseContent } from "../../../../../types/UpdateBreachedPasswordDetectionSettingsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -45,22 +52,22 @@ export class BreachedPasswordDetection {
      *
      * @param {BreachedPasswordDetection.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.attackProtection.breachedPasswordDetection.get()
      */
     public get(
         requestOptions?: BreachedPasswordDetection.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetBreachedPasswordDetectionSettingsResponseContent> {
+    ): core.HttpResponsePromise<GetBreachedPasswordDetectionSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(requestOptions));
     }
 
     private async __get(
         requestOptions?: BreachedPasswordDetection.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetBreachedPasswordDetectionSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetBreachedPasswordDetectionSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -82,7 +89,7 @@ export class BreachedPasswordDetection {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetBreachedPasswordDetectionSettingsResponseContent,
+                data: _response.body as GetBreachedPasswordDetectionSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -90,11 +97,11 @@ export class BreachedPasswordDetection {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -126,28 +133,28 @@ export class BreachedPasswordDetection {
     /**
      * Update details of the Breached Password Detection configuration of your tenant.
      *
-     * @param {Management.UpdateBreachedPasswordDetectionSettingsRequestContent} request
+     * @param {UpdateBreachedPasswordDetectionSettingsRequestContent} request
      * @param {BreachedPasswordDetection.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.attackProtection.breachedPasswordDetection.update()
      */
     public update(
-        request: Management.UpdateBreachedPasswordDetectionSettingsRequestContent = {},
+        request: UpdateBreachedPasswordDetectionSettingsRequestContent = {},
         requestOptions?: BreachedPasswordDetection.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateBreachedPasswordDetectionSettingsResponseContent> {
+    ): core.HttpResponsePromise<UpdateBreachedPasswordDetectionSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.UpdateBreachedPasswordDetectionSettingsRequestContent = {},
+        request: UpdateBreachedPasswordDetectionSettingsRequestContent = {},
         requestOptions?: BreachedPasswordDetection.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateBreachedPasswordDetectionSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateBreachedPasswordDetectionSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -172,7 +179,7 @@ export class BreachedPasswordDetection {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateBreachedPasswordDetectionSettingsResponseContent,
+                data: _response.body as UpdateBreachedPasswordDetectionSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -180,13 +187,13 @@ export class BreachedPasswordDetection {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

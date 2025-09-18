@@ -4,7 +4,21 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListConnectionsQueryParameters } from "./requests/ListConnectionsQueryParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { ConnectionForList } from "../../../types/ConnectionForList.js";
+import type { ListConnectionsCheckpointPaginatedResponseContent } from "../../../types/ListConnectionsCheckpointPaginatedResponseContent.js";
+import type { CreateConnectionRequestContent } from "./requests/CreateConnectionRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateConnectionResponseContent } from "../../../types/CreateConnectionResponseContent.js";
+import type { GetConnectionRequestParameters } from "./requests/GetConnectionRequestParameters.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetConnectionResponseContent } from "../../../types/GetConnectionResponseContent.js";
+import type { UpdateConnectionRequestContent } from "./requests/UpdateConnectionRequestContent.js";
+import type { UpdateConnectionResponseContent } from "../../../types/UpdateConnectionResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Clients } from "../resources/clients/client/Client.js";
@@ -85,25 +99,25 @@ export class Connections {
      *
      * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
      *
-     * @param {Management.ListConnectionsQueryParameters} request
+     * @param {ListConnectionsQueryParameters} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.list()
      */
     public async list(
-        request: Management.ListConnectionsQueryParameters = {},
+        request: ListConnectionsQueryParameters = {},
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.Page<Management.ConnectionForList>> {
+    ): Promise<core.Page<ConnectionForList>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListConnectionsQueryParameters,
-            ): Promise<core.WithRawResponse<Management.ListConnectionsCheckpointPaginatedResponseContent>> => {
+                request: ListConnectionsQueryParameters,
+            ): Promise<core.WithRawResponse<ListConnectionsCheckpointPaginatedResponseContent>> => {
                 const { from: from_, take = 50, strategy, name, fields, include_fields: includeFields } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -150,29 +164,20 @@ export class Connections {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListConnectionsCheckpointPaginatedResponseContent,
+                        data: _response.body as ListConnectionsCheckpointPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -199,10 +204,7 @@ export class Connections {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListConnectionsCheckpointPaginatedResponseContent,
-            Management.ConnectionForList
-        >({
+        return new core.Pageable<ListConnectionsCheckpointPaginatedResponseContent, ConnectionForList>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -217,14 +219,14 @@ export class Connections {
     /**
      * Creates a new connection according to the JSON object received in <code>body</code>.<br/>
      *
-     * @param {Management.CreateConnectionRequestContent} request
+     * @param {CreateConnectionRequestContent} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.create({
@@ -233,16 +235,16 @@ export class Connections {
      *     })
      */
     public create(
-        request: Management.CreateConnectionRequestContent,
+        request: CreateConnectionRequestContent,
         requestOptions?: Connections.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateConnectionResponseContent> {
+    ): core.HttpResponsePromise<CreateConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateConnectionRequestContent,
+        request: CreateConnectionRequestContent,
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateConnectionResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateConnectionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -267,7 +269,7 @@ export class Connections {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateConnectionResponseContent,
+                data: _response.body as CreateConnectionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -275,15 +277,15 @@ export class Connections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -314,31 +316,31 @@ export class Connections {
      * Retrieve details for a specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> along with options that can be used for identity provider configuration.
      *
      * @param {string} id - The id of the connection to retrieve
-     * @param {Management.GetConnectionRequestParameters} request
+     * @param {GetConnectionRequestParameters} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.get("id")
      */
     public get(
         id: string,
-        request: Management.GetConnectionRequestParameters = {},
+        request: GetConnectionRequestParameters = {},
         requestOptions?: Connections.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetConnectionResponseContent> {
+    ): core.HttpResponsePromise<GetConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetConnectionRequestParameters = {},
+        request: GetConnectionRequestParameters = {},
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetConnectionResponseContent>> {
+    ): Promise<core.WithRawResponse<GetConnectionResponseContent>> {
         const { fields, include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -370,7 +372,7 @@ export class Connections {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetConnectionResponseContent,
+                data: _response.body as GetConnectionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -378,15 +380,15 @@ export class Connections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -419,10 +421,10 @@ export class Connections {
      * @param {string} id - The id of the connection to delete
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.delete("id")
@@ -461,13 +463,13 @@ export class Connections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -500,32 +502,32 @@ export class Connections {
      * <b>Note</b>: If you use the <code>options</code> parameter, the entire <code>options</code> object is overriden. To avoid partial data or other issues, ensure all parameters are present when using this option.
      *
      * @param {string} id - The id of the connection to update
-     * @param {Management.UpdateConnectionRequestContent} request
+     * @param {UpdateConnectionRequestContent} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateConnectionRequestContent = {},
+        request: UpdateConnectionRequestContent = {},
         requestOptions?: Connections.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateConnectionResponseContent> {
+    ): core.HttpResponsePromise<UpdateConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateConnectionRequestContent = {},
+        request: UpdateConnectionRequestContent = {},
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateConnectionResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateConnectionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -550,7 +552,7 @@ export class Connections {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateConnectionResponseContent,
+                data: _response.body as UpdateConnectionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -558,17 +560,17 @@ export class Connections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -601,11 +603,11 @@ export class Connections {
      * @param {string} id - ID of the connection to check
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.checkStatus("id")
@@ -644,15 +646,15 @@ export class Connections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

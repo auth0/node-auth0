@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { GetGroupMembersRequestParameters } from "./requests/GetGroupMembersRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GroupMember } from "../../../../../types/GroupMember.js";
+import type { GetGroupMembersResponseContent } from "../../../../../types/GetGroupMembersResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -42,26 +48,26 @@ export class Members {
 
     /**
      * @param {string} id - Unique identifier for the group (service-generated).
-     * @param {Management.GetGroupMembersRequestParameters} request
+     * @param {GetGroupMembersRequestParameters} request
      * @param {Members.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.groups.members.get("id")
+     *     await client.members.get("id")
      */
     public async get(
         id: string,
-        request: Management.GetGroupMembersRequestParameters = {},
+        request: GetGroupMembersRequestParameters = {},
         requestOptions?: Members.RequestOptions,
-    ): Promise<core.Page<Management.GroupMember>> {
+    ): Promise<core.Page<GroupMember>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.groups.GetGroupMembersRequestParameters,
-            ): Promise<core.WithRawResponse<Management.GetGroupMembersResponseContent>> => {
+                request: GetGroupMembersRequestParameters,
+            ): Promise<core.WithRawResponse<GetGroupMembersResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -92,29 +98,20 @@ export class Members {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.GetGroupMembersResponseContent,
+                        data: _response.body as GetGroupMembersResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -143,7 +140,7 @@ export class Members {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.GetGroupMembersResponseContent, Management.GroupMember>({
+        return new core.Pageable<GetGroupMembersResponseContent, GroupMember>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

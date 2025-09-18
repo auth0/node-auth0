@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ConnectionsGetRequest } from "./requests/ConnectionsGetRequest.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { ConnectionForList } from "../../../../../types/ConnectionForList.js";
+import type { ListClientConnectionsResponseContent } from "../../../../../types/ListClientConnectionsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -52,27 +59,27 @@ export class Connections {
      * </ul>
      *
      * @param {string} id - ID of the client for which to retrieve enabled connections.
-     * @param {Management.ConnectionsGetRequest} request
+     * @param {ConnectionsGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.clients.connections.get("id")
+     *     await client.connections.get("id")
      */
     public async get(
         id: string,
-        request: Management.ConnectionsGetRequest = {},
+        request: ConnectionsGetRequest = {},
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.Page<Management.ConnectionForList>> {
+    ): Promise<core.Page<ConnectionForList>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.clients.ConnectionsGetRequest,
-            ): Promise<core.WithRawResponse<Management.ListClientConnectionsResponseContent>> => {
+                request: ConnectionsGetRequest,
+            ): Promise<core.WithRawResponse<ListClientConnectionsResponseContent>> => {
                 const { strategy, from: from_, take = 50, fields, include_fields: includeFields } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (strategy != null) {
@@ -116,31 +123,22 @@ export class Connections {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListClientConnectionsResponseContent,
+                        data: _response.body as ListClientConnectionsResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -169,7 +167,7 @@ export class Connections {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListClientConnectionsResponseContent, Management.ConnectionForList>({
+        return new core.Pageable<ListClientConnectionsResponseContent, ConnectionForList>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

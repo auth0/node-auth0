@@ -4,7 +4,16 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListUserBlocksByIdentifierRequestParameters } from "./requests/ListUserBlocksByIdentifierRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { ListUserBlocksByIdentifierResponseContent } from "../../../types/ListUserBlocksByIdentifierResponseContent.js";
+import type { DeleteUserBlocksByIdentifierRequestParameters } from "./requests/DeleteUserBlocksByIdentifierRequestParameters.js";
+import type { ListUserBlocksRequestParameters } from "./requests/ListUserBlocksRequestParameters.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { ListUserBlocksResponseContent } from "../../../types/ListUserBlocksResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,13 +52,13 @@ export class UserBlocks {
     /**
      * Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for a user with the given identifier (username, phone number, or email).
      *
-     * @param {Management.ListUserBlocksByIdentifierRequestParameters} request
+     * @param {ListUserBlocksByIdentifierRequestParameters} request
      * @param {UserBlocks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.userBlocks.listByIdentifier({
@@ -57,16 +66,16 @@ export class UserBlocks {
      *     })
      */
     public listByIdentifier(
-        request: Management.ListUserBlocksByIdentifierRequestParameters,
+        request: ListUserBlocksByIdentifierRequestParameters,
         requestOptions?: UserBlocks.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListUserBlocksByIdentifierResponseContent> {
+    ): core.HttpResponsePromise<ListUserBlocksByIdentifierResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__listByIdentifier(request, requestOptions));
     }
 
     private async __listByIdentifier(
-        request: Management.ListUserBlocksByIdentifierRequestParameters,
+        request: ListUserBlocksByIdentifierRequestParameters,
         requestOptions?: UserBlocks.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListUserBlocksByIdentifierResponseContent>> {
+    ): Promise<core.WithRawResponse<ListUserBlocksByIdentifierResponseContent>> {
         const { identifier, consider_brute_force_enablement: considerBruteForceEnablement } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         _queryParams["identifier"] = identifier;
@@ -95,7 +104,7 @@ export class UserBlocks {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.ListUserBlocksByIdentifierResponseContent,
+                data: _response.body as ListUserBlocksByIdentifierResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -103,13 +112,13 @@ export class UserBlocks {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -141,13 +150,13 @@ export class UserBlocks {
      *
      * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by a tenant administrator</a>.
      *
-     * @param {Management.DeleteUserBlocksByIdentifierRequestParameters} request
+     * @param {DeleteUserBlocksByIdentifierRequestParameters} request
      * @param {UserBlocks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.userBlocks.deleteByIdentifier({
@@ -155,14 +164,14 @@ export class UserBlocks {
      *     })
      */
     public deleteByIdentifier(
-        request: Management.DeleteUserBlocksByIdentifierRequestParameters,
+        request: DeleteUserBlocksByIdentifierRequestParameters,
         requestOptions?: UserBlocks.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__deleteByIdentifier(request, requestOptions));
     }
 
     private async __deleteByIdentifier(
-        request: Management.DeleteUserBlocksByIdentifierRequestParameters,
+        request: DeleteUserBlocksByIdentifierRequestParameters,
         requestOptions?: UserBlocks.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { identifier } = request;
@@ -194,13 +203,13 @@ export class UserBlocks {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -231,31 +240,31 @@ export class UserBlocks {
      * Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for the user with the given ID.
      *
      * @param {string} id - user_id of the user blocks to retrieve.
-     * @param {Management.ListUserBlocksRequestParameters} request
+     * @param {ListUserBlocksRequestParameters} request
      * @param {UserBlocks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.userBlocks.list("id")
      */
     public list(
         id: string,
-        request: Management.ListUserBlocksRequestParameters = {},
+        request: ListUserBlocksRequestParameters = {},
         requestOptions?: UserBlocks.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListUserBlocksResponseContent> {
+    ): core.HttpResponsePromise<ListUserBlocksResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__list(id, request, requestOptions));
     }
 
     private async __list(
         id: string,
-        request: Management.ListUserBlocksRequestParameters = {},
+        request: ListUserBlocksRequestParameters = {},
         requestOptions?: UserBlocks.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListUserBlocksResponseContent>> {
+    ): Promise<core.WithRawResponse<ListUserBlocksResponseContent>> {
         const { consider_brute_force_enablement: considerBruteForceEnablement } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (considerBruteForceEnablement != null) {
@@ -283,7 +292,7 @@ export class UserBlocks {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.ListUserBlocksResponseContent,
+                data: _response.body as ListUserBlocksResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -291,15 +300,15 @@ export class UserBlocks {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -334,11 +343,11 @@ export class UserBlocks {
      * @param {string} id - The user_id of the user to update.
      * @param {UserBlocks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.userBlocks.delete("id")
@@ -377,15 +386,15 @@ export class UserBlocks {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

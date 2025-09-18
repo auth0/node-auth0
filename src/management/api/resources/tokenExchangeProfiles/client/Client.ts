@@ -4,7 +4,19 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { TokenExchangeProfilesListRequest } from "./requests/TokenExchangeProfilesListRequest.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { TokenExchangeProfileResponseContent } from "../../../types/TokenExchangeProfileResponseContent.js";
+import type { ListTokenExchangeProfileResponseContent } from "../../../types/ListTokenExchangeProfileResponseContent.js";
+import type { CreateTokenExchangeProfileRequestContent } from "./requests/CreateTokenExchangeProfileRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateTokenExchangeProfileResponseContent } from "../../../types/CreateTokenExchangeProfileResponseContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetTokenExchangeProfileResponseContent } from "../../../types/GetTokenExchangeProfileResponseContent.js";
+import type { UpdateTokenExchangeProfileRequestContent } from "./requests/UpdateTokenExchangeProfileRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -51,25 +63,25 @@ export class TokenExchangeProfiles {
      *
      * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
      *
-     * @param {Management.TokenExchangeProfilesListRequest} request
+     * @param {TokenExchangeProfilesListRequest} request
      * @param {TokenExchangeProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tokenExchangeProfiles.list()
      */
     public async list(
-        request: Management.TokenExchangeProfilesListRequest = {},
+        request: TokenExchangeProfilesListRequest = {},
         requestOptions?: TokenExchangeProfiles.RequestOptions,
-    ): Promise<core.Page<Management.TokenExchangeProfileResponseContent>> {
+    ): Promise<core.Page<TokenExchangeProfileResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.TokenExchangeProfilesListRequest,
-            ): Promise<core.WithRawResponse<Management.ListTokenExchangeProfileResponseContent>> => {
+                request: TokenExchangeProfilesListRequest,
+            ): Promise<core.WithRawResponse<ListTokenExchangeProfileResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -100,29 +112,20 @@ export class TokenExchangeProfiles {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListTokenExchangeProfileResponseContent,
+                        data: _response.body as ListTokenExchangeProfileResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -151,10 +154,7 @@ export class TokenExchangeProfiles {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListTokenExchangeProfileResponseContent,
-            Management.TokenExchangeProfileResponseContent
-        >({
+        return new core.Pageable<ListTokenExchangeProfileResponseContent, TokenExchangeProfileResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -169,14 +169,14 @@ export class TokenExchangeProfiles {
     /**
      * Create a new Token Exchange Profile within your tenant.
      *
-     * @param {Management.CreateTokenExchangeProfileRequestContent} request
+     * @param {CreateTokenExchangeProfileRequestContent} request
      * @param {TokenExchangeProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tokenExchangeProfiles.create({
@@ -186,16 +186,16 @@ export class TokenExchangeProfiles {
      *     })
      */
     public create(
-        request: Management.CreateTokenExchangeProfileRequestContent,
+        request: CreateTokenExchangeProfileRequestContent,
         requestOptions?: TokenExchangeProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateTokenExchangeProfileResponseContent> {
+    ): core.HttpResponsePromise<CreateTokenExchangeProfileResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateTokenExchangeProfileRequestContent,
+        request: CreateTokenExchangeProfileRequestContent,
         requestOptions?: TokenExchangeProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateTokenExchangeProfileResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateTokenExchangeProfileResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -220,7 +220,7 @@ export class TokenExchangeProfiles {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateTokenExchangeProfileResponseContent,
+                data: _response.body as CreateTokenExchangeProfileResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -228,15 +228,15 @@ export class TokenExchangeProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -269,11 +269,11 @@ export class TokenExchangeProfiles {
      * @param {string} id - ID of the Token Exchange Profile to retrieve.
      * @param {TokenExchangeProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tokenExchangeProfiles.get("id")
@@ -281,14 +281,14 @@ export class TokenExchangeProfiles {
     public get(
         id: string,
         requestOptions?: TokenExchangeProfiles.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetTokenExchangeProfileResponseContent> {
+    ): core.HttpResponsePromise<GetTokenExchangeProfileResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: TokenExchangeProfiles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetTokenExchangeProfileResponseContent>> {
+    ): Promise<core.WithRawResponse<GetTokenExchangeProfileResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -310,7 +310,7 @@ export class TokenExchangeProfiles {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetTokenExchangeProfileResponseContent,
+                data: _response.body as GetTokenExchangeProfileResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -318,15 +318,15 @@ export class TokenExchangeProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -361,9 +361,9 @@ export class TokenExchangeProfiles {
      * @param {string} id - ID of the Token Exchange Profile to delete.
      * @param {TokenExchangeProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tokenExchangeProfiles.delete("id")
@@ -402,11 +402,11 @@ export class TokenExchangeProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -439,21 +439,21 @@ export class TokenExchangeProfiles {
      * Update a Token Exchange Profile within your tenant.
      *
      * @param {string} id - ID of the Token Exchange Profile to update.
-     * @param {Management.UpdateTokenExchangeProfileRequestContent} request
+     * @param {UpdateTokenExchangeProfileRequestContent} request
      * @param {TokenExchangeProfiles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tokenExchangeProfiles.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateTokenExchangeProfileRequestContent = {},
+        request: UpdateTokenExchangeProfileRequestContent = {},
         requestOptions?: TokenExchangeProfiles.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
@@ -461,7 +461,7 @@ export class TokenExchangeProfiles {
 
     private async __update(
         id: string,
-        request: Management.UpdateTokenExchangeProfileRequestContent = {},
+        request: UpdateTokenExchangeProfileRequestContent = {},
         requestOptions?: TokenExchangeProfiles.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -493,15 +493,15 @@ export class TokenExchangeProfiles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

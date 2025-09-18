@@ -4,7 +4,22 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListClientsRequestParameters } from "./requests/ListClientsRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { Client } from "../../../types/Client.js";
+import type { ListClientsOffsetPaginatedResponseContent } from "../../../types/ListClientsOffsetPaginatedResponseContent.js";
+import type { CreateClientRequestContent } from "./requests/CreateClientRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateClientResponseContent } from "../../../types/CreateClientResponseContent.js";
+import type { GetClientRequestParameters } from "./requests/GetClientRequestParameters.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetClientResponseContent } from "../../../types/GetClientResponseContent.js";
+import type { UpdateClientRequestContent } from "./requests/UpdateClientRequestContent.js";
+import type { UpdateClientResponseContent } from "../../../types/UpdateClientResponseContent.js";
+import type { RotateClientSecretResponseContent } from "../../../types/RotateClientSecretResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Credentials } from "../resources/credentials/client/Client.js";
@@ -87,25 +102,25 @@ export class Clients {
      *   </li>
      * </ul>
      *
-     * @param {Management.ListClientsRequestParameters} request
+     * @param {ListClientsRequestParameters} request
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.list()
      */
     public async list(
-        request: Management.ListClientsRequestParameters = {},
+        request: ListClientsRequestParameters = {},
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.Page<Management.Client>> {
+    ): Promise<core.Page<Client>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListClientsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListClientsOffsetPaginatedResponseContent>> => {
+                request: ListClientsRequestParameters,
+            ): Promise<core.WithRawResponse<ListClientsOffsetPaginatedResponseContent>> => {
                 const {
                     fields,
                     include_fields: includeFields,
@@ -167,29 +182,20 @@ export class Clients {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListClientsOffsetPaginatedResponseContent,
+                        data: _response.body as ListClientsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -217,7 +223,7 @@ export class Clients {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListClientsOffsetPaginatedResponseContent, Management.Client>({
+        return new core.Pageable<ListClientsOffsetPaginatedResponseContent, Client>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.clients ?? []).length > 0,
@@ -245,14 +251,14 @@ export class Clients {
      *
      * <div class="alert alert-warning">SSO Integrations created via this endpoint will accept login requests and share user profile information.</div>
      *
-     * @param {Management.CreateClientRequestContent} request
+     * @param {CreateClientRequestContent} request
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.create({
@@ -260,16 +266,16 @@ export class Clients {
      *     })
      */
     public create(
-        request: Management.CreateClientRequestContent,
+        request: CreateClientRequestContent,
         requestOptions?: Clients.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateClientResponseContent> {
+    ): core.HttpResponsePromise<CreateClientResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateClientRequestContent,
+        request: CreateClientRequestContent,
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateClientResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateClientResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -294,7 +300,7 @@ export class Clients {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateClientResponseContent,
+                data: _response.body as CreateClientResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -302,15 +308,15 @@ export class Clients {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -371,31 +377,31 @@ export class Clients {
      * </ul>
      *
      * @param {string} id - ID of the client to retrieve.
-     * @param {Management.GetClientRequestParameters} request
+     * @param {GetClientRequestParameters} request
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.get("id")
      */
     public get(
         id: string,
-        request: Management.GetClientRequestParameters = {},
+        request: GetClientRequestParameters = {},
         requestOptions?: Clients.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetClientResponseContent> {
+    ): core.HttpResponsePromise<GetClientResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetClientRequestParameters = {},
+        request: GetClientRequestParameters = {},
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetClientResponseContent>> {
+    ): Promise<core.WithRawResponse<GetClientResponseContent>> {
         const { fields, include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -426,21 +432,21 @@ export class Clients {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetClientResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetClientResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -473,10 +479,10 @@ export class Clients {
      * @param {string} id - ID of the client to delete.
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.delete("id")
@@ -512,13 +518,13 @@ export class Clients {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -557,31 +563,31 @@ export class Clients {
      * - To change a client's <code>is_first_party</code> property to <code>false</code>, the <code>organization_usage</code> and <code>organization_require_behavior</code> properties must be unset.
      *
      * @param {string} id - ID of the client to update.
-     * @param {Management.UpdateClientRequestContent} request
+     * @param {UpdateClientRequestContent} request
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateClientRequestContent = {},
+        request: UpdateClientRequestContent = {},
         requestOptions?: Clients.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateClientResponseContent> {
+    ): core.HttpResponsePromise<UpdateClientResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateClientRequestContent = {},
+        request: UpdateClientRequestContent = {},
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateClientResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateClientResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -606,7 +612,7 @@ export class Clients {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateClientResponseContent,
+                data: _response.body as UpdateClientResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -614,15 +620,15 @@ export class Clients {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -659,11 +665,11 @@ export class Clients {
      * @param {string} id - ID of the client that will rotate secrets.
      * @param {Clients.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.rotateSecret("id")
@@ -671,14 +677,14 @@ export class Clients {
     public rotateSecret(
         id: string,
         requestOptions?: Clients.RequestOptions,
-    ): core.HttpResponsePromise<Management.RotateClientSecretResponseContent> {
+    ): core.HttpResponsePromise<RotateClientSecretResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__rotateSecret(id, requestOptions));
     }
 
     private async __rotateSecret(
         id: string,
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.RotateClientSecretResponseContent>> {
+    ): Promise<core.WithRawResponse<RotateClientSecretResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -700,7 +706,7 @@ export class Clients {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.RotateClientSecretResponseContent,
+                data: _response.body as RotateClientSecretResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -708,15 +714,15 @@ export class Clients {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

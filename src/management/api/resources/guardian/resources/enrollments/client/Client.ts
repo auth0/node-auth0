@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { CreateGuardianEnrollmentTicketRequestContent } from "./requests/CreateGuardianEnrollmentTicketRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import type { CreateGuardianEnrollmentTicketResponseContent } from "../../../../../types/CreateGuardianEnrollmentTicketResponseContent.js";
+import type { GetGuardianEnrollmentResponseContent } from "../../../../../types/GetGuardianEnrollmentResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -46,13 +52,13 @@ export class Enrollments {
      *
      * Note: Users cannot enroll in Email as a factor through custom enrollment tickets.
      *
-     * @param {Management.CreateGuardianEnrollmentTicketRequestContent} request
+     * @param {CreateGuardianEnrollmentTicketRequestContent} request
      * @param {Enrollments.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
      *
      * @example
      *     await client.guardian.enrollments.createTicket({
@@ -60,16 +66,16 @@ export class Enrollments {
      *     })
      */
     public createTicket(
-        request: Management.CreateGuardianEnrollmentTicketRequestContent,
+        request: CreateGuardianEnrollmentTicketRequestContent,
         requestOptions?: Enrollments.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateGuardianEnrollmentTicketResponseContent> {
+    ): core.HttpResponsePromise<CreateGuardianEnrollmentTicketResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__createTicket(request, requestOptions));
     }
 
     private async __createTicket(
-        request: Management.CreateGuardianEnrollmentTicketRequestContent,
+        request: CreateGuardianEnrollmentTicketRequestContent,
         requestOptions?: Enrollments.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateGuardianEnrollmentTicketResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateGuardianEnrollmentTicketResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -94,7 +100,7 @@ export class Enrollments {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateGuardianEnrollmentTicketResponseContent,
+                data: _response.body as CreateGuardianEnrollmentTicketResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -102,13 +108,13 @@ export class Enrollments {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -143,9 +149,9 @@ export class Enrollments {
      * @param {string} id - ID of the enrollment to be retrieve.
      * @param {Enrollments.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
      *
      * @example
      *     await client.guardian.enrollments.get("id")
@@ -153,14 +159,14 @@ export class Enrollments {
     public get(
         id: string,
         requestOptions?: Enrollments.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetGuardianEnrollmentResponseContent> {
+    ): core.HttpResponsePromise<GetGuardianEnrollmentResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: Enrollments.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetGuardianEnrollmentResponseContent>> {
+    ): Promise<core.WithRawResponse<GetGuardianEnrollmentResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -182,7 +188,7 @@ export class Enrollments {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetGuardianEnrollmentResponseContent,
+                data: _response.body as GetGuardianEnrollmentResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -190,11 +196,11 @@ export class Enrollments {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -229,9 +235,9 @@ export class Enrollments {
      * @param {string} id - ID of the enrollment to be deleted.
      * @param {Enrollments.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
      *
      * @example
      *     await client.guardian.enrollments.delete("id")
@@ -270,11 +276,11 @@ export class Enrollments {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

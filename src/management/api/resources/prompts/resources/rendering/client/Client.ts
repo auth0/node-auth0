@@ -4,7 +4,20 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListAculsRequestParameters } from "./requests/ListAculsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { PaymentRequiredError } from "../../../../../errors/PaymentRequiredError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { AculResponseContent } from "../../../../../types/AculResponseContent.js";
+import type { ListAculsOffsetPaginatedResponseContent } from "../../../../../types/ListAculsOffsetPaginatedResponseContent.js";
+import type { PromptGroupNameEnum } from "../../../../../types/PromptGroupNameEnum.js";
+import type { ScreenGroupNameEnum } from "../../../../../types/ScreenGroupNameEnum.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import type { GetAculResponseContent } from "../../../../../types/GetAculResponseContent.js";
+import type { UpdateAculRequestContent } from "./requests/UpdateAculRequestContent.js";
+import type { UpdateAculResponseContent } from "../../../../../types/UpdateAculResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,26 +56,26 @@ export class Rendering {
     /**
      * Get render setting configurations for all screens.
      *
-     * @param {Management.ListAculsRequestParameters} request
+     * @param {ListAculsRequestParameters} request
      * @param {Rendering.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link PaymentRequiredError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.prompts.rendering.list()
+     *     await client.rendering.list()
      */
     public async list(
-        request: Management.ListAculsRequestParameters = {},
+        request: ListAculsRequestParameters = {},
         requestOptions?: Rendering.RequestOptions,
-    ): Promise<core.Page<Management.AculResponseContent>> {
+    ): Promise<core.Page<AculResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.prompts.ListAculsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListAculsOffsetPaginatedResponseContent>> => {
+                request: ListAculsRequestParameters,
+            ): Promise<core.WithRawResponse<ListAculsOffsetPaginatedResponseContent>> => {
                 const {
                     fields,
                     include_fields: includeFields,
@@ -120,34 +133,22 @@ export class Rendering {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListAculsOffsetPaginatedResponseContent,
+                        data: _response.body as ListAculsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 402:
-                            throw new Management.PaymentRequiredError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -177,7 +178,7 @@ export class Rendering {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListAculsOffsetPaginatedResponseContent, Management.AculResponseContent>({
+        return new core.Pageable<ListAculsOffsetPaginatedResponseContent, AculResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.configs ?? []).length > 0,
@@ -192,33 +193,33 @@ export class Rendering {
     /**
      * Get render settings for a screen.
      *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt
-     * @param {Management.ScreenGroupNameEnum} screen - Name of the screen
+     * @param {PromptGroupNameEnum} prompt - Name of the prompt
+     * @param {ScreenGroupNameEnum} screen - Name of the screen
      * @param {Rendering.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link PaymentRequiredError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.prompts.rendering.get("login", "login")
+     *     await client.rendering.get("login", "login")
      */
     public get(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
+        prompt: PromptGroupNameEnum,
+        screen: ScreenGroupNameEnum,
         requestOptions?: Rendering.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetAculResponseContent> {
+    ): core.HttpResponsePromise<GetAculResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(prompt, screen, requestOptions));
     }
 
     private async __get(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
+        prompt: PromptGroupNameEnum,
+        screen: ScreenGroupNameEnum,
         requestOptions?: Rendering.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetAculResponseContent>> {
+    ): Promise<core.WithRawResponse<GetAculResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -239,23 +240,23 @@ export class Rendering {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetAculResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetAculResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 402:
-                    throw new Management.PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
+                    throw new PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -314,35 +315,35 @@ export class Rendering {
      * }
      * </pre>
      *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt
-     * @param {Management.ScreenGroupNameEnum} screen - Name of the screen
-     * @param {Management.UpdateAculRequestContent} request
+     * @param {PromptGroupNameEnum} prompt - Name of the prompt
+     * @param {ScreenGroupNameEnum} screen - Name of the screen
+     * @param {UpdateAculRequestContent} request
      * @param {Rendering.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.PaymentRequiredError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link PaymentRequiredError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.prompts.rendering.update("login", "login")
+     *     await client.rendering.update("login", "login")
      */
     public update(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
-        request: Management.UpdateAculRequestContent = {},
+        prompt: PromptGroupNameEnum,
+        screen: ScreenGroupNameEnum,
+        request: UpdateAculRequestContent = {},
         requestOptions?: Rendering.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateAculResponseContent> {
+    ): core.HttpResponsePromise<UpdateAculResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(prompt, screen, request, requestOptions));
     }
 
     private async __update(
-        prompt: Management.PromptGroupNameEnum,
-        screen: Management.ScreenGroupNameEnum,
-        request: Management.UpdateAculRequestContent = {},
+        prompt: PromptGroupNameEnum,
+        screen: ScreenGroupNameEnum,
+        request: UpdateAculRequestContent = {},
         requestOptions?: Rendering.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateAculResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateAculResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -366,21 +367,21 @@ export class Rendering {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UpdateAculResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as UpdateAculResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 402:
-                    throw new Management.PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
+                    throw new PaymentRequiredError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

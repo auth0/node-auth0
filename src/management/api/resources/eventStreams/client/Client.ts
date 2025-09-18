@@ -4,7 +4,22 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListEventStreamsRequestParameters } from "./requests/ListEventStreamsRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { EventStreamResponseContent } from "../../../types/EventStreamResponseContent.js";
+// TODO: Why is this is adifferent types directory?
+import { EventStreamsCreateRequest } from "../types/EventStreamsCreateRequest.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateEventStreamResponseContent } from "../../../types/CreateEventStreamResponseContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetEventStreamResponseContent } from "../../../types/GetEventStreamResponseContent.js";
+import type { UpdateEventStreamRequestContent } from "./requests/UpdateEventStreamRequestContent.js";
+import type { UpdateEventStreamResponseContent } from "../../../types/UpdateEventStreamResponseContent.js";
+import type { CreateEventStreamTestEventRequestContent } from "./requests/CreateEventStreamTestEventRequestContent.js";
+import type { CreateEventStreamTestEventResponseContent } from "../../../types/CreateEventStreamTestEventResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Deliveries } from "../resources/deliveries/client/Client.js";
@@ -53,28 +68,28 @@ export class EventStreams {
     }
 
     /**
-     * @param {Management.ListEventStreamsRequestParameters} request
+     * @param {ListEventStreamsRequestParameters} request
      * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.list()
      */
     public list(
-        request: Management.ListEventStreamsRequestParameters = {},
+        request: ListEventStreamsRequestParameters = {},
         requestOptions?: EventStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.EventStreamResponseContent[]> {
+    ): core.HttpResponsePromise<EventStreamResponseContent[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
     private async __list(
-        request: Management.ListEventStreamsRequestParameters = {},
+        request: ListEventStreamsRequestParameters = {},
         requestOptions?: EventStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.EventStreamResponseContent[]>> {
+    ): Promise<core.WithRawResponse<EventStreamResponseContent[]>> {
         const { from: from_, take = 50 } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (from_ != null) {
@@ -106,7 +121,7 @@ export class EventStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.EventStreamResponseContent[],
+                data: _response.body as EventStreamResponseContent[],
                 rawResponse: _response.rawResponse,
             };
         }
@@ -114,13 +129,13 @@ export class EventStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -148,14 +163,14 @@ export class EventStreams {
     }
 
     /**
-     * @param {Management.EventStreamsCreateRequest} request
+     * @param {EventStreamsCreateRequest} request
      * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.create({
@@ -172,16 +187,16 @@ export class EventStreams {
      *     })
      */
     public create(
-        request: Management.EventStreamsCreateRequest,
+        request: EventStreamsCreateRequest,
         requestOptions?: EventStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateEventStreamResponseContent> {
+    ): core.HttpResponsePromise<CreateEventStreamResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.EventStreamsCreateRequest,
+        request: EventStreamsCreateRequest,
         requestOptions?: EventStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateEventStreamResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateEventStreamResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -206,7 +221,7 @@ export class EventStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateEventStreamResponseContent,
+                data: _response.body as CreateEventStreamResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -214,15 +229,15 @@ export class EventStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -253,10 +268,10 @@ export class EventStreams {
      * @param {string} id - Unique identifier for the event stream.
      * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.get("id")
@@ -264,14 +279,14 @@ export class EventStreams {
     public get(
         id: string,
         requestOptions?: EventStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetEventStreamResponseContent> {
+    ): core.HttpResponsePromise<GetEventStreamResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: EventStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetEventStreamResponseContent>> {
+    ): Promise<core.WithRawResponse<GetEventStreamResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -293,7 +308,7 @@ export class EventStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetEventStreamResponseContent,
+                data: _response.body as GetEventStreamResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -301,13 +316,13 @@ export class EventStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -338,10 +353,10 @@ export class EventStreams {
      * @param {string} id - Unique identifier for the event stream.
      * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.delete("id")
@@ -380,13 +395,13 @@ export class EventStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -415,30 +430,30 @@ export class EventStreams {
 
     /**
      * @param {string} id - Unique identifier for the event stream.
-     * @param {Management.UpdateEventStreamRequestContent} request
+     * @param {UpdateEventStreamRequestContent} request
      * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateEventStreamRequestContent = {},
+        request: UpdateEventStreamRequestContent = {},
         requestOptions?: EventStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateEventStreamResponseContent> {
+    ): core.HttpResponsePromise<UpdateEventStreamResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateEventStreamRequestContent = {},
+        request: UpdateEventStreamRequestContent = {},
         requestOptions?: EventStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateEventStreamResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateEventStreamResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -463,7 +478,7 @@ export class EventStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateEventStreamResponseContent,
+                data: _response.body as UpdateEventStreamResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -471,13 +486,13 @@ export class EventStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -506,12 +521,12 @@ export class EventStreams {
 
     /**
      * @param {string} id - Unique identifier for the event stream.
-     * @param {Management.CreateEventStreamTestEventRequestContent} request
+     * @param {CreateEventStreamTestEventRequestContent} request
      * @param {EventStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.eventStreams.test("id", {
@@ -520,17 +535,17 @@ export class EventStreams {
      */
     public test(
         id: string,
-        request: Management.CreateEventStreamTestEventRequestContent,
+        request: CreateEventStreamTestEventRequestContent,
         requestOptions?: EventStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateEventStreamTestEventResponseContent> {
+    ): core.HttpResponsePromise<CreateEventStreamTestEventResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__test(id, request, requestOptions));
     }
 
     private async __test(
         id: string,
-        request: Management.CreateEventStreamTestEventRequestContent,
+        request: CreateEventStreamTestEventRequestContent,
         requestOptions?: EventStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateEventStreamTestEventResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateEventStreamTestEventResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -555,7 +570,7 @@ export class EventStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateEventStreamTestEventResponseContent,
+                data: _response.body as CreateEventStreamTestEventResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -563,11 +578,11 @@ export class EventStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

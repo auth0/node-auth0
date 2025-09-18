@@ -4,7 +4,22 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListUserAuthenticationMethodsRequestParameters } from "./requests/ListUserAuthenticationMethodsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { UserAuthenticationMethod } from "../../../../../types/UserAuthenticationMethod.js";
+import type { ListUserAuthenticationMethodsOffsetPaginatedResponseContent } from "../../../../../types/ListUserAuthenticationMethodsOffsetPaginatedResponseContent.js";
+import type { CreateUserAuthenticationMethodRequestContent } from "./requests/CreateUserAuthenticationMethodRequestContent.js";
+import { ConflictError } from "../../../../../errors/ConflictError.js";
+import type { CreateUserAuthenticationMethodResponseContent } from "../../../../../types/CreateUserAuthenticationMethodResponseContent.js";
+import type { SetUserAuthenticationMethodsRequestContent } from "../../../../../types/SetUserAuthenticationMethodsRequestContent.js";
+import type { SetUserAuthenticationMethodResponseContent } from "../../../../../types/SetUserAuthenticationMethodResponseContent.js";
+import type { GetUserAuthenticationMethodResponseContent } from "../../../../../types/GetUserAuthenticationMethodResponseContent.js";
+import type { UpdateUserAuthenticationMethodRequestContent } from "./requests/UpdateUserAuthenticationMethodRequestContent.js";
+import type { UpdateUserAuthenticationMethodResponseContent } from "../../../../../types/UpdateUserAuthenticationMethodResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,29 +59,27 @@ export class AuthenticationMethods {
      * Retrieve detailed list of authentication methods associated with a specified user.
      *
      * @param {string} id - The ID of the user in question.
-     * @param {Management.ListUserAuthenticationMethodsRequestParameters} request
+     * @param {ListUserAuthenticationMethodsRequestParameters} request
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.authenticationMethods.list("id")
+     *     await client.authenticationMethods.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListUserAuthenticationMethodsRequestParameters = {},
+        request: ListUserAuthenticationMethodsRequestParameters = {},
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): Promise<core.Page<Management.UserAuthenticationMethod>> {
+    ): Promise<core.Page<UserAuthenticationMethod>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.users.ListUserAuthenticationMethodsRequestParameters,
-            ): Promise<
-                core.WithRawResponse<Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent>
-            > => {
+                request: ListUserAuthenticationMethodsRequestParameters,
+            ): Promise<core.WithRawResponse<ListUserAuthenticationMethodsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -100,31 +113,22 @@ export class AuthenticationMethods {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent,
+                        data: _response.body as ListUserAuthenticationMethodsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -154,53 +158,52 @@ export class AuthenticationMethods {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent,
-            Management.UserAuthenticationMethod
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.authenticators ?? []).length > 0,
-            getItems: (response) => response?.authenticators ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
+        return new core.Pageable<ListUserAuthenticationMethodsOffsetPaginatedResponseContent, UserAuthenticationMethod>(
+            {
+                response: dataWithRawResponse.data,
+                rawResponse: dataWithRawResponse.rawResponse,
+                hasNextPage: (response) => (response?.authenticators ?? []).length > 0,
+                getItems: (response) => response?.authenticators ?? [],
+                loadPage: (_response) => {
+                    _offset += 1;
+                    return list(core.setObjectProperty(request, "page", _offset));
+                },
             },
-        });
+        );
     }
 
     /**
      * Create an authentication method. Authentication methods created via this endpoint will be auto confirmed and should already have verification completed.
      *
      * @param {string} id - The ID of the user to whom the new authentication method will be assigned.
-     * @param {Management.CreateUserAuthenticationMethodRequestContent} request
+     * @param {CreateUserAuthenticationMethodRequestContent} request
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.authenticationMethods.create("id", {
+     *     await client.authenticationMethods.create("id", {
      *         type: "phone"
      *     })
      */
     public create(
         id: string,
-        request: Management.CreateUserAuthenticationMethodRequestContent,
+        request: CreateUserAuthenticationMethodRequestContent,
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateUserAuthenticationMethodResponseContent> {
+    ): core.HttpResponsePromise<CreateUserAuthenticationMethodResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
     }
 
     private async __create(
         id: string,
-        request: Management.CreateUserAuthenticationMethodRequestContent,
+        request: CreateUserAuthenticationMethodRequestContent,
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateUserAuthenticationMethodResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateUserAuthenticationMethodResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -225,7 +228,7 @@ export class AuthenticationMethods {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateUserAuthenticationMethodResponseContent,
+                data: _response.body as CreateUserAuthenticationMethodResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -233,17 +236,17 @@ export class AuthenticationMethods {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -278,33 +281,33 @@ export class AuthenticationMethods {
      *     <b>Note</b>: Authentication methods supplied through this action do not iterate on existing methods. Instead, any methods passed will overwrite the user&#8217s existing settings.
      *
      * @param {string} id - The ID of the user in question.
-     * @param {Management.SetUserAuthenticationMethodsRequestContent} request
+     * @param {SetUserAuthenticationMethodsRequestContent} request
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.authenticationMethods.set("id", [{
+     *     await client.authenticationMethods.set("id", [{
      *             type: "phone"
      *         }])
      */
     public set(
         id: string,
-        request: Management.SetUserAuthenticationMethodsRequestContent,
+        request: SetUserAuthenticationMethodsRequestContent,
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetUserAuthenticationMethodResponseContent[]> {
+    ): core.HttpResponsePromise<SetUserAuthenticationMethodResponseContent[]> {
         return core.HttpResponsePromise.fromPromise(this.__set(id, request, requestOptions));
     }
 
     private async __set(
         id: string,
-        request: Management.SetUserAuthenticationMethodsRequestContent,
+        request: SetUserAuthenticationMethodsRequestContent,
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetUserAuthenticationMethodResponseContent[]>> {
+    ): Promise<core.WithRawResponse<SetUserAuthenticationMethodResponseContent[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -329,7 +332,7 @@ export class AuthenticationMethods {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetUserAuthenticationMethodResponseContent[],
+                data: _response.body as SetUserAuthenticationMethodResponseContent[],
                 rawResponse: _response.rawResponse,
             };
         }
@@ -337,15 +340,15 @@ export class AuthenticationMethods {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -380,13 +383,13 @@ export class AuthenticationMethods {
      * @param {string} id - The ID of the user in question.
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.authenticationMethods.deleteAll("id")
+     *     await client.authenticationMethods.deleteAll("id")
      */
     public deleteAll(
         id: string,
@@ -425,13 +428,13 @@ export class AuthenticationMethods {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -465,20 +468,20 @@ export class AuthenticationMethods {
      * @param {string} authenticationMethodId - The ID of the authentication methods in question.
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.authenticationMethods.get("id", "authentication_method_id")
+     *     await client.authenticationMethods.get("id", "authentication_method_id")
      */
     public get(
         id: string,
         authenticationMethodId: string,
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetUserAuthenticationMethodResponseContent> {
+    ): core.HttpResponsePromise<GetUserAuthenticationMethodResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, authenticationMethodId, requestOptions));
     }
 
@@ -486,7 +489,7 @@ export class AuthenticationMethods {
         id: string,
         authenticationMethodId: string,
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetUserAuthenticationMethodResponseContent>> {
+    ): Promise<core.WithRawResponse<GetUserAuthenticationMethodResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -508,7 +511,7 @@ export class AuthenticationMethods {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetUserAuthenticationMethodResponseContent,
+                data: _response.body as GetUserAuthenticationMethodResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -516,15 +519,15 @@ export class AuthenticationMethods {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -560,14 +563,14 @@ export class AuthenticationMethods {
      * @param {string} authenticationMethodId - The ID of the authentication method to delete.
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.authenticationMethods.delete("id", "authentication_method_id")
+     *     await client.authenticationMethods.delete("id", "authentication_method_id")
      */
     public delete(
         id: string,
@@ -608,15 +611,15 @@ export class AuthenticationMethods {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -650,33 +653,33 @@ export class AuthenticationMethods {
      *
      * @param {string} id - The ID of the user in question.
      * @param {string} authenticationMethodId - The ID of the authentication method to update.
-     * @param {Management.UpdateUserAuthenticationMethodRequestContent} request
+     * @param {UpdateUserAuthenticationMethodRequestContent} request
      * @param {AuthenticationMethods.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.authenticationMethods.update("id", "authentication_method_id")
+     *     await client.authenticationMethods.update("id", "authentication_method_id")
      */
     public update(
         id: string,
         authenticationMethodId: string,
-        request: Management.UpdateUserAuthenticationMethodRequestContent = {},
+        request: UpdateUserAuthenticationMethodRequestContent = {},
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateUserAuthenticationMethodResponseContent> {
+    ): core.HttpResponsePromise<UpdateUserAuthenticationMethodResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, authenticationMethodId, request, requestOptions));
     }
 
     private async __update(
         id: string,
         authenticationMethodId: string,
-        request: Management.UpdateUserAuthenticationMethodRequestContent = {},
+        request: UpdateUserAuthenticationMethodRequestContent = {},
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateUserAuthenticationMethodResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateUserAuthenticationMethodResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -701,7 +704,7 @@ export class AuthenticationMethods {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateUserAuthenticationMethodResponseContent,
+                data: _response.body as UpdateUserAuthenticationMethodResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -709,15 +712,15 @@ export class AuthenticationMethods {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

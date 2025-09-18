@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { GetTenantSettingsRequestParameters } from "./requests/GetTenantSettingsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetTenantSettingsResponseContent } from "../../../../../types/GetTenantSettingsResponseContent.js";
+import type { UpdateTenantSettingsRequestContent } from "./requests/UpdateTenantSettingsRequestContent.js";
+import type { UpdateTenantSettingsResponseContent } from "../../../../../types/UpdateTenantSettingsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,28 +50,28 @@ export class Settings {
     /**
      * Retrieve tenant settings. A list of fields to include or exclude may also be specified.
      *
-     * @param {Management.GetTenantSettingsRequestParameters} request
+     * @param {GetTenantSettingsRequestParameters} request
      * @param {Settings.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tenants.settings.get()
      */
     public get(
-        request: Management.GetTenantSettingsRequestParameters = {},
+        request: GetTenantSettingsRequestParameters = {},
         requestOptions?: Settings.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetTenantSettingsResponseContent> {
+    ): core.HttpResponsePromise<GetTenantSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: Management.GetTenantSettingsRequestParameters = {},
+        request: GetTenantSettingsRequestParameters = {},
         requestOptions?: Settings.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetTenantSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetTenantSettingsResponseContent>> {
         const { fields, include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -96,7 +103,7 @@ export class Settings {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetTenantSettingsResponseContent,
+                data: _response.body as GetTenantSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -104,13 +111,13 @@ export class Settings {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -140,28 +147,28 @@ export class Settings {
     /**
      * Update settings for a tenant.
      *
-     * @param {Management.UpdateTenantSettingsRequestContent} request
+     * @param {UpdateTenantSettingsRequestContent} request
      * @param {Settings.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tenants.settings.update()
      */
     public update(
-        request: Management.UpdateTenantSettingsRequestContent = {},
+        request: UpdateTenantSettingsRequestContent = {},
         requestOptions?: Settings.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateTenantSettingsResponseContent> {
+    ): core.HttpResponsePromise<UpdateTenantSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.UpdateTenantSettingsRequestContent = {},
+        request: UpdateTenantSettingsRequestContent = {},
         requestOptions?: Settings.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateTenantSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateTenantSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -186,7 +193,7 @@ export class Settings {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateTenantSettingsResponseContent,
+                data: _response.body as UpdateTenantSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -194,13 +201,13 @@ export class Settings {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

@@ -4,7 +4,16 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListRolePermissionsRequestParameters } from "./requests/ListRolePermissionsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { PermissionsResponsePayload } from "../../../../../types/PermissionsResponsePayload.js";
+import type { ListRolePermissionsOffsetPaginatedResponseContent } from "../../../../../types/ListRolePermissionsOffsetPaginatedResponseContent.js";
+import type { AddRolePermissionsRequestContent } from "./requests/AddRolePermissionsRequestContent.js";
+import type { DeleteRolePermissionsRequestContent } from "./requests/DeleteRolePermissionsRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,27 +53,27 @@ export class Permissions {
      * Retrieve detailed list (name, description, resource server) of permissions granted by a specified user role.
      *
      * @param {string} id - ID of the role to list granted permissions.
-     * @param {Management.ListRolePermissionsRequestParameters} request
+     * @param {ListRolePermissionsRequestParameters} request
      * @param {Permissions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.roles.permissions.list("id")
+     *     await client.permissions.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListRolePermissionsRequestParameters = {},
+        request: ListRolePermissionsRequestParameters = {},
         requestOptions?: Permissions.RequestOptions,
-    ): Promise<core.Page<Management.PermissionsResponsePayload>> {
+    ): Promise<core.Page<PermissionsResponsePayload>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.roles.ListRolePermissionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRolePermissionsOffsetPaginatedResponseContent>> => {
+                request: ListRolePermissionsRequestParameters,
+            ): Promise<core.WithRawResponse<ListRolePermissionsOffsetPaginatedResponseContent>> => {
                 const { per_page: perPage = 50, page = 0, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (perPage != null) {
@@ -98,31 +107,22 @@ export class Permissions {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListRolePermissionsOffsetPaginatedResponseContent,
+                        data: _response.body as ListRolePermissionsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -152,10 +152,7 @@ export class Permissions {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListRolePermissionsOffsetPaginatedResponseContent,
-            Management.PermissionsResponsePayload
-        >({
+        return new core.Pageable<ListRolePermissionsOffsetPaginatedResponseContent, PermissionsResponsePayload>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.permissions ?? []).length > 0,
@@ -171,16 +168,16 @@ export class Permissions {
      * Add one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> to a specified user role.
      *
      * @param {string} id - ID of the role to add permissions to.
-     * @param {Management.AddRolePermissionsRequestContent} request
+     * @param {AddRolePermissionsRequestContent} request
      * @param {Permissions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.roles.permissions.add("id", {
+     *     await client.permissions.add("id", {
      *         permissions: [{
      *                 resource_server_identifier: "resource_server_identifier",
      *                 permission_name: "permission_name"
@@ -189,7 +186,7 @@ export class Permissions {
      */
     public add(
         id: string,
-        request: Management.AddRolePermissionsRequestContent,
+        request: AddRolePermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__add(id, request, requestOptions));
@@ -197,7 +194,7 @@ export class Permissions {
 
     private async __add(
         id: string,
-        request: Management.AddRolePermissionsRequestContent,
+        request: AddRolePermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -229,13 +226,13 @@ export class Permissions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -266,16 +263,16 @@ export class Permissions {
      * Remove one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> from a specified user role.
      *
      * @param {string} id - ID of the role to remove permissions from.
-     * @param {Management.DeleteRolePermissionsRequestContent} request
+     * @param {DeleteRolePermissionsRequestContent} request
      * @param {Permissions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.roles.permissions.delete("id", {
+     *     await client.permissions.delete("id", {
      *         permissions: [{
      *                 resource_server_identifier: "resource_server_identifier",
      *                 permission_name: "permission_name"
@@ -284,7 +281,7 @@ export class Permissions {
      */
     public delete(
         id: string,
-        request: Management.DeleteRolePermissionsRequestContent,
+        request: DeleteRolePermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, request, requestOptions));
@@ -292,7 +289,7 @@ export class Permissions {
 
     private async __delete(
         id: string,
-        request: Management.DeleteRolePermissionsRequestContent,
+        request: DeleteRolePermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -324,13 +321,13 @@ export class Permissions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

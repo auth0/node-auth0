@@ -4,7 +4,21 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListEncryptionKeysRequestParameters } from "./requests/ListEncryptionKeysRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { EncryptionKey } from "../../../../../types/EncryptionKey.js";
+import type { ListEncryptionKeyOffsetPaginatedResponseContent } from "../../../../../types/ListEncryptionKeyOffsetPaginatedResponseContent.js";
+import type { CreateEncryptionKeyRequestContent } from "./requests/CreateEncryptionKeyRequestContent.js";
+import { ConflictError } from "../../../../../errors/ConflictError.js";
+import type { CreateEncryptionKeyResponseContent } from "../../../../../types/CreateEncryptionKeyResponseContent.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import type { GetEncryptionKeyResponseContent } from "../../../../../types/GetEncryptionKeyResponseContent.js";
+import type { ImportEncryptionKeyRequestContent } from "./requests/ImportEncryptionKeyRequestContent.js";
+import type { ImportEncryptionKeyResponseContent } from "../../../../../types/ImportEncryptionKeyResponseContent.js";
+import type { CreateEncryptionKeyPublicWrappingResponseContent } from "../../../../../types/CreateEncryptionKeyPublicWrappingResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,25 +57,25 @@ export class Encryption {
     /**
      * Retrieve details of all the encryption keys associated with your tenant.
      *
-     * @param {Management.ListEncryptionKeysRequestParameters} request
+     * @param {ListEncryptionKeysRequestParameters} request
      * @param {Encryption.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.keys.encryption.list()
+     *     await client.encryption.list()
      */
     public async list(
-        request: Management.ListEncryptionKeysRequestParameters = {},
+        request: ListEncryptionKeysRequestParameters = {},
         requestOptions?: Encryption.RequestOptions,
-    ): Promise<core.Page<Management.EncryptionKey>> {
+    ): Promise<core.Page<EncryptionKey>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.keys.ListEncryptionKeysRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListEncryptionKeyOffsetPaginatedResponseContent>> => {
+                request: ListEncryptionKeysRequestParameters,
+            ): Promise<core.WithRawResponse<ListEncryptionKeyOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -95,29 +109,20 @@ export class Encryption {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListEncryptionKeyOffsetPaginatedResponseContent,
+                        data: _response.body as ListEncryptionKeyOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -145,7 +150,7 @@ export class Encryption {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListEncryptionKeyOffsetPaginatedResponseContent, Management.EncryptionKey>({
+        return new core.Pageable<ListEncryptionKeyOffsetPaginatedResponseContent, EncryptionKey>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.keys ?? []).length > 0,
@@ -160,31 +165,31 @@ export class Encryption {
     /**
      * Create the new, pre-activated encryption key, without the key material.
      *
-     * @param {Management.CreateEncryptionKeyRequestContent} request
+     * @param {CreateEncryptionKeyRequestContent} request
      * @param {Encryption.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.keys.encryption.create({
+     *     await client.encryption.create({
      *         type: "customer-provided-root-key"
      *     })
      */
     public create(
-        request: Management.CreateEncryptionKeyRequestContent,
+        request: CreateEncryptionKeyRequestContent,
         requestOptions?: Encryption.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateEncryptionKeyResponseContent> {
+    ): core.HttpResponsePromise<CreateEncryptionKeyResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateEncryptionKeyRequestContent,
+        request: CreateEncryptionKeyRequestContent,
         requestOptions?: Encryption.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateEncryptionKeyResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateEncryptionKeyResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -209,7 +214,7 @@ export class Encryption {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateEncryptionKeyResponseContent,
+                data: _response.body as CreateEncryptionKeyResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -217,15 +222,15 @@ export class Encryption {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -257,12 +262,12 @@ export class Encryption {
      *
      * @param {Encryption.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.keys.encryption.rekey()
+     *     await client.encryption.rekey()
      */
     public rekey(requestOptions?: Encryption.RequestOptions): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__rekey(requestOptions));
@@ -295,11 +300,11 @@ export class Encryption {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -332,26 +337,26 @@ export class Encryption {
      * @param {string} kid - Encryption key ID
      * @param {Encryption.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.keys.encryption.get("kid")
+     *     await client.encryption.get("kid")
      */
     public get(
         kid: string,
         requestOptions?: Encryption.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetEncryptionKeyResponseContent> {
+    ): core.HttpResponsePromise<GetEncryptionKeyResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(kid, requestOptions));
     }
 
     private async __get(
         kid: string,
         requestOptions?: Encryption.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetEncryptionKeyResponseContent>> {
+    ): Promise<core.WithRawResponse<GetEncryptionKeyResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -373,7 +378,7 @@ export class Encryption {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetEncryptionKeyResponseContent,
+                data: _response.body as GetEncryptionKeyResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -381,15 +386,15 @@ export class Encryption {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -420,33 +425,33 @@ export class Encryption {
      * Import wrapped key material and activate encryption key.
      *
      * @param {string} kid - Encryption key ID
-     * @param {Management.ImportEncryptionKeyRequestContent} request
+     * @param {ImportEncryptionKeyRequestContent} request
      * @param {Encryption.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.keys.encryption.import("kid", {
+     *     await client.encryption.import("kid", {
      *         wrapped_key: "wrapped_key"
      *     })
      */
     public import(
         kid: string,
-        request: Management.ImportEncryptionKeyRequestContent,
+        request: ImportEncryptionKeyRequestContent,
         requestOptions?: Encryption.RequestOptions,
-    ): core.HttpResponsePromise<Management.ImportEncryptionKeyResponseContent> {
+    ): core.HttpResponsePromise<ImportEncryptionKeyResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__import(kid, request, requestOptions));
     }
 
     private async __import(
         kid: string,
-        request: Management.ImportEncryptionKeyRequestContent,
+        request: ImportEncryptionKeyRequestContent,
         requestOptions?: Encryption.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ImportEncryptionKeyResponseContent>> {
+    ): Promise<core.WithRawResponse<ImportEncryptionKeyResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -471,7 +476,7 @@ export class Encryption {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.ImportEncryptionKeyResponseContent,
+                data: _response.body as ImportEncryptionKeyResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -479,15 +484,15 @@ export class Encryption {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -520,13 +525,13 @@ export class Encryption {
      * @param {string} kid - Encryption key ID
      * @param {Encryption.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.keys.encryption.delete("kid")
+     *     await client.encryption.delete("kid")
      */
     public delete(kid: string, requestOptions?: Encryption.RequestOptions): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(kid, requestOptions));
@@ -562,13 +567,13 @@ export class Encryption {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -601,26 +606,26 @@ export class Encryption {
      * @param {string} kid - Encryption key ID
      * @param {Encryption.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.keys.encryption.createPublicWrappingKey("kid")
+     *     await client.encryption.createPublicWrappingKey("kid")
      */
     public createPublicWrappingKey(
         kid: string,
         requestOptions?: Encryption.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateEncryptionKeyPublicWrappingResponseContent> {
+    ): core.HttpResponsePromise<CreateEncryptionKeyPublicWrappingResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__createPublicWrappingKey(kid, requestOptions));
     }
 
     private async __createPublicWrappingKey(
         kid: string,
         requestOptions?: Encryption.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateEncryptionKeyPublicWrappingResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateEncryptionKeyPublicWrappingResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -642,7 +647,7 @@ export class Encryption {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateEncryptionKeyPublicWrappingResponseContent,
+                data: _response.body as CreateEncryptionKeyPublicWrappingResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -650,15 +655,15 @@ export class Encryption {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

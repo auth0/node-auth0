@@ -4,7 +4,21 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListHooksRequestParameters } from "./requests/ListHooksRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { Hook } from "../../../types/Hook.js";
+import type { ListHooksOffsetPaginatedResponseContent } from "../../../types/ListHooksOffsetPaginatedResponseContent.js";
+import type { CreateHookRequestContent } from "./requests/CreateHookRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateHookResponseContent } from "../../../types/CreateHookResponseContent.js";
+import type { GetHookRequestParameters } from "./requests/GetHookRequestParameters.js";
+import type { GetHookResponseContent } from "../../../types/GetHookResponseContent.js";
+import type { UpdateHookRequestContent } from "./requests/UpdateHookRequestContent.js";
+import type { UpdateHookResponseContent } from "../../../types/UpdateHookResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Secrets } from "../resources/secrets/client/Client.js";
@@ -49,26 +63,26 @@ export class Hooks {
     /**
      * Retrieve all <a href="https://auth0.com/docs/hooks">hooks</a>. Accepts a list of fields to include or exclude in the result.
      *
-     * @param {Management.ListHooksRequestParameters} request
+     * @param {ListHooksRequestParameters} request
      * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.hooks.list()
      */
     public async list(
-        request: Management.ListHooksRequestParameters = {},
+        request: ListHooksRequestParameters = {},
         requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.Page<Management.Hook>> {
+    ): Promise<core.Page<Hook>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListHooksRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListHooksOffsetPaginatedResponseContent>> => {
+                request: ListHooksRequestParameters,
+            ): Promise<core.WithRawResponse<ListHooksOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
                     per_page: perPage = 50,
@@ -118,31 +132,22 @@ export class Hooks {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListHooksOffsetPaginatedResponseContent,
+                        data: _response.body as ListHooksOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -170,7 +175,7 @@ export class Hooks {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListHooksOffsetPaginatedResponseContent, Management.Hook>({
+        return new core.Pageable<ListHooksOffsetPaginatedResponseContent, Hook>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.hooks ?? []).length > 0,
@@ -185,14 +190,14 @@ export class Hooks {
     /**
      * Create a new hook.
      *
-     * @param {Management.CreateHookRequestContent} request
+     * @param {CreateHookRequestContent} request
      * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.hooks.create({
@@ -202,16 +207,16 @@ export class Hooks {
      *     })
      */
     public create(
-        request: Management.CreateHookRequestContent,
+        request: CreateHookRequestContent,
         requestOptions?: Hooks.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateHookResponseContent> {
+    ): core.HttpResponsePromise<CreateHookResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateHookRequestContent,
+        request: CreateHookRequestContent,
         requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateHookResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateHookResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -235,21 +240,21 @@ export class Hooks {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.CreateHookResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as CreateHookResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -280,31 +285,31 @@ export class Hooks {
      * Retrieve <a href="https://auth0.com/docs/hooks">a hook</a> by its ID. Accepts a list of fields to include in the result.
      *
      * @param {string} id - ID of the hook to retrieve.
-     * @param {Management.GetHookRequestParameters} request
+     * @param {GetHookRequestParameters} request
      * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.hooks.get("id")
      */
     public get(
         id: string,
-        request: Management.GetHookRequestParameters = {},
+        request: GetHookRequestParameters = {},
         requestOptions?: Hooks.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetHookResponseContent> {
+    ): core.HttpResponsePromise<GetHookResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetHookRequestParameters = {},
+        request: GetHookRequestParameters = {},
         requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetHookResponseContent>> {
+    ): Promise<core.WithRawResponse<GetHookResponseContent>> {
         const { fields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -331,21 +336,21 @@ export class Hooks {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetHookResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetHookResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -378,10 +383,10 @@ export class Hooks {
      * @param {string} id - ID of the hook to delete.
      * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.hooks.delete("id")
@@ -417,13 +422,13 @@ export class Hooks {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -454,32 +459,32 @@ export class Hooks {
      * Update an existing hook.
      *
      * @param {string} id - ID of the hook to update.
-     * @param {Management.UpdateHookRequestContent} request
+     * @param {UpdateHookRequestContent} request
      * @param {Hooks.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.hooks.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateHookRequestContent = {},
+        request: UpdateHookRequestContent = {},
         requestOptions?: Hooks.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateHookResponseContent> {
+    ): core.HttpResponsePromise<UpdateHookResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateHookRequestContent = {},
+        request: UpdateHookRequestContent = {},
         requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateHookResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateHookResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -503,23 +508,23 @@ export class Hooks {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UpdateHookResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as UpdateHookResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

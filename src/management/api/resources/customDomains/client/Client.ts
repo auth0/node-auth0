@@ -4,7 +4,20 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { ListCustomDomainsResponseContent } from "../../../types/ListCustomDomainsResponseContent.js";
+import type { CreateCustomDomainRequestContent } from "./requests/CreateCustomDomainRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateCustomDomainResponseContent } from "../../../types/CreateCustomDomainResponseContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetCustomDomainResponseContent } from "../../../types/GetCustomDomainResponseContent.js";
+import type { UpdateCustomDomainRequestContent } from "./requests/UpdateCustomDomainRequestContent.js";
+import type { UpdateCustomDomainResponseContent } from "../../../types/UpdateCustomDomainResponseContent.js";
+import type { TestCustomDomainResponseContent } from "../../../types/TestCustomDomainResponseContent.js";
+import type { VerifyCustomDomainResponseContent } from "../../../types/VerifyCustomDomainResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -45,22 +58,22 @@ export class CustomDomains {
      *
      * @param {CustomDomains.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.customDomains.list()
      */
     public list(
         requestOptions?: CustomDomains.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListCustomDomainsResponseContent> {
+    ): core.HttpResponsePromise<ListCustomDomainsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
     private async __list(
         requestOptions?: CustomDomains.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListCustomDomainsResponseContent>> {
+    ): Promise<core.WithRawResponse<ListCustomDomainsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -82,7 +95,7 @@ export class CustomDomains {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.ListCustomDomainsResponseContent,
+                data: _response.body as ListCustomDomainsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -90,11 +103,11 @@ export class CustomDomains {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -137,14 +150,14 @@ export class CustomDomains {
      *
      * - recommended - for modern usage this includes TLS 1.2 only
      *
-     * @param {Management.CreateCustomDomainRequestContent} request
+     * @param {CreateCustomDomainRequestContent} request
      * @param {CustomDomains.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.customDomains.create({
@@ -153,16 +166,16 @@ export class CustomDomains {
      *     })
      */
     public create(
-        request: Management.CreateCustomDomainRequestContent,
+        request: CreateCustomDomainRequestContent,
         requestOptions?: CustomDomains.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateCustomDomainResponseContent> {
+    ): core.HttpResponsePromise<CreateCustomDomainResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateCustomDomainRequestContent,
+        request: CreateCustomDomainRequestContent,
         requestOptions?: CustomDomains.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateCustomDomainResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateCustomDomainResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -187,7 +200,7 @@ export class CustomDomains {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateCustomDomainResponseContent,
+                data: _response.body as CreateCustomDomainResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -195,15 +208,15 @@ export class CustomDomains {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -236,11 +249,11 @@ export class CustomDomains {
      * @param {string} id - ID of the custom domain to retrieve.
      * @param {CustomDomains.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.customDomains.get("id")
@@ -248,14 +261,14 @@ export class CustomDomains {
     public get(
         id: string,
         requestOptions?: CustomDomains.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetCustomDomainResponseContent> {
+    ): core.HttpResponsePromise<GetCustomDomainResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: CustomDomains.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetCustomDomainResponseContent>> {
+    ): Promise<core.WithRawResponse<GetCustomDomainResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -277,7 +290,7 @@ export class CustomDomains {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetCustomDomainResponseContent,
+                data: _response.body as GetCustomDomainResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -285,15 +298,15 @@ export class CustomDomains {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -326,10 +339,10 @@ export class CustomDomains {
      * @param {string} id - ID of the custom domain to delete.
      * @param {CustomDomains.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.customDomains.delete("id")
@@ -368,13 +381,13 @@ export class CustomDomains {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -428,30 +441,30 @@ export class CustomDomains {
      * - The <code>compatible</code> TLS policy is no longer supported.
      *
      * @param {string} id - The id of the custom domain to update
-     * @param {Management.UpdateCustomDomainRequestContent} request
+     * @param {UpdateCustomDomainRequestContent} request
      * @param {CustomDomains.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.customDomains.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateCustomDomainRequestContent = {},
+        request: UpdateCustomDomainRequestContent = {},
         requestOptions?: CustomDomains.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateCustomDomainResponseContent> {
+    ): core.HttpResponsePromise<UpdateCustomDomainResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateCustomDomainRequestContent = {},
+        request: UpdateCustomDomainRequestContent = {},
         requestOptions?: CustomDomains.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateCustomDomainResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateCustomDomainResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -476,7 +489,7 @@ export class CustomDomains {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateCustomDomainResponseContent,
+                data: _response.body as UpdateCustomDomainResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -484,13 +497,13 @@ export class CustomDomains {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -523,11 +536,11 @@ export class CustomDomains {
      * @param {string} id - ID of the custom domain to test.
      * @param {CustomDomains.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
      *
      * @example
      *     await client.customDomains.test("id")
@@ -535,14 +548,14 @@ export class CustomDomains {
     public test(
         id: string,
         requestOptions?: CustomDomains.RequestOptions,
-    ): core.HttpResponsePromise<Management.TestCustomDomainResponseContent> {
+    ): core.HttpResponsePromise<TestCustomDomainResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__test(id, requestOptions));
     }
 
     private async __test(
         id: string,
         requestOptions?: CustomDomains.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.TestCustomDomainResponseContent>> {
+    ): Promise<core.WithRawResponse<TestCustomDomainResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -564,7 +577,7 @@ export class CustomDomains {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.TestCustomDomainResponseContent,
+                data: _response.body as TestCustomDomainResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -572,15 +585,15 @@ export class CustomDomains {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -622,11 +635,11 @@ export class CustomDomains {
      * @param {string} id - ID of the custom domain to verify.
      * @param {CustomDomains.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.customDomains.verify("id")
@@ -634,14 +647,14 @@ export class CustomDomains {
     public verify(
         id: string,
         requestOptions?: CustomDomains.RequestOptions,
-    ): core.HttpResponsePromise<Management.VerifyCustomDomainResponseContent> {
+    ): core.HttpResponsePromise<VerifyCustomDomainResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__verify(id, requestOptions));
     }
 
     private async __verify(
         id: string,
         requestOptions?: CustomDomains.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.VerifyCustomDomainResponseContent>> {
+    ): Promise<core.WithRawResponse<VerifyCustomDomainResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -663,7 +676,7 @@ export class CustomDomains {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.VerifyCustomDomainResponseContent,
+                data: _response.body as VerifyCustomDomainResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -671,15 +684,15 @@ export class CustomDomains {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

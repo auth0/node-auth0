@@ -4,7 +4,18 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+// TODO: Why is this not in the types folder?
+import type { ListUserPermissionsRequestParameters } from "./requests/ListUserPermissionsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { UserPermissionSchema } from "../../../../../types/UserPermissionSchema.js";
+import type { ListUserPermissionsOffsetPaginatedResponseContent } from "../../../../../types/ListUserPermissionsOffsetPaginatedResponseContent.js";
+// TODO: Why are these not in the types folder?
+import { CreateUserPermissionsRequestContent } from "./requests/CreateUserPermissionsRequestContent.js";
+import { DeleteUserPermissionsRequestContent } from "./requests/DeleteUserPermissionsRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,27 +55,28 @@ export class Permissions {
      * Retrieve all permissions associated with the user.
      *
      * @param {string} id - ID of the user to retrieve the permissions for.
-     * @param {Management.ListUserPermissionsRequestParameters} request
+     * @param {ListUserPermissionsRequestParameters} request
      * @param {Permissions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.permissions.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListUserPermissionsRequestParameters = {},
+        request: ListUserPermissionsRequestParameters = {},
         requestOptions?: Permissions.RequestOptions,
-    ): Promise<core.Page<Management.UserPermissionSchema>> {
+    ): Promise<core.Page<UserPermissionSchema>> {
         const list = core.HttpResponsePromise.interceptFunction(
+            // TODO: Why was this not consistent with the argument type? The argument uses Manmagement.ListUserPermissionsRequestParameters, while below we were using Management.users.ListUserPermissionsRequestParameters
             async (
-                request: Management.users.ListUserPermissionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListUserPermissionsOffsetPaginatedResponseContent>> => {
+                request: ListUserPermissionsRequestParameters,
+            ): Promise<core.WithRawResponse<ListUserPermissionsOffsetPaginatedResponseContent>> => {
                 const { per_page: perPage = 50, page = 0, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (perPage != null) {
@@ -98,31 +110,22 @@ export class Permissions {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListUserPermissionsOffsetPaginatedResponseContent,
+                        data: _response.body as ListUserPermissionsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -152,10 +155,7 @@ export class Permissions {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserPermissionsOffsetPaginatedResponseContent,
-            Management.UserPermissionSchema
-        >({
+        return new core.Pageable<ListUserPermissionsOffsetPaginatedResponseContent, UserPermissionSchema>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.permissions ?? []).length > 0,
@@ -171,13 +171,13 @@ export class Permissions {
      * Assign permissions to a user.
      *
      * @param {string} id - ID of the user to assign permissions to.
-     * @param {Management.CreateUserPermissionsRequestContent} request
+     * @param {CreateUserPermissionsRequestContent} request
      * @param {Permissions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.permissions.create("id", {
@@ -189,7 +189,7 @@ export class Permissions {
      */
     public create(
         id: string,
-        request: Management.CreateUserPermissionsRequestContent,
+        request: CreateUserPermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
@@ -197,7 +197,7 @@ export class Permissions {
 
     private async __create(
         id: string,
-        request: Management.CreateUserPermissionsRequestContent,
+        request: CreateUserPermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -229,13 +229,13 @@ export class Permissions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -266,13 +266,13 @@ export class Permissions {
      * Remove permissions from a user.
      *
      * @param {string} id - ID of the user to remove permissions from.
-     * @param {Management.DeleteUserPermissionsRequestContent} request
+     * @param {DeleteUserPermissionsRequestContent} request
      * @param {Permissions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.users.permissions.delete("id", {
@@ -284,7 +284,7 @@ export class Permissions {
      */
     public delete(
         id: string,
-        request: Management.DeleteUserPermissionsRequestContent,
+        request: DeleteUserPermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, request, requestOptions));
@@ -292,7 +292,7 @@ export class Permissions {
 
     private async __delete(
         id: string,
-        request: Management.DeleteUserPermissionsRequestContent,
+        request: DeleteUserPermissionsRequestContent,
         requestOptions?: Permissions.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -324,13 +324,13 @@ export class Permissions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

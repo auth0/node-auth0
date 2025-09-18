@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+// TODO: Why are the next 2 in different directories?
+import type { CreateSelfServiceProfileSsoTicketRequestContent } from "./requests/CreateSelfServiceProfileSsoTicketRequestContent.js";
+import type { CreateSelfServiceProfileSsoTicketResponseContent } from "../../../../../types/CreateSelfServiceProfileSsoTicketResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,30 +50,30 @@ export class SsoTicket {
      * Creates an SSO access ticket to initiate the Self Service SSO Flow using a self-service profile.
      *
      * @param {string} id - The id of the self-service profile to retrieve
-     * @param {Management.CreateSelfServiceProfileSsoTicketRequestContent} request
+     * @param {CreateSelfServiceProfileSsoTicketRequestContent} request
      * @param {SsoTicket.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.selfServiceProfiles.ssoTicket.create("id")
      */
     public create(
         id: string,
-        request: Management.CreateSelfServiceProfileSsoTicketRequestContent = {},
+        request: CreateSelfServiceProfileSsoTicketRequestContent = {},
         requestOptions?: SsoTicket.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateSelfServiceProfileSsoTicketResponseContent> {
+    ): core.HttpResponsePromise<CreateSelfServiceProfileSsoTicketResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
     }
 
     private async __create(
         id: string,
-        request: Management.CreateSelfServiceProfileSsoTicketRequestContent = {},
+        request: CreateSelfServiceProfileSsoTicketRequestContent = {},
         requestOptions?: SsoTicket.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateSelfServiceProfileSsoTicketResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateSelfServiceProfileSsoTicketResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -92,7 +98,7 @@ export class SsoTicket {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateSelfServiceProfileSsoTicketResponseContent,
+                data: _response.body as CreateSelfServiceProfileSsoTicketResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -100,13 +106,13 @@ export class SsoTicket {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -143,9 +149,9 @@ export class SsoTicket {
      * @param {string} id - The id of the ticket to revoke
      * @param {SsoTicket.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.selfServiceProfiles.ssoTicket.revoke("profileId", "id")
@@ -189,11 +195,11 @@ export class SsoTicket {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

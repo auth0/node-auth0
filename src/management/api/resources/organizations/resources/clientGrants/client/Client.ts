@@ -4,7 +4,17 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListOrganizationClientGrantsRequestParameters } from "./requests/ListOrganizationClientGrantsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { OrganizationClientGrant } from "../../../../../types/OrganizationClientGrant.js";
+import type { ListOrganizationClientGrantsOffsetPaginatedResponseContent } from "../../../../../types/ListOrganizationClientGrantsOffsetPaginatedResponseContent.js";
+import type { AssociateOrganizationClientGrantRequestContent } from "./requests/AssociateOrganizationClientGrantRequestContent.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { ConflictError } from "../../../../../errors/ConflictError.js";
+import type { AssociateOrganizationClientGrantResponseContent } from "../../../../../types/AssociateOrganizationClientGrantResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -42,26 +52,26 @@ export class ClientGrants {
 
     /**
      * @param {string} id - Organization identifier.
-     * @param {Management.ListOrganizationClientGrantsRequestParameters} request
+     * @param {ListOrganizationClientGrantsRequestParameters} request
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.organizations.clientGrants.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListOrganizationClientGrantsRequestParameters = {},
+        request: ListOrganizationClientGrantsRequestParameters = {},
         requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationClientGrant>> {
+    ): Promise<core.Page<OrganizationClientGrant>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.organizations.ListOrganizationClientGrantsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent>> => {
+                request: ListOrganizationClientGrantsRequestParameters,
+            ): Promise<core.WithRawResponse<ListOrganizationClientGrantsOffsetPaginatedResponseContent>> => {
                 const {
                     audience,
                     client_id: clientId,
@@ -115,29 +125,20 @@ export class ClientGrants {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent,
+                        data: _response.body as ListOrganizationClientGrantsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -167,10 +168,7 @@ export class ClientGrants {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent,
-            Management.OrganizationClientGrant
-        >({
+        return new core.Pageable<ListOrganizationClientGrantsOffsetPaginatedResponseContent, OrganizationClientGrant>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.client_grants ?? []).length > 0,
@@ -184,15 +182,15 @@ export class ClientGrants {
 
     /**
      * @param {string} id - Organization identifier.
-     * @param {Management.AssociateOrganizationClientGrantRequestContent} request
+     * @param {AssociateOrganizationClientGrantRequestContent} request
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.organizations.clientGrants.create("id", {
@@ -201,17 +199,17 @@ export class ClientGrants {
      */
     public create(
         id: string,
-        request: Management.AssociateOrganizationClientGrantRequestContent,
+        request: AssociateOrganizationClientGrantRequestContent,
         requestOptions?: ClientGrants.RequestOptions,
-    ): core.HttpResponsePromise<Management.AssociateOrganizationClientGrantResponseContent> {
+    ): core.HttpResponsePromise<AssociateOrganizationClientGrantResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
     }
 
     private async __create(
         id: string,
-        request: Management.AssociateOrganizationClientGrantRequestContent,
+        request: AssociateOrganizationClientGrantRequestContent,
         requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.AssociateOrganizationClientGrantResponseContent>> {
+    ): Promise<core.WithRawResponse<AssociateOrganizationClientGrantResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -236,7 +234,7 @@ export class ClientGrants {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.AssociateOrganizationClientGrantResponseContent,
+                data: _response.body as AssociateOrganizationClientGrantResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -244,17 +242,17 @@ export class ClientGrants {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -288,11 +286,11 @@ export class ClientGrants {
      * @param {string} grantId - The Client Grant ID to remove from the organization
      * @param {ClientGrants.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.organizations.clientGrants.delete("id", "grant_id")
@@ -336,15 +334,15 @@ export class ClientGrants {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

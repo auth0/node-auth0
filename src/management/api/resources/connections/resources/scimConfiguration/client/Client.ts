@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import type { GetScimConfigurationResponseContent } from "../../../../../types/GetScimConfigurationResponseContent.js";
+import type { CreateScimConfigurationRequestContent } from "../../../../../types/CreateScimConfigurationRequestContent.js";
+import type { CreateScimConfigurationResponseContent } from "../../../../../types/CreateScimConfigurationResponseContent.js";
+import type { UpdateScimConfigurationRequestContent } from "./requests/UpdateScimConfigurationRequestContent.js";
+import type { UpdateScimConfigurationResponseContent } from "../../../../../types/UpdateScimConfigurationResponseContent.js";
+import type { GetScimConfigurationDefaultMappingResponseContent } from "../../../../../types/GetScimConfigurationDefaultMappingResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 import { Tokens } from "../resources/tokens/client/Client.js";
@@ -52,8 +59,8 @@ export class ScimConfiguration {
      * @param {string} id - The id of the connection to retrieve its SCIM configuration
      * @param {ScimConfiguration.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link BadRequestError}
+     * @throws {@link NotFoundError}
      *
      * @example
      *     await client.connections.scimConfiguration.get("id")
@@ -61,14 +68,14 @@ export class ScimConfiguration {
     public get(
         id: string,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetScimConfigurationResponseContent> {
+    ): core.HttpResponsePromise<GetScimConfigurationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetScimConfigurationResponseContent>> {
+    ): Promise<core.WithRawResponse<GetScimConfigurationResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -90,7 +97,7 @@ export class ScimConfiguration {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetScimConfigurationResponseContent,
+                data: _response.body as GetScimConfigurationResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -98,9 +105,9 @@ export class ScimConfiguration {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -133,28 +140,28 @@ export class ScimConfiguration {
      * Create a scim configuration for a connection.
      *
      * @param {string} id - The id of the connection to create its SCIM configuration
-     * @param {Management.CreateScimConfigurationRequestContent} request
+     * @param {CreateScimConfigurationRequestContent} request
      * @param {ScimConfiguration.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link BadRequestError}
+     * @throws {@link NotFoundError}
      *
      * @example
      *     await client.connections.scimConfiguration.create("id", undefined)
      */
     public create(
         id: string,
-        request?: Management.CreateScimConfigurationRequestContent,
+        request?: CreateScimConfigurationRequestContent,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateScimConfigurationResponseContent> {
+    ): core.HttpResponsePromise<CreateScimConfigurationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
     }
 
     private async __create(
         id: string,
-        request?: Management.CreateScimConfigurationRequestContent,
+        request?: CreateScimConfigurationRequestContent,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateScimConfigurationResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateScimConfigurationResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -179,7 +186,7 @@ export class ScimConfiguration {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateScimConfigurationResponseContent,
+                data: _response.body as CreateScimConfigurationResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -187,9 +194,9 @@ export class ScimConfiguration {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -224,8 +231,8 @@ export class ScimConfiguration {
      * @param {string} id - The id of the connection to delete its SCIM configuration
      * @param {ScimConfiguration.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link BadRequestError}
+     * @throws {@link NotFoundError}
      *
      * @example
      *     await client.connections.scimConfiguration.delete("id")
@@ -264,9 +271,9 @@ export class ScimConfiguration {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -299,11 +306,11 @@ export class ScimConfiguration {
      * Update a scim configuration by its <code>connectionId</code>.
      *
      * @param {string} id - The id of the connection to update its SCIM configuration
-     * @param {Management.UpdateScimConfigurationRequestContent} request
+     * @param {UpdateScimConfigurationRequestContent} request
      * @param {ScimConfiguration.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link BadRequestError}
+     * @throws {@link NotFoundError}
      *
      * @example
      *     await client.connections.scimConfiguration.update("id", {
@@ -313,17 +320,17 @@ export class ScimConfiguration {
      */
     public update(
         id: string,
-        request: Management.UpdateScimConfigurationRequestContent,
+        request: UpdateScimConfigurationRequestContent,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateScimConfigurationResponseContent> {
+    ): core.HttpResponsePromise<UpdateScimConfigurationResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateScimConfigurationRequestContent,
+        request: UpdateScimConfigurationRequestContent,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateScimConfigurationResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateScimConfigurationResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -348,7 +355,7 @@ export class ScimConfiguration {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateScimConfigurationResponseContent,
+                data: _response.body as UpdateScimConfigurationResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -356,9 +363,9 @@ export class ScimConfiguration {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -393,8 +400,8 @@ export class ScimConfiguration {
      * @param {string} id - The id of the connection to retrieve its default SCIM mapping
      * @param {ScimConfiguration.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.NotFoundError}
+     * @throws {@link BadRequestError}
+     * @throws {@link NotFoundError}
      *
      * @example
      *     await client.connections.scimConfiguration.getDefaultMapping("id")
@@ -402,14 +409,14 @@ export class ScimConfiguration {
     public getDefaultMapping(
         id: string,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetScimConfigurationDefaultMappingResponseContent> {
+    ): core.HttpResponsePromise<GetScimConfigurationDefaultMappingResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__getDefaultMapping(id, requestOptions));
     }
 
     private async __getDefaultMapping(
         id: string,
         requestOptions?: ScimConfiguration.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetScimConfigurationDefaultMappingResponseContent>> {
+    ): Promise<core.WithRawResponse<GetScimConfigurationDefaultMappingResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -431,7 +438,7 @@ export class ScimConfiguration {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetScimConfigurationDefaultMappingResponseContent,
+                data: _response.body as GetScimConfigurationDefaultMappingResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -439,9 +446,9 @@ export class ScimConfiguration {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

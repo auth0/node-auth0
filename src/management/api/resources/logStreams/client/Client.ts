@@ -4,7 +4,18 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { LogStreamResponseSchema } from "../../../types/LogStreamResponseSchema.js";
+import type { CreateLogStreamRequestContent } from "../../../types/CreateLogStreamRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateLogStreamResponseContent } from "../../../types/CreateLogStreamResponseContent.js";
+import type { GetLogStreamResponseContent } from "../../../types/GetLogStreamResponseContent.js";
+import type { UpdateLogStreamRequestContent } from "./requests/UpdateLogStreamRequestContent.js";
+import type { UpdateLogStreamResponseContent } from "../../../types/UpdateLogStreamResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -110,23 +121,21 @@ export class LogStreams {
      *
      * @param {LogStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.logStreams.list()
      */
-    public list(
-        requestOptions?: LogStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.LogStreamResponseSchema[]> {
+    public list(requestOptions?: LogStreams.RequestOptions): core.HttpResponsePromise<LogStreamResponseSchema[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
     private async __list(
         requestOptions?: LogStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.LogStreamResponseSchema[]>> {
+    ): Promise<core.WithRawResponse<LogStreamResponseSchema[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -147,19 +156,19 @@ export class LogStreams {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.LogStreamResponseSchema[], rawResponse: _response.rawResponse };
+            return { data: _response.body as LogStreamResponseSchema[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -314,14 +323,14 @@ export class LogStreams {
      * 	}
      * }</code></pre>
      *
-     * @param {Management.CreateLogStreamRequestContent} request
+     * @param {CreateLogStreamRequestContent} request
      * @param {LogStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.logStreams.create({
@@ -332,16 +341,16 @@ export class LogStreams {
      *     })
      */
     public create(
-        request: Management.CreateLogStreamRequestContent,
+        request: CreateLogStreamRequestContent,
         requestOptions?: LogStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateLogStreamResponseContent> {
+    ): core.HttpResponsePromise<CreateLogStreamResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateLogStreamRequestContent,
+        request: CreateLogStreamRequestContent,
         requestOptions?: LogStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateLogStreamResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateLogStreamResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -366,7 +375,7 @@ export class LogStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateLogStreamResponseContent,
+                data: _response.body as CreateLogStreamResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -374,15 +383,15 @@ export class LogStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -516,10 +525,10 @@ export class LogStreams {
      * @param {string} id - The id of the log stream to get
      * @param {LogStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.logStreams.get("id")
@@ -527,14 +536,14 @@ export class LogStreams {
     public get(
         id: string,
         requestOptions?: LogStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetLogStreamResponseContent> {
+    ): core.HttpResponsePromise<GetLogStreamResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: LogStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetLogStreamResponseContent>> {
+    ): Promise<core.WithRawResponse<GetLogStreamResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -556,7 +565,7 @@ export class LogStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetLogStreamResponseContent,
+                data: _response.body as GetLogStreamResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -564,13 +573,13 @@ export class LogStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -603,11 +612,11 @@ export class LogStreams {
      * @param {string} id - The id of the log stream to delete
      * @param {LogStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.logStreams.delete("id")
@@ -646,15 +655,15 @@ export class LogStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -719,30 +728,30 @@ export class LogStreams {
      * }</code></pre>
      *
      * @param {string} id - The id of the log stream to get
-     * @param {Management.UpdateLogStreamRequestContent} request
+     * @param {UpdateLogStreamRequestContent} request
      * @param {LogStreams.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.logStreams.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateLogStreamRequestContent = {},
+        request: UpdateLogStreamRequestContent = {},
         requestOptions?: LogStreams.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateLogStreamResponseContent> {
+    ): core.HttpResponsePromise<UpdateLogStreamResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateLogStreamRequestContent = {},
+        request: UpdateLogStreamRequestContent = {},
         requestOptions?: LogStreams.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateLogStreamResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateLogStreamResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -767,7 +776,7 @@ export class LogStreams {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateLogStreamResponseContent,
+                data: _response.body as UpdateLogStreamResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -775,13 +784,13 @@ export class LogStreams {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

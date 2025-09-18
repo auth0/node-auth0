@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListUserSessionsRequestParameters } from "./requests/ListUserSessionsRequestParameters.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { SessionResponseContent } from "../../../../../types/SessionResponseContent.js";
+import type { ListUserSessionsPaginatedResponseContent } from "../../../../../types/ListUserSessionsPaginatedResponseContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,26 +51,26 @@ export class Sessions {
      * Retrieve details for a user's sessions.
      *
      * @param {string} userId - ID of the user to get sessions for
-     * @param {Management.ListUserSessionsRequestParameters} request
+     * @param {ListUserSessionsRequestParameters} request
      * @param {Sessions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.sessions.list("user_id")
+     *     await client.sessions.list("user_id")
      */
     public async list(
         userId: string,
-        request: Management.ListUserSessionsRequestParameters = {},
+        request: ListUserSessionsRequestParameters = {},
         requestOptions?: Sessions.RequestOptions,
-    ): Promise<core.Page<Management.SessionResponseContent>> {
+    ): Promise<core.Page<SessionResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.users.ListUserSessionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListUserSessionsPaginatedResponseContent>> => {
+                request: ListUserSessionsRequestParameters,
+            ): Promise<core.WithRawResponse<ListUserSessionsPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -94,26 +101,20 @@ export class Sessions {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListUserSessionsPaginatedResponseContent,
+                        data: _response.body as ListUserSessionsPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -142,10 +143,7 @@ export class Sessions {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserSessionsPaginatedResponseContent,
-            Management.SessionResponseContent
-        >({
+        return new core.Pageable<ListUserSessionsPaginatedResponseContent, SessionResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -163,14 +161,14 @@ export class Sessions {
      * @param {string} userId - ID of the user to get sessions for
      * @param {Sessions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.sessions.delete("user_id")
+     *     await client.sessions.delete("user_id")
      */
     public delete(userId: string, requestOptions?: Sessions.RequestOptions): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(userId, requestOptions));
@@ -206,15 +204,15 @@ export class Sessions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

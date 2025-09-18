@@ -4,7 +4,12 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { RulesConfig } from "../../../types/RulesConfig.js";
+import type { SetRulesConfigRequestContent } from "./requests/SetRulesConfigRequestContent.js";
+import type { SetRulesConfigResponseContent } from "../../../types/SetRulesConfigResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -47,20 +52,18 @@ export class RulesConfigs {
      *
      * @param {RulesConfigs.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rulesConfigs.list()
      */
-    public list(requestOptions?: RulesConfigs.RequestOptions): core.HttpResponsePromise<Management.RulesConfig[]> {
+    public list(requestOptions?: RulesConfigs.RequestOptions): core.HttpResponsePromise<RulesConfig[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __list(
-        requestOptions?: RulesConfigs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.RulesConfig[]>> {
+    private async __list(requestOptions?: RulesConfigs.RequestOptions): Promise<core.WithRawResponse<RulesConfig[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -81,17 +84,17 @@ export class RulesConfigs {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.RulesConfig[], rawResponse: _response.rawResponse };
+            return { data: _response.body as RulesConfig[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -122,12 +125,12 @@ export class RulesConfigs {
      * Sets a rules config variable.
      *
      * @param {string} key - Key of the rules config variable to set (max length: 127 characters).
-     * @param {Management.SetRulesConfigRequestContent} request
+     * @param {SetRulesConfigRequestContent} request
      * @param {RulesConfigs.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rulesConfigs.set("key", {
@@ -136,17 +139,17 @@ export class RulesConfigs {
      */
     public set(
         key: string,
-        request: Management.SetRulesConfigRequestContent,
+        request: SetRulesConfigRequestContent,
         requestOptions?: RulesConfigs.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetRulesConfigResponseContent> {
+    ): core.HttpResponsePromise<SetRulesConfigResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(key, request, requestOptions));
     }
 
     private async __set(
         key: string,
-        request: Management.SetRulesConfigRequestContent,
+        request: SetRulesConfigRequestContent,
         requestOptions?: RulesConfigs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetRulesConfigResponseContent>> {
+    ): Promise<core.WithRawResponse<SetRulesConfigResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -171,7 +174,7 @@ export class RulesConfigs {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetRulesConfigResponseContent,
+                data: _response.body as SetRulesConfigResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -179,11 +182,11 @@ export class RulesConfigs {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -216,9 +219,9 @@ export class RulesConfigs {
      * @param {string} key - Key of the rules config variable to delete.
      * @param {RulesConfigs.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rulesConfigs.delete("key")
@@ -257,11 +260,11 @@ export class RulesConfigs {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

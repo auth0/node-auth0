@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { SigningKeys } from "../../../../../types/SigningKeys.js";
+import type { RotateSigningKeysResponseContent } from "../../../../../types/RotateSigningKeysResponseContent.js";
+import type { GetSigningKeysResponseContent } from "../../../../../types/GetSigningKeysResponseContent.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import type { RevokedSigningKeysResponseContent } from "../../../../../types/RevokedSigningKeysResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -45,21 +53,19 @@ export class Signing {
      *
      * @param {Signing.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.keys.signing.list()
      */
-    public list(requestOptions?: Signing.RequestOptions): core.HttpResponsePromise<Management.SigningKeys[]> {
+    public list(requestOptions?: Signing.RequestOptions): core.HttpResponsePromise<SigningKeys[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __list(
-        requestOptions?: Signing.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SigningKeys[]>> {
+    private async __list(requestOptions?: Signing.RequestOptions): Promise<core.WithRawResponse<SigningKeys[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -80,19 +86,19 @@ export class Signing {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.SigningKeys[], rawResponse: _response.rawResponse };
+            return { data: _response.body as SigningKeys[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -124,22 +130,20 @@ export class Signing {
      *
      * @param {Signing.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.keys.signing.rotate()
      */
-    public rotate(
-        requestOptions?: Signing.RequestOptions,
-    ): core.HttpResponsePromise<Management.RotateSigningKeysResponseContent> {
+    public rotate(requestOptions?: Signing.RequestOptions): core.HttpResponsePromise<RotateSigningKeysResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__rotate(requestOptions));
     }
 
     private async __rotate(
         requestOptions?: Signing.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.RotateSigningKeysResponseContent>> {
+    ): Promise<core.WithRawResponse<RotateSigningKeysResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -161,7 +165,7 @@ export class Signing {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.RotateSigningKeysResponseContent,
+                data: _response.body as RotateSigningKeysResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -169,11 +173,11 @@ export class Signing {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -206,10 +210,10 @@ export class Signing {
      * @param {string} kid - Key id of the key to retrieve
      * @param {Signing.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.keys.signing.get("kid")
@@ -217,14 +221,14 @@ export class Signing {
     public get(
         kid: string,
         requestOptions?: Signing.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetSigningKeysResponseContent> {
+    ): core.HttpResponsePromise<GetSigningKeysResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(kid, requestOptions));
     }
 
     private async __get(
         kid: string,
         requestOptions?: Signing.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetSigningKeysResponseContent>> {
+    ): Promise<core.WithRawResponse<GetSigningKeysResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -246,7 +250,7 @@ export class Signing {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetSigningKeysResponseContent,
+                data: _response.body as GetSigningKeysResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -254,13 +258,13 @@ export class Signing {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -293,10 +297,10 @@ export class Signing {
      * @param {string} kid - Key id of the key to revoke
      * @param {Signing.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.keys.signing.revoke("kid")
@@ -304,14 +308,14 @@ export class Signing {
     public revoke(
         kid: string,
         requestOptions?: Signing.RequestOptions,
-    ): core.HttpResponsePromise<Management.RevokedSigningKeysResponseContent> {
+    ): core.HttpResponsePromise<RevokedSigningKeysResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__revoke(kid, requestOptions));
     }
 
     private async __revoke(
         kid: string,
         requestOptions?: Signing.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.RevokedSigningKeysResponseContent>> {
+    ): Promise<core.WithRawResponse<RevokedSigningKeysResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -333,7 +337,7 @@ export class Signing {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.RevokedSigningKeysResponseContent,
+                data: _response.body as RevokedSigningKeysResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -341,13 +345,13 @@ export class Signing {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

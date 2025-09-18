@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListUserLogsRequestParameters } from "./requests/ListUserLogsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { Log } from "../../../../../types/Log.js";
+import type { UserListLogOffsetPaginatedResponseContent } from "../../../../../types/UserListLogOffsetPaginatedResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -50,26 +56,26 @@ export class Logs {
      * Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#limitations">limits the number of logs</a> you can return by search criteria to 100 logs per request. Furthermore, you may only paginate through up to 1,000 search results. If you exceed this threshold, please redefine your search.
      *
      * @param {string} id - ID of the user of the logs to retrieve
-     * @param {Management.ListUserLogsRequestParameters} request
+     * @param {ListUserLogsRequestParameters} request
      * @param {Logs.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.logs.list("id")
+     *     await client.logs.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListUserLogsRequestParameters = {},
+        request: ListUserLogsRequestParameters = {},
         requestOptions?: Logs.RequestOptions,
-    ): Promise<core.Page<Management.Log>> {
+    ): Promise<core.Page<Log>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.users.ListUserLogsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.UserListLogOffsetPaginatedResponseContent>> => {
+                request: ListUserLogsRequestParameters,
+            ): Promise<core.WithRawResponse<UserListLogOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, sort, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -106,29 +112,20 @@ export class Logs {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.UserListLogOffsetPaginatedResponseContent,
+                        data: _response.body as UserListLogOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -156,7 +153,7 @@ export class Logs {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.UserListLogOffsetPaginatedResponseContent, Management.Log>({
+        return new core.Pageable<UserListLogOffsetPaginatedResponseContent, Log>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.logs ?? []).length > 0,

@@ -4,7 +4,12 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import type { ListGuardianPoliciesResponseContent } from "../../../../../types/ListGuardianPoliciesResponseContent.js";
+import type { SetGuardianPoliciesRequestContent } from "../../../../../types/SetGuardianPoliciesRequestContent.js";
+import type { SetGuardianPoliciesResponseContent } from "../../../../../types/SetGuardianPoliciesResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -53,22 +58,22 @@ export class Policies {
      *
      * @param {Policies.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
      *
      * @example
      *     await client.guardian.policies.list()
      */
     public list(
         requestOptions?: Policies.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListGuardianPoliciesResponseContent> {
+    ): core.HttpResponsePromise<ListGuardianPoliciesResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
     private async __list(
         requestOptions?: Policies.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListGuardianPoliciesResponseContent>> {
+    ): Promise<core.WithRawResponse<ListGuardianPoliciesResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -90,7 +95,7 @@ export class Policies {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.ListGuardianPoliciesResponseContent,
+                data: _response.body as ListGuardianPoliciesResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -98,11 +103,11 @@ export class Policies {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -140,27 +145,27 @@ export class Policies {
      *
      * <b>Note</b>: The <code>confidence-score</code> policy is part of the <a href="https://auth0.com/docs/secure/multi-factor-authentication/adaptive-mfa">Adaptive MFA feature</a>. Adaptive MFA requires an add-on for the Enterprise plan; review <a href="https://auth0.com/pricing">Auth0 Pricing</a> for more details.
      *
-     * @param {Management.SetGuardianPoliciesRequestContent} request
+     * @param {SetGuardianPoliciesRequestContent} request
      * @param {Policies.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
      *
      * @example
      *     await client.guardian.policies.set(["all-applications"])
      */
     public set(
-        request: Management.SetGuardianPoliciesRequestContent,
+        request: SetGuardianPoliciesRequestContent,
         requestOptions?: Policies.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetGuardianPoliciesResponseContent> {
+    ): core.HttpResponsePromise<SetGuardianPoliciesResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(request, requestOptions));
     }
 
     private async __set(
-        request: Management.SetGuardianPoliciesRequestContent,
+        request: SetGuardianPoliciesRequestContent,
         requestOptions?: Policies.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetGuardianPoliciesResponseContent>> {
+    ): Promise<core.WithRawResponse<SetGuardianPoliciesResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -185,7 +190,7 @@ export class Policies {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetGuardianPoliciesResponseContent,
+                data: _response.body as SetGuardianPoliciesResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -193,11 +198,11 @@ export class Policies {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

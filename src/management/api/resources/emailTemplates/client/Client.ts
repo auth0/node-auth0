@@ -4,7 +4,20 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { CreateEmailTemplateRequestContent } from "./requests/CreateEmailTemplateRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { CreateEmailTemplateResponseContent } from "../../../types/CreateEmailTemplateResponseContent.js";
+import type { EmailTemplateNameEnum } from "../../../types/EmailTemplateNameEnum.js";
+import type { GetEmailTemplateResponseContent } from "../../../types/GetEmailTemplateResponseContent.js";
+import type { SetEmailTemplateRequestContent } from "./requests/SetEmailTemplateRequestContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { SetEmailTemplateResponseContent } from "../../../types/SetEmailTemplateResponseContent.js";
+import type { UpdateEmailTemplateRequestContent } from "./requests/UpdateEmailTemplateRequestContent.js";
+import type { UpdateEmailTemplateResponseContent } from "../../../types/UpdateEmailTemplateResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,14 +56,14 @@ export class EmailTemplates {
     /**
      * Create an email template.
      *
-     * @param {Management.CreateEmailTemplateRequestContent} request
+     * @param {CreateEmailTemplateRequestContent} request
      * @param {EmailTemplates.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emailTemplates.create({
@@ -58,16 +71,16 @@ export class EmailTemplates {
      *     })
      */
     public create(
-        request: Management.CreateEmailTemplateRequestContent,
+        request: CreateEmailTemplateRequestContent,
         requestOptions?: EmailTemplates.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateEmailTemplateResponseContent> {
+    ): core.HttpResponsePromise<CreateEmailTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateEmailTemplateRequestContent,
+        request: CreateEmailTemplateRequestContent,
         requestOptions?: EmailTemplates.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateEmailTemplateResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateEmailTemplateResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -92,7 +105,7 @@ export class EmailTemplates {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateEmailTemplateResponseContent,
+                data: _response.body as CreateEmailTemplateResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -100,15 +113,15 @@ export class EmailTemplates {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -138,28 +151,28 @@ export class EmailTemplates {
     /**
      * Retrieve an email template by pre-defined name. These names are `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, and `async_approval`. The names `change_password`, and `password_reset` are also supported for legacy scenarios.
      *
-     * @param {Management.EmailTemplateNameEnum} templateName - Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
+     * @param {EmailTemplateNameEnum} templateName - Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
      * @param {EmailTemplates.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emailTemplates.get("verify_email")
      */
     public get(
-        templateName: Management.EmailTemplateNameEnum,
+        templateName: EmailTemplateNameEnum,
         requestOptions?: EmailTemplates.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetEmailTemplateResponseContent> {
+    ): core.HttpResponsePromise<GetEmailTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(templateName, requestOptions));
     }
 
     private async __get(
-        templateName: Management.EmailTemplateNameEnum,
+        templateName: EmailTemplateNameEnum,
         requestOptions?: EmailTemplates.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetEmailTemplateResponseContent>> {
+    ): Promise<core.WithRawResponse<GetEmailTemplateResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -181,7 +194,7 @@ export class EmailTemplates {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetEmailTemplateResponseContent,
+                data: _response.body as GetEmailTemplateResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -189,13 +202,13 @@ export class EmailTemplates {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -227,15 +240,15 @@ export class EmailTemplates {
     /**
      * Update an email template.
      *
-     * @param {Management.EmailTemplateNameEnum} templateName - Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
-     * @param {Management.SetEmailTemplateRequestContent} request
+     * @param {EmailTemplateNameEnum} templateName - Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
+     * @param {SetEmailTemplateRequestContent} request
      * @param {EmailTemplates.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emailTemplates.set("verify_email", {
@@ -243,18 +256,18 @@ export class EmailTemplates {
      *     })
      */
     public set(
-        templateName: Management.EmailTemplateNameEnum,
-        request: Management.SetEmailTemplateRequestContent,
+        templateName: EmailTemplateNameEnum,
+        request: SetEmailTemplateRequestContent,
         requestOptions?: EmailTemplates.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetEmailTemplateResponseContent> {
+    ): core.HttpResponsePromise<SetEmailTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(templateName, request, requestOptions));
     }
 
     private async __set(
-        templateName: Management.EmailTemplateNameEnum,
-        request: Management.SetEmailTemplateRequestContent,
+        templateName: EmailTemplateNameEnum,
+        request: SetEmailTemplateRequestContent,
         requestOptions?: EmailTemplates.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetEmailTemplateResponseContent>> {
+    ): Promise<core.WithRawResponse<SetEmailTemplateResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -279,7 +292,7 @@ export class EmailTemplates {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetEmailTemplateResponseContent,
+                data: _response.body as SetEmailTemplateResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -287,15 +300,15 @@ export class EmailTemplates {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -327,32 +340,32 @@ export class EmailTemplates {
     /**
      * Modify an email template.
      *
-     * @param {Management.EmailTemplateNameEnum} templateName - Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
-     * @param {Management.UpdateEmailTemplateRequestContent} request
+     * @param {EmailTemplateNameEnum} templateName - Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy).
+     * @param {UpdateEmailTemplateRequestContent} request
      * @param {EmailTemplates.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.emailTemplates.update("verify_email")
      */
     public update(
-        templateName: Management.EmailTemplateNameEnum,
-        request: Management.UpdateEmailTemplateRequestContent = {},
+        templateName: EmailTemplateNameEnum,
+        request: UpdateEmailTemplateRequestContent = {},
         requestOptions?: EmailTemplates.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateEmailTemplateResponseContent> {
+    ): core.HttpResponsePromise<UpdateEmailTemplateResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(templateName, request, requestOptions));
     }
 
     private async __update(
-        templateName: Management.EmailTemplateNameEnum,
-        request: Management.UpdateEmailTemplateRequestContent = {},
+        templateName: EmailTemplateNameEnum,
+        request: UpdateEmailTemplateRequestContent = {},
         requestOptions?: EmailTemplates.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateEmailTemplateResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateEmailTemplateResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -377,7 +390,7 @@ export class EmailTemplates {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateEmailTemplateResponseContent,
+                data: _response.body as UpdateEmailTemplateResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -385,15 +398,15 @@ export class EmailTemplates {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

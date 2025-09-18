@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetSuspiciousIpThrottlingSettingsResponseContent } from "../../../../../types/GetSuspiciousIpThrottlingSettingsResponseContent.js";
+// TODO: Why is this import different from the others?
+import type { UpdateSuspiciousIpThrottlingSettingsRequestContent } from "./requests/UpdateSuspiciousIpThrottlingSettingsRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import type { UpdateSuspiciousIpThrottlingSettingsResponseContent } from "../../../../../types/UpdateSuspiciousIpThrottlingSettingsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -45,22 +52,22 @@ export class SuspiciousIpThrottling {
      *
      * @param {SuspiciousIpThrottling.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.attackProtection.suspiciousIpThrottling.get()
      */
     public get(
         requestOptions?: SuspiciousIpThrottling.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetSuspiciousIpThrottlingSettingsResponseContent> {
+    ): core.HttpResponsePromise<GetSuspiciousIpThrottlingSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(requestOptions));
     }
 
     private async __get(
         requestOptions?: SuspiciousIpThrottling.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetSuspiciousIpThrottlingSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetSuspiciousIpThrottlingSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -82,7 +89,7 @@ export class SuspiciousIpThrottling {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetSuspiciousIpThrottlingSettingsResponseContent,
+                data: _response.body as GetSuspiciousIpThrottlingSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -90,11 +97,11 @@ export class SuspiciousIpThrottling {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -126,28 +133,28 @@ export class SuspiciousIpThrottling {
     /**
      * Update the details of the Suspicious IP Throttling configuration of your tenant.
      *
-     * @param {Management.UpdateSuspiciousIpThrottlingSettingsRequestContent} request
+     * @param {UpdateSuspiciousIpThrottlingSettingsRequestContent} request
      * @param {SuspiciousIpThrottling.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.attackProtection.suspiciousIpThrottling.update()
      */
     public update(
-        request: Management.UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
+        request: UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
         requestOptions?: SuspiciousIpThrottling.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateSuspiciousIpThrottlingSettingsResponseContent> {
+    ): core.HttpResponsePromise<UpdateSuspiciousIpThrottlingSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
+        request: UpdateSuspiciousIpThrottlingSettingsRequestContent = {},
         requestOptions?: SuspiciousIpThrottling.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateSuspiciousIpThrottlingSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateSuspiciousIpThrottlingSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -172,7 +179,7 @@ export class SuspiciousIpThrottling {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateSuspiciousIpThrottlingSettingsResponseContent,
+                data: _response.body as UpdateSuspiciousIpThrottlingSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -180,13 +187,13 @@ export class SuspiciousIpThrottling {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

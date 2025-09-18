@@ -4,7 +4,18 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListOrganizationConnectionsRequestParameters } from "./requests/ListOrganizationConnectionsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { OrganizationConnection } from "../../../../../types/OrganizationConnection.js";
+import type { ListOrganizationConnectionsOffsetPaginatedResponseContent } from "../../../../../types/ListOrganizationConnectionsOffsetPaginatedResponseContent.js";
+import type { AddOrganizationConnectionRequestContent } from "./requests/AddOrganizationConnectionRequestContent.js";
+import type { AddOrganizationConnectionResponseContent } from "../../../../../types/AddOrganizationConnectionResponseContent.js";
+import type { GetOrganizationConnectionResponseContent } from "../../../../../types/GetOrganizationConnectionResponseContent.js";
+import type { UpdateOrganizationConnectionRequestContent } from "./requests/UpdateOrganizationConnectionRequestContent.js";
+import type { UpdateOrganizationConnectionResponseContent } from "../../../../../types/UpdateOrganizationConnectionResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,26 +55,26 @@ export class EnabledConnections {
      * Retrieve details about a specific connection currently enabled for an Organization. Information returned includes details such as connection ID, name, strategy, and whether the connection automatically grants membership upon login.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.ListOrganizationConnectionsRequestParameters} request
+     * @param {ListOrganizationConnectionsRequestParameters} request
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.enabledConnections.list("id")
+     *     await client.enabledConnections.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListOrganizationConnectionsRequestParameters = {},
+        request: ListOrganizationConnectionsRequestParameters = {},
         requestOptions?: EnabledConnections.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationConnection>> {
+    ): Promise<core.Page<OrganizationConnection>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.organizations.ListOrganizationConnectionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListOrganizationConnectionsOffsetPaginatedResponseContent>> => {
+                request: ListOrganizationConnectionsRequestParameters,
+            ): Promise<core.WithRawResponse<ListOrganizationConnectionsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -97,29 +108,20 @@ export class EnabledConnections {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListOrganizationConnectionsOffsetPaginatedResponseContent,
+                        data: _response.body as ListOrganizationConnectionsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -149,10 +151,7 @@ export class EnabledConnections {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationConnectionsOffsetPaginatedResponseContent,
-            Management.OrganizationConnection
-        >({
+        return new core.Pageable<ListOrganizationConnectionsOffsetPaginatedResponseContent, OrganizationConnection>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.enabled_connections ?? []).length > 0,
@@ -170,32 +169,32 @@ export class EnabledConnections {
      * <a href="https://auth0.com/docs/authenticate/identity-providers">Connections</a> represent the relationship between Auth0 and a source of users. Available types of connections include database, enterprise, and social.
      *
      * @param {string} id - Organization identifier.
-     * @param {Management.AddOrganizationConnectionRequestContent} request
+     * @param {AddOrganizationConnectionRequestContent} request
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.enabledConnections.add("id", {
+     *     await client.enabledConnections.add("id", {
      *         connection_id: "connection_id"
      *     })
      */
     public add(
         id: string,
-        request: Management.AddOrganizationConnectionRequestContent,
+        request: AddOrganizationConnectionRequestContent,
         requestOptions?: EnabledConnections.RequestOptions,
-    ): core.HttpResponsePromise<Management.AddOrganizationConnectionResponseContent> {
+    ): core.HttpResponsePromise<AddOrganizationConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__add(id, request, requestOptions));
     }
 
     private async __add(
         id: string,
-        request: Management.AddOrganizationConnectionRequestContent,
+        request: AddOrganizationConnectionRequestContent,
         requestOptions?: EnabledConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.AddOrganizationConnectionResponseContent>> {
+    ): Promise<core.WithRawResponse<AddOrganizationConnectionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -220,7 +219,7 @@ export class EnabledConnections {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.AddOrganizationConnectionResponseContent,
+                data: _response.body as AddOrganizationConnectionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -228,13 +227,13 @@ export class EnabledConnections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -270,18 +269,18 @@ export class EnabledConnections {
      * @param {string} connectionId - Connection identifier.
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.enabledConnections.get("id", "connectionId")
+     *     await client.enabledConnections.get("id", "connectionId")
      */
     public get(
         id: string,
         connectionId: string,
         requestOptions?: EnabledConnections.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetOrganizationConnectionResponseContent> {
+    ): core.HttpResponsePromise<GetOrganizationConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, connectionId, requestOptions));
     }
 
@@ -289,7 +288,7 @@ export class EnabledConnections {
         id: string,
         connectionId: string,
         requestOptions?: EnabledConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetOrganizationConnectionResponseContent>> {
+    ): Promise<core.WithRawResponse<GetOrganizationConnectionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -311,7 +310,7 @@ export class EnabledConnections {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetOrganizationConnectionResponseContent,
+                data: _response.body as GetOrganizationConnectionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -319,11 +318,11 @@ export class EnabledConnections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -361,13 +360,13 @@ export class EnabledConnections {
      * @param {string} connectionId - Connection identifier.
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.enabledConnections.delete("id", "connectionId")
+     *     await client.enabledConnections.delete("id", "connectionId")
      */
     public delete(
         id: string,
@@ -408,13 +407,13 @@ export class EnabledConnections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -448,32 +447,32 @@ export class EnabledConnections {
      *
      * @param {string} id - Organization identifier.
      * @param {string} connectionId - Connection identifier.
-     * @param {Management.UpdateOrganizationConnectionRequestContent} request
+     * @param {UpdateOrganizationConnectionRequestContent} request
      * @param {EnabledConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.enabledConnections.update("id", "connectionId")
+     *     await client.enabledConnections.update("id", "connectionId")
      */
     public update(
         id: string,
         connectionId: string,
-        request: Management.UpdateOrganizationConnectionRequestContent = {},
+        request: UpdateOrganizationConnectionRequestContent = {},
         requestOptions?: EnabledConnections.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateOrganizationConnectionResponseContent> {
+    ): core.HttpResponsePromise<UpdateOrganizationConnectionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, connectionId, request, requestOptions));
     }
 
     private async __update(
         id: string,
         connectionId: string,
-        request: Management.UpdateOrganizationConnectionRequestContent = {},
+        request: UpdateOrganizationConnectionRequestContent = {},
         requestOptions?: EnabledConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateOrganizationConnectionResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateOrganizationConnectionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -498,7 +497,7 @@ export class EnabledConnections {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateOrganizationConnectionResponseContent,
+                data: _response.body as UpdateOrganizationConnectionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -506,13 +505,13 @@ export class EnabledConnections {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

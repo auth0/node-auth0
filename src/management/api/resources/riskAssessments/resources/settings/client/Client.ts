@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetRiskAssessmentsSettingsResponseContent } from "../../../../../types/GetRiskAssessmentsSettingsResponseContent.js";
+import type { UpdateRiskAssessmentsSettingsRequestContent } from "./requests/UpdateRiskAssessmentsSettingsRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import type { UpdateRiskAssessmentsSettingsResponseContent } from "../../../../../types/UpdateRiskAssessmentsSettingsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 import { NewDevice } from "../resources/newDevice/client/Client.js";
@@ -51,23 +58,23 @@ export class Settings {
      *
      * @param {Settings.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.riskAssessments.settings.get()
      */
     public get(
         requestOptions?: Settings.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetRiskAssessmentsSettingsResponseContent> {
+    ): core.HttpResponsePromise<GetRiskAssessmentsSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(requestOptions));
     }
 
     private async __get(
         requestOptions?: Settings.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetRiskAssessmentsSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetRiskAssessmentsSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -89,7 +96,7 @@ export class Settings {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetRiskAssessmentsSettingsResponseContent,
+                data: _response.body as GetRiskAssessmentsSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -97,13 +104,13 @@ export class Settings {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -135,14 +142,14 @@ export class Settings {
     /**
      * Updates the tenant settings for risk assessments
      *
-     * @param {Management.UpdateRiskAssessmentsSettingsRequestContent} request
+     * @param {UpdateRiskAssessmentsSettingsRequestContent} request
      * @param {Settings.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.riskAssessments.settings.update({
@@ -150,16 +157,16 @@ export class Settings {
      *     })
      */
     public update(
-        request: Management.UpdateRiskAssessmentsSettingsRequestContent,
+        request: UpdateRiskAssessmentsSettingsRequestContent,
         requestOptions?: Settings.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateRiskAssessmentsSettingsResponseContent> {
+    ): core.HttpResponsePromise<UpdateRiskAssessmentsSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.UpdateRiskAssessmentsSettingsRequestContent,
+        request: UpdateRiskAssessmentsSettingsRequestContent,
         requestOptions?: Settings.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateRiskAssessmentsSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateRiskAssessmentsSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -184,7 +191,7 @@ export class Settings {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateRiskAssessmentsSettingsResponseContent,
+                data: _response.body as UpdateRiskAssessmentsSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -192,15 +199,15 @@ export class Settings {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

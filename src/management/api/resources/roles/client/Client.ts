@@ -4,7 +4,19 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListRolesRequestParameters } from "./requests/ListRolesRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { Role } from "../../../types/Role.js";
+import type { ListRolesOffsetPaginatedResponseContent } from "../../../types/ListRolesOffsetPaginatedResponseContent.js";
+import type { CreateRoleRequestContent } from "./requests/CreateRoleRequestContent.js";
+import type { CreateRoleResponseContent } from "../../../types/CreateRoleResponseContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetRoleResponseContent } from "../../../types/GetRoleResponseContent.js";
+import type { UpdateRoleRequestContent } from "./requests/UpdateRoleRequestContent.js";
+import type { UpdateRoleResponseContent } from "../../../types/UpdateRoleResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Permissions } from "../resources/permissions/client/Client.js";
@@ -57,25 +69,25 @@ export class Roles {
      *
      * <b>Note</b>: The returned list does not include standard roles available for tenant members, such as Admin or Support Access.
      *
-     * @param {Management.ListRolesRequestParameters} request
+     * @param {ListRolesRequestParameters} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.roles.list()
      */
     public async list(
-        request: Management.ListRolesRequestParameters = {},
+        request: ListRolesRequestParameters = {},
         requestOptions?: Roles.RequestOptions,
-    ): Promise<core.Page<Management.Role>> {
+    ): Promise<core.Page<Role>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListRolesRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRolesOffsetPaginatedResponseContent>> => {
+                request: ListRolesRequestParameters,
+            ): Promise<core.WithRawResponse<ListRolesOffsetPaginatedResponseContent>> => {
                 const {
                     per_page: perPage = 50,
                     page = 0,
@@ -117,29 +129,20 @@ export class Roles {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListRolesOffsetPaginatedResponseContent,
+                        data: _response.body as ListRolesOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -167,7 +170,7 @@ export class Roles {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListRolesOffsetPaginatedResponseContent, Management.Role>({
+        return new core.Pageable<ListRolesOffsetPaginatedResponseContent, Role>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.roles ?? []).length > 0,
@@ -184,13 +187,13 @@ export class Roles {
      *
      * <b>Note</b>: New roles are not associated with any permissions by default. To assign existing permissions to your role, review Associate Permissions with a Role. To create new permissions, review Add API Permissions.
      *
-     * @param {Management.CreateRoleRequestContent} request
+     * @param {CreateRoleRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.roles.create({
@@ -198,16 +201,16 @@ export class Roles {
      *     })
      */
     public create(
-        request: Management.CreateRoleRequestContent,
+        request: CreateRoleRequestContent,
         requestOptions?: Roles.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateRoleResponseContent> {
+    ): core.HttpResponsePromise<CreateRoleResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateRoleRequestContent,
+        request: CreateRoleRequestContent,
         requestOptions?: Roles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateRoleResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateRoleResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -231,19 +234,19 @@ export class Roles {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.CreateRoleResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as CreateRoleResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -276,26 +279,23 @@ export class Roles {
      * @param {string} id - ID of the role to retrieve.
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.roles.get("id")
      */
-    public get(
-        id: string,
-        requestOptions?: Roles.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetRoleResponseContent> {
+    public get(id: string, requestOptions?: Roles.RequestOptions): core.HttpResponsePromise<GetRoleResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: Roles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetRoleResponseContent>> {
+    ): Promise<core.WithRawResponse<GetRoleResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -316,21 +316,21 @@ export class Roles {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetRoleResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetRoleResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -363,11 +363,11 @@ export class Roles {
      * @param {string} id - ID of the role to delete.
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.roles.delete("id")
@@ -403,15 +403,15 @@ export class Roles {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -442,30 +442,30 @@ export class Roles {
      * Modify the details of a specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">user role</a> specified by ID.
      *
      * @param {string} id - ID of the role to update.
-     * @param {Management.UpdateRoleRequestContent} request
+     * @param {UpdateRoleRequestContent} request
      * @param {Roles.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.roles.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateRoleRequestContent = {},
+        request: UpdateRoleRequestContent = {},
         requestOptions?: Roles.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateRoleResponseContent> {
+    ): core.HttpResponsePromise<UpdateRoleResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateRoleRequestContent = {},
+        request: UpdateRoleRequestContent = {},
         requestOptions?: Roles.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateRoleResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateRoleResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -489,19 +489,19 @@ export class Roles {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UpdateRoleResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as UpdateRoleResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

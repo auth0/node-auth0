@@ -4,7 +4,21 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListRulesRequestParameters } from "./requests/ListRulesRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { Rule } from "../../../types/Rule.js";
+import type { ListRulesOffsetPaginatedResponseContent } from "../../../types/ListRulesOffsetPaginatedResponseContent.js";
+import type { CreateRuleRequestContent } from "./requests/CreateRuleRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreateRuleResponseContent } from "../../../types/CreateRuleResponseContent.js";
+import type { GetRuleRequestParameters } from "./requests/GetRuleRequestParameters.js";
+import type { GetRuleResponseContent } from "../../../types/GetRuleResponseContent.js";
+import type { UpdateRuleRequestContent } from "./requests/UpdateRuleRequestContent.js";
+import type { UpdateRuleResponseContent } from "../../../types/UpdateRuleResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,26 +57,26 @@ export class Rules {
     /**
      * Retrieve a filtered list of <a href="https://auth0.com/docs/rules">rules</a>. Accepts a list of fields to include or exclude.
      *
-     * @param {Management.ListRulesRequestParameters} request
+     * @param {ListRulesRequestParameters} request
      * @param {Rules.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rules.list()
      */
     public async list(
-        request: Management.ListRulesRequestParameters = {},
+        request: ListRulesRequestParameters = {},
         requestOptions?: Rules.RequestOptions,
-    ): Promise<core.Page<Management.Rule>> {
+    ): Promise<core.Page<Rule>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListRulesRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRulesOffsetPaginatedResponseContent>> => {
+                request: ListRulesRequestParameters,
+            ): Promise<core.WithRawResponse<ListRulesOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
                     per_page: perPage = 50,
@@ -112,31 +126,22 @@ export class Rules {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListRulesOffsetPaginatedResponseContent,
+                        data: _response.body as ListRulesOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -164,7 +169,7 @@ export class Rules {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListRulesOffsetPaginatedResponseContent, Management.Rule>({
+        return new core.Pageable<ListRulesOffsetPaginatedResponseContent, Rule>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.rules ?? []).length > 0,
@@ -181,14 +186,14 @@ export class Rules {
      *
      * Note: Changing a rule's stage of execution from the default <code>login_success</code> can change the rule's function signature to have user omitted.
      *
-     * @param {Management.CreateRuleRequestContent} request
+     * @param {CreateRuleRequestContent} request
      * @param {Rules.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rules.create({
@@ -197,16 +202,16 @@ export class Rules {
      *     })
      */
     public create(
-        request: Management.CreateRuleRequestContent,
+        request: CreateRuleRequestContent,
         requestOptions?: Rules.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateRuleResponseContent> {
+    ): core.HttpResponsePromise<CreateRuleResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateRuleRequestContent,
+        request: CreateRuleRequestContent,
         requestOptions?: Rules.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateRuleResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateRuleResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -230,21 +235,21 @@ export class Rules {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.CreateRuleResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as CreateRuleResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -275,31 +280,31 @@ export class Rules {
      * Retrieve <a href="https://auth0.com/docs/rules">rule</a> details. Accepts a list of fields to include or exclude in the result.
      *
      * @param {string} id - ID of the rule to retrieve.
-     * @param {Management.GetRuleRequestParameters} request
+     * @param {GetRuleRequestParameters} request
      * @param {Rules.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rules.get("id")
      */
     public get(
         id: string,
-        request: Management.GetRuleRequestParameters = {},
+        request: GetRuleRequestParameters = {},
         requestOptions?: Rules.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetRuleResponseContent> {
+    ): core.HttpResponsePromise<GetRuleResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetRuleRequestParameters = {},
+        request: GetRuleRequestParameters = {},
         requestOptions?: Rules.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetRuleResponseContent>> {
+    ): Promise<core.WithRawResponse<GetRuleResponseContent>> {
         const { fields, include_fields: includeFields } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (fields != null) {
@@ -330,21 +335,21 @@ export class Rules {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetRuleResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetRuleResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -377,10 +382,10 @@ export class Rules {
      * @param {string} id - ID of the rule to delete.
      * @param {Rules.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rules.delete("id")
@@ -416,13 +421,13 @@ export class Rules {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -453,32 +458,32 @@ export class Rules {
      * Update an existing rule.
      *
      * @param {string} id - ID of the rule to retrieve.
-     * @param {Management.UpdateRuleRequestContent} request
+     * @param {UpdateRuleRequestContent} request
      * @param {Rules.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.rules.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateRuleRequestContent = {},
+        request: UpdateRuleRequestContent = {},
         requestOptions?: Rules.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateRuleResponseContent> {
+    ): core.HttpResponsePromise<UpdateRuleResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateRuleRequestContent = {},
+        request: UpdateRuleRequestContent = {},
         requestOptions?: Rules.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateRuleResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateRuleResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -502,23 +507,23 @@ export class Rules {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UpdateRuleResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as UpdateRuleResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

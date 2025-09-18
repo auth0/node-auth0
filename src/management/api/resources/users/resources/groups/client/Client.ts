@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { GetUserGroupsRequestParameters } from "./requests/GetUserGroupsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { Group } from "../../../../../types/Group.js";
+import type { GetUserGroupsResponseContent } from "../../../../../types/GetUserGroupsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,26 +50,26 @@ export class Groups {
      * Retrieve the first <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">multi-factor authentication</a> enrollment that a specific user has confirmed.
      *
      * @param {string} id - ID of the user to list groups for.
-     * @param {Management.GetUserGroupsRequestParameters} request
+     * @param {GetUserGroupsRequestParameters} request
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.users.groups.get("id")
+     *     await client.groups.get("id")
      */
     public async get(
         id: string,
-        request: Management.GetUserGroupsRequestParameters = {},
+        request: GetUserGroupsRequestParameters = {},
         requestOptions?: Groups.RequestOptions,
-    ): Promise<core.Page<Management.Group>> {
+    ): Promise<core.Page<Group>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.users.GetUserGroupsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.GetUserGroupsResponseContent>> => {
+                request: GetUserGroupsRequestParameters,
+            ): Promise<core.WithRawResponse<GetUserGroupsResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -94,29 +100,20 @@ export class Groups {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.GetUserGroupsResponseContent,
+                        data: _response.body as GetUserGroupsResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -145,7 +142,7 @@ export class Groups {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.GetUserGroupsResponseContent, Management.Group>({
+        return new core.Pageable<GetUserGroupsResponseContent, Group>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

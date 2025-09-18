@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { PromptGroupNameEnum } from "../../../../../types/PromptGroupNameEnum.js";
+import type { PromptLanguageEnum } from "../../../../../types/PromptLanguageEnum.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetCustomTextsByLanguageResponseContent } from "../../../../../types/GetCustomTextsByLanguageResponseContent.js";
+import type { SetsCustomTextsByLanguageRequestContent } from "../../../../../types/SetsCustomTextsByLanguageRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,32 +51,32 @@ export class CustomText {
     /**
      * Retrieve custom text for a specific prompt and language.
      *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt.
-     * @param {Management.PromptLanguageEnum} language - Language to update.
+     * @param {PromptGroupNameEnum} prompt - Name of the prompt.
+     * @param {PromptLanguageEnum} language - Language to update.
      * @param {CustomText.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.prompts.customText.get("login", "am")
      */
     public get(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
+        prompt: PromptGroupNameEnum,
+        language: PromptLanguageEnum,
         requestOptions?: CustomText.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetCustomTextsByLanguageResponseContent> {
+    ): core.HttpResponsePromise<GetCustomTextsByLanguageResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(prompt, language, requestOptions));
     }
 
     private async __get(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
+        prompt: PromptGroupNameEnum,
+        language: PromptLanguageEnum,
         requestOptions?: CustomText.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetCustomTextsByLanguageResponseContent>> {
+    ): Promise<core.WithRawResponse<GetCustomTextsByLanguageResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -90,7 +98,7 @@ export class CustomText {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetCustomTextsByLanguageResponseContent,
+                data: _response.body as GetCustomTextsByLanguageResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -98,15 +106,15 @@ export class CustomText {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -138,15 +146,15 @@ export class CustomText {
     /**
      * Set custom text for a specific prompt. Existing texts will be overwritten.
      *
-     * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt.
-     * @param {Management.PromptLanguageEnum} language - Language to update.
-     * @param {Management.SetsCustomTextsByLanguageRequestContent} request
+     * @param {PromptGroupNameEnum} prompt - Name of the prompt.
+     * @param {PromptLanguageEnum} language - Language to update.
+     * @param {SetsCustomTextsByLanguageRequestContent} request
      * @param {CustomText.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.prompts.customText.set("login", "am", {
@@ -154,18 +162,18 @@ export class CustomText {
      *     })
      */
     public set(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
-        request: Management.SetsCustomTextsByLanguageRequestContent,
+        prompt: PromptGroupNameEnum,
+        language: PromptLanguageEnum,
+        request: SetsCustomTextsByLanguageRequestContent,
         requestOptions?: CustomText.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__set(prompt, language, request, requestOptions));
     }
 
     private async __set(
-        prompt: Management.PromptGroupNameEnum,
-        language: Management.PromptLanguageEnum,
-        request: Management.SetsCustomTextsByLanguageRequestContent,
+        prompt: PromptGroupNameEnum,
+        language: PromptLanguageEnum,
+        request: SetsCustomTextsByLanguageRequestContent,
         requestOptions?: CustomText.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -197,13 +205,13 @@ export class CustomText {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

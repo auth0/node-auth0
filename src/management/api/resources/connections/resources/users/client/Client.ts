@@ -4,7 +4,11 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { DeleteConnectionUsersByEmailQueryParameters } from "./requests/DeleteConnectionUsersByEmailQueryParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,13 +48,13 @@ export class Users {
      * Deletes a specified connection user by its email (you cannot delete all users from specific connection). Currently, only Database Connections are supported.
      *
      * @param {string} id - The id of the connection (currently only database connections are supported)
-     * @param {Management.DeleteConnectionUsersByEmailQueryParameters} request
+     * @param {DeleteConnectionUsersByEmailQueryParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.users.deleteByEmail("id", {
@@ -59,7 +63,7 @@ export class Users {
      */
     public deleteByEmail(
         id: string,
-        request: Management.DeleteConnectionUsersByEmailQueryParameters,
+        request: DeleteConnectionUsersByEmailQueryParameters,
         requestOptions?: Users.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__deleteByEmail(id, request, requestOptions));
@@ -67,7 +71,7 @@ export class Users {
 
     private async __deleteByEmail(
         id: string,
-        request: Management.DeleteConnectionUsersByEmailQueryParameters,
+        request: DeleteConnectionUsersByEmailQueryParameters,
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { email } = request;
@@ -99,13 +103,13 @@ export class Users {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

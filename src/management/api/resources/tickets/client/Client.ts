@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { VerifyEmailTicketRequestContent } from "./requests/VerifyEmailTicketRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { VerifyEmailTicketResponseContent } from "../../../types/VerifyEmailTicketResponseContent.js";
+import type { ChangePasswordTicketRequestContent } from "./requests/ChangePasswordTicketRequestContent.js";
+import type { ChangePasswordTicketResponseContent } from "../../../types/ChangePasswordTicketResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,14 +51,14 @@ export class Tickets {
     /**
      * Create an email verification ticket for a given user. An email verification ticket is a generated URL that the user can consume to verify their email address.
      *
-     * @param {Management.VerifyEmailTicketRequestContent} request
+     * @param {VerifyEmailTicketRequestContent} request
      * @param {Tickets.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tickets.verifyEmail({
@@ -58,16 +66,16 @@ export class Tickets {
      *     })
      */
     public verifyEmail(
-        request: Management.VerifyEmailTicketRequestContent,
+        request: VerifyEmailTicketRequestContent,
         requestOptions?: Tickets.RequestOptions,
-    ): core.HttpResponsePromise<Management.VerifyEmailTicketResponseContent> {
+    ): core.HttpResponsePromise<VerifyEmailTicketResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__verifyEmail(request, requestOptions));
     }
 
     private async __verifyEmail(
-        request: Management.VerifyEmailTicketRequestContent,
+        request: VerifyEmailTicketRequestContent,
         requestOptions?: Tickets.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.VerifyEmailTicketResponseContent>> {
+    ): Promise<core.WithRawResponse<VerifyEmailTicketResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -92,7 +100,7 @@ export class Tickets {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.VerifyEmailTicketResponseContent,
+                data: _response.body as VerifyEmailTicketResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -100,15 +108,15 @@ export class Tickets {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -142,29 +150,29 @@ export class Tickets {
      *
      * Note: This endpoint does not verify the given user’s identity. If you call this endpoint within your application, you must design your application to verify the user’s identity.
      *
-     * @param {Management.ChangePasswordTicketRequestContent} request
+     * @param {ChangePasswordTicketRequestContent} request
      * @param {Tickets.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.tickets.changePassword()
      */
     public changePassword(
-        request: Management.ChangePasswordTicketRequestContent = {},
+        request: ChangePasswordTicketRequestContent = {},
         requestOptions?: Tickets.RequestOptions,
-    ): core.HttpResponsePromise<Management.ChangePasswordTicketResponseContent> {
+    ): core.HttpResponsePromise<ChangePasswordTicketResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__changePassword(request, requestOptions));
     }
 
     private async __changePassword(
-        request: Management.ChangePasswordTicketRequestContent = {},
+        request: ChangePasswordTicketRequestContent = {},
         requestOptions?: Tickets.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ChangePasswordTicketResponseContent>> {
+    ): Promise<core.WithRawResponse<ChangePasswordTicketResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -189,7 +197,7 @@ export class Tickets {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.ChangePasswordTicketResponseContent,
+                data: _response.body as ChangePasswordTicketResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -197,15 +205,15 @@ export class Tickets {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

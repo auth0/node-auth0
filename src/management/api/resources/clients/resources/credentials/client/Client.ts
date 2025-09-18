@@ -4,7 +4,17 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { ClientCredential } from "../../../../../types/ClientCredential.js";
+import type { PostClientCredentialRequestContent } from "./requests/PostClientCredentialRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import type { PostClientCredentialResponseContent } from "../../../../../types/PostClientCredentialResponseContent.js";
+import type { GetClientCredentialResponseContent } from "../../../../../types/GetClientCredentialResponseContent.js";
+import type { PatchClientCredentialRequestContent } from "./requests/PatchClientCredentialRequestContent.js";
+import type { PatchClientCredentialResponseContent } from "../../../../../types/PatchClientCredentialResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -48,10 +58,10 @@ export class Credentials {
      * @param {string} clientId - ID of the client.
      * @param {Credentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.credentials.list("client_id")
@@ -59,14 +69,14 @@ export class Credentials {
     public list(
         clientId: string,
         requestOptions?: Credentials.RequestOptions,
-    ): core.HttpResponsePromise<Management.ClientCredential[]> {
+    ): core.HttpResponsePromise<ClientCredential[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(clientId, requestOptions));
     }
 
     private async __list(
         clientId: string,
         requestOptions?: Credentials.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ClientCredential[]>> {
+    ): Promise<core.WithRawResponse<ClientCredential[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -87,19 +97,19 @@ export class Credentials {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.ClientCredential[], rawResponse: _response.rawResponse };
+            return { data: _response.body as ClientCredential[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -164,14 +174,14 @@ export class Credentials {
      * </ul>
      *
      * @param {string} clientId - ID of the client.
-     * @param {Management.PostClientCredentialRequestContent} request
+     * @param {PostClientCredentialRequestContent} request
      * @param {Credentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.credentials.create("client_id", {
@@ -180,17 +190,17 @@ export class Credentials {
      */
     public create(
         clientId: string,
-        request: Management.PostClientCredentialRequestContent,
+        request: PostClientCredentialRequestContent,
         requestOptions?: Credentials.RequestOptions,
-    ): core.HttpResponsePromise<Management.PostClientCredentialResponseContent> {
+    ): core.HttpResponsePromise<PostClientCredentialResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(clientId, request, requestOptions));
     }
 
     private async __create(
         clientId: string,
-        request: Management.PostClientCredentialRequestContent,
+        request: PostClientCredentialRequestContent,
         requestOptions?: Credentials.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.PostClientCredentialResponseContent>> {
+    ): Promise<core.WithRawResponse<PostClientCredentialResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -215,7 +225,7 @@ export class Credentials {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.PostClientCredentialResponseContent,
+                data: _response.body as PostClientCredentialResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -223,15 +233,15 @@ export class Credentials {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -269,10 +279,10 @@ export class Credentials {
      * @param {string} credentialId - ID of the credential.
      * @param {Credentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.credentials.get("client_id", "credential_id")
@@ -281,7 +291,7 @@ export class Credentials {
         clientId: string,
         credentialId: string,
         requestOptions?: Credentials.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetClientCredentialResponseContent> {
+    ): core.HttpResponsePromise<GetClientCredentialResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(clientId, credentialId, requestOptions));
     }
 
@@ -289,7 +299,7 @@ export class Credentials {
         clientId: string,
         credentialId: string,
         requestOptions?: Credentials.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetClientCredentialResponseContent>> {
+    ): Promise<core.WithRawResponse<GetClientCredentialResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -311,7 +321,7 @@ export class Credentials {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetClientCredentialResponseContent,
+                data: _response.body as GetClientCredentialResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -319,13 +329,13 @@ export class Credentials {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -361,10 +371,10 @@ export class Credentials {
      * @param {string} credentialId - ID of the credential to delete.
      * @param {Credentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.credentials.delete("client_id", "credential_id")
@@ -408,13 +418,13 @@ export class Credentials {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -448,14 +458,14 @@ export class Credentials {
      *
      * @param {string} clientId - ID of the client.
      * @param {string} credentialId - ID of the credential.
-     * @param {Management.PatchClientCredentialRequestContent} request
+     * @param {PatchClientCredentialRequestContent} request
      * @param {Credentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clients.credentials.update("client_id", "credential_id")
@@ -463,18 +473,18 @@ export class Credentials {
     public update(
         clientId: string,
         credentialId: string,
-        request: Management.PatchClientCredentialRequestContent = {},
+        request: PatchClientCredentialRequestContent = {},
         requestOptions?: Credentials.RequestOptions,
-    ): core.HttpResponsePromise<Management.PatchClientCredentialResponseContent> {
+    ): core.HttpResponsePromise<PatchClientCredentialResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(clientId, credentialId, request, requestOptions));
     }
 
     private async __update(
         clientId: string,
         credentialId: string,
-        request: Management.PatchClientCredentialRequestContent = {},
+        request: PatchClientCredentialRequestContent = {},
         requestOptions?: Credentials.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.PatchClientCredentialResponseContent>> {
+    ): Promise<core.WithRawResponse<PatchClientCredentialResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -499,7 +509,7 @@ export class Credentials {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.PatchClientCredentialResponseContent,
+                data: _response.body as PatchClientCredentialResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -507,15 +517,15 @@ export class Credentials {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListClientGrantOrganizationsRequestParameters } from "./requests/ListClientGrantOrganizationsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { Organization } from "../../../../../types/Organization.js";
+import type { ListClientGrantOrganizationsPaginatedResponseContent } from "../../../../../types/ListClientGrantOrganizationsPaginatedResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -42,26 +48,26 @@ export class Organizations {
 
     /**
      * @param {string} id - ID of the client grant
-     * @param {Management.ListClientGrantOrganizationsRequestParameters} request
+     * @param {ListClientGrantOrganizationsRequestParameters} request
      * @param {Organizations.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.clientGrants.organizations.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListClientGrantOrganizationsRequestParameters = {},
+        request: ListClientGrantOrganizationsRequestParameters = {},
         requestOptions?: Organizations.RequestOptions,
-    ): Promise<core.Page<Management.Organization>> {
+    ): Promise<core.Page<Organization>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.clientGrants.ListClientGrantOrganizationsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListClientGrantOrganizationsPaginatedResponseContent>> => {
+                request: ListClientGrantOrganizationsRequestParameters,
+            ): Promise<core.WithRawResponse<ListClientGrantOrganizationsPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -92,29 +98,20 @@ export class Organizations {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListClientGrantOrganizationsPaginatedResponseContent,
+                        data: _response.body as ListClientGrantOrganizationsPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -143,10 +140,7 @@ export class Organizations {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListClientGrantOrganizationsPaginatedResponseContent,
-            Management.Organization
-        >({
+        return new core.Pageable<ListClientGrantOrganizationsPaginatedResponseContent, Organization>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

@@ -4,7 +4,27 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+// TODO: Why do this not follow the same pattern to structure the types?
+import type { ListActionsRequestParameters } from "./requests/ListActionsRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { Action } from "../../../types/Action.js";
+import type { ListActionsPaginatedResponseContent } from "../../../types/ListActionsPaginatedResponseContent.js";
+// TODO: Why do these next two not follow the same pattern to structure the types?
+import type { CreateActionRequestContent } from "./requests/CreateActionRequestContent.js";
+import type { CreateActionResponseContent } from "../../../types/CreateActionResponseContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetActionResponseContent } from "../../../types/GetActionResponseContent.js";
+
+// TODO: Why do these not follow the same pattern to structure the types?
+import type { DeleteActionRequestParameters } from "./requests/DeleteActionRequestParameters.js";
+import type { UpdateActionRequestContent } from "./requests/UpdateActionRequestContent.js";
+import type { UpdateActionResponseContent } from "../../../types/UpdateActionResponseContent.js";
+import type { DeployActionResponseContent } from "../../../types/DeployActionResponseContent.js";
+import type { TestActionRequestContent } from "./requests/TestActionRequestContent.js";
+import type { TestActionResponseContent } from "../../../types/TestActionResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { Versions } from "../resources/versions/client/Client.js";
@@ -61,25 +81,25 @@ export class Actions {
     /**
      * Retrieve all actions.
      *
-     * @param {Management.ListActionsRequestParameters} request
+     * @param {ListActionsRequestParameters} request
      * @param {Actions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.actions.list()
      */
     public async list(
-        request: Management.ListActionsRequestParameters = {},
+        request: ListActionsRequestParameters = {},
         requestOptions?: Actions.RequestOptions,
-    ): Promise<core.Page<Management.Action>> {
+    ): Promise<core.Page<Action>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListActionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListActionsPaginatedResponseContent>> => {
+                request: ListActionsRequestParameters,
+            ): Promise<core.WithRawResponse<ListActionsPaginatedResponseContent>> => {
                 const { triggerId, actionName, deployed, page = 0, per_page: perPage = 50, installed } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (triggerId != null) {
@@ -122,29 +142,20 @@ export class Actions {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListActionsPaginatedResponseContent,
+                        data: _response.body as ListActionsPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -172,7 +183,7 @@ export class Actions {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListActionsPaginatedResponseContent, Management.Action>({
+        return new core.Pageable<ListActionsPaginatedResponseContent, Action>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.actions ?? []).length > 0,
@@ -187,13 +198,13 @@ export class Actions {
     /**
      * Create an action. Once an action is created, it must be deployed, and then bound to a trigger before it will be executed as part of a flow.
      *
-     * @param {Management.CreateActionRequestContent} request
+     * @param {CreateActionRequestContent} request
      * @param {Actions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.actions.create({
@@ -204,16 +215,16 @@ export class Actions {
      *     })
      */
     public create(
-        request: Management.CreateActionRequestContent,
+        request: CreateActionRequestContent,
         requestOptions?: Actions.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateActionResponseContent> {
+    ): core.HttpResponsePromise<CreateActionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateActionRequestContent,
+        request: CreateActionRequestContent,
         requestOptions?: Actions.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateActionResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateActionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -238,7 +249,7 @@ export class Actions {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateActionResponseContent,
+                data: _response.body as CreateActionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -246,13 +257,13 @@ export class Actions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -285,11 +296,11 @@ export class Actions {
      * @param {string} id - The ID of the action to retrieve.
      * @param {Actions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.actions.get("id")
@@ -297,14 +308,14 @@ export class Actions {
     public get(
         id: string,
         requestOptions?: Actions.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetActionResponseContent> {
+    ): core.HttpResponsePromise<GetActionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: Actions.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetActionResponseContent>> {
+    ): Promise<core.WithRawResponse<GetActionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -325,21 +336,21 @@ export class Actions {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetActionResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetActionResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -370,21 +381,21 @@ export class Actions {
      * Deletes an action and all of its associated versions. An action must be unbound from all triggers before it can be deleted.
      *
      * @param {string} id - The ID of the action to delete.
-     * @param {Management.DeleteActionRequestParameters} request
+     * @param {DeleteActionRequestParameters} request
      * @param {Actions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.actions.delete("id")
      */
     public delete(
         id: string,
-        request: Management.DeleteActionRequestParameters = {},
+        request: DeleteActionRequestParameters = {},
         requestOptions?: Actions.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, request, requestOptions));
@@ -392,7 +403,7 @@ export class Actions {
 
     private async __delete(
         id: string,
-        request: Management.DeleteActionRequestParameters = {},
+        request: DeleteActionRequestParameters = {},
         requestOptions?: Actions.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { force } = request;
@@ -427,15 +438,15 @@ export class Actions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -466,31 +477,31 @@ export class Actions {
      * Update an existing action. If this action is currently bound to a trigger, updating it will <strong>not</strong> affect any user flows until the action is deployed.
      *
      * @param {string} id - The id of the action to update.
-     * @param {Management.UpdateActionRequestContent} request
+     * @param {UpdateActionRequestContent} request
      * @param {Actions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.actions.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateActionRequestContent = {},
+        request: UpdateActionRequestContent = {},
         requestOptions?: Actions.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateActionResponseContent> {
+    ): core.HttpResponsePromise<UpdateActionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateActionRequestContent = {},
+        request: UpdateActionRequestContent = {},
         requestOptions?: Actions.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateActionResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateActionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -515,7 +526,7 @@ export class Actions {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateActionResponseContent,
+                data: _response.body as UpdateActionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -523,15 +534,15 @@ export class Actions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -564,10 +575,10 @@ export class Actions {
      * @param {string} id - The ID of an action.
      * @param {Actions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.actions.deploy("id")
@@ -575,14 +586,14 @@ export class Actions {
     public deploy(
         id: string,
         requestOptions?: Actions.RequestOptions,
-    ): core.HttpResponsePromise<Management.DeployActionResponseContent> {
+    ): core.HttpResponsePromise<DeployActionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__deploy(id, requestOptions));
     }
 
     private async __deploy(
         id: string,
         requestOptions?: Actions.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.DeployActionResponseContent>> {
+    ): Promise<core.WithRawResponse<DeployActionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -604,7 +615,7 @@ export class Actions {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.DeployActionResponseContent,
+                data: _response.body as DeployActionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -612,13 +623,13 @@ export class Actions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -651,13 +662,13 @@ export class Actions {
      * Test an action. After updating an action, it can be tested prior to being deployed to ensure it behaves as expected.
      *
      * @param {string} id - The id of the action to test.
-     * @param {Management.TestActionRequestContent} request
+     * @param {TestActionRequestContent} request
      * @param {Actions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.actions.test("id", {
@@ -668,17 +679,17 @@ export class Actions {
      */
     public test(
         id: string,
-        request: Management.TestActionRequestContent,
+        request: TestActionRequestContent,
         requestOptions?: Actions.RequestOptions,
-    ): core.HttpResponsePromise<Management.TestActionResponseContent> {
+    ): core.HttpResponsePromise<TestActionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__test(id, request, requestOptions));
     }
 
     private async __test(
         id: string,
-        request: Management.TestActionRequestContent,
+        request: TestActionRequestContent,
         requestOptions?: Actions.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.TestActionResponseContent>> {
+    ): Promise<core.WithRawResponse<TestActionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -702,19 +713,19 @@ export class Actions {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.TestActionResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as TestActionResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

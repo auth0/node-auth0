@@ -4,7 +4,18 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+// TODO: Why is this located differently than other imports?
+import type { ListActionVersionsRequestParameters } from "./requests/ListActionVersionsRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { ActionVersion } from "../../../../../types/ActionVersion.js";
+import type { ListActionVersionsPaginatedResponseContent } from "../../../../../types/ListActionVersionsPaginatedResponseContent.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import type { GetActionVersionResponseContent } from "../../../../../types/GetActionVersionResponseContent.js";
+import type { DeployActionVersionRequestContent } from "../../../../../types/DeployActionVersionRequestContent.js";
+import type { DeployActionVersionResponseContent } from "../../../../../types/DeployActionVersionResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -44,26 +55,26 @@ export class Versions {
      * Retrieve all of an action's versions. An action version is created whenever an action is deployed. An action version is immutable, once created.
      *
      * @param {string} actionId - The ID of the action.
-     * @param {Management.ListActionVersionsRequestParameters} request
+     * @param {ListActionVersionsRequestParameters} request
      * @param {Versions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.actions.versions.list("actionId")
+     *     await client.versions.list("actionId")
      */
     public async list(
         actionId: string,
-        request: Management.ListActionVersionsRequestParameters = {},
+        request: ListActionVersionsRequestParameters = {},
         requestOptions?: Versions.RequestOptions,
-    ): Promise<core.Page<Management.ActionVersion>> {
+    ): Promise<core.Page<ActionVersion>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.actions.ListActionVersionsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListActionVersionsPaginatedResponseContent>> => {
+                request: ListActionVersionsRequestParameters,
+            ): Promise<core.WithRawResponse<ListActionVersionsPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -94,29 +105,20 @@ export class Versions {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListActionVersionsPaginatedResponseContent,
+                        data: _response.body as ListActionVersionsPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -146,7 +148,7 @@ export class Versions {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListActionVersionsPaginatedResponseContent, Management.ActionVersion>({
+        return new core.Pageable<ListActionVersionsPaginatedResponseContent, ActionVersion>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.versions ?? []).length > 0,
@@ -165,20 +167,20 @@ export class Versions {
      * @param {string} id - The ID of the action version.
      * @param {Versions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.actions.versions.get("actionId", "id")
+     *     await client.versions.get("actionId", "id")
      */
     public get(
         actionId: string,
         id: string,
         requestOptions?: Versions.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetActionVersionResponseContent> {
+    ): core.HttpResponsePromise<GetActionVersionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(actionId, id, requestOptions));
     }
 
@@ -186,7 +188,7 @@ export class Versions {
         actionId: string,
         id: string,
         requestOptions?: Versions.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetActionVersionResponseContent>> {
+    ): Promise<core.WithRawResponse<GetActionVersionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -208,7 +210,7 @@ export class Versions {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetActionVersionResponseContent,
+                data: _response.body as GetActionVersionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -216,15 +218,15 @@ export class Versions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -258,32 +260,32 @@ export class Versions {
      *
      * @param {string} id - The ID of an action version.
      * @param {string} actionId - The ID of an action.
-     * @param {Management.DeployActionVersionRequestContent | undefined} request
+     * @param {DeployActionVersionRequestContent | undefined} request
      * @param {Versions.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.actions.versions.deploy("id", "actionId", undefined)
+     *     await client.versions.deploy("id", "actionId", undefined)
      */
     public deploy(
         id: string,
         actionId: string,
-        request?: Management.DeployActionVersionRequestContent | undefined,
+        request?: DeployActionVersionRequestContent | undefined,
         requestOptions?: Versions.RequestOptions,
-    ): core.HttpResponsePromise<Management.DeployActionVersionResponseContent> {
+    ): core.HttpResponsePromise<DeployActionVersionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__deploy(id, actionId, request, requestOptions));
     }
 
     private async __deploy(
         id: string,
         actionId: string,
-        request?: Management.DeployActionVersionRequestContent | undefined,
+        request?: DeployActionVersionRequestContent | undefined,
         requestOptions?: Versions.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.DeployActionVersionResponseContent>> {
+    ): Promise<core.WithRawResponse<DeployActionVersionResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -308,7 +310,7 @@ export class Versions {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.DeployActionVersionResponseContent,
+                data: _response.body as DeployActionVersionResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -316,13 +318,13 @@ export class Versions {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

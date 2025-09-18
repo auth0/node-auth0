@@ -4,7 +4,16 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListDeviceCredentialsRequestParameters } from "./requests/ListDeviceCredentialsRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { DeviceCredential } from "../../../types/DeviceCredential.js";
+import type { ListDeviceCredentialsOffsetPaginatedResponseContent } from "../../../types/ListDeviceCredentialsOffsetPaginatedResponseContent.js";
+import type { CreatePublicKeyDeviceCredentialRequestContent } from "./requests/CreatePublicKeyDeviceCredentialRequestContent.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import type { CreatePublicKeyDeviceCredentialResponseContent } from "../../../types/CreatePublicKeyDeviceCredentialResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,25 +52,25 @@ export class DeviceCredentials {
     /**
      * Retrieve device credential information (<code>public_key</code>, <code>refresh_token</code>, or <code>rotating_refresh_token</code>) associated with a specific user.
      *
-     * @param {Management.ListDeviceCredentialsRequestParameters} request
+     * @param {ListDeviceCredentialsRequestParameters} request
      * @param {DeviceCredentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.deviceCredentials.list()
      */
     public async list(
-        request: Management.ListDeviceCredentialsRequestParameters = {},
+        request: ListDeviceCredentialsRequestParameters = {},
         requestOptions?: DeviceCredentials.RequestOptions,
-    ): Promise<core.Page<Management.DeviceCredential>> {
+    ): Promise<core.Page<DeviceCredential>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListDeviceCredentialsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListDeviceCredentialsOffsetPaginatedResponseContent>> => {
+                request: ListDeviceCredentialsRequestParameters,
+            ): Promise<core.WithRawResponse<ListDeviceCredentialsOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
                     per_page: perPage = 50,
@@ -119,29 +128,20 @@ export class DeviceCredentials {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListDeviceCredentialsOffsetPaginatedResponseContent,
+                        data: _response.body as ListDeviceCredentialsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -171,10 +171,7 @@ export class DeviceCredentials {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListDeviceCredentialsOffsetPaginatedResponseContent,
-            Management.DeviceCredential
-        >({
+        return new core.Pageable<ListDeviceCredentialsOffsetPaginatedResponseContent, DeviceCredential>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.device_credentials ?? []).length > 0,
@@ -191,14 +188,14 @@ export class DeviceCredentials {
      *
      * When refresh token rotation is enabled, the endpoint becomes consistent. For more information, read <a href="https://auth0.com/docs/get-started/tenant-settings/signing-keys"> Signing Keys</a>.
      *
-     * @param {Management.CreatePublicKeyDeviceCredentialRequestContent} request
+     * @param {CreatePublicKeyDeviceCredentialRequestContent} request
      * @param {DeviceCredentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.deviceCredentials.createPublicKey({
@@ -208,16 +205,16 @@ export class DeviceCredentials {
      *     })
      */
     public createPublicKey(
-        request: Management.CreatePublicKeyDeviceCredentialRequestContent,
+        request: CreatePublicKeyDeviceCredentialRequestContent,
         requestOptions?: DeviceCredentials.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreatePublicKeyDeviceCredentialResponseContent> {
+    ): core.HttpResponsePromise<CreatePublicKeyDeviceCredentialResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__createPublicKey(request, requestOptions));
     }
 
     private async __createPublicKey(
-        request: Management.CreatePublicKeyDeviceCredentialRequestContent,
+        request: CreatePublicKeyDeviceCredentialRequestContent,
         requestOptions?: DeviceCredentials.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreatePublicKeyDeviceCredentialResponseContent>> {
+    ): Promise<core.WithRawResponse<CreatePublicKeyDeviceCredentialResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -242,7 +239,7 @@ export class DeviceCredentials {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreatePublicKeyDeviceCredentialResponseContent,
+                data: _response.body as CreatePublicKeyDeviceCredentialResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -250,15 +247,15 @@ export class DeviceCredentials {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -291,10 +288,10 @@ export class DeviceCredentials {
      * @param {string} id - ID of the credential to delete.
      * @param {DeviceCredentials.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.deviceCredentials.delete("id")
@@ -333,13 +330,13 @@ export class DeviceCredentials {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

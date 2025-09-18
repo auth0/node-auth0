@@ -4,7 +4,20 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListFormsRequestParameters } from "./requests/ListFormsRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { FormSummary } from "../../../types/FormSummary.js";
+import type { ListFormsOffsetPaginatedResponseContent } from "../../../types/ListFormsOffsetPaginatedResponseContent.js";
+import type { CreateFormRequestContent } from "./requests/CreateFormRequestContent.js";
+import type { CreateFormResponseContent } from "../../../types/CreateFormResponseContent.js";
+import type { GetFormRequestParameters } from "./requests/GetFormRequestParameters.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetFormResponseContent } from "../../../types/GetFormResponseContent.js";
+import type { UpdateFormRequestContent } from "./requests/UpdateFormRequestContent.js";
+import type { UpdateFormResponseContent } from "../../../types/UpdateFormResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -41,25 +54,25 @@ export class Forms {
     }
 
     /**
-     * @param {Management.ListFormsRequestParameters} request
+     * @param {ListFormsRequestParameters} request
      * @param {Forms.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.forms.list()
      */
     public async list(
-        request: Management.ListFormsRequestParameters = {},
+        request: ListFormsRequestParameters = {},
         requestOptions?: Forms.RequestOptions,
-    ): Promise<core.Page<Management.FormSummary>> {
+    ): Promise<core.Page<FormSummary>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListFormsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListFormsOffsetPaginatedResponseContent>> => {
+                request: ListFormsRequestParameters,
+            ): Promise<core.WithRawResponse<ListFormsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true, hydrate } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -100,29 +113,20 @@ export class Forms {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListFormsOffsetPaginatedResponseContent,
+                        data: _response.body as ListFormsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -150,7 +154,7 @@ export class Forms {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListFormsOffsetPaginatedResponseContent, Management.FormSummary>({
+        return new core.Pageable<ListFormsOffsetPaginatedResponseContent, FormSummary>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.forms ?? []).length > 0,
@@ -163,13 +167,13 @@ export class Forms {
     }
 
     /**
-     * @param {Management.CreateFormRequestContent} request
+     * @param {CreateFormRequestContent} request
      * @param {Forms.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.forms.create({
@@ -177,16 +181,16 @@ export class Forms {
      *     })
      */
     public create(
-        request: Management.CreateFormRequestContent,
+        request: CreateFormRequestContent,
         requestOptions?: Forms.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateFormResponseContent> {
+    ): core.HttpResponsePromise<CreateFormResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateFormRequestContent,
+        request: CreateFormRequestContent,
         requestOptions?: Forms.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateFormResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateFormResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -210,19 +214,19 @@ export class Forms {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.CreateFormResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as CreateFormResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -251,31 +255,31 @@ export class Forms {
 
     /**
      * @param {string} id - The ID of the form to retrieve.
-     * @param {Management.GetFormRequestParameters} request
+     * @param {GetFormRequestParameters} request
      * @param {Forms.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.forms.get("id")
      */
     public get(
         id: string,
-        request: Management.GetFormRequestParameters = {},
+        request: GetFormRequestParameters = {},
         requestOptions?: Forms.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetFormResponseContent> {
+    ): core.HttpResponsePromise<GetFormResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: string,
-        request: Management.GetFormRequestParameters = {},
+        request: GetFormRequestParameters = {},
         requestOptions?: Forms.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetFormResponseContent>> {
+    ): Promise<core.WithRawResponse<GetFormResponseContent>> {
         const { hydrate } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (hydrate != null) {
@@ -306,21 +310,21 @@ export class Forms {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetFormResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetFormResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -351,10 +355,10 @@ export class Forms {
      * @param {string} id - The ID of the form to delete.
      * @param {Forms.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.forms.delete("id")
@@ -390,13 +394,13 @@ export class Forms {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -425,29 +429,29 @@ export class Forms {
 
     /**
      * @param {string} id - The ID of the form to update.
-     * @param {Management.UpdateFormRequestContent} request
+     * @param {UpdateFormRequestContent} request
      * @param {Forms.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.forms.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateFormRequestContent = {},
+        request: UpdateFormRequestContent = {},
         requestOptions?: Forms.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateFormResponseContent> {
+    ): core.HttpResponsePromise<UpdateFormResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateFormRequestContent = {},
+        request: UpdateFormRequestContent = {},
         requestOptions?: Forms.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateFormResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateFormResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -471,17 +475,17 @@ export class Forms {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.UpdateFormResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as UpdateFormResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

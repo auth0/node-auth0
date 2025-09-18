@@ -4,7 +4,22 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListNetworkAclsRequestParameters } from "./requests/ListNetworkAclsRequestParameters.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { NetworkAclsResponseContent } from "../../../types/NetworkAclsResponseContent.js";
+import type { ListNetworkAclsOffsetPaginatedResponseContent } from "../../../types/ListNetworkAclsOffsetPaginatedResponseContent.js";
+import type { CreateNetworkAclRequestContent } from "./requests/CreateNetworkAclRequestContent.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { ConflictError } from "../../../errors/ConflictError.js";
+import { InternalServerError } from "../../../errors/InternalServerError.js";
+import type { GetNetworkAclsResponseContent } from "../../../types/GetNetworkAclsResponseContent.js";
+import type { SetNetworkAclRequestContent } from "./requests/SetNetworkAclRequestContent.js";
+import type { SetNetworkAclsResponseContent } from "../../../types/SetNetworkAclsResponseContent.js";
+import type { UpdateNetworkAclRequestContent } from "./requests/UpdateNetworkAclRequestContent.js";
+import type { UpdateNetworkAclResponseContent } from "../../../types/UpdateNetworkAclResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -43,25 +58,25 @@ export class NetworkAcls {
     /**
      * Get all access control list entries for your client.
      *
-     * @param {Management.ListNetworkAclsRequestParameters} request
+     * @param {ListNetworkAclsRequestParameters} request
      * @param {NetworkAcls.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.networkAcls.list()
      */
     public async list(
-        request: Management.ListNetworkAclsRequestParameters = {},
+        request: ListNetworkAclsRequestParameters = {},
         requestOptions?: NetworkAcls.RequestOptions,
-    ): Promise<core.Page<Management.NetworkAclsResponseContent>> {
+    ): Promise<core.Page<NetworkAclsResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListNetworkAclsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListNetworkAclsOffsetPaginatedResponseContent>> => {
+                request: ListNetworkAclsRequestParameters,
+            ): Promise<core.WithRawResponse<ListNetworkAclsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (page != null) {
@@ -95,26 +110,20 @@ export class NetworkAcls {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListNetworkAclsOffsetPaginatedResponseContent,
+                        data: _response.body as ListNetworkAclsOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -142,10 +151,7 @@ export class NetworkAcls {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListNetworkAclsOffsetPaginatedResponseContent,
-            Management.NetworkAclsResponseContent
-        >({
+        return new core.Pageable<ListNetworkAclsOffsetPaginatedResponseContent, NetworkAclsResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.network_acls ?? []).length > 0,
@@ -160,15 +166,15 @@ export class NetworkAcls {
     /**
      * Create a new access control list for your client.
      *
-     * @param {Management.CreateNetworkAclRequestContent} request
+     * @param {CreateNetworkAclRequestContent} request
      * @param {NetworkAcls.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
-     * @throws {@link Management.InternalServerError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link ConflictError}
+     * @throws {@link TooManyRequestsError}
+     * @throws {@link InternalServerError}
      *
      * @example
      *     await client.networkAcls.create({
@@ -182,14 +188,14 @@ export class NetworkAcls {
      *     })
      */
     public create(
-        request: Management.CreateNetworkAclRequestContent,
+        request: CreateNetworkAclRequestContent,
         requestOptions?: NetworkAcls.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateNetworkAclRequestContent,
+        request: CreateNetworkAclRequestContent,
         requestOptions?: NetworkAcls.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -221,17 +227,17 @@ export class NetworkAcls {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 case 500:
-                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                    throw new InternalServerError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -264,10 +270,10 @@ export class NetworkAcls {
      * @param {string} id - The id of the access control list to retrieve.
      * @param {NetworkAcls.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.networkAcls.get("id")
@@ -275,14 +281,14 @@ export class NetworkAcls {
     public get(
         id: string,
         requestOptions?: NetworkAcls.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetNetworkAclsResponseContent> {
+    ): core.HttpResponsePromise<GetNetworkAclsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: NetworkAcls.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetNetworkAclsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetNetworkAclsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -304,7 +310,7 @@ export class NetworkAcls {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetNetworkAclsResponseContent,
+                data: _response.body as GetNetworkAclsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -312,13 +318,13 @@ export class NetworkAcls {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -349,14 +355,14 @@ export class NetworkAcls {
      * Update existing access control list for your client.
      *
      * @param {string} id - The id of the ACL to update.
-     * @param {Management.SetNetworkAclRequestContent} request
+     * @param {SetNetworkAclRequestContent} request
      * @param {NetworkAcls.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.networkAcls.set("id", {
@@ -371,17 +377,17 @@ export class NetworkAcls {
      */
     public set(
         id: string,
-        request: Management.SetNetworkAclRequestContent,
+        request: SetNetworkAclRequestContent,
         requestOptions?: NetworkAcls.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetNetworkAclsResponseContent> {
+    ): core.HttpResponsePromise<SetNetworkAclsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(id, request, requestOptions));
     }
 
     private async __set(
         id: string,
-        request: Management.SetNetworkAclRequestContent,
+        request: SetNetworkAclRequestContent,
         requestOptions?: NetworkAcls.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetNetworkAclsResponseContent>> {
+    ): Promise<core.WithRawResponse<SetNetworkAclsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -406,7 +412,7 @@ export class NetworkAcls {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetNetworkAclsResponseContent,
+                data: _response.body as SetNetworkAclsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -414,15 +420,15 @@ export class NetworkAcls {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -455,11 +461,11 @@ export class NetworkAcls {
      * @param {string} id - The id of the ACL to delete
      * @param {NetworkAcls.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.networkAcls.delete("id")
@@ -498,15 +504,15 @@ export class NetworkAcls {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -537,31 +543,31 @@ export class NetworkAcls {
      * Update existing access control list for your client.
      *
      * @param {string} id - The id of the ACL to update.
-     * @param {Management.UpdateNetworkAclRequestContent} request
+     * @param {UpdateNetworkAclRequestContent} request
      * @param {NetworkAcls.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.networkAcls.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateNetworkAclRequestContent = {},
+        request: UpdateNetworkAclRequestContent = {},
         requestOptions?: NetworkAcls.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateNetworkAclResponseContent> {
+    ): core.HttpResponsePromise<UpdateNetworkAclResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateNetworkAclRequestContent = {},
+        request: UpdateNetworkAclRequestContent = {},
         requestOptions?: NetworkAcls.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateNetworkAclResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateNetworkAclResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -586,7 +592,7 @@ export class NetworkAcls {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateNetworkAclResponseContent,
+                data: _response.body as UpdateNetworkAclResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -594,15 +600,15 @@ export class NetworkAcls {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

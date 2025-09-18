@@ -67,7 +67,8 @@
         "docs:clean": "rm -rf docs",
         "docs:build": "yarn docs:clean && yarn docs",
         "precommit": "lint-staged",
-        "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
+        "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package",
+        "check-circular-deps": "npx madge --circular src/index.ts"
     },
     "devDependencies": {
         "webpack": "^5.97.1",
@@ -77,6 +78,7 @@
         "@types/jest": "^29.5.14",
         "ts-jest": "^29.3.4",
         "jest-environment-jsdom": "^29.7.0",
+        "madge": "^8.0.0",
         "msw": "^2.8.4",
         "@types/node": "^18.19.70",
         "prettier": "^3.4.2",

@@ -4,7 +4,12 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { CreateExportUsersRequestContent } from "./requests/CreateExportUsersRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { CreateExportUsersResponseContent } from "../../../../../types/CreateExportUsersResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -43,28 +48,28 @@ export class UsersExports {
     /**
      * Export all users to a file via a long-running job.
      *
-     * @param {Management.CreateExportUsersRequestContent} request
+     * @param {CreateExportUsersRequestContent} request
      * @param {UsersExports.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.jobs.usersExports.create()
      */
     public create(
-        request: Management.CreateExportUsersRequestContent = {},
+        request: CreateExportUsersRequestContent = {},
         requestOptions?: UsersExports.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateExportUsersResponseContent> {
+    ): core.HttpResponsePromise<CreateExportUsersResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateExportUsersRequestContent = {},
+        request: CreateExportUsersRequestContent = {},
         requestOptions?: UsersExports.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateExportUsersResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateExportUsersResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -89,7 +94,7 @@ export class UsersExports {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateExportUsersResponseContent,
+                data: _response.body as CreateExportUsersResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -97,13 +102,13 @@ export class UsersExports {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

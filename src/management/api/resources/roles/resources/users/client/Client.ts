@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { ListRoleUsersRequestParameters } from "./requests/ListRoleUsersRequestParameters.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { RoleUser } from "../../../../../types/RoleUser.js";
+import type { ListRoleUsersPaginatedResponseContent } from "../../../../../types/ListRoleUsersPaginatedResponseContent.js";
+import type { AssignRoleUsersRequestContent } from "./requests/AssignRoleUsersRequestContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -62,27 +70,27 @@ export class Users {
      * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
      *
      * @param {string} id - ID of the role to retrieve a list of users associated with.
-     * @param {Management.ListRoleUsersRequestParameters} request
+     * @param {ListRoleUsersRequestParameters} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.roles.users.list("id")
+     *     await client.users.list("id")
      */
     public async list(
         id: string,
-        request: Management.ListRoleUsersRequestParameters = {},
+        request: ListRoleUsersRequestParameters = {},
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.Page<Management.RoleUser>> {
+    ): Promise<core.Page<RoleUser>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.roles.ListRoleUsersRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListRoleUsersPaginatedResponseContent>> => {
+                request: ListRoleUsersRequestParameters,
+            ): Promise<core.WithRawResponse<ListRoleUsersPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
                 if (from_ != null) {
@@ -113,31 +121,22 @@ export class Users {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListRoleUsersPaginatedResponseContent,
+                        data: _response.body as ListRoleUsersPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                            throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -164,7 +163,7 @@ export class Users {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListRoleUsersPaginatedResponseContent, Management.RoleUser>({
+        return new core.Pageable<ListRoleUsersPaginatedResponseContent, RoleUser>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
@@ -182,23 +181,23 @@ export class Users {
      * <b>Note</b>: New roles cannot be created through this action.
      *
      * @param {string} id - ID of the role to assign users to.
-     * @param {Management.AssignRoleUsersRequestContent} request
+     * @param {AssignRoleUsersRequestContent} request
      * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
-     *     await client.roles.users.assign("id", {
+     *     await client.users.assign("id", {
      *         users: ["users"]
      *     })
      */
     public assign(
         id: string,
-        request: Management.AssignRoleUsersRequestContent,
+        request: AssignRoleUsersRequestContent,
         requestOptions?: Users.RequestOptions,
     ): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__assign(id, request, requestOptions));
@@ -206,7 +205,7 @@ export class Users {
 
     private async __assign(
         id: string,
-        request: Management.AssignRoleUsersRequestContent,
+        request: AssignRoleUsersRequestContent,
         requestOptions?: Users.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -238,15 +237,15 @@ export class Users {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

@@ -4,7 +4,15 @@
 
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
-import * as Management from "../../../index.js";
+import type { ListLogsRequestParameters } from "./requests/ListLogsRequestParameters.js";
+import { BadRequestError } from "../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../errors/TooManyRequestsError.js";
+import type { Log } from "../../../types/Log.js";
+import type { ListLogOffsetPaginatedResponseContent } from "../../../types/ListLogOffsetPaginatedResponseContent.js";
+import { NotFoundError } from "../../../errors/NotFoundError.js";
+import type { GetLogResponseContent } from "../../../types/GetLogResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
@@ -71,25 +79,25 @@ export class Logs {
      *
      * <strong>Important:</strong> When fetching logs from a checkpoint log ID, any parameter other than <code>from</code> and <code>take</code> will be ignored, and date ordering is not guaranteed.
      *
-     * @param {Management.ListLogsRequestParameters} request
+     * @param {ListLogsRequestParameters} request
      * @param {Logs.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.logs.list()
      */
     public async list(
-        request: Management.ListLogsRequestParameters = {},
+        request: ListLogsRequestParameters = {},
         requestOptions?: Logs.RequestOptions,
-    ): Promise<core.Page<Management.Log>> {
+    ): Promise<core.Page<Log>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListLogsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListLogOffsetPaginatedResponseContent>> => {
+                request: ListLogsRequestParameters,
+            ): Promise<core.WithRawResponse<ListLogOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
                     per_page: perPage = 50,
@@ -143,29 +151,20 @@ export class Logs {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListLogOffsetPaginatedResponseContent,
+                        data: _response.body as ListLogOffsetPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                         case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                         case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                            throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
+                            throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                         default:
                             throw new errors.ManagementError({
                                 statusCode: _response.error.statusCode,
@@ -193,7 +192,7 @@ export class Logs {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListLogOffsetPaginatedResponseContent, Management.Log>({
+        return new core.Pageable<ListLogOffsetPaginatedResponseContent, Log>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.logs ?? []).length > 0,
@@ -211,26 +210,23 @@ export class Logs {
      * @param {string} id - log_id of the log to retrieve.
      * @param {Logs.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.logs.get("id")
      */
-    public get(
-        id: string,
-        requestOptions?: Logs.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetLogResponseContent> {
+    public get(id: string, requestOptions?: Logs.RequestOptions): core.HttpResponsePromise<GetLogResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: Logs.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetLogResponseContent>> {
+    ): Promise<core.WithRawResponse<GetLogResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -251,21 +247,21 @@ export class Logs {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GetLogResponseContent, rawResponse: _response.rawResponse };
+            return { data: _response.body as GetLogResponseContent, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

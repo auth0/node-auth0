@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import type { GuardianFactor } from "../../../../../types/GuardianFactor.js";
+import type { GuardianFactorNameEnum } from "../../../../../types/GuardianFactorNameEnum.js";
+import type { SetGuardianFactorRequestContent } from "./requests/SetGuardianFactorRequestContent.js";
+import type { SetGuardianFactorResponseContent } from "../../../../../types/SetGuardianFactorResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 import { Phone } from "../resources/phone/client/Client.js";
@@ -69,20 +75,18 @@ export class Factors {
      *
      * @param {Factors.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
      *
      * @example
      *     await client.guardian.factors.list()
      */
-    public list(requestOptions?: Factors.RequestOptions): core.HttpResponsePromise<Management.GuardianFactor[]> {
+    public list(requestOptions?: Factors.RequestOptions): core.HttpResponsePromise<GuardianFactor[]> {
         return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __list(
-        requestOptions?: Factors.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GuardianFactor[]>> {
+    private async __list(requestOptions?: Factors.RequestOptions): Promise<core.WithRawResponse<GuardianFactor[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -103,17 +107,17 @@ export class Factors {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.GuardianFactor[], rawResponse: _response.rawResponse };
+            return { data: _response.body as GuardianFactor[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -143,13 +147,13 @@ export class Factors {
     /**
      * Update the status (i.e., enabled or disabled) of a specific multi-factor authentication factor.
      *
-     * @param {Management.GuardianFactorNameEnum} name - Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
-     * @param {Management.SetGuardianFactorRequestContent} request
+     * @param {GuardianFactorNameEnum} name - Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
+     * @param {SetGuardianFactorRequestContent} request
      * @param {Factors.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
      *
      * @example
      *     await client.guardian.factors.set("push-notification", {
@@ -157,18 +161,18 @@ export class Factors {
      *     })
      */
     public set(
-        name: Management.GuardianFactorNameEnum,
-        request: Management.SetGuardianFactorRequestContent,
+        name: GuardianFactorNameEnum,
+        request: SetGuardianFactorRequestContent,
         requestOptions?: Factors.RequestOptions,
-    ): core.HttpResponsePromise<Management.SetGuardianFactorResponseContent> {
+    ): core.HttpResponsePromise<SetGuardianFactorResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__set(name, request, requestOptions));
     }
 
     private async __set(
-        name: Management.GuardianFactorNameEnum,
-        request: Management.SetGuardianFactorRequestContent,
+        name: GuardianFactorNameEnum,
+        request: SetGuardianFactorRequestContent,
         requestOptions?: Factors.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.SetGuardianFactorResponseContent>> {
+    ): Promise<core.WithRawResponse<SetGuardianFactorResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -193,7 +197,7 @@ export class Factors {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.SetGuardianFactorResponseContent,
+                data: _response.body as SetGuardianFactorResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -201,11 +205,11 @@ export class Factors {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

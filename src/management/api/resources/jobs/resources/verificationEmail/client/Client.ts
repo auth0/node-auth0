@@ -4,7 +4,12 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import type { CreateVerificationEmailRequestContent } from "./requests/CreateVerificationEmailRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { CreateVerificationEmailResponseContent } from "../../../../../types/CreateVerificationEmailResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -45,13 +50,13 @@ export class VerificationEmail {
      *
      * Note: You must have the `Status` toggle enabled for the verification email template for the email to be sent.
      *
-     * @param {Management.CreateVerificationEmailRequestContent} request
+     * @param {CreateVerificationEmailRequestContent} request
      * @param {VerificationEmail.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.jobs.verificationEmail.create({
@@ -59,16 +64,16 @@ export class VerificationEmail {
      *     })
      */
     public create(
-        request: Management.CreateVerificationEmailRequestContent,
+        request: CreateVerificationEmailRequestContent,
         requestOptions?: VerificationEmail.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateVerificationEmailResponseContent> {
+    ): core.HttpResponsePromise<CreateVerificationEmailResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateVerificationEmailRequestContent,
+        request: CreateVerificationEmailRequestContent,
         requestOptions?: VerificationEmail.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateVerificationEmailResponseContent>> {
+    ): Promise<core.WithRawResponse<CreateVerificationEmailResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -93,7 +98,7 @@ export class VerificationEmail {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateVerificationEmailResponseContent,
+                data: _response.body as CreateVerificationEmailResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -101,13 +106,13 @@ export class VerificationEmail {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

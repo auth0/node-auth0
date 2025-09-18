@@ -4,7 +4,13 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { GetBruteForceSettingsResponseContent } from "../../../../../types/GetBruteForceSettingsResponseContent.js";
+import type { UpdateBruteForceSettingsRequestContent } from "./requests/UpdateBruteForceSettingsRequestContent.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import type { UpdateBruteForceSettingsResponseContent } from "../../../../../types/UpdateBruteForceSettingsResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -45,22 +51,22 @@ export class BruteForceProtection {
      *
      * @param {BruteForceProtection.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.attackProtection.bruteForceProtection.get()
      */
     public get(
         requestOptions?: BruteForceProtection.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetBruteForceSettingsResponseContent> {
+    ): core.HttpResponsePromise<GetBruteForceSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(requestOptions));
     }
 
     private async __get(
         requestOptions?: BruteForceProtection.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetBruteForceSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<GetBruteForceSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -82,7 +88,7 @@ export class BruteForceProtection {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetBruteForceSettingsResponseContent,
+                data: _response.body as GetBruteForceSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -90,11 +96,11 @@ export class BruteForceProtection {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -126,28 +132,28 @@ export class BruteForceProtection {
     /**
      * Update the Brute-force Protection configuration of your tenant.
      *
-     * @param {Management.UpdateBruteForceSettingsRequestContent} request
+     * @param {UpdateBruteForceSettingsRequestContent} request
      * @param {BruteForceProtection.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.attackProtection.bruteForceProtection.update()
      */
     public update(
-        request: Management.UpdateBruteForceSettingsRequestContent = {},
+        request: UpdateBruteForceSettingsRequestContent = {},
         requestOptions?: BruteForceProtection.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateBruteForceSettingsResponseContent> {
+    ): core.HttpResponsePromise<UpdateBruteForceSettingsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: Management.UpdateBruteForceSettingsRequestContent = {},
+        request: UpdateBruteForceSettingsRequestContent = {},
         requestOptions?: BruteForceProtection.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateBruteForceSettingsResponseContent>> {
+    ): Promise<core.WithRawResponse<UpdateBruteForceSettingsResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -172,7 +178,7 @@ export class BruteForceProtection {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateBruteForceSettingsResponseContent,
+                data: _response.body as UpdateBruteForceSettingsResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -180,13 +186,13 @@ export class BruteForceProtection {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

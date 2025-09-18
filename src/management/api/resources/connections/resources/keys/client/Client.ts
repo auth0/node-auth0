@@ -4,7 +4,14 @@
 
 import * as environments from "../../../../../../environments.js";
 import * as core from "../../../../../../core/index.js";
-import * as Management from "../../../../../index.js";
+import { BadRequestError } from "../../../../../errors/BadRequestError.js";
+import { UnauthorizedError } from "../../../../../errors/UnauthorizedError.js";
+import { ForbiddenError } from "../../../../../errors/ForbiddenError.js";
+import { NotFoundError } from "../../../../../errors/NotFoundError.js";
+import { TooManyRequestsError } from "../../../../../errors/TooManyRequestsError.js";
+import type { ConnectionKey } from "../../../../../types/ConnectionKey.js";
+import type { RotateConnectionKeysRequestContent } from "../../../../../types/RotateConnectionKeysRequestContent.js";
+import type { RotateConnectionsKeysResponseContent } from "../../../../../types/RotateConnectionsKeysResponseContent.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 
@@ -46,23 +53,23 @@ export class Keys {
      * @param {string} id - ID of the connection
      * @param {Keys.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.keys.get("id")
      */
-    public get(id: string, requestOptions?: Keys.RequestOptions): core.HttpResponsePromise<Management.ConnectionKey[]> {
+    public get(id: string, requestOptions?: Keys.RequestOptions): core.HttpResponsePromise<ConnectionKey[]> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: Keys.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ConnectionKey[]>> {
+    ): Promise<core.WithRawResponse<ConnectionKey[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -83,21 +90,21 @@ export class Keys {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.ConnectionKey[], rawResponse: _response.rawResponse };
+            return { data: _response.body as ConnectionKey[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
@@ -128,31 +135,31 @@ export class Keys {
      * Rotates the connection keys for the Okta or OIDC connection strategies.
      *
      * @param {string} id - ID of the connection
-     * @param {Management.RotateConnectionKeysRequestContent} request
+     * @param {RotateConnectionKeysRequestContent} request
      * @param {Keys.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link BadRequestError}
+     * @throws {@link UnauthorizedError}
+     * @throws {@link ForbiddenError}
+     * @throws {@link NotFoundError}
+     * @throws {@link TooManyRequestsError}
      *
      * @example
      *     await client.connections.keys.rotate("id", undefined)
      */
     public rotate(
         id: string,
-        request?: Management.RotateConnectionKeysRequestContent,
+        request?: RotateConnectionKeysRequestContent,
         requestOptions?: Keys.RequestOptions,
-    ): core.HttpResponsePromise<Management.RotateConnectionsKeysResponseContent> {
+    ): core.HttpResponsePromise<RotateConnectionsKeysResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__rotate(id, request, requestOptions));
     }
 
     private async __rotate(
         id: string,
-        request?: Management.RotateConnectionKeysRequestContent,
+        request?: RotateConnectionKeysRequestContent,
         requestOptions?: Keys.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.RotateConnectionsKeysResponseContent>> {
+    ): Promise<core.WithRawResponse<RotateConnectionsKeysResponseContent>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ Authorization: await this._getAuthorizationHeader() }),
@@ -177,7 +184,7 @@ export class Keys {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.RotateConnectionsKeysResponseContent,
+                data: _response.body as RotateConnectionsKeysResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -185,15 +192,15 @@ export class Keys {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                    throw new BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                    throw new UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                    throw new ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                    throw new NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                    throw new TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,
