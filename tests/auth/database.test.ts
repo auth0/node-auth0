@@ -34,6 +34,7 @@ describe("Database", () => {
                 connection: "Username-Password-Authentication",
             });
             expect(data).toEqual({
+                _id: "test-id",
                 id: "test-id",
                 email_verified: false,
                 email,
