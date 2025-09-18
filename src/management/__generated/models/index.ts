@@ -18835,15 +18835,119 @@ export interface UserAttributeProfile {
   user_attributes?: UserAttributeProfileUserAttributes;
 }
 /**
+ * OIDC mapping for this attribute
+ */
+export interface UserAttributeProfileOidcMapping {
+  /**
+   * OIDC mapping field
+   *
+   */
+  mapping: string;
+  /**
+   * Display name for the OIDC mapping
+   *
+   */
+  display_name?: string;
+}
+/**
  *
  */
 export type UserAttributeProfilePatchUserId = UserAttributeProfileUserId;
 /**
+ * SAML mapping override for this strategy
+ */
+export interface UserAttributeProfileSamlMapping extends Array<string> {}
+/**
+ * Strategy-specific overrides for this attribute
+ */
+export interface UserAttributeProfileStrategyOverrides {
+  /**
+   */
+  pingfederate?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  ad?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  adfs?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  waad?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  'google-apps'?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  okta?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  oidc?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  samlp?: UserAttributeProfileStrategyOverridesMapping;
+}
+/**
+ *
+ */
+export interface UserAttributeProfileStrategyOverridesMapping {
+  /**
+   */
+  oidc_mapping?: UserAttributeProfileOidcMapping;
+  /**
+   */
+  saml_mapping?: UserAttributeProfileSamlMapping;
+  /**
+   * SCIM mapping override for this strategy
+   *
+   */
+  scim_mapping?: string;
+}
+/**
  * Strategy-specific overrides for user ID
  */
 export interface UserAttributeProfileStrategyOverridesUserId {
-  [key: string]: any;
+  /**
+   */
+  pingfederate?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  ad?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  adfs?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  waad?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  'google-apps'?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  okta?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  oidc?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  samlp?: UserAttributeProfileStrategyOverridesUserIdMapping;
 }
+/**
+ *
+ */
+export interface UserAttributeProfileStrategyOverridesUserIdMapping {
+  /**
+   */
+  oidc_mapping?: UserAttributeProfileUserIdOidcStrategyOverrideMapping;
+  /**
+   */
+  saml_mapping?: UserAttributeProfileSamlMapping;
+  /**
+   * SCIM mapping override for this strategy
+   *
+   */
+  scim_mapping?: string;
+}
+
 /**
  * The structure of the template, which can be used as the payload for creating or updating a User Attribute Profile.
  */
@@ -18879,10 +18983,49 @@ export interface UserAttributeProfileTemplateItem {
   template?: UserAttributeProfileTemplate;
 }
 /**
- * User attributes configuration
+ *
+ */
+export interface UserAttributeProfileUserAttributeAdditionalProperties {
+  /**
+   * Description of this attribute
+   *
+   */
+  description: string;
+  /**
+   * Display label for this attribute
+   *
+   */
+  label: string;
+  /**
+   * Whether this attribute is required in the profile
+   *
+   */
+  profile_required: boolean;
+  /**
+   * Auth0 mapping for this attribute
+   *
+   */
+  auth0_mapping: string;
+  /**
+   */
+  oidc_mapping?: UserAttributeProfileOidcMapping;
+  /**
+   */
+  saml_mapping?: UserAttributeProfileSamlMapping;
+  /**
+   * SCIM mapping for this attribute
+   *
+   */
+  scim_mapping?: string;
+  /**
+   */
+  strategy_overrides?: UserAttributeProfileStrategyOverrides;
+}
+/**
+ * User attributes configuration map. Keys are attribute names, values are the mapping configuration for each attribute.
  */
 export interface UserAttributeProfileUserAttributes {
-  [key: string]: any;
+  [key: string]: UserAttributeProfileUserAttributeAdditionalProperties;
 }
 /**
  * User ID mapping configuration
@@ -18914,9 +19057,20 @@ export type UserAttributeProfileUserIdOidcMappingEnum =
   (typeof UserAttributeProfileUserIdOidcMappingEnum)[keyof typeof UserAttributeProfileUserIdOidcMappingEnum];
 
 /**
+ * OIDC mapping override for this strategy
+ */
+export const UserAttributeProfileUserIdOidcStrategyOverrideMapping = {
+  sub: 'sub',
+  oid: 'oid',
+  email: 'email',
+} as const;
+export type UserAttributeProfileUserIdOidcStrategyOverrideMapping =
+  (typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping)[keyof typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping];
+
+/**
  * SAML mapping for user ID
  */
-export type UserAttributeProfileUserIdSamlMapping = Array<string> | string;
+export interface UserAttributeProfileUserIdSamlMapping extends Array<string> {}
 /**
  *
  */
