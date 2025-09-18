@@ -3990,6 +3990,43 @@ export interface CreateTokenQuota {
 /**
  *
  */
+export interface CreateUserAttributeProfileRequestContent {
+  /**
+   * The name of the user attribute profile.
+   *
+   */
+  name: string;
+  /**
+   */
+  user_id?: UserAttributeProfileUserId;
+  /**
+   */
+  user_attributes: UserAttributeProfileUserAttributes;
+}
+/**
+ *
+ */
+export interface CreateUserAttributeProfileResponseContent {
+  /**
+   * User Attribute Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the user attribute profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  user_id?: UserAttributeProfileUserId;
+  /**
+   */
+  user_attributes?: UserAttributeProfileUserAttributes;
+}
+/**
+ *
+ */
 export interface CustomDomain {
   /**
    * ID of the custom domain.
@@ -9475,6 +9512,45 @@ export interface GetUniversalLogin200ResponseOneOf {
 /**
  *
  */
+export interface GetUserAttributeProfileResponseContent {
+  /**
+   * User Attribute Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the user attribute profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  user_id?: UserAttributeProfileUserId;
+  /**
+   */
+  user_attributes?: UserAttributeProfileUserAttributes;
+}
+/**
+ *
+ */
+export interface GetUserAttributeProfileTemplateResponseContent {
+  /**
+   * The id of the template.
+   *
+   */
+  id?: string;
+  /**
+   * The user-friendly name of the template displayed in the UI.
+   *
+   */
+  display_name?: string;
+  /**
+   */
+  template?: UserAttributeProfileTemplate;
+}
+/**
+ *
+ */
 export type GetUserOrganizations200Response =
   | Array<GetOrganizations200ResponseOneOfInner>
   | GetOrganizations200ResponseOneOf;
@@ -9875,6 +9951,27 @@ export interface ListPhoneTemplatesResponseContent {
   /**
    */
   templates?: Array<PhoneTemplate>;
+}
+/**
+ *
+ */
+export interface ListUserAttributeProfileTemplateResponseContent {
+  /**
+   */
+  user_attribute_profile_templates?: Array<UserAttributeProfileTemplateItem>;
+}
+/**
+ *
+ */
+export interface ListUserAttributeProfilesPaginatedResponseContent {
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next?: string;
+  /**
+   */
+  user_attribute_profiles?: Array<UserAttributeProfile>;
 }
 /**
  *
@@ -15594,6 +15691,9 @@ export interface PostSsoTicketRequest {
   /**
    */
   domain_aliases_config?: PostSsoTicketRequestDomainAliasesConfig;
+  /**
+   */
+  provisioning_config?: PostSsoTicketRequestProvisioningConfig;
 }
 /**
  * If provided, this will create a new connection for the SSO flow with the given configuration
@@ -15719,6 +15819,32 @@ export interface PostSsoTicketRequestEnabledOrganizationsInner {
    */
   show_as_button?: boolean;
 }
+/**
+ * Configuration for the setup of Provisioning in the self-service flow.
+ */
+export interface PostSsoTicketRequestProvisioningConfig {
+  /**
+   * The scopes of the SCIM tokens generated during the self-service flow.
+   *
+   */
+  scopes: Array<PostSsoTicketRequestProvisioningConfigScopesEnum>;
+  /**
+   * Lifetime of the tokens in seconds. Must be greater than 900. If not provided, the tokens don't expire.
+   *
+   */
+  token_lifetime?: number | null;
+}
+
+export const PostSsoTicketRequestProvisioningConfigScopesEnum = {
+  getusers: 'get:users',
+  postusers: 'post:users',
+  putusers: 'put:users',
+  patchusers: 'patch:users',
+  deleteusers: 'delete:users',
+} as const;
+export type PostSsoTicketRequestProvisioningConfigScopesEnum =
+  (typeof PostSsoTicketRequestProvisioningConfigScopesEnum)[keyof typeof PostSsoTicketRequestProvisioningConfigScopesEnum];
+
 /**
  *
  */
@@ -17096,6 +17222,35 @@ export interface Scope {
   description?: string;
 }
 /**
+ * Configuration for the setup of Provisioning in the self-service flow.
+ */
+export interface SelfServiceProfileSsoTicketProvisioningConfig {
+  /**
+   * The scopes of the SCIM tokens generated during the self-service flow.
+   *
+   */
+  scopes: Array<SelfServiceProfileSsoTicketProvisioningScopeEnum>;
+  /**
+   * Lifetime of the tokens in seconds. Must be greater than 900. If not provided, the tokens don't expire.
+   *
+   */
+  token_lifetime?: number | null;
+}
+
+/**
+ *
+ */
+export const SelfServiceProfileSsoTicketProvisioningScopeEnum = {
+  getusers: 'get:users',
+  postusers: 'post:users',
+  putusers: 'put:users',
+  patchusers: 'patch:users',
+  deleteusers: 'delete:users',
+} as const;
+export type SelfServiceProfileSsoTicketProvisioningScopeEnum =
+  (typeof SelfServiceProfileSsoTicketProvisioningScopeEnum)[keyof typeof SelfServiceProfileSsoTicketProvisioningScopeEnum];
+
+/**
  *
  */
 export interface SmsTwilioFactorProvider {
@@ -17182,6 +17337,11 @@ export interface SsProfile {
    *
    */
   allowed_strategies: Array<SsProfileAllowedStrategiesEnum>;
+  /**
+   * ID of the user-attribute-profile to associate with this self-service profile.
+   *
+   */
+  user_attribute_profile_id?: string;
 }
 
 export const SsProfileAllowedStrategiesEnum = {
@@ -17245,6 +17405,11 @@ export interface SsProfileCreate {
    *
    */
   allowed_strategies?: Array<SsProfileCreateAllowedStrategiesEnum>;
+  /**
+   * ID of the user-attribute-profile to associate with this self-service profile.
+   *
+   */
+  user_attribute_profile_id?: string;
 }
 
 export const SsProfileCreateAllowedStrategiesEnum = {
@@ -17299,6 +17464,11 @@ export interface SsProfileUpdate {
    *
    */
   allowed_strategies?: Array<SsProfileUpdateAllowedStrategiesEnum>;
+  /**
+   * ID of the user-attribute-profile to associate with this self-service profile.
+   *
+   */
+  user_attribute_profile_id?: string;
 }
 
 export const SsProfileUpdateAllowedStrategiesEnum = {
@@ -18606,6 +18776,301 @@ export interface UpdateTokenQuota {
    */
   client_credentials: TokenQuotaClientCredentials;
 }
+/**
+ *
+ */
+export interface UpdateUserAttributeProfileRequestContent {
+  /**
+   * The name of the user attribute profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  user_id?: UserAttributeProfilePatchUserId | null;
+  /**
+   */
+  user_attributes?: UserAttributeProfileUserAttributes;
+}
+/**
+ *
+ */
+export interface UpdateUserAttributeProfileResponseContent {
+  /**
+   * User Attribute Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the user attribute profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  user_id?: UserAttributeProfileUserId;
+  /**
+   */
+  user_attributes?: UserAttributeProfileUserAttributes;
+}
+/**
+ *
+ */
+export interface UserAttributeProfile {
+  /**
+   * User Attribute Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the user attribute profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  user_id?: UserAttributeProfileUserId;
+  /**
+   */
+  user_attributes?: UserAttributeProfileUserAttributes;
+}
+/**
+ * OIDC mapping for this attribute
+ */
+export interface UserAttributeProfileOidcMapping {
+  /**
+   * OIDC mapping field
+   *
+   */
+  mapping: string;
+  /**
+   * Display name for the OIDC mapping
+   *
+   */
+  display_name?: string;
+}
+/**
+ *
+ */
+export type UserAttributeProfilePatchUserId = UserAttributeProfileUserId;
+/**
+ * SAML mapping override for this strategy
+ */
+export interface UserAttributeProfileSamlMapping extends Array<string> {}
+/**
+ * Strategy-specific overrides for this attribute
+ */
+export interface UserAttributeProfileStrategyOverrides {
+  /**
+   */
+  pingfederate?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  ad?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  adfs?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  waad?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  'google-apps'?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  okta?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  oidc?: UserAttributeProfileStrategyOverridesMapping;
+  /**
+   */
+  samlp?: UserAttributeProfileStrategyOverridesMapping;
+}
+/**
+ *
+ */
+export interface UserAttributeProfileStrategyOverridesMapping {
+  /**
+   */
+  oidc_mapping?: UserAttributeProfileOidcMapping;
+  /**
+   */
+  saml_mapping?: UserAttributeProfileSamlMapping;
+  /**
+   * SCIM mapping override for this strategy
+   *
+   */
+  scim_mapping?: string;
+}
+/**
+ * Strategy-specific overrides for user ID
+ */
+export interface UserAttributeProfileStrategyOverridesUserId {
+  /**
+   */
+  pingfederate?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  ad?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  adfs?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  waad?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  'google-apps'?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  okta?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  oidc?: UserAttributeProfileStrategyOverridesUserIdMapping;
+  /**
+   */
+  samlp?: UserAttributeProfileStrategyOverridesUserIdMapping;
+}
+/**
+ *
+ */
+export interface UserAttributeProfileStrategyOverridesUserIdMapping {
+  /**
+   */
+  oidc_mapping?: UserAttributeProfileUserIdOidcStrategyOverrideMapping;
+  /**
+   */
+  saml_mapping?: UserAttributeProfileSamlMapping;
+  /**
+   * SCIM mapping override for this strategy
+   *
+   */
+  scim_mapping?: string;
+}
+
+/**
+ * The structure of the template, which can be used as the payload for creating or updating a User Attribute Profile.
+ */
+export interface UserAttributeProfileTemplate {
+  /**
+   * The name of the user attribute profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  user_id?: UserAttributeProfileUserId;
+  /**
+   */
+  user_attributes?: UserAttributeProfileUserAttributes;
+}
+/**
+ *
+ */
+export interface UserAttributeProfileTemplateItem {
+  /**
+   * The id of the template.
+   *
+   */
+  id?: string;
+  /**
+   * The user-friendly name of the template displayed in the UI.
+   *
+   */
+  display_name?: string;
+  /**
+   */
+  template?: UserAttributeProfileTemplate;
+}
+/**
+ *
+ */
+export interface UserAttributeProfileUserAttributeAdditionalProperties {
+  /**
+   * Description of this attribute
+   *
+   */
+  description: string;
+  /**
+   * Display label for this attribute
+   *
+   */
+  label: string;
+  /**
+   * Whether this attribute is required in the profile
+   *
+   */
+  profile_required: boolean;
+  /**
+   * Auth0 mapping for this attribute
+   *
+   */
+  auth0_mapping: string;
+  /**
+   */
+  oidc_mapping?: UserAttributeProfileOidcMapping;
+  /**
+   */
+  saml_mapping?: UserAttributeProfileSamlMapping;
+  /**
+   * SCIM mapping for this attribute
+   *
+   */
+  scim_mapping?: string;
+  /**
+   */
+  strategy_overrides?: UserAttributeProfileStrategyOverrides;
+}
+/**
+ * User attributes configuration map. Keys are attribute names, values are the mapping configuration for each attribute.
+ */
+export interface UserAttributeProfileUserAttributes {
+  [key: string]: UserAttributeProfileUserAttributeAdditionalProperties;
+}
+/**
+ * User ID mapping configuration
+ */
+export interface UserAttributeProfileUserId {
+  /**
+   */
+  oidc_mapping?: UserAttributeProfileUserIdOidcMappingEnum;
+  /**
+   */
+  saml_mapping?: UserAttributeProfileUserIdSamlMapping;
+  /**
+   * SCIM mapping for user ID
+   *
+   */
+  scim_mapping?: string;
+  /**
+   */
+  strategy_overrides?: UserAttributeProfileStrategyOverridesUserId;
+}
+
+/**
+ * OIDC mapping for user ID
+ */
+export const UserAttributeProfileUserIdOidcMappingEnum = {
+  sub: 'sub',
+} as const;
+export type UserAttributeProfileUserIdOidcMappingEnum =
+  (typeof UserAttributeProfileUserIdOidcMappingEnum)[keyof typeof UserAttributeProfileUserIdOidcMappingEnum];
+
+/**
+ * OIDC mapping override for this strategy
+ */
+export const UserAttributeProfileUserIdOidcStrategyOverrideMapping = {
+  sub: 'sub',
+  oid: 'oid',
+  email: 'email',
+} as const;
+export type UserAttributeProfileUserIdOidcStrategyOverrideMapping =
+  (typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping)[keyof typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping];
+
+/**
+ * SAML mapping for user ID
+ */
+export interface UserAttributeProfileUserIdSamlMapping extends Array<string> {}
 /**
  *
  */
@@ -22857,6 +23322,61 @@ export interface GetTokenExchangeProfilesByIdRequest {
 export interface PatchTokenExchangeProfilesByIdOperationRequest {
   /**
    * ID of the Token Exchange Profile to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface DeleteUserAttributeProfilesByIdRequest {
+  /**
+   * ID of the user-attribute-profile to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetUserAttributeProfileTemplateRequest {
+  /**
+   * ID of the user-attribute-profile-template to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetUserAttributeProfilesRequest {
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 5.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetUserAttributeProfilesByIdRequest {
+  /**
+   * ID of the user-attribute-profile to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchUserAttributeProfilesByIdRequest {
+  /**
+   * ID of the user attribute profile to update.
    *
    */
   id: string;
