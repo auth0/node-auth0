@@ -155,7 +155,18 @@ export class Database extends BaseAuthAPI {
             initOverrides,
         );
 
-        return JSONApiResponse.fromResponse(response);
+        // Transform the response to ensure id field is always available
+        const jsonResponse = await JSONApiResponse.fromResponse(response);
+
+        if (jsonResponse.data) {
+            const data = jsonResponse.data as any;
+            // Map _id or user_id to id
+            if (!data.id && (data._id || data.user_id)) {
+                data.id = data._id || data.user_id;
+            }
+        }
+
+        return jsonResponse as JSONApiResponse<SignUpResponse>;
     }
 
     /**

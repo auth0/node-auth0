@@ -35,6 +35,38 @@ describe("Database", () => {
             });
             expect(data).toEqual({
                 _id: "test-id",
+                id: "test-id",
+                email_verified: false,
+                email,
+            });
+        });
+
+        it("should signup a user when response param for id is 'user_id'", async () => {
+            const database = new Database(opts);
+            const email = "test-email-1@example.com";
+            const { data } = await database.signUp({
+                email,
+                password: PASSWORD,
+                connection: "Username-Password-Authentication",
+            });
+            expect(data).toEqual({
+                user_id: "test-id",
+                id: "test-id",
+                email_verified: false,
+                email,
+            });
+        });
+
+        it("should signup a user when response param for id is 'id'", async () => {
+            const database = new Database(opts);
+            const email = "test-email-2@example.com";
+            const { data } = await database.signUp({
+                email,
+                password: PASSWORD,
+                connection: "Username-Password-Authentication",
+            });
+            expect(data).toEqual({
+                id: "test-id",
                 email_verified: false,
                 email,
             });
