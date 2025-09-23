@@ -39,6 +39,40 @@
         "path": "/dbconnections/signup",
         "body": {
             "client_id": "test-client-id",
+            "email": "test-email-1@example.com",
+            "password": "test-password",
+            "connection": "Username-Password-Authentication"
+        },
+        "status": 200,
+        "response": {
+            "user_id": "test-id",
+            "email_verified": false,
+            "email": "test-email-1@example.com"
+        }
+    },
+    {
+        "scope": "https://test-domain.auth0.com",
+        "method": "POST",
+        "path": "/dbconnections/signup",
+        "body": {
+            "client_id": "test-client-id",
+            "email": "test-email-2@example.com",
+            "password": "test-password",
+            "connection": "Username-Password-Authentication"
+        },
+        "status": 200,
+        "response": {
+            "id": "test-id",
+            "email_verified": false,
+            "email": "test-email-2@example.com"
+        }
+    },
+    {
+        "scope": "https://test-domain.auth0.com",
+        "method": "POST",
+        "path": "/dbconnections/signup",
+        "body": {
+            "client_id": "test-client-id",
             "email": "test-email-duplicate@example.com",
             "password": "test-password",
             "connection": "Username-Password-Authentication"
