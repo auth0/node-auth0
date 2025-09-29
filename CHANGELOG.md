@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.31.0](https://github.com/auth0/node-auth0/tree/v4.31.0) (2025-09-29)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.30.0...v4.31.0)
+
+**Added**
+
+- Feat: Support for Self Service Provisioning [\#1186](https://github.com/auth0/node-auth0/pull/1186) ([tanya732](https://github.com/tanya732))
+
+**Fixed**
+
+- Fix: id field in SignUpResponse [\#1191](https://github.com/auth0/node-auth0/pull/1191) ([tanya732](https://github.com/tanya732))
+- Fixed testcases [\#1197](https://github.com/auth0/node-auth0/pull/1197) ([tanya732](https://github.com/tanya732))
+
 ## [v4.30.0](https://github.com/auth0/node-auth0/tree/v4.30.0) (2025-09-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.29.0...v4.30.0)
