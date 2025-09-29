@@ -48,7 +48,7 @@ describe('UserAttributeProfilesManager', () => {
     const updatePayload: UpdateUserAttributeProfileRequestContent = {
       user_id: {
         scim_mapping: 'customMappingValue',
-        saml_mapping: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier',
+        saml_mapping: ['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
         oidc_mapping: 'sub',
       },
     };
@@ -69,7 +69,10 @@ describe('UserAttributeProfilesManager', () => {
           label: 'testUser',
           profile_required: false,
           auth0_mapping: 'testUser',
-          oidc_mapping: 'preferred_username',
+          oidc_mapping: {
+            mapping: 'preferred_username',
+            display_name: 'Display Name'
+          }
         },
       },
     };
