@@ -3269,6 +3269,31 @@ export interface Connection {
    *
    */
   metadata: { [key: string]: any };
+  /**
+   */
+  authentication?: ConnectionAuthentication;
+  /**
+   */
+  connected_accounts?: ConnectionConnectedAccounts;
+}
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface ConnectionAuthentication {
+  /**
+   */
+  active: boolean;
+}
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface ConnectionConnectedAccounts {
+  /**
+   */
+  active: boolean;
+  /**
+   */
+  cross_app_access?: boolean;
 }
 /**
  *
@@ -3315,6 +3340,12 @@ export interface ConnectionCreate {
    *
    */
   metadata?: { [key: string]: any };
+  /**
+   */
+  authentication?: ConnectionAuthentication;
+  /**
+   */
+  connected_accounts?: ConnectionConnectedAccounts;
 }
 
 export const ConnectionCreateStrategyEnum = {
@@ -3720,6 +3751,12 @@ export interface ConnectionForList {
    *
    */
   metadata?: { [key: string]: any };
+  /**
+   */
+  authentication?: ConnectionAuthentication;
+  /**
+   */
+  connected_accounts?: ConnectionConnectedAccounts;
 }
 /**
  *
@@ -3756,6 +3793,12 @@ export interface ConnectionUpdate {
    *
    */
   metadata?: { [key: string]: any };
+  /**
+   */
+  authentication?: ConnectionAuthentication;
+  /**
+   */
+  connected_accounts?: ConnectionConnectedAccounts;
 }
 /**
  * The connection's options (depend on the connection strategy)
