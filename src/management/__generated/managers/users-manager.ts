@@ -16,6 +16,7 @@ import type {
   GetUserOrganizations200Response,
   GetUsers200Response,
   GetUsers200ResponseOneOfInner,
+  ListUserConnectedAccountsResponseContent,
   PatchAuthenticationMethodsByAuthenticationMethodIdRequest,
   PostAuthenticationMethods201Response,
   PostAuthenticationMethodsRequest,
@@ -52,6 +53,7 @@ import type {
   DeleteUsersByIdRequest,
   GetAuthenticationMethodsRequest,
   GetAuthenticationMethodsByAuthenticationMethodIdRequest,
+  GetConnectedAccountsRequest,
   GetEnrollmentsRequest,
   GetFederatedConnectionsTokensetsRequest,
   GetLogsByUserRequest,
@@ -440,6 +442,44 @@ export class UsersManager extends BaseAPI {
             encodeURIComponent(String(requestParameters.authentication_method_id))
           ),
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve all connected accounts associated with the user.
+   * Get a User's Connected Accounts
+   *
+   * @throws {RequiredError}
+   */
+  async getConnectedAccounts(
+    requestParameters: GetConnectedAccountsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<ListUserConnectedAccountsResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/users/{id}/connected-accounts`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
       },
       initOverrides
     );

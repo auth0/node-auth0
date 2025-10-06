@@ -1727,4 +1727,103 @@ describe('UsersManager', () => {
       expect(request.isDone()).toBe(true);
     });
   });
+
+  describe('#getConnectedAccounts', () => {
+    const data = {
+      id: 'user_id',
+    };
+
+    let scope: nock.Scope;
+
+    beforeEach(() => {
+      scope = nock(API_URL).get(`/users/${data.id}/connected-accounts`).reply(200, []);
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      expect(usersManager.getConnectedAccounts(data).then(() => done())).toBeInstanceOf(Promise);
+    });
+
+    it('should perform a GET request to /api/v2/users/user_id/connected-accounts', async () => {
+      await usersManager.getConnectedAccounts(data);
+      expect(scope.isDone()).toBe(true);
+    });
+
+    it('should pass any errors to the promise catch handler', async () => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/users/${data.id}/connected-accounts`).reply(500, {});
+
+      try {
+        await usersManager.getConnectedAccounts(data);
+      } catch (err) {
+        expect(err).toBeDefined();
+      }
+    });
+
+    it('should include the token in the authorization header', async () => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/connected-accounts`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, []);
+
+      await usersManager.getConnectedAccounts(data);
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should pass the body of the response to the "then" handler', async () => {
+      nock.cleanAll();
+
+      const connectedAccountsData = [
+        {
+          id: 'conn_123',
+          connection: 'google-oauth2',
+          connection_id: 'con_abc123',
+          strategy: 'google-oauth2',
+          access_type: 'offline',
+          scopes: ['profile', 'email'],
+          created_at: '2023-01-01T00:00:00.000Z',
+          expires_at: '2024-01-01T00:00:00.000Z',
+        },
+      ];
+
+      const response = {
+        connected_accounts: connectedAccountsData,
+        next: null,
+      };
+
+      nock(API_URL).get(`/users/${data.id}/connected-accounts`).reply(200, response);
+
+      const connectedAccounts = await usersManager.getConnectedAccounts(data);
+      expect(connectedAccounts.data.connected_accounts).toBeInstanceOf(Array);
+      expect(connectedAccounts.data.connected_accounts.length).toBe(connectedAccountsData.length);
+      expect(connectedAccounts.data.connected_accounts[0].id).toBe(connectedAccountsData[0].id);
+      expect(connectedAccounts.data.connected_accounts[0].connection).toBe(connectedAccountsData[0].connection);
+      expect(connectedAccounts.data.connected_accounts[0].strategy).toBe(connectedAccountsData[0].strategy);
+    });
+
+    it('should pass the parameters in the query-string', async () => {
+      nock.cleanAll();
+
+      const params = {
+        from: 'conn_123',
+        take: 10,
+      };
+      const request = nock(API_URL)
+        .get(`/users/${data.id}/connected-accounts`)
+        .query(params)
+        .reply(200, []);
+
+      await usersManager.getConnectedAccounts({
+        id: data.id,
+        ...params,
+      });
+      expect(request.isDone()).toBe(true);
+    });
+
+    it('should validate empty id', async () => {
+      await expect(usersManager.getConnectedAccounts({} as any)).rejects.toThrowError();
+    });
+  });
 });
