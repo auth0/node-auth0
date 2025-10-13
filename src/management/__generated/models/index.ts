@@ -290,6 +290,13 @@ export interface Client {
   /**
    */
   token_quota: TokenQuota;
+  /**
+   * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
+   * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
+   * See {{DOCS LINK}} for more information.
+   *
+   */
+  skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
 }
 
 export const ClientAppTypeEnum = {
@@ -1224,6 +1231,13 @@ export interface ClientCreate {
    *
    */
   resource_server_identifier?: string;
+  /**
+   * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
+   * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
+   * See {{DOCS LINK}} for more information.
+   *
+   */
+  skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -2810,6 +2824,13 @@ export interface ClientUpdate {
    *
    */
   compliance_level?: ClientUpdateComplianceLevelEnum;
+  /**
+   * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
+   * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
+   * See {{DOCS LINK}} for more information.
+   *
+   */
+  skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
 }
 
 export const ClientUpdateTokenEndpointAuthMethodEnum = {
@@ -17858,6 +17879,13 @@ export interface TenantSettings {
    *
    */
   authorization_response_iss_parameter_supported: boolean | null;
+  /**
+   * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
+   * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
+   * See {{DOCS LINK}} for more information.
+   *
+   */
+  skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
 }
 
 export const TenantSettingsEnabledLocalesEnum = {
@@ -18341,6 +18369,13 @@ export interface TenantSettingsUpdate {
    *
    */
   authorization_response_iss_parameter_supported?: boolean | null;
+  /**
+   * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
+   * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
+   * See {{DOCS LINK}} for more information.
+   *
+   */
+  skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
 }
 
 export const TenantSettingsUpdateEnabledLocalesEnum = {
