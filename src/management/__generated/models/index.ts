@@ -3220,6 +3220,59 @@ export interface ClientUpdateSignedRequestObject {
 /**
  *
  */
+export interface ConnectedAccount {
+  /**
+   * The unique identifier for the connected account.
+   *
+   */
+  id: string;
+  /**
+   * The name of the connection associated with the account.
+   *
+   */
+  connection: string;
+  /**
+   * The unique identifier of the connection associated with the account.
+   *
+   */
+  connection_id: string;
+  /**
+   * The authentication strategy used by the connection.
+   *
+   */
+  strategy: string;
+  /**
+   */
+  access_type: ConnectedAccountAccessTypeEnum;
+  /**
+   * The scopes granted for this connected account.
+   *
+   */
+  scopes?: Array<string>;
+  /**
+   * ISO 8601 timestamp when the connected account was created.
+   *
+   */
+  created_at: string;
+  /**
+   * ISO 8601 timestamp when the connected account expires.
+   *
+   */
+  expires_at?: string;
+}
+
+/**
+ * The access type for the connected account.
+ */
+export const ConnectedAccountAccessTypeEnum = {
+  offline: 'offline',
+} as const;
+export type ConnectedAccountAccessTypeEnum =
+  (typeof ConnectedAccountAccessTypeEnum)[keyof typeof ConnectedAccountAccessTypeEnum];
+
+/**
+ *
+ */
 export interface Connection {
   /**
    * The name of the connection
@@ -10015,6 +10068,19 @@ export interface ListUserAttributeProfilesPaginatedResponseContent {
   /**
    */
   user_attribute_profiles?: Array<UserAttributeProfile>;
+}
+/**
+ *
+ */
+export interface ListUserConnectedAccountsResponseContent {
+  /**
+   */
+  connected_accounts: Array<ConnectedAccount>;
+  /**
+   * The token to retrieve the next page of connected accounts (if there is one)
+   *
+   */
+  next?: string;
 }
 /**
  *
@@ -23735,6 +23801,26 @@ export interface GetAuthenticationMethodsByAuthenticationMethodIdRequest {
    *
    */
   authentication_method_id: string;
+}
+/**
+ *
+ */
+export interface GetConnectedAccountsRequest {
+  /**
+   * ID of the user to list connected accounts for.
+   *
+   */
+  id: string;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results to return.  Defaults to 10 with a maximum of 20
+   *
+   */
+  take?: number;
 }
 /**
  *
