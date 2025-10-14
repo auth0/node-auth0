@@ -1,5 +1,15 @@
 # Change Log
 
+## [v4.33.0](https://github.com/auth0/node-auth0/tree/v4.33.0) (2025-10-14)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.32.0...v4.33.0)
+
+**Added**
+
+- Added Support for skip_non_verifiable_callback_uri_confirmation_prompt Field [\#1207](https://github.com/auth0/node-auth0/pull/1207) ([tanya732](https://github.com/tanya732))
+- Feat: Added Support for Connected Accounts [\#1206](https://github.com/auth0/node-auth0/pull/1206) ([tanya732](https://github.com/tanya732))
+
+
 ## [v4.32.0](https://github.com/auth0/node-auth0/tree/v4.32.0) (2025-10-08)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.31.0...v4.32.0)
@@ -7,7 +17,6 @@
 **Added**
 
 - Feat: Added purpose settings to connections endpoints [\#1196](https://github.com/auth0/node-auth0/pull/1196) ([tanya732](https://github.com/tanya732))
-- Feat: Added Support for Connected Accounts [\#1201](https://github.com/auth0/node-auth0/pull/1201) ([tanya732](https://github.com/tanya732))
 
 
 ## [v4.31.0](https://github.com/auth0/node-auth0/tree/v4.31.0) (2025-09-29)
