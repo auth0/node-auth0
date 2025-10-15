@@ -262,6 +262,11 @@ export interface Client {
    */
   organization_require_behavior: ClientOrganizationRequireBehaviorEnum;
   /**
+   * Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both.
+   *
+   */
+  organization_discovery_methods?: Array<ClientOrganizationDiscoveryEnum>;
+  /**
    */
   client_authentication_methods: ClientClientAuthenticationMethods | null;
   /**
@@ -1197,6 +1202,11 @@ export interface ClientCreate {
    *
    */
   organization_require_behavior?: ClientCreateOrganizationRequireBehaviorEnum;
+  /**
+   * Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both.
+   *
+   */
+  organization_discovery_methods?: Array<ClientOrganizationDiscoveryEnum>;
   /**
    */
   client_authentication_methods?: ClientCreateClientAuthenticationMethods;
@@ -2477,6 +2487,16 @@ export type ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum =
   (typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum)[keyof typeof ClientOidcLogoutBackchannelLogoutInitiatorsSelectedInitiatorsEnum];
 
 /**
+ * Method for discovering organizations during the `pre_login_prompt`. `email` allows users to find their organization by entering their email address and performing domain matching, while `organization_name` requires users to enter the organization name directly. These methods can be combined.
+ */
+export const ClientOrganizationDiscoveryEnum = {
+  email: 'email',
+  organization_name: 'organization_name',
+} as const;
+export type ClientOrganizationDiscoveryEnum =
+  (typeof ClientOrganizationDiscoveryEnum)[keyof typeof ClientOrganizationDiscoveryEnum];
+
+/**
  * Refresh token configuration
  */
 export interface ClientRefreshToken {
@@ -2803,6 +2823,11 @@ export interface ClientUpdate {
    *
    */
   organization_require_behavior?: ClientUpdateOrganizationRequireBehaviorEnum;
+  /**
+   * Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both.
+   *
+   */
+  organization_discovery_methods?: Array<ClientOrganizationDiscoveryEnum>;
   /**
    */
   client_authentication_methods?: ClientUpdateClientAuthenticationMethods | null;
@@ -3985,6 +4010,49 @@ export const ConnectionUpdateOptionsSetUserRootAttributesEnum = {
 } as const;
 export type ConnectionUpdateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionUpdateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionUpdateOptionsSetUserRootAttributesEnum];
+
+/**
+ *
+ */
+export interface CreateOrganizationDiscoveryDomainRequestContent {
+  /**
+   * The domain name to associate with the organization e.g. acme.com.
+   *
+   */
+  domain: string;
+  /**
+   */
+  status?: OrganizationDiscoveryDomainStatus;
+}
+
+/**
+ *
+ */
+export interface CreateOrganizationDiscoveryDomainResponseContent {
+  /**
+   * Organization discovery domain identifier.
+   *
+   */
+  id: string;
+  /**
+   * The domain name to associate with the organization e.g. acme.com.
+   *
+   */
+  domain: string;
+  /**
+   */
+  status: OrganizationDiscoveryDomainStatus;
+  /**
+   * A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership.
+   *
+   */
+  verification_txt: string;
+  /**
+   * The full domain where the TXT record should be added.
+   *
+   */
+  verification_host: string;
+}
 
 /**
  * Phone provider configuration schema
@@ -8279,6 +8347,35 @@ export interface GetOrganizationClientGrants200ResponseOneOfInner {
 /**
  *
  */
+export interface GetOrganizationDiscoveryDomainResponseContent {
+  /**
+   * Organization discovery domain identifier.
+   *
+   */
+  id: string;
+  /**
+   * The domain name to associate with the organization e.g. acme.com.
+   *
+   */
+  domain: string;
+  /**
+   */
+  status: OrganizationDiscoveryDomainStatus;
+  /**
+   * A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership.
+   *
+   */
+  verification_txt: string;
+  /**
+   * The full domain where the TXT record should be added.
+   *
+   */
+  verification_host: string;
+}
+
+/**
+ *
+ */
 export type GetOrganizationMemberRoles200Response =
   | Array<GetOrganizationMemberRoles200ResponseOneOfInner>
   | GetOrganizationMemberRoles200ResponseOneOf;
@@ -10064,6 +10161,17 @@ export type JobFormatEnum = (typeof JobFormatEnum)[keyof typeof JobFormatEnum];
 /**
  *
  */
+export interface ListOrganizationDiscoveryDomainsResponseContent {
+  /**
+   */
+  next?: string;
+  /**
+   */
+  domains: Array<OrganizationDiscoveryDomain>;
+}
+/**
+ *
+ */
 export interface ListPhoneTemplatesResponseContent {
   /**
    */
@@ -10283,6 +10391,45 @@ export interface OrganizationBrandingColors {
    */
   page_background: string;
 }
+/**
+ *
+ */
+export interface OrganizationDiscoveryDomain {
+  /**
+   * Organization discovery domain identifier.
+   *
+   */
+  id: string;
+  /**
+   * The domain name to associate with the organization e.g. acme.com.
+   *
+   */
+  domain: string;
+  /**
+   */
+  status: OrganizationDiscoveryDomainStatus;
+  /**
+   * A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership.
+   *
+   */
+  verification_txt: string;
+  /**
+   * The full domain where the TXT record should be added.
+   *
+   */
+  verification_host: string;
+}
+
+/**
+ * The verification status of the discovery domain.
+ */
+export const OrganizationDiscoveryDomainStatus = {
+  pending: 'pending',
+  verified: 'verified',
+} as const;
+export type OrganizationDiscoveryDomainStatus =
+  (typeof OrganizationDiscoveryDomainStatus)[keyof typeof OrganizationDiscoveryDomainStatus];
+
 /**
  * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
  */
@@ -18794,6 +18941,44 @@ export interface TwilioFactorProvider {
 /**
  *
  */
+export interface UpdateOrganizationDiscoveryDomainRequestContent {
+  /**
+   */
+  status?: OrganizationDiscoveryDomainStatus;
+}
+
+/**
+ *
+ */
+export interface UpdateOrganizationDiscoveryDomainResponseContent {
+  /**
+   * Organization discovery domain identifier.
+   *
+   */
+  id: string;
+  /**
+   * The domain name to associate with the organization e.g. acme.com.
+   *
+   */
+  domain: string;
+  /**
+   */
+  status: OrganizationDiscoveryDomainStatus;
+  /**
+   * A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership.
+   *
+   */
+  verification_txt: string;
+  /**
+   * The full domain where the TXT record should be added.
+   *
+   */
+  verification_host: string;
+}
+
+/**
+ *
+ */
 export interface UpdatePhoneProviderRequest {
   /**
    * Name of the phone notification provider
@@ -21784,6 +21969,21 @@ export interface DeleteClientGrantsByGrantIdRequest {
 /**
  *
  */
+export interface DeleteDiscoveryDomainsByDiscoveryDomainIdRequest {
+  /**
+   * ID of the organization.
+   *
+   */
+  id: string;
+  /**
+   * ID of the discovery domain.
+   *
+   */
+  discovery_domain_id: string;
+}
+/**
+ *
+ */
 export interface DeleteEnabledConnectionsByConnectionIdRequest {
   /**
    * Organization identifier
@@ -21845,6 +22045,41 @@ export interface DeleteOrganizationsByIdRequest {
    *
    */
   id: string;
+}
+/**
+ *
+ */
+export interface GetDiscoveryDomainsRequest {
+  /**
+   * ID of the organization.
+   *
+   */
+  id: string;
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 50.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetDiscoveryDomainsByDiscoveryDomainIdRequest {
+  /**
+   * ID of the organization.
+   *
+   */
+  id: string;
+  /**
+   * ID of the discovery domain.
+   *
+   */
+  discovery_domain_id: string;
 }
 /**
  *
@@ -22124,6 +22359,21 @@ export interface GetOrganizationsByIdRequest {
 /**
  *
  */
+export interface PatchDiscoveryDomainsByDiscoveryDomainIdRequest {
+  /**
+   * ID of the organization.
+   *
+   */
+  id: string;
+  /**
+   * ID of the discovery domain to update.
+   *
+   */
+  discovery_domain_id: string;
+}
+/**
+ *
+ */
 export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
   /**
    * Organization identifier
@@ -22142,6 +22392,16 @@ export interface PatchEnabledConnectionsByConnectionIdOperationRequest {
 export interface PatchOrganizationsByIdOperationRequest {
   /**
    * ID of the organization to update.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PostDiscoveryDomainsRequest {
+  /**
+   * ID of the organization.
    *
    */
   id: string;

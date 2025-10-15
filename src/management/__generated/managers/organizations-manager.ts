@@ -1,6 +1,8 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  CreateOrganizationDiscoveryDomainRequestContent,
+  CreateOrganizationDiscoveryDomainResponseContent,
   DeleteMembersRequest,
   DeleteOrganizationMemberRolesRequest,
   GetEnabledConnections200Response,
@@ -10,9 +12,11 @@ import type {
   GetMembers200Response,
   GetOrganizationClientGrants200Response,
   GetOrganizationClientGrants200ResponseOneOfInner,
+  GetOrganizationDiscoveryDomainResponseContent,
   GetOrganizationMemberRoles200Response,
   GetOrganizations200Response,
   GetOrganizations200ResponseOneOfInner,
+  ListOrganizationDiscoveryDomainsResponseContent,
   PatchEnabledConnectionsByConnectionIdRequest,
   PatchOrganizationsByIdRequest,
   PostEnabledConnectionsRequest,
@@ -22,6 +26,8 @@ import type {
   PostOrganizationMemberRolesRequest,
   PostOrganizations201Response,
   PostOrganizationsRequest,
+  UpdateOrganizationDiscoveryDomainRequestContent,
+  UpdateOrganizationDiscoveryDomainResponseContent,
   GetEnabledConnections200ResponseOneOf,
   GetInvitations200ResponseOneOf,
   GetMembers200ResponseOneOf,
@@ -31,11 +37,14 @@ import type {
   GetOrganizationMemberRoles200ResponseOneOfInner,
   GetOrganizations200ResponseOneOf,
   DeleteClientGrantsByGrantIdRequest,
+  DeleteDiscoveryDomainsByDiscoveryDomainIdRequest,
   DeleteEnabledConnectionsByConnectionIdRequest,
   DeleteInvitationsByInvitationIdRequest,
   DeleteMembersOperationRequest,
   DeleteOrganizationMemberRolesOperationRequest,
   DeleteOrganizationsByIdRequest,
+  GetDiscoveryDomainsRequest,
+  GetDiscoveryDomainsByDiscoveryDomainIdRequest,
   GetEnabledConnectionsRequest,
   GetEnabledConnectionsByConnectionIdRequest,
   GetInvitationsRequest,
@@ -46,8 +55,10 @@ import type {
   GetOrganizationMemberRolesRequest,
   GetOrganizationsRequest,
   GetOrganizationsByIdRequest,
+  PatchDiscoveryDomainsByDiscoveryDomainIdRequest,
   PatchEnabledConnectionsByConnectionIdOperationRequest,
   PatchOrganizationsByIdOperationRequest,
+  PostDiscoveryDomainsRequest,
   PostEnabledConnectionsOperationRequest,
   PostInvitationsOperationRequest,
   PostMembersOperationRequest,
@@ -77,6 +88,34 @@ export class OrganizationsManager extends BaseAPI {
         path: `/organizations/{id}/client-grants/{grant_id}`
           .replace('{id}', encodeURIComponent(String(requestParameters.id)))
           .replace('{grant_id}', encodeURIComponent(String(requestParameters.grant_id))),
+        method: 'DELETE',
+      },
+      initOverrides
+    );
+
+    return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Remove a discovery domain from an organization. This action cannot be undone.
+   * Delete an organization discovery domain
+   *
+   * @throws {RequiredError}
+   */
+  async deleteDiscoveryDomain(
+    requestParameters: DeleteDiscoveryDomainsByDiscoveryDomainIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<void>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'discovery_domain_id']);
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/discovery-domains/{discovery_domain_id}`
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace(
+            '{discovery_domain_id}',
+            encodeURIComponent(String(requestParameters.discovery_domain_id))
+          ),
         method: 'DELETE',
       },
       initOverrides
@@ -221,6 +260,74 @@ export class OrganizationsManager extends BaseAPI {
     );
 
     return runtime.VoidApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve list of all organization discovery domains associated with the specified organization.
+   *
+   * Retrieve all organization discovery domains
+   *
+   * @throws {RequiredError}
+   */
+  async getAllDiscoveryDomains(
+    requestParameters: GetDiscoveryDomainsRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<ListOrganizationDiscoveryDomainsResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const queryParameters = runtime.applyQueryParams(requestParameters, [
+      {
+        key: 'from',
+        config: {},
+      },
+      {
+        key: 'take',
+        config: {},
+      },
+    ]);
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/discovery-domains`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'GET',
+        query: queryParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Retrieve details about a single organization discovery domain specified by ID.
+   *
+   * Retrieve an organization discovery domain by ID
+   *
+   * @throws {RequiredError}
+   */
+  async getDiscoveryDomain(
+    requestParameters: GetDiscoveryDomainsByDiscoveryDomainIdRequest,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetOrganizationDiscoveryDomainResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'discovery_domain_id']);
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/discovery-domains/{discovery_domain_id}`
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace(
+            '{discovery_domain_id}',
+            encodeURIComponent(String(requestParameters.discovery_domain_id))
+          ),
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
   }
 
   /**
@@ -730,6 +837,41 @@ export class OrganizationsManager extends BaseAPI {
   }
 
   /**
+   * Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
+   * Update an organization discovery domain
+   *
+   * @throws {RequiredError}
+   */
+  async updateDiscoveryDomain(
+    requestParameters: PatchDiscoveryDomainsByDiscoveryDomainIdRequest,
+    bodyParameters: UpdateOrganizationDiscoveryDomainRequestContent,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<UpdateOrganizationDiscoveryDomainResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id', 'discovery_domain_id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/discovery-domains/{discovery_domain_id}`
+          .replace('{id}', encodeURIComponent(String(requestParameters.id)))
+          .replace(
+            '{discovery_domain_id}',
+            encodeURIComponent(String(requestParameters.discovery_domain_id))
+          ),
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Modify an enabled_connection belonging to an Organization.
    *
    * Modify an Organizations Connection
@@ -787,6 +929,39 @@ export class OrganizationsManager extends BaseAPI {
           encodeURIComponent(String(requestParameters.id))
         ),
         method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
+   * Create an organization discovery domain
+   *
+   * @throws {RequiredError}
+   */
+  async createDiscoveryDomain(
+    requestParameters: PostDiscoveryDomainsRequest,
+    bodyParameters: CreateOrganizationDiscoveryDomainRequestContent,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<CreateOrganizationDiscoveryDomainResponseContent>> {
+    runtime.validateRequiredRequestParams(requestParameters, ['id']);
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/organizations/{id}/discovery-domains`.replace(
+          '{id}',
+          encodeURIComponent(String(requestParameters.id))
+        ),
+        method: 'POST',
         headers: headerParameters,
         body: bodyParameters,
       },
