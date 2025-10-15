@@ -11,6 +11,7 @@ import {
   ApiResponse,
   DeleteClientGrantsByGrantIdRequest,
   GetOrganizationClientGrants200ResponseOneOfInner,
+  OrganizationDiscoveryDomainStatus,
 } from '../../src/index.js';
 
 import { checkMethod } from '../utils/index.js';
@@ -1531,7 +1532,7 @@ describe('OrganizationsManager', () => {
     const operation = organizations.postOrganizationClientGrants(requestParameters, requestBody);
     const expectedResponse: GetOrganizationClientGrants200ResponseOneOfInner = <
       GetOrganizationClientGrants200ResponseOneOfInner
-    >{};
+      >{};
     const uri = `/organizations/{id}/client-grants`.replace(
       '{id}',
       encodeURIComponent(String(requestParameters.id))
@@ -1539,5 +1540,381 @@ describe('OrganizationsManager', () => {
     const method = 'post';
 
     checkMethod({ operation, expectedResponse, uri, method, requestBody });
+  });
+
+  //// Discovery Domains
+  describe('#getAllDiscoveryDomains', () => {
+    const data = {
+      id: 'org_id',
+    };
+
+    const responseData = {
+      domains: [
+        {
+          id: 'ord_abc123',
+          domain: 'acme.com',
+          status: OrganizationDiscoveryDomainStatus.verified,
+          verification_txt: 'auth-verification-token-xyz',
+          verification_result: 'success',
+          verification_host: '_ss-verification.org_123.acme.com',
+        },
+        {
+          id: 'ord_def456',
+          domain: 'acme.dev',
+          status: OrganizationDiscoveryDomainStatus.pending,
+          verification_txt: 'auth-verification-token-uvw',
+          verification_result: null,
+          verification_host: '_ss-verification.org_123.acme.dev',
+        },
+      ],
+      next: 'checkpoint-token',
+    };
+
+    beforeEach(() => {
+      request = nock(API_URL).get(`/organizations/${data.id}/discovery-domains`).reply(200, responseData);
+    });
+
+    it('should return a promise when no callback is given', (done) => {
+      organizations.getAllDiscoveryDomains(data).then(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/organizations/org_id/discovery-domains', (done) => {
+      organizations.getAllDiscoveryDomains(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).get(`/organizations/${data.id}/discovery-domains`).reply(500, {});
+
+      organizations.getAllDiscoveryDomains(data).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should include the token in the authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/organizations/${data.id}/discovery-domains`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, responseData);
+
+      organizations.getAllDiscoveryDomains(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should pass the query parameters correctly', (done) => {
+      nock.cleanAll();
+
+      const params = {
+        id: 'org_id',
+        from: 'checkpoint',
+        take: 10,
+      };
+      const request = nock(API_URL)
+        .get(`/organizations/${data.id}/discovery-domains`)
+        .query({ from: 'checkpoint', take: 10 })
+        .reply(200, responseData);
+
+      organizations.getAllDiscoveryDomains(params).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe('#getDiscoveryDomain', () => {
+    const data = {
+      id: 'org_123456',
+      discovery_domain_id: 'ord_abc123',
+    };
+
+    const responseData = {
+      id: 'ord_abc123',
+      domain: 'acme.com',
+      status: OrganizationDiscoveryDomainStatus.verified,
+      verification_txt: 'auth-verification-token-xyz',
+      verification_result: 'success',
+      verification_host: '_ss-verification.org_123.acme.com',
+    };
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .get(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .reply(200, responseData);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      organizations.getDiscoveryDomain(data).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should perform a GET request to /api/v2/organizations/:id/discovery-domains/:discovery_domain_id', (done) => {
+      organizations.getDiscoveryDomain(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .get(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .reply(500, {});
+
+      organizations.getDiscoveryDomain(data).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .get(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, responseData);
+
+      organizations.getDiscoveryDomain(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should return error when id is not sent', async () => {
+      await expect(organizations.getDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any)).rejects.toThrow(RequiredError);
+    });
+
+    it('should return error when discovery_domain_id is not sent', async () => {
+      await expect(organizations.getDiscoveryDomain({ id: 'org_123' } as any)).rejects.toThrow(RequiredError);
+    });
+  });
+
+  describe('#createDiscoveryDomain', () => {
+    const data = {
+      id: 'org_123',
+    };
+
+    const body = {
+      domain: 'acme.com',
+      status: OrganizationDiscoveryDomainStatus.verified,
+    };
+
+    const responseData = {
+      id: 'ord_abc123',
+      domain: 'acme.com',
+      status: OrganizationDiscoveryDomainStatus.verified,
+      verification_txt: 'auth-verification-token-xyz',
+      verification_result: 'success',
+      verification_host: '_ss-verification.org_123.acme.com',
+    };
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .post(`/organizations/${data.id}/discovery-domains`)
+        .reply(200, responseData);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      organizations.createDiscoveryDomain(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL).post(`/organizations/${data.id}/discovery-domains`).reply(500, {});
+
+      organizations.createDiscoveryDomain(data, body).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a POST request to /api/v2/organizations/org_id/discovery-domains', (done) => {
+      organizations.createDiscoveryDomain(data, body).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should return error when id is not sent', async () => {
+      await expect(organizations.createDiscoveryDomain({} as any, body)).rejects.toThrow(RequiredError);
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(`/organizations/${data.id}/discovery-domains`, body)
+        .reply(200, responseData);
+
+      organizations.createDiscoveryDomain(data, body).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .post(`/organizations/${data.id}/discovery-domains`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, responseData);
+
+      organizations.createDiscoveryDomain(data, body).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe('#updateDiscoveryDomain', () => {
+    const data = {
+      id: 'org_123',
+      discovery_domain_id: 'ord_abc123',
+    };
+    const body = { status: OrganizationDiscoveryDomainStatus.verified };
+
+    const responseData = {
+      id: 'ord_def456',
+      domain: 'acme.dev',
+      status: OrganizationDiscoveryDomainStatus.verified,
+      verification_txt: 'auth-verification-token-uvw',
+      verification_result: 'success',
+      verification_host: '_ss-verification.org_123.acme.dev',
+    };
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .patch(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .reply(200, responseData);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      organizations.updateDiscoveryDomain(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .patch(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .reply(500, {});
+
+      organizations.updateDiscoveryDomain(data, body).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a PATCH request to /api/v2/organizations/org_id/discovery-domains/discovery_domain_id', (done) => {
+      organizations.updateDiscoveryDomain(data, body).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should return error when id is not sent', async () => {
+      await expect(organizations.updateDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any, body)).rejects.toThrow(RequiredError);
+    });
+
+    it('should return error when discovery_domain_id is not sent', async () => {
+      await expect(organizations.updateDiscoveryDomain({ id: 'org_123' } as any, body)).rejects.toThrow(RequiredError);
+    });
+
+    it('should pass the data in the body of the request', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`, body)
+        .reply(200, responseData);
+
+      organizations.updateDiscoveryDomain(data, body).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .patch(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, responseData);
+
+      organizations.updateDiscoveryDomain(data, body).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe('#deleteDiscoveryDomain', () => {
+    const data = {
+      id: 'org_123',
+      discovery_domain_id: 'ord_abc123',
+    };
+
+    beforeEach(() => {
+      request = nock(API_URL)
+        .delete(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .reply(200, {});
+    });
+
+    it('should validate empty id', async () => {
+      await expect(organizations.deleteDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any)).rejects.toThrow(RequiredError);
+    });
+
+    it('should return a promise if no callback is given', (done) => {
+      organizations.deleteDiscoveryDomain(data).then(done.bind(null, null));
+    });
+
+    it('should pass any errors to the promise catch handler', (done) => {
+      nock.cleanAll();
+
+      nock(API_URL)
+        .delete(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .reply(500, {});
+
+      organizations.deleteDiscoveryDomain(data).catch((err) => {
+        expect(err).toBeDefined();
+        done();
+      });
+    });
+
+    it('should perform a DELETE request to /api/v2/organizations/organization_id/discovery-domains/discovery_domain_id', (done) => {
+      organizations.deleteDiscoveryDomain(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
+
+    it('should return error when discovery_domain_id is not sent', async () => {
+      await expect(organizations.deleteDiscoveryDomain({ id: 'org_123' } as any)).rejects.toThrow(RequiredError);
+    });
+
+    it('should include the token in the Authorization header', (done) => {
+      nock.cleanAll();
+
+      const request = nock(API_URL)
+        .delete(`/organizations/${data.id}/discovery-domains/${data.discovery_domain_id}`)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200, {});
+
+      organizations.deleteDiscoveryDomain(data).then(() => {
+        expect(request.isDone()).toBe(true);
+        done();
+      });
+    });
   });
 });
