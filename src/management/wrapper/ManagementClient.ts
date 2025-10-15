@@ -4,6 +4,12 @@ import { TokenProvider } from "./token-provider.js";
 import { Auth0ClientTelemetry } from "../../lib/middleware/auth0-client-telemetry.js";
 import { withCustomDomainHeader } from "../request-options.js";
 
+export type FetchWithAuth = (
+    input: RequestInfo,
+    init?: RequestInit,
+    authParams?: { scope?: string },
+) => Promise<Response>;
+
 /**
  * All supported configuration options for the ManagementClient.
  *
@@ -44,6 +50,11 @@ export declare namespace ManagementClient {
          * This works seamlessly with custom fetchers - both the custom domain logic and your custom fetcher will be applied.
          */
         withCustomDomainHeader?: string;
+
+        /**
+         * Custom fetcher function to use for HTTP requests.
+         */
+        fetcher?: FetchWithAuth;
     }
 
     /**
@@ -205,16 +216,15 @@ export class ManagementClient extends FernClient {
         const baseUrl = `https://${_options.domain}/api/v2`;
         const headers = createTelemetryHeaders(_options);
         const token = createTokenSupplier(_options);
-
-        // Temporarily remove fetcher from options to avoid people passing it for now
-        delete (_options as any).fetcher;
+        const fetcher = createFetcher(_options.fetcher);
 
         // Prepare the base client options
-        let clientOptions: any = {
+        let clientOptions: FernClient.Options = {
             ..._options,
             baseUrl,
             headers,
             token,
+            fetcher,
         };
 
         // Apply custom domain header configuration if provided
@@ -328,4 +338,51 @@ function createTokenSupplier(_options: ManagementClientConfig): core.Supplier<st
         const tokenProvider = new TokenProvider(tokenProviderOptions);
         return () => tokenProvider.getAccessToken();
     }
+}
+
+/**
+ * Creates a fetcher function compatible with the Fern client.
+ * Wraps the provided fetch function to match the expected interface.
+ * @param fetcher - Custom fetch function
+ * @returns The fetcher function for the Fern client, or undefined if no fetcher is provided
+ */
+function createFetcher(fetcher?: FetchWithAuth): core.FetchFunction | undefined {
+    // When no fetcher is provided, return undefined to use the default fetcher.
+    if (!fetcher) {
+        return;
+    }
+
+    return async (args) => {
+        // This is future stuff that will be supported in FernClient's `core.Fetcher.Args`
+        const scope = (args as any).scope;
+
+        const response = await fetcher(
+            args.url,
+            {
+                method: args.method,
+                headers: args.headers as Record<string, string>,
+                body: args.body ? JSON.stringify(args.body) : undefined,
+            },
+            { scope },
+        );
+
+        if (response.ok) {
+            return {
+                ok: true as const,
+                body: await response.json(),
+                headers: response.headers,
+                rawResponse: response,
+            };
+        } else {
+            return {
+                ok: false as const,
+                error: {
+                    reason: "status-code" as const,
+                    statusCode: response.status,
+                    body: await response.text(),
+                },
+                rawResponse: response,
+            };
+        }
+    };
 }
