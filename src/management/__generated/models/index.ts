@@ -3528,6 +3528,9 @@ export interface ConnectionCreateOptions {
   non_persistent_attrs?: Array<string>;
   /**
    */
+  attributes?: ConnectionCreateOptionsAttributes;
+  /**
+   */
   enable_script_context?: boolean;
   /**
    * Set to true to use a legacy user store
@@ -3625,6 +3628,154 @@ export const ConnectionCreateOptionsSetUserRootAttributesEnum = {
 export type ConnectionCreateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionCreateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionCreateOptionsSetUserRootAttributesEnum];
 
+/**
+ * Attribute configuration
+ */
+export interface ConnectionCreateOptionsAttributes {
+  /**
+   */
+  email?: ConnectionCreateOptionsAttributesEmail;
+  /**
+   */
+  phone_number?: ConnectionCreateOptionsAttributesPhoneNumber;
+  /**
+   */
+  username?: ConnectionCreateOptionsAttributesUsername;
+}
+/**
+ * Configuration for the email attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesEmail {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if the attribute is unique in a given connection
+   *
+   */
+  unique?: boolean;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  verification_method?: ConnectionCreateOptionsAttributesEmailVerificationMethodEnum;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+}
+
+export const ConnectionCreateOptionsAttributesEmailVerificationMethodEnum = {
+  link: 'link',
+  otp: 'otp',
+} as const;
+export type ConnectionCreateOptionsAttributesEmailVerificationMethodEnum =
+  (typeof ConnectionCreateOptionsAttributesEmailVerificationMethodEnum)[keyof typeof ConnectionCreateOptionsAttributesEmailVerificationMethodEnum];
+
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailIdentifier {
+  /**
+   * Determines if the attribute is used for identification
+   *
+   */
+  active?: boolean;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailSignup {
+  /**
+   */
+  status?: ConnectionCreateOptionsAttributesEmailSignupStatusEnum;
+  /**
+   */
+  verification?: ConnectionCreateOptionsAttributesEmailSignupVerification;
+}
+
+export const ConnectionCreateOptionsAttributesEmailSignupStatusEnum = {
+  required: 'required',
+  optional: 'optional',
+  inactive: 'inactive',
+} as const;
+export type ConnectionCreateOptionsAttributesEmailSignupStatusEnum =
+  (typeof ConnectionCreateOptionsAttributesEmailSignupStatusEnum)[keyof typeof ConnectionCreateOptionsAttributesEmailSignupStatusEnum];
+
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailSignupVerification {
+  /**
+   */
+  active?: boolean;
+}
+/**
+ * Configuration for the phone number attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesPhoneNumber {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+}
+/**
+ * Configuration for the username attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesUsername {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+  /**
+   */
+  validation?: ConnectionCreateOptionsAttributesUsernameValidation;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesUsernameValidation {
+  /**
+   * Minimum allowed length
+   *
+   */
+  min_length?: number;
+  /**
+   * Maximum allowed length
+   *
+   */
+  max_length?: number;
+  /**
+   */
+  allowed_types?: ConnectionCreateOptionsAttributesUsernameValidationAllowedTypes;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesUsernameValidationAllowedTypes {
+  /**
+   */
+  email?: boolean;
+  /**
+   */
+  phone_number?: boolean;
+}
 /**
  * Options for enabling authentication methods.
  */
@@ -3912,6 +4063,9 @@ export interface ConnectionUpdateOptions {
    *
    */
   non_persistent_attrs?: Array<string>;
+  /**
+   */
+  attributes?: ConnectionCreateOptionsAttributes;
   /**
    */
   enable_script_context?: boolean;
