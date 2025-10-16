@@ -8,6 +8,30 @@ export interface ActionsDraftUpdate {
    */
   update_draft?: boolean;
 }
+/**
+ *
+ */
+export type AnomalyAllowlistFormat = string;
+/**
+ *
+ */
+export interface ArkoseCaptchaConfig {
+  /**
+   */
+  siteKey: string;
+  /**
+   */
+  secret: string;
+  /**
+   */
+  clientSubdomain?: string;
+  /**
+   */
+  verifySubdomain?: string;
+  /**
+   */
+  failOpen?: boolean;
+}
 
 /**
  *
@@ -17,6 +41,66 @@ export const AssessorsTypeEnum = {
 } as const;
 export type AssessorsTypeEnum = (typeof AssessorsTypeEnum)[keyof typeof AssessorsTypeEnum];
 
+/**
+ *
+ */
+export interface Auth0V2CaptchaConfig {
+  /**
+   */
+  failOpen?: boolean;
+}
+
+/**
+ * The captcha assessment policy for userpass flow enabled for this tenant
+ */
+export const CaptchaEnforcementPolicyEnum = {
+  high_risk: 'high_risk',
+  always_on: 'always_on',
+  off: 'off',
+} as const;
+export type CaptchaEnforcementPolicyEnum =
+  (typeof CaptchaEnforcementPolicyEnum)[keyof typeof CaptchaEnforcementPolicyEnum];
+
+/**
+ * The selected captcha provider.
+ */
+export const CaptchaProviderEnum = {
+  auth0: 'auth0',
+  auth0_v2: 'auth0_v2',
+  recaptcha_v2: 'recaptcha_v2',
+  recaptcha_enterprise: 'recaptcha_enterprise',
+  hcaptcha: 'hcaptcha',
+  friendly_captcha: 'friendly_captcha',
+  arkose: 'arkose',
+} as const;
+export type CaptchaProviderEnum = (typeof CaptchaProviderEnum)[keyof typeof CaptchaProviderEnum];
+
+/**
+ * Config for all captcha providers available for this tenant.
+ */
+export interface CaptchaProvidersConfig {
+  /**
+   */
+  auth0?: object;
+  /**
+   */
+  auth0_v2?: Auth0V2CaptchaConfig;
+  /**
+   */
+  recaptcha_v2?: RecaptchaV2CaptchaConfig;
+  /**
+   */
+  recaptcha_enterprise?: RecaptchaEnterpriseCaptchaConfig;
+  /**
+   */
+  hcaptcha?: HcaptchaCaptchaConfig;
+  /**
+   */
+  friendly_captcha?: FriendlyCaptchaConfig;
+  /**
+   */
+  arkose?: ArkoseCaptchaConfig;
+}
 /**
  * Certificate information. This object is relevant only for Custom Domains with Auth0-Managed Certificates.
  */
@@ -3528,6 +3612,9 @@ export interface ConnectionCreateOptions {
   non_persistent_attrs?: Array<string>;
   /**
    */
+  attributes?: ConnectionCreateOptionsAttributes;
+  /**
+   */
   enable_script_context?: boolean;
   /**
    * Set to true to use a legacy user store
@@ -3625,6 +3712,154 @@ export const ConnectionCreateOptionsSetUserRootAttributesEnum = {
 export type ConnectionCreateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionCreateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionCreateOptionsSetUserRootAttributesEnum];
 
+/**
+ * Attribute configuration
+ */
+export interface ConnectionCreateOptionsAttributes {
+  /**
+   */
+  email?: ConnectionCreateOptionsAttributesEmail;
+  /**
+   */
+  phone_number?: ConnectionCreateOptionsAttributesPhoneNumber;
+  /**
+   */
+  username?: ConnectionCreateOptionsAttributesUsername;
+}
+/**
+ * Configuration for the email attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesEmail {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if the attribute is unique in a given connection
+   *
+   */
+  unique?: boolean;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  verification_method?: ConnectionCreateOptionsAttributesEmailVerificationMethodEnum;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+}
+
+export const ConnectionCreateOptionsAttributesEmailVerificationMethodEnum = {
+  link: 'link',
+  otp: 'otp',
+} as const;
+export type ConnectionCreateOptionsAttributesEmailVerificationMethodEnum =
+  (typeof ConnectionCreateOptionsAttributesEmailVerificationMethodEnum)[keyof typeof ConnectionCreateOptionsAttributesEmailVerificationMethodEnum];
+
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailIdentifier {
+  /**
+   * Determines if the attribute is used for identification
+   *
+   */
+  active?: boolean;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailSignup {
+  /**
+   */
+  status?: ConnectionCreateOptionsAttributesEmailSignupStatusEnum;
+  /**
+   */
+  verification?: ConnectionCreateOptionsAttributesEmailSignupVerification;
+}
+
+export const ConnectionCreateOptionsAttributesEmailSignupStatusEnum = {
+  required: 'required',
+  optional: 'optional',
+  inactive: 'inactive',
+} as const;
+export type ConnectionCreateOptionsAttributesEmailSignupStatusEnum =
+  (typeof ConnectionCreateOptionsAttributesEmailSignupStatusEnum)[keyof typeof ConnectionCreateOptionsAttributesEmailSignupStatusEnum];
+
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesEmailSignupVerification {
+  /**
+   */
+  active?: boolean;
+}
+/**
+ * Configuration for the phone number attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesPhoneNumber {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+}
+/**
+ * Configuration for the username attribute for users.
+ */
+export interface ConnectionCreateOptionsAttributesUsername {
+  /**
+   */
+  identifier?: ConnectionCreateOptionsAttributesEmailIdentifier;
+  /**
+   * Determines if property should be required for users
+   *
+   */
+  profile_required?: boolean;
+  /**
+   */
+  signup?: ConnectionCreateOptionsAttributesEmailSignup;
+  /**
+   */
+  validation?: ConnectionCreateOptionsAttributesUsernameValidation;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesUsernameValidation {
+  /**
+   * Minimum allowed length
+   *
+   */
+  min_length?: number;
+  /**
+   * Maximum allowed length
+   *
+   */
+  max_length?: number;
+  /**
+   */
+  allowed_types?: ConnectionCreateOptionsAttributesUsernameValidationAllowedTypes;
+}
+/**
+ *
+ */
+export interface ConnectionCreateOptionsAttributesUsernameValidationAllowedTypes {
+  /**
+   */
+  email?: boolean;
+  /**
+   */
+  phone_number?: boolean;
+}
 /**
  * Options for enabling authentication methods.
  */
@@ -3912,6 +4147,9 @@ export interface ConnectionUpdateOptions {
    *
    */
   non_persistent_attrs?: Array<string>;
+  /**
+   */
+  attributes?: ConnectionCreateOptionsAttributes;
   /**
    */
   enable_script_context?: boolean;
@@ -4787,6 +5025,17 @@ export type FactorNameEnum = (typeof FactorNameEnum)[keyof typeof FactorNameEnum
 /**
  *
  */
+export interface FriendlyCaptchaConfig {
+  /**
+   */
+  siteKey?: string;
+  /**
+   */
+  secret?: string;
+}
+/**
+ *
+ */
 export interface GetActionVersions200Response {
   /**
    * The total result count.
@@ -5659,6 +5908,33 @@ export interface GetBindings200ResponseBindingsInner {
 /**
  *
  */
+export interface GetBotDetectionSettingsResponseContent {
+  /**
+   */
+  bot_detection_level: any | null;
+  /**
+   */
+  challenge_password_policy: any | null;
+  /**
+   */
+  challenge_passwordless_policy: any | null;
+  /**
+   */
+  challenge_password_reset_policy: any | null;
+  /**
+   * List of IP addresses or CIDR blocks to allowlist
+   *
+   */
+  allowlist: Array<any>;
+  /**
+   * Whether monitoring mode is enabled (logs but does not block)
+   *
+   */
+  monitoring_mode_enabled: boolean;
+}
+/**
+ *
+ */
 export interface GetBranding200Response {
   [key: string]: any | any;
   /**
@@ -5985,6 +6261,36 @@ export type GetBruteForceProtection200ResponseModeEnum =
  *
  */
 export type GetBruteForceProtection200ResponseAllowlistInner = any;
+/**
+ *
+ */
+export interface GetCaptchaResponseContent {
+  [key: string]: any | any;
+  /**
+   */
+  active_provider_id?: string;
+  /**
+   */
+  arkose?: any | null;
+  /**
+   */
+  auth_challenge?: any | null;
+  /**
+   */
+  hcaptcha?: any | null;
+  /**
+   */
+  friendly_captcha?: any | null;
+  /**
+   */
+  recaptcha_enterprise?: any | null;
+  /**
+   */
+  recaptcha_v2?: any | null;
+  /**
+   */
+  simple_captcha?: any | null;
+}
 /**
  *
  */
@@ -10004,6 +10310,17 @@ export type GetUsers200ResponseOneOfInnerLastLogin = string | { [key: string]: a
  *
  */
 export type GetUsers200ResponseOneOfInnerUpdatedAt = string | { [key: string]: any };
+/**
+ *
+ */
+export interface HcaptchaCaptchaConfig {
+  /**
+   */
+  siteKey?: string;
+  /**
+   */
+  secret?: string;
+}
 /**
  *
  */
@@ -16896,6 +17213,31 @@ export interface PutUniversalLoginRequestOneOf {
 /**
  *
  */
+export interface RecaptchaEnterpriseCaptchaConfig {
+  /**
+   */
+  siteKey?: string;
+  /**
+   */
+  apiKey?: string;
+  /**
+   */
+  projectId?: string;
+}
+/**
+ *
+ */
+export interface RecaptchaV2CaptchaConfig {
+  /**
+   */
+  siteKey?: string;
+  /**
+   */
+  secret?: string;
+}
+/**
+ *
+ */
 export interface ResetPhoneTemplateResponseContent {
   /**
    */
@@ -18938,6 +19280,103 @@ export interface TwilioFactorProvider {
    */
   sid: string | null;
 }
+/**
+ *
+ */
+export interface UpdateBotDetectionSettingsRequestContent {
+  /**
+   */
+  bot_detection_level?: any | null;
+  /**
+   */
+  challenge_password_policy?: any | null;
+  /**
+   */
+  challenge_passwordless_policy?: any | null;
+  /**
+   */
+  challenge_password_reset_policy?: any | null;
+  /**
+   * List of IP addresses or CIDR blocks to allowlist
+   *
+   */
+  allowlist?: Array<any>;
+  /**
+   * Whether monitoring mode is enabled (logs but does not block)
+   *
+   */
+  monitoring_mode_enabled?: boolean;
+}
+/**
+ *
+ */
+export interface UpdateBotDetectionSettingsResponseContent {
+  /**
+   */
+  bot_detection_level?: any | null;
+  /**
+   */
+  challenge_password_policy?: any | null;
+  /**
+   */
+  challenge_passwordless_policy?: any | null;
+  /**
+   */
+  challenge_password_reset_policy?: any | null;
+  /**
+   * List of IP addresses or CIDR blocks to allowlist
+   *
+   */
+  allowlist?: Array<any>;
+  /**
+   * Whether monitoring mode is enabled (logs but does not block)
+   *
+   */
+  monitoring_mode_enabled?: boolean;
+}
+/**
+ *
+ */
+export interface UpdateCaptchaRequestContent {
+  /**
+   */
+  siteKey?: string;
+  /**
+   */
+  secret?: string;
+  /**
+   */
+  apiKey?: string;
+  /**
+   */
+  projectId?: string;
+}
+/**
+ *
+ */
+export interface UpdateCaptchaResponseContent {
+  /**
+   */
+  policy?: CaptchaEnforcementPolicyEnum;
+  /**
+   */
+  passwordless_policy?: CaptchaEnforcementPolicyEnum;
+  /**
+   */
+  password_reset_policy?: CaptchaEnforcementPolicyEnum;
+  /**
+   */
+  selected?: CaptchaProviderEnum;
+  /**
+   */
+  providers?: CaptchaProvidersConfig;
+  /**
+   * List of trusted IP addresses that will not have attack protection enforced against them.
+   *
+   */
+  allowlist?: Array<AnomalyAllowlistFormat>;
+}
+
 /**
  *
  */
