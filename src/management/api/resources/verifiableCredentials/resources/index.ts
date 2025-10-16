@@ -1,1 +1,1 @@
-export * as verification from "./verification/index.js";
+export * as verification from "./verification";

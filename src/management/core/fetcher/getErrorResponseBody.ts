@@ -1,5 +1,5 @@
-import { fromJson } from "../json.js";
-import { getResponseBody } from "./getResponseBody.js";
+import { fromJson } from "../json";
+import { getResponseBody } from "./getResponseBody";
 
 export async function getErrorResponseBody(response: Response): Promise<unknown> {
     let contentType = response.headers.get("Content-Type")?.toLowerCase();
@@ -16,9 +16,10 @@ export async function getErrorResponseBody(response: Response): Promise<unknown>
         case "application/ld+json":
         case "application/problem+json":
         case "application/vnd.api+json":
-        case "text/json":
+        case "text/json": {
             const text = await response.text();
             return text.length > 0 ? fromJson(text) : undefined;
+        }
         default:
             if (contentType.startsWith("application/vnd.") && contentType.endsWith("+json")) {
                 const text = await response.text();

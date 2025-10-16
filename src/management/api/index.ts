@@ -1,3 +1,4 @@
-export * from "./resources/index.js";
-export * from "./types/index.js";
-export * from "./errors/index.js";
+export * from "./errors";
+export * from "./requests";
+export * from "./resources";
+export * from "./types";

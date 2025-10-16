@@ -1,2 +1,2 @@
-export { ManagementError } from "./ManagementError.js";
-export { ManagementTimeoutError } from "./ManagementTimeoutError.js";
+export { ManagementError } from "./ManagementError";
+export { ManagementTimeoutError } from "./ManagementTimeoutError";
