@@ -1,4 +1,4 @@
-import { Headers } from "./Headers.js";
+import { Headers } from "./Headers";
 
 /**
  * The raw response from the fetch call excluding the body.

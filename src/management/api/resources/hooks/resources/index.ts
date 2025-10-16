@@ -1,1 +1,1 @@
-export * as secrets from "./secrets/index.js";
+export * as secrets from "./secrets";

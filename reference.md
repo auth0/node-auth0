@@ -30,13 +30,27 @@ Retrieve all actions.
 <dd>
 
 ```typescript
-const response = await client.actions.list();
+const response = await client.actions.list({
+    triggerId: "triggerId",
+    actionName: "actionName",
+    deployed: true,
+    page: 1,
+    per_page: 1,
+    installed: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.actions.list();
+let page = await client.actions.list({
+    triggerId: "triggerId",
+    actionName: "actionName",
+    deployed: true,
+    page: 1,
+    per_page: 1,
+    installed: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -235,7 +249,9 @@ Deletes an action and all of its associated versions. An action must be unbound 
 <dd>
 
 ```typescript
-await client.actions.delete("id");
+await client.actions.delete("id", {
+    force: true,
+});
 ```
 
 </dd>
@@ -621,7 +637,7 @@ await client.branding.update();
 <dl>
 <dd>
 
-Retrieve a list of <a href="https://auth0.com/docs/api-auth/grant/client-credentials">client grants</a>, including the scopes associated with the application/API pair.
+Retrieve a list of <a href="https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants">client grants</a>, including the scopes associated with the application/API pair.
 
 </dd>
 </dl>
@@ -637,13 +653,27 @@ Retrieve a list of <a href="https://auth0.com/docs/api-auth/grant/client-credent
 <dd>
 
 ```typescript
-const response = await client.clientGrants.list();
+const response = await client.clientGrants.list({
+    from: "from",
+    take: 1,
+    audience: "audience",
+    client_id: "client_id",
+    allow_any_organization: true,
+    subject_type: "client",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.clientGrants.list();
+let page = await client.clientGrants.list({
+    from: "from",
+    take: 1,
+    audience: "audience",
+    client_id: "client_id",
+    allow_any_organization: true,
+    subject_type: "client",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -712,7 +742,6 @@ Create a client grant for a machine-to-machine login flow. To learn more, read <
 await client.clientGrants.create({
     client_id: "client_id",
     audience: "audience",
-    scope: ["scope"],
 });
 ```
 
@@ -943,13 +972,33 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <dd>
 
 ```typescript
-const response = await client.clients.list();
+const response = await client.clients.list({
+    fields: "fields",
+    include_fields: true,
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    is_global: true,
+    is_first_party: true,
+    app_type: "app_type",
+    q: "q",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.clients.list();
+let page = await client.clients.list({
+    fields: "fields",
+    include_fields: true,
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    is_global: true,
+    is_first_party: true,
+    app_type: "app_type",
+    q: "q",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -1123,7 +1172,10 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <dd>
 
 ```typescript
-await client.clients.get("id");
+await client.clients.get("id", {
+    fields: "fields",
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -1425,13 +1477,25 @@ To search by checkpoint, use the following parameters:
 <dd>
 
 ```typescript
-const response = await client.connections.list();
+const response = await client.connections.list({
+    from: "from",
+    take: 1,
+    name: "name",
+    fields: "fields",
+    include_fields: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.connections.list();
+let page = await client.connections.list({
+    from: "from",
+    take: 1,
+    name: "name",
+    fields: "fields",
+    include_fields: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -1563,7 +1627,10 @@ Retrieve details for a specified <a href="https://auth0.com/docs/authenticate/id
 <dd>
 
 ```typescript
-await client.connections.get("id");
+await client.connections.get("id", {
+    fields: "fields",
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -2319,13 +2386,31 @@ Retrieve device credential information (<code>public_key</code>, <code>refresh_t
 <dd>
 
 ```typescript
-const response = await client.deviceCredentials.list();
+const response = await client.deviceCredentials.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    fields: "fields",
+    include_fields: true,
+    user_id: "user_id",
+    client_id: "client_id",
+    type: "public_key",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.deviceCredentials.list();
+let page = await client.deviceCredentials.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    fields: "fields",
+    include_fields: true,
+    user_id: "user_id",
+    client_id: "client_id",
+    type: "public_key",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -2784,7 +2869,10 @@ await client.emailTemplates.update("verify_email");
 <dd>
 
 ```typescript
-await client.eventStreams.list();
+await client.eventStreams.list({
+    from: "from",
+    take: 1,
+});
 ```
 
 </dd>
@@ -3103,13 +3191,23 @@ await client.eventStreams.test("id", {
 <dd>
 
 ```typescript
-const response = await client.flows.list();
+const response = await client.flows.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    synchronous: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.flows.list();
+let page = await client.flows.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    synchronous: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -3372,13 +3470,21 @@ await client.flows.update("id");
 <dd>
 
 ```typescript
-const response = await client.forms.list();
+const response = await client.forms.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.forms.list();
+let page = await client.forms.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -3656,13 +3762,27 @@ Retrieve the <a href="https://auth0.com/docs/api-auth/which-oauth-flow-to-use">g
 <dd>
 
 ```typescript
-const response = await client.userGrants.list();
+const response = await client.userGrants.list({
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+    user_id: "user_id",
+    client_id: "client_id",
+    audience: "audience",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.userGrants.list();
+let page = await client.userGrants.list({
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+    user_id: "user_id",
+    client_id: "client_id",
+    audience: "audience",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -3858,13 +3978,27 @@ Retrieve all <a href="https://auth0.com/docs/hooks">hooks</a>. Accepts a list of
 <dd>
 
 ```typescript
-const response = await client.hooks.list();
+const response = await client.hooks.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    enabled: true,
+    fields: "fields",
+    triggerId: "credentials-exchange",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.hooks.list();
+let page = await client.hooks.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    enabled: true,
+    fields: "fields",
+    triggerId: "credentials-exchange",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -3997,7 +4131,9 @@ Retrieve <a href="https://auth0.com/docs/hooks">a hook</a> by its ID. Accepts a 
 <dd>
 
 ```typescript
-await client.hooks.get("id");
+await client.hooks.get("id", {
+    fields: "fields",
+});
 ```
 
 </dd>
@@ -4941,13 +5077,29 @@ Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#li
 <dd>
 
 ```typescript
-const response = await client.logs.list();
+const response = await client.logs.list({
+    page: 1,
+    per_page: 1,
+    sort: "sort",
+    fields: "fields",
+    include_fields: true,
+    include_totals: true,
+    search: "search",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.logs.list();
+let page = await client.logs.list({
+    page: 1,
+    per_page: 1,
+    sort: "sort",
+    fields: "fields",
+    include_fields: true,
+    include_totals: true,
+    search: "search",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -5078,13 +5230,21 @@ Get all access control list entries for your client.
 <dd>
 
 ```typescript
-const response = await client.networkAcls.list();
+const response = await client.networkAcls.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.networkAcls.list();
+let page = await client.networkAcls.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -5519,13 +5679,21 @@ To search by checkpoint, use the following parameters:
 <dd>
 
 ```typescript
-const response = await client.organizations.list();
+const response = await client.organizations.list({
+    from: "from",
+    take: 1,
+    sort: "sort",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.organizations.list();
+let page = await client.organizations.list({
+    from: "from",
+    take: 1,
+    sort: "sort",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -6168,13 +6336,23 @@ Retrieve details of all APIs associated with your tenant.
 <dd>
 
 ```typescript
-const response = await client.resourceServers.list();
+const response = await client.resourceServers.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    include_fields: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.resourceServers.list();
+let page = await client.resourceServers.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    include_fields: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -6305,7 +6483,9 @@ Retrieve <a href="https://auth0.com/docs/apis">API</a> details with the given ID
 <dd>
 
 ```typescript
-await client.resourceServers.get("id");
+await client.resourceServers.get("id", {
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -6514,13 +6694,23 @@ Retrieve detailed list of user roles created in your tenant.
 <dd>
 
 ```typescript
-const response = await client.roles.list();
+const response = await client.roles.list({
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+    name_filter: "name_filter",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.roles.list();
+let page = await client.roles.list({
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+    name_filter: "name_filter",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -6852,13 +7042,27 @@ Retrieve a filtered list of <a href="https://auth0.com/docs/rules">rules</a>. Ac
 <dd>
 
 ```typescript
-const response = await client.rules.list();
+const response = await client.rules.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    enabled: true,
+    fields: "fields",
+    include_fields: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.rules.list();
+let page = await client.rules.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    enabled: true,
+    fields: "fields",
+    include_fields: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -6992,7 +7196,10 @@ Retrieve <a href="https://auth0.com/docs/rules">rule</a> details. Accepts a list
 <dd>
 
 ```typescript
-await client.rules.get("id");
+await client.rules.get("id", {
+    fields: "fields",
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -7394,13 +7601,21 @@ Retrieves self-service profiles.
 <dd>
 
 ```typescript
-const response = await client.selfServiceProfiles.list();
+const response = await client.selfServiceProfiles.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.selfServiceProfiles.list();
+let page = await client.selfServiceProfiles.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -7828,6 +8043,77 @@ await client.sessions.delete("id");
 </dl>
 </details>
 
+<details><summary><code>client.sessions.<a href="/src/management/api/resources/sessions/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateSessionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update session information.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.sessions.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the session to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateSessionRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Sessions.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.sessions.<a href="/src/management/api/resources/sessions/client/Client.ts">revoke</a>(id) -> void</code></summary>
 <dl>
 <dd>
@@ -7976,7 +8262,10 @@ Retrieve the number of logins, signups and breached-password detections (subscri
 <dd>
 
 ```typescript
-await client.stats.getDaily();
+await client.stats.getDaily({
+    from: "from",
+    to: "to",
+});
 ```
 
 </dd>
@@ -8304,13 +8593,19 @@ This endpoint supports Checkpoint pagination. To search by checkpoint, use the f
 <dd>
 
 ```typescript
-const response = await client.tokenExchangeProfiles.list();
+const response = await client.tokenExchangeProfiles.list({
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.tokenExchangeProfiles.list();
+let page = await client.tokenExchangeProfiles.list({
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -8612,6 +8907,474 @@ await client.tokenExchangeProfiles.update("id");
 </dl>
 </details>
 
+## UserAttributeProfiles
+
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserAttributeProfile></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of User Attribute Profiles. This endpoint supports Checkpoint pagination.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.userAttributeProfiles.list({
+    from: "from",
+    take: 1,
+});
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.userAttributeProfiles.list({
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListUserAttributeProfileRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserAttributeProfiles.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">create</a>({ ...params }) -> Management.CreateUserAttributeProfileResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details about a single User Attribute Profile specified by ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userAttributeProfiles.create({
+    name: "name",
+    user_attributes: {
+        key: {
+            description: "description",
+            label: "label",
+            profile_required: true,
+            auth0_mapping: "auth0_mapping",
+        },
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateUserAttributeProfileRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserAttributeProfiles.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">listTemplates</a>() -> Management.ListUserAttributeProfileTemplateResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of User Attribute Profile Templates.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userAttributeProfiles.listTemplates();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserAttributeProfiles.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">getTemplate</a>(id) -> Management.GetUserAttributeProfileTemplateResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a User Attribute Profile Template.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userAttributeProfiles.getTemplate("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the user-attribute-profile-template to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserAttributeProfiles.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">get</a>(id) -> Management.GetUserAttributeProfileResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details about a single User Attribute Profile specified by ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userAttributeProfiles.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the user-attribute-profile to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserAttributeProfiles.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a single User Attribute Profile specified by ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userAttributeProfiles.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the user-attribute-profile to delete.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserAttributeProfiles.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateUserAttributeProfileResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the details of a specific User attribute profile, such as name, user_id and user_attributes.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.userAttributeProfiles.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the user attribute profile to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateUserAttributeProfileRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UserAttributeProfiles.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## UserBlocks
 
 <details><summary><code>client.userBlocks.<a href="/src/management/api/resources/userBlocks/client/Client.ts">listByIdentifier</a>({ ...params }) -> Management.ListUserBlocksByIdentifierResponseContent</code></summary>
@@ -8644,6 +9407,7 @@ Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection
 ```typescript
 await client.userBlocks.listByIdentifier({
     identifier: "identifier",
+    consider_brute_force_enablement: true,
 });
 ```
 
@@ -8774,7 +9538,9 @@ Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection
 <dd>
 
 ```typescript
-await client.userBlocks.list("id");
+await client.userBlocks.list("id", {
+    consider_brute_force_enablement: true,
+});
 ```
 
 </dd>
@@ -8925,13 +9691,35 @@ Auth0 limits the number of users you can return. If you exceed this threshold, p
 <dd>
 
 ```typescript
-const response = await client.users.list();
+const response = await client.users.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    sort: "sort",
+    connection: "connection",
+    fields: "fields",
+    include_fields: true,
+    q: "q",
+    search_engine: "v1",
+    primary_order: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.list();
+let page = await client.users.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    sort: "sort",
+    connection: "connection",
+    fields: "fields",
+    include_fields: true,
+    q: "q",
+    search_engine: "v1",
+    primary_order: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -9069,6 +9857,8 @@ Therefore, when using this endpoint, make sure that you are searching for users 
 
 ```typescript
 await client.users.listUsersByEmail({
+    fields: "fields",
+    include_fields: true,
     email: "email",
 });
 ```
@@ -9133,7 +9923,10 @@ Retrieve user details. A list of fields to include or exclude may also be specif
 <dd>
 
 ```typescript
-await client.users.get("id");
+await client.users.get("id", {
+    fields: "fields",
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -9545,13 +10338,19 @@ Retrieve all of an action's versions. An action version is created whenever an a
 <dd>
 
 ```typescript
-const response = await client.actions.versions.list("actionId");
+const response = await client.actions.versions.list("actionId", {
+    page: 1,
+    per_page: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.actions.versions.list("actionId");
+let page = await client.actions.versions.list("actionId", {
+    page: 1,
+    per_page: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -9668,7 +10467,7 @@ await client.actions.versions.get("actionId", "id");
 </dl>
 </details>
 
-<details><summary><code>client.actions.versions.<a href="/src/management/api/resources/actions/resources/versions/client/Client.ts">deploy</a>(id, actionId, { ...params }) -> Management.DeployActionVersionResponseContent</code></summary>
+<details><summary><code>client.actions.versions.<a href="/src/management/api/resources/actions/resources/versions/client/Client.ts">deploy</a>(actionId, id, { ...params }) -> Management.DeployActionVersionResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -9696,7 +10495,7 @@ Performs the equivalent of a roll-back of an action to an earlier, specified ver
 <dd>
 
 ```typescript
-await client.actions.versions.deploy("id", "actionId", undefined);
+await client.actions.versions.deploy("actionId", "id");
 ```
 
 </dd>
@@ -9712,7 +10511,7 @@ await client.actions.versions.deploy("id", "actionId", undefined);
 <dl>
 <dd>
 
-**id:** `string` — The ID of an action version.
+**actionId:** `string` — The ID of an action.
 
 </dd>
 </dl>
@@ -9720,7 +10519,7 @@ await client.actions.versions.deploy("id", "actionId", undefined);
 <dl>
 <dd>
 
-**actionId:** `string` — The ID of an action.
+**id:** `string` — The ID of an action version.
 
 </dd>
 </dl>
@@ -9899,13 +10698,19 @@ Retrieve the actions that are bound to a trigger. Once an action is created and 
 <dd>
 
 ```typescript
-const response = await client.actions.triggers.bindings.list("triggerId");
+const response = await client.actions.triggers.bindings.list("triggerId", {
+    page: 1,
+    per_page: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.actions.triggers.bindings.list("triggerId");
+let page = await client.actions.triggers.bindings.list("triggerId", {
+    page: 1,
+    per_page: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -10566,28 +11371,27 @@ await client.branding.templates.getUniversalLogin();
 
 Update the Universal Login branding template.
 
-<p>When <code>content-type</code> header is set to <code>application/json</code>, the expected body must be JSON:</p>
+<p>When <code>content-type</code> header is set to <code>application/json</code>:</p>
 <pre>
 {
-  "template": "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;{%- auth0:head -%}&lt;/head&gt;&lt;body&gt;{%- auth0:widget -%}&lt;/body&gt;&lt;/html&gt;"
+  "template": "&lt;!DOCTYPE html&gt;{% assign resolved_dir = dir | default: "auto" %}&lt;html lang="{{locale}}" dir="{{resolved_dir}}"&gt;&lt;head&gt;{%- auth0:head -%}&lt;/head&gt;&lt;body class="_widget-auto-layout"&gt;{%- auth0:widget -%}&lt;/body&gt;&lt;/html&gt;"
 }
 </pre>
 
 <p>
-  When <code>content-type</code> header is set to <code>text/html</code>, the expected body must be the HTML template:
+  When <code>content-type</code> header is set to <code>text/html</code>:
 </p>
 <pre>
 &lt!DOCTYPE html&gt;
-&lt;code&gt;
-  &lt;html&gt;
-    &lt;head&gt;
-     {%- auth0:head -%}
-    &lt;/head&gt;
-    &lt;body&gt;
-      {%- auth0:widget -%}
-    &lt;/body&gt;
-  &lt;/html&gt;
-&lt;/code&gt;
+{% assign resolved_dir = dir | default: "auto" %}
+&lt;html lang="{{locale}}" dir="{{resolved_dir}}"&gt;
+  &lt;head&gt;
+    {%- auth0:head -%}
+  &lt;/head&gt;
+  &lt;body class="_widget-auto-layout"&gt;
+    {%- auth0:widget -%}
+  &lt;/body&gt;
+&lt;/html&gt;
 </pre>
 </dd>
 </dl>
@@ -11167,7 +11971,9 @@ Retrieve a list of <a href="https://auth0.com/docs/customize/phone-messages/conf
 <dd>
 
 ```typescript
-await client.branding.phone.providers.list();
+await client.branding.phone.providers.list({
+    disabled: true,
+});
 ```
 
 </dd>
@@ -11542,7 +12348,9 @@ await client.branding.phone.providers.test("id", {
 <dd>
 
 ```typescript
-await client.branding.phone.templates.list();
+await client.branding.phone.templates.list({
+    disabled: true,
+});
 ```
 
 </dd>
@@ -11908,13 +12716,19 @@ await client.branding.phone.templates.test("id", {
 <dd>
 
 ```typescript
-const response = await client.clientGrants.organizations.list("id");
+const response = await client.clientGrants.organizations.list("id", {
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.clientGrants.organizations.list("id");
+let page = await client.clientGrants.organizations.list("id", {
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -12394,13 +13208,23 @@ Retrieve all connections that are enabled for the specified <a href="https://www
 <dd>
 
 ```typescript
-const response = await client.clients.connections.get("id");
+const response = await client.clients.connections.get("id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.clients.connections.get("id");
+let page = await client.clients.connections.get("id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -12478,13 +13302,19 @@ Retrieve all clients that have the specified <a href="https://auth0.com/docs/aut
 <dd>
 
 ```typescript
-const response = await client.connections.clients.get("id");
+const response = await client.connections.clients.get("id", {
+    take: 1,
+    from: "from",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.connections.clients.get("id");
+let page = await client.connections.clients.get("id", {
+    take: 1,
+    from: "from",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -12684,7 +13514,7 @@ Rotates the connection keys for the Okta or OIDC connection strategies.
 <dd>
 
 ```typescript
-await client.connections.keys.rotate("id", undefined);
+await client.connections.keys.rotate("id");
 ```
 
 </dd>
@@ -12708,7 +13538,7 @@ await client.connections.keys.rotate("id", undefined);
 <dl>
 <dd>
 
-**request:** `Management.RotateConnectionKeysRequestContent`
+**request:** `Management.RotateConnectionKeysRequestContent | null`
 
 </dd>
 </dl>
@@ -12820,7 +13650,7 @@ Create a scim configuration for a connection.
 <dd>
 
 ```typescript
-await client.connections.scimConfiguration.create("id", undefined);
+await client.connections.scimConfiguration.create("id");
 ```
 
 </dd>
@@ -12844,7 +13674,7 @@ await client.connections.scimConfiguration.create("id", undefined);
 <dl>
 <dd>
 
-**request:** `Management.CreateScimConfigurationRequestContent`
+**request:** `Management.CreateScimConfigurationRequestContent | null`
 
 </dd>
 </dl>
@@ -13375,7 +14205,10 @@ Retrieve details of the <a href="https://auth0.com/docs/customize/email/smtp-ema
 <dd>
 
 ```typescript
-await client.emails.provider.get();
+await client.emails.provider.get({
+    fields: "fields",
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -13691,7 +14524,14 @@ await client.emails.provider.update();
 <dd>
 
 ```typescript
-await client.eventStreams.deliveries.list("id");
+await client.eventStreams.deliveries.list("id", {
+    statuses: "statuses",
+    event_types: "event_types",
+    date_from: "date_from",
+    date_to: "date_to",
+    from: "from",
+    take: 1,
+});
 ```
 
 </dd>
@@ -13919,13 +14759,19 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 <dd>
 
 ```typescript
-const response = await client.flows.executions.list("flow_id");
+const response = await client.flows.executions.list("flow_id", {
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.flows.executions.list("flow_id");
+let page = await client.flows.executions.list("flow_id", {
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -14106,13 +14952,21 @@ await client.flows.executions.delete("flow_id", "execution_id");
 <dd>
 
 ```typescript
-const response = await client.flows.vault.connections.list();
+const response = await client.flows.vault.connections.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.flows.vault.connections.list();
+let page = await client.flows.vault.connections.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -14347,73 +15201,6 @@ await client.flows.vault.connections.update("id");
 <dd>
 
 **requestOptions:** `Connections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Groups Members
-
-<details><summary><code>client.groups.members.<a href="/src/management/api/resources/groups/resources/members/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.GroupMember></code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-const response = await client.groups.members.get("id");
-for await (const item of response) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.groups.members.get("id");
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for the group (service-generated).
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.GetGroupMembersRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Members.RequestOptions`
 
 </dd>
 </dl>
@@ -17202,13 +17989,21 @@ Retrieve details of all the encryption keys associated with your tenant.
 <dd>
 
 ```typescript
-const response = await client.keys.encryption.list();
+const response = await client.keys.encryption.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.keys.encryption.list();
+let page = await client.keys.encryption.list({
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -17881,13 +18676,25 @@ await client.keys.signing.revoke("kid");
 <dd>
 
 ```typescript
-const response = await client.organizations.clientGrants.list("id");
+const response = await client.organizations.clientGrants.list("id", {
+    audience: "audience",
+    client_id: "client_id",
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.organizations.clientGrants.list("id");
+let page = await client.organizations.clientGrants.list("id", {
+    audience: "audience",
+    client_id: "client_id",
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -18077,13 +18884,21 @@ Retrieve details about a specific connection currently enabled for an Organizati
 <dd>
 
 ```typescript
-const response = await client.organizations.enabledConnections.list("id");
+const response = await client.organizations.enabledConnections.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.organizations.enabledConnections.list("id");
+let page = await client.organizations.enabledConnections.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -18457,13 +19272,27 @@ Retrieve a detailed list of invitations sent to users for a specific Organizatio
 <dd>
 
 ```typescript
-const response = await client.organizations.invitations.list("id");
+const response = await client.organizations.invitations.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    fields: "fields",
+    include_fields: true,
+    sort: "sort",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.organizations.invitations.list("id");
+let page = await client.organizations.invitations.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    fields: "fields",
+    include_fields: true,
+    sort: "sort",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -18601,7 +19430,10 @@ await client.organizations.invitations.create("id", {
 <dd>
 
 ```typescript
-await client.organizations.invitations.get("id", "invitation_id");
+await client.organizations.invitations.get("id", "invitation_id", {
+    fields: "fields",
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -18759,13 +19591,23 @@ To search by checkpoint, use the following parameters: - from: Optional id from 
 <dd>
 
 ```typescript
-const response = await client.organizations.members.list("id");
+const response = await client.organizations.members.list("id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.organizations.members.list("id");
+let page = await client.organizations.members.list("id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -18976,13 +19818,21 @@ Users can be members of multiple Organizations with unique roles assigned for ea
 <dd>
 
 ```typescript
-const response = await client.organizations.members.roles.list("id", "user_id");
+const response = await client.organizations.members.roles.list("id", "user_id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.organizations.members.roles.list("id", "user_id");
+let page = await client.organizations.members.roles.list("id", "user_id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -19232,13 +20082,31 @@ Get render setting configurations for all screens.
 <dd>
 
 ```typescript
-const response = await client.prompts.rendering.list();
+const response = await client.prompts.rendering.list({
+    fields: "fields",
+    include_fields: true,
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    prompt: "prompt",
+    screen: "screen",
+    rendering_mode: "advanced",
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.prompts.rendering.list();
+let page = await client.prompts.rendering.list({
+    fields: "fields",
+    include_fields: true,
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    prompt: "prompt",
+    screen: "screen",
+    rendering_mode: "advanced",
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -20018,13 +20886,21 @@ Retrieve detailed list (name, description, resource server) of permissions grant
 <dd>
 
 ```typescript
-const response = await client.roles.permissions.list("id");
+const response = await client.roles.permissions.list("id", {
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.roles.permissions.list("id");
+let page = await client.roles.permissions.list("id", {
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -20276,13 +21152,19 @@ To search by checkpoint, use the following parameters:
 <dd>
 
 ```typescript
-const response = await client.roles.users.list("id");
+const response = await client.roles.users.list("id", {
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.roles.users.list("id");
+let page = await client.roles.users.list("id", {
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -20748,7 +21630,10 @@ Retrieve tenant settings. A list of fields to include or exclude may also be spe
 <dd>
 
 ```typescript
-await client.tenants.settings.get();
+await client.tenants.settings.get({
+    fields: "fields",
+    include_fields: true,
+});
 ```
 
 </dd>
@@ -20876,13 +21761,21 @@ Retrieve detailed list of authentication methods associated with a specified use
 <dd>
 
 ```typescript
-const response = await client.users.authenticationMethods.list("id");
+const response = await client.users.authenticationMethods.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.authenticationMethods.list("id");
+let page = await client.users.authenticationMethods.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -21412,6 +22305,94 @@ await client.users.authenticators.deleteAll("id");
 </dl>
 </details>
 
+## Users ConnectedAccounts
+
+<details><summary><code>client.users.connectedAccounts.<a href="/src/management/api/resources/users/resources/connectedAccounts/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.ConnectedAccount></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all connected accounts associated with the user.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.users.connectedAccounts.list("id", {
+    from: "from",
+    take: 1,
+});
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.users.connectedAccounts.list("id", {
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the user to list connected accounts for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetUserConnectedAccountsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectedAccounts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Users Enrollments
 
 <details><summary><code>client.users.enrollments.<a href="/src/management/api/resources/users/resources/enrollments/client/Client.ts">get</a>(id) -> Management.UsersEnrollment[]</code></summary>
@@ -21628,13 +22609,19 @@ Retrieve the first <a href="https://auth0.com/docs/secure/multi-factor-authentic
 <dd>
 
 ```typescript
-const response = await client.users.groups.get("id");
+const response = await client.users.groups.get("id", {
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.groups.get("id");
+let page = await client.users.groups.get("id", {
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -21896,13 +22883,23 @@ Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#li
 <dd>
 
 ```typescript
-const response = await client.users.logs.list("id");
+const response = await client.users.logs.list("id", {
+    page: 1,
+    per_page: 1,
+    sort: "sort",
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.logs.list("id");
+let page = await client.users.logs.list("id", {
+    page: 1,
+    per_page: 1,
+    sort: "sort",
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -22114,13 +23111,21 @@ Retrieve list of the specified user's current Organization memberships. User mus
 <dd>
 
 ```typescript
-const response = await client.users.organizations.list("id");
+const response = await client.users.organizations.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.organizations.list("id");
+let page = await client.users.organizations.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -22196,13 +23201,21 @@ Retrieve all permissions associated with the user.
 <dd>
 
 ```typescript
-const response = await client.users.permissions.list("id");
+const response = await client.users.permissions.list("id", {
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.permissions.list("id");
+let page = await client.users.permissions.list("id", {
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -22512,13 +23525,21 @@ Retrieve detailed list of all user roles currently assigned to a user.
 <dd>
 
 ```typescript
-const response = await client.users.roles.list("id");
+const response = await client.users.roles.list("id", {
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.roles.list("id");
+let page = await client.users.roles.list("id", {
+    per_page: 1,
+    page: 1,
+    include_totals: true,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -22744,13 +23765,19 @@ Retrieve details for a user's refresh tokens.
 <dd>
 
 ```typescript
-const response = await client.users.refreshToken.list("user_id");
+const response = await client.users.refreshToken.list("user_id", {
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.refreshToken.list("user_id");
+let page = await client.users.refreshToken.list("user_id", {
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -22889,13 +23916,19 @@ Retrieve details for a user's sessions.
 <dd>
 
 ```typescript
-const response = await client.users.sessions.list("user_id");
+const response = await client.users.sessions.list("user_id", {
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.users.sessions.list("user_id");
+let page = await client.users.sessions.list("user_id", {
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
@@ -23034,13 +24067,19 @@ List a verifiable credential templates.
 <dd>
 
 ```typescript
-const response = await client.verifiableCredentials.verification.templates.list();
+const response = await client.verifiableCredentials.verification.templates.list({
+    from: "from",
+    take: 1,
+});
 for await (const item of response) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.verifiableCredentials.verification.templates.list();
+let page = await client.verifiableCredentials.verification.templates.list({
+    from: "from",
+    take: 1,
+});
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }

@@ -1,1 +1,1 @@
-export * as blocks from "./blocks/index.js";
+export * as blocks from "./blocks";

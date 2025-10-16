@@ -1,4 +1,4 @@
-export { AuthProvider } from "./AuthProvider.js";
-export { type AuthRequest } from "./AuthRequest.js";
-export { BasicAuth } from "./BasicAuth.js";
-export { BearerToken } from "./BearerToken.js";
+export type { AuthProvider } from "./AuthProvider";
+export type { AuthRequest } from "./AuthRequest";
+export { BasicAuth } from "./BasicAuth";
+export { BearerToken } from "./BearerToken";

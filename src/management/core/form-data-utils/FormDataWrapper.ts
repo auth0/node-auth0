@@ -1,5 +1,5 @@
-import { toJson } from "../../core/json.js";
-import { RUNTIME } from "../runtime/index.js";
+import { toJson } from "../../core/json";
+import { RUNTIME } from "../runtime/index";
 
 type NamedValue = {
     name: string;

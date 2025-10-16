@@ -1,5 +1,5 @@
-import { fromJson } from "../json.js";
-import { getResponseBody } from "./getResponseBody.js";
+import { fromJson } from "../json";
+import { getResponseBody } from "./getResponseBody";
 
 export async function getErrorResponseBody(response: Response): Promise<unknown> {
     let contentType = response.headers.get("Content-Type")?.toLowerCase();
