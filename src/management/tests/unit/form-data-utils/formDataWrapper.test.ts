@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Readable } from "stream";
-import { FormDataWrapper, newFormData } from "../../../../../src/management/core/form-data-utils/FormDataWrapper.js";
+import { FormDataWrapper, newFormData } from "../../../../../src/management/core/form-data-utils/FormDataWrapper";
 import { File, Blob } from "buffer";
 
 // Helper function to serialize FormData to string for inspection
