@@ -1,4 +1,4 @@
-import { join } from "../../../../../src/management/core/url/index.js";
+import { join } from "../../../../../src/management/core/url/index";
 
 describe("join", () => {
     describe("basic functionality", () => {
@@ -90,7 +90,7 @@ describe("join", () => {
         it("should handle many segments efficiently", () => {
             const segments = Array(100).fill("segment");
             const result = join("base", ...segments);
-            expect(result).toBe("base/" + segments.join("/"));
+            expect(result).toBe(`base/${segments.join("/")}`);
         });
 
         it("should handle long URLs", () => {
