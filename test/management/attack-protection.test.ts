@@ -555,13 +555,6 @@ describe('AttackProtectionManager', () => {
   });
 
   describe('CAPTCHA Configuration', () => {
-    const data: UpdateCaptchaRequestContent = {
-      siteKey: 'test-site-key',
-      secret: 'test-secret',
-      apiKey: 'test-api-key',
-      projectId: 'test-project-id',
-    };
-
     const responseData = {
       policy: 'high_risk',
       passwordless_policy: 'always_on',
@@ -628,10 +621,21 @@ describe('AttackProtectionManager', () => {
     });
 
     describe('#updateCaptchaConfig', () => {
+      const requestPayload: UpdateCaptchaRequestContent = {
+        siteKey: 'test-site-key',
+        secret: 'test-secret',
+        apiKey: 'test-api-key',
+        projectId: 'test-project-id',
+      };
+
+      const responsePayload = {
+        ...responseData,
+      };
+
       let request: Scope;
 
       beforeEach(() => {
-        request = nock(API_URL).patch(captchaPath).reply(200, responseData);
+        request = nock(API_URL).patch(captchaPath).reply(200, responsePayload);
       });
 
       it('should pass any errors to the promise catch handler', (done) => {
@@ -639,7 +643,7 @@ describe('AttackProtectionManager', () => {
 
         nock(API_URL).patch(captchaPath).reply(500, {});
 
-        attackProtection.updateCaptchaConfig(data).catch((err) => {
+        attackProtection.updateCaptchaConfig(requestPayload).catch((err) => {
           expect(err).toBeInstanceOf(Error);
 
           done();
@@ -647,7 +651,7 @@ describe('AttackProtectionManager', () => {
       });
 
       it(`should perform a PATCH request to /api/v2${captchaPath}`, (done) => {
-        attackProtection.updateCaptchaConfig({}).then(() => {
+        attackProtection.updateCaptchaConfig(requestPayload).then(() => {
           expect(request.isDone()).toBe(true);
 
           done();
@@ -655,7 +659,7 @@ describe('AttackProtectionManager', () => {
       });
 
       it('should pass the data in the body of the request', (done) => {
-        attackProtection.updateCaptchaConfig(data).then(() => {
+        attackProtection.updateCaptchaConfig(requestPayload).then(() => {
           expect(request.isDone()).toBe(true);
 
           done();
@@ -663,8 +667,8 @@ describe('AttackProtectionManager', () => {
       });
 
       it('should pass the body of the response to the "then" handler', (done) => {
-        attackProtection.updateCaptchaConfig(data).then((captchaConfig) => {
-          expect(captchaConfig.data).toMatchObject(responseData);
+        attackProtection.updateCaptchaConfig(requestPayload).then((captchaConfig) => {
+          expect(captchaConfig.data).toMatchObject(responsePayload);
 
           done();
         });
@@ -678,7 +682,7 @@ describe('AttackProtectionManager', () => {
           .matchHeader('Authorization', `Bearer ${token}`)
           .reply(200, {});
 
-        attackProtection.updateCaptchaConfig(data).then(() => {
+        attackProtection.updateCaptchaConfig(requestPayload).then(() => {
           expect(request.isDone()).toBe(true);
 
           done();
