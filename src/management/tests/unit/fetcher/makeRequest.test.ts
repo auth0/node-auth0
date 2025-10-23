@@ -1,4 +1,4 @@
-import { makeRequest } from "../../../../../src/management/core/fetcher/makeRequest.js";
+import { makeRequest } from "../../../../../src/management/core/fetcher/makeRequest";
 
 describe("Test makeRequest", () => {
     const mockPostUrl = "https://httpbin.org/post";

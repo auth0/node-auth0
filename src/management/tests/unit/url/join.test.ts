@@ -1,4 +1,4 @@
-import { join } from "../../../../../src/management/core/url/index.js";
+import { join } from "../../../../../src/management/core/url/index";
 
 describe("join", () => {
     describe("basic functionality", () => {

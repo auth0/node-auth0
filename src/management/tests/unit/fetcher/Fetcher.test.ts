@@ -2,8 +2,8 @@ import fs from "fs";
 import stream from "stream";
 import { join } from "path";
 
-import { Fetcher, fetcherImpl } from "../../../../../src/management/core/fetcher/Fetcher.js";
-import type { BinaryResponse } from "../../../../../src/management/core/index.js";
+import { Fetcher, fetcherImpl } from "../../../../../src/management/core/fetcher/Fetcher";
+import type { BinaryResponse } from "../../../../../src/management/core";
 
 describe("Test fetcherImpl", () => {
     it("should handle successful request", async () => {
