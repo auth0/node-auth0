@@ -253,7 +253,7 @@ function isClientOptionsWithToken(
  */
 function createTelemetryHeaders(
     _options: ManagementClientConfig,
-): Record<string, string | core.Supplier<string | undefined> | undefined> {
+): Record<string, string | core.Supplier<string | null | undefined> | null | undefined> {
     const headers = { ...(_options.headers ?? {}) };
 
     if (_options.telemetry !== false) {

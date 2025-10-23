@@ -1,5 +1,6 @@
 # Specify files that shouldn't be modified by Fern
 
+AGENTS.md
 legacy/
 src/management/index.ts
 src/management/wrapper
