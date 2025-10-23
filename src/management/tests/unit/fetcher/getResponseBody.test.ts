@@ -1,5 +1,5 @@
-import { RUNTIME } from "../../../../../src/management/core/runtime/index.js";
-import { getResponseBody } from "../../../../../src/management/core/fetcher/getResponseBody.js";
+import { RUNTIME } from "../../../../../src/management/core/runtime";
+import { getResponseBody } from "../../../../../src/management/core/fetcher/getResponseBody";
 
 describe("Test getResponseBody", () => {
     it("should handle blob response type", async () => {
