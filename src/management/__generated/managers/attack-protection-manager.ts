@@ -1,10 +1,10 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetAttackProtectionCaptchaResponseContent,
   GetBotDetectionSettingsResponseContent,
   GetBreachedPasswordDetection200Response,
   GetBruteForceProtection200Response,
-  GetCaptchaResponseContent,
   GetSuspiciousIpThrottling200Response,
   PatchBreachedPasswordDetectionRequest,
   PatchBruteForceProtectionRequest,
@@ -88,7 +88,7 @@ export class AttackProtectionManager extends BaseAPI {
    */
   async getCaptchaConfig(
     initOverrides?: InitOverride
-  ): Promise<ApiResponse<GetCaptchaResponseContent>> {
+  ): Promise<ApiResponse<GetAttackProtectionCaptchaResponseContent>> {
     const response = await this.request(
       {
         path: `/attack-protection/captcha`,

@@ -44,11 +44,277 @@ export type AssessorsTypeEnum = (typeof AssessorsTypeEnum)[keyof typeof Assessor
 /**
  *
  */
+export interface AttackProtectionCaptchaArkoseResponseContent {
+  [key: string]: any | any;
+  /**
+   * The site key for the Arkose captcha provider.
+   *
+   */
+  site_key?: string;
+  /**
+   * Whether the captcha should fail open.
+   *
+   */
+  fail_open?: boolean;
+  /**
+   * The subdomain used for client requests to the Arkose captcha provider.
+   *
+   */
+  client_subdomain?: string;
+  /**
+   * The subdomain used for server-side verification requests to the Arkose captcha provider.
+   *
+   */
+  verify_subdomain?: string;
+}
+/**
+ *
+ */
+export interface AttackProtectionCaptchaAuthChallengeRequest {
+  /**
+   * Whether the auth challenge should fail open.
+   *
+   */
+  fail_open: boolean;
+}
+/**
+ *
+ */
+export interface AttackProtectionCaptchaAuthChallengeResponseContent {
+  [key: string]: any | any;
+  /**
+   * Whether the auth challenge should fail open.
+   *
+   */
+  fail_open?: boolean;
+}
+/**
+ *
+ */
+export interface AttackProtectionCaptchaFriendlyCaptchaResponseContent {
+  [key: string]: any | any;
+  /**
+   * The site key for the Friendly Captcha provider.
+   *
+   */
+  site_key?: string;
+}
+/**
+ *
+ */
+export interface AttackProtectionCaptchaHcaptchaResponseContent {
+  [key: string]: any | any;
+  /**
+   * The site key for the hCaptcha provider.
+   *
+   */
+  site_key?: string;
+}
+
+/**
+ * The id of the active provider for the CAPTCHA.
+ */
+export const AttackProtectionCaptchaProviderId = {
+  arkose: 'arkose',
+  auth_challenge: 'auth_challenge',
+  friendly_captcha: 'friendly_captcha',
+  hcaptcha: 'hcaptcha',
+  recaptcha_v2: 'recaptcha_v2',
+  recaptcha_enterprise: 'recaptcha_enterprise',
+  simple_captcha: 'simple_captcha',
+} as const;
+export type AttackProtectionCaptchaProviderId =
+  (typeof AttackProtectionCaptchaProviderId)[keyof typeof AttackProtectionCaptchaProviderId];
+
+/**
+ *
+ */
+export interface AttackProtectionCaptchaRecaptchaEnterpriseResponseContent {
+  [key: string]: any | any;
+  /**
+   * The site key for the reCAPTCHA Enterprise provider.
+   *
+   */
+  site_key?: string;
+  /**
+   * The project ID for the reCAPTCHA Enterprise provider.
+   *
+   */
+  project_id?: string;
+}
+/**
+ *
+ */
+export interface AttackProtectionCaptchaRecaptchaV2ResponseContent {
+  [key: string]: any | any;
+  /**
+   * The site key for the reCAPTCHA v2 provider.
+   *
+   */
+  site_key?: string;
+}
+/**
+ *
+ */
+export interface AttackProtectionCaptchaSimpleCaptchaResponseContent {
+  [key: string]: any;
+}
+/**
+ *
+ */
+export interface AttackProtectionUpdateCaptchaArkose {
+  /**
+   * The site key for the Arkose captcha provider.
+   *
+   */
+  site_key: string;
+  /**
+   * The secret key for the Arkose captcha provider.
+   *
+   */
+  secret: string;
+  /**
+   * The subdomain used for client requests to the Arkose captcha provider.
+   *
+   */
+  client_subdomain?: string;
+  /**
+   * The subdomain used for server-side verification requests to the Arkose captcha provider.
+   *
+   */
+  verify_subdomain?: string;
+  /**
+   * Whether the captcha should fail open.
+   *
+   */
+  fail_open?: boolean;
+}
+/**
+ *
+ */
+export interface AttackProtectionUpdateCaptchaFriendlyCaptcha {
+  /**
+   * The site key for the Friendly Captcha provider.
+   *
+   */
+  site_key: string;
+  /**
+   * The secret key for the Friendly Captcha provider.
+   *
+   */
+  secret: string;
+}
+/**
+ *
+ */
+export interface AttackProtectionUpdateCaptchaHcaptcha {
+  /**
+   * The site key for the hCaptcha provider.
+   *
+   */
+  site_key: string;
+  /**
+   * The secret key for the hCaptcha provider.
+   *
+   */
+  secret: string;
+}
+/**
+ *
+ */
+export interface AttackProtectionUpdateCaptchaRecaptchaEnterprise {
+  /**
+   * The site key for the reCAPTCHA Enterprise provider.
+   *
+   */
+  site_key: string;
+  /**
+   * The API key for the reCAPTCHA Enterprise provider.
+   *
+   */
+  api_key: string;
+  /**
+   * The project ID for the reCAPTCHA Enterprise provider.
+   *
+   */
+  project_id: string;
+}
+/**
+ *
+ */
+export interface AttackProtectionUpdateCaptchaRecaptchaV2 {
+  /**
+   * The site key for the reCAPTCHA v2 provider.
+   *
+   */
+  site_key: string;
+  /**
+   * The secret key for the reCAPTCHA v2 provider.
+   *
+   */
+  secret: string;
+}
+/**
+ *
+ */
 export interface Auth0V2CaptchaConfig {
   /**
    */
   failOpen?: boolean;
 }
+/**
+ * List of IP addresses or CIDR blocks to allowlist
+ */
+export interface BotDetectionAllowlist extends Array<BotDetectionIpAddressOrCidrBlock> {}
+
+/**
+ * The policy that defines how often to show CAPTCHA
+ */
+export const BotDetectionChallengePolicyPasswordFlowEnum = {
+  never: 'never',
+  when_risky: 'when_risky',
+  always: 'always',
+} as const;
+export type BotDetectionChallengePolicyPasswordFlowEnum =
+  (typeof BotDetectionChallengePolicyPasswordFlowEnum)[keyof typeof BotDetectionChallengePolicyPasswordFlowEnum];
+
+/**
+ * The policy that defines how often to show CAPTCHA
+ */
+export const BotDetectionChallengePolicyPasswordResetFlowEnum = {
+  never: 'never',
+  when_risky: 'when_risky',
+  always: 'always',
+} as const;
+export type BotDetectionChallengePolicyPasswordResetFlowEnum =
+  (typeof BotDetectionChallengePolicyPasswordResetFlowEnum)[keyof typeof BotDetectionChallengePolicyPasswordResetFlowEnum];
+
+/**
+ * The policy that defines how often to show CAPTCHA
+ */
+export const BotDetectionChallengePolicyPasswordlessFlowEnum = {
+  never: 'never',
+  when_risky: 'when_risky',
+  always: 'always',
+} as const;
+export type BotDetectionChallengePolicyPasswordlessFlowEnum =
+  (typeof BotDetectionChallengePolicyPasswordlessFlowEnum)[keyof typeof BotDetectionChallengePolicyPasswordlessFlowEnum];
+
+/**
+ * IP address (IPv4 or IPv6) or CIDR block
+ */
+export type BotDetectionIpAddressOrCidrBlock = string;
+
+/**
+ * The level of bot detection sensitivity
+ */
+export const BotDetectionLevelEnum = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high',
+} as const;
+export type BotDetectionLevelEnum =
+  (typeof BotDetectionLevelEnum)[keyof typeof BotDetectionLevelEnum];
 
 /**
  * The captcha assessment policy for userpass flow enabled for this tenant
@@ -5685,6 +5951,36 @@ export interface GetApns200Response {
 /**
  *
  */
+export interface GetAttackProtectionCaptchaResponseContent {
+  [key: string]: any | any;
+  /**
+   */
+  active_provider_id?: string;
+  /**
+   */
+  arkose?: AttackProtectionCaptchaArkoseResponseContent;
+  /**
+   */
+  auth_challenge?: AttackProtectionCaptchaAuthChallengeResponseContent;
+  /**
+   */
+  hcaptcha?: AttackProtectionCaptchaHcaptchaResponseContent;
+  /**
+   */
+  friendly_captcha?: AttackProtectionCaptchaFriendlyCaptchaResponseContent;
+  /**
+   */
+  recaptcha_enterprise?: AttackProtectionCaptchaRecaptchaEnterpriseResponseContent;
+  /**
+   */
+  recaptcha_v2?: AttackProtectionCaptchaRecaptchaV2ResponseContent;
+  /**
+   */
+  simple_captcha?: AttackProtectionCaptchaSimpleCaptchaResponseContent;
+}
+/**
+ *
+ */
 export type GetAuthenticationMethods200Response =
   | Array<GetAuthenticationMethods200ResponseOneOfInner>
   | GetAuthenticationMethods200ResponseOneOf;
@@ -5911,27 +6207,26 @@ export interface GetBindings200ResponseBindingsInner {
 export interface GetBotDetectionSettingsResponseContent {
   /**
    */
-  bot_detection_level: any | null;
+  bot_detection_level: BotDetectionLevelEnum;
   /**
    */
-  challenge_password_policy: any | null;
+  challenge_password_policy: BotDetectionChallengePolicyPasswordFlowEnum;
   /**
    */
-  challenge_passwordless_policy: any | null;
+  challenge_passwordless_policy: BotDetectionChallengePolicyPasswordlessFlowEnum;
   /**
    */
-  challenge_password_reset_policy: any | null;
+  challenge_password_reset_policy: BotDetectionChallengePolicyPasswordResetFlowEnum;
   /**
-   * List of IP addresses or CIDR blocks to allowlist
-   *
    */
-  allowlist: Array<any>;
+  allowlist: BotDetectionAllowlist;
   /**
    * Whether monitoring mode is enabled (logs but does not block)
    *
    */
   monitoring_mode_enabled: boolean;
 }
+
 /**
  *
  */
@@ -6261,36 +6556,6 @@ export type GetBruteForceProtection200ResponseModeEnum =
  *
  */
 export type GetBruteForceProtection200ResponseAllowlistInner = any;
-/**
- *
- */
-export interface GetCaptchaResponseContent {
-  [key: string]: any | any;
-  /**
-   */
-  active_provider_id?: string;
-  /**
-   */
-  arkose?: any | null;
-  /**
-   */
-  auth_challenge?: any | null;
-  /**
-   */
-  hcaptcha?: any | null;
-  /**
-   */
-  friendly_captcha?: any | null;
-  /**
-   */
-  recaptcha_enterprise?: any | null;
-  /**
-   */
-  recaptcha_v2?: any | null;
-  /**
-   */
-  simple_captcha?: any | null;
-}
 /**
  *
  */
@@ -19283,57 +19548,115 @@ export interface TwilioFactorProvider {
 /**
  *
  */
+export interface UpdateAttackProtectionCaptchaRequestContent {
+  /**
+   */
+  active_provider_id?: AttackProtectionCaptchaProviderId;
+  /**
+   */
+  arkose?: AttackProtectionUpdateCaptchaArkose;
+  /**
+   */
+  auth_challenge?: AttackProtectionCaptchaAuthChallengeRequest;
+  /**
+   */
+  hcaptcha?: AttackProtectionUpdateCaptchaHcaptcha;
+  /**
+   */
+  friendly_captcha?: AttackProtectionUpdateCaptchaFriendlyCaptcha;
+  /**
+   */
+  recaptcha_enterprise?: AttackProtectionUpdateCaptchaRecaptchaEnterprise;
+  /**
+   */
+  recaptcha_v2?: AttackProtectionUpdateCaptchaRecaptchaV2;
+  /**
+   */
+  simple_captcha?: AttackProtectionCaptchaSimpleCaptchaResponseContent;
+}
+
+/**
+ *
+ */
+export interface UpdateAttackProtectionCaptchaResponseContent {
+  [key: string]: any | any;
+  /**
+   */
+  active_provider_id?: string;
+  /**
+   */
+  arkose?: AttackProtectionCaptchaArkoseResponseContent;
+  /**
+   */
+  auth_challenge?: AttackProtectionCaptchaAuthChallengeResponseContent;
+  /**
+   */
+  hcaptcha?: AttackProtectionCaptchaHcaptchaResponseContent;
+  /**
+   */
+  friendly_captcha?: AttackProtectionCaptchaFriendlyCaptchaResponseContent;
+  /**
+   */
+  recaptcha_enterprise?: AttackProtectionCaptchaRecaptchaEnterpriseResponseContent;
+  /**
+   */
+  recaptcha_v2?: AttackProtectionCaptchaRecaptchaV2ResponseContent;
+  /**
+   */
+  simple_captcha?: AttackProtectionCaptchaSimpleCaptchaResponseContent;
+}
+/**
+ *
+ */
 export interface UpdateBotDetectionSettingsRequestContent {
   /**
    */
-  bot_detection_level?: any | null;
+  bot_detection_level?: BotDetectionLevelEnum;
   /**
    */
-  challenge_password_policy?: any | null;
+  challenge_password_policy?: BotDetectionChallengePolicyPasswordFlowEnum;
   /**
    */
-  challenge_passwordless_policy?: any | null;
+  challenge_passwordless_policy?: BotDetectionChallengePolicyPasswordlessFlowEnum;
   /**
    */
-  challenge_password_reset_policy?: any | null;
+  challenge_password_reset_policy?: BotDetectionChallengePolicyPasswordResetFlowEnum;
   /**
-   * List of IP addresses or CIDR blocks to allowlist
-   *
    */
-  allowlist?: Array<any>;
+  allowlist?: BotDetectionAllowlist;
   /**
    * Whether monitoring mode is enabled (logs but does not block)
    *
    */
   monitoring_mode_enabled?: boolean;
 }
+
 /**
  *
  */
 export interface UpdateBotDetectionSettingsResponseContent {
   /**
    */
-  bot_detection_level?: any | null;
+  bot_detection_level?: BotDetectionLevelEnum;
   /**
    */
-  challenge_password_policy?: any | null;
+  challenge_password_policy?: BotDetectionChallengePolicyPasswordFlowEnum;
   /**
    */
-  challenge_passwordless_policy?: any | null;
+  challenge_passwordless_policy?: BotDetectionChallengePolicyPasswordlessFlowEnum;
   /**
    */
-  challenge_password_reset_policy?: any | null;
+  challenge_password_reset_policy?: BotDetectionChallengePolicyPasswordResetFlowEnum;
   /**
-   * List of IP addresses or CIDR blocks to allowlist
-   *
    */
-  allowlist?: Array<any>;
+  allowlist?: BotDetectionAllowlist;
   /**
    * Whether monitoring mode is enabled (logs but does not block)
    *
    */
   monitoring_mode_enabled?: boolean;
 }
+
 /**
  *
  */
