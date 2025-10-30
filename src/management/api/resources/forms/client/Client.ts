@@ -39,7 +39,7 @@ export class Forms {
     public async list(
         request: Management.ListFormsRequestParameters = {},
         requestOptions?: Forms.RequestOptions,
-    ): Promise<core.Page<Management.FormSummary>> {
+    ): Promise<core.Page<Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListFormsRequestParameters,
@@ -133,7 +133,7 @@ export class Forms {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListFormsOffsetPaginatedResponseContent, Management.FormSummary>({
+        return new core.Page<Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.forms ?? []).length > 0,

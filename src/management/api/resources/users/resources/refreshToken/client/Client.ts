@@ -42,7 +42,9 @@ export class RefreshToken {
         userId: string,
         request: Management.ListRefreshTokensRequestParameters = {},
         requestOptions?: RefreshToken.RequestOptions,
-    ): Promise<core.Page<Management.RefreshTokenResponseContent>> {
+    ): Promise<
+        core.Page<Management.RefreshTokenResponseContent, Management.ListRefreshTokensPaginatedResponseContent>
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListRefreshTokensRequestParameters,
@@ -124,9 +126,9 @@ export class RefreshToken {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListRefreshTokensPaginatedResponseContent,
-            Management.RefreshTokenResponseContent
+        return new core.Page<
+            Management.RefreshTokenResponseContent,
+            Management.ListRefreshTokensPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

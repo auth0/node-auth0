@@ -47,7 +47,7 @@ export class Roles {
         userId: string,
         request: Management.ListOrganizationMemberRolesRequestParameters = {},
         requestOptions?: Roles.RequestOptions,
-    ): Promise<core.Page<Management.Role>> {
+    ): Promise<core.Page<Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListOrganizationMemberRolesRequestParameters,
@@ -136,18 +136,16 @@ export class Roles {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent, Management.Role>(
-            {
-                response: dataWithRawResponse.data,
-                rawResponse: dataWithRawResponse.rawResponse,
-                hasNextPage: (response) => (response?.roles ?? []).length > 0,
-                getItems: (response) => response?.roles ?? [],
-                loadPage: (_response) => {
-                    _offset += 1;
-                    return list(core.setObjectProperty(request, "page", _offset));
-                },
+        return new core.Page<Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) => (response?.roles ?? []).length > 0,
+            getItems: (response) => response?.roles ?? [],
+            loadPage: (_response) => {
+                _offset += 1;
+                return list(core.setObjectProperty(request, "page", _offset));
             },
-        );
+        });
     }
 
     /**

@@ -39,7 +39,12 @@ export class Connections {
     public async list(
         request: Management.ListFlowsVaultConnectionsRequestParameters = {},
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.Page<Management.FlowsVaultConnectionSummary>> {
+    ): Promise<
+        core.Page<
+            Management.FlowsVaultConnectionSummary,
+            Management.ListFlowsVaultConnectionsOffsetPaginatedResponseContent
+        >
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListFlowsVaultConnectionsRequestParameters,
@@ -128,9 +133,9 @@ export class Connections {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListFlowsVaultConnectionsOffsetPaginatedResponseContent,
-            Management.FlowsVaultConnectionSummary
+        return new core.Page<
+            Management.FlowsVaultConnectionSummary,
+            Management.ListFlowsVaultConnectionsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

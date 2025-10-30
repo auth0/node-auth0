@@ -7,6 +7,7 @@ import * as Management from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { ClientGrants } from "../resources/clientGrants/client/Client.js";
+import { DiscoveryDomains } from "../resources/discoveryDomains/client/Client.js";
 import { EnabledConnections } from "../resources/enabledConnections/client/Client.js";
 import { Invitations } from "../resources/invitations/client/Client.js";
 import { Members } from "../resources/members/client/Client.js";
@@ -20,6 +21,7 @@ export declare namespace Organizations {
 export class Organizations {
     protected readonly _options: Organizations.Options;
     protected _clientGrants: ClientGrants | undefined;
+    protected _discoveryDomains: DiscoveryDomains | undefined;
     protected _enabledConnections: EnabledConnections | undefined;
     protected _invitations: Invitations | undefined;
     protected _members: Members | undefined;
@@ -30,6 +32,10 @@ export class Organizations {
 
     public get clientGrants(): ClientGrants {
         return (this._clientGrants ??= new ClientGrants(this._options));
+    }
+
+    public get discoveryDomains(): DiscoveryDomains {
+        return (this._discoveryDomains ??= new DiscoveryDomains(this._options));
     }
 
     public get enabledConnections(): EnabledConnections {
@@ -83,7 +89,7 @@ export class Organizations {
     public async list(
         request: Management.ListOrganizationsRequestParameters = {},
         requestOptions?: Organizations.RequestOptions,
-    ): Promise<core.Page<Management.Organization>> {
+    ): Promise<core.Page<Management.Organization, Management.ListOrganizationsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListOrganizationsRequestParameters,
@@ -169,7 +175,7 @@ export class Organizations {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListOrganizationsPaginatedResponseContent, Management.Organization>({
+        return new core.Page<Management.Organization, Management.ListOrganizationsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

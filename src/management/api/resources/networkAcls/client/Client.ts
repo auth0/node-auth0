@@ -41,7 +41,9 @@ export class NetworkAcls {
     public async list(
         request: Management.ListNetworkAclsRequestParameters = {},
         requestOptions?: NetworkAcls.RequestOptions,
-    ): Promise<core.Page<Management.NetworkAclsResponseContent>> {
+    ): Promise<
+        core.Page<Management.NetworkAclsResponseContent, Management.ListNetworkAclsOffsetPaginatedResponseContent>
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListNetworkAclsRequestParameters,
@@ -125,9 +127,9 @@ export class NetworkAcls {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListNetworkAclsOffsetPaginatedResponseContent,
-            Management.NetworkAclsResponseContent
+        return new core.Page<
+            Management.NetworkAclsResponseContent,
+            Management.ListNetworkAclsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

@@ -2678,6 +2678,40 @@ export interface AssociateOrganizationClientGrantRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationDiscoveryDomainsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         domain: "domain"
+ *     }
+ */
+export interface CreateOrganizationDiscoveryDomainRequestContent {
+    /** The domain name to associate with the organization e.g. acme.com. */
+    domain: string;
+    status?: Management.OrganizationDiscoveryDomainStatus;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateOrganizationDiscoveryDomainRequestContent {
+    status?: Management.OrganizationDiscoveryDomainStatus;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true
@@ -3280,26 +3314,6 @@ export interface GetUserConnectedAccountsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results to return.  Defaults to 10 with a maximum of 20 */
-    take?: number | null;
-}
-
-/**
- * @example
- *     {
- *         fields: "fields",
- *         include_fields: true,
- *         from: "from",
- *         take: 1
- *     }
- */
-export interface GetUserGroupsRequestParameters {
-    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
-    fields?: string | null;
-    /** Whether specified fields are to be included (true) or excluded (false). */
-    include_fields?: boolean | null;
-    /** Optional Id from which to start selection. */
-    from?: string | null;
-    /** Number of results per page. Defaults to 50. */
     take?: number | null;
 }
 
