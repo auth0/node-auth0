@@ -50,7 +50,7 @@ export class Logs {
         id: string,
         request: Management.ListUserLogsRequestParameters = {},
         requestOptions?: Logs.RequestOptions,
-    ): Promise<core.Page<Management.Log>> {
+    ): Promise<core.Page<Management.Log, Management.UserListLogOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListUserLogsRequestParameters,
@@ -140,7 +140,7 @@ export class Logs {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.UserListLogOffsetPaginatedResponseContent, Management.Log>({
+        return new core.Page<Management.Log, Management.UserListLogOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.logs ?? []).length > 0,

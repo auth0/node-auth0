@@ -43,7 +43,12 @@ export class ClientGrants {
         id: string,
         request: Management.ListOrganizationClientGrantsRequestParameters = {},
         requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationClientGrant>> {
+    ): Promise<
+        core.Page<
+            Management.OrganizationClientGrant,
+            Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent
+        >
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListOrganizationClientGrantsRequestParameters,
@@ -152,9 +157,9 @@ export class ClientGrants {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent,
-            Management.OrganizationClientGrant
+        return new core.Page<
+            Management.OrganizationClientGrant,
+            Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

@@ -71,7 +71,7 @@ export class Members {
         id: string,
         request: Management.ListOrganizationMembersRequestParameters = {},
         requestOptions?: Members.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationMember>> {
+    ): Promise<core.Page<Management.OrganizationMember, Management.ListOrganizationMembersPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListOrganizationMembersRequestParameters,
@@ -162,19 +162,18 @@ export class Members {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationMembersPaginatedResponseContent,
-            Management.OrganizationMember
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.members ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
+        return new core.Page<Management.OrganizationMember, Management.ListOrganizationMembersPaginatedResponseContent>(
+            {
+                response: dataWithRawResponse.data,
+                rawResponse: dataWithRawResponse.rawResponse,
+                hasNextPage: (response) =>
+                    response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+                getItems: (response) => response?.members ?? [],
+                loadPage: (response) => {
+                    return list(core.setObjectProperty(request, "from", response?.next));
+                },
             },
-        });
+        );
     }
 
     /**

@@ -85,7 +85,7 @@ export class Connections {
     public async list(
         request: Management.ListConnectionsQueryParameters = {},
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.Page<Management.ConnectionForList>> {
+    ): Promise<core.Page<Management.ConnectionForList, Management.ListConnectionsCheckpointPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListConnectionsQueryParameters,
@@ -184,9 +184,9 @@ export class Connections {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListConnectionsCheckpointPaginatedResponseContent,
-            Management.ConnectionForList
+        return new core.Page<
+            Management.ConnectionForList,
+            Management.ListConnectionsCheckpointPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

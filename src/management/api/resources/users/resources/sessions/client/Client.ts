@@ -42,7 +42,7 @@ export class Sessions {
         userId: string,
         request: Management.ListUserSessionsRequestParameters = {},
         requestOptions?: Sessions.RequestOptions,
-    ): Promise<core.Page<Management.SessionResponseContent>> {
+    ): Promise<core.Page<Management.SessionResponseContent, Management.ListUserSessionsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListUserSessionsRequestParameters,
@@ -124,10 +124,7 @@ export class Sessions {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserSessionsPaginatedResponseContent,
-            Management.SessionResponseContent
-        >({
+        return new core.Page<Management.SessionResponseContent, Management.ListUserSessionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

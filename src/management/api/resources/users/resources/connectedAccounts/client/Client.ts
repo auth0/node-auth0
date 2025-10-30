@@ -42,7 +42,7 @@ export class ConnectedAccounts {
         id: string,
         request: Management.GetUserConnectedAccountsRequestParameters = {},
         requestOptions?: ConnectedAccounts.RequestOptions,
-    ): Promise<core.Page<Management.ConnectedAccount>> {
+    ): Promise<core.Page<Management.ConnectedAccount, Management.ListUserConnectedAccountsResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.GetUserConnectedAccountsRequestParameters,
@@ -127,7 +127,7 @@ export class ConnectedAccounts {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListUserConnectedAccountsResponseContent, Management.ConnectedAccount>({
+        return new core.Page<Management.ConnectedAccount, Management.ListUserConnectedAccountsResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

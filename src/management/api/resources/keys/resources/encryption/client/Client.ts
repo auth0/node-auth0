@@ -41,7 +41,7 @@ export class Encryption {
     public async list(
         request: Management.ListEncryptionKeysRequestParameters = {},
         requestOptions?: Encryption.RequestOptions,
-    ): Promise<core.Page<Management.EncryptionKey>> {
+    ): Promise<core.Page<Management.EncryptionKey, Management.ListEncryptionKeyOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListEncryptionKeysRequestParameters,
@@ -128,7 +128,7 @@ export class Encryption {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListEncryptionKeyOffsetPaginatedResponseContent, Management.EncryptionKey>({
+        return new core.Page<Management.EncryptionKey, Management.ListEncryptionKeyOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.keys ?? []).length > 0,
