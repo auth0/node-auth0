@@ -431,17 +431,32 @@ The tables below show all method changes organized by category. Note these metho
 
 </details>
 
-### Pagination and Response Changes
+### Pagination
 
 All iterable responses, such as those returned by `*.list()` methods, are auto-paginated. This means that code can directly iterate over them without the need for manual pagination logic.
 
-#### Accessing Response Data
-
-**Important:** V5 no longer returns a `data` property by default for endpoints that do not return a paginated response (e.g., `create`, `update`). To retrieve the same `data` property and be able to access headers, you can use `.withRawResponse()`.
-
 #### Migrating from V4 to V5 Pagination
 
-Here's how to migrate your pagination code from v4 to v5:
+Here's a representative example of v4 pagination code:
+
+```ts
+// V4: Manual pagination
+const allUsers = [];
+let page = 0;
+while (true) {
+    const {
+        data: { actions, total },
+    } = await client.actions.getAll({
+        page: page++,
+    });
+    allUsers.push(...actions);
+    if (allUsers.length === total) {
+        break;
+    }
+}
+```
+
+In v5, `client.actions.list()` returns a response of type `Page<Action>`, over which the following pagination code is valid:
 
 ```ts
 import { ManagementClient } from "auth0";
@@ -452,22 +467,27 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-// V5: Simple pagination with .data property
-const clients = await client.clients.list({ per_page: 5, page: 1 });
-for (const client of clients.data) {
-    console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
+// Preferred hasNextPage()-based iteration:
+let page = await client.actions.list();
+while (page.hasNextPage()) {
+    console.log(page);
+    page = await page.getNextPage();
 }
 
-// V4: Similar structure but different method name
-// const clients2 = await legacyClient.clients.getAll({ per_page: 5, page: 1 });
-// for (const client of clients2.data) {
-//     console.log(`Legacy Client ID: ${client.client_id}, Name: ${client.name}`);
-// }
+// Alternatively, you can directly for-await over the items:
+const response = await client.actions.list();
+for await (const item of response) {
+    console.log(item);
+}
 ```
+
+### Getting the full response and headers
+
+Getting the full response (including headers) differs depending on whether the endpoint is paginated.
 
 #### Non-Paginated Responses (Create, Update, etc.)
 
-For non-paginated responses, v5 returns the data directly, but you can use `.withRawResponse()` to access headers and the full response:
+**Important:** V5 no longer returns a `data` property by default for endpoints that do not return a paginated response (e.g., `create`, `update`). To retrieve the same `data` property and be able to access headers, you can use `.withRawResponse()` to access headers and the full response:
 
 ```ts
 // V5: Direct data access (no .data wrapper)
@@ -498,28 +518,9 @@ console.log(`Client ID: ${clientWithResponse.data.client_id}, Name: ${clientWith
 // console.log(`Legacy Client ID: ${client2.data.client_id}, Name: ${client2.data.name}`);
 ```
 
-#### Advanced Pagination
+#### Paginated Responses (list, etc.)
 
-For more complex pagination scenarios, v5 provides enhanced pagination support:
-
-```ts
-// V4: Manual pagination
-const allUsers = [];
-let page = 0;
-while (true) {
-    const {
-        data: { actions, total },
-    } = await client.actions.getAll({
-        page: page++,
-    });
-    allUsers.push(...actions);
-    if (allUsers.length === total) {
-        break;
-    }
-}
-```
-
-In v5, `client.actions.list()` returns a response of type `Page<Action>`, over which the following pagination code is valid:
+Paginated responses have a `.data` attribute for accessing the full response and headers just as they did in v4:
 
 ```ts
 import { ManagementClient } from "auth0";
@@ -530,11 +531,18 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-let page = await client.actions.list();
+// V5: Pagination over full responses with .data property
+let page = await client.clients.list({ per_page: 5, page: 1 });
 while (page.hasNextPage()) {
+    console.log(`Full response data: ${page.data}`);
     page = await page.getNextPage();
-    console.log(page);
 }
+
+// V4: For-loop iteration over .data property
+// const clients = await legacyClient.clients.getAll({ per_page: 5, page: 1 });
+// for (const client of clients.data) {
+//     console.log(...);
+// }
 ```
 
 ### Management namespace
