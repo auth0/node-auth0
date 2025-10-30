@@ -1,12 +1,18 @@
 import * as runtime from '../../../lib/runtime.js';
 import type { InitOverride, ApiResponse } from '../../../lib/runtime.js';
 import type {
+  GetAttackProtectionCaptchaResponseContent,
+  GetBotDetectionSettingsResponseContent,
   GetBreachedPasswordDetection200Response,
   GetBruteForceProtection200Response,
   GetSuspiciousIpThrottling200Response,
   PatchBreachedPasswordDetectionRequest,
   PatchBruteForceProtectionRequest,
   PatchSuspiciousIpThrottlingRequest,
+  UpdateBotDetectionSettingsRequestContent,
+  UpdateBotDetectionSettingsResponseContent,
+  UpdateCaptchaRequestContent,
+  UpdateCaptchaResponseContent,
 } from '../models/index.js';
 
 const { BaseAPI } = runtime;
@@ -15,6 +21,26 @@ const { BaseAPI } = runtime;
  *
  */
 export class AttackProtectionManager extends BaseAPI {
+  /**
+   * Get the Bot Detection configuration of your tenant.
+   * Get Bot Detection settings
+   *
+   * @throws {RequiredError}
+   */
+  async getBotDetectionConfig(
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetBotDetectionSettingsResponseContent>> {
+    const response = await this.request(
+      {
+        path: `/attack-protection/bot-detection`,
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
   /**
    * Retrieve details of the Breached Password Detection configuration of your tenant.
    * Get Breached Password Detection settings
@@ -55,6 +81,26 @@ export class AttackProtectionManager extends BaseAPI {
   }
 
   /**
+   * Get the CAPTCHA configuration for your client.
+   * Get the CAPTCHA configuration for a tenant
+   *
+   * @throws {RequiredError}
+   */
+  async getCaptchaConfig(
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<GetAttackProtectionCaptchaResponseContent>> {
+    const response = await this.request(
+      {
+        path: `/attack-protection/captcha`,
+        method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
    * Get the suspicious IP throttling configuration
    *
    * @throws {RequiredError}
@@ -66,6 +112,33 @@ export class AttackProtectionManager extends BaseAPI {
       {
         path: `/attack-protection/suspicious-ip-throttling`,
         method: 'GET',
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update the Bot Detection configuration of your tenant.
+   * Update Bot Detection settings
+   *
+   * @throws {RequiredError}
+   */
+  async updateBotDetectionConfig(
+    bodyParameters: UpdateBotDetectionSettingsRequestContent,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<UpdateBotDetectionSettingsResponseContent>> {
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/attack-protection/bot-detection`,
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
       },
       initOverrides
     );
@@ -116,6 +189,33 @@ export class AttackProtectionManager extends BaseAPI {
     const response = await this.request(
       {
         path: `/attack-protection/brute-force-protection`,
+        method: 'PATCH',
+        headers: headerParameters,
+        body: bodyParameters,
+      },
+      initOverrides
+    );
+
+    return runtime.JSONApiResponse.fromResponse(response);
+  }
+
+  /**
+   * Update existing CAPTCHA configuration for your client.
+   * Partial Update for CAPTCHA Configuration
+   *
+   * @throws {RequiredError}
+   */
+  async updateCaptchaConfig(
+    bodyParameters: UpdateCaptchaRequestContent,
+    initOverrides?: InitOverride
+  ): Promise<ApiResponse<UpdateCaptchaResponseContent>> {
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters['Content-Type'] = 'application/json';
+
+    const response = await this.request(
+      {
+        path: `/attack-protection/captcha`,
         method: 'PATCH',
         headers: headerParameters,
         body: bodyParameters,
