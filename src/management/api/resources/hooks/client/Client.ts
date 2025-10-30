@@ -51,7 +51,7 @@ export class Hooks {
     public async list(
         request: Management.ListHooksRequestParameters = {},
         requestOptions?: Hooks.RequestOptions,
-    ): Promise<core.Page<Management.Hook>> {
+    ): Promise<core.Page<Management.Hook, Management.ListHooksOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListHooksRequestParameters,
@@ -156,7 +156,7 @@ export class Hooks {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListHooksOffsetPaginatedResponseContent, Management.Hook>({
+        return new core.Page<Management.Hook, Management.ListHooksOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.hooks ?? []).length > 0,

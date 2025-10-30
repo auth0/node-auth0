@@ -40,7 +40,7 @@ export class Organizations {
         id: string,
         request: Management.ListClientGrantOrganizationsRequestParameters = {},
         requestOptions?: Organizations.RequestOptions,
-    ): Promise<core.Page<Management.Organization>> {
+    ): Promise<core.Page<Management.Organization, Management.ListClientGrantOrganizationsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListClientGrantOrganizationsRequestParameters,
@@ -125,10 +125,7 @@ export class Organizations {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListClientGrantOrganizationsPaginatedResponseContent,
-            Management.Organization
-        >({
+        return new core.Page<Management.Organization, Management.ListClientGrantOrganizationsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

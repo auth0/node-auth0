@@ -52,7 +52,7 @@ export class Flows {
     public async list(
         request: Management.FlowsListRequest = {},
         requestOptions?: Flows.RequestOptions,
-    ): Promise<core.Page<Management.FlowSummary>> {
+    ): Promise<core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.FlowsListRequest,
@@ -155,7 +155,7 @@ export class Flows {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListFlowsOffsetPaginatedResponseContent, Management.FlowSummary>({
+        return new core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.flows ?? []).length > 0,

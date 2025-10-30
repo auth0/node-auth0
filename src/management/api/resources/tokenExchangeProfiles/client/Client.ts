@@ -48,7 +48,9 @@ export class TokenExchangeProfiles {
     public async list(
         request: Management.TokenExchangeProfilesListRequest = {},
         requestOptions?: TokenExchangeProfiles.RequestOptions,
-    ): Promise<core.Page<Management.TokenExchangeProfileResponseContent>> {
+    ): Promise<
+        core.Page<Management.TokenExchangeProfileResponseContent, Management.ListTokenExchangeProfileResponseContent>
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.TokenExchangeProfilesListRequest,
@@ -133,9 +135,9 @@ export class TokenExchangeProfiles {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListTokenExchangeProfileResponseContent,
-            Management.TokenExchangeProfileResponseContent
+        return new core.Page<
+            Management.TokenExchangeProfileResponseContent,
+            Management.ListTokenExchangeProfileResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

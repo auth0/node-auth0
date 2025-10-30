@@ -45,7 +45,7 @@ export class Rules {
     public async list(
         request: Management.ListRulesRequestParameters = {},
         requestOptions?: Rules.RequestOptions,
-    ): Promise<core.Page<Management.Rule>> {
+    ): Promise<core.Page<Management.Rule, Management.ListRulesOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListRulesRequestParameters,
@@ -150,7 +150,7 @@ export class Rules {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListRulesOffsetPaginatedResponseContent, Management.Rule>({
+        return new core.Page<Management.Rule, Management.ListRulesOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.rules ?? []).length > 0,

@@ -2,7 +2,7 @@
 
 ## Actions
 
-<details><summary><code>client.actions.<a href="/src/management/api/resources/actions/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Action></code></summary>
+<details><summary><code>client.actions.<a href="/src/management/api/resources/actions/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Action, Management.ListActionsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -30,7 +30,7 @@ Retrieve all actions.
 <dd>
 
 ```typescript
-const response = await client.actions.list({
+const pageableResponse = await client.actions.list({
     triggerId: "triggerId",
     actionName: "actionName",
     deployed: true,
@@ -38,7 +38,7 @@ const response = await client.actions.list({
     per_page: 1,
     installed: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -54,6 +54,9 @@ let page = await client.actions.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -625,7 +628,7 @@ await client.branding.update();
 
 ## ClientGrants
 
-<details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ClientGrantResponseContent></code></summary>
+<details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ClientGrantResponseContent, Management.ListClientGrantPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -653,7 +656,7 @@ Retrieve a list of <a href="https://auth0.com/docs/get-started/applications/appl
 <dd>
 
 ```typescript
-const response = await client.clientGrants.list({
+const pageableResponse = await client.clientGrants.list({
     from: "from",
     take: 1,
     audience: "audience",
@@ -661,7 +664,7 @@ const response = await client.clientGrants.list({
     allow_any_organization: true,
     subject_type: "client",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -677,6 +680,9 @@ let page = await client.clientGrants.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -913,7 +919,7 @@ await client.clientGrants.update("id");
 
 ## Clients
 
-<details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Client></code></summary>
+<details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Client, Management.ListClientsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -972,7 +978,7 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <dd>
 
 ```typescript
-const response = await client.clients.list({
+const pageableResponse = await client.clients.list({
     fields: "fields",
     include_fields: true,
     page: 1,
@@ -983,7 +989,7 @@ const response = await client.clients.list({
     app_type: "app_type",
     q: "q",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -1002,6 +1008,9 @@ let page = await client.clients.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -1429,7 +1438,7 @@ await client.clients.rotateSecret("id");
 
 ## Connections
 
-<details><summary><code>client.connections.<a href="/src/management/api/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ConnectionForList></code></summary>
+<details><summary><code>client.connections.<a href="/src/management/api/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ConnectionForList, Management.ListConnectionsCheckpointPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -1477,14 +1486,14 @@ To search by checkpoint, use the following parameters:
 <dd>
 
 ```typescript
-const response = await client.connections.list({
+const pageableResponse = await client.connections.list({
     from: "from",
     take: 1,
     name: "name",
     fields: "fields",
     include_fields: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -1499,6 +1508,9 @@ let page = await client.connections.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -2358,7 +2370,7 @@ await client.customDomains.verify("id");
 
 ## DeviceCredentials
 
-<details><summary><code>client.deviceCredentials.<a href="/src/management/api/resources/deviceCredentials/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.DeviceCredential></code></summary>
+<details><summary><code>client.deviceCredentials.<a href="/src/management/api/resources/deviceCredentials/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.DeviceCredential, Management.ListDeviceCredentialsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -2386,7 +2398,7 @@ Retrieve device credential information (<code>public_key</code>, <code>refresh_t
 <dd>
 
 ```typescript
-const response = await client.deviceCredentials.list({
+const pageableResponse = await client.deviceCredentials.list({
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -2396,7 +2408,7 @@ const response = await client.deviceCredentials.list({
     client_id: "client_id",
     type: "public_key",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -2414,6 +2426,9 @@ let page = await client.deviceCredentials.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -3178,7 +3193,7 @@ await client.eventStreams.test("id", {
 
 ## Flows
 
-<details><summary><code>client.flows.<a href="/src/management/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FlowSummary></code></summary>
+<details><summary><code>client.flows.<a href="/src/management/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -3191,13 +3206,13 @@ await client.eventStreams.test("id", {
 <dd>
 
 ```typescript
-const response = await client.flows.list({
+const pageableResponse = await client.flows.list({
     page: 1,
     per_page: 1,
     include_totals: true,
     synchronous: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -3211,6 +3226,9 @@ let page = await client.flows.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -3457,7 +3475,7 @@ await client.flows.update("id");
 
 ## Forms
 
-<details><summary><code>client.forms.<a href="/src/management/api/resources/forms/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FormSummary></code></summary>
+<details><summary><code>client.forms.<a href="/src/management/api/resources/forms/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -3470,12 +3488,12 @@ await client.flows.update("id");
 <dd>
 
 ```typescript
-const response = await client.forms.list({
+const pageableResponse = await client.forms.list({
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -3488,6 +3506,9 @@ let page = await client.forms.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -3734,7 +3755,7 @@ await client.forms.update("id");
 
 ## UserGrants
 
-<details><summary><code>client.userGrants.<a href="/src/management/api/resources/userGrants/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserGrant></code></summary>
+<details><summary><code>client.userGrants.<a href="/src/management/api/resources/userGrants/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserGrant, Management.ListUserGrantsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -3762,7 +3783,7 @@ Retrieve the <a href="https://auth0.com/docs/api-auth/which-oauth-flow-to-use">g
 <dd>
 
 ```typescript
-const response = await client.userGrants.list({
+const pageableResponse = await client.userGrants.list({
     per_page: 1,
     page: 1,
     include_totals: true,
@@ -3770,7 +3791,7 @@ const response = await client.userGrants.list({
     client_id: "client_id",
     audience: "audience",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -3786,6 +3807,9 @@ let page = await client.userGrants.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -3950,7 +3974,7 @@ await client.userGrants.delete("id");
 
 ## Hooks
 
-<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Hook></code></summary>
+<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Hook, Management.ListHooksOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -3978,7 +4002,7 @@ Retrieve all <a href="https://auth0.com/docs/hooks">hooks</a>. Accepts a list of
 <dd>
 
 ```typescript
-const response = await client.hooks.list({
+const pageableResponse = await client.hooks.list({
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -3986,7 +4010,7 @@ const response = await client.hooks.list({
     fields: "fields",
     triggerId: "credentials-exchange",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -4002,6 +4026,9 @@ let page = await client.hooks.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -5021,7 +5048,7 @@ await client.logStreams.update("id");
 
 ## Logs
 
-<details><summary><code>client.logs.<a href="/src/management/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Log></code></summary>
+<details><summary><code>client.logs.<a href="/src/management/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Log, Management.ListLogOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -5077,7 +5104,7 @@ Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#li
 <dd>
 
 ```typescript
-const response = await client.logs.list({
+const pageableResponse = await client.logs.list({
     page: 1,
     per_page: 1,
     sort: "sort",
@@ -5086,7 +5113,7 @@ const response = await client.logs.list({
     include_totals: true,
     search: "search",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -5103,6 +5130,9 @@ let page = await client.logs.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -5202,7 +5232,7 @@ await client.logs.get("id");
 
 ## NetworkAcls
 
-<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.NetworkAclsResponseContent></code></summary>
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.NetworkAclsResponseContent, Management.ListNetworkAclsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -5230,12 +5260,12 @@ Get all access control list entries for your client.
 <dd>
 
 ```typescript
-const response = await client.networkAcls.list({
+const pageableResponse = await client.networkAcls.list({
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -5248,6 +5278,9 @@ let page = await client.networkAcls.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -5631,7 +5664,7 @@ await client.networkAcls.update("id");
 
 ## Organizations
 
-<details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Organization></code></summary>
+<details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Organization, Management.ListOrganizationsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -5679,12 +5712,12 @@ To search by checkpoint, use the following parameters:
 <dd>
 
 ```typescript
-const response = await client.organizations.list({
+const pageableResponse = await client.organizations.list({
     from: "from",
     take: 1,
     sort: "sort",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -5697,6 +5730,9 @@ let page = await client.organizations.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -6308,7 +6344,7 @@ await client.refreshTokens.delete("id");
 
 ## ResourceServers
 
-<details><summary><code>client.resourceServers.<a href="/src/management/api/resources/resourceServers/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ResourceServer></code></summary>
+<details><summary><code>client.resourceServers.<a href="/src/management/api/resources/resourceServers/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -6336,13 +6372,13 @@ Retrieve details of all APIs associated with your tenant.
 <dd>
 
 ```typescript
-const response = await client.resourceServers.list({
+const pageableResponse = await client.resourceServers.list({
     page: 1,
     per_page: 1,
     include_totals: true,
     include_fields: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -6356,6 +6392,9 @@ let page = await client.resourceServers.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -6664,7 +6703,7 @@ await client.resourceServers.update("id");
 
 ## Roles
 
-<details><summary><code>client.roles.<a href="/src/management/api/resources/roles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Role></code></summary>
+<details><summary><code>client.roles.<a href="/src/management/api/resources/roles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Role, Management.ListRolesOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -6694,13 +6733,13 @@ Retrieve detailed list of user roles created in your tenant.
 <dd>
 
 ```typescript
-const response = await client.roles.list({
+const pageableResponse = await client.roles.list({
     per_page: 1,
     page: 1,
     include_totals: true,
     name_filter: "name_filter",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -6714,6 +6753,9 @@ let page = await client.roles.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -7014,7 +7056,7 @@ await client.roles.update("id");
 
 ## Rules
 
-<details><summary><code>client.rules.<a href="/src/management/api/resources/rules/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Rule></code></summary>
+<details><summary><code>client.rules.<a href="/src/management/api/resources/rules/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Rule, Management.ListRulesOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -7042,7 +7084,7 @@ Retrieve a filtered list of <a href="https://auth0.com/docs/rules">rules</a>. Ac
 <dd>
 
 ```typescript
-const response = await client.rules.list({
+const pageableResponse = await client.rules.list({
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -7050,7 +7092,7 @@ const response = await client.rules.list({
     fields: "fields",
     include_fields: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -7066,6 +7108,9 @@ let page = await client.rules.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -7573,7 +7618,7 @@ await client.rulesConfigs.delete("key");
 
 ## SelfServiceProfiles
 
-<details><summary><code>client.selfServiceProfiles.<a href="/src/management/api/resources/selfServiceProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.SelfServiceProfile></code></summary>
+<details><summary><code>client.selfServiceProfiles.<a href="/src/management/api/resources/selfServiceProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.SelfServiceProfile, Management.ListSelfServiceProfilesPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -7601,12 +7646,12 @@ Retrieves self-service profiles.
 <dd>
 
 ```typescript
-const response = await client.selfServiceProfiles.list({
+const pageableResponse = await client.selfServiceProfiles.list({
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -7619,6 +7664,9 @@ let page = await client.selfServiceProfiles.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -8556,7 +8604,7 @@ await client.tickets.changePassword();
 
 ## TokenExchangeProfiles
 
-<details><summary><code>client.tokenExchangeProfiles.<a href="/src/management/api/resources/tokenExchangeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.TokenExchangeProfileResponseContent></code></summary>
+<details><summary><code>client.tokenExchangeProfiles.<a href="/src/management/api/resources/tokenExchangeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.TokenExchangeProfileResponseContent, Management.ListTokenExchangeProfileResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -8593,11 +8641,11 @@ This endpoint supports Checkpoint pagination. To search by checkpoint, use the f
 <dd>
 
 ```typescript
-const response = await client.tokenExchangeProfiles.list({
+const pageableResponse = await client.tokenExchangeProfiles.list({
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -8609,6 +8657,9 @@ let page = await client.tokenExchangeProfiles.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -8909,7 +8960,7 @@ await client.tokenExchangeProfiles.update("id");
 
 ## UserAttributeProfiles
 
-<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserAttributeProfile></code></summary>
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserAttributeProfile, Management.ListUserAttributeProfilesPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -8937,11 +8988,11 @@ Retrieve a list of User Attribute Profiles. This endpoint supports Checkpoint pa
 <dd>
 
 ```typescript
-const response = await client.userAttributeProfiles.list({
+const pageableResponse = await client.userAttributeProfiles.list({
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -8953,6 +9004,9 @@ let page = await client.userAttributeProfiles.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -9650,7 +9704,7 @@ await client.userBlocks.delete("id");
 
 ## Users
 
-<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserResponseSchema></code></summary>
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserResponseSchema, Management.ListUsersOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -9691,7 +9745,7 @@ Auth0 limits the number of users you can return. If you exceed this threshold, p
 <dd>
 
 ```typescript
-const response = await client.users.list({
+const pageableResponse = await client.users.list({
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -9703,7 +9757,7 @@ const response = await client.users.list({
     search_engine: "v1",
     primary_order: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -9723,6 +9777,9 @@ let page = await client.users.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -10310,7 +10367,7 @@ await client.users.revokeAccess("id");
 
 ## Actions Versions
 
-<details><summary><code>client.actions.versions.<a href="/src/management/api/resources/actions/resources/versions/client/Client.ts">list</a>(actionId, { ...params }) -> core.Page<Management.ActionVersion></code></summary>
+<details><summary><code>client.actions.versions.<a href="/src/management/api/resources/actions/resources/versions/client/Client.ts">list</a>(actionId, { ...params }) -> core.Page<Management.ActionVersion, Management.ListActionVersionsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -10338,11 +10395,11 @@ Retrieve all of an action's versions. An action version is created whenever an a
 <dd>
 
 ```typescript
-const response = await client.actions.versions.list("actionId", {
+const pageableResponse = await client.actions.versions.list("actionId", {
     page: 1,
     per_page: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -10354,6 +10411,9 @@ let page = await client.actions.versions.list("actionId", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -10670,7 +10730,7 @@ await client.actions.triggers.list();
 
 ## Actions Triggers Bindings
 
-<details><summary><code>client.actions.triggers.bindings.<a href="/src/management/api/resources/actions/resources/triggers/resources/bindings/client/Client.ts">list</a>(triggerId, { ...params }) -> core.Page<Management.ActionBinding></code></summary>
+<details><summary><code>client.actions.triggers.bindings.<a href="/src/management/api/resources/actions/resources/triggers/resources/bindings/client/Client.ts">list</a>(triggerId, { ...params }) -> core.Page<Management.ActionBinding, Management.ListActionBindingsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -10698,11 +10758,11 @@ Retrieve the actions that are bound to a trigger. Once an action is created and 
 <dd>
 
 ```typescript
-const response = await client.actions.triggers.bindings.list("triggerId", {
+const pageableResponse = await client.actions.triggers.bindings.list("triggerId", {
     page: 1,
     per_page: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -10714,6 +10774,9 @@ let page = await client.actions.triggers.bindings.list("triggerId", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -12703,7 +12766,7 @@ await client.branding.phone.templates.test("id", {
 
 ## ClientGrants Organizations
 
-<details><summary><code>client.clientGrants.organizations.<a href="/src/management/api/resources/clientGrants/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Organization></code></summary>
+<details><summary><code>client.clientGrants.organizations.<a href="/src/management/api/resources/clientGrants/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Organization, Management.ListClientGrantOrganizationsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -12716,11 +12779,11 @@ await client.branding.phone.templates.test("id", {
 <dd>
 
 ```typescript
-const response = await client.clientGrants.organizations.list("id", {
+const pageableResponse = await client.clientGrants.organizations.list("id", {
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -12732,6 +12795,9 @@ let page = await client.clientGrants.organizations.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -13172,7 +13238,7 @@ await client.clients.credentials.update("client_id", "credential_id");
 
 ## Clients Connections
 
-<details><summary><code>client.clients.connections.<a href="/src/management/api/resources/clients/resources/connections/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionForList></code></summary>
+<details><summary><code>client.clients.connections.<a href="/src/management/api/resources/clients/resources/connections/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionForList, Management.ListClientConnectionsResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -13208,13 +13274,13 @@ Retrieve all connections that are enabled for the specified <a href="https://www
 <dd>
 
 ```typescript
-const response = await client.clients.connections.get("id", {
+const pageableResponse = await client.clients.connections.get("id", {
     from: "from",
     take: 1,
     fields: "fields",
     include_fields: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -13228,6 +13294,9 @@ let page = await client.clients.connections.get("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -13272,7 +13341,7 @@ while (page.hasNextPage()) {
 
 ## Connections Clients
 
-<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionEnabledClient></code></summary>
+<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionEnabledClient, Management.GetConnectionEnabledClientsResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -13302,11 +13371,11 @@ Retrieve all clients that have the specified <a href="https://auth0.com/docs/aut
 <dd>
 
 ```typescript
-const response = await client.connections.clients.get("id", {
+const pageableResponse = await client.connections.clients.get("id", {
     take: 1,
     from: "from",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -13318,6 +13387,9 @@ let page = await client.connections.clients.get("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -14746,7 +14818,7 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 
 ## Flows Executions
 
-<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flowId, { ...params }) -> core.Page<Management.FlowExecutionSummary></code></summary>
+<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flowId, { ...params }) -> core.Page<Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -14759,11 +14831,11 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 <dd>
 
 ```typescript
-const response = await client.flows.executions.list("flow_id", {
+const pageableResponse = await client.flows.executions.list("flow_id", {
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -14775,6 +14847,9 @@ let page = await client.flows.executions.list("flow_id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -14939,7 +15014,7 @@ await client.flows.executions.delete("flow_id", "execution_id");
 
 ## Flows Vault Connections
 
-<details><summary><code>client.flows.vault.connections.<a href="/src/management/api/resources/flows/resources/vault/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FlowsVaultConnectionSummary></code></summary>
+<details><summary><code>client.flows.vault.connections.<a href="/src/management/api/resources/flows/resources/vault/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FlowsVaultConnectionSummary, Management.ListFlowsVaultConnectionsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -14952,12 +15027,12 @@ await client.flows.executions.delete("flow_id", "execution_id");
 <dd>
 
 ```typescript
-const response = await client.flows.vault.connections.list({
+const pageableResponse = await client.flows.vault.connections.list({
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -14970,6 +15045,9 @@ let page = await client.flows.vault.connections.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -17962,7 +18040,7 @@ await client.keys.customSigning.delete();
 
 ## Keys Encryption
 
-<details><summary><code>client.keys.encryption.<a href="/src/management/api/resources/keys/resources/encryption/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.EncryptionKey></code></summary>
+<details><summary><code>client.keys.encryption.<a href="/src/management/api/resources/keys/resources/encryption/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.EncryptionKey, Management.ListEncryptionKeyOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -17990,12 +18068,12 @@ Retrieve details of all the encryption keys associated with your tenant.
 <dd>
 
 ```typescript
-const response = await client.keys.encryption.list({
+const pageableResponse = await client.keys.encryption.list({
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -18008,6 +18086,9 @@ let page = await client.keys.encryption.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -18664,7 +18745,7 @@ await client.keys.signing.revoke("kid");
 
 ## Organizations ClientGrants
 
-<details><summary><code>client.organizations.clientGrants.<a href="/src/management/api/resources/organizations/resources/clientGrants/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationClientGrant></code></summary>
+<details><summary><code>client.organizations.clientGrants.<a href="/src/management/api/resources/organizations/resources/clientGrants/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationClientGrant, Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -18677,14 +18758,14 @@ await client.keys.signing.revoke("kid");
 <dd>
 
 ```typescript
-const response = await client.organizations.clientGrants.list("id", {
+const pageableResponse = await client.organizations.clientGrants.list("id", {
     audience: "audience",
     client_id: "client_id",
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -18699,6 +18780,9 @@ let page = await client.organizations.clientGrants.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -18855,9 +18939,394 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 </dl>
 </details>
 
+## Organizations DiscoveryDomains
+
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationDiscoveryDomain, Management.ListOrganizationDiscoveryDomainsResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve list of all organization discovery domains associated with the specified organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.discoveryDomains.list("id", {
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.discoveryDomains.list("id", {
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationDiscoveryDomainsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DiscoveryDomains.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">create</a>(id, { ...params }) -> Management.CreateOrganizationDiscoveryDomainResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.discoveryDomains.create("id", {
+    domain: "domain",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateOrganizationDiscoveryDomainRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DiscoveryDomains.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">get</a>(id, discoveryDomainId) -> Management.GetOrganizationDiscoveryDomainResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details about a single organization discovery domain specified by ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.discoveryDomains.get("id", "discovery_domain_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**discoveryDomainId:** `string` — ID of the discovery domain.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DiscoveryDomains.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">delete</a>(id, discoveryDomainId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove a discovery domain from an organization. This action cannot be undone.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.discoveryDomains.delete("id", "discovery_domain_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**discoveryDomainId:** `string` — ID of the discovery domain.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DiscoveryDomains.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">update</a>(id, discoveryDomainId, { ...params }) -> Management.UpdateOrganizationDiscoveryDomainResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.discoveryDomains.update("id", "discovery_domain_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**discoveryDomainId:** `string` — ID of the discovery domain to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateOrganizationDiscoveryDomainRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DiscoveryDomains.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Organizations EnabledConnections
 
-<details><summary><code>client.organizations.enabledConnections.<a href="/src/management/api/resources/organizations/resources/enabledConnections/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationConnection></code></summary>
+<details><summary><code>client.organizations.enabledConnections.<a href="/src/management/api/resources/organizations/resources/enabledConnections/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationConnection, Management.ListOrganizationConnectionsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -18885,12 +19354,12 @@ Retrieve details about a specific connection currently enabled for an Organizati
 <dd>
 
 ```typescript
-const response = await client.organizations.enabledConnections.list("id", {
+const pageableResponse = await client.organizations.enabledConnections.list("id", {
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -18903,6 +19372,9 @@ let page = await client.organizations.enabledConnections.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -19245,7 +19717,7 @@ await client.organizations.enabledConnections.update("id", "connectionId");
 
 ## Organizations Invitations
 
-<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationInvitation></code></summary>
+<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationInvitation, Management.ListOrganizationInvitationsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -19273,7 +19745,7 @@ Retrieve a detailed list of invitations sent to users for a specific Organizatio
 <dd>
 
 ```typescript
-const response = await client.organizations.invitations.list("id", {
+const pageableResponse = await client.organizations.invitations.list("id", {
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -19281,7 +19753,7 @@ const response = await client.organizations.invitations.list("id", {
     include_fields: true,
     sort: "sort",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -19297,6 +19769,9 @@ let page = await client.organizations.invitations.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -19543,7 +20018,7 @@ await client.organizations.invitations.delete("id", "invitation_id");
 
 ## Organizations Members
 
-<details><summary><code>client.organizations.members.<a href="/src/management/api/resources/organizations/resources/members/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationMember></code></summary>
+<details><summary><code>client.organizations.members.<a href="/src/management/api/resources/organizations/resources/members/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationMember, Management.ListOrganizationMembersPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -19592,13 +20067,13 @@ To search by checkpoint, use the following parameters: - from: Optional id from 
 <dd>
 
 ```typescript
-const response = await client.organizations.members.list("id", {
+const pageableResponse = await client.organizations.members.list("id", {
     from: "from",
     take: 1,
     fields: "fields",
     include_fields: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -19612,6 +20087,9 @@ let page = await client.organizations.members.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -19789,7 +20267,7 @@ await client.organizations.members.delete("id", {
 
 ## Organizations Members Roles
 
-<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">list</a>(id, userId, { ...params }) -> core.Page<Management.Role></code></summary>
+<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">list</a>(id, userId, { ...params }) -> core.Page<Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -19819,12 +20297,12 @@ Users can be members of multiple Organizations with unique roles assigned for ea
 <dd>
 
 ```typescript
-const response = await client.organizations.members.roles.list("id", "user_id", {
+const pageableResponse = await client.organizations.members.roles.list("id", "user_id", {
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -19837,6 +20315,9 @@ let page = await client.organizations.members.roles.list("id", "user_id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -20055,7 +20536,7 @@ await client.organizations.members.roles.delete("id", "user_id", {
 
 ## Prompts Rendering
 
-<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.AculResponseContent></code></summary>
+<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -20083,7 +20564,7 @@ Get render setting configurations for all screens.
 <dd>
 
 ```typescript
-const response = await client.prompts.rendering.list({
+const pageableResponse = await client.prompts.rendering.list({
     fields: "fields",
     include_fields: true,
     page: 1,
@@ -20093,7 +20574,7 @@ const response = await client.prompts.rendering.list({
     screen: "screen",
     rendering_mode: "advanced",
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -20111,6 +20592,9 @@ let page = await client.prompts.rendering.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -20960,7 +21444,7 @@ await client.riskAssessments.settings.newDevice.update({
 
 ## Roles Permissions
 
-<details><summary><code>client.roles.permissions.<a href="/src/management/api/resources/roles/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.PermissionsResponsePayload></code></summary>
+<details><summary><code>client.roles.permissions.<a href="/src/management/api/resources/roles/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.PermissionsResponsePayload, Management.ListRolePermissionsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -20988,12 +21472,12 @@ Retrieve detailed list (name, description, resource server) of permissions grant
 <dd>
 
 ```typescript
-const response = await client.roles.permissions.list("id", {
+const pageableResponse = await client.roles.permissions.list("id", {
     per_page: 1,
     page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -21006,6 +21490,9 @@ let page = await client.roles.permissions.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -21206,7 +21693,7 @@ await client.roles.permissions.delete("id", {
 
 ## Roles Users
 
-<details><summary><code>client.roles.users.<a href="/src/management/api/resources/roles/resources/users/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.RoleUser></code></summary>
+<details><summary><code>client.roles.users.<a href="/src/management/api/resources/roles/resources/users/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.RoleUser, Management.ListRoleUsersPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -21254,11 +21741,11 @@ To search by checkpoint, use the following parameters:
 <dd>
 
 ```typescript
-const response = await client.roles.users.list("id", {
+const pageableResponse = await client.roles.users.list("id", {
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -21270,6 +21757,9 @@ let page = await client.roles.users.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -21835,7 +22325,7 @@ await client.tenants.settings.update();
 
 ## Users AuthenticationMethods
 
-<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.UserAuthenticationMethod></code></summary>
+<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.UserAuthenticationMethod, Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -21863,12 +22353,12 @@ Retrieve detailed list of authentication methods associated with a specified use
 <dd>
 
 ```typescript
-const response = await client.users.authenticationMethods.list("id", {
+const pageableResponse = await client.users.authenticationMethods.list("id", {
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -21881,6 +22371,9 @@ let page = await client.users.authenticationMethods.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -22409,7 +22902,7 @@ await client.users.authenticators.deleteAll("id");
 
 ## Users ConnectedAccounts
 
-<details><summary><code>client.users.connectedAccounts.<a href="/src/management/api/resources/users/resources/connectedAccounts/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.ConnectedAccount></code></summary>
+<details><summary><code>client.users.connectedAccounts.<a href="/src/management/api/resources/users/resources/connectedAccounts/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.ConnectedAccount, Management.ListUserConnectedAccountsResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -22437,11 +22930,11 @@ Retrieve all connected accounts associated with the user.
 <dd>
 
 ```typescript
-const response = await client.users.connectedAccounts.list("id", {
+const pageableResponse = await client.users.connectedAccounts.list("id", {
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -22453,6 +22946,9 @@ let page = await client.users.connectedAccounts.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -22681,98 +23177,6 @@ await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
 </dl>
 </details>
 
-## Users Groups
-
-<details><summary><code>client.users.groups.<a href="/src/management/api/resources/users/resources/groups/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.UserGroupsResponseSchema></code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all groups to which this user belongs.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-const response = await client.users.groups.get("id", {
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-for await (const item of response) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.users.groups.get("id", {
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the user to list groups for.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.GetUserGroupsRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Groups.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 ## Users Identities
 
 <details><summary><code>client.users.identities.<a href="/src/management/api/resources/users/resources/identities/client/Client.ts">link</a>(id, { ...params }) -> Management.UserIdentity[]</code></summary>
@@ -22955,7 +23359,7 @@ await client.users.identities.delete("id", "ad", "user_id");
 
 ## Users Logs
 
-<details><summary><code>client.users.logs.<a href="/src/management/api/resources/users/resources/logs/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Log></code></summary>
+<details><summary><code>client.users.logs.<a href="/src/management/api/resources/users/resources/logs/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Log, Management.UserListLogOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -22989,13 +23393,13 @@ Auth0 <a href="https://auth0.com/docs/logs/retrieve-log-events-using-mgmt-api#li
 <dd>
 
 ```typescript
-const response = await client.users.logs.list("id", {
+const pageableResponse = await client.users.logs.list("id", {
     page: 1,
     per_page: 1,
     sort: "sort",
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -23009,6 +23413,9 @@ let page = await client.users.logs.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -23189,7 +23596,7 @@ await client.users.multifactor.deleteProvider("id", "duo");
 
 ## Users Organizations
 
-<details><summary><code>client.users.organizations.<a href="/src/management/api/resources/users/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Organization></code></summary>
+<details><summary><code>client.users.organizations.<a href="/src/management/api/resources/users/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Organization, Management.ListUserOrganizationsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -23217,12 +23624,12 @@ Retrieve list of the specified user's current Organization memberships. User mus
 <dd>
 
 ```typescript
-const response = await client.users.organizations.list("id", {
+const pageableResponse = await client.users.organizations.list("id", {
     page: 1,
     per_page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -23235,6 +23642,9 @@ let page = await client.users.organizations.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -23279,7 +23689,7 @@ while (page.hasNextPage()) {
 
 ## Users Permissions
 
-<details><summary><code>client.users.permissions.<a href="/src/management/api/resources/users/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.UserPermissionSchema></code></summary>
+<details><summary><code>client.users.permissions.<a href="/src/management/api/resources/users/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.UserPermissionSchema, Management.ListUserPermissionsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -23307,12 +23717,12 @@ Retrieve all permissions associated with the user.
 <dd>
 
 ```typescript
-const response = await client.users.permissions.list("id", {
+const pageableResponse = await client.users.permissions.list("id", {
     per_page: 1,
     page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -23325,6 +23735,9 @@ let page = await client.users.permissions.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -23601,7 +24014,7 @@ await client.users.riskAssessments.clear("id", {
 
 ## Users Roles
 
-<details><summary><code>client.users.roles.<a href="/src/management/api/resources/users/resources/roles/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Role></code></summary>
+<details><summary><code>client.users.roles.<a href="/src/management/api/resources/users/resources/roles/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Role, Management.ListUserRolesOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -23631,12 +24044,12 @@ Retrieve detailed list of all user roles currently assigned to a user.
 <dd>
 
 ```typescript
-const response = await client.users.roles.list("id", {
+const pageableResponse = await client.users.roles.list("id", {
     per_page: 1,
     page: 1,
     include_totals: true,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -23649,6 +24062,9 @@ let page = await client.users.roles.list("id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -23843,7 +24259,7 @@ await client.users.roles.delete("id", {
 
 ## Users RefreshToken
 
-<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">list</a>(userId, { ...params }) -> core.Page<Management.RefreshTokenResponseContent></code></summary>
+<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">list</a>(userId, { ...params }) -> core.Page<Management.RefreshTokenResponseContent, Management.ListRefreshTokensPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -23871,11 +24287,11 @@ Retrieve details for a user's refresh tokens.
 <dd>
 
 ```typescript
-const response = await client.users.refreshToken.list("user_id", {
+const pageableResponse = await client.users.refreshToken.list("user_id", {
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -23887,6 +24303,9 @@ let page = await client.users.refreshToken.list("user_id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -23994,7 +24413,7 @@ await client.users.refreshToken.delete("user_id");
 
 ## Users Sessions
 
-<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">list</a>(userId, { ...params }) -> core.Page<Management.SessionResponseContent></code></summary>
+<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">list</a>(userId, { ...params }) -> core.Page<Management.SessionResponseContent, Management.ListUserSessionsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -24022,11 +24441,11 @@ Retrieve details for a user's sessions.
 <dd>
 
 ```typescript
-const response = await client.users.sessions.list("user_id", {
+const pageableResponse = await client.users.sessions.list("user_id", {
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -24038,6 +24457,9 @@ let page = await client.users.sessions.list("user_id", {
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -24145,7 +24567,7 @@ await client.users.sessions.delete("user_id");
 
 ## VerifiableCredentials Verification Templates
 
-<details><summary><code>client.verifiableCredentials.verification.templates.<a href="/src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.VerifiableCredentialTemplateResponse></code></summary>
+<details><summary><code>client.verifiableCredentials.verification.templates.<a href="/src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.VerifiableCredentialTemplateResponse, Management.ListVerifiableCredentialTemplatesPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -24173,11 +24595,11 @@ List a verifiable credential templates.
 <dd>
 
 ```typescript
-const response = await client.verifiableCredentials.verification.templates.list({
+const pageableResponse = await client.verifiableCredentials.verification.templates.list({
     from: "from",
     take: 1,
 });
-for await (const item of response) {
+for await (const item of pageableResponse) {
     console.log(item);
 }
 
@@ -24189,6 +24611,9 @@ let page = await client.verifiableCredentials.verification.templates.list({
 while (page.hasNextPage()) {
     page = page.getNextPage();
 }
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>

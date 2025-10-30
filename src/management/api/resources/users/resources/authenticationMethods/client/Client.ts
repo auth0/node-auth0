@@ -44,7 +44,12 @@ export class AuthenticationMethods {
         id: string,
         request: Management.ListUserAuthenticationMethodsRequestParameters = {},
         requestOptions?: AuthenticationMethods.RequestOptions,
-    ): Promise<core.Page<Management.UserAuthenticationMethod>> {
+    ): Promise<
+        core.Page<
+            Management.UserAuthenticationMethod,
+            Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent
+        >
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListUserAuthenticationMethodsRequestParameters,
@@ -137,9 +142,9 @@ export class AuthenticationMethods {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent,
-            Management.UserAuthenticationMethod
+        return new core.Page<
+            Management.UserAuthenticationMethod,
+            Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

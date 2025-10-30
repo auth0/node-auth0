@@ -47,7 +47,7 @@ export class Rendering {
     public async list(
         request: Management.ListAculsRequestParameters = {},
         requestOptions?: Rendering.RequestOptions,
-    ): Promise<core.Page<Management.AculResponseContent>> {
+    ): Promise<core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListAculsRequestParameters,
@@ -165,7 +165,7 @@ export class Rendering {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListAculsOffsetPaginatedResponseContent, Management.AculResponseContent>({
+        return new core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.configs ?? []).length > 0,

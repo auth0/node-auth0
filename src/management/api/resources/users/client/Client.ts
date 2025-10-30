@@ -11,7 +11,6 @@ import { Authenticators } from "../resources/authenticators/client/Client.js";
 import { ConnectedAccounts } from "../resources/connectedAccounts/client/Client.js";
 import { Enrollments } from "../resources/enrollments/client/Client.js";
 import { FederatedConnectionsTokensets } from "../resources/federatedConnectionsTokensets/client/Client.js";
-import { Groups } from "../resources/groups/client/Client.js";
 import { Identities } from "../resources/identities/client/Client.js";
 import { Logs } from "../resources/logs/client/Client.js";
 import { Multifactor } from "../resources/multifactor/client/Client.js";
@@ -35,7 +34,6 @@ export class Users {
     protected _connectedAccounts: ConnectedAccounts | undefined;
     protected _enrollments: Enrollments | undefined;
     protected _federatedConnectionsTokensets: FederatedConnectionsTokensets | undefined;
-    protected _groups: Groups | undefined;
     protected _identities: Identities | undefined;
     protected _logs: Logs | undefined;
     protected _multifactor: Multifactor | undefined;
@@ -68,10 +66,6 @@ export class Users {
 
     public get federatedConnectionsTokensets(): FederatedConnectionsTokensets {
         return (this._federatedConnectionsTokensets ??= new FederatedConnectionsTokensets(this._options));
-    }
-
-    public get groups(): Groups {
-        return (this._groups ??= new Groups(this._options));
     }
 
     public get identities(): Identities {
@@ -152,7 +146,7 @@ export class Users {
     public async list(
         request: Management.ListUsersRequestParameters = {},
         requestOptions?: Users.RequestOptions,
-    ): Promise<core.Page<Management.UserResponseSchema>> {
+    ): Promise<core.Page<Management.UserResponseSchema, Management.ListUsersOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListUsersRequestParameters,
@@ -276,7 +270,7 @@ export class Users {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListUsersOffsetPaginatedResponseContent, Management.UserResponseSchema>({
+        return new core.Page<Management.UserResponseSchema, Management.ListUsersOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.users ?? []).length > 0,

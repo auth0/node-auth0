@@ -113,6 +113,9 @@ export const OauthScope = {
      * Update Client Keys */
     UpdateClientKeys: "update:client_keys",
     /**
+     * Update Client Token Vault Privileged Access */
+    UpdateClientTokenVaultPrivilegedAccess: "update:client_token_vault_privileged_access",
+    /**
      * Delete Clients */
     DeleteClients: "delete:clients",
     /**

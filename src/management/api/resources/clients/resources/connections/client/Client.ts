@@ -53,7 +53,7 @@ export class Connections {
         id: string,
         request: Management.ConnectionsGetRequest = {},
         requestOptions?: Connections.RequestOptions,
-    ): Promise<core.Page<Management.ConnectionForList>> {
+    ): Promise<core.Page<Management.ConnectionForList, Management.ListClientConnectionsResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ConnectionsGetRequest,
@@ -153,7 +153,7 @@ export class Connections {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListClientConnectionsResponseContent, Management.ConnectionForList>({
+        return new core.Page<Management.ConnectionForList, Management.ListClientConnectionsResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

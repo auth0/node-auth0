@@ -44,7 +44,9 @@ export class Permissions {
         id: string,
         request: Management.ListUserPermissionsRequestParameters = {},
         requestOptions?: Permissions.RequestOptions,
-    ): Promise<core.Page<Management.UserPermissionSchema>> {
+    ): Promise<
+        core.Page<Management.UserPermissionSchema, Management.ListUserPermissionsOffsetPaginatedResponseContent>
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListUserPermissionsRequestParameters,
@@ -135,9 +137,9 @@ export class Permissions {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserPermissionsOffsetPaginatedResponseContent,
-            Management.UserPermissionSchema
+        return new core.Page<
+            Management.UserPermissionSchema,
+            Management.ListUserPermissionsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
