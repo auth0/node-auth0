@@ -3285,26 +3285,6 @@ export interface GetUserConnectedAccountsRequestParameters {
 
 /**
  * @example
- *     {
- *         fields: "fields",
- *         include_fields: true,
- *         from: "from",
- *         take: 1
- *     }
- */
-export interface GetUserGroupsRequestParameters {
-    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
-    fields?: string | null;
-    /** Whether specified fields are to be included (true) or excluded (false). */
-    include_fields?: boolean | null;
-    /** Optional Id from which to start selection. */
-    from?: string | null;
-    /** Number of results per page. Defaults to 50. */
-    take?: number | null;
-}
-
-/**
- * @example
  *     {}
  */
 export interface LinkUserIdentityRequestContent {

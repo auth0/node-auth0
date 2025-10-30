@@ -53,7 +53,7 @@ export class SelfServiceProfiles {
     public async list(
         request: Management.ListSelfServiceProfilesRequestParameters = {},
         requestOptions?: SelfServiceProfiles.RequestOptions,
-    ): Promise<core.Page<Management.SelfServiceProfile>> {
+    ): Promise<core.Page<Management.SelfServiceProfile, Management.ListSelfServiceProfilesPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListSelfServiceProfilesRequestParameters,
@@ -142,19 +142,18 @@ export class SelfServiceProfiles {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListSelfServiceProfilesPaginatedResponseContent,
-            Management.SelfServiceProfile
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.self_service_profiles ?? []).length > 0,
-            getItems: (response) => response?.self_service_profiles ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
+        return new core.Page<Management.SelfServiceProfile, Management.ListSelfServiceProfilesPaginatedResponseContent>(
+            {
+                response: dataWithRawResponse.data,
+                rawResponse: dataWithRawResponse.rawResponse,
+                hasNextPage: (response) => (response?.self_service_profiles ?? []).length > 0,
+                getItems: (response) => response?.self_service_profiles ?? [],
+                loadPage: (_response) => {
+                    _offset += 1;
+                    return list(core.setObjectProperty(request, "page", _offset));
+                },
             },
-        });
+        );
     }
 
     /**

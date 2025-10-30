@@ -42,7 +42,7 @@ export class Bindings {
         triggerId: Management.ActionTriggerTypeEnum,
         request: Management.ListActionTriggerBindingsRequestParameters = {},
         requestOptions?: Bindings.RequestOptions,
-    ): Promise<core.Page<Management.ActionBinding>> {
+    ): Promise<core.Page<Management.ActionBinding, Management.ListActionBindingsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListActionTriggerBindingsRequestParameters,
@@ -128,7 +128,7 @@ export class Bindings {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListActionBindingsPaginatedResponseContent, Management.ActionBinding>({
+        return new core.Page<Management.ActionBinding, Management.ListActionBindingsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.bindings ?? []).length > 0,

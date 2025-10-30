@@ -45,7 +45,7 @@ export class Clients {
         id: string,
         request: Management.GetConnectionEnabledClientsRequestParameters = {},
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.Page<Management.ConnectionEnabledClient>> {
+    ): Promise<core.Page<Management.ConnectionEnabledClient, Management.GetConnectionEnabledClientsResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.GetConnectionEnabledClientsRequestParameters,
@@ -132,19 +132,18 @@ export class Clients {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.GetConnectionEnabledClientsResponseContent,
-            Management.ConnectionEnabledClient
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.clients ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
+        return new core.Page<Management.ConnectionEnabledClient, Management.GetConnectionEnabledClientsResponseContent>(
+            {
+                response: dataWithRawResponse.data,
+                rawResponse: dataWithRawResponse.rawResponse,
+                hasNextPage: (response) =>
+                    response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+                getItems: (response) => response?.clients ?? [],
+                loadPage: (response) => {
+                    return list(core.setObjectProperty(request, "from", response?.next));
+                },
             },
-        });
+        );
     }
 
     /**

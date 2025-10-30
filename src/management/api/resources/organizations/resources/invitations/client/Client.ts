@@ -47,7 +47,12 @@ export class Invitations {
         id: string,
         request: Management.ListOrganizationInvitationsRequestParameters = {},
         requestOptions?: Invitations.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationInvitation>> {
+    ): Promise<
+        core.Page<
+            Management.OrganizationInvitation,
+            Management.ListOrganizationInvitationsOffsetPaginatedResponseContent
+        >
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListOrganizationInvitationsRequestParameters,
@@ -154,9 +159,9 @@ export class Invitations {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationInvitationsOffsetPaginatedResponseContent,
-            Management.OrganizationInvitation
+        return new core.Page<
+            Management.OrganizationInvitation,
+            Management.ListOrganizationInvitationsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

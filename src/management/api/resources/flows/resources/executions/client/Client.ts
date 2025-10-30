@@ -40,7 +40,7 @@ export class Executions {
         flowId: string,
         request: Management.ExecutionsListRequest = {},
         requestOptions?: Executions.RequestOptions,
-    ): Promise<core.Page<Management.FlowExecutionSummary>> {
+    ): Promise<core.Page<Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ExecutionsListRequest,
@@ -125,10 +125,7 @@ export class Executions {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListFlowExecutionsPaginatedResponseContent,
-            Management.FlowExecutionSummary
-        >({
+        return new core.Page<Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

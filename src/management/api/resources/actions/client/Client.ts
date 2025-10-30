@@ -62,7 +62,7 @@ export class Actions {
     public async list(
         request: Management.ListActionsRequestParameters = {},
         requestOptions?: Actions.RequestOptions,
-    ): Promise<core.Page<Management.Action>> {
+    ): Promise<core.Page<Management.Action, Management.ListActionsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListActionsRequestParameters,
@@ -158,7 +158,7 @@ export class Actions {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListActionsPaginatedResponseContent, Management.Action>({
+        return new core.Page<Management.Action, Management.ListActionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.actions ?? []).length > 0,

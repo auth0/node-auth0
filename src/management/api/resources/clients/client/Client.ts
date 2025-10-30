@@ -91,7 +91,7 @@ export class Clients {
     public async list(
         request: Management.ListClientsRequestParameters = {},
         requestOptions?: Clients.RequestOptions,
-    ): Promise<core.Page<Management.Client>> {
+    ): Promise<core.Page<Management.Client, Management.ListClientsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListClientsRequestParameters,
@@ -206,7 +206,7 @@ export class Clients {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListClientsOffsetPaginatedResponseContent, Management.Client>({
+        return new core.Page<Management.Client, Management.ListClientsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.clients ?? []).length > 0,

@@ -43,7 +43,7 @@ export class UserGrants {
     public async list(
         request: Management.ListUserGrantsRequestParameters = {},
         requestOptions?: UserGrants.RequestOptions,
-    ): Promise<core.Page<Management.UserGrant>> {
+    ): Promise<core.Page<Management.UserGrant, Management.ListUserGrantsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListUserGrantsRequestParameters,
@@ -141,7 +141,7 @@ export class UserGrants {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListUserGrantsOffsetPaginatedResponseContent, Management.UserGrant>({
+        return new core.Page<Management.UserGrant, Management.ListUserGrantsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.grants ?? []).length > 0,

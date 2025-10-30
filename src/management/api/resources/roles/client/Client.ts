@@ -56,7 +56,7 @@ export class Roles {
     public async list(
         request: Management.ListRolesRequestParameters = {},
         requestOptions?: Roles.RequestOptions,
-    ): Promise<core.Page<Management.Role>> {
+    ): Promise<core.Page<Management.Role, Management.ListRolesOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListRolesRequestParameters,
@@ -151,7 +151,7 @@ export class Roles {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListRolesOffsetPaginatedResponseContent, Management.Role>({
+        return new core.Page<Management.Role, Management.ListRolesOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.roles ?? []).length > 0,

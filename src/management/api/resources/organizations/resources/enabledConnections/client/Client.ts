@@ -43,7 +43,12 @@ export class EnabledConnections {
         id: string,
         request: Management.ListOrganizationConnectionsRequestParameters = {},
         requestOptions?: EnabledConnections.RequestOptions,
-    ): Promise<core.Page<Management.OrganizationConnection>> {
+    ): Promise<
+        core.Page<
+            Management.OrganizationConnection,
+            Management.ListOrganizationConnectionsOffsetPaginatedResponseContent
+        >
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListOrganizationConnectionsRequestParameters,
@@ -132,9 +137,9 @@ export class EnabledConnections {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListOrganizationConnectionsOffsetPaginatedResponseContent,
-            Management.OrganizationConnection
+        return new core.Page<
+            Management.OrganizationConnection,
+            Management.ListOrganizationConnectionsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
