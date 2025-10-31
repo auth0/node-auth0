@@ -66,11 +66,19 @@ export class CustomDomainsManager extends BaseAPI {
         config: {},
       },
       {
-        key: 'domain_metadata_filter',
+        key: 'q',
         config: {},
       },
       {
-        key: 'domain_name_filter',
+        key: 'fields',
+        config: {},
+      },
+      {
+        key: 'include_fields',
+        config: {},
+      },
+      {
+        key: 'sort',
         config: {},
       },
     ]);
