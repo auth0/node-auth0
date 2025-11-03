@@ -5,6 +5,8 @@ import {
   PatchBreachedPasswordDetectionRequest,
   PatchBruteForceProtectionRequest,
   PatchSuspiciousIpThrottlingRequest,
+  UpdateBotDetectionSettingsRequestContent,
+  UpdateCaptchaRequestContent,
   ManagementClient,
 } from '../../src/index.js';
 
@@ -14,6 +16,8 @@ describe('AttackProtectionManager', () => {
   const bruteForcePath = '/api/v2/attack-protection/brute-force-protection';
   const suspiciousIpPath = '/api/v2/attack-protection/suspicious-ip-throttling';
   const breachedPasswordDetectionPath = '/api/v2/attack-protection/breached-password-detection';
+  const botDetectionPath = '/api/v2/attack-protection/bot-detection';
+  const captchaPath = '/api/v2/attack-protection/captcha';
   let attackProtection: AttackProtectionManager;
   let token: string;
 
@@ -34,6 +38,10 @@ describe('AttackProtectionManager', () => {
       'updateSuspiciousIpThrottlingConfig',
       'getBreachedPasswordDetectionConfig',
       'updateBreachedPasswordDetectionConfig',
+      'getBotDetectionConfig',
+      'updateBotDetectionConfig',
+      'getCaptchaConfig',
+      'updateCaptchaConfig',
     ];
 
     methods.forEach((method) => {
@@ -417,6 +425,264 @@ describe('AttackProtectionManager', () => {
           .reply(200, {});
 
         attackProtection.updateBreachedPasswordDetectionConfig({}, data).then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+    });
+  });
+
+  describe('Bot Detection', () => {
+    const data: UpdateBotDetectionSettingsRequestContent = {
+      bot_detection_level: 'medium',
+      allowlist: ['192.168.1.0/24', '10.0.0.1'],
+      monitoring_mode_enabled: true,
+      challenge_password_policy: 'always',
+      challenge_passwordless_policy: 'high_risk',
+      challenge_password_reset_policy: 'off',
+    };
+
+    describe('#getBotDetectionConfig', () => {
+      let request: Scope;
+
+      beforeEach(() => {
+        request = nock(API_URL).get(botDetectionPath).reply(200, data);
+      });
+
+      it('should pass any errors to the promise catch handler', (done) => {
+        nock.cleanAll();
+
+        nock(API_URL).get(botDetectionPath).reply(500, {});
+
+        attackProtection.getBotDetectionConfig().catch((err) => {
+          expect(err).toBeDefined();
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', (done) => {
+        attackProtection.getBotDetectionConfig().then((botDetectionConfig) => {
+          expect(botDetectionConfig.data).toMatchObject(data);
+
+          done();
+        });
+      });
+
+      it(`should perform a GET request to /api/v2${botDetectionPath}`, (done) => {
+        attackProtection.getBotDetectionConfig().then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+
+      it('should include the token in the Authorization header', (done) => {
+        nock.cleanAll();
+
+        const request = nock(API_URL)
+          .get(botDetectionPath)
+          .matchHeader('Authorization', `Bearer ${token}`)
+          .reply(200, {});
+
+        attackProtection.getBotDetectionConfig().then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+    });
+
+    describe('#updateBotDetectionConfig', () => {
+      let request: Scope;
+
+      beforeEach(() => {
+        request = nock(API_URL).patch(botDetectionPath).reply(200, data);
+      });
+
+      it('should pass any errors to the promise catch handler', (done) => {
+        nock.cleanAll();
+
+        nock(API_URL).patch(botDetectionPath).reply(500, {});
+
+        attackProtection.updateBotDetectionConfig(data).catch((err) => {
+          expect(err).toBeInstanceOf(Error);
+
+          done();
+        });
+      });
+
+      it(`should perform a PATCH request to /api/v2${botDetectionPath}`, (done) => {
+        attackProtection.updateBotDetectionConfig({}).then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+
+      it('should pass the data in the body of the request', (done) => {
+        attackProtection.updateBotDetectionConfig(data).then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', (done) => {
+        attackProtection.updateBotDetectionConfig(data).then((botDetectionConfig) => {
+          expect(botDetectionConfig.data).toMatchObject(data);
+
+          done();
+        });
+      });
+
+      it('should include the token in the Authorization header', (done) => {
+        nock.cleanAll();
+
+        const request = nock(API_URL)
+          .patch(botDetectionPath)
+          .matchHeader('Authorization', `Bearer ${token}`)
+          .reply(200, {});
+
+        attackProtection.updateBotDetectionConfig(data).then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+    });
+  });
+
+  describe('CAPTCHA Configuration', () => {
+    const responseData = {
+      policy: 'high_risk',
+      passwordless_policy: 'always_on',
+      password_reset_policy: 'off',
+      selected: 'recaptcha_v2',
+      providers: {
+        recaptcha_v2: {
+          siteKey: 'test-site-key',
+          secret: 'test-secret',
+        },
+      },
+      allowlist: ['192.168.1.1'],
+    };
+
+    describe('#getCaptchaConfig', () => {
+      let request: Scope;
+
+      beforeEach(() => {
+        request = nock(API_URL).get(captchaPath).reply(200, responseData);
+      });
+
+      it('should pass any errors to the promise catch handler', (done) => {
+        nock.cleanAll();
+
+        nock(API_URL).get(captchaPath).reply(500, {});
+
+        attackProtection.getCaptchaConfig().catch((err) => {
+          expect(err).toBeDefined();
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', (done) => {
+        attackProtection.getCaptchaConfig().then((captchaConfig) => {
+          expect(captchaConfig.data).toMatchObject(responseData);
+
+          done();
+        });
+      });
+
+      it(`should perform a GET request to /api/v2${captchaPath}`, (done) => {
+        attackProtection.getCaptchaConfig().then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+
+      it('should include the token in the Authorization header', (done) => {
+        nock.cleanAll();
+
+        const request = nock(API_URL)
+          .get(captchaPath)
+          .matchHeader('Authorization', `Bearer ${token}`)
+          .reply(200, {});
+
+        attackProtection.getCaptchaConfig().then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+    });
+
+    describe('#updateCaptchaConfig', () => {
+      const requestPayload: UpdateCaptchaRequestContent = {
+        siteKey: 'test-site-key',
+        secret: 'test-secret',
+        apiKey: 'test-api-key',
+        projectId: 'test-project-id',
+      };
+
+      const responsePayload = {
+        ...responseData,
+      };
+
+      let request: Scope;
+
+      beforeEach(() => {
+        request = nock(API_URL).patch(captchaPath).reply(200, responsePayload);
+      });
+
+      it('should pass any errors to the promise catch handler', (done) => {
+        nock.cleanAll();
+
+        nock(API_URL).patch(captchaPath).reply(500, {});
+
+        attackProtection.updateCaptchaConfig(requestPayload).catch((err) => {
+          expect(err).toBeInstanceOf(Error);
+
+          done();
+        });
+      });
+
+      it(`should perform a PATCH request to /api/v2${captchaPath}`, (done) => {
+        attackProtection.updateCaptchaConfig(requestPayload).then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+
+      it('should pass the data in the body of the request', (done) => {
+        attackProtection.updateCaptchaConfig(requestPayload).then(() => {
+          expect(request.isDone()).toBe(true);
+
+          done();
+        });
+      });
+
+      it('should pass the body of the response to the "then" handler', (done) => {
+        attackProtection.updateCaptchaConfig(requestPayload).then((captchaConfig) => {
+          expect(captchaConfig.data).toMatchObject(responsePayload);
+
+          done();
+        });
+      });
+
+      it('should include the token in the Authorization header', (done) => {
+        nock.cleanAll();
+
+        const request = nock(API_URL)
+          .patch(captchaPath)
+          .matchHeader('Authorization', `Bearer ${token}`)
+          .reply(200, {});
+
+        attackProtection.updateCaptchaConfig(requestPayload).then(() => {
           expect(request.isDone()).toBe(true);
 
           done();
