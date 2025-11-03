@@ -94,6 +94,7 @@ describe('ClientsManager', () => {
             enforce: true,
           },
         },
+        async_approval_notification_channels: ['guardian-push', 'email'],
       },
     ];
 
@@ -132,6 +133,9 @@ describe('ClientsManager', () => {
         expect(clients.data[0].logo_uri).toBe(response[0].logo_uri);
         expect(clients.data[0].token_quota).toStrictEqual(response[0].token_quota);
         expect(clients.data[0].refresh_token).toBe(response[0].refresh_token);
+        expect(clients.data[0].async_approval_notification_channels).toStrictEqual(
+          response[0].async_approval_notification_channels
+        );
         done();
       });
     });
@@ -199,6 +203,7 @@ describe('ClientsManager', () => {
         },
       },
       resource_server_identifier: 'https://test-token-vault-1.example.com',
+      async_approval_notification_channels: ['guardian-push', 'email'],
     };
     const response: Partial<Client> = {
       tenant: 'test_tenant',
@@ -216,6 +221,7 @@ describe('ClientsManager', () => {
           enforce: true,
         },
       },
+      async_approval_notification_channels: ['guardian-push', 'email'],
     };
     let request: nock.Scope;
 
@@ -274,6 +280,9 @@ describe('ClientsManager', () => {
         expect(client.data.app_type).toBe(response.app_type);
         expect(client.data.logo_uri).toBe(response.logo_uri);
         expect(client.data.token_quota).toStrictEqual(response.token_quota);
+        expect(client.data.async_approval_notification_channels).toStrictEqual(
+          response.async_approval_notification_channels
+        );
         done();
       });
     });
@@ -296,6 +305,7 @@ describe('ClientsManager', () => {
           enforce: true,
         },
       },
+      async_approval_notification_channels: ['guardian-push', 'email'],
     };
     let request: nock.Scope;
 
@@ -329,6 +339,9 @@ describe('ClientsManager', () => {
         expect(client.data.logo_uri).toBe(response.logo_uri);
         expect(client.data.token_quota).toStrictEqual(response.token_quota);
         expect(client.data.refresh_token).toBe(response.refresh_token);
+        expect(client.data.async_approval_notification_channels).toStrictEqual(
+          response.async_approval_notification_channels
+        );
 
         done();
       });
@@ -348,6 +361,7 @@ describe('ClientsManager', () => {
           enforce: true,
         },
       },
+      async_approval_notification_channels: ['email'],
     };
     const response: Partial<Client> = {
       tenant: 'test_tenant',
@@ -365,6 +379,7 @@ describe('ClientsManager', () => {
           enforce: true,
         },
       },
+      async_approval_notification_channels: ['email'],
     };
 
     let request: nock.Scope;
@@ -412,6 +427,9 @@ describe('ClientsManager', () => {
         expect(client.data.logo_uri).toBe(response.logo_uri);
         expect(client.data.token_quota).toStrictEqual(response.token_quota);
         expect(client.data.refresh_token).toBe(response.refresh_token);
+        expect(client.data.async_approval_notification_channels).toStrictEqual(
+          response.async_approval_notification_channels
+        );
 
         done();
       });

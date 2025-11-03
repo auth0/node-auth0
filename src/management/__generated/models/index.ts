@@ -44,6 +44,16 @@ export type AssessorsTypeEnum = (typeof AssessorsTypeEnum)[keyof typeof Assessor
 /**
  *
  */
+export const AsyncApprovalNotificationsChannelsEnum = {
+  guardian_push: 'guardian-push',
+  email: 'email',
+} as const;
+export type AsyncApprovalNotificationsChannelsEnum =
+  (typeof AsyncApprovalNotificationsChannelsEnum)[keyof typeof AsyncApprovalNotificationsChannelsEnum];
+
+/**
+ *
+ */
 export interface AttackProtectionCaptchaArkoseResponseContent {
   [key: string]: any | any;
   /**
@@ -652,6 +662,11 @@ export interface Client {
    *
    */
   skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+  /**
+   * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
+   *
+   */
+  async_approval_notification_channels?: Array<AsyncApprovalNotificationsChannelsEnum>;
 }
 
 export const ClientAppTypeEnum = {
@@ -1598,6 +1613,11 @@ export interface ClientCreate {
    *
    */
   skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+  /**
+   * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
+   *
+   */
+  async_approval_notification_channels?: Array<AsyncApprovalNotificationsChannelsEnum>;
 }
 
 export const ClientCreateTokenEndpointAuthMethodEnum = {
@@ -3206,6 +3226,11 @@ export interface ClientUpdate {
    *
    */
   skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+  /**
+   * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
+   *
+   */
+  async_approval_notification_channels?: Array<AsyncApprovalNotificationsChannelsEnum>;
 }
 
 export const ClientUpdateTokenEndpointAuthMethodEnum = {
