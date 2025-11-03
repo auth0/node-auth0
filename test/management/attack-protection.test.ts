@@ -439,8 +439,8 @@ describe('AttackProtectionManager', () => {
       allowlist: ['192.168.1.0/24', '10.0.0.1'],
       monitoring_mode_enabled: true,
       challenge_password_policy: 'always',
-      challenge_passwordless_policy: 'high_risk',
-      challenge_password_reset_policy: 'off',
+      challenge_passwordless_policy: 'when_risky',
+      challenge_password_reset_policy: 'never',
     };
 
     describe('#getBotDetectionConfig', () => {
