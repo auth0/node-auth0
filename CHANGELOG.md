@@ -1,5 +1,15 @@
 # Change Log
 
+## [v4.34.0](https://github.com/auth0/node-auth0/tree/v4.34.0) (2025-10-30)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.33.0...v4.34.0)
+
+**Added**
+
+- Feat: Added Support for Non Unique Email Attribute [\#1210](https://github.com/auth0/node-auth0/pull/1210) ([tanya732](https://github.com/tanya732))
+- Feat: Added Support for Organization Domain Discovery [\#1209](https://github.com/auth0/node-auth0/pull/1209) ([tanya732](https://github.com/tanya732))
+
+
 ## [v4.33.0](https://github.com/auth0/node-auth0/tree/v4.33.0) (2025-10-14)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.32.0...v4.33.0)
