@@ -1,5 +1,16 @@
 # Change Log
 
+## [v4.35.0](https://github.com/auth0/node-auth0/tree/v4.35.0) (2025-11-04)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.34.0...v4.35.0)
+
+**Added**
+
+- feat: Added Support for Bot Detection Endpoints [\#1213](https://github.com/auth0/node-auth0/pull/1213) ([kushalshit27](https://github.com/kushalshit27))
+- feat: Add support for async_approval_notification_channels to Client interfaces [\#1231](https://github.com/auth0/node-auth0/pull/1231) ([kushalshit27](https://github.com/kushalshit27))
+- fix: bot detection test unit test [\#1232](https://github.com/auth0/node-auth0/pull/1232) ([kushalshit27](https://github.com/kushalshit27))
+
+
 ## [v4.34.0](https://github.com/auth0/node-auth0/tree/v4.34.0) (2025-10-30)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.33.0...v4.34.0)
