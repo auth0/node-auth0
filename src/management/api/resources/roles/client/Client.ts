@@ -154,10 +154,10 @@ export class Roles {
         return new core.Page<Management.Role, Management.ListRolesOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.roles ?? []).length > 0,
+            hasNextPage: (response) => (response?.roles ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.roles ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.roles != null ? response.roles.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

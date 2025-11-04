@@ -131,10 +131,10 @@ export class Bindings {
         return new core.Page<Management.ActionBinding, Management.ListActionBindingsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.bindings ?? []).length > 0,
+            hasNextPage: (response) => (response?.bindings ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.bindings ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.bindings != null ? response.bindings.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

@@ -158,10 +158,10 @@ export class Flows {
         return new core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.flows ?? []).length > 0,
+            hasNextPage: (response) => (response?.flows ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.flows ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.flows != null ? response.flows.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

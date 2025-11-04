@@ -136,10 +136,10 @@ export class Forms {
         return new core.Page<Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.forms ?? []).length > 0,
+            hasNextPage: (response) => (response?.forms ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.forms ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.forms != null ? response.forms.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

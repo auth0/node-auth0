@@ -165,10 +165,10 @@ export class Invitations {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.invitations ?? []).length > 0,
+            hasNextPage: (response) => (response?.invitations ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.invitations ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.invitations != null ? response.invitations.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

@@ -153,10 +153,10 @@ export class Rules {
         return new core.Page<Management.Rule, Management.ListRulesOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.rules ?? []).length > 0,
+            hasNextPage: (response) => (response?.rules ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.rules ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.rules != null ? response.rules.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

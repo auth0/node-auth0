@@ -129,10 +129,10 @@ export class Organizations {
         return new core.Page<Management.Organization, Management.ListUserOrganizationsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.organizations ?? []).length > 0,
+            hasNextPage: (response) => (response?.organizations ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.organizations ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.organizations != null ? response.organizations.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

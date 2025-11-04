@@ -273,10 +273,10 @@ export class Users {
         return new core.Page<Management.UserResponseSchema, Management.ListUsersOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.users ?? []).length > 0,
+            hasNextPage: (response) => (response?.users ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.users ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.users != null ? response.users.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

@@ -139,10 +139,10 @@ export class Connections {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.connections ?? []).length > 0,
+            hasNextPage: (response) => (response?.connections ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.connections ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.connections != null ? response.connections.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

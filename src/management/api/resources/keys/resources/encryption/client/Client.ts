@@ -131,10 +131,10 @@ export class Encryption {
         return new core.Page<Management.EncryptionKey, Management.ListEncryptionKeyOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.keys ?? []).length > 0,
+            hasNextPage: (response) => (response?.keys ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.keys ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.keys != null ? response.keys.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

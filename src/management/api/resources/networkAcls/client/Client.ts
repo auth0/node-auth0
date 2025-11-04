@@ -133,10 +133,10 @@ export class NetworkAcls {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.network_acls ?? []).length > 0,
+            hasNextPage: (response) => (response?.network_acls ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.network_acls ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.network_acls != null ? response.network_acls.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });
