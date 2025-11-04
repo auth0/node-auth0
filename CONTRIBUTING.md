@@ -127,9 +127,11 @@ This project uses automated code formatting and linting. Run `yarn run check:fix
 
 If you have questions or run into issues:
 
-1. Check the [Fern documentation](https://buildwithfern.com)
-2. Search existing [GitHub issues](https://github.com/fern-api/fern/issues)
+1. Check the [Auth0 documentation](https://auth0.com/docs)
+2. Search existing [GitHub issues](https://github.com/auth0/myaccount-js/issues)
 3. Open a new issue if your question hasn't been addressed
+
+For questions about the Fern code generator itself, see the [Fern documentation](https://buildwithfern.com) or [Fern repository](https://github.com/fern-api/fern).
 
 ## License
 
