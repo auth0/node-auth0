@@ -21721,15 +21721,25 @@ export interface GetCustomDomainsRequest {
    */
   from?: string;
   /**
-   * Optional filter on domain_metadata.
+   * Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>.
    *
    */
-  domain_metadata_filter?: string;
+  q?: string;
   /**
-   * Optional filter on domain_name.
+   * Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. Not yet supported
    *
    */
-  domain_name_filter?: string;
+  fields?: string;
+  /**
+   * Whether specified fields are to be included (true) or excluded (false).
+   *
+   */
+  include_fields?: boolean;
+  /**
+   * Field to sort by. Only domain is supported at this time
+   *
+   */
+  sort?: string;
 }
 /**
  *
