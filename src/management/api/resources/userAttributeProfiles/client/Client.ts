@@ -40,7 +40,9 @@ export class UserAttributeProfiles {
     public async list(
         request: Management.ListUserAttributeProfileRequestParameters = {},
         requestOptions?: UserAttributeProfiles.RequestOptions,
-    ): Promise<core.Page<Management.UserAttributeProfile>> {
+    ): Promise<
+        core.Page<Management.UserAttributeProfile, Management.ListUserAttributeProfilesPaginatedResponseContent>
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListUserAttributeProfileRequestParameters,
@@ -125,9 +127,9 @@ export class UserAttributeProfiles {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListUserAttributeProfilesPaginatedResponseContent,
-            Management.UserAttributeProfile
+        return new core.Page<
+            Management.UserAttributeProfile,
+            Management.ListUserAttributeProfilesPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

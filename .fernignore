@@ -47,3 +47,4 @@ eslint.config.mjs
 .husky/
 
 .prettierignore
+CONTRIBUTING.md

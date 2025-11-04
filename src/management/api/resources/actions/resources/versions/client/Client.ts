@@ -42,7 +42,7 @@ export class Versions {
         actionId: string,
         request: Management.ListActionVersionsRequestParameters = {},
         requestOptions?: Versions.RequestOptions,
-    ): Promise<core.Page<Management.ActionVersion>> {
+    ): Promise<core.Page<Management.ActionVersion, Management.ListActionVersionsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListActionVersionsRequestParameters,
@@ -128,7 +128,7 @@ export class Versions {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListActionVersionsPaginatedResponseContent, Management.ActionVersion>({
+        return new core.Page<Management.ActionVersion, Management.ListActionVersionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.versions ?? []).length > 0,

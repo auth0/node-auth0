@@ -42,7 +42,7 @@ export class ResourceServers {
     public async list(
         request: Management.ListResourceServerRequestParameters = {},
         requestOptions?: ResourceServers.RequestOptions,
-    ): Promise<core.Page<Management.ResourceServer>> {
+    ): Promise<core.Page<Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListResourceServerRequestParameters,
@@ -145,10 +145,7 @@ export class ResourceServers {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListResourceServerOffsetPaginatedResponseContent,
-            Management.ResourceServer
-        >({
+        return new core.Page<Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.resource_servers ?? []).length > 0,

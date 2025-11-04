@@ -46,7 +46,7 @@ export class DeviceCredentials {
     public async list(
         request: Management.ListDeviceCredentialsRequestParameters = {},
         requestOptions?: DeviceCredentials.RequestOptions,
-    ): Promise<core.Page<Management.DeviceCredential>> {
+    ): Promise<core.Page<Management.DeviceCredential, Management.ListDeviceCredentialsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListDeviceCredentialsRequestParameters,
@@ -159,9 +159,9 @@ export class DeviceCredentials {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListDeviceCredentialsOffsetPaginatedResponseContent,
-            Management.DeviceCredential
+        return new core.Page<
+            Management.DeviceCredential,
+            Management.ListDeviceCredentialsOffsetPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

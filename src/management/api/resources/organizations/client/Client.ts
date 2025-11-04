@@ -83,7 +83,7 @@ export class Organizations {
     public async list(
         request: Management.ListOrganizationsRequestParameters = {},
         requestOptions?: Organizations.RequestOptions,
-    ): Promise<core.Page<Management.Organization>> {
+    ): Promise<core.Page<Management.Organization, Management.ListOrganizationsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListOrganizationsRequestParameters,
@@ -169,7 +169,7 @@ export class Organizations {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<Management.ListOrganizationsPaginatedResponseContent, Management.Organization>({
+        return new core.Page<Management.Organization, Management.ListOrganizationsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>

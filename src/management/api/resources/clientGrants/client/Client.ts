@@ -49,7 +49,7 @@ export class ClientGrants {
     public async list(
         request: Management.ListClientGrantsRequestParameters = {},
         requestOptions?: ClientGrants.RequestOptions,
-    ): Promise<core.Page<Management.ClientGrantResponseContent>> {
+    ): Promise<core.Page<Management.ClientGrantResponseContent, Management.ListClientGrantPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListClientGrantsRequestParameters,
@@ -146,19 +146,18 @@ export class ClientGrants {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListClientGrantPaginatedResponseContent,
-            Management.ClientGrantResponseContent
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.client_grants ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
+        return new core.Page<Management.ClientGrantResponseContent, Management.ListClientGrantPaginatedResponseContent>(
+            {
+                response: dataWithRawResponse.data,
+                rawResponse: dataWithRawResponse.rawResponse,
+                hasNextPage: (response) =>
+                    response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+                getItems: (response) => response?.client_grants ?? [],
+                loadPage: (response) => {
+                    return list(core.setObjectProperty(request, "from", response?.next));
+                },
             },
-        });
+        );
     }
 
     /**

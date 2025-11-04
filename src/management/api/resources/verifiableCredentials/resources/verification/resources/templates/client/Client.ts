@@ -40,7 +40,12 @@ export class Templates {
     public async list(
         request: Management.ListVerifiableCredentialTemplatesRequestParameters = {},
         requestOptions?: Templates.RequestOptions,
-    ): Promise<core.Page<Management.VerifiableCredentialTemplateResponse>> {
+    ): Promise<
+        core.Page<
+            Management.VerifiableCredentialTemplateResponse,
+            Management.ListVerifiableCredentialTemplatesPaginatedResponseContent
+        >
+    > {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListVerifiableCredentialTemplatesRequestParameters,
@@ -125,9 +130,9 @@ export class Templates {
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Pageable<
-            Management.ListVerifiableCredentialTemplatesPaginatedResponseContent,
-            Management.VerifiableCredentialTemplateResponse
+        return new core.Page<
+            Management.VerifiableCredentialTemplateResponse,
+            Management.ListVerifiableCredentialTemplatesPaginatedResponseContent
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,

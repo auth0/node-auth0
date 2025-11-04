@@ -1090,7 +1090,6 @@ export * from "./GetUniversalLoginTemplateResponseContent.js";
 export * from "./GetUserAttributeProfileResponseContent.js";
 export * from "./GetUserAttributeProfileTemplateResponseContent.js";
 export * from "./GetUserAuthenticationMethodResponseContent.js";
-export * from "./GetUserGroupsPaginatedResponseContent.js";
 export * from "./GetUserResponseContent.js";
 export * from "./GetVerifiableCredentialTemplateResponseContent.js";
 export * from "./Group.js";
