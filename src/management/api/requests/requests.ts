@@ -2678,6 +2678,40 @@ export interface AssociateOrganizationClientGrantRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationDiscoveryDomainsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         domain: "domain"
+ *     }
+ */
+export interface CreateOrganizationDiscoveryDomainRequestContent {
+    /** The domain name to associate with the organization e.g. acme.com. */
+    domain: string;
+    status?: Management.OrganizationDiscoveryDomainStatus;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateOrganizationDiscoveryDomainRequestContent {
+    status?: Management.OrganizationDiscoveryDomainStatus;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true
