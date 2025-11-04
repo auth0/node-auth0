@@ -11,4 +11,4 @@ export const GuardianFactorNameEnum = {
     WebauthnPlatform: "webauthn-platform",
     RecoveryCode: "recovery-code",
 } as const;
-export type GuardianFactorNameEnum = (typeof GuardianFactorNameEnum)[keyof typeof GuardianFactorNameEnum];
+export type GuardianFactorNameEnum = (typeof GuardianFactorNameEnum)[keyof typeof GuardianFactorNameEnum] | string;

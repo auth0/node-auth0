@@ -8,4 +8,6 @@ export const ClientComplianceLevelEnum = {
     Fapi2SpPkjMtls: "fapi2_sp_pkj_mtls",
     Fapi2SpMtlsMtls: "fapi2_sp_mtls_mtls",
 } as const;
-export type ClientComplianceLevelEnum = (typeof ClientComplianceLevelEnum)[keyof typeof ClientComplianceLevelEnum];
+export type ClientComplianceLevelEnum =
+    | (typeof ClientComplianceLevelEnum)[keyof typeof ClientComplianceLevelEnum]
+    | string;

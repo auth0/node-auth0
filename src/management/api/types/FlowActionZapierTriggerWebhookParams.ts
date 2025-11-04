@@ -13,5 +13,5 @@ export namespace FlowActionZapierTriggerWebhookParams {
         Post: "POST",
         Put: "PUT",
     } as const;
-    export type Method = (typeof Method)[keyof typeof Method];
+    export type Method = (typeof Method)[keyof typeof Method] | string;
 }

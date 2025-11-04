@@ -5,4 +5,6 @@ export const ClientGrantSubjectTypeEnum = {
     Client: "client",
     User: "user",
 } as const;
-export type ClientGrantSubjectTypeEnum = (typeof ClientGrantSubjectTypeEnum)[keyof typeof ClientGrantSubjectTypeEnum];
+export type ClientGrantSubjectTypeEnum =
+    | (typeof ClientGrantSubjectTypeEnum)[keyof typeof ClientGrantSubjectTypeEnum]
+    | string;

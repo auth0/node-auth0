@@ -5,4 +5,4 @@ export const SessionCookieModeEnum = {
     Persistent: "persistent",
     NonPersistent: "non-persistent",
 } as const;
-export type SessionCookieModeEnum = (typeof SessionCookieModeEnum)[keyof typeof SessionCookieModeEnum];
+export type SessionCookieModeEnum = (typeof SessionCookieModeEnum)[keyof typeof SessionCookieModeEnum] | string;

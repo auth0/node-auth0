@@ -20,4 +20,6 @@ export const EventStreamEventTypeEnum = {
     GroupMemberAdded: "group.member.added",
     GroupMemberDeleted: "group.member.deleted",
 } as const;
-export type EventStreamEventTypeEnum = (typeof EventStreamEventTypeEnum)[keyof typeof EventStreamEventTypeEnum];
+export type EventStreamEventTypeEnum =
+    | (typeof EventStreamEventTypeEnum)[keyof typeof EventStreamEventTypeEnum]
+    | string;

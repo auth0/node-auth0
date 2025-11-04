@@ -5,4 +5,5 @@ export const BreachedPasswordDetectionPreUserRegistrationShieldsEnum = {
     AdminNotification: "admin_notification",
 } as const;
 export type BreachedPasswordDetectionPreUserRegistrationShieldsEnum =
-    (typeof BreachedPasswordDetectionPreUserRegistrationShieldsEnum)[keyof typeof BreachedPasswordDetectionPreUserRegistrationShieldsEnum];
+    | (typeof BreachedPasswordDetectionPreUserRegistrationShieldsEnum)[keyof typeof BreachedPasswordDetectionPreUserRegistrationShieldsEnum]
+    | string;

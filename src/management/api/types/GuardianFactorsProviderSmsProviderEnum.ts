@@ -6,4 +6,5 @@ export const GuardianFactorsProviderSmsProviderEnum = {
     PhoneMessageHook: "phone-message-hook",
 } as const;
 export type GuardianFactorsProviderSmsProviderEnum =
-    (typeof GuardianFactorsProviderSmsProviderEnum)[keyof typeof GuardianFactorsProviderSmsProviderEnum];
+    | (typeof GuardianFactorsProviderSmsProviderEnum)[keyof typeof GuardianFactorsProviderSmsProviderEnum]
+    | string;

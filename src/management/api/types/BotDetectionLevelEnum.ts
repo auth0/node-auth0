@@ -6,4 +6,4 @@ export const BotDetectionLevelEnum = {
     Medium: "medium",
     High: "high",
 } as const;
-export type BotDetectionLevelEnum = (typeof BotDetectionLevelEnum)[keyof typeof BotDetectionLevelEnum];
+export type BotDetectionLevelEnum = (typeof BotDetectionLevelEnum)[keyof typeof BotDetectionLevelEnum] | string;

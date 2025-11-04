@@ -7,4 +7,5 @@ export const ClientOrganizationUsagePatchEnum = {
     Require: "require",
 } as const;
 export type ClientOrganizationUsagePatchEnum =
-    (typeof ClientOrganizationUsagePatchEnum)[keyof typeof ClientOrganizationUsagePatchEnum];
+    | (typeof ClientOrganizationUsagePatchEnum)[keyof typeof ClientOrganizationUsagePatchEnum]
+    | string;

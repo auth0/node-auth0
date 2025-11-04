@@ -5,4 +5,4 @@ export const CustomDomainTypeEnum = {
     Auth0ManagedCerts: "auth0_managed_certs",
     SelfManagedCerts: "self_managed_certs",
 } as const;
-export type CustomDomainTypeEnum = (typeof CustomDomainTypeEnum)[keyof typeof CustomDomainTypeEnum];
+export type CustomDomainTypeEnum = (typeof CustomDomainTypeEnum)[keyof typeof CustomDomainTypeEnum] | string;

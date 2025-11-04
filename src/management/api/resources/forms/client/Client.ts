@@ -80,6 +80,7 @@ export class Forms {
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
                 });
                 if (_response.ok) {
                     return {
@@ -136,10 +137,10 @@ export class Forms {
         return new core.Page<Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.forms ?? []).length > 0,
+            hasNextPage: (response) => (response?.forms ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.forms ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.forms != null ? response.forms.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });
@@ -191,6 +192,7 @@ export class Forms {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: _response.body as Management.CreateFormResponseContent, rawResponse: _response.rawResponse };
@@ -287,6 +289,7 @@ export class Forms {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: _response.body as Management.GetFormResponseContent, rawResponse: _response.rawResponse };
@@ -365,6 +368,7 @@ export class Forms {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: undefined, rawResponse: _response.rawResponse };
@@ -452,6 +456,7 @@ export class Forms {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: _response.body as Management.UpdateFormResponseContent, rawResponse: _response.rawResponse };

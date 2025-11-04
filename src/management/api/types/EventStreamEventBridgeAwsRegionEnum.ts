@@ -40,4 +40,5 @@ export const EventStreamEventBridgeAwsRegionEnum = {
     UsWest2: "us-west-2",
 } as const;
 export type EventStreamEventBridgeAwsRegionEnum =
-    (typeof EventStreamEventBridgeAwsRegionEnum)[keyof typeof EventStreamEventBridgeAwsRegionEnum];
+    | (typeof EventStreamEventBridgeAwsRegionEnum)[keyof typeof EventStreamEventBridgeAwsRegionEnum]
+    | string;

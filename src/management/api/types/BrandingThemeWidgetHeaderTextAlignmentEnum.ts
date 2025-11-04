@@ -7,4 +7,5 @@ export const BrandingThemeWidgetHeaderTextAlignmentEnum = {
     Right: "right",
 } as const;
 export type BrandingThemeWidgetHeaderTextAlignmentEnum =
-    (typeof BrandingThemeWidgetHeaderTextAlignmentEnum)[keyof typeof BrandingThemeWidgetHeaderTextAlignmentEnum];
+    | (typeof BrandingThemeWidgetHeaderTextAlignmentEnum)[keyof typeof BrandingThemeWidgetHeaderTextAlignmentEnum]
+    | string;

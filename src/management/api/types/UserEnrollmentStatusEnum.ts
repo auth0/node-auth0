@@ -5,4 +5,6 @@ export const UserEnrollmentStatusEnum = {
     Pending: "pending",
     Confirmed: "confirmed",
 } as const;
-export type UserEnrollmentStatusEnum = (typeof UserEnrollmentStatusEnum)[keyof typeof UserEnrollmentStatusEnum];
+export type UserEnrollmentStatusEnum =
+    | (typeof UserEnrollmentStatusEnum)[keyof typeof UserEnrollmentStatusEnum]
+    | string;

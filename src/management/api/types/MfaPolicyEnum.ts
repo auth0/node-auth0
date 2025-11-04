@@ -5,4 +5,4 @@ export const MfaPolicyEnum = {
     AllApplications: "all-applications",
     ConfidenceScore: "confidence-score",
 } as const;
-export type MfaPolicyEnum = (typeof MfaPolicyEnum)[keyof typeof MfaPolicyEnum];
+export type MfaPolicyEnum = (typeof MfaPolicyEnum)[keyof typeof MfaPolicyEnum] | string;

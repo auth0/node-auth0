@@ -87,6 +87,7 @@ export class Logs {
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
                 });
                 if (_response.ok) {
                     return {
@@ -143,10 +144,10 @@ export class Logs {
         return new core.Page<Management.Log, Management.UserListLogOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.logs ?? []).length > 0,
+            hasNextPage: (response) => (response?.logs ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.logs ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.logs != null ? response.logs.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

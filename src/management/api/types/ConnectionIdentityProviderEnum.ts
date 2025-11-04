@@ -66,4 +66,5 @@ export const ConnectionIdentityProviderEnum = {
     Yandex: "yandex",
 } as const;
 export type ConnectionIdentityProviderEnum =
-    (typeof ConnectionIdentityProviderEnum)[keyof typeof ConnectionIdentityProviderEnum];
+    | (typeof ConnectionIdentityProviderEnum)[keyof typeof ConnectionIdentityProviderEnum]
+    | string;

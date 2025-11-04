@@ -5,4 +5,5 @@ export const FormFieldFileConfigStorageTypeEnum = {
     Custom: "CUSTOM",
 } as const;
 export type FormFieldFileConfigStorageTypeEnum =
-    (typeof FormFieldFileConfigStorageTypeEnum)[keyof typeof FormFieldFileConfigStorageTypeEnum];
+    | (typeof FormFieldFileConfigStorageTypeEnum)[keyof typeof FormFieldFileConfigStorageTypeEnum]
+    | string;

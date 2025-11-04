@@ -7,4 +7,5 @@ export const ConnectionIdentifierPrecedenceEnum = {
     Username: "username",
 } as const;
 export type ConnectionIdentifierPrecedenceEnum =
-    (typeof ConnectionIdentifierPrecedenceEnum)[keyof typeof ConnectionIdentifierPrecedenceEnum];
+    | (typeof ConnectionIdentifierPrecedenceEnum)[keyof typeof ConnectionIdentifierPrecedenceEnum]
+    | string;

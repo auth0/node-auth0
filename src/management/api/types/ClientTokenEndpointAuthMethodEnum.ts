@@ -7,4 +7,5 @@ export const ClientTokenEndpointAuthMethodEnum = {
     ClientSecretBasic: "client_secret_basic",
 } as const;
 export type ClientTokenEndpointAuthMethodEnum =
-    (typeof ClientTokenEndpointAuthMethodEnum)[keyof typeof ClientTokenEndpointAuthMethodEnum];
+    | (typeof ClientTokenEndpointAuthMethodEnum)[keyof typeof ClientTokenEndpointAuthMethodEnum]
+    | string;

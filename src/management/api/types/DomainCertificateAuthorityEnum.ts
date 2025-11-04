@@ -6,4 +6,5 @@ export const DomainCertificateAuthorityEnum = {
     Googletrust: "googletrust",
 } as const;
 export type DomainCertificateAuthorityEnum =
-    (typeof DomainCertificateAuthorityEnum)[keyof typeof DomainCertificateAuthorityEnum];
+    | (typeof DomainCertificateAuthorityEnum)[keyof typeof DomainCertificateAuthorityEnum]
+    | string;

@@ -6,4 +6,5 @@ export const SessionCookieMetadataModeEnum = {
     Persistent: "persistent",
 } as const;
 export type SessionCookieMetadataModeEnum =
-    (typeof SessionCookieMetadataModeEnum)[keyof typeof SessionCookieMetadataModeEnum];
+    | (typeof SessionCookieMetadataModeEnum)[keyof typeof SessionCookieMetadataModeEnum]
+    | string;

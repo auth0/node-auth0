@@ -6,4 +6,5 @@ export const RefreshTokenRotationTypeEnum = {
     NonRotating: "non-rotating",
 } as const;
 export type RefreshTokenRotationTypeEnum =
-    (typeof RefreshTokenRotationTypeEnum)[keyof typeof RefreshTokenRotationTypeEnum];
+    | (typeof RefreshTokenRotationTypeEnum)[keyof typeof RefreshTokenRotationTypeEnum]
+    | string;

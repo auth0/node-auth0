@@ -6,4 +6,6 @@ export const SearchEngineVersionsEnum = {
     V2: "v2",
     V3: "v3",
 } as const;
-export type SearchEngineVersionsEnum = (typeof SearchEngineVersionsEnum)[keyof typeof SearchEngineVersionsEnum];
+export type SearchEngineVersionsEnum =
+    | (typeof SearchEngineVersionsEnum)[keyof typeof SearchEngineVersionsEnum]
+    | string;

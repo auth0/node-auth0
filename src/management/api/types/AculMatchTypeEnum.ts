@@ -5,4 +5,4 @@ export const AculMatchTypeEnum = {
     IncludesAny: "includes_any",
     ExcludesAny: "excludes_any",
 } as const;
-export type AculMatchTypeEnum = (typeof AculMatchTypeEnum)[keyof typeof AculMatchTypeEnum];
+export type AculMatchTypeEnum = (typeof AculMatchTypeEnum)[keyof typeof AculMatchTypeEnum] | string;

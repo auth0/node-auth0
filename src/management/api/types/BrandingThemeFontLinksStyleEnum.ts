@@ -6,4 +6,5 @@ export const BrandingThemeFontLinksStyleEnum = {
     Underlined: "underlined",
 } as const;
 export type BrandingThemeFontLinksStyleEnum =
-    (typeof BrandingThemeFontLinksStyleEnum)[keyof typeof BrandingThemeFontLinksStyleEnum];
+    | (typeof BrandingThemeFontLinksStyleEnum)[keyof typeof BrandingThemeFontLinksStyleEnum]
+    | string;

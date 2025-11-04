@@ -73,6 +73,7 @@ export class Versions {
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
                 });
                 if (_response.ok) {
                     return {
@@ -131,10 +132,10 @@ export class Versions {
         return new core.Page<Management.ActionVersion, Management.ListActionVersionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.versions ?? []).length > 0,
+            hasNextPage: (response) => (response?.versions ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.versions ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.versions != null ? response.versions.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });
@@ -187,6 +188,7 @@ export class Versions {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return {
@@ -287,6 +289,7 @@ export class Versions {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return {

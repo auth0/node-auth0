@@ -6,4 +6,5 @@ export const BrandingThemeWidgetSocialButtonsLayoutEnum = {
     Top: "top",
 } as const;
 export type BrandingThemeWidgetSocialButtonsLayoutEnum =
-    (typeof BrandingThemeWidgetSocialButtonsLayoutEnum)[keyof typeof BrandingThemeWidgetSocialButtonsLayoutEnum];
+    | (typeof BrandingThemeWidgetSocialButtonsLayoutEnum)[keyof typeof BrandingThemeWidgetSocialButtonsLayoutEnum]
+    | string;

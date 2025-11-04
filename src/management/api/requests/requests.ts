@@ -1828,7 +1828,7 @@ export namespace UpdateBruteForceSettingsRequestContent {
             Block: "block",
             UserNotification: "user_notification",
         } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
+        export type Item = (typeof Item)[keyof typeof Item] | string;
     }
 
     /**
@@ -1839,7 +1839,7 @@ export namespace UpdateBruteForceSettingsRequestContent {
         CountPerIdentifierAndIp: "count_per_identifier_and_ip",
         CountPerIdentifier: "count_per_identifier",
     } as const;
-    export type Mode = (typeof Mode)[keyof typeof Mode];
+    export type Mode = (typeof Mode)[keyof typeof Mode] | string;
 }
 
 /**
@@ -3275,7 +3275,7 @@ export namespace UpdateTenantSettingsRequestContent {
             ZhHk: "zh-HK",
             ZhTw: "zh-TW",
         } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
+        export type Item = (typeof Item)[keyof typeof Item] | string;
     }
 }
 

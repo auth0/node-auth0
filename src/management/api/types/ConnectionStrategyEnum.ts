@@ -65,4 +65,4 @@ export const ConnectionStrategyEnum = {
     Yandex: "yandex",
     Auth0Adldap: "auth0-adldap",
 } as const;
-export type ConnectionStrategyEnum = (typeof ConnectionStrategyEnum)[keyof typeof ConnectionStrategyEnum];
+export type ConnectionStrategyEnum = (typeof ConnectionStrategyEnum)[keyof typeof ConnectionStrategyEnum] | string;

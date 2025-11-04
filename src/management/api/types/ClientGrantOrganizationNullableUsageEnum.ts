@@ -7,4 +7,5 @@ export const ClientGrantOrganizationNullableUsageEnum = {
     Require: "require",
 } as const;
 export type ClientGrantOrganizationNullableUsageEnum =
-    (typeof ClientGrantOrganizationNullableUsageEnum)[keyof typeof ClientGrantOrganizationNullableUsageEnum];
+    | (typeof ClientGrantOrganizationNullableUsageEnum)[keyof typeof ClientGrantOrganizationNullableUsageEnum]
+    | string;

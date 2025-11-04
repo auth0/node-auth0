@@ -6,4 +6,5 @@ export const GuardianFactorsProviderPushNotificationProviderDataEnum = {
     Direct: "direct",
 } as const;
 export type GuardianFactorsProviderPushNotificationProviderDataEnum =
-    (typeof GuardianFactorsProviderPushNotificationProviderDataEnum)[keyof typeof GuardianFactorsProviderPushNotificationProviderDataEnum];
+    | (typeof GuardianFactorsProviderPushNotificationProviderDataEnum)[keyof typeof GuardianFactorsProviderPushNotificationProviderDataEnum]
+    | string;

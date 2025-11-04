@@ -5,4 +5,4 @@ export const AculRenderingModeEnum = {
     Advanced: "advanced",
     Standard: "standard",
 } as const;
-export type AculRenderingModeEnum = (typeof AculRenderingModeEnum)[keyof typeof AculRenderingModeEnum];
+export type AculRenderingModeEnum = (typeof AculRenderingModeEnum)[keyof typeof AculRenderingModeEnum] | string;

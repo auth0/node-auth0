@@ -8,4 +8,5 @@ export const CreatedUserAuthenticationMethodTypeEnum = {
     Passkey: "passkey",
 } as const;
 export type CreatedUserAuthenticationMethodTypeEnum =
-    (typeof CreatedUserAuthenticationMethodTypeEnum)[keyof typeof CreatedUserAuthenticationMethodTypeEnum];
+    | (typeof CreatedUserAuthenticationMethodTypeEnum)[keyof typeof CreatedUserAuthenticationMethodTypeEnum]
+    | string;

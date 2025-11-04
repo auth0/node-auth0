@@ -6,4 +6,5 @@ export const UserMultifactorProviderEnum = {
     GoogleAuthenticator: "google-authenticator",
 } as const;
 export type UserMultifactorProviderEnum =
-    (typeof UserMultifactorProviderEnum)[keyof typeof UserMultifactorProviderEnum];
+    | (typeof UserMultifactorProviderEnum)[keyof typeof UserMultifactorProviderEnum]
+    | string;

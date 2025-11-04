@@ -93,6 +93,7 @@ export class UserGrants {
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
                 });
                 if (_response.ok) {
                     return {
@@ -144,10 +145,10 @@ export class UserGrants {
         return new core.Page<Management.UserGrant, Management.ListUserGrantsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.grants ?? []).length > 0,
+            hasNextPage: (response) => (response?.grants ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.grants ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.grants != null ? response.grants.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });
@@ -200,6 +201,7 @@ export class UserGrants {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: undefined, rawResponse: _response.rawResponse };
@@ -278,6 +280,7 @@ export class UserGrants {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: undefined, rawResponse: _response.rawResponse };

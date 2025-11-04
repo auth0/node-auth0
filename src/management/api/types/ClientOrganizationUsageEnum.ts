@@ -7,4 +7,5 @@ export const ClientOrganizationUsageEnum = {
     Require: "require",
 } as const;
 export type ClientOrganizationUsageEnum =
-    (typeof ClientOrganizationUsageEnum)[keyof typeof ClientOrganizationUsageEnum];
+    | (typeof ClientOrganizationUsageEnum)[keyof typeof ClientOrganizationUsageEnum]
+    | string;

@@ -6,4 +6,5 @@ export const ClientOidcBackchannelLogoutInitiatorsModeEnum = {
     All: "all",
 } as const;
 export type ClientOidcBackchannelLogoutInitiatorsModeEnum =
-    (typeof ClientOidcBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientOidcBackchannelLogoutInitiatorsModeEnum];
+    | (typeof ClientOidcBackchannelLogoutInitiatorsModeEnum)[keyof typeof ClientOidcBackchannelLogoutInitiatorsModeEnum]
+    | string;

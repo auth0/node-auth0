@@ -13,4 +13,5 @@ export const ClientOidcBackchannelLogoutInitiatorsEnum = {
     AccountDeactivated: "account-deactivated",
 } as const;
 export type ClientOidcBackchannelLogoutInitiatorsEnum =
-    (typeof ClientOidcBackchannelLogoutInitiatorsEnum)[keyof typeof ClientOidcBackchannelLogoutInitiatorsEnum];
+    | (typeof ClientOidcBackchannelLogoutInitiatorsEnum)[keyof typeof ClientOidcBackchannelLogoutInitiatorsEnum]
+    | string;

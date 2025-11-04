@@ -5,4 +5,6 @@ export const GuardianEnrollmentStatus = {
     Pending: "pending",
     Confirmed: "confirmed",
 } as const;
-export type GuardianEnrollmentStatus = (typeof GuardianEnrollmentStatus)[keyof typeof GuardianEnrollmentStatus];
+export type GuardianEnrollmentStatus =
+    | (typeof GuardianEnrollmentStatus)[keyof typeof GuardianEnrollmentStatus]
+    | string;

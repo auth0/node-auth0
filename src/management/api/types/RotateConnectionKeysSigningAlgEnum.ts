@@ -8,4 +8,5 @@ export const RotateConnectionKeysSigningAlgEnum = {
     Es256: "ES256",
 } as const;
 export type RotateConnectionKeysSigningAlgEnum =
-    (typeof RotateConnectionKeysSigningAlgEnum)[keyof typeof RotateConnectionKeysSigningAlgEnum];
+    | (typeof RotateConnectionKeysSigningAlgEnum)[keyof typeof RotateConnectionKeysSigningAlgEnum]
+    | string;

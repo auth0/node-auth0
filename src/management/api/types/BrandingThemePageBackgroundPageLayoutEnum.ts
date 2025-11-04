@@ -7,4 +7,5 @@ export const BrandingThemePageBackgroundPageLayoutEnum = {
     Right: "right",
 } as const;
 export type BrandingThemePageBackgroundPageLayoutEnum =
-    (typeof BrandingThemePageBackgroundPageLayoutEnum)[keyof typeof BrandingThemePageBackgroundPageLayoutEnum];
+    | (typeof BrandingThemePageBackgroundPageLayoutEnum)[keyof typeof BrandingThemePageBackgroundPageLayoutEnum]
+    | string;

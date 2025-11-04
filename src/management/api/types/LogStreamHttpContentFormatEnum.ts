@@ -7,4 +7,5 @@ export const LogStreamHttpContentFormatEnum = {
     Jsonobject: "JSONOBJECT",
 } as const;
 export type LogStreamHttpContentFormatEnum =
-    (typeof LogStreamHttpContentFormatEnum)[keyof typeof LogStreamHttpContentFormatEnum];
+    | (typeof LogStreamHttpContentFormatEnum)[keyof typeof LogStreamHttpContentFormatEnum]
+    | string;

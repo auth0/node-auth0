@@ -7,4 +7,4 @@ export const EncryptionKeyType = {
     TenantMasterKey: "tenant-master-key",
     TenantEncryptionKey: "tenant-encryption-key",
 } as const;
-export type EncryptionKeyType = (typeof EncryptionKeyType)[keyof typeof EncryptionKeyType];
+export type EncryptionKeyType = (typeof EncryptionKeyType)[keyof typeof EncryptionKeyType] | string;

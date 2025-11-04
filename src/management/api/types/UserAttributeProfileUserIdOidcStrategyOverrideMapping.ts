@@ -7,4 +7,5 @@ export const UserAttributeProfileUserIdOidcStrategyOverrideMapping = {
     Email: "email",
 } as const;
 export type UserAttributeProfileUserIdOidcStrategyOverrideMapping =
-    (typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping)[keyof typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping];
+    | (typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping)[keyof typeof UserAttributeProfileUserIdOidcStrategyOverrideMapping]
+    | string;

@@ -6,4 +6,5 @@ export const PhoneProviderDeliveryMethodEnum = {
     Voice: "voice",
 } as const;
 export type PhoneProviderDeliveryMethodEnum =
-    (typeof PhoneProviderDeliveryMethodEnum)[keyof typeof PhoneProviderDeliveryMethodEnum];
+    | (typeof PhoneProviderDeliveryMethodEnum)[keyof typeof PhoneProviderDeliveryMethodEnum]
+    | string;

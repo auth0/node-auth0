@@ -14,4 +14,5 @@ export const AuthenticationMethodTypeEnum = {
     Password: "password",
 } as const;
 export type AuthenticationMethodTypeEnum =
-    (typeof AuthenticationMethodTypeEnum)[keyof typeof AuthenticationMethodTypeEnum];
+    | (typeof AuthenticationMethodTypeEnum)[keyof typeof AuthenticationMethodTypeEnum]
+    | string;

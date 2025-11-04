@@ -65,4 +65,4 @@ export const IdentityProviderEnum = {
     Yammer: "yammer",
     Yandex: "yandex",
 } as const;
-export type IdentityProviderEnum = (typeof IdentityProviderEnum)[keyof typeof IdentityProviderEnum];
+export type IdentityProviderEnum = (typeof IdentityProviderEnum)[keyof typeof IdentityProviderEnum] | string;

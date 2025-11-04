@@ -6,4 +6,4 @@ export const OrganizationUsageEnum = {
     Allow: "allow",
     Require: "require",
 } as const;
-export type OrganizationUsageEnum = (typeof OrganizationUsageEnum)[keyof typeof OrganizationUsageEnum];
+export type OrganizationUsageEnum = (typeof OrganizationUsageEnum)[keyof typeof OrganizationUsageEnum] | string;

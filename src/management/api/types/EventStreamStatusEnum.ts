@@ -5,4 +5,4 @@ export const EventStreamStatusEnum = {
     Enabled: "enabled",
     Disabled: "disabled",
 } as const;
-export type EventStreamStatusEnum = (typeof EventStreamStatusEnum)[keyof typeof EventStreamStatusEnum];
+export type EventStreamStatusEnum = (typeof EventStreamStatusEnum)[keyof typeof EventStreamStatusEnum] | string;

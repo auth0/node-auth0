@@ -39,4 +39,4 @@ export const PromptGroupNameEnum = {
     BruteForceProtection: "brute-force-protection",
     AsyncApprovalFlow: "async-approval-flow",
 } as const;
-export type PromptGroupNameEnum = (typeof PromptGroupNameEnum)[keyof typeof PromptGroupNameEnum];
+export type PromptGroupNameEnum = (typeof PromptGroupNameEnum)[keyof typeof PromptGroupNameEnum] | string;

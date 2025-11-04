@@ -7,4 +7,5 @@ export const ClientOrganizationRequireBehaviorEnum = {
     PostLoginPrompt: "post_login_prompt",
 } as const;
 export type ClientOrganizationRequireBehaviorEnum =
-    (typeof ClientOrganizationRequireBehaviorEnum)[keyof typeof ClientOrganizationRequireBehaviorEnum];
+    | (typeof ClientOrganizationRequireBehaviorEnum)[keyof typeof ClientOrganizationRequireBehaviorEnum]
+    | string;

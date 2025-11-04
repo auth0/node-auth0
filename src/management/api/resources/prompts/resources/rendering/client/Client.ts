@@ -105,6 +105,7 @@ export class Rendering {
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
                 });
                 if (_response.ok) {
                     return {
@@ -168,10 +169,10 @@ export class Rendering {
         return new core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.configs ?? []).length > 0,
+            hasNextPage: (response) => (response?.configs ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.configs ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.configs != null ? response.configs.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });
@@ -258,6 +259,7 @@ export class Rendering {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return {
@@ -352,6 +354,7 @@ export class Rendering {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: _response.body as Management.GetAculResponseContent, rawResponse: _response.rawResponse };
@@ -482,6 +485,7 @@ export class Rendering {
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
         });
         if (_response.ok) {
             return { data: _response.body as Management.UpdateAculResponseContent, rawResponse: _response.rawResponse };

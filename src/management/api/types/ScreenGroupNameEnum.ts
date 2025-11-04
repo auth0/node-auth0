@@ -92,4 +92,4 @@ export const ScreenGroupNameEnum = {
     AsyncApprovalAccepted: "async-approval-accepted",
     AsyncApprovalDenied: "async-approval-denied",
 } as const;
-export type ScreenGroupNameEnum = (typeof ScreenGroupNameEnum)[keyof typeof ScreenGroupNameEnum];
+export type ScreenGroupNameEnum = (typeof ScreenGroupNameEnum)[keyof typeof ScreenGroupNameEnum] | string;

@@ -5,4 +5,6 @@ export const CustomSigningKeyTypeEnum = {
     Ec: "EC",
     Rsa: "RSA",
 } as const;
-export type CustomSigningKeyTypeEnum = (typeof CustomSigningKeyTypeEnum)[keyof typeof CustomSigningKeyTypeEnum];
+export type CustomSigningKeyTypeEnum =
+    | (typeof CustomSigningKeyTypeEnum)[keyof typeof CustomSigningKeyTypeEnum]
+    | string;

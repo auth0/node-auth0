@@ -9,4 +9,4 @@ export const ActionBuildStatusEnum = {
     Retrying: "retrying",
     Failed: "failed",
 } as const;
-export type ActionBuildStatusEnum = (typeof ActionBuildStatusEnum)[keyof typeof ActionBuildStatusEnum];
+export type ActionBuildStatusEnum = (typeof ActionBuildStatusEnum)[keyof typeof ActionBuildStatusEnum] | string;

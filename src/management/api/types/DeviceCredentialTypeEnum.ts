@@ -6,4 +6,6 @@ export const DeviceCredentialTypeEnum = {
     RefreshToken: "refresh_token",
     RotatingRefreshToken: "rotating_refresh_token",
 } as const;
-export type DeviceCredentialTypeEnum = (typeof DeviceCredentialTypeEnum)[keyof typeof DeviceCredentialTypeEnum];
+export type DeviceCredentialTypeEnum =
+    | (typeof DeviceCredentialTypeEnum)[keyof typeof DeviceCredentialTypeEnum]
+    | string;

@@ -7,4 +7,5 @@ export const SelfServiceProfileSsoTicketDomainVerificationEnum = {
     Required: "required",
 } as const;
 export type SelfServiceProfileSsoTicketDomainVerificationEnum =
-    (typeof SelfServiceProfileSsoTicketDomainVerificationEnum)[keyof typeof SelfServiceProfileSsoTicketDomainVerificationEnum];
+    | (typeof SelfServiceProfileSsoTicketDomainVerificationEnum)[keyof typeof SelfServiceProfileSsoTicketDomainVerificationEnum]
+    | string;

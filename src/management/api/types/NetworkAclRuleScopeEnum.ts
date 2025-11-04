@@ -6,4 +6,4 @@ export const NetworkAclRuleScopeEnum = {
     Authentication: "authentication",
     Tenant: "tenant",
 } as const;
-export type NetworkAclRuleScopeEnum = (typeof NetworkAclRuleScopeEnum)[keyof typeof NetworkAclRuleScopeEnum];
+export type NetworkAclRuleScopeEnum = (typeof NetworkAclRuleScopeEnum)[keyof typeof NetworkAclRuleScopeEnum] | string;

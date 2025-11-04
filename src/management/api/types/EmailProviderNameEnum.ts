@@ -12,4 +12,4 @@ export const EmailProviderNameEnum = {
     Ms365: "ms365",
     Custom: "custom",
 } as const;
-export type EmailProviderNameEnum = (typeof EmailProviderNameEnum)[keyof typeof EmailProviderNameEnum];
+export type EmailProviderNameEnum = (typeof EmailProviderNameEnum)[keyof typeof EmailProviderNameEnum] | string;

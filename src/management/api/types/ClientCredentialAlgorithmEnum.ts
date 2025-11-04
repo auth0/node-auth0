@@ -7,4 +7,5 @@ export const ClientCredentialAlgorithmEnum = {
     Ps256: "PS256",
 } as const;
 export type ClientCredentialAlgorithmEnum =
-    (typeof ClientCredentialAlgorithmEnum)[keyof typeof ClientCredentialAlgorithmEnum];
+    | (typeof ClientCredentialAlgorithmEnum)[keyof typeof ClientCredentialAlgorithmEnum]
+    | string;

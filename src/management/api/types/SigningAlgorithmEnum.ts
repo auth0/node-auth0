@@ -7,4 +7,4 @@ export const SigningAlgorithmEnum = {
     Rs512: "RS512",
     Ps256: "PS256",
 } as const;
-export type SigningAlgorithmEnum = (typeof SigningAlgorithmEnum)[keyof typeof SigningAlgorithmEnum];
+export type SigningAlgorithmEnum = (typeof SigningAlgorithmEnum)[keyof typeof SigningAlgorithmEnum] | string;

@@ -7,4 +7,5 @@ export const ConnectionPasskeyChallengeUiEnum = {
     Button: "button",
 } as const;
 export type ConnectionPasskeyChallengeUiEnum =
-    (typeof ConnectionPasskeyChallengeUiEnum)[keyof typeof ConnectionPasskeyChallengeUiEnum];
+    | (typeof ConnectionPasskeyChallengeUiEnum)[keyof typeof ConnectionPasskeyChallengeUiEnum]
+    | string;

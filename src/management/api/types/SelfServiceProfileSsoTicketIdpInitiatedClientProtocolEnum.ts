@@ -7,4 +7,5 @@ export const SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum = {
     Oauth2: "oauth2",
 } as const;
 export type SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum =
-    (typeof SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum)[keyof typeof SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum];
+    | (typeof SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum)[keyof typeof SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum]
+    | string;

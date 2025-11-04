@@ -8,4 +8,5 @@ export const FormFieldPasswordConfigHashEnum = {
     Sha512: "SHA512",
 } as const;
 export type FormFieldPasswordConfigHashEnum =
-    (typeof FormFieldPasswordConfigHashEnum)[keyof typeof FormFieldPasswordConfigHashEnum];
+    | (typeof FormFieldPasswordConfigHashEnum)[keyof typeof FormFieldPasswordConfigHashEnum]
+    | string;

@@ -6,4 +6,5 @@ export const OrganizationDiscoveryDomainStatus = {
     Verified: "verified",
 } as const;
 export type OrganizationDiscoveryDomainStatus =
-    (typeof OrganizationDiscoveryDomainStatus)[keyof typeof OrganizationDiscoveryDomainStatus];
+    | (typeof OrganizationDiscoveryDomainStatus)[keyof typeof OrganizationDiscoveryDomainStatus]
+    | string;

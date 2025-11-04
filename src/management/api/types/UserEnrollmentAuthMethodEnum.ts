@@ -9,4 +9,5 @@ export const UserEnrollmentAuthMethodEnum = {
     WebauthnRoaming: "webauthn-roaming",
 } as const;
 export type UserEnrollmentAuthMethodEnum =
-    (typeof UserEnrollmentAuthMethodEnum)[keyof typeof UserEnrollmentAuthMethodEnum];
+    | (typeof UserEnrollmentAuthMethodEnum)[keyof typeof UserEnrollmentAuthMethodEnum]
+    | string;

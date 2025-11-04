@@ -6,4 +6,5 @@ export const TenantSettingsDeviceFlowCharset = {
     Digits: "digits",
 } as const;
 export type TenantSettingsDeviceFlowCharset =
-    (typeof TenantSettingsDeviceFlowCharset)[keyof typeof TenantSettingsDeviceFlowCharset];
+    | (typeof TenantSettingsDeviceFlowCharset)[keyof typeof TenantSettingsDeviceFlowCharset]
+    | string;

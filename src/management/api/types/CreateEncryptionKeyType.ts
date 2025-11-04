@@ -5,4 +5,4 @@ export const CreateEncryptionKeyType = {
     CustomerProvidedRootKey: "customer-provided-root-key",
     TenantEncryptionKey: "tenant-encryption-key",
 } as const;
-export type CreateEncryptionKeyType = (typeof CreateEncryptionKeyType)[keyof typeof CreateEncryptionKeyType];
+export type CreateEncryptionKeyType = (typeof CreateEncryptionKeyType)[keyof typeof CreateEncryptionKeyType] | string;

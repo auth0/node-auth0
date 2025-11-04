@@ -9,4 +9,5 @@ export const CustomDomainCustomClientIpHeaderEnum = {
     Empty: "",
 } as const;
 export type CustomDomainCustomClientIpHeaderEnum =
-    (typeof CustomDomainCustomClientIpHeaderEnum)[keyof typeof CustomDomainCustomClientIpHeaderEnum];
+    | (typeof CustomDomainCustomClientIpHeaderEnum)[keyof typeof CustomDomainCustomClientIpHeaderEnum]
+    | string;

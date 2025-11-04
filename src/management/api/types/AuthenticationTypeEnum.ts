@@ -5,4 +5,4 @@ export const AuthenticationTypeEnum = {
     Email: "email",
     Totp: "totp",
 } as const;
-export type AuthenticationTypeEnum = (typeof AuthenticationTypeEnum)[keyof typeof AuthenticationTypeEnum];
+export type AuthenticationTypeEnum = (typeof AuthenticationTypeEnum)[keyof typeof AuthenticationTypeEnum] | string;

@@ -10,4 +10,5 @@ export const ActionVersionBuildStatusEnum = {
     Failed: "failed",
 } as const;
 export type ActionVersionBuildStatusEnum =
-    (typeof ActionVersionBuildStatusEnum)[keyof typeof ActionVersionBuildStatusEnum];
+    | (typeof ActionVersionBuildStatusEnum)[keyof typeof ActionVersionBuildStatusEnum]
+    | string;

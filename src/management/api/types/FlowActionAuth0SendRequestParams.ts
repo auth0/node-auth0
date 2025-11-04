@@ -19,5 +19,5 @@ export namespace FlowActionAuth0SendRequestParams {
         Patch: "PATCH",
         Delete: "DELETE",
     } as const;
-    export type Method = (typeof Method)[keyof typeof Method];
+    export type Method = (typeof Method)[keyof typeof Method] | string;
 }

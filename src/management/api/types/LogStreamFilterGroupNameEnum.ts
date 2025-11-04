@@ -24,4 +24,5 @@ export const LogStreamFilterGroupNameEnum = {
     Other: "other",
 } as const;
 export type LogStreamFilterGroupNameEnum =
-    (typeof LogStreamFilterGroupNameEnum)[keyof typeof LogStreamFilterGroupNameEnum];
+    | (typeof LogStreamFilterGroupNameEnum)[keyof typeof LogStreamFilterGroupNameEnum]
+    | string;

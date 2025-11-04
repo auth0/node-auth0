@@ -5,4 +5,4 @@ export const PhoneProviderNameEnum = {
     Twilio: "twilio",
     Custom: "custom",
 } as const;
-export type PhoneProviderNameEnum = (typeof PhoneProviderNameEnum)[keyof typeof PhoneProviderNameEnum];
+export type PhoneProviderNameEnum = (typeof PhoneProviderNameEnum)[keyof typeof PhoneProviderNameEnum] | string;

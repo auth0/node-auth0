@@ -7,4 +7,5 @@ export const ConnectionSetUserRootAttributesEnum = {
     NeverOnLogin: "never_on_login",
 } as const;
 export type ConnectionSetUserRootAttributesEnum =
-    (typeof ConnectionSetUserRootAttributesEnum)[keyof typeof ConnectionSetUserRootAttributesEnum];
+    | (typeof ConnectionSetUserRootAttributesEnum)[keyof typeof ConnectionSetUserRootAttributesEnum]
+    | string;

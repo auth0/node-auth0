@@ -9,4 +9,5 @@ export const BreachedPasswordDetectionMethodEnum = {
     Enhanced: "enhanced",
 } as const;
 export type BreachedPasswordDetectionMethodEnum =
-    (typeof BreachedPasswordDetectionMethodEnum)[keyof typeof BreachedPasswordDetectionMethodEnum];
+    | (typeof BreachedPasswordDetectionMethodEnum)[keyof typeof BreachedPasswordDetectionMethodEnum]
+    | string;

@@ -5,4 +5,5 @@ export const IntegrationRequiredParamTypeEnum = {
     String: "STRING",
 } as const;
 export type IntegrationRequiredParamTypeEnum =
-    (typeof IntegrationRequiredParamTypeEnum)[keyof typeof IntegrationRequiredParamTypeEnum];
+    | (typeof IntegrationRequiredParamTypeEnum)[keyof typeof IntegrationRequiredParamTypeEnum]
+    | string;

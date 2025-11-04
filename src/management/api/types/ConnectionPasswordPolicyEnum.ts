@@ -9,4 +9,5 @@ export const ConnectionPasswordPolicyEnum = {
     Excellent: "excellent",
 } as const;
 export type ConnectionPasswordPolicyEnum =
-    (typeof ConnectionPasswordPolicyEnum)[keyof typeof ConnectionPasswordPolicyEnum];
+    | (typeof ConnectionPasswordPolicyEnum)[keyof typeof ConnectionPasswordPolicyEnum]
+    | string;

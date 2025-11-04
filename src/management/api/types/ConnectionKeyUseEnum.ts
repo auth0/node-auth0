@@ -5,4 +5,4 @@ export const ConnectionKeyUseEnum = {
     Encryption: "encryption",
     Signing: "signing",
 } as const;
-export type ConnectionKeyUseEnum = (typeof ConnectionKeyUseEnum)[keyof typeof ConnectionKeyUseEnum];
+export type ConnectionKeyUseEnum = (typeof ConnectionKeyUseEnum)[keyof typeof ConnectionKeyUseEnum] | string;

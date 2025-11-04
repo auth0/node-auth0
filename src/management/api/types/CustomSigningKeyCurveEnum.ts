@@ -6,4 +6,6 @@ export const CustomSigningKeyCurveEnum = {
     P384: "P-384",
     P521: "P-521",
 } as const;
-export type CustomSigningKeyCurveEnum = (typeof CustomSigningKeyCurveEnum)[keyof typeof CustomSigningKeyCurveEnum];
+export type CustomSigningKeyCurveEnum =
+    | (typeof CustomSigningKeyCurveEnum)[keyof typeof CustomSigningKeyCurveEnum]
+    | string;

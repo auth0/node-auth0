@@ -5,4 +5,5 @@ export const GuardianFactorPhoneFactorMessageTypeEnum = {
     Voice: "voice",
 } as const;
 export type GuardianFactorPhoneFactorMessageTypeEnum =
-    (typeof GuardianFactorPhoneFactorMessageTypeEnum)[keyof typeof GuardianFactorPhoneFactorMessageTypeEnum];
+    | (typeof GuardianFactorPhoneFactorMessageTypeEnum)[keyof typeof GuardianFactorPhoneFactorMessageTypeEnum]
+    | string;

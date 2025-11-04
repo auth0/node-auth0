@@ -4,4 +4,4 @@ export const LogStreamPiiMethodEnum = {
     Mask: "mask",
     Hash: "hash",
 } as const;
-export type LogStreamPiiMethodEnum = (typeof LogStreamPiiMethodEnum)[keyof typeof LogStreamPiiMethodEnum];
+export type LogStreamPiiMethodEnum = (typeof LogStreamPiiMethodEnum)[keyof typeof LogStreamPiiMethodEnum] | string;

@@ -8,4 +8,5 @@ export const BrandingThemeWidgetLogoPositionEnum = {
     Right: "right",
 } as const;
 export type BrandingThemeWidgetLogoPositionEnum =
-    (typeof BrandingThemeWidgetLogoPositionEnum)[keyof typeof BrandingThemeWidgetLogoPositionEnum];
+    | (typeof BrandingThemeWidgetLogoPositionEnum)[keyof typeof BrandingThemeWidgetLogoPositionEnum]
+    | string;

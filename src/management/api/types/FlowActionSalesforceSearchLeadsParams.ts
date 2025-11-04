@@ -14,5 +14,5 @@ export namespace FlowActionSalesforceSearchLeadsParams {
         Phone: "phone",
         All: "all",
     } as const;
-    export type SearchField = (typeof SearchField)[keyof typeof SearchField];
+    export type SearchField = (typeof SearchField)[keyof typeof SearchField] | string;
 }

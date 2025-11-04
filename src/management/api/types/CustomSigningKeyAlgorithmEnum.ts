@@ -13,4 +13,5 @@ export const CustomSigningKeyAlgorithmEnum = {
     Ps512: "PS512",
 } as const;
 export type CustomSigningKeyAlgorithmEnum =
-    (typeof CustomSigningKeyAlgorithmEnum)[keyof typeof CustomSigningKeyAlgorithmEnum];
+    | (typeof CustomSigningKeyAlgorithmEnum)[keyof typeof CustomSigningKeyAlgorithmEnum]
+    | string;

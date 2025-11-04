@@ -84,4 +84,4 @@ export const PromptLanguageEnum = {
     ZhHk: "zh-HK",
     ZhTw: "zh-TW",
 } as const;
-export type PromptLanguageEnum = (typeof PromptLanguageEnum)[keyof typeof PromptLanguageEnum];
+export type PromptLanguageEnum = (typeof PromptLanguageEnum)[keyof typeof PromptLanguageEnum] | string;

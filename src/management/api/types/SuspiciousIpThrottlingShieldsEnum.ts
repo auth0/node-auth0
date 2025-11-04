@@ -5,4 +5,5 @@ export const SuspiciousIpThrottlingShieldsEnum = {
     AdminNotification: "admin_notification",
 } as const;
 export type SuspiciousIpThrottlingShieldsEnum =
-    (typeof SuspiciousIpThrottlingShieldsEnum)[keyof typeof SuspiciousIpThrottlingShieldsEnum];
+    | (typeof SuspiciousIpThrottlingShieldsEnum)[keyof typeof SuspiciousIpThrottlingShieldsEnum]
+    | string;

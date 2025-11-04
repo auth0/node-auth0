@@ -15,5 +15,5 @@ export namespace FlowActionSlackPostMessageParamsAttachment {
         Warning: "WARNING",
         Danger: "DANGER",
     } as const;
-    export type Color = (typeof Color)[keyof typeof Color];
+    export type Color = (typeof Color)[keyof typeof Color] | string;
 }

@@ -7,4 +7,5 @@ export const DomainVerificationStatusEnum = {
     Failed: "failed",
 } as const;
 export type DomainVerificationStatusEnum =
-    (typeof DomainVerificationStatusEnum)[keyof typeof DomainVerificationStatusEnum];
+    | (typeof DomainVerificationStatusEnum)[keyof typeof DomainVerificationStatusEnum]
+    | string;

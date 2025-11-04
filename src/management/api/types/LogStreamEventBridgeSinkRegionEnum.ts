@@ -40,4 +40,5 @@ export const LogStreamEventBridgeSinkRegionEnum = {
     UsWest2: "us-west-2",
 } as const;
 export type LogStreamEventBridgeSinkRegionEnum =
-    (typeof LogStreamEventBridgeSinkRegionEnum)[keyof typeof LogStreamEventBridgeSinkRegionEnum];
+    | (typeof LogStreamEventBridgeSinkRegionEnum)[keyof typeof LogStreamEventBridgeSinkRegionEnum]
+    | string;

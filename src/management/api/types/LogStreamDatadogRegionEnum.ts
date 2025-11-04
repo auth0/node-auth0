@@ -7,4 +7,6 @@ export const LogStreamDatadogRegionEnum = {
     Us3: "us3",
     Us5: "us5",
 } as const;
-export type LogStreamDatadogRegionEnum = (typeof LogStreamDatadogRegionEnum)[keyof typeof LogStreamDatadogRegionEnum];
+export type LogStreamDatadogRegionEnum =
+    | (typeof LogStreamDatadogRegionEnum)[keyof typeof LogStreamDatadogRegionEnum]
+    | string;

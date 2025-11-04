@@ -6,4 +6,5 @@ export const UniversalLoginExperienceEnum = {
     Classic: "classic",
 } as const;
 export type UniversalLoginExperienceEnum =
-    (typeof UniversalLoginExperienceEnum)[keyof typeof UniversalLoginExperienceEnum];
+    | (typeof UniversalLoginExperienceEnum)[keyof typeof UniversalLoginExperienceEnum]
+    | string;

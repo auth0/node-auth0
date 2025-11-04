@@ -16,4 +16,4 @@ export const EmailTemplateNameEnum = {
     PasswordReset: "password_reset",
     AsyncApproval: "async_approval",
 } as const;
-export type EmailTemplateNameEnum = (typeof EmailTemplateNameEnum)[keyof typeof EmailTemplateNameEnum];
+export type EmailTemplateNameEnum = (typeof EmailTemplateNameEnum)[keyof typeof EmailTemplateNameEnum] | string;

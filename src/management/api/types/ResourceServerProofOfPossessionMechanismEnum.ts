@@ -6,4 +6,5 @@ export const ResourceServerProofOfPossessionMechanismEnum = {
     Dpop: "dpop",
 } as const;
 export type ResourceServerProofOfPossessionMechanismEnum =
-    (typeof ResourceServerProofOfPossessionMechanismEnum)[keyof typeof ResourceServerProofOfPossessionMechanismEnum];
+    | (typeof ResourceServerProofOfPossessionMechanismEnum)[keyof typeof ResourceServerProofOfPossessionMechanismEnum]
+    | string;

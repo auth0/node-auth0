@@ -5,4 +5,5 @@ export const CustomProviderDeliveryMethodEnum = {
     Voice: "voice",
 } as const;
 export type CustomProviderDeliveryMethodEnum =
-    (typeof CustomProviderDeliveryMethodEnum)[keyof typeof CustomProviderDeliveryMethodEnum];
+    | (typeof CustomProviderDeliveryMethodEnum)[keyof typeof CustomProviderDeliveryMethodEnum]
+    | string;

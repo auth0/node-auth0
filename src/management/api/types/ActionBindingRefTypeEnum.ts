@@ -6,4 +6,6 @@ export const ActionBindingRefTypeEnum = {
     ActionId: "action_id",
     ActionName: "action_name",
 } as const;
-export type ActionBindingRefTypeEnum = (typeof ActionBindingRefTypeEnum)[keyof typeof ActionBindingRefTypeEnum];
+export type ActionBindingRefTypeEnum =
+    | (typeof ActionBindingRefTypeEnum)[keyof typeof ActionBindingRefTypeEnum]
+    | string;

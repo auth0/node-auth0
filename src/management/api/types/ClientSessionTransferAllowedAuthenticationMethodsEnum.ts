@@ -5,4 +5,5 @@ export const ClientSessionTransferAllowedAuthenticationMethodsEnum = {
     Query: "query",
 } as const;
 export type ClientSessionTransferAllowedAuthenticationMethodsEnum =
-    (typeof ClientSessionTransferAllowedAuthenticationMethodsEnum)[keyof typeof ClientSessionTransferAllowedAuthenticationMethodsEnum];
+    | (typeof ClientSessionTransferAllowedAuthenticationMethodsEnum)[keyof typeof ClientSessionTransferAllowedAuthenticationMethodsEnum]
+    | string;

@@ -7,4 +7,5 @@ export const BotDetectionChallengePolicyPasswordFlowEnum = {
     Always: "always",
 } as const;
 export type BotDetectionChallengePolicyPasswordFlowEnum =
-    (typeof BotDetectionChallengePolicyPasswordFlowEnum)[keyof typeof BotDetectionChallengePolicyPasswordFlowEnum];
+    | (typeof BotDetectionChallengePolicyPasswordFlowEnum)[keyof typeof BotDetectionChallengePolicyPasswordFlowEnum]
+    | string;

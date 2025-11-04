@@ -11,4 +11,5 @@ export const SelfServiceProfileAllowedStrategyEnum = {
     Pingfederate: "pingfederate",
 } as const;
 export type SelfServiceProfileAllowedStrategyEnum =
-    (typeof SelfServiceProfileAllowedStrategyEnum)[keyof typeof SelfServiceProfileAllowedStrategyEnum];
+    | (typeof SelfServiceProfileAllowedStrategyEnum)[keyof typeof SelfServiceProfileAllowedStrategyEnum]
+    | string;

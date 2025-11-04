@@ -5,4 +5,4 @@ export const SignupStatusEnum = {
     Optional: "optional",
     Inactive: "inactive",
 } as const;
-export type SignupStatusEnum = (typeof SignupStatusEnum)[keyof typeof SignupStatusEnum];
+export type SignupStatusEnum = (typeof SignupStatusEnum)[keyof typeof SignupStatusEnum] | string;

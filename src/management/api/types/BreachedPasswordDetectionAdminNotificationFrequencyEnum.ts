@@ -7,4 +7,5 @@ export const BreachedPasswordDetectionAdminNotificationFrequencyEnum = {
     Monthly: "monthly",
 } as const;
 export type BreachedPasswordDetectionAdminNotificationFrequencyEnum =
-    (typeof BreachedPasswordDetectionAdminNotificationFrequencyEnum)[keyof typeof BreachedPasswordDetectionAdminNotificationFrequencyEnum];
+    | (typeof BreachedPasswordDetectionAdminNotificationFrequencyEnum)[keyof typeof BreachedPasswordDetectionAdminNotificationFrequencyEnum]
+    | string;

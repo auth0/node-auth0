@@ -5,4 +5,4 @@ export const JobFileFormatEnum = {
     Json: "json",
     Csv: "csv",
 } as const;
-export type JobFileFormatEnum = (typeof JobFileFormatEnum)[keyof typeof JobFileFormatEnum];
+export type JobFileFormatEnum = (typeof JobFileFormatEnum)[keyof typeof JobFileFormatEnum] | string;

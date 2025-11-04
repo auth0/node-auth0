@@ -8,4 +8,5 @@ export const SelfServiceProfileSsoTicketProvisioningScopeEnum = {
     DeleteUsers: "delete:users",
 } as const;
 export type SelfServiceProfileSsoTicketProvisioningScopeEnum =
-    (typeof SelfServiceProfileSsoTicketProvisioningScopeEnum)[keyof typeof SelfServiceProfileSsoTicketProvisioningScopeEnum];
+    | (typeof SelfServiceProfileSsoTicketProvisioningScopeEnum)[keyof typeof SelfServiceProfileSsoTicketProvisioningScopeEnum]
+    | string;

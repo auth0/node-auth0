@@ -6,4 +6,5 @@ export const ResourceServerSubjectTypeAuthorizationClientPolicyEnum = {
     RequireClientGrant: "require_client_grant",
 } as const;
 export type ResourceServerSubjectTypeAuthorizationClientPolicyEnum =
-    (typeof ResourceServerSubjectTypeAuthorizationClientPolicyEnum)[keyof typeof ResourceServerSubjectTypeAuthorizationClientPolicyEnum];
+    | (typeof ResourceServerSubjectTypeAuthorizationClientPolicyEnum)[keyof typeof ResourceServerSubjectTypeAuthorizationClientPolicyEnum]
+    | string;

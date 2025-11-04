@@ -83,4 +83,4 @@ export const SupportedLocales = {
     ZhHk: "zh-HK",
     ZhTw: "zh-TW",
 } as const;
-export type SupportedLocales = (typeof SupportedLocales)[keyof typeof SupportedLocales];
+export type SupportedLocales = (typeof SupportedLocales)[keyof typeof SupportedLocales] | string;

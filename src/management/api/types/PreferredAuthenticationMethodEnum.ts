@@ -6,4 +6,5 @@ export const PreferredAuthenticationMethodEnum = {
     Sms: "sms",
 } as const;
 export type PreferredAuthenticationMethodEnum =
-    (typeof PreferredAuthenticationMethodEnum)[keyof typeof PreferredAuthenticationMethodEnum];
+    | (typeof PreferredAuthenticationMethodEnum)[keyof typeof PreferredAuthenticationMethodEnum]
+    | string;

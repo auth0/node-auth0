@@ -7,4 +7,5 @@ export const CustomDomainStatusFilterEnum = {
     Failed: "failed",
 } as const;
 export type CustomDomainStatusFilterEnum =
-    (typeof CustomDomainStatusFilterEnum)[keyof typeof CustomDomainStatusFilterEnum];
+    | (typeof CustomDomainStatusFilterEnum)[keyof typeof CustomDomainStatusFilterEnum]
+    | string;

@@ -22,5 +22,5 @@ export namespace FlowActionWhatsappSendMessageParams {
         Template: "TEMPLATE",
         Text: "TEXT",
     } as const;
-    export type Type = (typeof Type)[keyof typeof Type];
+    export type Type = (typeof Type)[keyof typeof Type] | string;
 }

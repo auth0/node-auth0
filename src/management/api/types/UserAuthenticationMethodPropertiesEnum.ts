@@ -7,4 +7,5 @@ export const UserAuthenticationMethodPropertiesEnum = {
     Voice: "voice",
 } as const;
 export type UserAuthenticationMethodPropertiesEnum =
-    (typeof UserAuthenticationMethodPropertiesEnum)[keyof typeof UserAuthenticationMethodPropertiesEnum];
+    | (typeof UserAuthenticationMethodPropertiesEnum)[keyof typeof UserAuthenticationMethodPropertiesEnum]
+    | string;

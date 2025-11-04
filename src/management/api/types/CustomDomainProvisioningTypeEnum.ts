@@ -6,4 +6,5 @@ export const CustomDomainProvisioningTypeEnum = {
     SelfManagedCerts: "self_managed_certs",
 } as const;
 export type CustomDomainProvisioningTypeEnum =
-    (typeof CustomDomainProvisioningTypeEnum)[keyof typeof CustomDomainProvisioningTypeEnum];
+    | (typeof CustomDomainProvisioningTypeEnum)[keyof typeof CustomDomainProvisioningTypeEnum]
+    | string;

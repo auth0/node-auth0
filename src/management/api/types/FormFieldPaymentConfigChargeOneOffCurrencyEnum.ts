@@ -12,4 +12,5 @@ export const FormFieldPaymentConfigChargeOneOffCurrencyEnum = {
     Usd: "USD",
 } as const;
 export type FormFieldPaymentConfigChargeOneOffCurrencyEnum =
-    (typeof FormFieldPaymentConfigChargeOneOffCurrencyEnum)[keyof typeof FormFieldPaymentConfigChargeOneOffCurrencyEnum];
+    | (typeof FormFieldPaymentConfigChargeOneOffCurrencyEnum)[keyof typeof FormFieldPaymentConfigChargeOneOffCurrencyEnum]
+    | string;

@@ -7,4 +7,5 @@ export const ResourceServerTokenEncryptionAlgorithmEnum = {
     RsaOaep512: "RSA-OAEP-512",
 } as const;
 export type ResourceServerTokenEncryptionAlgorithmEnum =
-    (typeof ResourceServerTokenEncryptionAlgorithmEnum)[keyof typeof ResourceServerTokenEncryptionAlgorithmEnum];
+    | (typeof ResourceServerTokenEncryptionAlgorithmEnum)[keyof typeof ResourceServerTokenEncryptionAlgorithmEnum]
+    | string;

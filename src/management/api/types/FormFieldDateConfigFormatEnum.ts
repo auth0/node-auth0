@@ -5,4 +5,5 @@ export const FormFieldDateConfigFormatEnum = {
     Time: "TIME",
 } as const;
 export type FormFieldDateConfigFormatEnum =
-    (typeof FormFieldDateConfigFormatEnum)[keyof typeof FormFieldDateConfigFormatEnum];
+    | (typeof FormFieldDateConfigFormatEnum)[keyof typeof FormFieldDateConfigFormatEnum]
+    | string;

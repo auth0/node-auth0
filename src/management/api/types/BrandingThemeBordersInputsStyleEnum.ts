@@ -7,4 +7,5 @@ export const BrandingThemeBordersInputsStyleEnum = {
     Sharp: "sharp",
 } as const;
 export type BrandingThemeBordersInputsStyleEnum =
-    (typeof BrandingThemeBordersInputsStyleEnum)[keyof typeof BrandingThemeBordersInputsStyleEnum];
+    | (typeof BrandingThemeBordersInputsStyleEnum)[keyof typeof BrandingThemeBordersInputsStyleEnum]
+    | string;

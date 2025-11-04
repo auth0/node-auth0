@@ -6,4 +6,5 @@ export const FormBlockResendButtonConfigTextAlignmentEnum = {
     Right: "RIGHT",
 } as const;
 export type FormBlockResendButtonConfigTextAlignmentEnum =
-    (typeof FormBlockResendButtonConfigTextAlignmentEnum)[keyof typeof FormBlockResendButtonConfigTextAlignmentEnum];
+    | (typeof FormBlockResendButtonConfigTextAlignmentEnum)[keyof typeof FormBlockResendButtonConfigTextAlignmentEnum]
+    | string;

@@ -5,4 +5,4 @@ export const ActionBindingTypeEnum = {
     TriggerBound: "trigger-bound",
     EntityBound: "entity-bound",
 } as const;
-export type ActionBindingTypeEnum = (typeof ActionBindingTypeEnum)[keyof typeof ActionBindingTypeEnum];
+export type ActionBindingTypeEnum = (typeof ActionBindingTypeEnum)[keyof typeof ActionBindingTypeEnum] | string;

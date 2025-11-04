@@ -6,4 +6,4 @@ export const LogStreamStatusEnum = {
     Paused: "paused",
     Suspended: "suspended",
 } as const;
-export type LogStreamStatusEnum = (typeof LogStreamStatusEnum)[keyof typeof LogStreamStatusEnum];
+export type LogStreamStatusEnum = (typeof LogStreamStatusEnum)[keyof typeof LogStreamStatusEnum] | string;

@@ -5,4 +5,5 @@ export const AsyncApprovalNotificationsChannelsEnum = {
     Email: "email",
 } as const;
 export type AsyncApprovalNotificationsChannelsEnum =
-    (typeof AsyncApprovalNotificationsChannelsEnum)[keyof typeof AsyncApprovalNotificationsChannelsEnum];
+    | (typeof AsyncApprovalNotificationsChannelsEnum)[keyof typeof AsyncApprovalNotificationsChannelsEnum]
+    | string;

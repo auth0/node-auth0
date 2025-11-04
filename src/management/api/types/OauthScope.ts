@@ -749,4 +749,4 @@ export const OauthScope = {
      * Delete Vdcs Templates */
     DeleteVdcsTemplates: "delete:vdcs_templates",
 } as const;
-export type OauthScope = (typeof OauthScope)[keyof typeof OauthScope];
+export type OauthScope = (typeof OauthScope)[keyof typeof OauthScope] | string;

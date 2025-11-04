@@ -10,4 +10,5 @@ export const GuardianEnrollmentFactorEnum = {
     WebauthnPlatform: "webauthn-platform",
 } as const;
 export type GuardianEnrollmentFactorEnum =
-    (typeof GuardianEnrollmentFactorEnum)[keyof typeof GuardianEnrollmentFactorEnum];
+    | (typeof GuardianEnrollmentFactorEnum)[keyof typeof GuardianEnrollmentFactorEnum]
+    | string;

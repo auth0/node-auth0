@@ -15,4 +15,5 @@ export const FlowsVaultConnectioSetupJwtAlgorithmEnum = {
     Ps512: "PS512",
 } as const;
 export type FlowsVaultConnectioSetupJwtAlgorithmEnum =
-    (typeof FlowsVaultConnectioSetupJwtAlgorithmEnum)[keyof typeof FlowsVaultConnectioSetupJwtAlgorithmEnum];
+    | (typeof FlowsVaultConnectioSetupJwtAlgorithmEnum)[keyof typeof FlowsVaultConnectioSetupJwtAlgorithmEnum]
+    | string;

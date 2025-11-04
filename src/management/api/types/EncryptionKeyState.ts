@@ -7,4 +7,4 @@ export const EncryptionKeyState = {
     Deactivated: "deactivated",
     Destroyed: "destroyed",
 } as const;
-export type EncryptionKeyState = (typeof EncryptionKeyState)[keyof typeof EncryptionKeyState];
+export type EncryptionKeyState = (typeof EncryptionKeyState)[keyof typeof EncryptionKeyState] | string;

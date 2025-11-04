@@ -6,4 +6,5 @@ export const LogStreamMixpanelRegionEnum = {
     Eu: "eu",
 } as const;
 export type LogStreamMixpanelRegionEnum =
-    (typeof LogStreamMixpanelRegionEnum)[keyof typeof LogStreamMixpanelRegionEnum];
+    | (typeof LogStreamMixpanelRegionEnum)[keyof typeof LogStreamMixpanelRegionEnum]
+    | string;

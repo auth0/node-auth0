@@ -6,4 +6,6 @@ export const ClientCredentialTypeEnum = {
     CertSubjectDn: "cert_subject_dn",
     X509Cert: "x509_cert",
 } as const;
-export type ClientCredentialTypeEnum = (typeof ClientCredentialTypeEnum)[keyof typeof ClientCredentialTypeEnum];
+export type ClientCredentialTypeEnum =
+    | (typeof ClientCredentialTypeEnum)[keyof typeof ClientCredentialTypeEnum]
+    | string;

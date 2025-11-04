@@ -38,4 +38,5 @@ export const LogStreamEventGridRegionEnum = {
     Westus2: "westus2",
 } as const;
 export type LogStreamEventGridRegionEnum =
-    (typeof LogStreamEventGridRegionEnum)[keyof typeof LogStreamEventGridRegionEnum];
+    | (typeof LogStreamEventGridRegionEnum)[keyof typeof LogStreamEventGridRegionEnum]
+    | string;

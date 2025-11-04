@@ -4,4 +4,4 @@ export const VerificationMethodEnum = {
     Link: "link",
     Otp: "otp",
 } as const;
-export type VerificationMethodEnum = (typeof VerificationMethodEnum)[keyof typeof VerificationMethodEnum];
+export type VerificationMethodEnum = (typeof VerificationMethodEnum)[keyof typeof VerificationMethodEnum] | string;

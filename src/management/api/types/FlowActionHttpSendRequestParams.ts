@@ -21,11 +21,11 @@ export namespace FlowActionHttpSendRequestParams {
         Patch: "PATCH",
         Delete: "DELETE",
     } as const;
-    export type Method = (typeof Method)[keyof typeof Method];
+    export type Method = (typeof Method)[keyof typeof Method] | string;
     export const ContentType = {
         Json: "JSON",
         Form: "FORM",
         Xml: "XML",
     } as const;
-    export type ContentType = (typeof ContentType)[keyof typeof ContentType];
+    export type ContentType = (typeof ContentType)[keyof typeof ContentType] | string;
 }

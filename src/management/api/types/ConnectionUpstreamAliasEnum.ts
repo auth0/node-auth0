@@ -15,4 +15,5 @@ export const ConnectionUpstreamAliasEnum = {
     UiLocales: "ui_locales",
 } as const;
 export type ConnectionUpstreamAliasEnum =
-    (typeof ConnectionUpstreamAliasEnum)[keyof typeof ConnectionUpstreamAliasEnum];
+    | (typeof ConnectionUpstreamAliasEnum)[keyof typeof ConnectionUpstreamAliasEnum]
+    | string;

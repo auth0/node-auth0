@@ -8,4 +8,6 @@ export const LogStreamPiiLogFieldsEnum = {
     Phone: "phone",
     Address: "address",
 } as const;
-export type LogStreamPiiLogFieldsEnum = (typeof LogStreamPiiLogFieldsEnum)[keyof typeof LogStreamPiiLogFieldsEnum];
+export type LogStreamPiiLogFieldsEnum =
+    | (typeof LogStreamPiiLogFieldsEnum)[keyof typeof LogStreamPiiLogFieldsEnum]
+    | string;

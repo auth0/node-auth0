@@ -7,4 +7,5 @@ export const ClientSessionTransferDeviceBindingEnum = {
     None: "none",
 } as const;
 export type ClientSessionTransferDeviceBindingEnum =
-    (typeof ClientSessionTransferDeviceBindingEnum)[keyof typeof ClientSessionTransferDeviceBindingEnum];
+    | (typeof ClientSessionTransferDeviceBindingEnum)[keyof typeof ClientSessionTransferDeviceBindingEnum]
+    | string;

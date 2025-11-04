@@ -8,4 +8,5 @@ export const FormFieldFileConfigCategoryEnum = {
     Archive: "ARCHIVE",
 } as const;
 export type FormFieldFileConfigCategoryEnum =
-    (typeof FormFieldFileConfigCategoryEnum)[keyof typeof FormFieldFileConfigCategoryEnum];
+    | (typeof FormFieldFileConfigCategoryEnum)[keyof typeof FormFieldFileConfigCategoryEnum]
+    | string;

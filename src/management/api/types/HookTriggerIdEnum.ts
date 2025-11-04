@@ -8,4 +8,4 @@ export const HookTriggerIdEnum = {
     PostChangePassword: "post-change-password",
     SendPhoneMessage: "send-phone-message",
 } as const;
-export type HookTriggerIdEnum = (typeof HookTriggerIdEnum)[keyof typeof HookTriggerIdEnum];
+export type HookTriggerIdEnum = (typeof HookTriggerIdEnum)[keyof typeof HookTriggerIdEnum] | string;

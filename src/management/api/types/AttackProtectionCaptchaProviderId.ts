@@ -11,4 +11,5 @@ export const AttackProtectionCaptchaProviderId = {
     SimpleCaptcha: "simple_captcha",
 } as const;
 export type AttackProtectionCaptchaProviderId =
-    (typeof AttackProtectionCaptchaProviderId)[keyof typeof AttackProtectionCaptchaProviderId];
+    | (typeof AttackProtectionCaptchaProviderId)[keyof typeof AttackProtectionCaptchaProviderId]
+    | string;

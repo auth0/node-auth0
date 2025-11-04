@@ -8,4 +8,5 @@ export const ResourceServerTokenDialectSchemaEnum = {
     Rfc9068ProfileAuthz: "rfc9068_profile_authz",
 } as const;
 export type ResourceServerTokenDialectSchemaEnum =
-    (typeof ResourceServerTokenDialectSchemaEnum)[keyof typeof ResourceServerTokenDialectSchemaEnum];
+    | (typeof ResourceServerTokenDialectSchemaEnum)[keyof typeof ResourceServerTokenDialectSchemaEnum]
+    | string;

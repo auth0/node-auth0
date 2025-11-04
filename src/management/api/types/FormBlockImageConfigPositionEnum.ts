@@ -6,4 +6,5 @@ export const FormBlockImageConfigPositionEnum = {
     Right: "RIGHT",
 } as const;
 export type FormBlockImageConfigPositionEnum =
-    (typeof FormBlockImageConfigPositionEnum)[keyof typeof FormBlockImageConfigPositionEnum];
+    | (typeof FormBlockImageConfigPositionEnum)[keyof typeof FormBlockImageConfigPositionEnum]
+    | string;

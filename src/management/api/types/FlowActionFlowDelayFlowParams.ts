@@ -14,5 +14,5 @@ export namespace FlowActionFlowDelayFlowParams {
         Hours: "HOURS",
         Days: "DAYS",
     } as const;
-    export type Units = (typeof Units)[keyof typeof Units];
+    export type Units = (typeof Units)[keyof typeof Units] | string;
 }

@@ -9,4 +9,6 @@ export const ActionExecutionStatusEnum = {
     Canceled: "canceled",
     Suspended: "suspended",
 } as const;
-export type ActionExecutionStatusEnum = (typeof ActionExecutionStatusEnum)[keyof typeof ActionExecutionStatusEnum];
+export type ActionExecutionStatusEnum =
+    | (typeof ActionExecutionStatusEnum)[keyof typeof ActionExecutionStatusEnum]
+    | string;

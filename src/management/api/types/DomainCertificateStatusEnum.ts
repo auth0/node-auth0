@@ -8,4 +8,5 @@ export const DomainCertificateStatusEnum = {
     RenewingFailed: "renewing_failed",
 } as const;
 export type DomainCertificateStatusEnum =
-    (typeof DomainCertificateStatusEnum)[keyof typeof DomainCertificateStatusEnum];
+    | (typeof DomainCertificateStatusEnum)[keyof typeof DomainCertificateStatusEnum]
+    | string;

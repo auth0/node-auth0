@@ -22,4 +22,5 @@ export const EventStreamDeliveryEventTypeEnum = {
     GroupMemberDeleted: "group.member.deleted",
 } as const;
 export type EventStreamDeliveryEventTypeEnum =
-    (typeof EventStreamDeliveryEventTypeEnum)[keyof typeof EventStreamDeliveryEventTypeEnum];
+    | (typeof EventStreamDeliveryEventTypeEnum)[keyof typeof EventStreamDeliveryEventTypeEnum]
+    | string;

@@ -5,4 +5,5 @@ export const TwilioProviderDeliveryMethodEnum = {
     Voice: "voice",
 } as const;
 export type TwilioProviderDeliveryMethodEnum =
-    (typeof TwilioProviderDeliveryMethodEnum)[keyof typeof TwilioProviderDeliveryMethodEnum];
+    | (typeof TwilioProviderDeliveryMethodEnum)[keyof typeof TwilioProviderDeliveryMethodEnum]
+    | string;

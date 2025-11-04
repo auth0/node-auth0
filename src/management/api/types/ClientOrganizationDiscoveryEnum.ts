@@ -6,4 +6,5 @@ export const ClientOrganizationDiscoveryEnum = {
     OrganizationName: "organization_name",
 } as const;
 export type ClientOrganizationDiscoveryEnum =
-    (typeof ClientOrganizationDiscoveryEnum)[keyof typeof ClientOrganizationDiscoveryEnum];
+    | (typeof ClientOrganizationDiscoveryEnum)[keyof typeof ClientOrganizationDiscoveryEnum]
+    | string;

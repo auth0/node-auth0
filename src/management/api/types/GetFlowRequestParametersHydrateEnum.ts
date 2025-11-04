@@ -5,4 +5,5 @@ export const GetFlowRequestParametersHydrateEnum = {
     Forms: "forms",
 } as const;
 export type GetFlowRequestParametersHydrateEnum =
-    (typeof GetFlowRequestParametersHydrateEnum)[keyof typeof GetFlowRequestParametersHydrateEnum];
+    | (typeof GetFlowRequestParametersHydrateEnum)[keyof typeof GetFlowRequestParametersHydrateEnum]
+    | string;

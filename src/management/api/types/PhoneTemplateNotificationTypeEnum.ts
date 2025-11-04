@@ -8,4 +8,5 @@ export const PhoneTemplateNotificationTypeEnum = {
     PasswordBreach: "password_breach",
 } as const;
 export type PhoneTemplateNotificationTypeEnum =
-    (typeof PhoneTemplateNotificationTypeEnum)[keyof typeof PhoneTemplateNotificationTypeEnum];
+    | (typeof PhoneTemplateNotificationTypeEnum)[keyof typeof PhoneTemplateNotificationTypeEnum]
+    | string;

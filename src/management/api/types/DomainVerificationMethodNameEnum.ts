@@ -6,4 +6,5 @@ export const DomainVerificationMethodNameEnum = {
     Txt: "txt",
 } as const;
 export type DomainVerificationMethodNameEnum =
-    (typeof DomainVerificationMethodNameEnum)[keyof typeof DomainVerificationMethodNameEnum];
+    | (typeof DomainVerificationMethodNameEnum)[keyof typeof DomainVerificationMethodNameEnum]
+    | string;

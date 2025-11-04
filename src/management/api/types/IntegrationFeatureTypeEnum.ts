@@ -9,4 +9,6 @@ export const IntegrationFeatureTypeEnum = {
     SsoIntegration: "sso_integration",
     SmsProvider: "sms_provider",
 } as const;
-export type IntegrationFeatureTypeEnum = (typeof IntegrationFeatureTypeEnum)[keyof typeof IntegrationFeatureTypeEnum];
+export type IntegrationFeatureTypeEnum =
+    | (typeof IntegrationFeatureTypeEnum)[keyof typeof IntegrationFeatureTypeEnum]
+    | string;

@@ -6,4 +6,5 @@ export const RefreshTokenExpirationTypeEnum = {
     NonExpiring: "non-expiring",
 } as const;
 export type RefreshTokenExpirationTypeEnum =
-    (typeof RefreshTokenExpirationTypeEnum)[keyof typeof RefreshTokenExpirationTypeEnum];
+    | (typeof RefreshTokenExpirationTypeEnum)[keyof typeof RefreshTokenExpirationTypeEnum]
+    | string;

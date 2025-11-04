@@ -11,4 +11,4 @@ export const PartialGroupsEnum = {
     SignupPassword: "signup-password",
     CustomizedConsent: "customized-consent",
 } as const;
-export type PartialGroupsEnum = (typeof PartialGroupsEnum)[keyof typeof PartialGroupsEnum];
+export type PartialGroupsEnum = (typeof PartialGroupsEnum)[keyof typeof PartialGroupsEnum] | string;

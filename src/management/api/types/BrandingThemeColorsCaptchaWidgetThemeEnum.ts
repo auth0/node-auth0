@@ -7,4 +7,5 @@ export const BrandingThemeColorsCaptchaWidgetThemeEnum = {
     Light: "light",
 } as const;
 export type BrandingThemeColorsCaptchaWidgetThemeEnum =
-    (typeof BrandingThemeColorsCaptchaWidgetThemeEnum)[keyof typeof BrandingThemeColorsCaptchaWidgetThemeEnum];
+    | (typeof BrandingThemeColorsCaptchaWidgetThemeEnum)[keyof typeof BrandingThemeColorsCaptchaWidgetThemeEnum]
+    | string;

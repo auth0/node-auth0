@@ -28,4 +28,4 @@ export const ClientAppTypeEnum = {
     SsoIntegration: "sso_integration",
     Oag: "oag",
 } as const;
-export type ClientAppTypeEnum = (typeof ClientAppTypeEnum)[keyof typeof ClientAppTypeEnum];
+export type ClientAppTypeEnum = (typeof ClientAppTypeEnum)[keyof typeof ClientAppTypeEnum] | string;

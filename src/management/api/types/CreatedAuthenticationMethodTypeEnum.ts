@@ -7,4 +7,5 @@ export const CreatedAuthenticationMethodTypeEnum = {
     WebauthnRoaming: "webauthn-roaming",
 } as const;
 export type CreatedAuthenticationMethodTypeEnum =
-    (typeof CreatedAuthenticationMethodTypeEnum)[keyof typeof CreatedAuthenticationMethodTypeEnum];
+    | (typeof CreatedAuthenticationMethodTypeEnum)[keyof typeof CreatedAuthenticationMethodTypeEnum]
+    | string;
