@@ -23,7 +23,7 @@ export declare namespace ManagementClient {
      * @public
      */
     export interface ManagementClientOptions
-        extends Omit<FernClient.Options, "token" | "environment" | "fetcher" | "baseUrl"> {
+        extends Omit<FernClient.Options, "token" | "environment" | "fetcher" | "baseUrl" | "fetch"> {
         /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
         domain: string;
         /**
@@ -208,6 +208,7 @@ export class ManagementClient extends FernClient {
 
         // Temporarily remove fetcher from options to avoid people passing it for now
         delete (_options as any).fetcher;
+        delete (_options as any).fetch;
 
         // Prepare the base client options
         let clientOptions: any = {
