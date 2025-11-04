@@ -3,8 +3,10 @@
 import type { BaseClientOptions } from "../../../../BaseClient.js";
 import * as environments from "../../../../environments.js";
 import * as core from "../../../../core/index.js";
+import { BotDetection } from "../resources/botDetection/client/Client.js";
 import { BreachedPasswordDetection } from "../resources/breachedPasswordDetection/client/Client.js";
 import { BruteForceProtection } from "../resources/bruteForceProtection/client/Client.js";
+import { Captcha } from "../resources/captcha/client/Client.js";
 import { SuspiciousIpThrottling } from "../resources/suspiciousIpThrottling/client/Client.js";
 
 export declare namespace AttackProtection {
@@ -13,12 +15,18 @@ export declare namespace AttackProtection {
 
 export class AttackProtection {
     protected readonly _options: AttackProtection.Options;
+    protected _botDetection: BotDetection | undefined;
     protected _breachedPasswordDetection: BreachedPasswordDetection | undefined;
     protected _bruteForceProtection: BruteForceProtection | undefined;
+    protected _captcha: Captcha | undefined;
     protected _suspiciousIpThrottling: SuspiciousIpThrottling | undefined;
 
     constructor(_options: AttackProtection.Options) {
         this._options = _options;
+    }
+
+    public get botDetection(): BotDetection {
+        return (this._botDetection ??= new BotDetection(this._options));
     }
 
     public get breachedPasswordDetection(): BreachedPasswordDetection {
@@ -27,6 +35,10 @@ export class AttackProtection {
 
     public get bruteForceProtection(): BruteForceProtection {
         return (this._bruteForceProtection ??= new BruteForceProtection(this._options));
+    }
+
+    public get captcha(): Captcha {
+        return (this._captcha ??= new Captcha(this._options));
     }
 
     public get suspiciousIpThrottling(): SuspiciousIpThrottling {

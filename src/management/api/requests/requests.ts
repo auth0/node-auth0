@@ -1767,6 +1767,19 @@ export interface UpdateActionBindingsRequestContent {
  * @example
  *     {}
  */
+export interface UpdateBotDetectionSettingsRequestContent {
+    bot_detection_level?: Management.BotDetectionLevelEnum;
+    challenge_password_policy?: Management.BotDetectionChallengePolicyPasswordFlowEnum;
+    challenge_passwordless_policy?: Management.BotDetectionChallengePolicyPasswordlessFlowEnum;
+    challenge_password_reset_policy?: Management.BotDetectionChallengePolicyPasswordResetFlowEnum;
+    allowlist?: Management.BotDetectionAllowlist;
+    monitoring_mode_enabled?: Management.BotDetectionMonitoringModeEnabled;
+}
+
+/**
+ * @example
+ *     {}
+ */
 export interface UpdateBreachedPasswordDetectionSettingsRequestContent {
     /** Whether or not breached password detection is active. */
     enabled?: boolean;
@@ -1827,6 +1840,21 @@ export namespace UpdateBruteForceSettingsRequestContent {
         CountPerIdentifier: "count_per_identifier",
     } as const;
     export type Mode = (typeof Mode)[keyof typeof Mode];
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateAttackProtectionCaptchaRequestContent {
+    active_provider_id?: Management.AttackProtectionCaptchaProviderId;
+    arkose?: Management.AttackProtectionUpdateCaptchaArkose;
+    auth_challenge?: Management.AttackProtectionCaptchaAuthChallengeRequest;
+    hcaptcha?: Management.AttackProtectionUpdateCaptchaHcaptcha;
+    friendly_captcha?: Management.AttackProtectionUpdateCaptchaFriendlyCaptcha;
+    recaptcha_enterprise?: Management.AttackProtectionUpdateCaptchaRecaptchaEnterprise;
+    recaptcha_v2?: Management.AttackProtectionUpdateCaptchaRecaptchaV2;
+    simple_captcha?: Management.AttackProtectionCaptchaSimpleCaptchaResponseContent;
 }
 
 /**

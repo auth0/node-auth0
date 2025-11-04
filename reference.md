@@ -11018,6 +11018,126 @@ await client.anomaly.blocks.unblockIp("id");
 </dl>
 </details>
 
+## AttackProtection BotDetection
+
+<details><summary><code>client.attackProtection.botDetection.<a href="/src/management/api/resources/attackProtection/resources/botDetection/client/Client.ts">get</a>() -> Management.GetBotDetectionSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the Bot Detection configuration of your tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.botDetection.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `BotDetection.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.attackProtection.botDetection.<a href="/src/management/api/resources/attackProtection/resources/botDetection/client/Client.ts">update</a>({ ...params }) -> Management.UpdateBotDetectionSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the Bot Detection configuration of your tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.botDetection.update();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateBotDetectionSettingsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `BotDetection.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## AttackProtection BreachedPasswordDetection
 
 <details><summary><code>client.attackProtection.breachedPasswordDetection.<a href="/src/management/api/resources/attackProtection/resources/breachedPasswordDetection/client/Client.ts">get</a>() -> Management.GetBreachedPasswordDetectionSettingsResponseContent</code></summary>
@@ -11248,6 +11368,126 @@ await client.attackProtection.bruteForceProtection.update();
 <dd>
 
 **requestOptions:** `BruteForceProtection.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## AttackProtection Captcha
+
+<details><summary><code>client.attackProtection.captcha.<a href="/src/management/api/resources/attackProtection/resources/captcha/client/Client.ts">get</a>() -> Management.GetAttackProtectionCaptchaResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the CAPTCHA configuration for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.captcha.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `Captcha.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.attackProtection.captcha.<a href="/src/management/api/resources/attackProtection/resources/captcha/client/Client.ts">update</a>({ ...params }) -> Management.UpdateAttackProtectionCaptchaResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update existing CAPTCHA configuration for your client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.captcha.update();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateAttackProtectionCaptchaRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Captcha.RequestOptions`
 
 </dd>
 </dl>
