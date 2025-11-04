@@ -143,10 +143,10 @@ export class Permissions {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.permissions ?? []).length > 0,
+            hasNextPage: (response) => (response?.permissions ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.permissions ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.permissions != null ? response.permissions.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

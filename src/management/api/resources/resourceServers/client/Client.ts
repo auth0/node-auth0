@@ -148,10 +148,10 @@ export class ResourceServers {
         return new core.Page<Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.resource_servers ?? []).length > 0,
+            hasNextPage: (response) => (response?.resource_servers ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.resource_servers ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.resource_servers != null ? response.resource_servers.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

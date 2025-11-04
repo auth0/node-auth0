@@ -159,10 +159,10 @@ export class Hooks {
         return new core.Page<Management.Hook, Management.ListHooksOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.hooks ?? []).length > 0,
+            hasNextPage: (response) => (response?.hooks ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.hooks ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.hooks != null ? response.hooks.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

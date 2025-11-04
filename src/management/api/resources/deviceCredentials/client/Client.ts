@@ -165,10 +165,10 @@ export class DeviceCredentials {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.device_credentials ?? []).length > 0,
+            hasNextPage: (response) => (response?.device_credentials ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.device_credentials ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.device_credentials != null ? response.device_credentials.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

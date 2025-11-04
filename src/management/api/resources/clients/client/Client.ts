@@ -209,10 +209,10 @@ export class Clients {
         return new core.Page<Management.Client, Management.ListClientsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.clients ?? []).length > 0,
+            hasNextPage: (response) => (response?.clients ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.clients ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.clients != null ? response.clients.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

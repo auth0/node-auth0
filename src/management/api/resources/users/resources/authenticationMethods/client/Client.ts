@@ -148,10 +148,10 @@ export class AuthenticationMethods {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.authenticators ?? []).length > 0,
+            hasNextPage: (response) => (response?.authenticators ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.authenticators ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.authenticators != null ? response.authenticators.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

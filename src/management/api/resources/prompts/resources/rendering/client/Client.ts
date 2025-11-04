@@ -168,10 +168,10 @@ export class Rendering {
         return new core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.configs ?? []).length > 0,
+            hasNextPage: (response) => (response?.configs ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.configs ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.configs != null ? response.configs.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

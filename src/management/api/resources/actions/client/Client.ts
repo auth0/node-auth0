@@ -161,10 +161,10 @@ export class Actions {
         return new core.Page<Management.Action, Management.ListActionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.actions ?? []).length > 0,
+            hasNextPage: (response) => (response?.actions ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.actions ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.actions != null ? response.actions.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });

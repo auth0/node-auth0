@@ -163,10 +163,10 @@ export class ClientGrants {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.client_grants ?? []).length > 0,
+            hasNextPage: (response) => (response?.client_grants ?? []).length >= (request?.per_page ?? 1),
             getItems: (response) => response?.client_grants ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
+            loadPage: (response) => {
+                _offset += response?.client_grants != null ? response.client_grants.length : 1;
                 return list(core.setObjectProperty(request, "page", _offset));
             },
         });
