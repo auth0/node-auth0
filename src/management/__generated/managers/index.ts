@@ -5,6 +5,7 @@ export * from './blacklists-manager.js';
 export * from './branding-manager.js';
 export * from './client-grants-manager.js';
 export * from './clients-manager.js';
+export * from './connection-profiles-manager.js';
 export * from './connections-manager.js';
 export * from './custom-domains-manager.js';
 export * from './device-credentials-manager.js';
