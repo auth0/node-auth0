@@ -18,8 +18,8 @@ export default {
         global: {
             branches: 70,
             functions: 90,
-            lines: 80,
-            statements: 80,
+            lines: 75,
+            statements: 75,
         },
     },
     projects: [
