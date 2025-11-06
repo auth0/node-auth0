@@ -452,7 +452,7 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-// V5: Manual pagination through all pages
+// V5: Manual pagination with default values
 let page = await client.clients.list();
 for (const client of page.data) {
     console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
@@ -463,6 +463,16 @@ while (page.hasNextPage()) {
     for (const client of page.data) {
         console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
     }
+}
+
+// V5: Or with explicit pagination control
+let customPage = await client.clients.list({
+    page: 0, // Page number (0-indexed)
+    per_page: 25, // Items per page
+});
+
+for (const client of customPage.data) {
+    console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
 }
 
 // V4: Similar structure but different method name
@@ -518,7 +528,7 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-// V5: Manual page-by-page iteration
+// V5: Manual page-by-page iteration with default values
 let page = await client.actions.list();
 for (const item of page.data) {
     console.log(item);
@@ -527,6 +537,32 @@ for (const item of page.data) {
 while (page.hasNextPage()) {
     page = await page.getNextPage();
     for (const item of page.data) {
+        console.log(item);
+    }
+}
+
+// V5: Or with explicit pagination parameters (offset-based)
+let customPage = await client.actions.list({
+    page: 0, // Page number (0-indexed)
+    per_page: 50, // Number of items per page (defaults vary by endpoint)
+});
+
+for (const item of customPage.data) {
+    console.log(item);
+}
+
+// V5: Checkpoint-based pagination (e.g., connections, organizations)
+let checkpointPage = await client.connections.list({
+    take: 50, // Number of items per page
+});
+
+for (const item of checkpointPage.data) {
+    console.log(item);
+}
+
+while (checkpointPage.hasNextPage()) {
+    checkpointPage = await checkpointPage.getNextPage();
+    for (const item of checkpointPage.data) {
         console.log(item);
     }
 }
