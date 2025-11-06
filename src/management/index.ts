@@ -3,3 +3,4 @@ export { ManagementError, ManagementTimeoutError } from "./errors/index.js";
 export { ManagementClient } from "./wrapper/ManagementClient.js";
 export { ManagementEnvironment } from "./environments.js";
 export { CustomDomainHeader, withTimeout, withRetries, withHeaders, withAbortSignal } from "./request-options.js";
+export * from "./core/logging/exports.js";

@@ -469,6 +469,100 @@ const response = await client.actions.create(
 controller.abort(); // aborts the request
 ```
 
+### Logging
+
+The SDK provides built-in logging support to help with debugging and monitoring API requests. Logging is disabled by default to avoid noise in production environments.
+
+#### Enable Debug Logging
+
+```typescript
+import { ManagementClient, logging } from "auth0";
+
+const management = new ManagementClient({
+    domain: "{YOUR_TENANT_AND REGION}.auth0.com",
+    clientId: "{YOUR_CLIENT_ID}",
+    clientSecret: "{YOUR_CLIENT_SECRET}",
+    logging: {
+        level: logging.LogLevel.Debug,
+        silent: false, // Enable logging output
+    },
+});
+
+// All API calls will now log request/response details
+const users = await management.users.list();
+```
+
+#### Log Levels
+
+The SDK supports four log levels:
+
+- `logging.LogLevel.Debug` - Detailed debugging information
+- `logging.LogLevel.Info` - General informational messages
+- `logging.LogLevel.Warn` - Warning messages
+- `logging.LogLevel.Error` - Error messages only
+
+#### Custom Logger
+
+You can provide your own logger implementation to integrate with your existing logging infrastructure:
+
+```typescript
+import { ManagementClient, logging } from "auth0";
+
+class CustomLogger implements logging.ILogger {
+    debug(message: string, ...args: unknown[]) {
+        // Send to your logging service
+        console.debug(`[AUTH0]`, message, ...args);
+    }
+    info(message: string, ...args: unknown[]) {
+        console.info(`[AUTH0]`, message, ...args);
+    }
+    warn(message: string, ...args: unknown[]) {
+        console.warn(`[AUTH0]`, message, ...args);
+    }
+    error(message: string, ...args: unknown[]) {
+        console.error(`[AUTH0]`, message, ...args);
+    }
+}
+
+const management = new ManagementClient({
+    domain: "{YOUR_TENANT_AND REGION}.auth0.com",
+    clientId: "{YOUR_CLIENT_ID}",
+    clientSecret: "{YOUR_CLIENT_SECRET}",
+    logging: {
+        level: logging.LogLevel.Info,
+        logger: new CustomLogger(),
+        silent: false,
+    },
+});
+```
+
+#### Using the Built-in ConsoleLogger
+
+```typescript
+import { ManagementClient, logging } from "auth0";
+
+const management = new ManagementClient({
+    domain: "{YOUR_TENANT_AND REGION}.auth0.com",
+    clientId: "{YOUR_CLIENT_ID}",
+    clientSecret: "{YOUR_CLIENT_SECRET}",
+    logging: {
+        level: logging.LogLevel.Warn,
+        logger: new logging.ConsoleLogger(),
+        silent: false,
+    },
+});
+```
+
+#### Security Note
+
+The SDK automatically redacts sensitive information from logs, including:
+
+- Authorization headers and tokens
+- API keys and secrets
+- Passwords and credentials in URLs
+- Session identifiers
+- Authentication tokens in query parameters
+
 ### Access Raw Response Data
 
 The SDK provides access to raw response data, including headers, through the `.withRawResponse()` method.
