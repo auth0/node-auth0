@@ -308,7 +308,7 @@ try {
 
 ## Pagination
 
-Some list endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
+Some list endpoints are paginated. You can manually iterate page-by-page:
 
 ```typescript
 import { ManagementClient } from "auth0";
@@ -318,15 +318,16 @@ const client = new ManagementClient({
     token: "YOUR_TOKEN",
 });
 
-const response = await client.actions.list();
-for await (const item of response) {
+let page = await client.actions.list();
+for (const item of page.data) {
     console.log(item);
 }
 
-// Or you can manually iterate page-by-page
-let page = await client.actions.list();
 while (page.hasNextPage()) {
     page = await page.getNextPage();
+    for (const item of page.data) {
+        console.log(item);
+    }
 }
 ```
 
