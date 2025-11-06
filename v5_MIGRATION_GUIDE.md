@@ -433,7 +433,7 @@ The tables below show all method changes organized by category. Note these metho
 
 ### Pagination and Response Changes
 
-All iterable responses, such as those returned by `*.list()` methods, are auto-paginated. This means that code can directly iterate over them without the need for manual pagination logic.
+All iterable responses, such as those returned by `*.list()` methods, return a `Page` object. You can manually iterate through pages to retrieve all data.
 
 #### Accessing Response Data
 
@@ -452,9 +452,26 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
-// V5: Simple pagination with .data property
-const clients = await client.clients.list({ per_page: 5, page: 1 });
-for (const client of clients.data) {
+// V5: Manual pagination with default values
+let page = await client.clients.list();
+for (const client of page.data) {
+    console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
+}
+
+while (page.hasNextPage()) {
+    page = await page.getNextPage();
+    for (const client of page.data) {
+        console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
+    }
+}
+
+// V5: Or with explicit pagination control
+let customPage = await client.clients.list({
+    page: 0, // Page number (0-indexed)
+    per_page: 25, // Items per page
+});
+
+for (const client of customPage.data) {
     console.log(`Client ID: ${client.client_id}, Name: ${client.name}`);
 }
 
@@ -500,26 +517,7 @@ console.log(`Client ID: ${clientWithResponse.data.client_id}, Name: ${clientWith
 
 #### Advanced Pagination
 
-For more complex pagination scenarios, v5 provides enhanced pagination support:
-
-```ts
-// V4: Manual pagination
-const allUsers = [];
-let page = 0;
-while (true) {
-    const {
-        data: { actions, total },
-    } = await client.actions.getAll({
-        page: page++,
-    });
-    allUsers.push(...actions);
-    if (allUsers.length === total) {
-        break;
-    }
-}
-```
-
-In v5, `client.actions.list()` returns a response of type `Page<Action>`, over which the following pagination code is valid:
+For more complex pagination scenarios, v5 provides enhanced pagination support through the `Page` object:
 
 ```ts
 import { ManagementClient } from "auth0";
@@ -530,11 +528,59 @@ const client = new ManagementClient({
     clientSecret: "YOUR_CLIENT_SECRET",
 });
 
+// V5: Manual page-by-page iteration with default values
 let page = await client.actions.list();
+for (const item of page.data) {
+    console.log(item);
+}
+
 while (page.hasNextPage()) {
     page = await page.getNextPage();
-    console.log(page);
+    for (const item of page.data) {
+        console.log(item);
+    }
 }
+
+// V5: Or with explicit pagination parameters (offset-based)
+let customPage = await client.actions.list({
+    page: 0, // Page number (0-indexed)
+    per_page: 50, // Number of items per page (defaults vary by endpoint)
+});
+
+for (const item of customPage.data) {
+    console.log(item);
+}
+
+// V5: Checkpoint-based pagination (e.g., connections, organizations)
+let checkpointPage = await client.connections.list({
+    take: 50, // Number of items per page
+});
+
+for (const item of checkpointPage.data) {
+    console.log(item);
+}
+
+while (checkpointPage.hasNextPage()) {
+    checkpointPage = await checkpointPage.getNextPage();
+    for (const item of checkpointPage.data) {
+        console.log(item);
+    }
+}
+
+// V4: Manual pagination
+// const allUsers = [];
+// let pageNum = 0;
+// while (true) {
+//     const {
+//         data: { actions, total },
+//     } = await client.actions.getAll({
+//         page: pageNum++,
+//     });
+//     allUsers.push(...actions);
+//     if (allUsers.length === total) {
+//         break;
+//     }
+// }
 ```
 
 ### Management namespace
