@@ -9,6 +9,7 @@ import {
   BrandingManager,
   ClientGrantsManager,
   ClientsManager,
+  ConnectionProfilesManager,
   ConnectionsManager,
   CustomDomainsManager,
   DeviceCredentialsManager,
@@ -54,6 +55,7 @@ export abstract class ManagementClientBase {
   public readonly branding = new BrandingManager(this.configuration);
   public readonly clientGrants = new ClientGrantsManager(this.configuration);
   public readonly clients = new ClientsManager(this.configuration);
+  public readonly connectionProfiles = new ConnectionProfilesManager(this.configuration);
   public readonly connections = new ConnectionsManager(this.configuration);
   public readonly customDomains = new CustomDomainsManager(this.configuration);
   public readonly deviceCredentials = new DeviceCredentialsManager(this.configuration);
