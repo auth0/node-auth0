@@ -2715,6 +2715,11 @@ export interface ClientGrant {
    */
   allow_any_organization: boolean;
   /**
+   * If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly.
+   *
+   */
+  is_system?: boolean;
+  /**
    */
   subject_type?: ClientGrantSubjectTypeEnum;
   /**
