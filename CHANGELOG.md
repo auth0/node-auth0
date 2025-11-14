@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.36.0](https://github.com/auth0/node-auth0/tree/v4.36.0) (2025-11-13)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.35.0...v4.36.0)
+
+**Added**
+
+- Feat: Added q, include_fields, fields and sort query params [\#1229](https://github.com/auth0/node-auth0/pull/1229) ([tanya732](https://github.com/tanya732))
+
+
 ## [v4.35.0](https://github.com/auth0/node-auth0/tree/v4.35.0) (2025-11-04)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.34.0...v4.35.0)
