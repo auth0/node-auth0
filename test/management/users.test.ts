@@ -1799,8 +1799,12 @@ describe('UsersManager', () => {
       expect(connectedAccounts.data.connected_accounts).toBeInstanceOf(Array);
       expect(connectedAccounts.data.connected_accounts.length).toBe(connectedAccountsData.length);
       expect(connectedAccounts.data.connected_accounts[0].id).toBe(connectedAccountsData[0].id);
-      expect(connectedAccounts.data.connected_accounts[0].connection).toBe(connectedAccountsData[0].connection);
-      expect(connectedAccounts.data.connected_accounts[0].strategy).toBe(connectedAccountsData[0].strategy);
+      expect(connectedAccounts.data.connected_accounts[0].connection).toBe(
+        connectedAccountsData[0].connection
+      );
+      expect(connectedAccounts.data.connected_accounts[0].strategy).toBe(
+        connectedAccountsData[0].strategy
+      );
     });
 
     it('should pass the parameters in the query-string', async () => {
