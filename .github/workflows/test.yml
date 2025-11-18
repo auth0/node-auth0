@@ -6,16 +6,18 @@ on:
   pull_request:
     branches:
       - master
+      - v4
   push:
     branches:
       - master
+      - v4
 
 permissions:
   contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ !contains(fromJSON('["refs/heads/master", "refs/heads/v4"]'), github.ref) }}
 
 jobs:
   build:
