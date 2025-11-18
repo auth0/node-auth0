@@ -3,8 +3,6 @@ name: Publish release to npm
 inputs:
     node-version:
         required: true
-    npm-token:
-        required: true
     version:
         required: true
     require-build:
@@ -24,7 +22,10 @@ runs:
           with:
               node-version: ${{ inputs.node-version }}
               cache: "yarn"
-              registry-url: "https://registry.npmjs.org"
+
+        - name: Setup yarn
+          shell: bash
+          run: npm install -g yarn
 
         - name: Install dependencies
           shell: bash
@@ -43,6 +44,9 @@ runs:
           shell: bash
           working-directory: ${{ inputs.release-directory }}
           run: |
+              publish() {
+                npx -y npm@latest publish "$@"
+              }
               if [[ "${VERSION}" == *"beta"* ]]; then
                 TAG="beta"
               elif [[ "${VERSION}" == *"alpha"* ]]; then
@@ -50,7 +54,6 @@ runs:
               else
                 TAG="latest"
               fi
-              npm publish --provenance --tag $TAG
+              publish --provenance --tag $TAG
           env:
-              NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
               VERSION: ${{ inputs.version }}
