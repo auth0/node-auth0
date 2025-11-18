@@ -3,8 +3,6 @@ name: Publish release to npm
 inputs:
     node-version:
         required: true
-    npm-token:
-        required: true
     version:
         required: true
     require-build:
@@ -52,5 +50,4 @@ runs:
               fi
               npm publish --provenance --tag $TAG
           env:
-              NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
               VERSION: ${{ inputs.version }}
