@@ -1532,7 +1532,7 @@ describe('OrganizationsManager', () => {
     const operation = organizations.postOrganizationClientGrants(requestParameters, requestBody);
     const expectedResponse: GetOrganizationClientGrants200ResponseOneOfInner = <
       GetOrganizationClientGrants200ResponseOneOfInner
-      >{};
+    >{};
     const uri = `/organizations/{id}/client-grants`.replace(
       '{id}',
       encodeURIComponent(String(requestParameters.id))
@@ -1571,7 +1571,9 @@ describe('OrganizationsManager', () => {
     };
 
     beforeEach(() => {
-      request = nock(API_URL).get(`/organizations/${data.id}/discovery-domains`).reply(200, responseData);
+      request = nock(API_URL)
+        .get(`/organizations/${data.id}/discovery-domains`)
+        .reply(200, responseData);
     });
 
     it('should return a promise when no callback is given', (done) => {
@@ -1652,7 +1654,10 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      organizations.getDiscoveryDomain(data).then(done.bind(null, null)).catch(done.bind(null, null));
+      organizations
+        .getDiscoveryDomain(data)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
     });
 
     it('should perform a GET request to /api/v2/organizations/:id/discovery-domains/:discovery_domain_id', (done) => {
@@ -1690,11 +1695,15 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when id is not sent', async () => {
-      await expect(organizations.getDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any)).rejects.toThrow(RequiredError);
+      await expect(
+        organizations.getDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any)
+      ).rejects.toThrow(RequiredError);
     });
 
     it('should return error when discovery_domain_id is not sent', async () => {
-      await expect(organizations.getDiscoveryDomain({ id: 'org_123' } as any)).rejects.toThrow(RequiredError);
+      await expect(organizations.getDiscoveryDomain({ id: 'org_123' } as any)).rejects.toThrow(
+        RequiredError
+      );
     });
   });
 
@@ -1724,7 +1733,10 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      organizations.createDiscoveryDomain(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
+      organizations
+        .createDiscoveryDomain(data, body)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', (done) => {
@@ -1746,7 +1758,9 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when id is not sent', async () => {
-      await expect(organizations.createDiscoveryDomain({} as any, body)).rejects.toThrow(RequiredError);
+      await expect(organizations.createDiscoveryDomain({} as any, body)).rejects.toThrow(
+        RequiredError
+      );
     });
 
     it('should pass the data in the body of the request', (done) => {
@@ -1800,7 +1814,10 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return a promise if no callback is given', (done) => {
-      organizations.updateDiscoveryDomain(data, body).then(done.bind(null, null)).catch(done.bind(null, null));
+      organizations
+        .updateDiscoveryDomain(data, body)
+        .then(done.bind(null, null))
+        .catch(done.bind(null, null));
     });
 
     it('should pass any errors to the promise catch handler', (done) => {
@@ -1824,11 +1841,15 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when id is not sent', async () => {
-      await expect(organizations.updateDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any, body)).rejects.toThrow(RequiredError);
+      await expect(
+        organizations.updateDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any, body)
+      ).rejects.toThrow(RequiredError);
     });
 
     it('should return error when discovery_domain_id is not sent', async () => {
-      await expect(organizations.updateDiscoveryDomain({ id: 'org_123' } as any, body)).rejects.toThrow(RequiredError);
+      await expect(
+        organizations.updateDiscoveryDomain({ id: 'org_123' } as any, body)
+      ).rejects.toThrow(RequiredError);
     });
 
     it('should pass the data in the body of the request', (done) => {
@@ -1872,7 +1893,9 @@ describe('OrganizationsManager', () => {
     });
 
     it('should validate empty id', async () => {
-      await expect(organizations.deleteDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any)).rejects.toThrow(RequiredError);
+      await expect(
+        organizations.deleteDiscoveryDomain({ discovery_domain_id: 'ord_123' } as any)
+      ).rejects.toThrow(RequiredError);
     });
 
     it('should return a promise if no callback is given', (done) => {
@@ -1900,7 +1923,9 @@ describe('OrganizationsManager', () => {
     });
 
     it('should return error when discovery_domain_id is not sent', async () => {
-      await expect(organizations.deleteDiscoveryDomain({ id: 'org_123' } as any)).rejects.toThrow(RequiredError);
+      await expect(organizations.deleteDiscoveryDomain({ id: 'org_123' } as any)).rejects.toThrow(
+        RequiredError
+      );
     });
 
     it('should include the token in the Authorization header', (done) => {

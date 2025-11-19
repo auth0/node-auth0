@@ -33,7 +33,7 @@ runs:
   using: composite
 
   steps:
-    - uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+    - uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # pin@v2.4.2
       with:
         body: ${{ inputs.body }}
         name: ${{ inputs.name }}
@@ -41,6 +41,7 @@ runs:
         target_commitish: ${{ inputs.commit }}
         draft: ${{ inputs.draft }}
         prerelease: ${{ inputs.prerelease }}
+        make_latest: false
         fail_on_unmatched_files: ${{ inputs.fail_on_unmatched_files }}
         files: ${{ inputs.files }}
       env:
