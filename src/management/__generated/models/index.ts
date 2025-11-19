@@ -663,6 +663,9 @@ export interface Client {
    */
   skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
   /**
+   */
+  express_configuration?: ClientExpressConfiguration;
+  /**
    * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
    *
    */
@@ -1613,6 +1616,9 @@ export interface ClientCreate {
    *
    */
   skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+  /**
+   */
+  express_configuration?: ClientExpressConfiguration;
   /**
    * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
    *
@@ -2615,6 +2621,66 @@ export interface ClientEncryptionKey {
   subject: string;
 }
 /**
+ * Application specific configuration for use with the OIN Express Configuration feature.
+ */
+export interface ClientExpressConfiguration {
+  /**
+   * The URI users should bookmark to log in to this application. Variable substitution is permitted for the following properties: organization_name, organization_id, and connection_name.
+   *
+   */
+  initiate_login_uri_template: string;
+  /**
+   * The ID of the user attribute profile to use for this application.
+   *
+   */
+  user_attribute_profile_id: string;
+  /**
+   * The ID of the connection profile to use for this application.
+   *
+   */
+  connection_profile_id: string;
+  /**
+   * When true, all connections made via express configuration will be enabled for this application.
+   *
+   */
+  enable_client: boolean;
+  /**
+   * When true, all connections made via express configuration will have the associated organization enabled.
+   *
+   */
+  enable_organization: boolean;
+  /**
+   * List of client IDs that are linked to this express configuration (e.g. web or mobile clients).
+   *
+   */
+  linked_clients?: Array<ClientExpressConfigurationLinkedClientsInner>;
+  /**
+   * This is the unique identifier for the Okta OIN Express Configuration Client, which Okta will use for this application.
+   *
+   */
+  okta_oin_client_id: string;
+  /**
+   * This is the domain that admins are expected to log in via for authenticating for express configuration. It can be either the canonical domain or a registered custom domain.
+   *
+   */
+  admin_login_domain: string;
+  /**
+   * The identifier of the published application in the OKTA OIN.
+   *
+   */
+  oin_submission_id?: string;
+}
+/**
+ * Configuration for linked clients in the OIN Express Configuration feature.
+ */
+export interface ClientExpressConfigurationLinkedClientsInner {
+  /**
+   * The ID of the linked client.
+   *
+   */
+  client_id: string;
+}
+/**
  *
  */
 export interface ClientGrant {
@@ -2648,6 +2714,11 @@ export interface ClientGrant {
    *
    */
   allow_any_organization: boolean;
+  /**
+   * If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly.
+   *
+   */
+  is_system?: boolean;
   /**
    */
   subject_type?: ClientGrantSubjectTypeEnum;
@@ -3226,6 +3297,9 @@ export interface ClientUpdate {
    *
    */
   skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+  /**
+   */
+  express_configuration?: ClientExpressConfiguration;
   /**
    * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
    *
@@ -4386,6 +4460,172 @@ export interface ConnectionForList {
 /**
  *
  */
+export interface ConnectionProfile {
+  /**
+   * Connection Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the connection profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  organization?: ConnectionProfileOrganization;
+  /**
+   * Connection name prefix template.
+   *
+   */
+  connection_name_prefix_template?: string;
+  /**
+   */
+  enabled_features?: ConnectionProfileEnabledFeatures;
+  /**
+   * Connection profile configuration.
+   *
+   */
+  connection_config?: object;
+  /**
+   */
+  strategy_overrides?: ConnectionProfileStrategyOverrides;
+}
+/**
+ * Enabled features for the connection profile.
+ */
+export interface ConnectionProfileEnabledFeatures extends Array<EnabledFeaturesEnum> {}
+/**
+ * The organization of the connection profile.
+ */
+export interface ConnectionProfileOrganization {
+  /**
+   */
+  show_as_button?: ConnectionProfileOrganizationShowAsButtonEnum;
+  /**
+   */
+  assign_membership_on_login?: ConnectionProfileOrganizationAssignMembershipOnLoginEnum;
+}
+
+/**
+ * Indicates if membership should be assigned on login.
+ */
+export const ConnectionProfileOrganizationAssignMembershipOnLoginEnum = {
+  none: 'none',
+  optional: 'optional',
+  required: 'required',
+} as const;
+export type ConnectionProfileOrganizationAssignMembershipOnLoginEnum =
+  (typeof ConnectionProfileOrganizationAssignMembershipOnLoginEnum)[keyof typeof ConnectionProfileOrganizationAssignMembershipOnLoginEnum];
+
+/**
+ * Indicates if the organization should be shown as a button.
+ */
+export const ConnectionProfileOrganizationShowAsButtonEnum = {
+  none: 'none',
+  optional: 'optional',
+  required: 'required',
+} as const;
+export type ConnectionProfileOrganizationShowAsButtonEnum =
+  (typeof ConnectionProfileOrganizationShowAsButtonEnum)[keyof typeof ConnectionProfileOrganizationShowAsButtonEnum];
+
+/**
+ * Connection Profile Strategy Override
+ */
+export interface ConnectionProfileStrategyOverride {
+  /**
+   */
+  enabled_features?: ConnectionProfileStrategyOverridesEnabledFeatures;
+  /**
+   * Connection profile strategy overrides connection configuration.
+   *
+   */
+  connection_config?: object;
+}
+/**
+ * Strategy-specific overrides for this attribute
+ */
+export interface ConnectionProfileStrategyOverrides {
+  /**
+   */
+  pingfederate?: ConnectionProfileStrategyOverride;
+  /**
+   */
+  ad?: ConnectionProfileStrategyOverride;
+  /**
+   */
+  adfs?: ConnectionProfileStrategyOverride;
+  /**
+   */
+  waad?: ConnectionProfileStrategyOverride;
+  /**
+   */
+  'google-apps'?: ConnectionProfileStrategyOverride;
+  /**
+   */
+  okta?: ConnectionProfileStrategyOverride;
+  /**
+   */
+  oidc?: ConnectionProfileStrategyOverride;
+  /**
+   */
+  samlp?: ConnectionProfileStrategyOverride;
+}
+/**
+ * Enabled features for a connections profile strategy override.
+ */
+export interface ConnectionProfileStrategyOverridesEnabledFeatures
+  extends Array<EnabledFeaturesEnum> {}
+/**
+ * The structure of the template, which can be used as the payload for creating or updating a Connection Profile.
+ */
+export interface ConnectionProfileTemplate {
+  /**
+   * The name of the connection profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  organization?: ConnectionProfileOrganization;
+  /**
+   * Connection name prefix template.
+   *
+   */
+  connection_name_prefix_template?: string;
+  /**
+   */
+  enabled_features?: ConnectionProfileEnabledFeatures;
+  /**
+   * Connection profile configuration.
+   *
+   */
+  connection_config?: object;
+  /**
+   */
+  strategy_overrides?: ConnectionProfileStrategyOverrides;
+}
+/**
+ *
+ */
+export interface ConnectionProfileTemplateItem {
+  /**
+   * The id of the template.
+   *
+   */
+  id?: string;
+  /**
+   * The user-friendly name of the template displayed in the UI.
+   *
+   */
+  display_name?: string;
+  /**
+   */
+  template?: ConnectionProfileTemplate;
+}
+/**
+ *
+ */
 export interface ConnectionUpdate {
   /**
    * The connection name used in the new universal login experience. If display_name is not included in the request, the field will be overwritten with the name value.
@@ -4540,6 +4780,69 @@ export const ConnectionUpdateOptionsSetUserRootAttributesEnum = {
 export type ConnectionUpdateOptionsSetUserRootAttributesEnum =
   (typeof ConnectionUpdateOptionsSetUserRootAttributesEnum)[keyof typeof ConnectionUpdateOptionsSetUserRootAttributesEnum];
 
+/**
+ *
+ */
+export interface CreateConnectionProfileRequestContent {
+  /**
+   * The name of the connection profile.
+   *
+   */
+  name: string;
+  /**
+   */
+  organization?: ConnectionProfileOrganization;
+  /**
+   * Connection name prefix template.
+   *
+   */
+  connection_name_prefix_template?: string;
+  /**
+   */
+  enabled_features?: ConnectionProfileEnabledFeatures;
+  /**
+   * Connection profile configuration.
+   *
+   */
+  connection_config?: object;
+  /**
+   */
+  strategy_overrides?: ConnectionProfileStrategyOverrides;
+}
+/**
+ *
+ */
+export interface CreateConnectionProfileResponseContent {
+  /**
+   * Connection Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the connection profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  organization?: ConnectionProfileOrganization;
+  /**
+   * Connection name prefix template.
+   *
+   */
+  connection_name_prefix_template?: string;
+  /**
+   */
+  enabled_features?: ConnectionProfileEnabledFeatures;
+  /**
+   * Connection profile configuration.
+   *
+   */
+  connection_config?: object;
+  /**
+   */
+  strategy_overrides?: ConnectionProfileStrategyOverrides;
+}
 /**
  *
  */
@@ -5203,6 +5506,15 @@ export const EmailTemplateUpdateTemplateEnum = {
 } as const;
 export type EmailTemplateUpdateTemplateEnum =
   (typeof EmailTemplateUpdateTemplateEnum)[keyof typeof EmailTemplateUpdateTemplateEnum];
+
+/**
+ * Enum for enabled features.
+ */
+export const EnabledFeaturesEnum = {
+  scim: 'scim',
+  universal_logout: 'universal_logout',
+} as const;
+export type EnabledFeaturesEnum = (typeof EnabledFeaturesEnum)[keyof typeof EnabledFeaturesEnum];
 
 /**
  *
@@ -6746,6 +7058,58 @@ export interface GetConnectionClients200ResponseClientsInner {
    *
    */
   client_id: string;
+}
+/**
+ *
+ */
+export interface GetConnectionProfileResponseContent {
+  /**
+   * Connection Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the connection profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  organization?: ConnectionProfileOrganization;
+  /**
+   * Connection name prefix template.
+   *
+   */
+  connection_name_prefix_template?: string;
+  /**
+   */
+  enabled_features?: ConnectionProfileEnabledFeatures;
+  /**
+   * Connection profile configuration.
+   *
+   */
+  connection_config?: object;
+  /**
+   */
+  strategy_overrides?: ConnectionProfileStrategyOverrides;
+}
+/**
+ *
+ */
+export interface GetConnectionProfileTemplateResponseContent {
+  /**
+   * The id of the template.
+   *
+   */
+  id?: string;
+  /**
+   * The user-friendly name of the template displayed in the UI.
+   *
+   */
+  display_name?: string;
+  /**
+   */
+  template?: ConnectionProfileTemplate;
 }
 /**
  *
@@ -10764,6 +11128,27 @@ export const JobFormatEnum = {
 } as const;
 export type JobFormatEnum = (typeof JobFormatEnum)[keyof typeof JobFormatEnum];
 
+/**
+ *
+ */
+export interface ListConnectionProfileTemplateResponseContent {
+  /**
+   */
+  connection_profile_templates?: Array<ConnectionProfileTemplateItem>;
+}
+/**
+ *
+ */
+export interface ListConnectionProfilesPaginatedResponseContent {
+  /**
+   * A cursor to be used as the "from" query parameter for the next page of results.
+   *
+   */
+  next?: string;
+  /**
+   */
+  connection_profiles?: Array<ConnectionProfile>;
+}
 /**
  *
  */
@@ -19727,6 +20112,69 @@ export interface UpdateCaptchaResponseContent {
 /**
  *
  */
+export interface UpdateConnectionProfileRequestContent {
+  /**
+   * The name of the connection profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  organization?: ConnectionProfileOrganization;
+  /**
+   * Connection name prefix template.
+   *
+   */
+  connection_name_prefix_template?: string;
+  /**
+   */
+  enabled_features?: ConnectionProfileEnabledFeatures;
+  /**
+   * Connection profile configuration.
+   *
+   */
+  connection_config?: object;
+  /**
+   */
+  strategy_overrides?: ConnectionProfileStrategyOverrides;
+}
+/**
+ *
+ */
+export interface UpdateConnectionProfileResponseContent {
+  /**
+   * Connection Profile identifier.
+   *
+   */
+  id?: string;
+  /**
+   * The name of the connection profile.
+   *
+   */
+  name?: string;
+  /**
+   */
+  organization?: ConnectionProfileOrganization;
+  /**
+   * Connection name prefix template.
+   *
+   */
+  connection_name_prefix_template?: string;
+  /**
+   */
+  enabled_features?: ConnectionProfileEnabledFeatures;
+  /**
+   * Connection profile configuration.
+   *
+   */
+  connection_config?: object;
+  /**
+   */
+  strategy_overrides?: ConnectionProfileStrategyOverrides;
+}
+/**
+ *
+ */
 export interface UpdateOrganizationDiscoveryDomainRequestContent {
   /**
    */
@@ -21368,6 +21816,61 @@ export interface PostRotateSecretRequest {
    *
    */
   client_id: string;
+}
+/**
+ *
+ */
+export interface DeleteConnectionProfilesByIdRequest {
+  /**
+   * ID of the connection-profile to delete.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetConnectionProfileTemplateRequest {
+  /**
+   * ID of the connection-profile-template to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface GetConnectionProfilesRequest {
+  /**
+   * Optional Id from which to start selection.
+   *
+   */
+  from?: string;
+  /**
+   * Number of results per page. Defaults to 5.
+   *
+   */
+  take?: number;
+}
+/**
+ *
+ */
+export interface GetConnectionProfilesByIdRequest {
+  /**
+   * ID of the connection-profile to retrieve.
+   *
+   */
+  id: string;
+}
+/**
+ *
+ */
+export interface PatchConnectionProfilesByIdRequest {
+  /**
+   * ID of the connection profile to update.
+   *
+   */
+  id: string;
 }
 /**
  *
