@@ -1,33 +1,33 @@
-import * as core from "./index.js";
-
-export function mergeHeaders(
-    ...headersArray: (Record<string, string | core.Supplier<string | undefined> | undefined> | undefined)[]
-): Record<string, string | core.Supplier<string | undefined>> {
-    const result: Record<string, string | core.Supplier<string | undefined>> = {};
+export function mergeHeaders<THeaderValue>(
+    ...headersArray: (Record<string, THeaderValue> | null | undefined)[]
+): Record<string, string | THeaderValue> {
+    const result: Record<string, THeaderValue> = {};
 
     for (const [key, value] of headersArray
         .filter((headers) => headers != null)
         .flatMap((headers) => Object.entries(headers))) {
+        const insensitiveKey = key.toLowerCase();
         if (value != null) {
-            result[key] = value;
-        } else if (key in result) {
-            delete result[key];
+            result[insensitiveKey] = value;
+        } else if (insensitiveKey in result) {
+            delete result[insensitiveKey];
         }
     }
 
     return result;
 }
 
-export function mergeOnlyDefinedHeaders(
-    ...headersArray: (Record<string, string | core.Supplier<string | undefined> | undefined> | undefined)[]
-): Record<string, string | core.Supplier<string | undefined>> {
-    const result: Record<string, string | core.Supplier<string | undefined>> = {};
+export function mergeOnlyDefinedHeaders<THeaderValue>(
+    ...headersArray: (Record<string, THeaderValue> | null | undefined)[]
+): Record<string, THeaderValue> {
+    const result: Record<string, THeaderValue> = {};
 
     for (const [key, value] of headersArray
         .filter((headers) => headers != null)
         .flatMap((headers) => Object.entries(headers))) {
+        const insensitiveKey = key.toLowerCase();
         if (value != null) {
-            result[key] = value;
+            result[insensitiveKey] = value;
         }
     }
 

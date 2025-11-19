@@ -1,5 +1,22 @@
 # Change Log
 
+## [v5.1.0](https://github.com/auth0/node-auth0/tree/v5.1.0) (2025-11-06)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.0.0...v5.1.0)
+
+**Added**
+
+- feat: add Bot Detection and CAPTCHA attack protection endpoints [\#1235](https://github.com/auth0/node-auth0/pull/1235) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: Add organization discovery domains support [\#1225](https://github.com/auth0/node-auth0/pull/1225) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: add User Attribute Profiles, Connected Accounts, Sessions Update APIs and improvements [\#1222](https://github.com/auth0/node-auth0/pull/1222) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Fixed**
+
+- fix: Consolidate type exports to resolve 'too many open files' error in serverless environments [\#1241](https://github.com/auth0/node-auth0/pull/1241) ([fern-api[bot]](https://github.com/apps/fern-api))
+- fix: Fix header merging case-sensitivity issue [\#1238](https://github.com/auth0/node-auth0/pull/1238) ([fern-api[bot]](https://github.com/apps/fern-api))
+- fix: Correct pagination `hasNextPage` logic and offset increment for Management API [\#1237](https://github.com/auth0/node-auth0/pull/1237) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Fix: id field in SignUpResponse [\#1190](https://github.com/auth0/node-auth0/pull/1190) ([tanya732](https://github.com/tanya732))
+
 ## [v5.0.0](https://github.com/auth0/node-auth0/tree/v5.0.0) (2025-09-15)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.29.0...v5.0.0)

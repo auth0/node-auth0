@@ -12,6 +12,7 @@
 ## Documentation
 
 - [Docs Site](https://auth0.com/docs) - explore our docs site and learn more about Auth0
+- [SDK Documentation](http://auth0.github.io/node-auth0/) - explore the SDK documentation
 - [API Reference](https://github.com/auth0/node-auth0/blob/master/reference.md) - full reference for this library
 
 ## Getting Started
@@ -309,7 +310,7 @@ try {
 
 ## Pagination
 
-Some list endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
+Some list endpoints are paginated. You can iterate through pages using default values:
 
 ```typescript
 import { ManagementClient } from "auth0";
@@ -319,15 +320,58 @@ const client = new ManagementClient({
     token: "YOUR_TOKEN",
 });
 
-const response = await client.actions.list();
-for await (const item of response) {
+// Using default pagination (page size defaults vary by endpoint)
+let page = await client.actions.list();
+for (const item of page.data) {
     console.log(item);
 }
 
-// Or you can manually iterate page-by-page
-let page = await client.actions.list();
 while (page.hasNextPage()) {
     page = await page.getNextPage();
+    for (const item of page.data) {
+        console.log(item);
+    }
+}
+```
+
+Or you can explicitly control pagination using `page` and `per_page` parameters:
+
+```typescript
+// Offset-based pagination (most endpoints)
+let page = await client.actions.list({
+    page: 0, // Page number (0-indexed)
+    per_page: 25, // Number of items per page
+});
+
+for (const item of page.data) {
+    console.log(item);
+}
+
+while (page.hasNextPage()) {
+    page = await page.getNextPage();
+    for (const item of page.data) {
+        console.log(item);
+    }
+}
+```
+
+Some endpoints use checkpoint pagination with `from` and `take` parameters:
+
+```typescript
+// Checkpoint-based pagination (e.g., connections, organizations)
+let page = await client.connections.list({
+    take: 50, // Number of items per page
+});
+
+for (const item of page.data) {
+    console.log(item);
+}
+
+while (page.hasNextPage()) {
+    page = await page.getNextPage();
+    for (const item of page.data) {
+        console.log(item);
+    }
 }
 ```
 

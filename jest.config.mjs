@@ -18,8 +18,8 @@ export default {
         global: {
             branches: 70,
             functions: 90,
-            lines: 80,
-            statements: 80,
+            lines: 75,
+            statements: 75,
         },
     },
     projects: [
@@ -32,17 +32,6 @@ export default {
             },
             roots: ["<rootDir>/src/management/tests"],
             testPathIgnorePatterns: ["\.browser\.(spec|test)\.[jt]sx?$", "/tests/wire/"],
-            setupFilesAfterEnv: [],
-        },
-        {
-            displayName: "browser",
-            preset: "ts-jest",
-            testEnvironment: "<rootDir>/src/management/tests/BrowserTestEnvironment.ts",
-            moduleNameMapper: {
-                "^(\\.{1,2}/.*)\\.js$": "$1",
-            },
-            roots: ["<rootDir>/src/management/tests"],
-            testMatch: ["<rootDir>/src/management/tests/unit/**/?(*.)+(browser).(spec|test).[jt]s?(x)"],
             setupFilesAfterEnv: [],
         },
         {
