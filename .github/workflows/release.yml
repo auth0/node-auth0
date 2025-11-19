@@ -18,7 +18,7 @@ jobs:
   rl-scanner:
     uses: ./.github/workflows/rl-secure.yml
     with:
-      node-version: 18 ## depends if build requires node else we can remove this.
+      node-version: 20 ## depends if build requires node else we can remove this.
       artifact-name: 'node-auth0.tgz' ## Will change respective to Repository
     secrets:
       RLSECURE_LICENSE: ${{ secrets.RLSECURE_LICENSE }}
@@ -32,7 +32,7 @@ jobs:
     uses: ./.github/workflows/npm-release.yml
     needs: rl-scanner
     with:
-      node-version: 18
+      node-version: 20
       require-build: true
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
