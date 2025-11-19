@@ -275,7 +275,7 @@ export interface Auth0V2CaptchaConfig {
 /**
  * List of IP addresses or CIDR blocks to allowlist
  */
-export interface BotDetectionAllowlist extends Array<BotDetectionIpAddressOrCidrBlock> {}
+export type BotDetectionAllowlist = Array<BotDetectionIpAddressOrCidrBlock>;
 
 /**
  * The policy that defines how often to show CAPTCHA
@@ -6771,8 +6771,7 @@ export interface GetConnections200ResponseOneOf {
 /**
  *
  */
-export interface GetConnectionsKeysResponseContent
-  extends Array<GetConnectionsKeysResponseContentInner> {}
+export type GetConnectionsKeysResponseContent = Array<GetConnectionsKeysResponseContentInner>;
 /**
  *
  */
@@ -19972,7 +19971,7 @@ export type UserAttributeProfilePatchUserId = UserAttributeProfileUserId;
 /**
  * SAML mapping override for this strategy
  */
-export interface UserAttributeProfileSamlMapping extends Array<string> {}
+export type UserAttributeProfileSamlMapping = Array<string>;
 /**
  * Strategy-specific overrides for this attribute
  */
@@ -20186,7 +20185,7 @@ export type UserAttributeProfileUserIdOidcStrategyOverrideMapping =
 /**
  * SAML mapping for user ID
  */
-export interface UserAttributeProfileUserIdSamlMapping extends Array<string> {}
+export type UserAttributeProfileUserIdSamlMapping = Array<string>;
 /**
  *
  */

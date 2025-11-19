@@ -71,8 +71,8 @@ describe('UserAttributeProfilesManager', () => {
           auth0_mapping: 'testUser',
           oidc_mapping: {
             mapping: 'preferred_username',
-            display_name: 'Display Name'
-          }
+            display_name: 'Display Name',
+          },
         },
       },
     };
