@@ -28,21 +28,25 @@ jest.mock("uuid", () => ({
 }));
 
 // Mock the core fetcher to avoid actual HTTP calls
-jest.mock("../../core/index.js", () => ({
-    fetcher: jest.fn().mockResolvedValue({
-        ok: true,
-        body: { data: "test" },
-        headers: {},
-        rawResponse: {
-            headers: new Headers(),
-            status: 200,
-            statusText: "OK",
-            url: "",
-            redirected: false,
-            type: "basic",
-        },
-    }),
-}));
+jest.mock("../../core/index.js", () => {
+    const actual = jest.requireActual("../../core/index.js");
+    return {
+        ...actual,
+        fetcher: jest.fn().mockResolvedValue({
+            ok: true,
+            body: { data: "test" },
+            headers: {},
+            rawResponse: {
+                headers: new Headers(),
+                status: 200,
+                statusText: "OK",
+                url: "",
+                redirected: false,
+                type: "basic",
+            },
+        }),
+    };
+});
 
 import { ManagementClient } from "../../wrapper/ManagementClient.js";
 
