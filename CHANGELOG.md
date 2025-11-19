@@ -1,5 +1,14 @@
 # Change Log
 
+## [v4.37.0](https://github.com/auth0/node-auth0/tree/v4.37.0) (2025-11-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v4.36.0...v4.37.0)
+
+**Added**
+
+- Feat: Added support new connection-profiles endpoint and express-configuration property on clients endpoint  [\#1240](https://github.com/auth0/node-auth0/pull/1240) ([tanya732](https://github.com/tanya732))
+
+
 ## [v4.36.0](https://github.com/auth0/node-auth0/tree/v4.36.0) (2025-11-13)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.35.0...v4.36.0)
