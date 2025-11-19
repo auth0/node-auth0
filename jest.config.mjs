@@ -32,7 +32,7 @@ export default {
             },
             roots: ["<rootDir>/src/management/tests"],
             testPathIgnorePatterns: ["\.browser\.(spec|test)\.[jt]sx?$", "/tests/wire/"],
-            setupFilesAfterEnv: [],
+            setupFilesAfterEnv: ["<rootDir>/src/management/tests/setup.ts"],
         },
         {
             displayName: "wire",
@@ -42,7 +42,10 @@ export default {
                 "^(\\.{1,2}/.*)\\.js$": "$1",
             },
             roots: ["<rootDir>/src/management/tests/wire"],
-            setupFilesAfterEnv: ["<rootDir>/src/management/tests/mock-server/setup.ts"],
+            setupFilesAfterEnv: [
+                "<rootDir>/src/management/tests/setup.ts",
+                "<rootDir>/src/management/tests/mock-server/setup.ts",
+            ],
         },
         {
             displayName: "root-tests",

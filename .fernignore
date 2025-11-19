@@ -48,3 +48,6 @@ eslint.config.mjs
 
 .prettierignore
 CONTRIBUTING.md
+
+# Fern metadata directory
+.fern/
