@@ -4,10 +4,10 @@ import { mockServerPool } from "../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../Client";
 import * as Management from "../../../api/index";
 
-describe("Factors", () => {
+describe("FactorsClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [{ enabled: true, trial_expired: true, name: "push-notification" }];
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -24,7 +24,7 @@ describe("Factors", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -36,7 +36,7 @@ describe("Factors", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -48,7 +48,7 @@ describe("Factors", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -60,7 +60,7 @@ describe("Factors", () => {
 
     test("set (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { enabled: true };
         server
@@ -82,7 +82,7 @@ describe("Factors", () => {
 
     test("set (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
         server
@@ -103,7 +103,7 @@ describe("Factors", () => {
 
     test("set (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
         server
@@ -124,7 +124,7 @@ describe("Factors", () => {
 
     test("set (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
         server

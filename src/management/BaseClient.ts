@@ -17,6 +17,8 @@ export interface BaseClientOptions {
     /** Provide a custom fetch implementation. Useful for platforms that don't have a built-in fetch or need a custom implementation. */
     fetch?: typeof fetch;
     fetcher?: core.FetchFunction;
+    /** Configure logging for the client. */
+    logging?: core.logging.LogConfig | core.logging.Logger;
 }
 
 export interface BaseRequestOptions {
@@ -30,4 +32,11 @@ export interface BaseRequestOptions {
     queryParams?: Record<string, unknown>;
     /** Additional headers to include in the request. */
     headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
+}
+
+export function normalizeClientOptions<T extends BaseClientOptions>(options: T): T {
+    return {
+        ...options,
+        logging: core.logging.createLogger(options?.logging),
+    } as T;
 }

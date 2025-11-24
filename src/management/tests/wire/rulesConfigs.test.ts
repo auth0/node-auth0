@@ -4,10 +4,10 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { ManagementClient } from "../../Client";
 import * as Management from "../../api/index";
 
-describe("RulesConfigs", () => {
+describe("RulesConfigsClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [{ key: "key" }];
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -22,7 +22,7 @@ describe("RulesConfigs", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -34,7 +34,7 @@ describe("RulesConfigs", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -46,7 +46,7 @@ describe("RulesConfigs", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -58,7 +58,7 @@ describe("RulesConfigs", () => {
 
     test("set (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "value" };
         const rawResponseBody = { key: "key", value: "value" };
         server
@@ -81,7 +81,7 @@ describe("RulesConfigs", () => {
 
     test("set (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "MY_RULES_CONFIG_VALUE" };
         const rawResponseBody = { key: "value" };
         server
@@ -102,7 +102,7 @@ describe("RulesConfigs", () => {
 
     test("set (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "MY_RULES_CONFIG_VALUE" };
         const rawResponseBody = { key: "value" };
         server
@@ -123,7 +123,7 @@ describe("RulesConfigs", () => {
 
     test("set (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "MY_RULES_CONFIG_VALUE" };
         const rawResponseBody = { key: "value" };
         server
@@ -144,7 +144,7 @@ describe("RulesConfigs", () => {
 
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         server.mockEndpoint().delete("/rules-configs/key").respondWith().statusCode(200).build();
 
@@ -154,7 +154,7 @@ describe("RulesConfigs", () => {
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -172,7 +172,7 @@ describe("RulesConfigs", () => {
 
     test("delete (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -190,7 +190,7 @@ describe("RulesConfigs", () => {
 
     test("delete (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server

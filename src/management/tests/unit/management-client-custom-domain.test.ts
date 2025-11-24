@@ -42,6 +42,27 @@ jest.mock("../../core/index.js", () => ({
             type: "basic",
         },
     }),
+    logging: {
+        createLogger: jest.fn().mockReturnValue({
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+            shouldLog: jest.fn(),
+            isDebug: jest.fn(),
+            isInfo: jest.fn(),
+            isWarn: jest.fn(),
+            isError: jest.fn(),
+        }),
+        Logger: jest.fn(),
+        ConsoleLogger: jest.fn(),
+        LogLevel: {
+            Debug: "debug",
+            Info: "info",
+            Warn: "warn",
+            Error: "error",
+        },
+    },
 }));
 
 import { ManagementClient } from "../../wrapper/ManagementClient.js";

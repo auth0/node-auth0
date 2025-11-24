@@ -28,28 +28,31 @@ export default {
             preset: "ts-jest",
             testEnvironment: "node",
             moduleNameMapper: {
-                "^(\\.{1,2}/.*)\\.js$": "$1",
+                "^(\.{1,2}/.*)\.js$": "$1",
             },
             roots: ["<rootDir>/src/management/tests"],
             testPathIgnorePatterns: ["\.browser\.(spec|test)\.[jt]sx?$", "/tests/wire/"],
-            setupFilesAfterEnv: [],
+            setupFilesAfterEnv: ["<rootDir>/src/management/tests/setup.ts"],
         },
         {
             displayName: "wire",
             preset: "ts-jest",
             testEnvironment: "node",
             moduleNameMapper: {
-                "^(\\.{1,2}/.*)\\.js$": "$1",
+                "^(\.{1,2}/.*)\.js$": "$1",
             },
             roots: ["<rootDir>/src/management/tests/wire"],
-            setupFilesAfterEnv: ["<rootDir>/src/management/tests/mock-server/setup.ts"],
+            setupFilesAfterEnv: [
+                "<rootDir>/src/management/tests/setup.ts",
+                "<rootDir>/src/management/tests/mock-server/setup.ts",
+            ],
         },
         {
             displayName: "root-tests",
             preset: "ts-jest/presets/default-esm",
             testEnvironment: "node",
             moduleNameMapper: {
-                "^(\\.{1,2}/.*)\\.js$": "$1",
+                "^(\.{1,2}/.*)\.js$": "$1",
             },
             extensionsToTreatAsEsm: [".ts"],
             transform: {

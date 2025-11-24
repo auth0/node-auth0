@@ -4,10 +4,10 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { ManagementClient } from "../../Client";
 import * as Management from "../../api/index";
 
-describe("UserBlocks", () => {
+describe("UserBlocksClient", () => {
     test("listByIdentifier (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { blocked_for: [{ identifier: "identifier", ip: "ip", connection: "connection" }] };
         server.mockEndpoint().get("/user-blocks").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -29,7 +29,7 @@ describe("UserBlocks", () => {
 
     test("listByIdentifier (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -43,7 +43,7 @@ describe("UserBlocks", () => {
 
     test("listByIdentifier (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -57,7 +57,7 @@ describe("UserBlocks", () => {
 
     test("listByIdentifier (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -71,7 +71,7 @@ describe("UserBlocks", () => {
 
     test("listByIdentifier (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -85,7 +85,7 @@ describe("UserBlocks", () => {
 
     test("deleteByIdentifier (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         server.mockEndpoint().delete("/user-blocks").respondWith().statusCode(200).build();
 
@@ -97,7 +97,7 @@ describe("UserBlocks", () => {
 
     test("deleteByIdentifier (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -111,7 +111,7 @@ describe("UserBlocks", () => {
 
     test("deleteByIdentifier (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -125,7 +125,7 @@ describe("UserBlocks", () => {
 
     test("deleteByIdentifier (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -139,7 +139,7 @@ describe("UserBlocks", () => {
 
     test("deleteByIdentifier (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -153,7 +153,7 @@ describe("UserBlocks", () => {
 
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { blocked_for: [{ identifier: "identifier", ip: "ip", connection: "connection" }] };
         server.mockEndpoint().get("/user-blocks/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -174,7 +174,7 @@ describe("UserBlocks", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -186,7 +186,7 @@ describe("UserBlocks", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -198,7 +198,7 @@ describe("UserBlocks", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -210,7 +210,7 @@ describe("UserBlocks", () => {
 
     test("list (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
@@ -222,7 +222,7 @@ describe("UserBlocks", () => {
 
     test("list (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/user-blocks/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -234,7 +234,7 @@ describe("UserBlocks", () => {
 
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         server.mockEndpoint().delete("/user-blocks/id").respondWith().statusCode(200).build();
 
@@ -244,7 +244,7 @@ describe("UserBlocks", () => {
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -256,7 +256,7 @@ describe("UserBlocks", () => {
 
     test("delete (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -268,7 +268,7 @@ describe("UserBlocks", () => {
 
     test("delete (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -280,7 +280,7 @@ describe("UserBlocks", () => {
 
     test("delete (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
@@ -292,7 +292,7 @@ describe("UserBlocks", () => {
 
     test("delete (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/user-blocks/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();

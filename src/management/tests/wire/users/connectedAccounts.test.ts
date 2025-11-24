@@ -4,10 +4,10 @@ import { mockServerPool } from "../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../Client";
 import * as Management from "../../../api/index";
 
-describe("ConnectedAccounts", () => {
+describe("ConnectedAccountsClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             connected_accounts: [
@@ -25,7 +25,7 @@ describe("ConnectedAccounts", () => {
             next: "next",
         };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(200)
@@ -60,11 +60,11 @@ describe("ConnectedAccounts", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(400)
@@ -78,11 +78,11 @@ describe("ConnectedAccounts", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(401)
@@ -96,11 +96,11 @@ describe("ConnectedAccounts", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(403)
@@ -114,11 +114,11 @@ describe("ConnectedAccounts", () => {
 
     test("list (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(429)

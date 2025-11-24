@@ -80,7 +80,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Actions.RequestOptions`
+**requestOptions:** `ActionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -150,7 +150,7 @@ await client.actions.create({
 <dl>
 <dd>
 
-**requestOptions:** `Actions.RequestOptions`
+**requestOptions:** `ActionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -213,7 +213,7 @@ await client.actions.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Actions.RequestOptions`
+**requestOptions:** `ActionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -286,7 +286,7 @@ await client.actions.delete("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Actions.RequestOptions`
+**requestOptions:** `ActionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -357,7 +357,7 @@ await client.actions.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Actions.RequestOptions`
+**requestOptions:** `ActionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -420,7 +420,7 @@ await client.actions.deploy("id");
 <dl>
 <dd>
 
-**requestOptions:** `Actions.RequestOptions`
+**requestOptions:** `ActionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -495,7 +495,7 @@ await client.actions.test("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Actions.RequestOptions`
+**requestOptions:** `ActionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -552,7 +552,7 @@ await client.branding.get();
 <dl>
 <dd>
 
-**requestOptions:** `Branding.RequestOptions`
+**requestOptions:** `BrandingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -615,7 +615,7 @@ await client.branding.update();
 <dl>
 <dd>
 
-**requestOptions:** `Branding.RequestOptions`
+**requestOptions:** `BrandingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -706,7 +706,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `ClientGrants.RequestOptions`
+**requestOptions:** `ClientGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -772,7 +772,7 @@ await client.clientGrants.create({
 <dl>
 <dd>
 
-**requestOptions:** `ClientGrants.RequestOptions`
+**requestOptions:** `ClientGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -835,7 +835,7 @@ await client.clientGrants.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `ClientGrants.RequestOptions`
+**requestOptions:** `ClientGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -906,7 +906,7 @@ await client.clientGrants.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `ClientGrants.RequestOptions`
+**requestOptions:** `ClientGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1034,7 +1034,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1112,7 +1112,7 @@ await client.clients.create({
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1216,7 +1216,7 @@ await client.clients.get("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1279,7 +1279,7 @@ await client.clients.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1358,7 +1358,7 @@ await client.clients.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1425,7 +1425,7 @@ await client.clients.rotateSecret("id");
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1534,7 +1534,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1600,7 +1600,7 @@ await client.connections.create({
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1674,7 +1674,7 @@ await client.connections.get("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1737,7 +1737,7 @@ await client.connections.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1810,7 +1810,7 @@ await client.connections.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1873,7 +1873,7 @@ await client.connections.checkStatus("id");
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -1930,7 +1930,7 @@ await client.customDomains.list();
 <dl>
 <dd>
 
-**requestOptions:** `CustomDomains.RequestOptions`
+**requestOptions:** `CustomDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2007,7 +2007,7 @@ await client.customDomains.create({
 <dl>
 <dd>
 
-**requestOptions:** `CustomDomains.RequestOptions`
+**requestOptions:** `CustomDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2070,7 +2070,7 @@ await client.customDomains.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `CustomDomains.RequestOptions`
+**requestOptions:** `CustomDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2133,7 +2133,7 @@ await client.customDomains.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `CustomDomains.RequestOptions`
+**requestOptions:** `CustomDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2224,7 +2224,7 @@ await client.customDomains.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `CustomDomains.RequestOptions`
+**requestOptions:** `CustomDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2287,7 +2287,7 @@ await client.customDomains.test("id");
 <dl>
 <dd>
 
-**requestOptions:** `CustomDomains.RequestOptions`
+**requestOptions:** `CustomDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2357,7 +2357,7 @@ await client.customDomains.verify("id");
 <dl>
 <dd>
 
-**requestOptions:** `CustomDomains.RequestOptions`
+**requestOptions:** `CustomDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2452,7 +2452,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `DeviceCredentials.RequestOptions`
+**requestOptions:** `DeviceCredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2521,7 +2521,7 @@ await client.deviceCredentials.createPublicKey({
 <dl>
 <dd>
 
-**requestOptions:** `DeviceCredentials.RequestOptions`
+**requestOptions:** `DeviceCredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2584,7 +2584,7 @@ await client.deviceCredentials.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `DeviceCredentials.RequestOptions`
+**requestOptions:** `DeviceCredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2651,7 +2651,7 @@ await client.emailTemplates.create({
 <dl>
 <dd>
 
-**requestOptions:** `EmailTemplates.RequestOptions`
+**requestOptions:** `EmailTemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2714,7 +2714,7 @@ await client.emailTemplates.get("verify_email");
 <dl>
 <dd>
 
-**requestOptions:** `EmailTemplates.RequestOptions`
+**requestOptions:** `EmailTemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2787,7 +2787,7 @@ await client.emailTemplates.set("verify_email", {
 <dl>
 <dd>
 
-**requestOptions:** `EmailTemplates.RequestOptions`
+**requestOptions:** `EmailTemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2858,7 +2858,7 @@ await client.emailTemplates.update("verify_email");
 <dl>
 <dd>
 
-**requestOptions:** `EmailTemplates.RequestOptions`
+**requestOptions:** `EmailTemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2911,7 +2911,7 @@ await client.eventStreams.list({
 <dl>
 <dd>
 
-**requestOptions:** `EventStreams.RequestOptions`
+**requestOptions:** `EventStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -2970,7 +2970,7 @@ await client.eventStreams.create({
 <dl>
 <dd>
 
-**requestOptions:** `EventStreams.RequestOptions`
+**requestOptions:** `EventStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3018,7 +3018,7 @@ await client.eventStreams.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `EventStreams.RequestOptions`
+**requestOptions:** `EventStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3066,7 +3066,7 @@ await client.eventStreams.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `EventStreams.RequestOptions`
+**requestOptions:** `EventStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3122,7 +3122,7 @@ await client.eventStreams.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `EventStreams.RequestOptions`
+**requestOptions:** `EventStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3180,7 +3180,7 @@ await client.eventStreams.test("id", {
 <dl>
 <dd>
 
-**requestOptions:** `EventStreams.RequestOptions`
+**requestOptions:** `EventStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3252,7 +3252,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Flows.RequestOptions`
+**requestOptions:** `FlowsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3302,7 +3302,7 @@ await client.flows.create({
 <dl>
 <dd>
 
-**requestOptions:** `Flows.RequestOptions`
+**requestOptions:** `FlowsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3358,7 +3358,7 @@ await client.flows.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Flows.RequestOptions`
+**requestOptions:** `FlowsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3406,7 +3406,7 @@ await client.flows.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Flows.RequestOptions`
+**requestOptions:** `FlowsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3462,7 +3462,7 @@ await client.flows.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Flows.RequestOptions`
+**requestOptions:** `FlowsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3532,7 +3532,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Forms.RequestOptions`
+**requestOptions:** `FormsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3582,7 +3582,7 @@ await client.forms.create({
 <dl>
 <dd>
 
-**requestOptions:** `Forms.RequestOptions`
+**requestOptions:** `FormsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3638,7 +3638,7 @@ await client.forms.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Forms.RequestOptions`
+**requestOptions:** `FormsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3686,7 +3686,7 @@ await client.forms.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Forms.RequestOptions`
+**requestOptions:** `FormsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3742,7 +3742,7 @@ await client.forms.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Forms.RequestOptions`
+**requestOptions:** `FormsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3833,7 +3833,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `UserGrants.RequestOptions`
+**requestOptions:** `UserGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3898,7 +3898,7 @@ await client.userGrants.deleteByUserId({
 <dl>
 <dd>
 
-**requestOptions:** `UserGrants.RequestOptions`
+**requestOptions:** `UserGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -3961,7 +3961,7 @@ await client.userGrants.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `UserGrants.RequestOptions`
+**requestOptions:** `UserGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4052,7 +4052,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Hooks.RequestOptions`
+**requestOptions:** `HooksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4119,7 +4119,7 @@ await client.hooks.create({
 <dl>
 <dd>
 
-**requestOptions:** `Hooks.RequestOptions`
+**requestOptions:** `HooksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4192,7 +4192,7 @@ await client.hooks.get("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Hooks.RequestOptions`
+**requestOptions:** `HooksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4255,7 +4255,7 @@ await client.hooks.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Hooks.RequestOptions`
+**requestOptions:** `HooksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4326,7 +4326,7 @@ await client.hooks.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Hooks.RequestOptions`
+**requestOptions:** `HooksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4391,7 +4391,7 @@ await client.jobs.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Jobs.RequestOptions`
+**requestOptions:** `JobsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4513,7 +4513,7 @@ await client.logStreams.list();
 <dl>
 <dd>
 
-**requestOptions:** `LogStreams.RequestOptions`
+**requestOptions:** `LogStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4706,7 +4706,7 @@ await client.logStreams.create({
 <dl>
 <dd>
 
-**requestOptions:** `LogStreams.RequestOptions`
+**requestOptions:** `LogStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4867,7 +4867,7 @@ await client.logStreams.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `LogStreams.RequestOptions`
+**requestOptions:** `LogStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -4930,7 +4930,7 @@ await client.logStreams.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `LogStreams.RequestOptions`
+**requestOptions:** `LogStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5035,7 +5035,7 @@ await client.logStreams.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `LogStreams.RequestOptions`
+**requestOptions:** `LogStreamsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5156,7 +5156,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Logs.RequestOptions`
+**requestOptions:** `LogsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5219,7 +5219,7 @@ await client.logs.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Logs.RequestOptions`
+**requestOptions:** `LogsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5304,7 +5304,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `NetworkAcls.RequestOptions`
+**requestOptions:** `NetworkAclsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5375,7 +5375,7 @@ await client.networkAcls.create({
 <dl>
 <dd>
 
-**requestOptions:** `NetworkAcls.RequestOptions`
+**requestOptions:** `NetworkAclsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5438,7 +5438,7 @@ await client.networkAcls.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `NetworkAcls.RequestOptions`
+**requestOptions:** `NetworkAclsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5517,7 +5517,7 @@ await client.networkAcls.set("id", {
 <dl>
 <dd>
 
-**requestOptions:** `NetworkAcls.RequestOptions`
+**requestOptions:** `NetworkAclsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5580,7 +5580,7 @@ await client.networkAcls.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `NetworkAcls.RequestOptions`
+**requestOptions:** `NetworkAclsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5651,7 +5651,7 @@ await client.networkAcls.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `NetworkAcls.RequestOptions`
+**requestOptions:** `NetworkAclsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5756,7 +5756,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5821,7 +5821,7 @@ await client.organizations.create({
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5884,7 +5884,7 @@ await client.organizations.getByName("name");
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -5947,7 +5947,7 @@ await client.organizations.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6012,7 +6012,7 @@ await client.organizations.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6083,7 +6083,7 @@ await client.organizations.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6140,7 +6140,7 @@ await client.prompts.getSettings();
 <dl>
 <dd>
 
-**requestOptions:** `Prompts.RequestOptions`
+**requestOptions:** `PromptsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6203,7 +6203,7 @@ await client.prompts.updateSettings();
 <dl>
 <dd>
 
-**requestOptions:** `Prompts.RequestOptions`
+**requestOptions:** `PromptsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6268,7 +6268,7 @@ await client.refreshTokens.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `RefreshTokens.RequestOptions`
+**requestOptions:** `RefreshTokensClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6331,7 +6331,7 @@ await client.refreshTokens.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `RefreshTokens.RequestOptions`
+**requestOptions:** `RefreshTokensClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6418,7 +6418,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `ResourceServers.RequestOptions`
+**requestOptions:** `ResourceServersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6483,7 +6483,7 @@ await client.resourceServers.create({
 <dl>
 <dd>
 
-**requestOptions:** `ResourceServers.RequestOptions`
+**requestOptions:** `ResourceServersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6556,7 +6556,7 @@ await client.resourceServers.get("id", {
 <dl>
 <dd>
 
-**requestOptions:** `ResourceServers.RequestOptions`
+**requestOptions:** `ResourceServersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6619,7 +6619,7 @@ await client.resourceServers.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `ResourceServers.RequestOptions`
+**requestOptions:** `ResourceServersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6690,7 +6690,7 @@ await client.resourceServers.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `ResourceServers.RequestOptions`
+**requestOptions:** `ResourceServersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6779,7 +6779,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6846,7 +6846,7 @@ await client.roles.create({
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6909,7 +6909,7 @@ await client.roles.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6972,7 +6972,7 @@ await client.roles.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7043,7 +7043,7 @@ await client.roles.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7134,7 +7134,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Rules.RequestOptions`
+**requestOptions:** `RulesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7202,7 +7202,7 @@ await client.rules.create({
 <dl>
 <dd>
 
-**requestOptions:** `Rules.RequestOptions`
+**requestOptions:** `RulesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7276,7 +7276,7 @@ await client.rules.get("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Rules.RequestOptions`
+**requestOptions:** `RulesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7339,7 +7339,7 @@ await client.rules.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Rules.RequestOptions`
+**requestOptions:** `RulesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7410,7 +7410,7 @@ await client.rules.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Rules.RequestOptions`
+**requestOptions:** `RulesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7469,7 +7469,7 @@ await client.rulesConfigs.list();
 <dl>
 <dd>
 
-**requestOptions:** `RulesConfigs.RequestOptions`
+**requestOptions:** `RulesConfigsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7542,7 +7542,7 @@ await client.rulesConfigs.set("key", {
 <dl>
 <dd>
 
-**requestOptions:** `RulesConfigs.RequestOptions`
+**requestOptions:** `RulesConfigsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7605,7 +7605,7 @@ await client.rulesConfigs.delete("key");
 <dl>
 <dd>
 
-**requestOptions:** `RulesConfigs.RequestOptions`
+**requestOptions:** `RulesConfigsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7690,7 +7690,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `SelfServiceProfiles.RequestOptions`
+**requestOptions:** `SelfServiceProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7755,7 +7755,7 @@ await client.selfServiceProfiles.create({
 <dl>
 <dd>
 
-**requestOptions:** `SelfServiceProfiles.RequestOptions`
+**requestOptions:** `SelfServiceProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7818,7 +7818,7 @@ await client.selfServiceProfiles.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `SelfServiceProfiles.RequestOptions`
+**requestOptions:** `SelfServiceProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7881,7 +7881,7 @@ await client.selfServiceProfiles.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `SelfServiceProfiles.RequestOptions`
+**requestOptions:** `SelfServiceProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -7952,7 +7952,7 @@ await client.selfServiceProfiles.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `SelfServiceProfiles.RequestOptions`
+**requestOptions:** `SelfServiceProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8017,7 +8017,7 @@ await client.sessions.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Sessions.RequestOptions`
+**requestOptions:** `SessionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8080,7 +8080,7 @@ await client.sessions.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Sessions.RequestOptions`
+**requestOptions:** `SessionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8151,7 +8151,7 @@ await client.sessions.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Sessions.RequestOptions`
+**requestOptions:** `SessionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8214,7 +8214,7 @@ await client.sessions.revoke("id");
 <dl>
 <dd>
 
-**requestOptions:** `Sessions.RequestOptions`
+**requestOptions:** `SessionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8271,7 +8271,7 @@ await client.stats.getActiveUsersCount();
 <dl>
 <dd>
 
-**requestOptions:** `Stats.RequestOptions`
+**requestOptions:** `StatsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8337,7 +8337,7 @@ await client.stats.getDaily({
 <dl>
 <dd>
 
-**requestOptions:** `Stats.RequestOptions`
+**requestOptions:** `StatsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8394,7 +8394,7 @@ await client.supplementalSignals.get();
 <dl>
 <dd>
 
-**requestOptions:** `SupplementalSignals.RequestOptions`
+**requestOptions:** `SupplementalSignalsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8459,7 +8459,7 @@ await client.supplementalSignals.patch({
 <dl>
 <dd>
 
-**requestOptions:** `SupplementalSignals.RequestOptions`
+**requestOptions:** `SupplementalSignalsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8526,7 +8526,7 @@ await client.tickets.verifyEmail({
 <dl>
 <dd>
 
-**requestOptions:** `Tickets.RequestOptions`
+**requestOptions:** `TicketsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8591,7 +8591,7 @@ await client.tickets.changePassword();
 <dl>
 <dd>
 
-**requestOptions:** `Tickets.RequestOptions`
+**requestOptions:** `TicketsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8683,7 +8683,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `TokenExchangeProfiles.RequestOptions`
+**requestOptions:** `TokenExchangeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8750,7 +8750,7 @@ await client.tokenExchangeProfiles.create({
 <dl>
 <dd>
 
-**requestOptions:** `TokenExchangeProfiles.RequestOptions`
+**requestOptions:** `TokenExchangeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8813,7 +8813,7 @@ await client.tokenExchangeProfiles.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `TokenExchangeProfiles.RequestOptions`
+**requestOptions:** `TokenExchangeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8876,7 +8876,7 @@ await client.tokenExchangeProfiles.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `TokenExchangeProfiles.RequestOptions`
+**requestOptions:** `TokenExchangeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -8947,7 +8947,7 @@ await client.tokenExchangeProfiles.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `TokenExchangeProfiles.RequestOptions`
+**requestOptions:** `TokenExchangeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9030,7 +9030,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `UserAttributeProfiles.RequestOptions`
+**requestOptions:** `UserAttributeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9103,7 +9103,7 @@ await client.userAttributeProfiles.create({
 <dl>
 <dd>
 
-**requestOptions:** `UserAttributeProfiles.RequestOptions`
+**requestOptions:** `UserAttributeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9158,7 +9158,7 @@ await client.userAttributeProfiles.listTemplates();
 <dl>
 <dd>
 
-**requestOptions:** `UserAttributeProfiles.RequestOptions`
+**requestOptions:** `UserAttributeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9221,7 +9221,7 @@ await client.userAttributeProfiles.getTemplate("id");
 <dl>
 <dd>
 
-**requestOptions:** `UserAttributeProfiles.RequestOptions`
+**requestOptions:** `UserAttributeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9284,7 +9284,7 @@ await client.userAttributeProfiles.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `UserAttributeProfiles.RequestOptions`
+**requestOptions:** `UserAttributeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9347,7 +9347,7 @@ await client.userAttributeProfiles.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `UserAttributeProfiles.RequestOptions`
+**requestOptions:** `UserAttributeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9418,7 +9418,7 @@ await client.userAttributeProfiles.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `UserAttributeProfiles.RequestOptions`
+**requestOptions:** `UserAttributeProfilesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9486,7 +9486,7 @@ await client.userBlocks.listByIdentifier({
 <dl>
 <dd>
 
-**requestOptions:** `UserBlocks.RequestOptions`
+**requestOptions:** `UserBlocksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9553,7 +9553,7 @@ await client.userBlocks.deleteByIdentifier({
 <dl>
 <dd>
 
-**requestOptions:** `UserBlocks.RequestOptions`
+**requestOptions:** `UserBlocksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9626,7 +9626,7 @@ await client.userBlocks.list("id", {
 <dl>
 <dd>
 
-**requestOptions:** `UserBlocks.RequestOptions`
+**requestOptions:** `UserBlocksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9691,7 +9691,7 @@ await client.userBlocks.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `UserBlocks.RequestOptions`
+**requestOptions:** `UserBlocksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9803,7 +9803,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9870,7 +9870,7 @@ await client.users.create({
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -9941,7 +9941,7 @@ await client.users.listUsersByEmail({
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10015,7 +10015,7 @@ await client.users.get("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10078,7 +10078,7 @@ await client.users.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10220,7 +10220,7 @@ await client.users.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10283,7 +10283,7 @@ await client.users.regenerateRecoveryCode("id");
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10354,7 +10354,7 @@ await client.users.revokeAccess("id");
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10445,7 +10445,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Versions.RequestOptions`
+**requestOptions:** `VersionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10516,7 +10516,7 @@ await client.actions.versions.get("actionId", "id");
 <dl>
 <dd>
 
-**requestOptions:** `Versions.RequestOptions`
+**requestOptions:** `VersionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10595,7 +10595,7 @@ await client.actions.versions.deploy("actionId", "id");
 <dl>
 <dd>
 
-**requestOptions:** `Versions.RequestOptions`
+**requestOptions:** `VersionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10660,7 +10660,7 @@ await client.actions.executions.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Executions.RequestOptions`
+**requestOptions:** `ExecutionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10717,7 +10717,7 @@ await client.actions.triggers.list();
 <dl>
 <dd>
 
-**requestOptions:** `Triggers.RequestOptions`
+**requestOptions:** `TriggersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10808,7 +10808,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Bindings.RequestOptions`
+**requestOptions:** `BindingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10879,7 +10879,7 @@ await client.actions.triggers.bindings.updateMany("triggerId");
 <dl>
 <dd>
 
-**requestOptions:** `Bindings.RequestOptions`
+**requestOptions:** `BindingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -10944,7 +10944,7 @@ await client.anomaly.blocks.checkIp("id");
 <dl>
 <dd>
 
-**requestOptions:** `Blocks.RequestOptions`
+**requestOptions:** `BlocksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11007,7 +11007,7 @@ await client.anomaly.blocks.unblockIp("id");
 <dl>
 <dd>
 
-**requestOptions:** `Blocks.RequestOptions`
+**requestOptions:** `BlocksClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11064,7 +11064,7 @@ await client.attackProtection.botDetection.get();
 <dl>
 <dd>
 
-**requestOptions:** `BotDetection.RequestOptions`
+**requestOptions:** `BotDetectionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11127,7 +11127,7 @@ await client.attackProtection.botDetection.update();
 <dl>
 <dd>
 
-**requestOptions:** `BotDetection.RequestOptions`
+**requestOptions:** `BotDetectionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11184,7 +11184,7 @@ await client.attackProtection.breachedPasswordDetection.get();
 <dl>
 <dd>
 
-**requestOptions:** `BreachedPasswordDetection.RequestOptions`
+**requestOptions:** `BreachedPasswordDetectionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11247,7 +11247,7 @@ await client.attackProtection.breachedPasswordDetection.update();
 <dl>
 <dd>
 
-**requestOptions:** `BreachedPasswordDetection.RequestOptions`
+**requestOptions:** `BreachedPasswordDetectionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11304,7 +11304,7 @@ await client.attackProtection.bruteForceProtection.get();
 <dl>
 <dd>
 
-**requestOptions:** `BruteForceProtection.RequestOptions`
+**requestOptions:** `BruteForceProtectionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11367,7 +11367,7 @@ await client.attackProtection.bruteForceProtection.update();
 <dl>
 <dd>
 
-**requestOptions:** `BruteForceProtection.RequestOptions`
+**requestOptions:** `BruteForceProtectionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11424,7 +11424,7 @@ await client.attackProtection.captcha.get();
 <dl>
 <dd>
 
-**requestOptions:** `Captcha.RequestOptions`
+**requestOptions:** `CaptchaClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11487,7 +11487,7 @@ await client.attackProtection.captcha.update();
 <dl>
 <dd>
 
-**requestOptions:** `Captcha.RequestOptions`
+**requestOptions:** `CaptchaClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11544,7 +11544,7 @@ await client.attackProtection.suspiciousIpThrottling.get();
 <dl>
 <dd>
 
-**requestOptions:** `SuspiciousIpThrottling.RequestOptions`
+**requestOptions:** `SuspiciousIpThrottlingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11607,7 +11607,7 @@ await client.attackProtection.suspiciousIpThrottling.update();
 <dl>
 <dd>
 
-**requestOptions:** `SuspiciousIpThrottling.RequestOptions`
+**requestOptions:** `SuspiciousIpThrottlingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11649,7 +11649,7 @@ await client.branding.templates.getUniversalLogin();
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11734,7 +11734,7 @@ await client.branding.templates.updateUniversalLogin("string");
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11774,7 +11774,7 @@ await client.branding.templates.deleteUniversalLogin();
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11910,7 +11910,7 @@ await client.branding.themes.create({
 <dl>
 <dd>
 
-**requestOptions:** `Themes.RequestOptions`
+**requestOptions:** `ThemesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -11965,7 +11965,7 @@ await client.branding.themes.getDefault();
 <dl>
 <dd>
 
-**requestOptions:** `Themes.RequestOptions`
+**requestOptions:** `ThemesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12028,7 +12028,7 @@ await client.branding.themes.get("themeId");
 <dl>
 <dd>
 
-**requestOptions:** `Themes.RequestOptions`
+**requestOptions:** `ThemesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12091,7 +12091,7 @@ await client.branding.themes.delete("themeId");
 <dl>
 <dd>
 
-**requestOptions:** `Themes.RequestOptions`
+**requestOptions:** `ThemesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12233,7 +12233,7 @@ await client.branding.themes.update("themeId", {
 <dl>
 <dd>
 
-**requestOptions:** `Themes.RequestOptions`
+**requestOptions:** `ThemesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12300,7 +12300,7 @@ await client.branding.phone.providers.list({
 <dl>
 <dd>
 
-**requestOptions:** `Providers.RequestOptions`
+**requestOptions:** `ProvidersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12369,7 +12369,7 @@ await client.branding.phone.providers.create({
 <dl>
 <dd>
 
-**requestOptions:** `Providers.RequestOptions`
+**requestOptions:** `ProvidersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12432,7 +12432,7 @@ await client.branding.phone.providers.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Providers.RequestOptions`
+**requestOptions:** `ProvidersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12495,7 +12495,7 @@ await client.branding.phone.providers.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Providers.RequestOptions`
+**requestOptions:** `ProvidersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12567,7 +12567,7 @@ await client.branding.phone.providers.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Providers.RequestOptions`
+**requestOptions:** `ProvidersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12625,7 +12625,7 @@ await client.branding.phone.providers.test("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Providers.RequestOptions`
+**requestOptions:** `ProvidersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12677,7 +12677,7 @@ await client.branding.phone.templates.list({
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12725,7 +12725,7 @@ await client.branding.phone.templates.create();
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12773,7 +12773,7 @@ await client.branding.phone.templates.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12821,7 +12821,7 @@ await client.branding.phone.templates.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12877,7 +12877,7 @@ await client.branding.phone.templates.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12935,7 +12935,7 @@ await client.branding.phone.templates.reset("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -12993,7 +12993,7 @@ await client.branding.phone.templates.test("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13069,7 +13069,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13082,7 +13082,7 @@ const response = page.response;
 
 ## Clients Credentials
 
-<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">list</a>(clientId) -> Management.ClientCredential[]</code></summary>
+<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">list</a>(client_id) -> Management.ClientCredential[]</code></summary>
 <dl>
 <dd>
 
@@ -13128,7 +13128,7 @@ await client.clients.credentials.list("client_id");
 <dl>
 <dd>
 
-**clientId:** `string` — ID of the client.
+**client_id:** `string` — ID of the client.
 
 </dd>
 </dl>
@@ -13136,7 +13136,7 @@ await client.clients.credentials.list("client_id");
 <dl>
 <dd>
 
-**requestOptions:** `Credentials.RequestOptions`
+**requestOptions:** `CredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13147,7 +13147,7 @@ await client.clients.credentials.list("client_id");
 </dl>
 </details>
 
-<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">create</a>(clientId, { ...params }) -> Management.PostClientCredentialResponseContent</code></summary>
+<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">create</a>(client_id, { ...params }) -> Management.PostClientCredentialResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -13226,7 +13226,7 @@ await client.clients.credentials.create("client_id", {
 <dl>
 <dd>
 
-**clientId:** `string` — ID of the client.
+**client_id:** `string` — ID of the client.
 
 </dd>
 </dl>
@@ -13242,7 +13242,7 @@ await client.clients.credentials.create("client_id", {
 <dl>
 <dd>
 
-**requestOptions:** `Credentials.RequestOptions`
+**requestOptions:** `CredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13253,7 +13253,7 @@ await client.clients.credentials.create("client_id", {
 </dl>
 </details>
 
-<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">get</a>(clientId, credentialId) -> Management.GetClientCredentialResponseContent</code></summary>
+<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">get</a>(client_id, credential_id) -> Management.GetClientCredentialResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -13299,7 +13299,7 @@ await client.clients.credentials.get("client_id", "credential_id");
 <dl>
 <dd>
 
-**clientId:** `string` — ID of the client.
+**client_id:** `string` — ID of the client.
 
 </dd>
 </dl>
@@ -13307,7 +13307,7 @@ await client.clients.credentials.get("client_id", "credential_id");
 <dl>
 <dd>
 
-**credentialId:** `string` — ID of the credential.
+**credential_id:** `string` — ID of the credential.
 
 </dd>
 </dl>
@@ -13315,7 +13315,7 @@ await client.clients.credentials.get("client_id", "credential_id");
 <dl>
 <dd>
 
-**requestOptions:** `Credentials.RequestOptions`
+**requestOptions:** `CredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13326,7 +13326,7 @@ await client.clients.credentials.get("client_id", "credential_id");
 </dl>
 </details>
 
-<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">delete</a>(clientId, credentialId) -> void</code></summary>
+<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">delete</a>(client_id, credential_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -13370,7 +13370,7 @@ await client.clients.credentials.delete("client_id", "credential_id");
 <dl>
 <dd>
 
-**clientId:** `string` — ID of the client.
+**client_id:** `string` — ID of the client.
 
 </dd>
 </dl>
@@ -13378,7 +13378,7 @@ await client.clients.credentials.delete("client_id", "credential_id");
 <dl>
 <dd>
 
-**credentialId:** `string` — ID of the credential to delete.
+**credential_id:** `string` — ID of the credential to delete.
 
 </dd>
 </dl>
@@ -13386,7 +13386,7 @@ await client.clients.credentials.delete("client_id", "credential_id");
 <dl>
 <dd>
 
-**requestOptions:** `Credentials.RequestOptions`
+**requestOptions:** `CredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13397,7 +13397,7 @@ await client.clients.credentials.delete("client_id", "credential_id");
 </dl>
 </details>
 
-<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">update</a>(clientId, credentialId, { ...params }) -> Management.PatchClientCredentialResponseContent</code></summary>
+<details><summary><code>client.clients.credentials.<a href="/src/management/api/resources/clients/resources/credentials/client/Client.ts">update</a>(client_id, credential_id, { ...params }) -> Management.PatchClientCredentialResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -13441,7 +13441,7 @@ await client.clients.credentials.update("client_id", "credential_id");
 <dl>
 <dd>
 
-**clientId:** `string` — ID of the client.
+**client_id:** `string` — ID of the client.
 
 </dd>
 </dl>
@@ -13449,7 +13449,7 @@ await client.clients.credentials.update("client_id", "credential_id");
 <dl>
 <dd>
 
-**credentialId:** `string` — ID of the credential.
+**credential_id:** `string` — ID of the credential.
 
 </dd>
 </dl>
@@ -13465,7 +13465,7 @@ await client.clients.credentials.update("client_id", "credential_id");
 <dl>
 <dd>
 
-**requestOptions:** `Credentials.RequestOptions`
+**requestOptions:** `CredentialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13568,7 +13568,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13661,7 +13661,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13722,7 +13722,7 @@ await client.connections.clients.update("id", [
 <dl>
 <dd>
 
-**requestOptions:** `Clients.RequestOptions`
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13787,7 +13787,7 @@ await client.connections.keys.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Keys.RequestOptions`
+**requestOptions:** `KeysClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13858,7 +13858,7 @@ await client.connections.keys.rotate("id");
 <dl>
 <dd>
 
-**requestOptions:** `Keys.RequestOptions`
+**requestOptions:** `KeysClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13923,7 +13923,7 @@ await client.connections.scimConfiguration.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `ScimConfiguration.RequestOptions`
+**requestOptions:** `ScimConfigurationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -13994,7 +13994,7 @@ await client.connections.scimConfiguration.create("id");
 <dl>
 <dd>
 
-**requestOptions:** `ScimConfiguration.RequestOptions`
+**requestOptions:** `ScimConfigurationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14057,7 +14057,7 @@ await client.connections.scimConfiguration.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `ScimConfiguration.RequestOptions`
+**requestOptions:** `ScimConfigurationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14131,7 +14131,7 @@ await client.connections.scimConfiguration.update("id", {
 <dl>
 <dd>
 
-**requestOptions:** `ScimConfiguration.RequestOptions`
+**requestOptions:** `ScimConfigurationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14194,7 +14194,7 @@ await client.connections.scimConfiguration.getDefaultMapping("id");
 <dl>
 <dd>
 
-**requestOptions:** `ScimConfiguration.RequestOptions`
+**requestOptions:** `ScimConfigurationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14269,7 +14269,7 @@ await client.connections.users.deleteByEmail("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14334,7 +14334,7 @@ await client.connections.scimConfiguration.tokens.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Tokens.RequestOptions`
+**requestOptions:** `TokensClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14405,7 +14405,7 @@ await client.connections.scimConfiguration.tokens.create("id");
 <dl>
 <dd>
 
-**requestOptions:** `Tokens.RequestOptions`
+**requestOptions:** `TokensClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14476,7 +14476,7 @@ await client.connections.scimConfiguration.tokens.delete("id", "tokenId");
 <dl>
 <dd>
 
-**requestOptions:** `Tokens.RequestOptions`
+**requestOptions:** `TokensClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14544,7 +14544,7 @@ await client.emails.provider.get({
 <dl>
 <dd>
 
-**requestOptions:** `Provider.RequestOptions`
+**requestOptions:** `ProviderClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14653,7 +14653,7 @@ await client.emails.provider.create({
 <dl>
 <dd>
 
-**requestOptions:** `Provider.RequestOptions`
+**requestOptions:** `ProviderClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14708,7 +14708,7 @@ await client.emails.provider.delete();
 <dl>
 <dd>
 
-**requestOptions:** `Provider.RequestOptions`
+**requestOptions:** `ProviderClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14810,7 +14810,7 @@ await client.emails.provider.update();
 <dl>
 <dd>
 
-**requestOptions:** `Provider.RequestOptions`
+**requestOptions:** `ProviderClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14875,7 +14875,7 @@ await client.eventStreams.deliveries.list("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Deliveries.RequestOptions`
+**requestOptions:** `DeliveriesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14886,7 +14886,7 @@ await client.eventStreams.deliveries.list("id", {
 </dl>
 </details>
 
-<details><summary><code>client.eventStreams.deliveries.<a href="/src/management/api/resources/eventStreams/resources/deliveries/client/Client.ts">getHistory</a>(id, eventId) -> Management.GetEventStreamDeliveryHistoryResponseContent</code></summary>
+<details><summary><code>client.eventStreams.deliveries.<a href="/src/management/api/resources/eventStreams/resources/deliveries/client/Client.ts">getHistory</a>(id, event_id) -> Management.GetEventStreamDeliveryHistoryResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -14923,7 +14923,7 @@ await client.eventStreams.deliveries.getHistory("id", "event_id");
 <dl>
 <dd>
 
-**eventId:** `string` — Unique identifier for the event
+**event_id:** `string` — Unique identifier for the event
 
 </dd>
 </dl>
@@ -14931,7 +14931,7 @@ await client.eventStreams.deliveries.getHistory("id", "event_id");
 <dl>
 <dd>
 
-**requestOptions:** `Deliveries.RequestOptions`
+**requestOptions:** `DeliveriesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14989,7 +14989,7 @@ await client.eventStreams.redeliveries.create("id");
 <dl>
 <dd>
 
-**requestOptions:** `Redeliveries.RequestOptions`
+**requestOptions:** `RedeliveriesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15000,7 +15000,7 @@ await client.eventStreams.redeliveries.create("id");
 </dl>
 </details>
 
-<details><summary><code>client.eventStreams.redeliveries.<a href="/src/management/api/resources/eventStreams/resources/redeliveries/client/Client.ts">createById</a>(id, eventId) -> void</code></summary>
+<details><summary><code>client.eventStreams.redeliveries.<a href="/src/management/api/resources/eventStreams/resources/redeliveries/client/Client.ts">createById</a>(id, event_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -15037,7 +15037,7 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 <dl>
 <dd>
 
-**eventId:** `string` — Unique identifier for the event
+**event_id:** `string` — Unique identifier for the event
 
 </dd>
 </dl>
@@ -15045,7 +15045,7 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 <dl>
 <dd>
 
-**requestOptions:** `Redeliveries.RequestOptions`
+**requestOptions:** `RedeliveriesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15058,7 +15058,7 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 
 ## Flows Executions
 
-<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flowId, { ...params }) -> core.Page<Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent></code></summary>
+<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flow_id, { ...params }) -> core.Page<Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -15105,7 +15105,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**flowId:** `string` — Flow id
+**flow_id:** `string` — Flow id
 
 </dd>
 </dl>
@@ -15121,7 +15121,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Executions.RequestOptions`
+**requestOptions:** `ExecutionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15132,7 +15132,7 @@ const response = page.response;
 </dl>
 </details>
 
-<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">get</a>(flowId, executionId, { ...params }) -> Management.GetFlowExecutionResponseContent</code></summary>
+<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">get</a>(flow_id, execution_id, { ...params }) -> Management.GetFlowExecutionResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -15161,7 +15161,7 @@ await client.flows.executions.get("flow_id", "execution_id");
 <dl>
 <dd>
 
-**flowId:** `string` — Flow id
+**flow_id:** `string` — Flow id
 
 </dd>
 </dl>
@@ -15169,7 +15169,7 @@ await client.flows.executions.get("flow_id", "execution_id");
 <dl>
 <dd>
 
-**executionId:** `string` — Flow execution id
+**execution_id:** `string` — Flow execution id
 
 </dd>
 </dl>
@@ -15185,7 +15185,7 @@ await client.flows.executions.get("flow_id", "execution_id");
 <dl>
 <dd>
 
-**requestOptions:** `Executions.RequestOptions`
+**requestOptions:** `ExecutionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15196,7 +15196,7 @@ await client.flows.executions.get("flow_id", "execution_id");
 </dl>
 </details>
 
-<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">delete</a>(flowId, executionId) -> void</code></summary>
+<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">delete</a>(flow_id, execution_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -15225,7 +15225,7 @@ await client.flows.executions.delete("flow_id", "execution_id");
 <dl>
 <dd>
 
-**flowId:** `string` — Flows id
+**flow_id:** `string` — Flows id
 
 </dd>
 </dl>
@@ -15233,7 +15233,7 @@ await client.flows.executions.delete("flow_id", "execution_id");
 <dl>
 <dd>
 
-**executionId:** `string` — Flow execution identifier
+**execution_id:** `string` — Flow execution identifier
 
 </dd>
 </dl>
@@ -15241,7 +15241,7 @@ await client.flows.executions.delete("flow_id", "execution_id");
 <dl>
 <dd>
 
-**requestOptions:** `Executions.RequestOptions`
+**requestOptions:** `ExecutionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15311,7 +15311,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15367,7 +15367,7 @@ await client.flows.vault.connections.create({
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15415,7 +15415,7 @@ await client.flows.vault.connections.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15463,7 +15463,7 @@ await client.flows.vault.connections.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15519,7 +15519,7 @@ await client.flows.vault.connections.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Connections.RequestOptions`
+**requestOptions:** `ConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15589,7 +15589,7 @@ await client.guardian.enrollments.createTicket({
 <dl>
 <dd>
 
-**requestOptions:** `Enrollments.RequestOptions`
+**requestOptions:** `EnrollmentsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15652,7 +15652,7 @@ await client.guardian.enrollments.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Enrollments.RequestOptions`
+**requestOptions:** `EnrollmentsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15715,7 +15715,7 @@ await client.guardian.enrollments.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Enrollments.RequestOptions`
+**requestOptions:** `EnrollmentsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15772,7 +15772,7 @@ await client.guardian.factors.list();
 <dl>
 <dd>
 
-**requestOptions:** `Factors.RequestOptions`
+**requestOptions:** `FactorsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15845,7 +15845,7 @@ await client.guardian.factors.set("push-notification", {
 <dl>
 <dd>
 
-**requestOptions:** `Factors.RequestOptions`
+**requestOptions:** `FactorsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15911,7 +15911,7 @@ await client.guardian.policies.list();
 <dl>
 <dd>
 
-**requestOptions:** `Policies.RequestOptions`
+**requestOptions:** `PoliciesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -15983,7 +15983,7 @@ await client.guardian.policies.set(["all-applications"]);
 <dl>
 <dd>
 
-**requestOptions:** `Policies.RequestOptions`
+**requestOptions:** `PoliciesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16040,7 +16040,7 @@ await client.guardian.factors.phone.getMessageTypes();
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16105,7 +16105,7 @@ await client.guardian.factors.phone.setMessageTypes({
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16160,7 +16160,7 @@ await client.guardian.factors.phone.getTwilioProvider();
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16223,7 +16223,7 @@ await client.guardian.factors.phone.setTwilioProvider();
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16278,7 +16278,7 @@ await client.guardian.factors.phone.getSelectedProvider();
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16328,7 +16328,7 @@ await client.guardian.factors.phone.setProvider({
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16383,7 +16383,7 @@ await client.guardian.factors.phone.getTemplates();
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16449,7 +16449,7 @@ await client.guardian.factors.phone.setTemplates({
 <dl>
 <dd>
 
-**requestOptions:** `Phone.RequestOptions`
+**requestOptions:** `PhoneClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16506,7 +16506,7 @@ await client.guardian.factors.pushNotification.getApnsProvider();
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16569,7 +16569,7 @@ await client.guardian.factors.pushNotification.setApnsProvider({});
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16632,7 +16632,7 @@ await client.guardian.factors.pushNotification.setFcmProvider({});
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16695,7 +16695,7 @@ await client.guardian.factors.pushNotification.setFcmv1Provider({});
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16750,7 +16750,7 @@ await client.guardian.factors.pushNotification.getSnsProvider();
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16813,7 +16813,7 @@ await client.guardian.factors.pushNotification.setSnsProvider();
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16876,7 +16876,7 @@ await client.guardian.factors.pushNotification.updateSnsProvider();
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16931,7 +16931,7 @@ await client.guardian.factors.pushNotification.getSelectedProvider();
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16996,7 +16996,7 @@ await client.guardian.factors.pushNotification.setProvider({
 <dl>
 <dd>
 
-**requestOptions:** `PushNotification.RequestOptions`
+**requestOptions:** `PushNotificationClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17055,7 +17055,7 @@ await client.guardian.factors.sms.getTwilioProvider();
 <dl>
 <dd>
 
-**requestOptions:** `Sms.RequestOptions`
+**requestOptions:** `SmsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17120,7 +17120,7 @@ await client.guardian.factors.sms.setTwilioProvider();
 <dl>
 <dd>
 
-**requestOptions:** `Sms.RequestOptions`
+**requestOptions:** `SmsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17177,7 +17177,7 @@ await client.guardian.factors.sms.getSelectedProvider();
 <dl>
 <dd>
 
-**requestOptions:** `Sms.RequestOptions`
+**requestOptions:** `SmsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17244,7 +17244,7 @@ await client.guardian.factors.sms.setProvider({
 <dl>
 <dd>
 
-**requestOptions:** `Sms.RequestOptions`
+**requestOptions:** `SmsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17301,7 +17301,7 @@ await client.guardian.factors.sms.getTemplates();
 <dl>
 <dd>
 
-**requestOptions:** `Sms.RequestOptions`
+**requestOptions:** `SmsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17369,7 +17369,7 @@ await client.guardian.factors.sms.setTemplates({
 <dl>
 <dd>
 
-**requestOptions:** `Sms.RequestOptions`
+**requestOptions:** `SmsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17426,7 +17426,7 @@ await client.guardian.factors.duo.settings.get();
 <dl>
 <dd>
 
-**requestOptions:** `Settings.RequestOptions`
+**requestOptions:** `SettingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17489,7 +17489,7 @@ await client.guardian.factors.duo.settings.set();
 <dl>
 <dd>
 
-**requestOptions:** `Settings.RequestOptions`
+**requestOptions:** `SettingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17537,7 +17537,7 @@ await client.guardian.factors.duo.settings.update();
 <dl>
 <dd>
 
-**requestOptions:** `Settings.RequestOptions`
+**requestOptions:** `SettingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17602,7 +17602,7 @@ await client.hooks.secrets.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Secrets.RequestOptions`
+**requestOptions:** `SecretsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17675,7 +17675,7 @@ await client.hooks.secrets.create("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Secrets.RequestOptions`
+**requestOptions:** `SecretsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17746,7 +17746,7 @@ await client.hooks.secrets.delete("id", ["string"]);
 <dl>
 <dd>
 
-**requestOptions:** `Secrets.RequestOptions`
+**requestOptions:** `SecretsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17819,7 +17819,7 @@ await client.hooks.secrets.update("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Secrets.RequestOptions`
+**requestOptions:** `SecretsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17884,7 +17884,7 @@ await client.jobs.usersExports.create();
 <dl>
 <dd>
 
-**requestOptions:** `UsersExports.RequestOptions`
+**requestOptions:** `UsersExportsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17952,7 +17952,7 @@ await client.jobs.usersImports.create({
 <dl>
 <dd>
 
-**requestOptions:** `UsersImports.RequestOptions`
+**requestOptions:** `UsersImportsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18021,7 +18021,7 @@ await client.jobs.verificationEmail.create({
 <dl>
 <dd>
 
-**requestOptions:** `VerificationEmail.RequestOptions`
+**requestOptions:** `VerificationEmailClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18086,7 +18086,7 @@ await client.jobs.errors.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Errors.RequestOptions`
+**requestOptions:** `ErrorsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18143,7 +18143,7 @@ await client.keys.customSigning.get();
 <dl>
 <dd>
 
-**requestOptions:** `CustomSigning.RequestOptions`
+**requestOptions:** `CustomSigningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18212,7 +18212,7 @@ await client.keys.customSigning.set({
 <dl>
 <dd>
 
-**requestOptions:** `CustomSigning.RequestOptions`
+**requestOptions:** `CustomSigningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18267,7 +18267,7 @@ await client.keys.customSigning.delete();
 <dl>
 <dd>
 
-**requestOptions:** `CustomSigning.RequestOptions`
+**requestOptions:** `CustomSigningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18352,7 +18352,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Encryption.RequestOptions`
+**requestOptions:** `EncryptionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18417,7 +18417,7 @@ await client.keys.encryption.create({
 <dl>
 <dd>
 
-**requestOptions:** `Encryption.RequestOptions`
+**requestOptions:** `EncryptionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18472,7 +18472,7 @@ await client.keys.encryption.rekey();
 <dl>
 <dd>
 
-**requestOptions:** `Encryption.RequestOptions`
+**requestOptions:** `EncryptionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18535,7 +18535,7 @@ await client.keys.encryption.get("kid");
 <dl>
 <dd>
 
-**requestOptions:** `Encryption.RequestOptions`
+**requestOptions:** `EncryptionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18608,7 +18608,7 @@ await client.keys.encryption.import("kid", {
 <dl>
 <dd>
 
-**requestOptions:** `Encryption.RequestOptions`
+**requestOptions:** `EncryptionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18671,7 +18671,7 @@ await client.keys.encryption.delete("kid");
 <dl>
 <dd>
 
-**requestOptions:** `Encryption.RequestOptions`
+**requestOptions:** `EncryptionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18734,7 +18734,7 @@ await client.keys.encryption.createPublicWrappingKey("kid");
 <dl>
 <dd>
 
-**requestOptions:** `Encryption.RequestOptions`
+**requestOptions:** `EncryptionClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18791,7 +18791,7 @@ await client.keys.signing.list();
 <dl>
 <dd>
 
-**requestOptions:** `Signing.RequestOptions`
+**requestOptions:** `SigningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18846,7 +18846,7 @@ await client.keys.signing.rotate();
 <dl>
 <dd>
 
-**requestOptions:** `Signing.RequestOptions`
+**requestOptions:** `SigningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18909,7 +18909,7 @@ await client.keys.signing.get("kid");
 <dl>
 <dd>
 
-**requestOptions:** `Signing.RequestOptions`
+**requestOptions:** `SigningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -18972,7 +18972,7 @@ await client.keys.signing.revoke("kid");
 <dl>
 <dd>
 
-**requestOptions:** `Signing.RequestOptions`
+**requestOptions:** `SigningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19054,7 +19054,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `ClientGrants.RequestOptions`
+**requestOptions:** `ClientGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19112,7 +19112,7 @@ await client.organizations.clientGrants.create("id", {
 <dl>
 <dd>
 
-**requestOptions:** `ClientGrants.RequestOptions`
+**requestOptions:** `ClientGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19123,7 +19123,7 @@ await client.organizations.clientGrants.create("id", {
 </dl>
 </details>
 
-<details><summary><code>client.organizations.clientGrants.<a href="/src/management/api/resources/organizations/resources/clientGrants/client/Client.ts">delete</a>(id, grantId) -> void</code></summary>
+<details><summary><code>client.organizations.clientGrants.<a href="/src/management/api/resources/organizations/resources/clientGrants/client/Client.ts">delete</a>(id, grant_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -19160,7 +19160,7 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 <dl>
 <dd>
 
-**grantId:** `string` — The Client Grant ID to remove from the organization
+**grant_id:** `string` — The Client Grant ID to remove from the organization
 
 </dd>
 </dl>
@@ -19168,7 +19168,7 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 <dl>
 <dd>
 
-**requestOptions:** `ClientGrants.RequestOptions`
+**requestOptions:** `ClientGrantsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19259,7 +19259,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `DiscoveryDomains.RequestOptions`
+**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19332,7 +19332,7 @@ await client.organizations.discoveryDomains.create("id", {
 <dl>
 <dd>
 
-**requestOptions:** `DiscoveryDomains.RequestOptions`
+**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19343,7 +19343,7 @@ await client.organizations.discoveryDomains.create("id", {
 </dl>
 </details>
 
-<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">get</a>(id, discoveryDomainId) -> Management.GetOrganizationDiscoveryDomainResponseContent</code></summary>
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">get</a>(id, discovery_domain_id) -> Management.GetOrganizationDiscoveryDomainResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -19395,7 +19395,7 @@ await client.organizations.discoveryDomains.get("id", "discovery_domain_id");
 <dl>
 <dd>
 
-**discoveryDomainId:** `string` — ID of the discovery domain.
+**discovery_domain_id:** `string` — ID of the discovery domain.
 
 </dd>
 </dl>
@@ -19403,7 +19403,7 @@ await client.organizations.discoveryDomains.get("id", "discovery_domain_id");
 <dl>
 <dd>
 
-**requestOptions:** `DiscoveryDomains.RequestOptions`
+**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19414,7 +19414,7 @@ await client.organizations.discoveryDomains.get("id", "discovery_domain_id");
 </dl>
 </details>
 
-<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">delete</a>(id, discoveryDomainId) -> void</code></summary>
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">delete</a>(id, discovery_domain_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -19466,7 +19466,7 @@ await client.organizations.discoveryDomains.delete("id", "discovery_domain_id");
 <dl>
 <dd>
 
-**discoveryDomainId:** `string` — ID of the discovery domain.
+**discovery_domain_id:** `string` — ID of the discovery domain.
 
 </dd>
 </dl>
@@ -19474,7 +19474,7 @@ await client.organizations.discoveryDomains.delete("id", "discovery_domain_id");
 <dl>
 <dd>
 
-**requestOptions:** `DiscoveryDomains.RequestOptions`
+**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19485,7 +19485,7 @@ await client.organizations.discoveryDomains.delete("id", "discovery_domain_id");
 </dl>
 </details>
 
-<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">update</a>(id, discoveryDomainId, { ...params }) -> Management.UpdateOrganizationDiscoveryDomainResponseContent</code></summary>
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">update</a>(id, discovery_domain_id, { ...params }) -> Management.UpdateOrganizationDiscoveryDomainResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -19537,7 +19537,7 @@ await client.organizations.discoveryDomains.update("id", "discovery_domain_id");
 <dl>
 <dd>
 
-**discoveryDomainId:** `string` — ID of the discovery domain to update.
+**discovery_domain_id:** `string` — ID of the discovery domain to update.
 
 </dd>
 </dl>
@@ -19553,7 +19553,7 @@ await client.organizations.discoveryDomains.update("id", "discovery_domain_id");
 <dl>
 <dd>
 
-**requestOptions:** `DiscoveryDomains.RequestOptions`
+**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19646,7 +19646,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `EnabledConnections.RequestOptions`
+**requestOptions:** `EnabledConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19721,7 +19721,7 @@ await client.organizations.enabledConnections.add("id", {
 <dl>
 <dd>
 
-**requestOptions:** `EnabledConnections.RequestOptions`
+**requestOptions:** `EnabledConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19792,7 +19792,7 @@ await client.organizations.enabledConnections.get("id", "connectionId");
 <dl>
 <dd>
 
-**requestOptions:** `EnabledConnections.RequestOptions`
+**requestOptions:** `EnabledConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19865,7 +19865,7 @@ await client.organizations.enabledConnections.delete("id", "connectionId");
 <dl>
 <dd>
 
-**requestOptions:** `EnabledConnections.RequestOptions`
+**requestOptions:** `EnabledConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -19944,7 +19944,7 @@ await client.organizations.enabledConnections.update("id", "connectionId");
 <dl>
 <dd>
 
-**requestOptions:** `EnabledConnections.RequestOptions`
+**requestOptions:** `EnabledConnectionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20043,7 +20043,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Invitations.RequestOptions`
+**requestOptions:** `InvitationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20122,7 +20122,7 @@ await client.organizations.invitations.create("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Invitations.RequestOptions`
+**requestOptions:** `InvitationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20133,7 +20133,7 @@ await client.organizations.invitations.create("id", {
 </dl>
 </details>
 
-<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">get</a>(id, invitationId, { ...params }) -> Management.GetOrganizationInvitationResponseContent</code></summary>
+<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">get</a>(id, invitation_id, { ...params }) -> Management.GetOrganizationInvitationResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -20173,7 +20173,7 @@ await client.organizations.invitations.get("id", "invitation_id", {
 <dl>
 <dd>
 
-**invitationId:** `string` — The id of the user invitation.
+**invitation_id:** `string` — The id of the user invitation.
 
 </dd>
 </dl>
@@ -20189,7 +20189,7 @@ await client.organizations.invitations.get("id", "invitation_id", {
 <dl>
 <dd>
 
-**requestOptions:** `Invitations.RequestOptions`
+**requestOptions:** `InvitationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20200,7 +20200,7 @@ await client.organizations.invitations.get("id", "invitation_id", {
 </dl>
 </details>
 
-<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">delete</a>(id, invitationId) -> void</code></summary>
+<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">delete</a>(id, invitation_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -20237,7 +20237,7 @@ await client.organizations.invitations.delete("id", "invitation_id");
 <dl>
 <dd>
 
-**invitationId:** `string` — The id of the user invitation.
+**invitation_id:** `string` — The id of the user invitation.
 
 </dd>
 </dl>
@@ -20245,7 +20245,7 @@ await client.organizations.invitations.delete("id", "invitation_id");
 <dl>
 <dd>
 
-**requestOptions:** `Invitations.RequestOptions`
+**requestOptions:** `InvitationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20361,7 +20361,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Members.RequestOptions`
+**requestOptions:** `MembersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20436,7 +20436,7 @@ await client.organizations.members.create("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Members.RequestOptions`
+**requestOptions:** `MembersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20494,7 +20494,7 @@ await client.organizations.members.delete("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Members.RequestOptions`
+**requestOptions:** `MembersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20507,7 +20507,7 @@ await client.organizations.members.delete("id", {
 
 ## Organizations Members Roles
 
-<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">list</a>(id, userId, { ...params }) -> core.Page<Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">list</a>(id, user_id, { ...params }) -> core.Page<Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -20581,7 +20581,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**userId:** `string` — ID of the user to associate roles with.
+**user_id:** `string` — ID of the user to associate roles with.
 
 </dd>
 </dl>
@@ -20597,7 +20597,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20608,7 +20608,7 @@ const response = page.response;
 </dl>
 </details>
 
-<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">assign</a>(id, userId, { ...params }) -> void</code></summary>
+<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">assign</a>(id, user_id, { ...params }) -> void</code></summary>
 <dl>
 <dd>
 
@@ -20664,7 +20664,7 @@ await client.organizations.members.roles.assign("id", "user_id", {
 <dl>
 <dd>
 
-**userId:** `string` — ID of the user to associate roles with.
+**user_id:** `string` — ID of the user to associate roles with.
 
 </dd>
 </dl>
@@ -20680,7 +20680,7 @@ await client.organizations.members.roles.assign("id", "user_id", {
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20691,7 +20691,7 @@ await client.organizations.members.roles.assign("id", "user_id", {
 </dl>
 </details>
 
-<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">delete</a>(id, userId, { ...params }) -> void</code></summary>
+<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">delete</a>(id, user_id, { ...params }) -> void</code></summary>
 <dl>
 <dd>
 
@@ -20747,7 +20747,7 @@ await client.organizations.members.roles.delete("id", "user_id", {
 <dl>
 <dd>
 
-**userId:** `string` — User ID of the organization member to remove roles from.
+**user_id:** `string` — User ID of the organization member to remove roles from.
 
 </dd>
 </dl>
@@ -20763,7 +20763,7 @@ await client.organizations.members.roles.delete("id", "user_id", {
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20858,7 +20858,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Rendering.RequestOptions`
+**requestOptions:** `RenderingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20956,7 +20956,7 @@ await client.prompts.rendering.bulkUpdate({
 <dl>
 <dd>
 
-**requestOptions:** `Rendering.RequestOptions`
+**requestOptions:** `RenderingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21027,7 +21027,7 @@ await client.prompts.rendering.get("login", "login");
 <dl>
 <dd>
 
-**requestOptions:** `Rendering.RequestOptions`
+**requestOptions:** `RenderingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21135,7 +21135,7 @@ await client.prompts.rendering.update("login", "login", {
 <dl>
 <dd>
 
-**requestOptions:** `Rendering.RequestOptions`
+**requestOptions:** `RenderingClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21208,7 +21208,7 @@ await client.prompts.customText.get("login", "am");
 <dl>
 <dd>
 
-**requestOptions:** `CustomText.RequestOptions`
+**requestOptions:** `CustomTextClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21289,7 +21289,7 @@ await client.prompts.customText.set("login", "am", {
 <dl>
 <dd>
 
-**requestOptions:** `CustomText.RequestOptions`
+**requestOptions:** `CustomTextClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21354,7 +21354,7 @@ await client.prompts.partials.get("login");
 <dl>
 <dd>
 
-**requestOptions:** `Partials.RequestOptions`
+**requestOptions:** `PartialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21427,7 +21427,7 @@ await client.prompts.partials.set("login", {
 <dl>
 <dd>
 
-**requestOptions:** `Partials.RequestOptions`
+**requestOptions:** `PartialsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21484,7 +21484,7 @@ await client.riskAssessments.settings.get();
 <dl>
 <dd>
 
-**requestOptions:** `Settings.RequestOptions`
+**requestOptions:** `SettingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21549,7 +21549,7 @@ await client.riskAssessments.settings.update({
 <dl>
 <dd>
 
-**requestOptions:** `Settings.RequestOptions`
+**requestOptions:** `SettingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21606,7 +21606,7 @@ await client.riskAssessments.settings.newDevice.get();
 <dl>
 <dd>
 
-**requestOptions:** `NewDevice.RequestOptions`
+**requestOptions:** `NewDeviceClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21671,7 +21671,7 @@ await client.riskAssessments.settings.newDevice.update({
 <dl>
 <dd>
 
-**requestOptions:** `NewDevice.RequestOptions`
+**requestOptions:** `NewDeviceClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21764,7 +21764,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Permissions.RequestOptions`
+**requestOptions:** `PermissionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21842,7 +21842,7 @@ await client.roles.permissions.add("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Permissions.RequestOptions`
+**requestOptions:** `PermissionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -21920,7 +21920,7 @@ await client.roles.permissions.delete("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Permissions.RequestOptions`
+**requestOptions:** `PermissionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22031,7 +22031,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22106,7 +22106,7 @@ await client.roles.users.assign("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Users.RequestOptions`
+**requestOptions:** `UsersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22187,7 +22187,7 @@ await client.selfServiceProfiles.customText.list("id", "en", "get-started");
 <dl>
 <dd>
 
-**requestOptions:** `CustomText.RequestOptions`
+**requestOptions:** `CustomTextClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22276,7 +22276,7 @@ await client.selfServiceProfiles.customText.set("id", "en", "get-started", {
 <dl>
 <dd>
 
-**requestOptions:** `CustomText.RequestOptions`
+**requestOptions:** `CustomTextClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22349,7 +22349,7 @@ await client.selfServiceProfiles.ssoTicket.create("id");
 <dl>
 <dd>
 
-**requestOptions:** `SsoTicket.RequestOptions`
+**requestOptions:** `SsoTicketClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22421,7 +22421,7 @@ await client.selfServiceProfiles.ssoTicket.revoke("profileId", "id");
 <dl>
 <dd>
 
-**requestOptions:** `SsoTicket.RequestOptions`
+**requestOptions:** `SsoTicketClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22489,7 +22489,7 @@ await client.tenants.settings.get({
 <dl>
 <dd>
 
-**requestOptions:** `Settings.RequestOptions`
+**requestOptions:** `SettingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22552,7 +22552,7 @@ await client.tenants.settings.update();
 <dl>
 <dd>
 
-**requestOptions:** `Settings.RequestOptions`
+**requestOptions:** `SettingsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22645,7 +22645,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `AuthenticationMethods.RequestOptions`
+**requestOptions:** `AuthenticationMethodsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22718,7 +22718,7 @@ await client.users.authenticationMethods.create("id", {
 <dl>
 <dd>
 
-**requestOptions:** `AuthenticationMethods.RequestOptions`
+**requestOptions:** `AuthenticationMethodsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22795,7 +22795,7 @@ await client.users.authenticationMethods.set("id", [
 <dl>
 <dd>
 
-**requestOptions:** `AuthenticationMethods.RequestOptions`
+**requestOptions:** `AuthenticationMethodsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22858,7 +22858,7 @@ await client.users.authenticationMethods.deleteAll("id");
 <dl>
 <dd>
 
-**requestOptions:** `AuthenticationMethods.RequestOptions`
+**requestOptions:** `AuthenticationMethodsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22869,7 +22869,7 @@ await client.users.authenticationMethods.deleteAll("id");
 </dl>
 </details>
 
-<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">get</a>(id, authenticationMethodId) -> Management.GetUserAuthenticationMethodResponseContent</code></summary>
+<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">get</a>(id, authentication_method_id) -> Management.GetUserAuthenticationMethodResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -22906,7 +22906,7 @@ await client.users.authenticationMethods.get("id", "authentication_method_id");
 <dl>
 <dd>
 
-**authenticationMethodId:** `string` — The ID of the authentication methods in question.
+**authentication_method_id:** `string` — The ID of the authentication methods in question.
 
 </dd>
 </dl>
@@ -22914,7 +22914,7 @@ await client.users.authenticationMethods.get("id", "authentication_method_id");
 <dl>
 <dd>
 
-**requestOptions:** `AuthenticationMethods.RequestOptions`
+**requestOptions:** `AuthenticationMethodsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22925,7 +22925,7 @@ await client.users.authenticationMethods.get("id", "authentication_method_id");
 </dl>
 </details>
 
-<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">delete</a>(id, authenticationMethodId) -> void</code></summary>
+<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">delete</a>(id, authentication_method_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -22977,7 +22977,7 @@ await client.users.authenticationMethods.delete("id", "authentication_method_id"
 <dl>
 <dd>
 
-**authenticationMethodId:** `string` — The ID of the authentication method to delete.
+**authentication_method_id:** `string` — The ID of the authentication method to delete.
 
 </dd>
 </dl>
@@ -22985,7 +22985,7 @@ await client.users.authenticationMethods.delete("id", "authentication_method_id"
 <dl>
 <dd>
 
-**requestOptions:** `AuthenticationMethods.RequestOptions`
+**requestOptions:** `AuthenticationMethodsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -22996,7 +22996,7 @@ await client.users.authenticationMethods.delete("id", "authentication_method_id"
 </dl>
 </details>
 
-<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">update</a>(id, authenticationMethodId, { ...params }) -> Management.UpdateUserAuthenticationMethodResponseContent</code></summary>
+<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">update</a>(id, authentication_method_id, { ...params }) -> Management.UpdateUserAuthenticationMethodResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -23048,7 +23048,7 @@ await client.users.authenticationMethods.update("id", "authentication_method_id"
 <dl>
 <dd>
 
-**authenticationMethodId:** `string` — The ID of the authentication method to update.
+**authentication_method_id:** `string` — The ID of the authentication method to update.
 
 </dd>
 </dl>
@@ -23064,7 +23064,7 @@ await client.users.authenticationMethods.update("id", "authentication_method_id"
 <dl>
 <dd>
 
-**requestOptions:** `AuthenticationMethods.RequestOptions`
+**requestOptions:** `AuthenticationMethodsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23129,7 +23129,7 @@ await client.users.authenticators.deleteAll("id");
 <dl>
 <dd>
 
-**requestOptions:** `Authenticators.RequestOptions`
+**requestOptions:** `AuthenticatorsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23220,7 +23220,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `ConnectedAccounts.RequestOptions`
+**requestOptions:** `ConnectedAccountsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23285,7 +23285,7 @@ await client.users.enrollments.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Enrollments.RequestOptions`
+**requestOptions:** `EnrollmentsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23350,7 +23350,7 @@ await client.users.federatedConnectionsTokensets.list("id");
 <dl>
 <dd>
 
-**requestOptions:** `FederatedConnectionsTokensets.RequestOptions`
+**requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23361,7 +23361,7 @@ await client.users.federatedConnectionsTokensets.list("id");
 </dl>
 </details>
 
-<details><summary><code>client.users.federatedConnectionsTokensets.<a href="/src/management/api/resources/users/resources/federatedConnectionsTokensets/client/Client.ts">delete</a>(id, tokensetId) -> void</code></summary>
+<details><summary><code>client.users.federatedConnectionsTokensets.<a href="/src/management/api/resources/users/resources/federatedConnectionsTokensets/client/Client.ts">delete</a>(id, tokenset_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -23398,7 +23398,7 @@ await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
 <dl>
 <dd>
 
-**tokensetId:** `string` — The tokenset id
+**tokenset_id:** `string` — The tokenset id
 
 </dd>
 </dl>
@@ -23406,7 +23406,7 @@ await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
 <dl>
 <dd>
 
-**requestOptions:** `FederatedConnectionsTokensets.RequestOptions`
+**requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23505,7 +23505,7 @@ await client.users.identities.link("id");
 <dl>
 <dd>
 
-**requestOptions:** `Identities.RequestOptions`
+**requestOptions:** `IdentitiesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23516,7 +23516,7 @@ await client.users.identities.link("id");
 </dl>
 </details>
 
-<details><summary><code>client.users.identities.<a href="/src/management/api/resources/users/resources/identities/client/Client.ts">delete</a>(id, provider, userId) -> Management.DeleteUserIdentityResponseContent</code></summary>
+<details><summary><code>client.users.identities.<a href="/src/management/api/resources/users/resources/identities/client/Client.ts">delete</a>(id, provider, user_id) -> Management.DeleteUserIdentityResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -23578,7 +23578,7 @@ await client.users.identities.delete("id", "ad", "user_id");
 <dl>
 <dd>
 
-**userId:** `string` — ID of the secondary linked account (e.g. `123456789081523216417` part after the `|` in `google-oauth2|123456789081523216417`).
+**user_id:** `string` — ID of the secondary linked account (e.g. `123456789081523216417` part after the `|` in `google-oauth2|123456789081523216417`).
 
 </dd>
 </dl>
@@ -23586,7 +23586,7 @@ await client.users.identities.delete("id", "ad", "user_id");
 <dl>
 <dd>
 
-**requestOptions:** `Identities.RequestOptions`
+**requestOptions:** `IdentitiesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23687,7 +23687,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Logs.RequestOptions`
+**requestOptions:** `LogsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23752,7 +23752,7 @@ await client.users.multifactor.invalidateRememberBrowser("id");
 <dl>
 <dd>
 
-**requestOptions:** `Multifactor.RequestOptions`
+**requestOptions:** `MultifactorClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23823,7 +23823,7 @@ await client.users.multifactor.deleteProvider("id", "duo");
 <dl>
 <dd>
 
-**requestOptions:** `Multifactor.RequestOptions`
+**requestOptions:** `MultifactorClient.RequestOptions`
 
 </dd>
 </dl>
@@ -23916,7 +23916,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Organizations.RequestOptions`
+**requestOptions:** `OrganizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24009,7 +24009,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Permissions.RequestOptions`
+**requestOptions:** `PermissionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24087,7 +24087,7 @@ await client.users.permissions.create("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Permissions.RequestOptions`
+**requestOptions:** `PermissionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24165,7 +24165,7 @@ await client.users.permissions.delete("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Permissions.RequestOptions`
+**requestOptions:** `PermissionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24241,7 +24241,7 @@ await client.users.riskAssessments.clear("id", {
 <dl>
 <dd>
 
-**requestOptions:** `RiskAssessments.RequestOptions`
+**requestOptions:** `RiskAssessmentsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24336,7 +24336,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24411,7 +24411,7 @@ await client.users.roles.assign("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24486,7 +24486,7 @@ await client.users.roles.delete("id", {
 <dl>
 <dd>
 
-**requestOptions:** `Roles.RequestOptions`
+**requestOptions:** `RolesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24499,7 +24499,7 @@ await client.users.roles.delete("id", {
 
 ## Users RefreshToken
 
-<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">list</a>(userId, { ...params }) -> core.Page<Management.RefreshTokenResponseContent, Management.ListRefreshTokensPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">list</a>(user_id, { ...params }) -> core.Page<Management.RefreshTokenResponseContent, Management.ListRefreshTokensPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -24561,7 +24561,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**userId:** `string` — ID of the user to get refresh tokens for
+**user_id:** `string` — ID of the user to get refresh tokens for
 
 </dd>
 </dl>
@@ -24577,7 +24577,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `RefreshToken.RequestOptions`
+**requestOptions:** `RefreshTokenClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24588,7 +24588,7 @@ const response = page.response;
 </dl>
 </details>
 
-<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">delete</a>(userId) -> void</code></summary>
+<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">delete</a>(user_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -24632,7 +24632,7 @@ await client.users.refreshToken.delete("user_id");
 <dl>
 <dd>
 
-**userId:** `string` — ID of the user to get remove refresh tokens for
+**user_id:** `string` — ID of the user to get remove refresh tokens for
 
 </dd>
 </dl>
@@ -24640,7 +24640,7 @@ await client.users.refreshToken.delete("user_id");
 <dl>
 <dd>
 
-**requestOptions:** `RefreshToken.RequestOptions`
+**requestOptions:** `RefreshTokenClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24653,7 +24653,7 @@ await client.users.refreshToken.delete("user_id");
 
 ## Users Sessions
 
-<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">list</a>(userId, { ...params }) -> core.Page<Management.SessionResponseContent, Management.ListUserSessionsPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">list</a>(user_id, { ...params }) -> core.Page<Management.SessionResponseContent, Management.ListUserSessionsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -24715,7 +24715,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**userId:** `string` — ID of the user to get sessions for
+**user_id:** `string` — ID of the user to get sessions for
 
 </dd>
 </dl>
@@ -24731,7 +24731,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Sessions.RequestOptions`
+**requestOptions:** `SessionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24742,7 +24742,7 @@ const response = page.response;
 </dl>
 </details>
 
-<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">delete</a>(userId) -> void</code></summary>
+<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">delete</a>(user_id) -> void</code></summary>
 <dl>
 <dd>
 
@@ -24786,7 +24786,7 @@ await client.users.sessions.delete("user_id");
 <dl>
 <dd>
 
-**userId:** `string` — ID of the user to get sessions for
+**user_id:** `string` — ID of the user to get sessions for
 
 </dd>
 </dl>
@@ -24794,7 +24794,7 @@ await client.users.sessions.delete("user_id");
 <dl>
 <dd>
 
-**requestOptions:** `Sessions.RequestOptions`
+**requestOptions:** `SessionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24877,7 +24877,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -24950,7 +24950,7 @@ await client.verifiableCredentials.verification.templates.create({
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -25013,7 +25013,7 @@ await client.verifiableCredentials.verification.templates.get("id");
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -25076,7 +25076,7 @@ await client.verifiableCredentials.verification.templates.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -25147,7 +25147,7 @@ await client.verifiableCredentials.verification.templates.update("id");
 <dl>
 <dd>
 
-**requestOptions:** `Templates.RequestOptions`
+**requestOptions:** `TemplatesClient.RequestOptions`
 
 </dd>
 </dl>
