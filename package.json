@@ -1,11 +1,8 @@
 {
     "name": "auth0",
-    "version": "5.1.0",
+    "version": "5.1.1",
     "private": false,
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/auth0/node-auth0.git"
-    },
+    "repository": "github:auth0/node-auth0",
     "license": "MIT",
     "type": "commonjs",
     "main": "./dist/cjs/index.js",
@@ -38,21 +35,19 @@
         }
     },
     "files": [
-        "legacy",
-        "package.json",
         "dist",
         "reference.md",
         "README.md",
         "LICENSE"
     ],
     "scripts": {
-        "format": "prettier . --write --ignore-unknown",
-        "format:check": "prettier . --check --ignore-unknown",
+        "format": "biome format --write --skip-parse-errors --no-errors-on-unmatched --max-diagnostics=none",
+        "format:check": "biome format --skip-parse-errors --no-errors-on-unmatched --max-diagnostics=none",
         "lint": "eslint . --ext .js,.ts,.tsx",
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
-        "check": "yarn format:check && yarn lint",
-        "check:fix": "yarn format && yarn lint:fix",
-        "build": "yarn build:cjs && yarn build:esm",
+        "check": "biome check --skip-parse-errors --no-errors-on-unmatched --max-diagnostics=none",
+        "check:fix": "biome check --fix --unsafe --skip-parse-errors --no-errors-on-unmatched --max-diagnostics=none",
+        "build": "pnpm build:cjs && pnpm build:esm",
         "build:cjs": "tsc --project ./tsconfig.cjs.json",
         "build:esm": "tsc --project ./tsconfig.esm.json && node scripts/rename-to-esm-files.js dist/esm",
         "test": "jest --config jest.config.mjs",
@@ -60,16 +55,20 @@
         "test:wire": "jest --selectProjects wire",
         "prepare": "husky",
         "lint:check": "eslint . --ext .js,.ts,.tsx",
-        "lint:package": "publint --pack npm",
         "test:coverage": "jest --config jest.config.mjs --coverage",
         "test:coverage:unit": "jest --selectProjects unit --coverage",
         "test:coverage:browser": "jest --selectProjects browser --coverage",
         "test:coverage:wire": "jest --selectProjects wire --coverage",
         "docs": "typedoc",
         "docs:clean": "rm -rf docs",
-        "docs:build": "yarn docs:clean && yarn docs",
+        "docs:build": "npm run docs:clean && npm run docs",
         "precommit": "lint-staged",
-        "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
+        "validate": "yarn lint:check && yarn format --check && yarn test"
+    },
+    "dependencies": {
+        "uuid": "^11.1.0",
+        "jose": "^4.13.2",
+        "auth0-legacy": "npm:auth0@^4.27.0"
     },
     "devDependencies": {
         "webpack": "^5.97.1",
@@ -82,7 +81,7 @@
         "msw": "2.11.2",
         "@types/node": "^18.19.70",
         "typescript": "~5.7.2",
-        "prettier": "3.4.2",
+        "@biomejs/biome": "2.3.1",
         "typedoc": "^0.28.7",
         "typedoc-plugin-missing-exports": "^4.0.0",
         "nock": "^14.0.6",
@@ -94,8 +93,7 @@
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.3",
         "husky": "^9.1.7",
-        "lint-staged": "^16.1.4",
-        "publint": "^0.3.12"
+        "lint-staged": "^16.1.4"
     },
     "browser": {
         "fs": false,
@@ -103,25 +101,11 @@
         "path": false,
         "stream": false
     },
-    "packageManager": "yarn@1.22.22",
+    "packageManager": "pnpm@10.20.0",
     "engines": {
         "node": "^20.19.0 || ^22.12.0 || ^24.0.0"
     },
     "sideEffects": false,
-    "bugs": {
-        "url": "https://github.com/auth0/node-auth0/issues"
-    },
-    "homepage": "https://github.com/auth0/node-auth0",
-    "keywords": [
-        "auth0",
-        "authentication",
-        "login",
-        "auth",
-        "jwt",
-        "management api",
-        "json web token"
-    ],
-    "description": "Auth0 Node.js SDK for the Management API v2.",
     "lint-staged": {
         "*.{js,ts,tsx}": [
             "eslint --fix",
@@ -130,10 +114,5 @@
         "*.{json,md,yml,yaml}": [
             "prettier --write"
         ]
-    },
-    "dependencies": {
-        "uuid": "^11.1.0",
-        "jose": "^4.13.2",
-        "auth0-legacy": "npm:auth0@^4.27.0"
     }
 }

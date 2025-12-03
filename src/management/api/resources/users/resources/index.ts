@@ -1,6 +1,5 @@
 export * as authenticationMethods from "./authenticationMethods/index.js";
 export * as authenticators from "./authenticators/index.js";
-export * as connectedAccounts from "./connectedAccounts/index.js";
 export * as enrollments from "./enrollments/index.js";
 export * as federatedConnectionsTokensets from "./federatedConnectionsTokensets/index.js";
 export * as identities from "./identities/index.js";
@@ -8,7 +7,6 @@ export * as logs from "./logs/index.js";
 export * as multifactor from "./multifactor/index.js";
 export * as organizations from "./organizations/index.js";
 export * as permissions from "./permissions/index.js";
-export * as riskAssessments from "./riskAssessments/index.js";
-export * as roles from "./roles/index.js";
 export * as refreshToken from "./refreshToken/index.js";
+export * as roles from "./roles/index.js";
 export * as sessions from "./sessions/index.js";
