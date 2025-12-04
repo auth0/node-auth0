@@ -1,0 +1,72 @@
+{
+    "cliVersion": "3.0.1",
+    "generatorName": "fernapi/fern-typescript-sdk",
+    "generatorVersion": "3.35.8",
+    "generatorConfig": {
+        "packagePath": "src/management",
+        "namespaceExport": "Management",
+        "allowCustomFetcher": true,
+        "omitFernHeaders": true,
+        "useDefaultRequestParameterValues": true,
+        "exportAllRequestsAtRoot": true,
+        "consolidateTypeFiles": true,
+        "generateEndpointMetadata": true,
+        "testFramework": "jest",
+        "packageJson": {
+            "engines": {
+                "node": "^20.19.0 || ^22.12.0 || ^24.0.0"
+            },
+            "lint-staged": {
+                "*.{js,ts,tsx}": ["eslint --fix", "prettier --write"],
+                "*.{json,md,yml,yaml}": ["prettier --write"]
+            },
+            "scripts": {
+                "prepare": "husky",
+                "lint": "eslint . --ext .js,.ts,.tsx",
+                "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
+                "lint:check": "eslint . --ext .js,.ts,.tsx",
+                "test:coverage": "jest --config jest.config.mjs --coverage",
+                "test:coverage:unit": "jest --selectProjects unit --coverage",
+                "test:coverage:browser": "jest --selectProjects browser --coverage",
+                "test:coverage:wire": "jest --selectProjects wire --coverage",
+                "docs": "typedoc",
+                "docs:clean": "rm -rf docs",
+                "docs:build": "npm run docs:clean && npm run docs",
+                "precommit": "lint-staged",
+                "validate": "yarn lint:check && yarn format --check && yarn test"
+            },
+            "dependencies": {
+                "uuid": "^11.1.0",
+                "jose": "^4.13.2",
+                "auth0-legacy": "npm:auth0@^4.27.0"
+            },
+            "devDependencies": {
+                "typedoc": "^0.28.7",
+                "typedoc-plugin-missing-exports": "^4.0.0",
+                "nock": "^14.0.6",
+                "undici": "^7.12.0",
+                "@eslint/js": "^9.32.0",
+                "@typescript-eslint/eslint-plugin": "^8.38.0",
+                "@typescript-eslint/parser": "^8.38.0",
+                "eslint": "^9.32.0",
+                "eslint-config-prettier": "^10.1.8",
+                "eslint-plugin-prettier": "^5.5.3",
+                "husky": "^9.1.7",
+                "lint-staged": "^16.1.4"
+            },
+            "exports": {
+                "./legacy": {
+                    "types": "./legacy/exports/index.d.ts",
+                    "import": {
+                        "types": "./legacy/exports/index.d.mts",
+                        "default": "./legacy/exports/index.mjs"
+                    },
+                    "require": {
+                        "types": "./legacy/exports/index.d.ts",
+                        "default": "./legacy/exports/index.js"
+                    }
+                }
+            }
+        }
+    }
+}
