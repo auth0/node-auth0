@@ -276,7 +276,8 @@ const actions = await client.actions.list(listParams);
 
 ### Generated Documentation
 
-- [Full Reference](./reference.md) - complete API reference guide
+- [API Documentation](http://auth0.github.io/node-auth0/) - complete API documentation
+- [Full Reference](./reference.md) - complete API reference guide in markdown format
 
 ### Key Classes
 
