@@ -4,10 +4,10 @@ import { mockServerPool } from "../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../Client";
 import * as Management from "../../../api/index";
 
-describe("Rendering", () => {
+describe("RenderingClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             configs: [
@@ -23,7 +23,13 @@ describe("Rendering", () => {
             limit: 1.1,
             total: 1.1,
         };
-        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/prompts/rendering")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
 
         const expected = {
             configs: [
@@ -58,10 +64,16 @@ describe("Rendering", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/prompts/rendering")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -70,10 +82,16 @@ describe("Rendering", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/prompts/rendering")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -82,10 +100,16 @@ describe("Rendering", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(402).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/prompts/rendering")
+            .respondWith()
+            .statusCode(402)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -94,10 +118,16 @@ describe("Rendering", () => {
 
     test("list (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/prompts/rendering")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -106,10 +136,16 @@ describe("Rendering", () => {
 
     test("list (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/prompts/rendering")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -118,7 +154,7 @@ describe("Rendering", () => {
 
     test("bulkUpdate (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [{ prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}] }],
         };
@@ -171,7 +207,7 @@ describe("Rendering", () => {
 
     test("bulkUpdate (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
                 { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
@@ -210,7 +246,7 @@ describe("Rendering", () => {
 
     test("bulkUpdate (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
                 { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
@@ -249,7 +285,7 @@ describe("Rendering", () => {
 
     test("bulkUpdate (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
                 { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
@@ -288,7 +324,7 @@ describe("Rendering", () => {
 
     test("bulkUpdate (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
                 { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
@@ -327,7 +363,7 @@ describe("Rendering", () => {
 
     test("bulkUpdate (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
                 { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
@@ -366,7 +402,7 @@ describe("Rendering", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             tenant: "tenant",
@@ -430,7 +466,7 @@ describe("Rendering", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -448,7 +484,7 @@ describe("Rendering", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -466,7 +502,7 @@ describe("Rendering", () => {
 
     test("get (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -484,7 +520,7 @@ describe("Rendering", () => {
 
     test("get (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -502,7 +538,7 @@ describe("Rendering", () => {
 
     test("get (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -520,7 +556,7 @@ describe("Rendering", () => {
 
     test("get (7)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -538,7 +574,7 @@ describe("Rendering", () => {
 
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}] };
         const rawResponseBody = {
             rendering_mode: "advanced",
@@ -600,7 +636,7 @@ describe("Rendering", () => {
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
         const rawResponseBody = { key: "value" };
         server
@@ -622,7 +658,7 @@ describe("Rendering", () => {
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
         const rawResponseBody = { key: "value" };
         server
@@ -644,7 +680,7 @@ describe("Rendering", () => {
 
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
         const rawResponseBody = { key: "value" };
         server
@@ -666,7 +702,7 @@ describe("Rendering", () => {
 
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
         const rawResponseBody = { key: "value" };
         server
@@ -688,7 +724,7 @@ describe("Rendering", () => {
 
     test("update (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
         const rawResponseBody = { key: "value" };
         server

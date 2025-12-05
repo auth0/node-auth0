@@ -4,10 +4,10 @@ import { mockServerPool } from "../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../Client";
 import * as Management from "../../../api/index";
 
-describe("Errors", () => {
+describe("ErrorsClient", () => {
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [{ user: { key: "value" }, errors: [{}] }];
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -25,7 +25,7 @@ describe("Errors", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -37,7 +37,7 @@ describe("Errors", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -49,7 +49,7 @@ describe("Errors", () => {
 
     test("get (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -61,7 +61,7 @@ describe("Errors", () => {
 
     test("get (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
@@ -73,7 +73,7 @@ describe("Errors", () => {
 
     test("get (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
