@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "5.1.0",
+    "version": "5.1.1",
     "private": false,
     "repository": {
         "type": "git",
@@ -71,6 +71,11 @@
         "precommit": "lint-staged",
         "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
     },
+    "dependencies": {
+        "uuid": "^11.1.0",
+        "jose": "^4.13.2",
+        "auth0-legacy": "npm:auth0@^4.27.0"
+    },
     "devDependencies": {
         "webpack": "^5.97.1",
         "ts-loader": "^9.5.1",
@@ -130,10 +135,5 @@
         "*.{json,md,yml,yaml}": [
             "prettier --write"
         ]
-    },
-    "dependencies": {
-        "uuid": "^11.1.0",
-        "jose": "^4.13.2",
-        "auth0-legacy": "npm:auth0@^4.27.0"
     }
 }

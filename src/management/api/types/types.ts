@@ -3032,7 +3032,29 @@ export type ConnectionOptionsApple = Record<string, unknown>;
 /**
  * options for the 'auth0' connection
  */
-export type ConnectionOptionsAuth0 = Record<string, unknown>;
+export interface ConnectionOptionsAuth0 {
+    attributes?: Management.ConnectionAttributes;
+    authentication_methods?: Management.ConnectionAuthenticationMethods | null;
+    brute_force_protection?: unknown;
+    configuration?: unknown;
+    customScripts?: Management.ConnectionCustomScripts;
+    disable_self_service_change_password?: unknown;
+    disable_signup?: unknown;
+    enable_script_context?: unknown;
+    enabledDatabaseCustomization?: unknown;
+    import_mode?: unknown;
+    mfa?: unknown;
+    passkey_options?: Management.ConnectionPasskeyOptions | null;
+    passwordPolicy?: Management.ConnectionPasswordPolicyEnum | null;
+    password_complexity_options?: Management.ConnectionPasswordComplexityOptions | null;
+    password_dictionary?: Management.ConnectionPasswordDictionaryOptions | null;
+    password_history?: Management.ConnectionPasswordHistoryOptions | null;
+    password_no_personal_info?: Management.ConnectionPasswordNoPersonalInfoOptions | null;
+    precedence?: unknown;
+    realm_fallback?: unknown;
+    requires_username?: unknown;
+    validation?: Management.ConnectionValidationOptions | null;
+}
 
 /**
  * options for the 'auth0-oidc' connection
