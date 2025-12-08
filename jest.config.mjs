@@ -31,8 +31,16 @@ export default {
                 "^(\.{1,2}/.*)\.js$": "$1",
             },
             roots: ["<rootDir>/src/management/tests"],
-            testPathIgnorePatterns: ["\.browser\.(spec|test)\.[jt]sx?$", "/tests/wire/"],
+            testPathIgnorePatterns: ["/tests/wire/"],
             setupFilesAfterEnv: ["<rootDir>/src/management/tests/setup.ts"],
+            transform: {
+                "^.+\\.tsx?$": [
+                    "ts-jest",
+                    {
+                        tsconfig: "<rootDir>/src/management/tests/tsconfig.json",
+                    },
+                ],
+            },
         },
         {
             displayName: "wire",
@@ -46,6 +54,14 @@ export default {
                 "<rootDir>/src/management/tests/setup.ts",
                 "<rootDir>/src/management/tests/mock-server/setup.ts",
             ],
+            transform: {
+                "^.+\\.tsx?$": [
+                    "ts-jest",
+                    {
+                        tsconfig: "<rootDir>/src/management/tests/tsconfig.json",
+                    },
+                ],
+            },
         },
         {
             displayName: "root-tests",
