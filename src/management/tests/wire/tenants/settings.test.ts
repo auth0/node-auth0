@@ -4,10 +4,10 @@ import { mockServerPool } from "../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../Client";
 import * as Management from "../../../api/index";
 
-describe("Settings", () => {
+describe("SettingsClient", () => {
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             change_password: { enabled: true, html: "html" },
@@ -72,6 +72,7 @@ describe("Settings", () => {
             pushed_authorization_requests_supported: true,
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            resource_parameter_profile: "audience",
         };
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -170,12 +171,13 @@ describe("Settings", () => {
             pushed_authorization_requests_supported: true,
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            resource_parameter_profile: "audience",
         });
     });
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -187,7 +189,7 @@ describe("Settings", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -199,7 +201,7 @@ describe("Settings", () => {
 
     test("get (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -211,7 +213,7 @@ describe("Settings", () => {
 
     test("get (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -223,7 +225,7 @@ describe("Settings", () => {
 
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             change_password: { enabled: true, html: "html" },
@@ -288,6 +290,7 @@ describe("Settings", () => {
             pushed_authorization_requests_supported: true,
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            resource_parameter_profile: "audience",
         };
         server
             .mockEndpoint()
@@ -390,12 +393,13 @@ describe("Settings", () => {
             pushed_authorization_requests_supported: true,
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            resource_parameter_profile: "audience",
         });
     });
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -414,7 +418,7 @@ describe("Settings", () => {
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -433,7 +437,7 @@ describe("Settings", () => {
 
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -452,7 +456,7 @@ describe("Settings", () => {
 
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server

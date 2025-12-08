@@ -289,11 +289,13 @@ export interface CreateClientRequestContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+    token_exchange?: Management.ClientTokenExchangeConfiguration;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.CreateTokenQuota;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
+    express_configuration?: Management.ExpressConfiguration;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
 }
 
@@ -392,9 +394,53 @@ export interface UpdateClientRequestContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
+    token_exchange?: Management.ClientTokenExchangeConfigurationOrNull | null;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
+    express_configuration?: Management.ExpressConfigurationOrNull | null;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListConnectionProfileRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 5. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name"
+ *     }
+ */
+export interface CreateConnectionProfileRequestContent {
+    name: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateConnectionProfileRequestContent {
+    name?: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
 }
 
 /**
@@ -487,6 +533,32 @@ export interface UpdateConnectionRequestContent {
 /**
  * @example
  *     {
+ *         take: 1,
+ *         from: "from",
+ *         q: "q",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         sort: "sort"
+ *     }
+ */
+export interface ListCustomDomainsRequestParameters {
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>. */
+    q?: string | null;
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Field to sort by. Only <code>domain:1</code> (ascending order by domain) is supported at this time. */
+    sort?: string | null;
+}
+
+/**
+ * @example
+ *     {
  *         domain: "domain",
  *         type: "auth0_managed_certs"
  *     }
@@ -498,6 +570,7 @@ export interface CreateCustomDomainRequestContent {
     verification_method?: Management.CustomDomainVerificationMethodEnum;
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
+    domain_metadata?: Management.DomainMetadata;
 }
 
 /**
@@ -507,6 +580,7 @@ export interface CreateCustomDomainRequestContent {
 export interface UpdateCustomDomainRequestContent {
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
+    domain_metadata?: Management.DomainMetadata;
 }
 
 /**
@@ -1432,6 +1506,7 @@ export interface ChangePasswordTicketRequestContent {
     mark_email_as_verified?: boolean;
     /** Whether to include the email address as part of the returnUrl in the reset_email (true), or not (false). */
     includeEmailInRedirect?: boolean;
+    identity?: Management.ChangePasswordTicketIdentity;
 }
 
 /**
@@ -2971,9 +3046,7 @@ export interface ListAculsRequestParameters {
  *     {
  *         configs: [{
  *                 prompt: "login",
- *                 screen: "login",
- *                 rendering_mode: "advanced",
- *                 head_tags: [{}]
+ *                 screen: "login"
  *             }]
  *     }
  */
@@ -2983,22 +3056,18 @@ export interface BulkUpdateAculRequestContent {
 
 /**
  * @example
- *     {
- *         rendering_mode: "advanced",
- *         head_tags: [{}]
- *     }
+ *     {}
  */
 export interface UpdateAculRequestContent {
-    rendering_mode: Management.AculRenderingModeEnum;
-    /** Context values to make available */
-    context_configuration?: string[];
+    rendering_mode?: Management.AculRenderingModeEnum;
+    context_configuration?: Management.AculContextConfiguration;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
-    /** An array of head tags */
-    head_tags: Management.AculHeadTag[];
-    filters?: Management.AculFilters | null;
     /** Use page template with ACUL */
     use_page_template?: boolean | null;
+    /** An array of head tags */
+    head_tags?: Management.AculHeadTag[];
+    filters?: Management.AculFilters | null;
 }
 
 /**
@@ -3186,6 +3255,7 @@ export interface UpdateTenantSettingsRequestContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
+    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
 }
 
 export namespace UpdateTenantSettingsRequestContent {

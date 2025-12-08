@@ -11,6 +11,11 @@ export class ConflictError extends errors.ManagementError {
             body: body,
             rawResponse: rawResponse,
         });
-        Object.setPrototypeOf(this, ConflictError.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, this.constructor);
+        }
+
+        this.name = this.constructor.name;
     }
 }
