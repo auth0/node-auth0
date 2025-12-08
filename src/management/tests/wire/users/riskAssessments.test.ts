@@ -4,10 +4,10 @@ import { mockServerPool } from "../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../Client";
 import * as Management from "../../../api/index";
 
-describe("RiskAssessments", () => {
+describe("RiskAssessmentsClient", () => {
     test("clear (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "connection", assessors: ["new-device"] };
 
         server
@@ -27,7 +27,7 @@ describe("RiskAssessments", () => {
 
     test("clear (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
         server
@@ -49,7 +49,7 @@ describe("RiskAssessments", () => {
 
     test("clear (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
         server
@@ -71,7 +71,7 @@ describe("RiskAssessments", () => {
 
     test("clear (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
         server
@@ -93,7 +93,7 @@ describe("RiskAssessments", () => {
 
     test("clear (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
         server
