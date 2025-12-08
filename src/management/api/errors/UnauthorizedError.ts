@@ -11,6 +11,11 @@ export class UnauthorizedError extends errors.ManagementError {
             body: body,
             rawResponse: rawResponse,
         });
-        Object.setPrototypeOf(this, UnauthorizedError.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, this.constructor);
+        }
+
+        this.name = this.constructor.name;
     }
 }
