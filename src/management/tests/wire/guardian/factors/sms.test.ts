@@ -4,10 +4,10 @@ import { mockServerPool } from "../../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../../Client";
 import * as Management from "../../../../api/index";
 
-describe("Sms", () => {
+describe("SmsClient", () => {
     test("getTwilioProvider (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             from: "from",
@@ -34,7 +34,7 @@ describe("Sms", () => {
 
     test("getTwilioProvider (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -52,7 +52,7 @@ describe("Sms", () => {
 
     test("getTwilioProvider (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -70,7 +70,7 @@ describe("Sms", () => {
 
     test("getTwilioProvider (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -88,7 +88,7 @@ describe("Sms", () => {
 
     test("setTwilioProvider (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             from: "from",
@@ -116,7 +116,7 @@ describe("Sms", () => {
 
     test("setTwilioProvider (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -135,7 +135,7 @@ describe("Sms", () => {
 
     test("setTwilioProvider (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -154,7 +154,7 @@ describe("Sms", () => {
 
     test("setTwilioProvider (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -173,7 +173,7 @@ describe("Sms", () => {
 
     test("getSelectedProvider (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { provider: "auth0" };
         server
@@ -192,7 +192,7 @@ describe("Sms", () => {
 
     test("getSelectedProvider (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -210,7 +210,7 @@ describe("Sms", () => {
 
     test("getSelectedProvider (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -228,7 +228,7 @@ describe("Sms", () => {
 
     test("getSelectedProvider (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -246,7 +246,7 @@ describe("Sms", () => {
 
     test("setProvider (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { provider: "auth0" };
         server
@@ -268,7 +268,7 @@ describe("Sms", () => {
 
     test("setProvider (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
         server
@@ -289,7 +289,7 @@ describe("Sms", () => {
 
     test("setProvider (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
         server
@@ -310,7 +310,7 @@ describe("Sms", () => {
 
     test("setProvider (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
         server
@@ -331,7 +331,7 @@ describe("Sms", () => {
 
     test("getTemplates (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             enrollment_message: "enrollment_message",
@@ -354,7 +354,7 @@ describe("Sms", () => {
 
     test("getTemplates (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -372,7 +372,7 @@ describe("Sms", () => {
 
     test("getTemplates (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -390,7 +390,7 @@ describe("Sms", () => {
 
     test("getTemplates (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -408,7 +408,7 @@ describe("Sms", () => {
 
     test("setTemplates (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
@@ -438,7 +438,7 @@ describe("Sms", () => {
 
     test("setTemplates (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             enrollment_message:
                 "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
@@ -465,7 +465,7 @@ describe("Sms", () => {
 
     test("setTemplates (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             enrollment_message:
                 "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
@@ -492,7 +492,7 @@ describe("Sms", () => {
 
     test("setTemplates (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             enrollment_message:
                 "{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment.",
