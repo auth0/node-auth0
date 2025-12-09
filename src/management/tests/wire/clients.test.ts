@@ -4,10 +4,10 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { ManagementClient } from "../../Client";
 import * as Management from "../../api/index";
 
-describe("Clients", () => {
+describe("ClientsClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             start: 1.1,
@@ -56,12 +56,27 @@ describe("Clients", () => {
                     skip_non_verifiable_callback_uri_confirmation_prompt: true,
                     par_request_expiry: 1,
                     token_quota: { client_credentials: {} },
+                    express_configuration: {
+                        initiate_login_uri_template: "initiate_login_uri_template",
+                        user_attribute_profile_id: "user_attribute_profile_id",
+                        connection_profile_id: "connection_profile_id",
+                        enable_client: true,
+                        enable_organization: true,
+                        okta_oin_client_id: "okta_oin_client_id",
+                        admin_login_domain: "admin_login_domain",
+                    },
                     resource_server_identifier: "resource_server_identifier",
                     async_approval_notification_channels: ["guardian-push"],
                 },
             ],
         };
-        server.mockEndpoint().get("/clients").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/clients")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
 
         const expected = {
             start: 1.1,
@@ -120,6 +135,15 @@ describe("Clients", () => {
                     token_quota: {
                         client_credentials: {},
                     },
+                    express_configuration: {
+                        initiate_login_uri_template: "initiate_login_uri_template",
+                        user_attribute_profile_id: "user_attribute_profile_id",
+                        connection_profile_id: "connection_profile_id",
+                        enable_client: true,
+                        enable_organization: true,
+                        okta_oin_client_id: "okta_oin_client_id",
+                        admin_login_domain: "admin_login_domain",
+                    },
                     resource_server_identifier: "resource_server_identifier",
                     async_approval_notification_channels: ["guardian-push"],
                 },
@@ -145,10 +169,16 @@ describe("Clients", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/clients").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/clients")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -157,10 +187,16 @@ describe("Clients", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/clients").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/clients")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -169,10 +205,16 @@ describe("Clients", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/clients").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/clients")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -181,10 +223,16 @@ describe("Clients", () => {
 
     test("list (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/clients").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/clients")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -193,7 +241,7 @@ describe("Clients", () => {
 
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = {
             client_id: "client_id",
@@ -368,8 +416,20 @@ describe("Clients", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [{ client_id: "client_id" }],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         };
@@ -663,6 +723,9 @@ describe("Clients", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {
@@ -671,6 +734,21 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [
+                    {
+                        client_id: "client_id",
+                    },
+                ],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         });
@@ -678,7 +756,7 @@ describe("Clients", () => {
 
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
         server
@@ -699,7 +777,7 @@ describe("Clients", () => {
 
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
         server
@@ -720,7 +798,7 @@ describe("Clients", () => {
 
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
         server
@@ -741,7 +819,7 @@ describe("Clients", () => {
 
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
         server
@@ -762,7 +840,7 @@ describe("Clients", () => {
 
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
         server
@@ -783,7 +861,7 @@ describe("Clients", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             client_id: "client_id",
@@ -958,8 +1036,20 @@ describe("Clients", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [{ client_id: "client_id" }],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         };
@@ -1247,6 +1337,9 @@ describe("Clients", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {
@@ -1255,6 +1348,21 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [
+                    {
+                        client_id: "client_id",
+                    },
+                ],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         });
@@ -1262,7 +1370,7 @@ describe("Clients", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -1274,7 +1382,7 @@ describe("Clients", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -1286,7 +1394,7 @@ describe("Clients", () => {
 
     test("get (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -1298,7 +1406,7 @@ describe("Clients", () => {
 
     test("get (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
@@ -1310,7 +1418,7 @@ describe("Clients", () => {
 
     test("get (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -1322,7 +1430,7 @@ describe("Clients", () => {
 
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(200).build();
 
@@ -1332,7 +1440,7 @@ describe("Clients", () => {
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -1344,7 +1452,7 @@ describe("Clients", () => {
 
     test("delete (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -1356,7 +1464,7 @@ describe("Clients", () => {
 
     test("delete (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -1368,7 +1476,7 @@ describe("Clients", () => {
 
     test("delete (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -1380,7 +1488,7 @@ describe("Clients", () => {
 
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             client_id: "client_id",
@@ -1555,8 +1663,20 @@ describe("Clients", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [{ client_id: "client_id" }],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         };
@@ -1848,6 +1968,9 @@ describe("Clients", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {
@@ -1856,6 +1979,21 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [
+                    {
+                        client_id: "client_id",
+                    },
+                ],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         });
@@ -1863,7 +2001,7 @@ describe("Clients", () => {
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -1882,7 +2020,7 @@ describe("Clients", () => {
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -1901,7 +2039,7 @@ describe("Clients", () => {
 
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -1920,7 +2058,7 @@ describe("Clients", () => {
 
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -1939,7 +2077,7 @@ describe("Clients", () => {
 
     test("update (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -1958,7 +2096,7 @@ describe("Clients", () => {
 
     test("rotateSecret (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             client_id: "client_id",
@@ -2133,8 +2271,20 @@ describe("Clients", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [{ client_id: "client_id" }],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         };
@@ -2425,6 +2575,9 @@ describe("Clients", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {
@@ -2433,6 +2586,21 @@ describe("Clients", () => {
                     per_hour: 1,
                 },
             },
+            express_configuration: {
+                initiate_login_uri_template: "initiate_login_uri_template",
+                user_attribute_profile_id: "user_attribute_profile_id",
+                connection_profile_id: "connection_profile_id",
+                enable_client: true,
+                enable_organization: true,
+                linked_clients: [
+                    {
+                        client_id: "client_id",
+                    },
+                ],
+                okta_oin_client_id: "okta_oin_client_id",
+                admin_login_domain: "admin_login_domain",
+                oin_submission_id: "oin_submission_id",
+            },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
         });
@@ -2440,7 +2608,7 @@ describe("Clients", () => {
 
     test("rotateSecret (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -2458,7 +2626,7 @@ describe("Clients", () => {
 
     test("rotateSecret (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -2476,7 +2644,7 @@ describe("Clients", () => {
 
     test("rotateSecret (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -2494,7 +2662,7 @@ describe("Clients", () => {
 
     test("rotateSecret (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -2512,7 +2680,7 @@ describe("Clients", () => {
 
     test("rotateSecret (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
