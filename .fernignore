@@ -48,3 +48,4 @@ eslint.config.mjs
 
 .prettierignore
 CONTRIBUTING.md
+.fern/
