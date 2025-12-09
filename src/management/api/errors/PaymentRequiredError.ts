@@ -11,6 +11,11 @@ export class PaymentRequiredError extends errors.ManagementError {
             body: body,
             rawResponse: rawResponse,
         });
-        Object.setPrototypeOf(this, PaymentRequiredError.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, this.constructor);
+        }
+
+        this.name = this.constructor.name;
     }
 }
