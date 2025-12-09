@@ -28,6 +28,10 @@ runs:
           shell: bash
           run: yarn install --frozen-lockfile
 
+        - name: Update npm to latest
+          shell: bash
+          run: npm install -g npm@latest
+
         - name: Build package
           if: inputs.require-build == 'true'
           shell: bash
