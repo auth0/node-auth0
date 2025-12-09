@@ -4,10 +4,10 @@ import { mockServerPool } from "../../mock-server/MockServerPool";
 import { ManagementClient } from "../../../Client";
 import * as Management from "../../../api/index";
 
-describe("Signing", () => {
+describe("SigningClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -48,7 +48,7 @@ describe("Signing", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -60,7 +60,7 @@ describe("Signing", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -72,7 +72,7 @@ describe("Signing", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -84,7 +84,7 @@ describe("Signing", () => {
 
     test("list (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -96,7 +96,7 @@ describe("Signing", () => {
 
     test("rotate (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { cert: "cert", kid: "kid" };
         server
@@ -116,7 +116,7 @@ describe("Signing", () => {
 
     test("rotate (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -134,7 +134,7 @@ describe("Signing", () => {
 
     test("rotate (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -152,7 +152,7 @@ describe("Signing", () => {
 
     test("rotate (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -170,7 +170,7 @@ describe("Signing", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             kid: "kid",
@@ -207,7 +207,7 @@ describe("Signing", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -219,7 +219,7 @@ describe("Signing", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -231,7 +231,7 @@ describe("Signing", () => {
 
     test("get (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -243,7 +243,7 @@ describe("Signing", () => {
 
     test("get (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -255,7 +255,7 @@ describe("Signing", () => {
 
     test("revoke (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { cert: "cert", kid: "kid" };
         server
@@ -275,7 +275,7 @@ describe("Signing", () => {
 
     test("revoke (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -293,7 +293,7 @@ describe("Signing", () => {
 
     test("revoke (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -311,7 +311,7 @@ describe("Signing", () => {
 
     test("revoke (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -329,7 +329,7 @@ describe("Signing", () => {
 
     test("revoke (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server

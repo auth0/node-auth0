@@ -4,10 +4,10 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { ManagementClient } from "../../Client";
 import * as Management from "../../api/index";
 
-describe("CustomDomains", () => {
+describe("CustomDomainsClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -69,7 +69,7 @@ describe("CustomDomains", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -81,7 +81,7 @@ describe("CustomDomains", () => {
 
     test("list (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -93,7 +93,7 @@ describe("CustomDomains", () => {
 
     test("list (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -105,7 +105,7 @@ describe("CustomDomains", () => {
 
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = {
             custom_domain_id: "custom_domain_id",
@@ -171,7 +171,7 @@ describe("CustomDomains", () => {
 
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
         server
@@ -193,7 +193,7 @@ describe("CustomDomains", () => {
 
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
         server
@@ -215,7 +215,7 @@ describe("CustomDomains", () => {
 
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
         server
@@ -237,7 +237,7 @@ describe("CustomDomains", () => {
 
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
         server
@@ -259,7 +259,7 @@ describe("CustomDomains", () => {
 
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
         server
@@ -281,7 +281,7 @@ describe("CustomDomains", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             custom_domain_id: "custom_domain_id",
@@ -339,7 +339,7 @@ describe("CustomDomains", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -351,7 +351,7 @@ describe("CustomDomains", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -363,7 +363,7 @@ describe("CustomDomains", () => {
 
     test("get (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -375,7 +375,7 @@ describe("CustomDomains", () => {
 
     test("get (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
@@ -387,7 +387,7 @@ describe("CustomDomains", () => {
 
     test("get (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -399,7 +399,7 @@ describe("CustomDomains", () => {
 
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         server.mockEndpoint().delete("/custom-domains/id").respondWith().statusCode(200).build();
 
@@ -409,7 +409,7 @@ describe("CustomDomains", () => {
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -427,7 +427,7 @@ describe("CustomDomains", () => {
 
     test("delete (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -445,7 +445,7 @@ describe("CustomDomains", () => {
 
     test("delete (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -463,7 +463,7 @@ describe("CustomDomains", () => {
 
     test("delete (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -481,7 +481,7 @@ describe("CustomDomains", () => {
 
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             custom_domain_id: "custom_domain_id",
@@ -544,7 +544,7 @@ describe("CustomDomains", () => {
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -563,7 +563,7 @@ describe("CustomDomains", () => {
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -582,7 +582,7 @@ describe("CustomDomains", () => {
 
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -601,7 +601,7 @@ describe("CustomDomains", () => {
 
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -620,7 +620,7 @@ describe("CustomDomains", () => {
 
     test("test (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { success: true, message: "message" };
         server
@@ -640,7 +640,7 @@ describe("CustomDomains", () => {
 
     test("test (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -658,7 +658,7 @@ describe("CustomDomains", () => {
 
     test("test (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -676,7 +676,7 @@ describe("CustomDomains", () => {
 
     test("test (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -694,7 +694,7 @@ describe("CustomDomains", () => {
 
     test("test (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -712,7 +712,7 @@ describe("CustomDomains", () => {
 
     test("test (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -730,7 +730,7 @@ describe("CustomDomains", () => {
 
     test("verify (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             custom_domain_id: "custom_domain_id",
@@ -796,7 +796,7 @@ describe("CustomDomains", () => {
 
     test("verify (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -814,7 +814,7 @@ describe("CustomDomains", () => {
 
     test("verify (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -832,7 +832,7 @@ describe("CustomDomains", () => {
 
     test("verify (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -850,7 +850,7 @@ describe("CustomDomains", () => {
 
     test("verify (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -868,7 +868,7 @@ describe("CustomDomains", () => {
 
     test("verify (6)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server

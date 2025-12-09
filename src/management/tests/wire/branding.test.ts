@@ -4,10 +4,10 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { ManagementClient } from "../../Client";
 import * as Management from "../../api/index";
 
-describe("Branding", () => {
+describe("BrandingClient", () => {
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             colors: { primary: "primary", page_background: "page_background" },
@@ -33,7 +33,7 @@ describe("Branding", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/branding").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -45,7 +45,7 @@ describe("Branding", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/branding").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
@@ -57,7 +57,7 @@ describe("Branding", () => {
 
     test("get (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/branding").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
@@ -69,7 +69,7 @@ describe("Branding", () => {
 
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             colors: { primary: "primary", page_background: "page_background" },
@@ -102,7 +102,7 @@ describe("Branding", () => {
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -121,7 +121,7 @@ describe("Branding", () => {
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -140,7 +140,7 @@ describe("Branding", () => {
 
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
@@ -159,7 +159,7 @@ describe("Branding", () => {
 
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
-        const client = new ManagementClient({ token: "test", environment: server.baseUrl });
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
