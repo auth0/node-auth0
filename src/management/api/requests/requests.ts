@@ -533,8 +533,6 @@ export interface UpdateConnectionRequestContent {
 /**
  * @example
  *     {
- *         take: 1,
- *         from: "from",
  *         q: "q",
  *         fields: "fields",
  *         include_fields: true,
@@ -542,10 +540,6 @@ export interface UpdateConnectionRequestContent {
  *     }
  */
 export interface ListCustomDomainsRequestParameters {
-    /** Number of results per page. Defaults to 50. */
-    take?: number | null;
-    /** Optional Id from which to start selection. */
-    from?: string | null;
     /** Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>. */
     q?: string | null;
     /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
