@@ -1,6 +1,6 @@
+import { toMultipartDataPart, type Uploadable } from "../../core/file/index.js";
 import { toJson } from "../../core/json.js";
 import { RUNTIME } from "../runtime/index.js";
-import { toMultipartDataPart, type Uploadable } from "../../core/file/index.js";
 
 interface FormDataRequest<Body> {
     body: Body;

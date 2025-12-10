@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "5.1.0",
+    "version": "5.2.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -50,8 +50,8 @@
         "format:check": "prettier . --check --ignore-unknown",
         "lint": "eslint . --ext .js,.ts,.tsx",
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
-        "check": "yarn format:check && yarn lint",
-        "check:fix": "yarn format && yarn lint:fix",
+        "check": "yarn format:check",
+        "check:fix": "yarn format",
         "build": "yarn build:cjs && yarn build:esm",
         "build:cjs": "tsc --project ./tsconfig.cjs.json",
         "build:esm": "tsc --project ./tsconfig.esm.json && node scripts/rename-to-esm-files.js dist/esm",
