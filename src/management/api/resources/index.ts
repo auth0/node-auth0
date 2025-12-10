@@ -5,6 +5,7 @@ export * as actions from "./actions/index.js";
 export * as branding from "./branding/index.js";
 export * as clientGrants from "./clientGrants/index.js";
 export * as clients from "./clients/index.js";
+export * as connectionProfiles from "./connectionProfiles/index.js";
 export * as connections from "./connections/index.js";
 export * as customDomains from "./customDomains/index.js";
 export * as deviceCredentials from "./deviceCredentials/index.js";

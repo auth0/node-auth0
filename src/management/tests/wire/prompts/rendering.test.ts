@@ -155,9 +155,7 @@ describe("RenderingClient", () => {
     test("bulkUpdate (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            configs: [{ prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}] }],
-        };
+        const rawRequestBody = { configs: [{ prompt: "login", screen: "login" }] };
         const rawResponseBody = {
             configs: [
                 {
@@ -185,8 +183,6 @@ describe("RenderingClient", () => {
                 {
                     prompt: "login",
                     screen: "login",
-                    rendering_mode: "advanced",
-                    head_tags: [{}],
                 },
             ],
         });
@@ -210,8 +206,8 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
+                { prompt: "login", screen: "login" },
+                { prompt: "login", screen: "login" },
             ],
         };
         const rawResponseBody = { key: "value" };
@@ -230,14 +226,10 @@ describe("RenderingClient", () => {
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                 ],
             });
@@ -249,8 +241,8 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
+                { prompt: "login", screen: "login" },
+                { prompt: "login", screen: "login" },
             ],
         };
         const rawResponseBody = { key: "value" };
@@ -269,14 +261,10 @@ describe("RenderingClient", () => {
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                 ],
             });
@@ -288,8 +276,8 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
+                { prompt: "login", screen: "login" },
+                { prompt: "login", screen: "login" },
             ],
         };
         const rawResponseBody = { key: "value" };
@@ -308,14 +296,10 @@ describe("RenderingClient", () => {
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                 ],
             });
@@ -327,8 +311,8 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
+                { prompt: "login", screen: "login" },
+                { prompt: "login", screen: "login" },
             ],
         };
         const rawResponseBody = { key: "value" };
@@ -347,14 +331,10 @@ describe("RenderingClient", () => {
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                 ],
             });
@@ -366,8 +346,8 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             configs: [
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
-                { prompt: "login", screen: "login", rendering_mode: "advanced", head_tags: [{}, {}] },
+                { prompt: "login", screen: "login" },
+                { prompt: "login", screen: "login" },
             ],
         };
         const rawResponseBody = { key: "value" };
@@ -386,14 +366,10 @@ describe("RenderingClient", () => {
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                     {
                         prompt: "login",
                         screen: "login",
-                        rendering_mode: "advanced",
-                        head_tags: [{}, {}],
                     },
                 ],
             });
@@ -575,7 +551,7 @@ describe("RenderingClient", () => {
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}] };
+        const rawRequestBody = {};
         const rawResponseBody = {
             rendering_mode: "advanced",
             context_configuration: ["context_configuration"],
@@ -598,10 +574,7 @@ describe("RenderingClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.prompts.rendering.update("login", "login", {
-            rendering_mode: "advanced",
-            head_tags: [{}],
-        });
+        const response = await client.prompts.rendering.update("login", "login");
         expect(response).toEqual({
             rendering_mode: "advanced",
             context_configuration: ["context_configuration"],
@@ -637,7 +610,7 @@ describe("RenderingClient", () => {
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -649,17 +622,14 @@ describe("RenderingClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.prompts.rendering.update("login", "login", {
-                rendering_mode: "advanced",
-                head_tags: [{}, {}],
-            });
+            return await client.prompts.rendering.update("login", "login");
         }).rejects.toThrow(Management.BadRequestError);
     });
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -671,17 +641,14 @@ describe("RenderingClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.prompts.rendering.update("login", "login", {
-                rendering_mode: "advanced",
-                head_tags: [{}, {}],
-            });
+            return await client.prompts.rendering.update("login", "login");
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -693,17 +660,14 @@ describe("RenderingClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.prompts.rendering.update("login", "login", {
-                rendering_mode: "advanced",
-                head_tags: [{}, {}],
-            });
+            return await client.prompts.rendering.update("login", "login");
         }).rejects.toThrow(Management.PaymentRequiredError);
     });
 
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -715,17 +679,14 @@ describe("RenderingClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.prompts.rendering.update("login", "login", {
-                rendering_mode: "advanced",
-                head_tags: [{}, {}],
-            });
+            return await client.prompts.rendering.update("login", "login");
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
     test("update (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { rendering_mode: "advanced", head_tags: [{}, {}] };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -737,10 +698,7 @@ describe("RenderingClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.prompts.rendering.update("login", "login", {
-                rendering_mode: "advanced",
-                head_tags: [{}, {}],
-            });
+            return await client.prompts.rendering.update("login", "login");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 });

@@ -294,6 +294,7 @@ export interface CreateClientRequestContent {
     token_quota?: Management.CreateTokenQuota;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
+    express_configuration?: Management.ExpressConfiguration;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
 }
 
@@ -394,7 +395,50 @@ export interface UpdateClientRequestContent {
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
+    express_configuration?: Management.ExpressConfigurationOrNull | null;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListConnectionProfileRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 5. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name"
+ *     }
+ */
+export interface CreateConnectionProfileRequestContent {
+    name: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateConnectionProfileRequestContent {
+    name?: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
 }
 
 /**
@@ -2971,9 +3015,7 @@ export interface ListAculsRequestParameters {
  *     {
  *         configs: [{
  *                 prompt: "login",
- *                 screen: "login",
- *                 rendering_mode: "advanced",
- *                 head_tags: [{}]
+ *                 screen: "login"
  *             }]
  *     }
  */
@@ -2983,19 +3025,16 @@ export interface BulkUpdateAculRequestContent {
 
 /**
  * @example
- *     {
- *         rendering_mode: "advanced",
- *         head_tags: [{}]
- *     }
+ *     {}
  */
 export interface UpdateAculRequestContent {
-    rendering_mode: Management.AculRenderingModeEnum;
+    rendering_mode?: Management.AculRenderingModeEnum;
     /** Context values to make available */
     context_configuration?: string[];
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
     /** An array of head tags */
-    head_tags: Management.AculHeadTag[];
+    head_tags?: Management.AculHeadTag[];
     filters?: Management.AculFilters | null;
     /** Use page template with ACUL */
     use_page_template?: boolean | null;
@@ -3186,6 +3225,7 @@ export interface UpdateTenantSettingsRequestContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
+    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
 }
 
 export namespace UpdateTenantSettingsRequestContent {

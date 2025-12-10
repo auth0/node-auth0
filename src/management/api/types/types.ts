@@ -1054,10 +1054,10 @@ export type AculClientMetadata = Record<string, unknown>;
 export interface AculConfigsItem {
     prompt: Management.PromptGroupNameEnum;
     screen: Management.ScreenGroupNameEnum;
-    rendering_mode: Management.AculRenderingModeEnum;
+    rendering_mode?: Management.AculRenderingModeEnum;
     context_configuration?: Management.AculContextConfiguration;
     default_head_tags_disabled?: (Management.AculDefaultHeadTagsDisabled | undefined) | null;
-    head_tags: Management.AculHeadTags;
+    head_tags?: Management.AculHeadTags;
     filters?: Management.AculFilters | null;
     use_page_template?: (Management.AculUsePageTemplate | undefined) | null;
 }
@@ -1407,19 +1407,29 @@ export type BotDetectionChallengePolicyPasswordlessFlowEnum =
     (typeof BotDetectionChallengePolicyPasswordlessFlowEnum)[keyof typeof BotDetectionChallengePolicyPasswordlessFlowEnum];
 
 /**
+ * CIDR block
+ */
+export type BotDetectionCidrBlock = string;
+
+/**
  * IPv4 address or CIDR block
  */
-export type BotDetectionIPv4OrCidrBlock = string;
+export type BotDetectionIPv4 = string;
 
 /**
  * IPv6 address or CIDR block
  */
-export type BotDetectionIPv6OrCidrBlock = string;
+export type BotDetectionIPv6 = string;
 
 /**
  * IP address (IPv4 or IPv6) or CIDR block
  */
 export type BotDetectionIpAddressOrCidrBlock = string;
+
+/**
+ * IPv6 CIDR block
+ */
+export type BotDetectionIpv6CidrBlock = string;
 
 /** The level of bot detection sensitivity */
 export const BotDetectionLevelEnum = {
@@ -1851,6 +1861,7 @@ export interface Client {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
+    express_configuration?: Management.ExpressConfiguration;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
@@ -2777,6 +2788,26 @@ export interface ConnectionAuthenticationPurpose {
 }
 
 /**
+ * Indicates whether brute force protection is enabled.
+ */
+export type ConnectionBruteForceProtection = boolean;
+
+/**
+ * The client ID of the connection.
+ */
+export type ConnectionClientId = string;
+
+/**
+ * The client secret of the connection.
+ */
+export type ConnectionClientSecret = string;
+
+/**
+ * A hash of configuration key/value pairs.
+ */
+export type ConnectionConfiguration = Record<string, string>;
+
+/**
  * Configure the purpose of a connection to be used for connected accounts and Token Vault.
  */
 export interface ConnectionConnectedAccountsPurpose {
@@ -2802,9 +2833,24 @@ export interface ConnectionCustomScripts {
 }
 
 /**
+ * Indicates whether to disable self-service change password. Set to true to stop the "Forgot Password" being displayed on login pages
+ */
+export type ConnectionDisableSelfServiceChangePassword = boolean;
+
+/**
+ * Set to true to disable signups
+ */
+export type ConnectionDisableSignup = boolean;
+
+/**
  * Connection name used in the new universal login experience
  */
 export type ConnectionDisplayName = string;
+
+/**
+ * Set to true to inject context into custom DB scripts (warning: cannot be disabled once enabled)
+ */
+export type ConnectionEnableScriptContext = boolean;
 
 export interface ConnectionEnabledClient {
     /** The client id */
@@ -2817,6 +2863,11 @@ export interface ConnectionEnabledClient {
  * DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients.
  */
 export type ConnectionEnabledClients = string[];
+
+/**
+ * Set to true to use a legacy user store
+ */
+export type ConnectionEnabledDatabaseCustomization = boolean;
 
 /**
  * Federated Connections Access Tokens
@@ -2862,6 +2913,11 @@ export interface ConnectionForOrganization {
 }
 
 /**
+ * Array of freeform scopes
+ */
+export type ConnectionFreeformScopes = string[];
+
+/**
  * Token-based authentication settings to be applied when connection is using an sms strategy.
  */
 export interface ConnectionGatewayAuthentication {
@@ -2883,6 +2939,11 @@ export interface ConnectionGatewayAuthentication {
  * The connection's identifier
  */
 export type ConnectionId = string;
+
+/**
+ * Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used.
+ */
+export type ConnectionIdentifierPrecedence = Management.ConnectionIdentifierPrecedenceEnum[];
 
 /** Order of precedence for attribute types */
 export const ConnectionIdentifierPrecedenceEnum = {
@@ -2962,6 +3023,11 @@ export type ConnectionIdentityProviderEnum =
     (typeof ConnectionIdentityProviderEnum)[keyof typeof ConnectionIdentityProviderEnum];
 
 /**
+ * Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store
+ */
+export type ConnectionImportMode = boolean;
+
+/**
  * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
  */
 export type ConnectionIsDomainConnection = boolean;
@@ -3001,9 +3067,29 @@ export const ConnectionKeyUseEnum = {
 export type ConnectionKeyUseEnum = (typeof ConnectionKeyUseEnum)[keyof typeof ConnectionKeyUseEnum];
 
 /**
+ * Multi-factor authentication configuration
+ */
+export interface ConnectionMfa {
+    /** Indicates whether MFA is active for this connection */
+    active?: boolean;
+    /** Indicates whether to return MFA enrollment settings */
+    return_enroll_settings?: boolean;
+}
+
+/**
  * The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128
  */
 export type ConnectionName = string;
+
+/**
+ * Connection name prefix template.
+ */
+export type ConnectionNamePrefixTemplate = string;
+
+/**
+ * An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist)
+ */
+export type ConnectionNonPersistentAttrs = (string[] | null) | undefined;
 
 /**
  * In order to return options in the response, the `read:connections_options` scope must be present
@@ -3027,12 +3113,55 @@ export type ConnectionOptionsAmazon = Management.ConnectionOptionsOAuth2Common;
 /**
  * options for the 'apple' connection
  */
-export type ConnectionOptionsApple = Record<string, unknown>;
+export interface ConnectionOptionsApple {
+    /** Apple App Secret (must be a PEM) */
+    app_secret?: string | null;
+    /** Apple Services ID */
+    client_id?: string | null;
+    /** Whether to request email from Apple */
+    email?: boolean;
+    /** Array of freeform scopes */
+    freeform_scopes?: Management.ConnectionFreeformScopes;
+    /** Apple Key ID */
+    kid?: string | null;
+    /** Whether to request name from Apple */
+    name?: boolean;
+    non_persistent_attrs?: (Management.ConnectionNonPersistentAttrs | undefined) | null;
+    scope?: Management.ConnectionScopeString;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    /** Apple Team ID */
+    team_id?: string | null;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * options for the 'auth0' connection
  */
-export type ConnectionOptionsAuth0 = Record<string, unknown>;
+export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsCommon {
+    attributes?: Management.ConnectionAttributes;
+    authentication_methods?: Management.ConnectionAuthenticationMethods | null;
+    brute_force_protection?: Management.ConnectionBruteForceProtection;
+    configuration?: Management.ConnectionConfiguration;
+    customScripts?: Management.ConnectionCustomScripts;
+    disable_self_service_change_password?: Management.ConnectionDisableSelfServiceChangePassword;
+    disable_signup?: Management.ConnectionDisableSignup;
+    enable_script_context?: Management.ConnectionEnableScriptContext;
+    enabledDatabaseCustomization?: Management.ConnectionEnabledDatabaseCustomization;
+    import_mode?: Management.ConnectionImportMode;
+    mfa?: Management.ConnectionMfa;
+    passkey_options?: Management.ConnectionPasskeyOptions | null;
+    passwordPolicy?: Management.ConnectionPasswordPolicyEnum | null;
+    password_complexity_options?: Management.ConnectionPasswordComplexityOptions | null;
+    password_dictionary?: Management.ConnectionPasswordDictionaryOptions | null;
+    password_history?: Management.ConnectionPasswordHistoryOptions | null;
+    password_no_personal_info?: Management.ConnectionPasswordNoPersonalInfoOptions | null;
+    precedence?: Management.ConnectionIdentifierPrecedence;
+    realm_fallback?: Management.ConnectionRealmFallback;
+    requires_username?: Management.ConnectionRequiresUsername;
+    validation?: Management.ConnectionValidationOptions | null;
+}
 
 /**
  * options for the 'auth0-oidc' connection
@@ -3051,6 +3180,13 @@ export type ConnectionOptionsBitbucket = Management.ConnectionOptionsOAuth2Commo
 export type ConnectionOptionsBitly = Management.ConnectionOptionsOAuth2Common;
 
 export type ConnectionOptionsBox = Management.ConnectionOptionsOAuth2Common;
+
+/**
+ * Common attributes for connection options including non-persistent attributes and cross-app access
+ */
+export interface ConnectionOptionsCommon {
+    non_persistent_attrs?: (Management.ConnectionNonPersistentAttrs | undefined) | null;
+}
 
 /**
  * options for the 'custom' connection
@@ -3129,7 +3265,12 @@ export type ConnectionOptionsOAuth1 = Record<string, unknown>;
 
 export type ConnectionOptionsOAuth2 = Management.ConnectionOptionsOAuth2Common;
 
-export type ConnectionOptionsOAuth2Common = Record<string, unknown>;
+export interface ConnectionOptionsOAuth2Common extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientId;
+    client_secret?: Management.ConnectionClientSecret;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+}
 
 /**
  * options for the 'oidc' connection
@@ -3300,6 +3441,114 @@ export const ConnectionPasswordPolicyEnum = {
 export type ConnectionPasswordPolicyEnum =
     (typeof ConnectionPasswordPolicyEnum)[keyof typeof ConnectionPasswordPolicyEnum];
 
+export interface ConnectionProfile {
+    id?: Management.ConnectionProfileId;
+    name?: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+}
+
+/**
+ * Connection profile configuration.
+ */
+export interface ConnectionProfileConfig {}
+
+/**
+ * Enabled features for the connection profile.
+ */
+export type ConnectionProfileEnabledFeatures = Management.EnabledFeaturesEnum[];
+
+/**
+ * Connection Profile identifier.
+ */
+export type ConnectionProfileId = string;
+
+/**
+ * The name of the connection profile.
+ */
+export type ConnectionProfileName = string;
+
+/**
+ * The organization of the connection profile.
+ */
+export interface ConnectionProfileOrganization {
+    show_as_button?: Management.ConnectionProfileOrganizationShowAsButtonEnum;
+    assign_membership_on_login?: Management.ConnectionProfileOrganizationAssignMembershipOnLoginEnum;
+}
+
+/** Indicates if membership should be assigned on login. */
+export const ConnectionProfileOrganizationAssignMembershipOnLoginEnum = {
+    None: "none",
+    Optional: "optional",
+    Required: "required",
+} as const;
+export type ConnectionProfileOrganizationAssignMembershipOnLoginEnum =
+    (typeof ConnectionProfileOrganizationAssignMembershipOnLoginEnum)[keyof typeof ConnectionProfileOrganizationAssignMembershipOnLoginEnum];
+
+/** Indicates if the organization should be shown as a button. */
+export const ConnectionProfileOrganizationShowAsButtonEnum = {
+    None: "none",
+    Optional: "optional",
+    Required: "required",
+} as const;
+export type ConnectionProfileOrganizationShowAsButtonEnum =
+    (typeof ConnectionProfileOrganizationShowAsButtonEnum)[keyof typeof ConnectionProfileOrganizationShowAsButtonEnum];
+
+/**
+ * Connection Profile Strategy Override
+ */
+export interface ConnectionProfileStrategyOverride {
+    enabled_features?: Management.ConnectionProfileStrategyOverridesEnabledFeatures;
+    connection_config?: Management.ConnectionProfileStrategyOverridesConnectionConfig;
+}
+
+/**
+ * Strategy-specific overrides for this attribute
+ */
+export interface ConnectionProfileStrategyOverrides {
+    pingfederate?: Management.ConnectionProfileStrategyOverride;
+    ad?: Management.ConnectionProfileStrategyOverride;
+    adfs?: Management.ConnectionProfileStrategyOverride;
+    waad?: Management.ConnectionProfileStrategyOverride;
+    "google-apps"?: Management.ConnectionProfileStrategyOverride;
+    okta?: Management.ConnectionProfileStrategyOverride;
+    oidc?: Management.ConnectionProfileStrategyOverride;
+    samlp?: Management.ConnectionProfileStrategyOverride;
+}
+
+/**
+ * Connection profile strategy overrides connection configuration.
+ */
+export interface ConnectionProfileStrategyOverridesConnectionConfig {}
+
+/**
+ * Enabled features for a connections profile strategy override.
+ */
+export type ConnectionProfileStrategyOverridesEnabledFeatures = Management.EnabledFeaturesEnum[];
+
+/**
+ * The structure of the template, which can be used as the payload for creating or updating a Connection Profile.
+ */
+export interface ConnectionProfileTemplate {
+    name?: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+}
+
+export interface ConnectionProfileTemplateItem {
+    /** The id of the template. */
+    id?: string;
+    /** The user-friendly name of the template displayed in the UI. */
+    display_name?: string;
+    template?: Management.ConnectionProfileTemplate;
+}
+
 /**
  * The connection's options (depend on the connection strategy)
  */
@@ -3342,6 +3591,11 @@ export interface ConnectionPropertiesOptions {
 }
 
 /**
+ * Indicates whether to use realm fallback.
+ */
+export type ConnectionRealmFallback = boolean;
+
+/**
  * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
  */
 export type ConnectionRealms = string[];
@@ -3356,6 +3610,11 @@ export interface ConnectionRequestCommon {
     authentication?: Management.ConnectionAuthenticationPurpose;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
 }
+
+/**
+ * Indicates whether the user is required to provide a username in addition to an email address.
+ */
+export type ConnectionRequiresUsername = boolean;
 
 export interface ConnectionResponseCommon extends Management.ConnectionRequestCommon {
     id?: Management.ConnectionId;
@@ -3983,6 +4242,11 @@ export interface ConnectionResponseContentYandex extends Management.ConnectionRe
     name?: Management.ConnectionName;
 }
 
+/**
+ * Space separated list of scopes
+ */
+export type ConnectionScopeString = string;
+
 /** When using an external IdP, this flag determines  whether 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes are updated. In addition, it also determines whether the user is created when user doesnt exist previously. Possible values are 'on_each_login' (default value, it configures the connection to automatically create the user if necessary and update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to create the user and set the root attributes on first login only, allowing them to be independently updated thereafter), and 'never_on_login' (configures the connection not to create the user and not to set the root attributes from the external IdP, allowing them to be independently updated). */
 export const ConnectionSetUserRootAttributesEnum = {
     OnEachLogin: "on_each_login",
@@ -4283,11 +4547,22 @@ export interface CreateClientResponseContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
+    express_configuration?: Management.ExpressConfiguration;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface CreateConnectionProfileResponseContent {
+    id?: Management.ConnectionProfileId;
+    name?: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
 }
 
 /**
@@ -6467,6 +6742,13 @@ export const EmailTemplateNameEnum = {
 } as const;
 export type EmailTemplateNameEnum = (typeof EmailTemplateNameEnum)[keyof typeof EmailTemplateNameEnum];
 
+/** Enum for enabled features. */
+export const EnabledFeaturesEnum = {
+    Scim: "scim",
+    UniversalLogout: "universal_logout",
+} as const;
+export type EnabledFeaturesEnum = (typeof EnabledFeaturesEnum)[keyof typeof EnabledFeaturesEnum];
+
 /**
  * Encryption key
  */
@@ -6813,6 +7095,54 @@ export interface EventStreamWebhookResponseContent {
     updated_at?: string;
 }
 
+/**
+ * Application specific configuration for use with the OIN Express Configuration feature.
+ */
+export interface ExpressConfiguration {
+    /** The URI users should bookmark to log in to this application. Variable substitution is permitted for the following properties: organization_name, organization_id, and connection_name. */
+    initiate_login_uri_template: string;
+    /** The ID of the user attribute profile to use for this application. */
+    user_attribute_profile_id: string;
+    /** The ID of the connection profile to use for this application. */
+    connection_profile_id: string;
+    /** When true, all connections made via express configuration will be enabled for this application. */
+    enable_client: boolean;
+    /** When true, all connections made via express configuration will have the associated organization enabled. */
+    enable_organization: boolean;
+    /** List of client IDs that are linked to this express configuration (e.g. web or mobile clients). */
+    linked_clients?: Management.LinkedClientConfiguration[];
+    /** This is the unique identifier for the Okta OIN Express Configuration Client, which Okta will use for this application. */
+    okta_oin_client_id: string;
+    /** This is the domain that admins are expected to log in via for authenticating for express configuration. It can be either the canonical domain or a registered custom domain. */
+    admin_login_domain: string;
+    /** The identifier of the published application in the OKTA OIN. */
+    oin_submission_id?: string;
+}
+
+/**
+ * Application specific configuration for use with the OIN Express Configuration feature.
+ */
+export interface ExpressConfigurationOrNull {
+    /** The URI users should bookmark to log in to this application. Variable substitution is permitted for the following properties: organization_name, organization_id, and connection_name. */
+    initiate_login_uri_template: string;
+    /** The ID of the user attribute profile to use for this application. */
+    user_attribute_profile_id: string;
+    /** The ID of the connection profile to use for this application. */
+    connection_profile_id: string;
+    /** When true, all connections made via express configuration will be enabled for this application. */
+    enable_client: boolean;
+    /** When true, all connections made via express configuration will have the associated organization enabled. */
+    enable_organization: boolean;
+    /** List of client IDs that are linked to this express configuration (e.g. web or mobile clients). */
+    linked_clients?: Management.LinkedClientConfiguration[];
+    /** This is the unique identifier for the Okta OIN Express Configuration Client, which Okta will use for this application. */
+    okta_oin_client_id: string;
+    /** This is the domain that admins are expected to log in via for authenticating for express configuration. It can be either the canonical domain or a registered custom domain. */
+    admin_login_domain: string;
+    /** The identifier of the published application in the OKTA OIN. */
+    oin_submission_id?: string;
+}
+
 export interface ExtensibilityEmailProviderCredentials {}
 
 export interface FederatedConnectionTokenSet {
@@ -6959,7 +7289,8 @@ export type FlowActionAuth0 =
     | Management.FlowActionAuth0CreateUser
     | Management.FlowActionAuth0GetUser
     | Management.FlowActionAuth0UpdateUser
-    | Management.FlowActionAuth0SendRequest;
+    | Management.FlowActionAuth0SendRequest
+    | Management.FlowActionAuth0SendEmail;
 
 export interface FlowActionAuth0CreateUser {
     id: string;
@@ -6993,6 +7324,33 @@ export interface FlowActionAuth0GetUserParams {
     user_id: string;
 }
 
+export interface FlowActionAuth0SendEmail {
+    id: string;
+    alias?: string;
+    type: "AUTH0";
+    action: "SEND_EMAIL";
+    allow_failure?: boolean;
+    mask_output?: boolean;
+    params: Management.FlowActionAuth0SendEmailParams;
+}
+
+export interface FlowActionAuth0SendEmailParams {
+    from?: Management.FlowActionAuth0SendEmailParamsFrom;
+    to: Management.FlowActionAuth0SendEmailParamsTo;
+    subject: string;
+    body: string;
+    custom_vars?: Management.FlowActionAuth0SendRequestParamsCustomVars;
+}
+
+export interface FlowActionAuth0SendEmailParamsFrom {
+    name?: string;
+    email: Management.FlowActionAuth0SendEmailParamsFromEmail;
+}
+
+export type FlowActionAuth0SendEmailParamsFromEmail = string;
+
+export type FlowActionAuth0SendEmailParamsTo = string;
+
 export interface FlowActionAuth0SendRequest {
     id: string;
     alias?: string;
@@ -7022,6 +7380,8 @@ export namespace FlowActionAuth0SendRequestParams {
     } as const;
     export type Method = (typeof Method)[keyof typeof Method];
 }
+
+export type FlowActionAuth0SendRequestParamsCustomVars = Record<string, unknown>;
 
 export type FlowActionAuth0SendRequestParamsHeaders = Record<string, unknown>;
 
@@ -9598,6 +9958,7 @@ export interface GetClientResponseContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
+    express_configuration?: Management.ExpressConfiguration;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
@@ -9612,6 +9973,24 @@ export interface GetConnectionEnabledClientsResponseContent {
     next?: string;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface GetConnectionProfileResponseContent {
+    id?: Management.ConnectionProfileId;
+    name?: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+}
+
+export interface GetConnectionProfileTemplateResponseContent {
+    /** The id of the template. */
+    id?: string;
+    /** The user-friendly name of the template displayed in the UI. */
+    display_name?: string;
+    template?: Management.ConnectionProfileTemplate;
 }
 
 export interface GetConnectionResponseContent {
@@ -10412,6 +10791,7 @@ export interface GetTenantSettingsResponseContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
+    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
 }
 
 export interface GetTokenExchangeProfileResponseContent {
@@ -10919,6 +11299,14 @@ export const JobFileFormatEnum = {
 } as const;
 export type JobFileFormatEnum = (typeof JobFileFormatEnum)[keyof typeof JobFileFormatEnum];
 
+/**
+ * Configuration for linked clients in the OIN Express Configuration feature.
+ */
+export interface LinkedClientConfiguration {
+    /** The ID of the linked client. */
+    client_id: string;
+}
+
 export interface ListActionBindingsPaginatedResponseContent {
     /** The total result count. */
     total?: number;
@@ -10994,6 +11382,16 @@ export interface ListClientsOffsetPaginatedResponseContent {
     limit?: number;
     total?: number;
     clients?: Management.Client[];
+}
+
+export interface ListConnectionProfileTemplateResponseContent {
+    connection_profile_templates?: Management.ConnectionProfileTemplateItem[];
+}
+
+export interface ListConnectionProfilesPaginatedResponseContent {
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string;
+    connection_profiles?: Management.ConnectionProfile[];
 }
 
 export interface ListConnectionsCheckpointPaginatedResponseContent {
@@ -11940,11 +12338,12 @@ export interface NetworkAclRule {
     scope: Management.NetworkAclRuleScopeEnum;
 }
 
-/** Identifies the origin of the request as the Management API (management), Authentication API (authentication), or either (tenant) */
+/** Identifies the origin of the request as the Management API (management), Authentication API (authentication), Dynamic Client Registration API (dynamic_client_registration), or any (tenant) */
 export const NetworkAclRuleScopeEnum = {
     Management: "management",
     Authentication: "authentication",
     Tenant: "tenant",
+    DynamicClientRegistration: "dynamic_client_registration",
 } as const;
 export type NetworkAclRuleScopeEnum = (typeof NetworkAclRuleScopeEnum)[keyof typeof NetworkAclRuleScopeEnum];
 
@@ -12859,6 +13258,7 @@ export interface RotateClientSecretResponseContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
+    express_configuration?: Management.ExpressConfiguration;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
@@ -13200,7 +13600,7 @@ export interface SelfServiceProfileSsoTicketIdpInitiatedOptions {
  */
 export interface SelfServiceProfileSsoTicketProvisioningConfig {
     /** The scopes of the SCIM tokens generated during the self-service flow. */
-    scopes: Management.SelfServiceProfileSsoTicketProvisioningScopeEnum[];
+    scopes?: Management.SelfServiceProfileSsoTicketProvisioningScopeEnum[];
     /** Lifetime of the tokens in seconds. Must be greater than 900. If not provided, the tokens don't expire. */
     token_lifetime?: number | null;
 }
@@ -13881,6 +14281,14 @@ export interface TenantSettingsPasswordPage {
     html?: string;
 }
 
+/** Profile that determines how the identity of the protected resource (i.e., API) can be specified in the OAuth endpoints when access is being requested. When set to audience (default), the audience parameter is used to specify the resource server. When set to compatibility, the audience parameter is still checked first, but if it not provided, then the resource parameter can be used to specify the resource server. */
+export const TenantSettingsResourceParameterProfile = {
+    Audience: "audience",
+    Compatibility: "compatibility",
+} as const;
+export type TenantSettingsResourceParameterProfile =
+    (typeof TenantSettingsResourceParameterProfile)[keyof typeof TenantSettingsResourceParameterProfile];
+
 /**
  * Sessions related settings for tenant
  */
@@ -14294,6 +14702,7 @@ export interface UpdateClientResponseContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
+    express_configuration?: Management.ExpressConfiguration;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
@@ -14340,6 +14749,16 @@ export interface UpdateConnectionOptions {
     federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface UpdateConnectionProfileResponseContent {
+    id?: Management.ConnectionProfileId;
+    name?: Management.ConnectionProfileName;
+    organization?: Management.ConnectionProfileOrganization;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures;
+    connection_config?: Management.ConnectionProfileConfig;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
 }
 
 export interface UpdateConnectionResponseContent {
@@ -14808,6 +15227,7 @@ export interface UpdateTenantSettingsResponseContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
+    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
 }
 
 export interface UpdateTokenQuota {
