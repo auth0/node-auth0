@@ -514,6 +514,48 @@ const response = await client.actions.create(
 controller.abort(); // aborts the request
 ```
 
+### Logging
+
+The SDK supports configurable logging for debugging API requests and responses. By default, logging is silent.
+
+```typescript
+import { ManagementClient } from "auth0";
+
+const client = new ManagementClient({
+    domain: "your-tenant.auth0.com",
+    clientId: "YOUR_CLIENT_ID",
+    clientSecret: "YOUR_CLIENT_SECRET",
+    logging: {
+        level: "debug", // "debug" | "info" | "warn" | "error"
+        silent: false, // Set to false to enable logging output
+    },
+});
+```
+
+You can also provide a custom logger implementation:
+
+```typescript
+import { ManagementClient } from "auth0";
+
+const customLogger = {
+    debug: (msg, ...args) => myLogger.debug(msg, args),
+    info: (msg, ...args) => myLogger.info(msg, args),
+    warn: (msg, ...args) => myLogger.warn(msg, args),
+    error: (msg, ...args) => myLogger.error(msg, args),
+};
+
+const client = new ManagementClient({
+    domain: "your-tenant.auth0.com",
+    clientId: "YOUR_CLIENT_ID",
+    clientSecret: "YOUR_CLIENT_SECRET",
+    logging: {
+        level: "info",
+        logger: customLogger,
+        silent: false,
+    },
+});
+```
+
 ### Access Raw Response Data
 
 The SDK provides access to raw response data, including headers, through the `.withRawResponse()` method.
