@@ -12343,11 +12343,7 @@ export interface ListConnectionsCheckpointPaginatedResponseContent {
     connections?: Management.ConnectionForList[];
 }
 
-export interface ListCustomDomainsPaginatedResponseContent {
-    custom_domains: Management.CustomDomain[];
-    /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-}
+export type ListCustomDomainsResponseContent = Management.CustomDomain[];
 
 export interface ListDeviceCredentialsOffsetPaginatedResponseContent {
     start?: number;

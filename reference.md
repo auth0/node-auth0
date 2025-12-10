@@ -2349,7 +2349,7 @@ await client.connections.checkStatus("id");
 
 ## CustomDomains
 
-<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.CustomDomain, Management.ListCustomDomainsPaginatedResponseContent></code></summary>
+<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">list</a>({ ...params }) -> Management.ListCustomDomainsResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -2377,33 +2377,12 @@ Retrieve details on <a href="https://auth0.com/docs/custom-domains">custom domai
 <dd>
 
 ```typescript
-const pageableResponse = await client.customDomains.list({
-    take: 1,
-    from: "from",
+await client.customDomains.list({
     q: "q",
     fields: "fields",
     include_fields: true,
     sort: "sort",
 });
-for await (const item of pageableResponse) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.customDomains.list({
-    take: 1,
-    from: "from",
-    q: "q",
-    fields: "fields",
-    include_fields: true,
-    sort: "sort",
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-
-// You can also access the underlying response
-const response = page.response;
 ```
 
 </dd>
