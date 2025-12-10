@@ -1,0 +1,15 @@
+coverage:
+    status:
+        project:
+            default:
+                # Allow up to 1% drop from base coverage
+                threshold: 1%
+        patch:
+            default:
+                # Allow patch coverage to be 5% below project coverage
+                threshold: 5%
+
+comment:
+    layout: "reach,diff,flags,files"
+    behavior: default
+    require_changes: false
