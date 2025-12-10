@@ -9,62 +9,57 @@ describe("CustomDomainsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = [
-            {
-                custom_domain_id: "custom_domain_id",
-                domain: "domain",
-                primary: true,
-                status: "pending_verification",
-                type: "auth0_managed_certs",
-                origin_domain_name: "origin_domain_name",
-                verification: {
-                    methods: [{ name: "cname", record: "record" }],
-                    status: "verified",
-                    error_msg: "error_msg",
-                    last_verified_at: "last_verified_at",
+        const rawResponseBody = {
+            custom_domains: [
+                {
+                    custom_domain_id: "custom_domain_id",
+                    domain: "domain",
+                    primary: true,
+                    status: "pending_verification",
+                    type: "auth0_managed_certs",
+                    origin_domain_name: "origin_domain_name",
+                    custom_client_ip_header: "custom_client_ip_header",
+                    tls_policy: "tls_policy",
                 },
-                custom_client_ip_header: "custom_client_ip_header",
-                tls_policy: "tls_policy",
-                certificate: {
-                    status: "provisioning",
-                    error_msg: "error_msg",
-                    certificate_authority: "letsencrypt",
-                    renews_before: "renews_before",
-                },
-            },
-        ];
-        server.mockEndpoint().get("/custom-domains").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+            ],
+            next: "next",
+        };
+        server
+            .mockEndpoint({ once: false })
+            .get("/custom-domains")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
 
-        const response = await client.customDomains.list();
-        expect(response).toEqual([
-            {
-                custom_domain_id: "custom_domain_id",
-                domain: "domain",
-                primary: true,
-                status: "pending_verification",
-                type: "auth0_managed_certs",
-                origin_domain_name: "origin_domain_name",
-                verification: {
-                    methods: [
-                        {
-                            name: "cname",
-                            record: "record",
-                        },
-                    ],
-                    status: "verified",
-                    error_msg: "error_msg",
-                    last_verified_at: "last_verified_at",
+        const expected = {
+            custom_domains: [
+                {
+                    custom_domain_id: "custom_domain_id",
+                    domain: "domain",
+                    primary: true,
+                    status: "pending_verification",
+                    type: "auth0_managed_certs",
+                    origin_domain_name: "origin_domain_name",
+                    custom_client_ip_header: "custom_client_ip_header",
+                    tls_policy: "tls_policy",
                 },
-                custom_client_ip_header: "custom_client_ip_header",
-                tls_policy: "tls_policy",
-                certificate: {
-                    status: "provisioning",
-                    error_msg: "error_msg",
-                    certificate_authority: "letsencrypt",
-                    renews_before: "renews_before",
-                },
-            },
-        ]);
+            ],
+            next: "next",
+        };
+        const page = await client.customDomains.list({
+            take: 1,
+            from: "from",
+            q: "q",
+            fields: "fields",
+            include_fields: true,
+            sort: "sort",
+        });
+
+        expect(expected.custom_domains).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.custom_domains).toEqual(nextPage.data);
     });
 
     test("list (2)", async () => {
@@ -72,7 +67,13 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/custom-domains").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/custom-domains")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.customDomains.list();
@@ -84,7 +85,13 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/custom-domains").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/custom-domains")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.customDomains.list();
@@ -96,7 +103,13 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/custom-domains").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+        server
+            .mockEndpoint({ once: false })
+            .get("/custom-domains")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
 
         await expect(async () => {
             return await client.customDomains.list();
@@ -121,6 +134,7 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: { key: "value" },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",
@@ -160,6 +174,9 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: {
+                key: "value",
+            },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",
@@ -298,6 +315,7 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: { key: "value" },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",
@@ -328,6 +346,9 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: {
+                key: "value",
+            },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",
@@ -497,6 +518,7 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: { key: "value" },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",
@@ -533,6 +555,9 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: {
+                key: "value",
+            },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",
@@ -748,6 +773,7 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: { key: "value" },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",
@@ -785,6 +811,9 @@ describe("CustomDomainsClient", () => {
             },
             custom_client_ip_header: "custom_client_ip_header",
             tls_policy: "tls_policy",
+            domain_metadata: {
+                key: "value",
+            },
             certificate: {
                 status: "provisioning",
                 error_msg: "error_msg",

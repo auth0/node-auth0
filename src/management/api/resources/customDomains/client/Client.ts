@@ -25,6 +25,7 @@ export class CustomDomainsClient {
     /**
      * Retrieve details on <a href="https://auth0.com/docs/custom-domains">custom domains</a>.
      *
+     * @param {Management.ListCustomDomainsRequestParameters} request
      * @param {CustomDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.UnauthorizedError}
@@ -32,64 +33,107 @@ export class CustomDomainsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.customDomains.list()
+     *     await client.customDomains.list({
+     *         take: 1,
+     *         from: "from",
+     *         q: "q",
+     *         fields: "fields",
+     *         include_fields: true,
+     *         sort: "sort"
+     *     })
      */
-    public list(
+    public async list(
+        request: Management.ListCustomDomainsRequestParameters = {},
         requestOptions?: CustomDomainsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.ListCustomDomainsResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
-    }
-
-    private async __list(
-        requestOptions?: CustomDomainsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ListCustomDomainsResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "custom-domains",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.ListCustomDomainsResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+    ): Promise<core.Page<Management.CustomDomain, Management.ListCustomDomainsPaginatedResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.ListCustomDomainsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListCustomDomainsPaginatedResponseContent>> => {
+                const { take = 50, from: from_, q, fields, include_fields: includeFields, sort } = request;
+                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+                if (take !== undefined) {
+                    _queryParams["take"] = take?.toString() ?? null;
+                }
+                if (from_ !== undefined) {
+                    _queryParams["from"] = from_;
+                }
+                if (q !== undefined) {
+                    _queryParams["q"] = q;
+                }
+                if (fields !== undefined) {
+                    _queryParams["fields"] = fields;
+                }
+                if (includeFields !== undefined) {
+                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
+                }
+                if (sort !== undefined) {
+                    _queryParams["sort"] = sort;
+                }
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "custom-domains",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.ListCustomDomainsPaginatedResponseContent,
                         rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/custom-domains");
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/custom-domains");
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.CustomDomain, Management.ListCustomDomainsPaginatedResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.custom_domains ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
     }
 
     /**

@@ -9,6 +9,7 @@ import { mergeHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import { ClientsClient } from "../resources/clients/client/Client.js";
+import { DirectoryProvisioningClient } from "../resources/directoryProvisioning/client/Client.js";
 import { KeysClient } from "../resources/keys/client/Client.js";
 import { ScimConfigurationClient } from "../resources/scimConfiguration/client/Client.js";
 import { UsersClient } from "../resources/users/client/Client.js";
@@ -22,6 +23,7 @@ export declare namespace ConnectionsClient {
 export class ConnectionsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ConnectionsClient.Options>;
     protected _clients: ClientsClient | undefined;
+    protected _directoryProvisioning: DirectoryProvisioningClient | undefined;
     protected _keys: KeysClient | undefined;
     protected _scimConfiguration: ScimConfigurationClient | undefined;
     protected _users: UsersClient | undefined;
@@ -32,6 +34,10 @@ export class ConnectionsClient {
 
     public get clients(): ClientsClient {
         return (this._clients ??= new ClientsClient(this._options));
+    }
+
+    public get directoryProvisioning(): DirectoryProvisioningClient {
+        return (this._directoryProvisioning ??= new DirectoryProvisioningClient(this._options));
     }
 
     public get keys(): KeysClient {

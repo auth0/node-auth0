@@ -8,26 +8,31 @@ import * as Management from "../../../../../index.js";
 import { mergeHeaders } from "../../../../../../core/headers.js";
 import * as errors from "../../../../../../errors/index.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
+import { SynchronizationsClient } from "../resources/synchronizations/client/Client.js";
 
-export declare namespace DiscoveryDomainsClient {
+export declare namespace DirectoryProvisioningClient {
     export type Options = BaseClientOptions;
 
     export interface RequestOptions extends BaseRequestOptions {}
 }
 
-export class DiscoveryDomainsClient {
-    protected readonly _options: NormalizedClientOptionsWithAuth<DiscoveryDomainsClient.Options>;
+export class DirectoryProvisioningClient {
+    protected readonly _options: NormalizedClientOptionsWithAuth<DirectoryProvisioningClient.Options>;
+    protected _synchronizations: SynchronizationsClient | undefined;
 
-    constructor(options: DiscoveryDomainsClient.Options) {
+    constructor(options: DirectoryProvisioningClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
+    public get synchronizations(): SynchronizationsClient {
+        return (this._synchronizations ??= new SynchronizationsClient(this._options));
+    }
+
     /**
-     * Retrieve list of all organization discovery domains associated with the specified organization.
+     * Retrieve the directory provisioning configuration of a connection.
      *
-     * @param {string} id - ID of the organization.
-     * @param {Management.ListOrganizationDiscoveryDomainsRequestParameters} request
-     * @param {DiscoveryDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - The id of the connection to retrieve its directory provisioning configuration
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
@@ -36,143 +41,19 @@ export class DiscoveryDomainsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.discoveryDomains.list("id", {
-     *         from: "from",
-     *         take: 1
-     *     })
+     *     await client.connections.directoryProvisioning.get("id")
      */
-    public async list(
+    public get(
         id: string,
-        request: Management.ListOrganizationDiscoveryDomainsRequestParameters = {},
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): Promise<
-        core.Page<Management.OrganizationDiscoveryDomain, Management.ListOrganizationDiscoveryDomainsResponseContent>
-    > {
-        const list = core.HttpResponsePromise.interceptFunction(
-            async (
-                request: Management.ListOrganizationDiscoveryDomainsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListOrganizationDiscoveryDomainsResponseContent>> => {
-                const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-                    _authRequest.headers,
-                    this._options?.headers,
-                    requestOptions?.headers,
-                );
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: core.url.join(
-                        (await core.Supplier.get(this._options.baseUrl)) ??
-                            (await core.Supplier.get(this._options.environment)) ??
-                            environments.ManagementEnvironment.Default,
-                        `organizations/${core.url.encodePathParam(id)}/discovery-domains`,
-                    ),
-                    method: "GET",
-                    headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                    fetchFn: this._options?.fetch,
-                    logging: this._options.logging,
-                });
-                if (_response.ok) {
-                    return {
-                        data: _response.body as Management.ListOrganizationDiscoveryDomainsResponseContent,
-                        rawResponse: _response.rawResponse,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new Management.BadRequestError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 401:
-                            throw new Management.UnauthorizedError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        case 403:
-                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                        case 404:
-                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                        case 429:
-                            throw new Management.TooManyRequestsError(
-                                _response.error.body as unknown,
-                                _response.rawResponse,
-                            );
-                        default:
-                            throw new errors.ManagementError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                                rawResponse: _response.rawResponse,
-                            });
-                    }
-                }
-                return handleNonStatusCodeError(
-                    _response.error,
-                    _response.rawResponse,
-                    "GET",
-                    "/organizations/{id}/discovery-domains",
-                );
-            },
-        );
-        const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Page<
-            Management.OrganizationDiscoveryDomain,
-            Management.ListOrganizationDiscoveryDomainsResponseContent
-        >({
-            response: dataWithRawResponse.data,
-            rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) =>
-                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.domains ?? [],
-            loadPage: (response) => {
-                return list(core.setObjectProperty(request, "from", response?.next));
-            },
-        });
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetDirectoryProvisioningResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
-    /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
-     *
-     * @param {string} id - ID of the organization.
-     * @param {Management.CreateOrganizationDiscoveryDomainRequestContent} request
-     * @param {DiscoveryDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.organizations.discoveryDomains.create("id", {
-     *         domain: "domain"
-     *     })
-     */
-    public create(
+    private async __get(
         id: string,
-        request: Management.CreateOrganizationDiscoveryDomainRequestContent,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateOrganizationDiscoveryDomainResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
-    }
-
-    private async __create(
-        id: string,
-        request: Management.CreateOrganizationDiscoveryDomainRequestContent,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateOrganizationDiscoveryDomainResponseContent>> {
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetDirectoryProvisioningResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -184,14 +65,11 @@ export class DiscoveryDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains`,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
             ),
-            method: "POST",
+            method: "GET",
             headers: _headers,
-            contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -200,7 +78,98 @@ export class DiscoveryDomainsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateOrganizationDiscoveryDomainResponseContent,
+                data: _response.body as Management.GetDirectoryProvisioningResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/connections/{id}/directory-provisioning",
+        );
+    }
+
+    /**
+     * Create a directory provisioning configuration for a connection.
+     *
+     * @param {string} id - The id of the connection to create its directory provisioning configuration
+     * @param {Management.CreateDirectoryProvisioningRequestContent | null} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.ConflictError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.create("id")
+     */
+    public create(
+        id: string,
+        request?: Management.CreateDirectoryProvisioningRequestContent | null,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.CreateDirectoryProvisioningResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__create(id, request, requestOptions));
+    }
+
+    private async __create(
+        id: string,
+        request?: Management.CreateDirectoryProvisioningRequestContent | null,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.CreateDirectoryProvisioningResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request != null ? request : undefined,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.CreateDirectoryProvisioningResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -232,16 +201,15 @@ export class DiscoveryDomainsClient {
             _response.error,
             _response.rawResponse,
             "POST",
-            "/organizations/{id}/discovery-domains",
+            "/connections/{id}/directory-provisioning",
         );
     }
 
     /**
-     * Retrieve details about a single organization discovery domain specified by ID.
+     * Delete the directory provisioning configuration of a connection.
      *
-     * @param {string} id - ID of the organization.
-     * @param {string} discovery_domain_id - ID of the discovery domain.
-     * @param {DiscoveryDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - The id of the connection to delete its directory provisioning configuration
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
@@ -250,21 +218,19 @@ export class DiscoveryDomainsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.organizations.discoveryDomains.get("id", "discovery_domain_id")
+     *     await client.connections.directoryProvisioning.delete("id")
      */
-    public get(
+    public delete(
         id: string,
-        discovery_domain_id: string,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetOrganizationDiscoveryDomainResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__get(id, discovery_domain_id, requestOptions));
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(id, requestOptions));
     }
 
-    private async __get(
+    private async __delete(
         id: string,
-        discovery_domain_id: string,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetOrganizationDiscoveryDomainResponseContent>> {
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<void>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -276,7 +242,178 @@ export class DiscoveryDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id)}`,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/connections/{id}/directory-provisioning",
+        );
+    }
+
+    /**
+     * Update the directory provisioning configuration of a connection.
+     *
+     * @param {string} id - The id of the connection to create its directory provisioning configuration
+     * @param {Management.UpdateDirectoryProvisioningRequestContent | null} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.update("id")
+     */
+    public update(
+        id: string,
+        request?: Management.UpdateDirectoryProvisioningRequestContent | null,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.UpdateDirectoryProvisioningResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
+    }
+
+    private async __update(
+        id: string,
+        request?: Management.UpdateDirectoryProvisioningRequestContent | null,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.UpdateDirectoryProvisioningResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+            ),
+            method: "PATCH",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request != null ? request : undefined,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.UpdateDirectoryProvisioningResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PATCH",
+            "/connections/{id}/directory-provisioning",
+        );
+    }
+
+    /**
+     * Retrieve the directory provisioning default attribute mapping of a connection.
+     *
+     * @param {string} id - The id of the connection to retrieve its directory provisioning configuration
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.getDefaultMapping("id")
+     */
+    public getDefaultMapping(
+        id: string,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetDirectoryProvisioningDefaultMappingResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__getDefaultMapping(id, requestOptions));
+    }
+
+    private async __getDefaultMapping(
+        id: string,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetDirectoryProvisioningDefaultMappingResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning/default-mapping`,
             ),
             method: "GET",
             headers: _headers,
@@ -289,7 +426,7 @@ export class DiscoveryDomainsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetOrganizationDiscoveryDomainResponseContent,
+                data: _response.body as Management.GetDirectoryProvisioningDefaultMappingResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -319,172 +456,7 @@ export class DiscoveryDomainsClient {
             _response.error,
             _response.rawResponse,
             "GET",
-            "/organizations/{id}/discovery-domains/{discovery_domain_id}",
-        );
-    }
-
-    /**
-     * Remove a discovery domain from an organization. This action cannot be undone.
-     *
-     * @param {string} id - ID of the organization.
-     * @param {string} discovery_domain_id - ID of the discovery domain.
-     * @param {DiscoveryDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.organizations.discoveryDomains.delete("id", "discovery_domain_id")
-     */
-    public delete(
-        id: string,
-        discovery_domain_id: string,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(id, discovery_domain_id, requestOptions));
-    }
-
-    private async __delete(
-        id: string,
-        discovery_domain_id: string,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<void>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id)}`,
-            ),
-            method: "DELETE",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: undefined, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "DELETE",
-            "/organizations/{id}/discovery-domains/{discovery_domain_id}",
-        );
-    }
-
-    /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
-     *
-     * @param {string} id - ID of the organization.
-     * @param {string} discovery_domain_id - ID of the discovery domain to update.
-     * @param {Management.UpdateOrganizationDiscoveryDomainRequestContent} request
-     * @param {DiscoveryDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.NotFoundError}
-     *
-     * @example
-     *     await client.organizations.discoveryDomains.update("id", "discovery_domain_id")
-     */
-    public update(
-        id: string,
-        discovery_domain_id: string,
-        request: Management.UpdateOrganizationDiscoveryDomainRequestContent = {},
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateOrganizationDiscoveryDomainResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__update(id, discovery_domain_id, request, requestOptions));
-    }
-
-    private async __update(
-        id: string,
-        discovery_domain_id: string,
-        request: Management.UpdateOrganizationDiscoveryDomainRequestContent = {},
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateOrganizationDiscoveryDomainResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id)}`,
-            ),
-            method: "PATCH",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.UpdateOrganizationDiscoveryDomainResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "PATCH",
-            "/organizations/{id}/discovery-domains/{discovery_domain_id}",
+            "/connections/{id}/directory-provisioning/default-mapping",
         );
     }
 }
