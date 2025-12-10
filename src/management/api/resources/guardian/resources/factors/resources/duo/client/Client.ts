@@ -2,11 +2,11 @@
 
 import type { BaseClientOptions } from "../../../../../../../../BaseClient.js";
 import {
-    type NormalizedClientOptionsWithAuth,
     normalizeClientOptionsWithAuth,
+    type NormalizedClientOptionsWithAuth,
 } from "../../../../../../../../BaseClient.js";
-import * as environments from "../../../../../../../../environments.js";
 import * as core from "../../../../../../../../core/index.js";
+import * as environments from "../../../../../../../../environments.js";
 import { SettingsClient } from "../resources/settings/client/Client.js";
 
 export declare namespace DuoClient {

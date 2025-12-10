@@ -2,15 +2,15 @@
 
 import type { BaseClientOptions, BaseRequestOptions } from "../../../../../../../../BaseClient.js";
 import {
-    type NormalizedClientOptionsWithAuth,
     normalizeClientOptionsWithAuth,
+    type NormalizedClientOptionsWithAuth,
 } from "../../../../../../../../BaseClient.js";
-import * as environments from "../../../../../../../../environments.js";
 import * as core from "../../../../../../../../core/index.js";
-import * as Management from "../../../../../../../index.js";
 import { mergeHeaders } from "../../../../../../../../core/headers.js";
-import * as errors from "../../../../../../../../errors/index.js";
+import * as environments from "../../../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../../../errors/handleNonStatusCodeError.js";
+import * as errors from "../../../../../../../../errors/index.js";
+import * as Management from "../../../../../../../index.js";
 
 export declare namespace ConnectionsClient {
     export type Options = BaseClientOptions;
@@ -136,7 +136,7 @@ export class ConnectionsClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.connections ?? []).length >= Math.floor(request?.per_page ?? 1),
+            hasNextPage: (response) => (response?.connections ?? []).length >= Math.floor(request?.per_page ?? 50),
             getItems: (response) => response?.connections ?? [],
             loadPage: (_response) => {
                 _offset += 1;

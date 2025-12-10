@@ -8,7 +8,7 @@ export * as logs from "./logs/index.js";
 export * as multifactor from "./multifactor/index.js";
 export * as organizations from "./organizations/index.js";
 export * as permissions from "./permissions/index.js";
+export * as refreshToken from "./refreshToken/index.js";
 export * as riskAssessments from "./riskAssessments/index.js";
 export * as roles from "./roles/index.js";
-export * as refreshToken from "./refreshToken/index.js";
 export * as sessions from "./sessions/index.js";
