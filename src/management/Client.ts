@@ -8,6 +8,7 @@ import { ActionsClient } from "./api/resources/actions/client/Client.js";
 import { BrandingClient } from "./api/resources/branding/client/Client.js";
 import { ClientGrantsClient } from "./api/resources/clientGrants/client/Client.js";
 import { ClientsClient } from "./api/resources/clients/client/Client.js";
+import { ConnectionProfilesClient } from "./api/resources/connectionProfiles/client/Client.js";
 import { ConnectionsClient } from "./api/resources/connections/client/Client.js";
 import { CustomDomainsClient } from "./api/resources/customDomains/client/Client.js";
 import { DeviceCredentialsClient } from "./api/resources/deviceCredentials/client/Client.js";
@@ -58,6 +59,7 @@ export class ManagementClient {
     protected _branding: BrandingClient | undefined;
     protected _clientGrants: ClientGrantsClient | undefined;
     protected _clients: ClientsClient | undefined;
+    protected _connectionProfiles: ConnectionProfilesClient | undefined;
     protected _connections: ConnectionsClient | undefined;
     protected _customDomains: CustomDomainsClient | undefined;
     protected _deviceCredentials: DeviceCredentialsClient | undefined;
@@ -114,6 +116,10 @@ export class ManagementClient {
 
     public get clients(): ClientsClient {
         return (this._clients ??= new ClientsClient(this._options));
+    }
+
+    public get connectionProfiles(): ConnectionProfilesClient {
+        return (this._connectionProfiles ??= new ConnectionProfilesClient(this._options));
     }
 
     public get connections(): ConnectionsClient {

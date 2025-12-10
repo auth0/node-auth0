@@ -209,9 +209,7 @@ export class RenderingClient {
      *     await client.prompts.rendering.bulkUpdate({
      *         configs: [{
      *                 prompt: "login",
-     *                 screen: "login",
-     *                 rendering_mode: "advanced",
-     *                 head_tags: [{}]
+     *                 screen: "login"
      *             }]
      *     })
      */
@@ -411,15 +409,12 @@ export class RenderingClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.prompts.rendering.update("login", "login", {
-     *         rendering_mode: "advanced",
-     *         head_tags: [{}]
-     *     })
+     *     await client.prompts.rendering.update("login", "login")
      */
     public update(
         prompt: Management.PromptGroupNameEnum,
         screen: Management.ScreenGroupNameEnum,
-        request: Management.UpdateAculRequestContent,
+        request: Management.UpdateAculRequestContent = {},
         requestOptions?: RenderingClient.RequestOptions,
     ): core.HttpResponsePromise<Management.UpdateAculResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(prompt, screen, request, requestOptions));
@@ -428,7 +423,7 @@ export class RenderingClient {
     private async __update(
         prompt: Management.PromptGroupNameEnum,
         screen: Management.ScreenGroupNameEnum,
-        request: Management.UpdateAculRequestContent,
+        request: Management.UpdateAculRequestContent = {},
         requestOptions?: RenderingClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UpdateAculResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
