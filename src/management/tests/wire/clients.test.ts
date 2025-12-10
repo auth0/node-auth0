@@ -401,6 +401,7 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -416,6 +417,7 @@ describe("ClientsClient", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             express_configuration: {
@@ -679,6 +681,12 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [
+                    {
+                        audience: "audience",
+                        scope: ["scope"],
+                    },
+                ],
             },
             default_organization: {
                 organization_id: "organization_id",
@@ -722,6 +730,9 @@ describe("ClientsClient", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {
@@ -1017,6 +1028,7 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -1032,6 +1044,7 @@ describe("ClientsClient", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             express_configuration: {
@@ -1289,6 +1302,12 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [
+                    {
+                        audience: "audience",
+                        scope: ["scope"],
+                    },
+                ],
             },
             default_organization: {
                 organization_id: "organization_id",
@@ -1332,6 +1351,9 @@ describe("ClientsClient", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {
@@ -1640,6 +1662,7 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -1655,6 +1678,7 @@ describe("ClientsClient", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             express_configuration: {
@@ -1916,6 +1940,12 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [
+                    {
+                        audience: "audience",
+                        scope: ["scope"],
+                    },
+                ],
             },
             default_organization: {
                 organization_id: "organization_id",
@@ -1959,6 +1989,9 @@ describe("ClientsClient", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {
@@ -2244,6 +2277,7 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -2259,6 +2293,7 @@ describe("ClientsClient", () => {
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
             par_request_expiry: 1,
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             express_configuration: {
@@ -2519,6 +2554,12 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
+                policies: [
+                    {
+                        audience: "audience",
+                        scope: ["scope"],
+                    },
+                ],
             },
             default_organization: {
                 organization_id: "organization_id",
@@ -2562,6 +2603,9 @@ describe("ClientsClient", () => {
             },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
+            token_exchange: {
+                allow_any_profile_of_type: ["custom_authentication"],
+            },
             par_request_expiry: 1,
             token_quota: {
                 client_credentials: {

@@ -289,6 +289,7 @@ export interface CreateClientRequestContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+    token_exchange?: Management.ClientTokenExchangeConfiguration;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.CreateTokenQuota;
@@ -393,6 +394,7 @@ export interface UpdateClientRequestContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
+    token_exchange?: Management.ClientTokenExchangeConfigurationOrNull | null;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     express_configuration?: Management.ExpressConfigurationOrNull | null;
@@ -531,6 +533,32 @@ export interface UpdateConnectionRequestContent {
 /**
  * @example
  *     {
+ *         take: 1,
+ *         from: "from",
+ *         q: "q",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         sort: "sort"
+ *     }
+ */
+export interface ListCustomDomainsRequestParameters {
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>. */
+    q?: string | null;
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Field to sort by. Only <code>domain:1</code> (ascending order by domain) is supported at this time. */
+    sort?: string | null;
+}
+
+/**
+ * @example
+ *     {
  *         domain: "domain",
  *         type: "auth0_managed_certs"
  *     }
@@ -542,6 +570,7 @@ export interface CreateCustomDomainRequestContent {
     verification_method?: Management.CustomDomainVerificationMethodEnum;
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
+    domain_metadata?: Management.DomainMetadata;
 }
 
 /**
@@ -551,6 +580,7 @@ export interface CreateCustomDomainRequestContent {
 export interface UpdateCustomDomainRequestContent {
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
+    domain_metadata?: Management.DomainMetadata;
 }
 
 /**
@@ -1476,6 +1506,7 @@ export interface ChangePasswordTicketRequestContent {
     mark_email_as_verified?: boolean;
     /** Whether to include the email address as part of the returnUrl in the reset_email (true), or not (false). */
     includeEmailInRedirect?: boolean;
+    identity?: Management.ChangePasswordTicketIdentity;
 }
 
 /**
@@ -2522,6 +2553,58 @@ export interface SetGuardianFactorPhoneTemplatesRequestContent {
  * @example
  *     {}
  */
+export interface SetGuardianFactorsProviderPushNotificationApnsRequestContent {
+    sandbox?: boolean;
+    bundle_id?: string | null;
+    p12?: string | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateGuardianFactorsProviderPushNotificationApnsRequestContent {
+    sandbox?: boolean;
+    bundle_id?: string | null;
+    p12?: string | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface SetGuardianFactorsProviderPushNotificationFcmRequestContent {
+    server_key?: string | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateGuardianFactorsProviderPushNotificationFcmRequestContent {
+    server_key?: string | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface SetGuardianFactorsProviderPushNotificationFcmv1RequestContent {
+    server_credentials?: string | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent {
+    server_credentials?: string | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
 export interface SetGuardianFactorsProviderPushNotificationSnsRequestContent {
     aws_access_key_id?: string | null;
     aws_secret_access_key?: string | null;
@@ -2771,6 +2854,8 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status?: Management.OrganizationDiscoveryDomainStatus;
+    /** Indicates whether this discovery domain should be used for organization discovery. */
+    use_for_organization_discovery?: boolean;
 }
 
 /**
@@ -2779,6 +2864,8 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
  */
 export interface UpdateOrganizationDiscoveryDomainRequestContent {
     status?: Management.OrganizationDiscoveryDomainStatus;
+    /** Indicates whether this discovery domain should be used for organization discovery. */
+    use_for_organization_discovery?: boolean;
 }
 
 /**
@@ -3029,15 +3116,14 @@ export interface BulkUpdateAculRequestContent {
  */
 export interface UpdateAculRequestContent {
     rendering_mode?: Management.AculRenderingModeEnum;
-    /** Context values to make available */
-    context_configuration?: string[];
+    context_configuration?: Management.AculContextConfiguration;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
+    /** Use page template with ACUL */
+    use_page_template?: boolean | null;
     /** An array of head tags */
     head_tags?: Management.AculHeadTag[];
     filters?: Management.AculFilters | null;
-    /** Use page template with ACUL */
-    use_page_template?: boolean | null;
 }
 
 /**

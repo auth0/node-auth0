@@ -15,8 +15,8 @@ describe("RenderingClient", () => {
                     rendering_mode: "advanced",
                     context_configuration: ["context_configuration"],
                     default_head_tags_disabled: true,
-                    head_tags: [{}],
                     use_page_template: true,
+                    head_tags: [{}],
                 },
             ],
             start: 1.1,
@@ -37,8 +37,8 @@ describe("RenderingClient", () => {
                     rendering_mode: "advanced",
                     context_configuration: ["context_configuration"],
                     default_head_tags_disabled: true,
-                    head_tags: [{}],
                     use_page_template: true,
+                    head_tags: [{}],
                 },
             ],
             start: 1.1,
@@ -162,10 +162,10 @@ describe("RenderingClient", () => {
                     prompt: "login",
                     screen: "login",
                     rendering_mode: "advanced",
-                    context_configuration: ["context_configuration"],
+                    context_configuration: ["branding.settings"],
                     default_head_tags_disabled: true,
-                    head_tags: [{}],
                     use_page_template: true,
+                    head_tags: [{}],
                 },
             ],
         };
@@ -192,10 +192,10 @@ describe("RenderingClient", () => {
                     prompt: "login",
                     screen: "login",
                     rendering_mode: "advanced",
-                    context_configuration: ["context_configuration"],
+                    context_configuration: ["branding.settings"],
                     default_head_tags_disabled: true,
-                    head_tags: [{}],
                     use_page_template: true,
+                    head_tags: [{}],
                 },
             ],
         });
@@ -387,14 +387,14 @@ describe("RenderingClient", () => {
             rendering_mode: "advanced",
             context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
-            head_tags: [{ tag: "tag", content: "content" }],
+            use_page_template: true,
+            head_tags: [{ tag: "tag", attributes: { key: "value" }, content: "content" }],
             filters: {
                 match_type: "includes_any",
                 clients: [{ id: "id" }],
                 organizations: [{ id: "id" }],
                 domains: [{ id: "id" }],
             },
-            use_page_template: true,
         };
         server
             .mockEndpoint()
@@ -412,9 +412,13 @@ describe("RenderingClient", () => {
             rendering_mode: "advanced",
             context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
+            use_page_template: true,
             head_tags: [
                 {
                     tag: "tag",
+                    attributes: {
+                        key: "value",
+                    },
                     content: "content",
                 },
             ],
@@ -436,7 +440,6 @@ describe("RenderingClient", () => {
                     },
                 ],
             },
-            use_page_template: true,
         });
     });
 
@@ -556,14 +559,14 @@ describe("RenderingClient", () => {
             rendering_mode: "advanced",
             context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
-            head_tags: [{ tag: "tag", content: "content" }],
+            use_page_template: true,
+            head_tags: [{ tag: "tag", attributes: { key: "value" }, content: "content" }],
             filters: {
                 match_type: "includes_any",
                 clients: [{ id: "id" }],
                 organizations: [{ id: "id" }],
                 domains: [{ id: "id" }],
             },
-            use_page_template: true,
         };
         server
             .mockEndpoint()
@@ -579,9 +582,13 @@ describe("RenderingClient", () => {
             rendering_mode: "advanced",
             context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
+            use_page_template: true,
             head_tags: [
                 {
                     tag: "tag",
+                    attributes: {
+                        key: "value",
+                    },
                     content: "content",
                 },
             ],
@@ -603,7 +610,6 @@ describe("RenderingClient", () => {
                     },
                 ],
             },
-            use_page_template: true,
         });
     });
 

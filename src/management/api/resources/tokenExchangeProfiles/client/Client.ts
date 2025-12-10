@@ -25,6 +25,8 @@ export class TokenExchangeProfilesClient {
     /**
      * Retrieve a list of all Token Exchange Profiles available in your tenant.
      *
+     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     *
      * This endpoint supports Checkpoint pagination. To search by checkpoint, use the following parameters:
      * <ul>
      * <li><code>from</code>: Optional id from which to start selection.</li>
@@ -147,6 +149,8 @@ export class TokenExchangeProfilesClient {
     /**
      * Create a new Token Exchange Profile within your tenant.
      *
+     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     *
      * @param {Management.CreateTokenExchangeProfileRequestContent} request
      * @param {TokenExchangeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -233,6 +237,8 @@ export class TokenExchangeProfilesClient {
     /**
      * Retrieve details about a single Token Exchange Profile specified by ID.
      *
+     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     *
      * @param {string} id - ID of the Token Exchange Profile to retrieve.
      * @param {TokenExchangeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -312,6 +318,9 @@ export class TokenExchangeProfilesClient {
     /**
      * Delete a Token Exchange Profile within your tenant.
      *
+     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta's Master Subscription Agreement</a>. It is your responsibility to securely validate the user's subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     *
+     *
      * @param {string} id - ID of the Token Exchange Profile to delete.
      * @param {TokenExchangeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -386,6 +395,9 @@ export class TokenExchangeProfilesClient {
 
     /**
      * Update a Token Exchange Profile within your tenant.
+     *
+     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta's Master Subscription Agreement</a>. It is your responsibility to securely validate the user's subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     *
      *
      * @param {string} id - ID of the Token Exchange Profile to update.
      * @param {Management.UpdateTokenExchangeProfileRequestContent} request

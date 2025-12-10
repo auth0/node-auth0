@@ -268,6 +268,9 @@ export const OauthScope = {
      * Update Event Deliveries */
     UpdateEventDeliveries: "update:event_deliveries",
     /**
+     * Read Events */
+    ReadEvents: "read:events",
+    /**
      * Read Extensions */
     ReadExtensions: "read:extensions",
     /**
@@ -1057,9 +1060,9 @@ export interface AculConfigsItem {
     rendering_mode?: Management.AculRenderingModeEnum;
     context_configuration?: Management.AculContextConfiguration;
     default_head_tags_disabled?: (Management.AculDefaultHeadTagsDisabled | undefined) | null;
+    use_page_template?: (Management.AculUsePageTemplate | undefined) | null;
     head_tags?: Management.AculHeadTags;
     filters?: Management.AculFilters | null;
-    use_page_template?: (Management.AculUsePageTemplate | undefined) | null;
 }
 
 /**
@@ -1072,7 +1075,33 @@ export type AculConfigs = Management.AculConfigsItem[];
  */
 export type AculContextConfiguration = Management.AculContextConfigurationItem[];
 
-export type AculContextConfigurationItem = string;
+export type AculContextConfigurationItem =
+    | Management.AculContextEnum
+    /**
+     * Dynamic authorization param ext key (e.g., `untrusted_data.authorization_params.ext-myKey`) */
+    | string;
+
+/** Static context values */
+export const AculContextEnum = {
+    BrandingSettings: "branding.settings",
+    BrandingThemesDefault: "branding.themes.default",
+    ClientLogoUri: "client.logo_uri",
+    ClientDescription: "client.description",
+    OrganizationDisplayName: "organization.display_name",
+    OrganizationBranding: "organization.branding",
+    ScreenTexts: "screen.texts",
+    TenantName: "tenant.name",
+    TenantFriendlyName: "tenant.friendly_name",
+    TenantLogoUrl: "tenant.logo_url",
+    TenantEnabledLocales: "tenant.enabled_locales",
+    UntrustedDataSubmittedFormData: "untrusted_data.submitted_form_data",
+    UntrustedDataAuthorizationParamsLoginHint: "untrusted_data.authorization_params.login_hint",
+    UntrustedDataAuthorizationParamsScreenHint: "untrusted_data.authorization_params.screen_hint",
+    UntrustedDataAuthorizationParamsUiLocales: "untrusted_data.authorization_params.ui_locales",
+    UserOrganizations: "user.organizations",
+    TransactionCustomDomainDomain: "transaction.custom_domain.domain",
+} as const;
+export type AculContextEnum = (typeof AculContextEnum)[keyof typeof AculContextEnum];
 
 /**
  * Override Universal Login default head tags
@@ -1115,23 +1144,21 @@ export interface AculHeadTag {
     /** Any HTML element valid for use in the head tag */
     tag?: string;
     attributes?: Management.AculHeadTagAttributes;
-    /**
-     * Text/content within the opening and closing tags of the element.
-     * See <a href="https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens">documentation</a> on using context variables
-     */
-    content?: string;
+    content?: Management.AculHeadTagContent;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 /**
- * Attributes of the HTML tag
+ * Attributes of the HTML tag. See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes"> MDN documentation</a> for valid attributes.
  */
-export interface AculHeadTagAttributes {
-    integrity?: string[];
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
+export type AculHeadTagAttributes = Record<string, unknown>;
+
+/**
+ * Text or markup between the element’s opening and closing tags.
+ * You can use <a href="https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens">context variables</a> to display dynamic values.
+ */
+export type AculHeadTagContent = string;
 
 /**
  * An array of head tags
@@ -1179,11 +1206,11 @@ export interface AculResponseContent {
     context_configuration?: string[];
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
+    /** Use page template with ACUL */
+    use_page_template?: boolean | null;
     /** An array of head tags */
     head_tags?: Management.AculHeadTag[];
     filters?: Management.AculFilters | null;
-    /** Use page template with ACUL */
-    use_page_template?: boolean | null;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1412,24 +1439,24 @@ export type BotDetectionChallengePolicyPasswordlessFlowEnum =
 export type BotDetectionCidrBlock = string;
 
 /**
- * IPv4 address or CIDR block
- */
-export type BotDetectionIPv4 = string;
-
-/**
- * IPv6 address or CIDR block
- */
-export type BotDetectionIPv6 = string;
-
-/**
  * IP address (IPv4 or IPv6) or CIDR block
  */
 export type BotDetectionIpAddressOrCidrBlock = string;
 
 /**
+ * IPv4 address
+ */
+export type BotDetectionIPv4 = string;
+
+/**
+ * IPv6 address
+ */
+export type BotDetectionIPv6 = string;
+
+/**
  * IPv6 CIDR block
  */
-export type BotDetectionIpv6CidrBlock = string;
+export type BotDetectionIPv6CidrBlock = string;
 
 /** The level of bot detection sensitivity */
 export const BotDetectionLevelEnum = {
@@ -1769,6 +1796,17 @@ export interface BulkUpdateAculResponseContent {
     [key: string]: any;
 }
 
+/**
+ * The user's identity. If you set this value, you must also send the user_id parameter.
+ */
+export interface ChangePasswordTicketIdentity {
+    /** user_id of the identity. */
+    user_id: string;
+    provider: Management.IdentityProviderOnlyAuth0Enum;
+    /** connection_id of the identity. */
+    connection_id?: string;
+}
+
 export interface ChangePasswordTicketResponseContent {
     /** URL representing the ticket. */
     ticket: string;
@@ -1858,6 +1896,7 @@ export interface Client {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+    token_exchange?: Management.ClientTokenExchangeConfiguration;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
@@ -2648,6 +2687,15 @@ export interface ClientRefreshTokenConfiguration {
     idle_token_lifetime?: number;
     /** Prevents tokens from expiring without use when `true` (takes precedence over `idle_token_lifetime` values) */
     infinite_idle_token_lifetime?: boolean;
+    /** A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers */
+    policies?: Management.ClientRefreshTokenPolicy[];
+}
+
+export interface ClientRefreshTokenPolicy {
+    /** The identifier of the resource server to which the Multi Resource Refresh Token Policy applies */
+    audience: string;
+    /** The resource server permissions granted under the Multi Resource Refresh Token Policy, defining the context in which an access token can be used */
+    scope: string[];
 }
 
 export const ClientSessionTransferAllowedAuthenticationMethodsEnum = {
@@ -2735,6 +2783,24 @@ export const ClientTokenEndpointAuthMethodOrNullEnum = {
 export type ClientTokenEndpointAuthMethodOrNullEnum =
     (typeof ClientTokenEndpointAuthMethodOrNullEnum)[keyof typeof ClientTokenEndpointAuthMethodOrNullEnum];
 
+/**
+ * Configuration for token exchange.
+ */
+export interface ClientTokenExchangeConfiguration {
+    /** List the enabled token exchange types for this client. */
+    allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[];
+}
+
+/**
+ * Configuration for token exchange.
+ */
+export interface ClientTokenExchangeConfigurationOrNull {
+    /** List the enabled token exchange types for this client. */
+    allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[];
+}
+
+export type ClientTokenExchangeTypeEnum = "custom_authentication";
+
 export interface ConnectedAccount {
     /** The unique identifier for the connected account. */
     id: string;
@@ -2758,10 +2824,53 @@ export interface ConnectedAccount {
  */
 export type ConnectedAccountAccessTypeEnum = "offline";
 
+/**
+ * A list of the Authentication Context Class References that this OP supports
+ */
+export type ConnectionAcrValuesSupported = string[];
+
+/**
+ * List of allowed audiences in the ID token for Google Native Social Login
+ */
+export type ConnectionAllowedAudiencesGoogleOAuth2 = string[];
+
+/**
+ * The Azure AD application domain (e.g., 'contoso.onmicrosoft.com'). Used primarily with WS-Federation protocol and Azure AD v1 endpoints.
+ */
+export type ConnectionAppDomainAzureAd = string;
+
 export interface ConnectionAttributeIdentifier {
     /** Determines if the attribute is used for identification */
     active?: boolean;
 }
+
+/**
+ * Object containing mapping details for incoming claims
+ */
+export type ConnectionAttributeMapAttributes = Record<string, unknown>;
+
+/**
+ * Mapping of claims received from the identity provider (IdP)
+ */
+export interface ConnectionAttributeMapOidc {
+    attributes?: Management.ConnectionAttributeMapAttributes;
+    mapping_mode?: Management.ConnectionMappingModeEnumOidc;
+    userinfo_scope?: Management.ConnectionAttributeMapUserinfoScope;
+}
+
+/**
+ * Mapping of claims received from the identity provider (IdP)
+ */
+export interface ConnectionAttributeMapOkta {
+    attributes?: Management.ConnectionAttributeMapAttributes;
+    mapping_mode?: Management.ConnectionMappingModeEnumOkta;
+    userinfo_scope?: Management.ConnectionAttributeMapUserinfoScope;
+}
+
+/**
+ * Scopes to send to the IdP's Userinfo endpoint
+ */
+export type ConnectionAttributeMapUserinfoScope = string;
 
 /**
  * Attribute configuration
@@ -2771,6 +2880,21 @@ export interface ConnectionAttributes {
     phone_number?: Management.PhoneAttribute;
     username?: Management.UsernameAttribute;
 }
+
+/**
+ * Additional properties for OAuth2 connection authentication parameters
+ */
+export type ConnectionAuthParamsAdditionalPropertiesOAuth2 = string;
+
+/**
+ * Maps parameter names from Auth0's /authorize endpoint to the identity provider's authorization endpoint parameters. For example, mapping 'audience' to 'resource' transforms the parameter name during authorization requests. Applied after authParams merging. See https://auth0.com/docs/authenticate/identity-providers/social-identity-providers/oauth2#pass-dynamic-parameters
+ */
+export type ConnectionAuthParamsMap = Record<string, string>;
+
+/**
+ * Additional static parameters included in every authorization request to the identity provider. These parameters are merged with runtime parameters before the authorization redirect. Keys and values are passed as-is to the identity provider's authorization endpoint. See https://auth0.com/docs/authenticate/identity-providers/social-identity-providers/oauth2#pass-static-parameters
+ */
+export type ConnectionAuthParamsOAuth2 = Record<string, Management.ConnectionAuthParamsAdditionalPropertiesOAuth2>;
 
 /**
  * Options for enabling authentication methods.
@@ -2787,20 +2911,80 @@ export interface ConnectionAuthenticationPurpose {
     active: boolean;
 }
 
+export type ConnectionAuthorizationEndpoint = string;
+
+export type ConnectionAuthorizationEndpointOAuth2 = Management.ConnectionAuthorizationEndpoint;
+
 /**
  * Indicates whether brute force protection is enabled.
  */
 export type ConnectionBruteForceProtection = boolean;
 
 /**
- * The client ID of the connection.
+ * JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims.
+ */
+export type ConnectionClaimTypesSupported = string[];
+
+/**
+ * Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values.
+ */
+export type ConnectionClaimsLocalesSupported = string[];
+
+/**
+ * Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false.
+ */
+export type ConnectionClaimsParameterSupported = boolean;
+
+/**
+ * JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list.
+ */
+export type ConnectionClaimsSupported = string[];
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
 export type ConnectionClientId = string;
 
+export type ConnectionClientIdAzureAd = Management.ConnectionClientId;
+
 /**
- * The client secret of the connection.
+ * Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
+ */
+export type ConnectionClientIdGoogleOAuth2 = (string | null) | undefined;
+
+export type ConnectionClientIdOAuth2 = Management.ConnectionClientId;
+
+export type ConnectionClientIdOidc = Management.ConnectionClientId;
+
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
 export type ConnectionClientSecret = string;
+
+/**
+ * The client secret (application password) from your Azure AD app registration. Used to authenticate your application when exchanging authorization codes for tokens.
+ */
+export type ConnectionClientSecretAzureAd = string;
+
+/**
+ * Your Google OAuth 2.0 client secret. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
+ */
+export type ConnectionClientSecretGoogleOAuth2 = (string | null) | undefined;
+
+export type ConnectionClientSecretOAuth2 = Management.ConnectionClientSecret;
+
+export type ConnectionClientSecretOidc = Management.ConnectionClientSecret;
+
+export interface ConnectionCommon {
+    authentication?: Management.ConnectionAuthenticationPurpose;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    display_name?: Management.ConnectionDisplayName;
+    enabled_clients?: Management.ConnectionEnabledClients;
+    is_domain_connection?: Management.ConnectionIsDomainConnection;
+    metadata?: Management.ConnectionsMetadata;
+    realms?: Management.ConnectionRealms;
+    show_as_button?: Management.ConnectionShowAsButton;
+}
 
 /**
  * A hash of configuration key/value pairs.
@@ -2814,6 +2998,28 @@ export interface ConnectionConnectedAccountsPurpose {
     active: boolean;
     cross_app_access?: boolean;
 }
+
+/**
+ * PKCE configuration for the connection
+ */
+export interface ConnectionConnectionSettings {
+    pkce?: Management.ConnectionConnectionSettingsPkceEnum;
+}
+
+/** PKCE configuration. */
+export const ConnectionConnectionSettingsPkceEnum = {
+    Auto: "auto",
+    S256: "S256",
+    Plain: "plain",
+    Disabled: "disabled",
+} as const;
+export type ConnectionConnectionSettingsPkceEnum =
+    (typeof ConnectionConnectionSettingsPkceEnum)[keyof typeof ConnectionConnectionSettingsPkceEnum];
+
+/**
+ * Custom HTTP headers sent with token exchange requests to the identity provider's token endpoint. Provided as key-value pairs (e.g., {'X-Custom-Header': 'value'}). Auth0's User-Agent header is always included by default.
+ */
+export type ConnectionCustomHeadersOAuth2 = Record<string, string>;
 
 /**
  * A map of scripts used to integrate with a custom database.
@@ -2843,9 +3049,31 @@ export type ConnectionDisableSelfServiceChangePassword = boolean;
 export type ConnectionDisableSignup = boolean;
 
 /**
+ * OIDC discovery URL. Discovery runs only when connection.options.oidc_metadata is empty and a discovery_url is provided.
+ */
+export type ConnectionDiscoveryUrl = string;
+
+/**
  * Connection name used in the new universal login experience
  */
 export type ConnectionDisplayName = string;
+
+/**
+ * JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used.
+ */
+export type ConnectionDisplayValuesSupported = string[];
+
+export type ConnectionDomainAliasesOne = string[];
+
+/**
+ * Alternative domain names associated with this Azure AD tenant. Allows users from multiple verified domains to authenticate through this connection. Can be an array of domain strings.
+ */
+export type ConnectionDomainAliasesAzureAd = string[];
+
+/**
+ * Domain of the Okta organization (e.g., dev-123456.okta.com). Should be just the domain of the okta server with no scheme or trailing backslash. Discovery runs only when connection.options.oidc_metadata is empty and a domain is provided
+ */
+export type ConnectionDomainOkta = string;
 
 /**
  * Set to true to inject context into custom DB scripts (warning: cannot be disabled once enabled)
@@ -2870,12 +3098,54 @@ export type ConnectionEnabledClients = string[];
 export type ConnectionEnabledDatabaseCustomization = boolean;
 
 /**
+ * URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme.
+ */
+export type ConnectionEndSessionEndpoint = string;
+
+export type ConnectionEndSessionEndpointOAuth2 = Management.ConnectionEndSessionEndpoint;
+
+/**
+ * Indicates to store whether the user is a domain administrator.
+ */
+export type ConnectionExtAdmin = boolean;
+
+/**
+ * Indicates to store whether the user has agreed to the terms of service.
+ */
+export type ConnectionExtAgreedTerms = boolean;
+
+/**
+ * Indicates whether to store a list of the Office 365 assigned plans for the user.
+ */
+export type ConnectionExtAssignedPlans = boolean;
+
+/**
+ * When enabled (true), retrieves and stores Azure AD security group memberships for the user. Requires Microsoft Graph API permissions (Directory.Read.All). Allows configuring max_groups_to_retrieve.
+ */
+export type ConnectionExtGroups = boolean;
+
+/**
+ * Indicates to store whether a user's account is suspended.
+ */
+export type ConnectionExtIsSuspended = boolean;
+
+/**
+ * When enabled (true), retrieves extended profile attributes from Azure AD via Microsoft Graph API (job title, department, office location, etc.). Requires Graph API permissions. Only available with Azure AD v1 or when explicitly enabled for v2.
+ */
+export type ConnectionExtProfile = boolean;
+
+/**
  * Federated Connections Access Tokens
  */
 export interface ConnectionFederatedConnectionsAccessTokens {
     /** Enables refresh tokens and access tokens collection for federated connections */
     active?: boolean;
 }
+
+/**
+ * Mapping of user profile fields returned from the OAuth2 provider to Auth0 user attributes
+ */
+export type ConnectionFieldsMap = Record<string, string>;
 
 export interface ConnectionForList {
     /** The name of the connection */
@@ -2913,9 +3183,9 @@ export interface ConnectionForOrganization {
 }
 
 /**
- * Array of freeform scopes
+ * Array of custom OAuth 2.0 scopes to request from Google during authentication. Use this to request scopes not covered by the predefined scope options.
  */
-export type ConnectionFreeformScopes = string[];
+export type ConnectionFreeformScopesGoogleOAuth2 = Management.ConnectionScopeArray;
 
 /**
  * Token-based authentication settings to be applied when connection is using an sms strategy.
@@ -2936,9 +3206,60 @@ export interface ConnectionGatewayAuthentication {
 }
 
 /**
+ * A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"].
+ */
+export type ConnectionGrantTypesSupported = string[];
+
+export type ConnectionHttpsUrlWithHttpFallback = string;
+
+/**
+ * https url of the icon to be shown
+ */
+export type ConnectionIconUrl = string;
+
+/**
+ * URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows.
+ */
+export type ConnectionIconUrlAzureAd = Management.ConnectionIconUrl;
+
+export type ConnectionIconUrlGoogleOAuth2 = Management.ConnectionIconUrl;
+
+/**
  * The connection's identifier
  */
 export type ConnectionId = string;
+
+/**
+ * JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT
+ */
+export type ConnectionIdTokenEncryptionAlgValuesSupported = string[];
+
+/**
+ * JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT].
+ */
+export type ConnectionIdTokenEncryptionEncValuesSupported = string[];
+
+/** Algorithm allowed to verify the ID tokens. */
+export const ConnectionIdTokenSignedResponseAlgEnum = {
+    Rs256: "RS256",
+    Rs512: "RS512",
+    Ps256: "PS256",
+    Es256: "ES256",
+} as const;
+export type ConnectionIdTokenSignedResponseAlgEnum =
+    (typeof ConnectionIdTokenSignedResponseAlgEnum)[keyof typeof ConnectionIdTokenSignedResponseAlgEnum];
+
+/**
+ * List of algorithms allowed to verify the ID tokens.
+ */
+export type ConnectionIdTokenSignedResponseAlgs =
+    | (Management.ConnectionIdTokenSignedResponseAlgEnum[] | null)
+    | undefined;
+
+/**
+ * A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518
+ */
+export type ConnectionIdTokenSigningAlgValuesSupported = string[];
 
 /**
  * Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used.
@@ -2953,6 +3274,19 @@ export const ConnectionIdentifierPrecedenceEnum = {
 } as const;
 export type ConnectionIdentifierPrecedenceEnum =
     (typeof ConnectionIdentifierPrecedenceEnum)[keyof typeof ConnectionIdentifierPrecedenceEnum];
+
+/**
+ * The Azure AD endpoint version for authentication. 'microsoft-identity-platform-v2.0' (recommended, default) supports modern OAuth 2.0 features. 'azure-active-directory-v1.0' is the legacy endpoint with protocol limitations. Selection affects available features.
+ */
+export type ConnectionIdentityApiAzureAd = Management.ConnectionIdentityApiEnumAzureAd;
+
+/** Identity API version to use */
+export const ConnectionIdentityApiEnumAzureAd = {
+    MicrosoftIdentityPlatformV20: "microsoft-identity-platform-v2.0",
+    AzureActiveDirectoryV10: "azure-active-directory-v1.0",
+} as const;
+export type ConnectionIdentityApiEnumAzureAd =
+    (typeof ConnectionIdentityApiEnumAzureAd)[keyof typeof ConnectionIdentityApiEnumAzureAd];
 
 /** The identity provider identifier for the connection */
 export const ConnectionIdentityProviderEnum = {
@@ -3032,6 +3366,10 @@ export type ConnectionImportMode = boolean;
  */
 export type ConnectionIsDomainConnection = boolean;
 
+export type ConnectionIssuer = Management.ConnectionHttpsUrlWithHttpFallback;
+
+export type ConnectionJwksUri = Management.ConnectionHttpsUrlWithHttpFallback;
+
 export interface ConnectionKey {
     /** The key id of the signing key */
     kid: string;
@@ -3066,6 +3404,27 @@ export const ConnectionKeyUseEnum = {
 } as const;
 export type ConnectionKeyUseEnum = (typeof ConnectionKeyUseEnum)[keyof typeof ConnectionKeyUseEnum];
 
+/** Method used to map incoming claims when strategy=oidc. */
+export const ConnectionMappingModeEnumOidc = {
+    BindAll: "bind_all",
+    UseMap: "use_map",
+} as const;
+export type ConnectionMappingModeEnumOidc =
+    (typeof ConnectionMappingModeEnumOidc)[keyof typeof ConnectionMappingModeEnumOidc];
+
+/** Method used to map incoming claims when strategy=okta. */
+export const ConnectionMappingModeEnumOkta = {
+    BasicProfile: "basic_profile",
+    UseMap: "use_map",
+} as const;
+export type ConnectionMappingModeEnumOkta =
+    (typeof ConnectionMappingModeEnumOkta)[keyof typeof ConnectionMappingModeEnumOkta];
+
+/**
+ * Maximum number of Azure AD groups to retrieve per user during authentication. Helps prevent performance issues for users in many groups. Only applies when ext_groups is enabled. Leave empty to use platform default.
+ */
+export type ConnectionMaxGroupsToRetrieve = string;
+
 /**
  * Multi-factor authentication configuration
  */
@@ -3089,7 +3448,11 @@ export type ConnectionNamePrefixTemplate = string;
 /**
  * An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist)
  */
-export type ConnectionNonPersistentAttrs = (string[] | null) | undefined;
+export type ConnectionNonPersistentAttrs = string[];
+
+export type ConnectionOpPolicyUri = Management.ConnectionHttpsUrlWithHttpFallback;
+
+export type ConnectionOpTosUri = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /**
  * In order to return options in the response, the `read:connections_options` scope must be present
@@ -3097,12 +3460,12 @@ export type ConnectionNonPersistentAttrs = (string[] | null) | undefined;
 export type ConnectionOptions = Record<string, unknown>;
 
 /**
- * options for the 'ad' connection
+ * Options for the 'ad' connection
  */
 export type ConnectionOptionsAd = Record<string, unknown>;
 
 /**
- * options for the 'adfs' connection
+ * Options for the 'adfs' connection
  */
 export type ConnectionOptionsAdfs = Record<string, unknown>;
 
@@ -3111,33 +3474,31 @@ export type ConnectionOptionsAol = Management.ConnectionOptionsOAuth2Common;
 export type ConnectionOptionsAmazon = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'apple' connection
+ * Options for the 'apple' connection
  */
-export interface ConnectionOptionsApple {
+export interface ConnectionOptionsApple extends Management.ConnectionOptionsCommon {
     /** Apple App Secret (must be a PEM) */
     app_secret?: string | null;
     /** Apple Services ID */
     client_id?: string | null;
-    /** Whether to request email from Apple */
+    /** User has the option to obfuscate the email with Apple's relay service */
     email?: boolean;
     /** Array of freeform scopes */
-    freeform_scopes?: Management.ConnectionFreeformScopes;
+    freeform_scopes?: string[];
     /** Apple Key ID */
     kid?: string | null;
     /** Whether to request name from Apple */
     name?: boolean;
-    non_persistent_attrs?: (Management.ConnectionNonPersistentAttrs | undefined) | null;
-    scope?: Management.ConnectionScopeString;
+    /** Space separated list of scopes */
+    scope?: string;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
     /** Apple Team ID */
     team_id?: string | null;
     upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 /**
- * options for the 'auth0' connection
+ * Options for the 'auth0' connection
  */
 export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsCommon {
     attributes?: Management.ConnectionAttributes;
@@ -3164,14 +3525,125 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
 }
 
 /**
- * options for the 'auth0-oidc' connection
+ * Options for the 'auth0-oidc' connection
  */
 export type ConnectionOptionsAuth0Oidc = Record<string, unknown>;
 
 /**
- * options for the 'waad' connection
+ * Options for the 'waad' connection
  */
-export type ConnectionOptionsAzureAd = Record<string, unknown>;
+export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCommon {
+    /** Enable users API */
+    api_enable_users?: boolean;
+    app_domain?: Management.ConnectionAppDomainAzureAd;
+    /** The Application ID URI (App ID URI) for the Azure AD application. Required when using Azure AD v1 with the Resource Owner Password flow. Used to identify the resource being requested in OAuth token requests. */
+    app_id?: string;
+    /** Includes basic user profile information from Azure AD (name, email, given_name, family_name). Always enabled and required - represents the minimum profile data retrieved during authentication. */
+    basic_profile?: boolean;
+    client_id?: Management.ConnectionClientIdAzureAd;
+    client_secret?: Management.ConnectionClientSecretAzureAd;
+    domain_aliases?: Management.ConnectionDomainAliasesAzureAd;
+    /** When false, prevents storing the user's Azure AD access token in the Auth0 user profile. When true (default), the access token is persisted for API access. */
+    ext_access_token?: boolean;
+    /** When false, prevents storing whether the user's Azure AD account is enabled. When true (default), the account enabled status is persisted in the user profile. */
+    ext_account_enabled?: boolean;
+    ext_admin?: Management.ConnectionExtAdmin;
+    ext_agreed_terms?: Management.ConnectionExtAgreedTerms;
+    /** When false, prevents storing the list of Microsoft 365/Office 365 licenses assigned to the user. When true (default), license information is persisted in the user profile. */
+    ext_assigned_licenses?: boolean;
+    ext_assigned_plans?: Management.ConnectionExtAssignedPlans;
+    /** When false, prevents storing the user's Azure ID identifier. When true (default), the Azure ID is persisted. Note: 'oid' (Object ID) is the recommended unique identifier for single-tenant connections. */
+    ext_azure_id?: boolean;
+    /** When false, prevents storing the user's city from Azure AD. When true (default), city information is persisted in the user profile. */
+    ext_city?: boolean;
+    /** When false, prevents storing the user's country from Azure AD. When true (default), country information is persisted in the user profile. */
+    ext_country?: boolean;
+    /** When false, prevents storing the user's department from Azure AD. When true (default), department information is persisted in the user profile. */
+    ext_department?: boolean;
+    /** When false, prevents storing whether directory synchronization is enabled for the user. When true (default), directory sync status is persisted in the user profile. */
+    ext_dir_sync_enabled?: boolean;
+    /** When false, prevents storing the user's email address from Azure AD. When true (default), email is persisted in the user profile. */
+    ext_email?: boolean;
+    /** When false, prevents storing the token expiration time (in seconds). When true (default), expiration information is persisted in the user profile. */
+    ext_expires_in?: boolean;
+    /** When false, prevents storing the user's family name (last name) from Azure AD. When true (default), family name is persisted in the user profile. */
+    ext_family_name?: boolean;
+    /** When false, prevents storing the user's fax number from Azure AD. When true (default), fax information is persisted in the user profile. */
+    ext_fax?: boolean;
+    /** When false, prevents storing the user's given name (first name) from Azure AD. When true (default), given name is persisted in the user profile. */
+    ext_given_name?: boolean;
+    /** When false, prevents storing the list of Azure AD group IDs the user is a member of. When true (default), group membership IDs are persisted. See ext_groups for retrieving group details. */
+    ext_group_ids?: boolean;
+    ext_groups?: Management.ConnectionExtGroups;
+    ext_is_suspended?: Management.ConnectionExtIsSuspended;
+    /** When false, prevents storing the user's job title from Azure AD. When true (default), job title information is persisted in the user profile. */
+    ext_job_title?: boolean;
+    /** When false, prevents storing the timestamp of the last directory synchronization. When true (default), the last sync date is persisted in the user profile. */
+    ext_last_sync?: boolean;
+    /** When false, prevents storing the user's mobile phone number from Azure AD. When true (default), mobile number is persisted in the user profile. */
+    ext_mobile?: boolean;
+    /** When false, prevents storing the user's full name from Azure AD. When true (default), full name is persisted in the user profile. */
+    ext_name?: boolean;
+    /** When true, stores all groups the user is member of, including transitive group memberships (groups within groups). When false (default), only direct group memberships are included. */
+    ext_nested_groups?: boolean;
+    /** When false, prevents storing the user's nickname or display name from Azure AD. When true (default), nickname is persisted in the user profile. */
+    ext_nickname?: boolean;
+    /** When false, prevents storing the user's Object ID (oid) from Azure AD. When true (default), the oid is persisted. Note: 'oid' is the recommended unique identifier for single-tenant connections and required for SCIM. */
+    ext_oid?: boolean;
+    /** When false, prevents storing the user's phone number from Azure AD. When true (default), phone number is persisted in the user profile. */
+    ext_phone?: boolean;
+    /** When false, prevents storing the user's office location from Azure AD. When true (default), office location is persisted in the user profile. */
+    ext_physical_delivery_office_name?: boolean;
+    /** When false, prevents storing the user's postal code from Azure AD. When true (default), postal code is persisted in the user profile. */
+    ext_postal_code?: boolean;
+    /** When false, prevents storing the user's preferred language from Azure AD. When true (default), language preference is persisted in the user profile. */
+    ext_preferred_language?: boolean;
+    ext_profile?: Management.ConnectionExtProfile;
+    /** When false, prevents storing the list of service plans provisioned to the user. When true (default), provisioned plans are persisted in the user profile. */
+    ext_provisioned_plans?: boolean;
+    /** When false, prevents storing provisioning errors that occurred during synchronization. When true (default), error information is persisted. Useful for troubleshooting sync issues. */
+    ext_provisioning_errors?: boolean;
+    /** When false, prevents storing all proxy email addresses (email aliases) for the user. When true (default), proxy addresses are persisted in the user profile. */
+    ext_proxy_addresses?: boolean;
+    /** When false, prevents storing the user's Passport User ID (puid). When true (default), puid is persisted in the user profile. Legacy attribute. */
+    ext_puid?: boolean;
+    /** When false, prevents storing the Azure AD refresh token. When true (default), the refresh token is persisted for offline access. Required for token refresh in long-lived applications. */
+    ext_refresh_token?: boolean;
+    /** When false, prevents storing Azure AD application roles assigned to the user. When true (default), role information is persisted. Useful for RBAC in applications. */
+    ext_roles?: boolean;
+    /** When false, prevents storing the user's state (province/region) from Azure AD. When true (default), state information is persisted in the user profile. */
+    ext_state?: boolean;
+    /** When false, prevents storing the user's street address from Azure AD. When true (default), street address is persisted in the user profile. */
+    ext_street?: boolean;
+    /** When false, prevents storing the user's telephone number from Azure AD. When true (default), telephone number is persisted in the user profile. */
+    ext_telephoneNumber?: boolean;
+    /** When false, prevents storing the user's Azure AD tenant ID. When true (default), tenant ID is persisted. Useful for identifying which Azure AD organization the user belongs to. */
+    ext_tenantid?: boolean;
+    /** When false, prevents storing the user's User Principal Name (UPN) from Azure AD. When true (default), UPN is persisted. UPN is the user's logon name (e.g., user@contoso.com). */
+    ext_upn?: boolean;
+    /** When false, prevents storing the user's usage location for license assignment. When true (default), usage location is persisted in the user profile. */
+    ext_usage_location?: boolean;
+    /** When false, prevents storing an alternative user ID. When true (default), this user ID is persisted in the user profile. */
+    ext_user_id?: boolean;
+    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
+    /** Indicates whether admin consent has been granted for the required Azure AD permissions. Read-only status field managed by Auth0 during the OAuth authorization flow. */
+    granted?: boolean;
+    icon_url?: Management.ConnectionIconUrlAzureAd;
+    identity_api?: Management.ConnectionIdentityApiAzureAd;
+    max_groups_to_retrieve?: Management.ConnectionMaxGroupsToRetrieve;
+    scope?: Management.ConnectionScopeAzureAd;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    should_trust_email_verified_connection?: Management.ConnectionShouldTrustEmailVerifiedConnectionEnum;
+    tenant_domain?: Management.ConnectionTenantDomainAzureAdOne;
+    tenantId?: Management.ConnectionTenantIdAzureAd;
+    thumbprints?: Management.ConnectionThumbprints;
+    upstream_params?: Management.ConnectionUpstreamParamsAzureAd | undefined;
+    /** Indicates WS-Federation protocol usage. When true, uses WS-Federation; when false, uses OpenID Connect. */
+    use_wsfed?: boolean;
+    useCommonEndpoint?: Management.ConnectionUseCommonEndpointAzureAd;
+    userid_attribute?: Management.ConnectionUseridAttributeAzureAd;
+    waad_protocol?: Management.ConnectionWaadProtocol;
+}
 
 export type ConnectionOptionsBaidu = Management.ConnectionOptionsOAuth2Common;
 
@@ -3182,14 +3654,42 @@ export type ConnectionOptionsBitly = Management.ConnectionOptionsOAuth2Common;
 export type ConnectionOptionsBox = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * Common attributes for connection options including non-persistent attributes and cross-app access
+ * Common attributes for connection options including non-persistent attributes and Cross App Access
  */
 export interface ConnectionOptionsCommon {
-    non_persistent_attrs?: (Management.ConnectionNonPersistentAttrs | undefined) | null;
+    non_persistent_attrs?: Management.ConnectionNonPersistentAttrs;
 }
 
 /**
- * options for the 'custom' connection
+ * common options for OIDC connections
+ */
+export interface ConnectionOptionsCommonOidc {
+    authorization_endpoint?: Management.ConnectionAuthorizationEndpoint;
+    client_id: Management.ConnectionClientIdOidc;
+    client_secret?: Management.ConnectionClientSecretOidc;
+    connection_settings?: Management.ConnectionConnectionSettings;
+    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
+    domain_aliases?: Management.ConnectionDomainAliasesOne;
+    icon_url?: Management.ConnectionIconUrl;
+    id_token_signed_response_algs?: (Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null;
+    issuer?: Management.ConnectionIssuer;
+    jwks_uri?: Management.ConnectionJwksUri;
+    oidc_metadata?: Management.ConnectionOptionsOidcMetadata;
+    scope?: Management.ConnectionScopeOidc;
+    send_back_channel_nonce?: Management.ConnectionSendBackChannelNonce;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    tenant_domain?: (Management.ConnectionTenantDomain | undefined) | null;
+    token_endpoint?: Management.ConnectionTokenEndpointOidc;
+    token_endpoint_auth_method?: Management.ConnectionTokenEndpointAuthMethodEnum | null;
+    token_endpoint_auth_signing_alg?: Management.ConnectionTokenEndpointAuthSigningAlgEnum | null;
+    upstream_params?: Management.ConnectionUpstreamParamsOidc | undefined;
+    userinfo_endpoint?: Management.ConnectionUserinfoEndpointOidc;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Options for the 'custom' connection
  */
 export type ConnectionOptionsCustom = Record<string, unknown>;
 
@@ -3200,7 +3700,7 @@ export type ConnectionOptionsDropbox = Management.ConnectionOptionsOAuth2Common;
 export type ConnectionOptionsDwolla = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'email' connection
+ * Options for the 'email' connection
  */
 export type ConnectionOptionsEmail = Record<string, unknown>;
 
@@ -3213,37 +3713,176 @@ export type ConnectionOptionsEvernoteSandbox = Management.ConnectionOptionsEvern
 export type ConnectionOptionsExact = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'facebook' connection
+ * Options for the 'facebook' connection
  */
 export type ConnectionOptionsFacebook = Record<string, unknown>;
 
 /**
- * options for the 'fitbit' connection
+ * Options for the 'fitbit' connection
  */
 export type ConnectionOptionsFitbit = Record<string, unknown>;
 
 /**
- * options for the 'flickr' connection
+ * Options for the 'flickr' connection
  */
 export type ConnectionOptionsFlickr = Record<string, unknown>;
 
 /**
- * options for the 'github' connection
+ * Options for the 'github' connection
  */
 export type ConnectionOptionsGitHub = Record<string, unknown>;
 
 /**
- * options for the 'google-apps' connection
+ * Options for the 'google-apps' connection
  */
 export type ConnectionOptionsGoogleApps = Record<string, unknown>;
 
 /**
- * options for the 'google-oauth2' connection
+ * Options for the 'google-oauth2' connection
  */
-export type ConnectionOptionsGoogleOAuth2 = Record<string, unknown>;
+export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOptionsCommon {
+    /** View and manage user's ad applications, ad units, and channels in AdSense */
+    adsense_management?: boolean;
+    allowed_audiences?: Management.ConnectionAllowedAudiencesGoogleOAuth2;
+    /** View user's configuration information and reports */
+    analytics?: boolean;
+    /** View and manage user's posts and blogs on Blogger and Blogger comments */
+    blogger?: boolean;
+    /** See, edit, share, and permanently delete all the calendars you can access using Google Calendar */
+    calendar?: boolean;
+    /** Run as a Calendar add-on */
+    calendar_addons_execute?: boolean;
+    /** View and edit events on all your calendars */
+    calendar_events?: boolean;
+    /** View events on all your calendars */
+    calendar_events_readonly?: boolean;
+    /** View your Calendar settings */
+    calendar_settings_readonly?: boolean;
+    /** Read access to user's chrome web store */
+    chrome_web_store?: boolean;
+    client_id?: (Management.ConnectionClientIdGoogleOAuth2 | undefined) | null;
+    client_secret?: (Management.ConnectionClientSecretGoogleOAuth2 | undefined) | null;
+    /** Full access to the authenticated user's contacts */
+    contacts?: boolean;
+    /** Full access to the authenticated user's contacts */
+    contacts_new?: boolean;
+    /** Read-only access to the authenticated user's 'Other contacts' */
+    contacts_other_readonly?: boolean;
+    /** Read-only access to the authenticated user's contacts */
+    contacts_readonly?: boolean;
+    /** View and manage user's products, feeds, and subaccounts */
+    content_api_for_shopping?: boolean;
+    /** Grants read and write access to the Coordinate API */
+    coordinate?: boolean;
+    /** Grants read access to the Coordinate API */
+    coordinate_readonly?: boolean;
+    /** Read-only access to the authenticated user's corporate directory (if applicable) */
+    directory_readonly?: boolean;
+    /** Access to Google Docs document list feed */
+    document_list?: boolean;
+    /** Full access to all files and folders in the user's Google Drive */
+    drive?: boolean;
+    /** View and add to the activity record of files in your Drive */
+    drive_activity?: boolean;
+    /** View the activity record of files in your Drive */
+    drive_activity_readonly?: boolean;
+    /** Access to the application's configuration data in the user's Google Drive */
+    drive_appdata?: boolean;
+    /** View apps authorized to access your Drive */
+    drive_apps_readonly?: boolean;
+    /** Access to files created or opened by the app */
+    drive_file?: boolean;
+    /** Access to file metadata, including listing files and folders */
+    drive_metadata?: boolean;
+    /** Read-only access to file metadata */
+    drive_metadata_readonly?: boolean;
+    /** Read-only access to the user's Google Photos */
+    drive_photos_readonly?: boolean;
+    /** Read-only access to all files and folders in the user's Google Drive */
+    drive_readonly?: boolean;
+    /** Modify the behavior of Google Apps Scripts */
+    drive_scripts?: boolean;
+    /** Email and verified email flag */
+    email?: boolean;
+    freeform_scopes?: Management.ConnectionFreeformScopesGoogleOAuth2;
+    /** Full access to the account's mailboxes, including permanent deletion of threads and messages */
+    gmail?: boolean;
+    /** Read all resources and their metadata—no write operations */
+    gmail_compose?: boolean;
+    /** Insert and import messages only */
+    gmail_insert?: boolean;
+    /** Create, read, update, and delete labels only */
+    gmail_labels?: boolean;
+    /** Read resources metadata including labels, history records, and email message headers, but not the message body or attachments */
+    gmail_metadata?: boolean;
+    /** All read/write operations except immediate, permanent deletion of threads and messages, bypassing Trash */
+    gmail_modify?: boolean;
+    /** Full access to the account's mailboxes, including permanent deletion of threads and messages */
+    gmail_new?: boolean;
+    /** Read all resources and their metadata—no write operations */
+    gmail_readonly?: boolean;
+    /** Send messages only. No read or modify privileges on mailbox */
+    gmail_send?: boolean;
+    /** Manage basic mail settings */
+    gmail_settings_basic?: boolean;
+    /** Manage sensitive mail settings, including forwarding rules and aliases. Note: Operations guarded by this scope are restricted to administrative use only */
+    gmail_settings_sharing?: boolean;
+    /** View and manage user's publisher data in the Google Affiliate Network */
+    google_affiliate_network?: boolean;
+    /** View and manage user's books and library in Google Books */
+    google_books?: boolean;
+    /** View and manage user's data stored in Google Cloud Storage */
+    google_cloud_storage?: boolean;
+    /** Full access to all files and folders in the user's Google Drive */
+    google_drive?: boolean;
+    /** Access to files created or opened by the app */
+    google_drive_files?: boolean;
+    /** Associate user with its public Google profile */
+    google_plus?: boolean;
+    icon_url?: Management.ConnectionIconUrlGoogleOAuth2;
+    /** View and manage user's best-available current location and location history in Google Latitude */
+    latitude_best?: boolean;
+    /** View and manage user's city-level current location and location history in Google Latitude */
+    latitude_city?: boolean;
+    /** View and manage user's votes, topics, and submissions */
+    moderator?: boolean;
+    /** Request a refresh token when the user authorizes your application */
+    offline_access?: boolean;
+    /** View and manage user's friends, applications and profile and status */
+    orkut?: boolean;
+    /** View and manage user's Google photos, videos, photo and video tags and comments */
+    picasa_web?: boolean;
+    /** Name, public profile URL, photo, country, language, and timezone */
+    profile?: boolean;
+    scope?: Management.ConnectionScopeGoogleOAuth2;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    /** View and manage user's sites on Google Sites */
+    sites?: boolean;
+    /** Full access to create, edit, organize, and delete all your tasks */
+    tasks?: boolean;
+    /** Read-only access to view your tasks and task lists */
+    tasks_readonly?: boolean;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** View, manage and view statistics user's short URLs */
+    url_shortener?: boolean;
+    /** View and manage user's sites and messages, view keywords */
+    webmaster_tools?: boolean;
+    /** Manage your YouTube account */
+    youtube?: boolean;
+    /** See a list of your current active channel members, their current level, and when they became a member */
+    youtube_channelmemberships_creator?: boolean;
+    /** Manage your YouTube account */
+    youtube_new?: boolean;
+    /** View your YouTube account */
+    youtube_readonly?: boolean;
+    /** Manage your YouTube videos */
+    youtube_upload?: boolean;
+    /** View and manage your assets and associated content on YouTube */
+    youtubepartner?: boolean;
+}
 
 /**
- * options for the 'ip' connection
+ * Options for the 'ip' connection
  */
 export type ConnectionOptionsIp = Record<string, unknown>;
 
@@ -3252,18 +3891,40 @@ export type ConnectionOptionsInstagram = Management.ConnectionOptionsOAuth2Commo
 export type ConnectionOptionsLine = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'linkedin' connection
+ * Options for the 'linkedin' connection
  */
 export type ConnectionOptionsLinkedin = Record<string, unknown>;
 
 export type ConnectionOptionsMiicard = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'oauth1' connection
+ * Options for the 'oauth1' connection
  */
 export type ConnectionOptionsOAuth1 = Record<string, unknown>;
 
-export type ConnectionOptionsOAuth2 = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'oauth2' connection
+ */
+export interface ConnectionOptionsOAuth2 extends Management.ConnectionOptionsCommon {
+    authParams?: Management.ConnectionAuthParamsOAuth2;
+    authParamsMap?: Management.ConnectionAuthParamsMap;
+    authorizationURL?: Management.ConnectionAuthorizationEndpointOAuth2;
+    client_id?: Management.ConnectionClientIdOAuth2;
+    client_secret?: Management.ConnectionClientSecretOAuth2;
+    customHeaders?: Management.ConnectionCustomHeadersOAuth2;
+    fieldsMap?: Management.ConnectionFieldsMap;
+    icon_url?: Management.ConnectionIconUrl;
+    logoutUrl?: Management.ConnectionEndSessionEndpointOAuth2;
+    /** When true, enables Proof Key for Code Exchange (PKCE) for the authorization code flow. PKCE provides additional security by preventing authorization code interception attacks. */
+    pkce_enabled?: boolean;
+    scope?: Management.ConnectionScopeOAuth2;
+    scripts?: Management.ConnectionScriptsOAuth2;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    tokenURL?: Management.ConnectionTokenEndpointOAuth2;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean;
+}
 
 export interface ConnectionOptionsOAuth2Common extends Management.ConnectionOptionsCommon {
     client_id?: Management.ConnectionClientId;
@@ -3273,43 +3934,99 @@ export interface ConnectionOptionsOAuth2Common extends Management.ConnectionOpti
 }
 
 /**
- * options for the 'oidc' connection
+ * Options for the 'oidc' connection
  */
-export type ConnectionOptionsOidc = Record<string, unknown>;
+export interface ConnectionOptionsOidc
+    extends Management.ConnectionOptionsCommonOidc,
+        Management.ConnectionOptionsCommon {
+    attribute_map?: Management.ConnectionAttributeMapOidc;
+    discovery_url?: Management.ConnectionDiscoveryUrl;
+    type?: Management.ConnectionTypeEnumOidc;
+}
 
 /**
- * options for the 'office365' connection
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+ */
+export interface ConnectionOptionsOidcMetadata {
+    acr_values_supported?: Management.ConnectionAcrValuesSupported;
+    authorization_endpoint: Management.ConnectionAuthorizationEndpoint;
+    claim_types_supported?: Management.ConnectionClaimTypesSupported;
+    claims_locales_supported?: Management.ConnectionClaimsLocalesSupported;
+    claims_parameter_supported?: Management.ConnectionClaimsParameterSupported;
+    claims_supported?: Management.ConnectionClaimsSupported;
+    display_values_supported?: Management.ConnectionDisplayValuesSupported;
+    end_session_endpoint?: Management.ConnectionEndSessionEndpoint;
+    grant_types_supported?: Management.ConnectionGrantTypesSupported;
+    id_token_encryption_alg_values_supported?: Management.ConnectionIdTokenEncryptionAlgValuesSupported;
+    id_token_encryption_enc_values_supported?: Management.ConnectionIdTokenEncryptionEncValuesSupported;
+    id_token_signing_alg_values_supported: Management.ConnectionIdTokenSigningAlgValuesSupported;
+    issuer: Management.ConnectionIssuer;
+    jwks_uri: Management.ConnectionJwksUri;
+    op_policy_uri?: Management.ConnectionOpPolicyUri;
+    op_tos_uri?: Management.ConnectionOpTosUri;
+    registration_endpoint?: Management.ConnectionRegistrationEndpoint;
+    request_object_encryption_alg_values_supported?: Management.ConnectionRequestObjectEncryptionAlgValuesSupported;
+    request_object_encryption_enc_values_supported?: Management.ConnectionRequestObjectEncryptionEncValuesSupported;
+    request_object_signing_alg_values_supported?: Management.ConnectionRequestObjectSigningAlgValuesSupported;
+    request_parameter_supported?: Management.ConnectionRequestParameterSupported;
+    request_uri_parameter_supported?: Management.ConnectionRequestUriParameterSupported;
+    require_request_uri_registration?: Management.ConnectionRequireRequestUriRegistration;
+    response_modes_supported?: Management.ConnectionResponseModesSupported;
+    response_types_supported?: Management.ConnectionResponseTypesSupported;
+    scopes_supported?: (Management.ConnectionScopesSupported | undefined) | null;
+    service_documentation?: Management.ConnectionServiceDocumentation;
+    subject_types_supported?: Management.ConnectionSubjectTypesSupported;
+    token_endpoint?: Management.ConnectionTokenEndpoint;
+    token_endpoint_auth_methods_supported?: Management.ConnectionTokenEndpointAuthMethodsSupported;
+    token_endpoint_auth_signing_alg_values_supported?: Management.ConnectionTokenEndpointAuthSigningAlgValuesSupported;
+    ui_locales_supported?: Management.ConnectionUiLocalesSupported;
+    userinfo_encryption_alg_values_supported?: Management.ConnectionUserinfoEncryptionAlgValuesSupported;
+    userinfo_encryption_enc_values_supported?: Management.ConnectionUserinfoEncryptionEncValuesSupported;
+    userinfo_endpoint?: Management.ConnectionUserinfoEndpoint;
+    userinfo_signing_alg_values_supported?: Management.ConnectionUserinfoSigningAlgValuesSupported;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Options for the 'office365' connection
  */
 export type ConnectionOptionsOffice365 = Record<string, unknown>;
 
 /**
- * options for the 'okta' connection
+ * Options for the 'okta' connection
  */
-export type ConnectionOptionsOkta = Record<string, unknown>;
+export interface ConnectionOptionsOkta
+    extends Management.ConnectionOptionsCommonOidc,
+        Management.ConnectionOptionsCommon {
+    attribute_map?: Management.ConnectionAttributeMapOkta;
+    domain?: Management.ConnectionDomainOkta;
+    type?: Management.ConnectionTypeEnumOkta;
+}
 
 export type ConnectionOptionsPaypal = Management.ConnectionOptionsOAuth2Common;
 
 export type ConnectionOptionsPaypalSandbox = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'pingfederate' connection
+ * Options for the 'pingfederate' connection
  */
 export type ConnectionOptionsPingFederate = Record<string, unknown>;
 
 /**
- * options for the 'planningcenter' connection
+ * Options for the 'planningcenter' connection
  */
 export type ConnectionOptionsPlanningCenter = Record<string, unknown>;
 
 export type ConnectionOptionsRenren = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'samlp' connection
+ * Options for the 'samlp' connection
  */
 export type ConnectionOptionsSaml = Record<string, unknown>;
 
 /**
- * options for the 'sms' connection
+ * Options for the 'sms' connection
  */
 export type ConnectionOptionsSms = Record<string, unknown>;
 
@@ -3324,7 +4041,7 @@ export type ConnectionOptionsSalesforceSandbox = Management.ConnectionOptionsSal
 export type ConnectionOptionsSharepoint = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'shop' connection
+ * Options for the 'shop' connection
  */
 export type ConnectionOptionsShop = Record<string, unknown>;
 
@@ -3339,7 +4056,7 @@ export type ConnectionOptionsTheCitySandbox = Management.ConnectionOptionsOAuth2
 export type ConnectionOptionsThirtySevenSignals = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'twitter' connection
+ * Options for the 'twitter' connection
  */
 export type ConnectionOptionsTwitter = Record<string, unknown>;
 
@@ -3350,7 +4067,7 @@ export type ConnectionOptionsVkontakte = Management.ConnectionOptionsOAuth2Commo
 export type ConnectionOptionsWeibo = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * options for the 'windowslive' connection
+ * Options for the 'windowslive' connection
  */
 export type ConnectionOptionsWindowsLive = Record<string, unknown>;
 
@@ -3591,6 +4308,16 @@ export interface ConnectionPropertiesOptions {
 }
 
 /**
+ * A ticket used for provisioning the connection
+ */
+export type ConnectionProvisioningTicket = string;
+
+/**
+ * A ticket used for provisioning the connection
+ */
+export type ConnectionProvisioningTicketUrl = string;
+
+/**
  * Indicates whether to use realm fallback.
  */
 export type ConnectionRealmFallback = boolean;
@@ -3600,652 +4327,607 @@ export type ConnectionRealmFallback = boolean;
  */
 export type ConnectionRealms = string[];
 
-export interface ConnectionRequestCommon {
-    display_name?: Management.ConnectionDisplayName;
-    enabled_clients?: Management.ConnectionEnabledClients;
-    is_domain_connection?: Management.ConnectionIsDomainConnection;
-    show_as_button?: Management.ConnectionShowAsButton;
-    realms?: Management.ConnectionRealms;
-    metadata?: Management.ConnectionsMetadata;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
-}
+export type ConnectionRegistrationEndpoint = Management.ConnectionHttpsUrlWithHttpFallback;
+
+/**
+ * JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference.
+ */
+export type ConnectionRequestObjectEncryptionAlgValuesSupported = string[];
+
+/**
+ * JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference.
+ */
+export type ConnectionRequestObjectEncryptionEncValuesSupported = string[];
+
+/**
+ * JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256.
+ */
+export type ConnectionRequestObjectSigningAlgValuesSupported = string[];
+
+/**
+ * Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false.
+ */
+export type ConnectionRequestParameterSupported = boolean;
+
+/**
+ * Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false.
+ */
+export type ConnectionRequestUriParameterSupported = boolean;
+
+/**
+ * Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false.
+ */
+export type ConnectionRequireRequestUriRegistration = boolean;
 
 /**
  * Indicates whether the user is required to provide a username in addition to an email address.
  */
 export type ConnectionRequiresUsername = boolean;
 
-export interface ConnectionResponseCommon extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseCommon extends Management.CreateConnectionCommon {
     id?: Management.ConnectionId;
-    strategy?: Management.ConnectionIdentityProviderEnum;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=ad
  */
-export interface ConnectionResponseContentAd extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentAd extends Management.ConnectionResponseCommon {
     strategy: "ad";
     options?: Management.ConnectionOptionsAd;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=adfs
  */
-export interface ConnectionResponseContentAdfs extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentAdfs extends Management.ConnectionResponseCommon {
     strategy: "adfs";
     options?: Management.ConnectionOptionsAdfs;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=aol
  */
-export interface ConnectionResponseContentAol extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentAol extends Management.ConnectionResponseCommon {
     strategy: "aol";
     options?: Management.ConnectionOptionsAol;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=amazon
  */
-export interface ConnectionResponseContentAmazon extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentAmazon extends Management.ConnectionResponseCommon {
     strategy: "amazon";
     options?: Management.ConnectionOptionsAmazon;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=apple
  */
-export interface ConnectionResponseContentApple extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentApple extends Management.ConnectionResponseCommon {
     strategy: "apple";
     options?: Management.ConnectionOptionsApple;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=auth0
  */
-export interface ConnectionResponseContentAuth0 extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentAuth0 extends Management.ConnectionResponseCommon {
     strategy: "auth0";
     options?: Management.ConnectionOptionsAuth0;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=auth0-oidc
  */
-export interface ConnectionResponseContentAuth0Oidc extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentAuth0Oidc extends Management.ConnectionResponseCommon {
     strategy: "auth0-oidc";
     options?: Management.ConnectionOptionsAuth0Oidc;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=waad
  */
-export interface ConnectionResponseContentAzureAd extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentAzureAd extends Management.ConnectionResponseCommon {
     strategy: "waad";
     options?: Management.ConnectionOptionsAzureAd;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
+    provisioning_ticket?: Management.ConnectionProvisioningTicket;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
+    strategy_version?: Management.ConnectionStrategyVersionEnumAzureAd;
 }
 
 /**
  * Response for connections with strategy=baidu
  */
-export interface ConnectionResponseContentBaidu extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentBaidu extends Management.ConnectionResponseCommon {
     strategy: "baidu";
     options?: Management.ConnectionOptionsBaidu;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=bitbucket
  */
-export interface ConnectionResponseContentBitbucket extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentBitbucket extends Management.ConnectionResponseCommon {
     strategy: "bitbucket";
     options?: Management.ConnectionOptionsBitbucket;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=bitly
  */
-export interface ConnectionResponseContentBitly extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentBitly extends Management.ConnectionResponseCommon {
     strategy: "bitly";
     options?: Management.ConnectionOptionsBitly;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=box
  */
-export interface ConnectionResponseContentBox extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentBox extends Management.ConnectionResponseCommon {
     strategy: "box";
     options?: Management.ConnectionOptionsBox;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=custom
  */
-export interface ConnectionResponseContentCustom extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentCustom extends Management.ConnectionResponseCommon {
     strategy: "custom";
     options?: Management.ConnectionOptionsCustom;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=daccount
  */
-export interface ConnectionResponseContentDaccount extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentDaccount extends Management.ConnectionResponseCommon {
     strategy: "daccount";
     options?: Management.ConnectionOptionsDaccount;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=dropbox
  */
-export interface ConnectionResponseContentDropbox extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentDropbox extends Management.ConnectionResponseCommon {
     strategy: "dropbox";
     options?: Management.ConnectionOptionsDropbox;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=dwolla
  */
-export interface ConnectionResponseContentDwolla extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentDwolla extends Management.ConnectionResponseCommon {
     strategy: "dwolla";
     options?: Management.ConnectionOptionsDwolla;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=email
  */
-export interface ConnectionResponseContentEmail extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentEmail extends Management.ConnectionResponseCommon {
     strategy: "email";
     options?: Management.ConnectionOptionsEmail;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=evernote
  */
-export interface ConnectionResponseContentEvernote extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentEvernote extends Management.ConnectionResponseCommon {
     strategy: "evernote";
     options?: Management.ConnectionOptionsEvernote;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=evernote-sandbox
  */
-export interface ConnectionResponseContentEvernoteSandbox extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentEvernoteSandbox extends Management.ConnectionResponseCommon {
     strategy: "evernote-sandbox";
     options?: Management.ConnectionOptionsEvernoteSandbox;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=exact
  */
-export interface ConnectionResponseContentExact extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentExact extends Management.ConnectionResponseCommon {
     strategy: "exact";
     options?: Management.ConnectionOptionsExact;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=facebook
  */
-export interface ConnectionResponseContentFacebook extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentFacebook extends Management.ConnectionResponseCommon {
     strategy: "facebook";
     options?: Management.ConnectionOptionsFacebook;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=fitbit
  */
-export interface ConnectionResponseContentFitbit extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentFitbit extends Management.ConnectionResponseCommon {
     strategy: "fitbit";
     options?: Management.ConnectionOptionsFitbit;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=flickr
  */
-export interface ConnectionResponseContentFlickr extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentFlickr extends Management.ConnectionResponseCommon {
     strategy: "flickr";
     options?: Management.ConnectionOptionsFlickr;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=github
  */
-export interface ConnectionResponseContentGitHub extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentGitHub extends Management.ConnectionResponseCommon {
     strategy: "github";
     options?: Management.ConnectionOptionsGitHub;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=google-apps
  */
-export interface ConnectionResponseContentGoogleApps extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentGoogleApps extends Management.ConnectionResponseCommon {
     strategy: "google-apps";
     options?: Management.ConnectionOptionsGoogleApps;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=google-oauth2
  */
-export interface ConnectionResponseContentGoogleOAuth2 extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentGoogleOAuth2 extends Management.ConnectionResponseCommon {
     strategy: "google-oauth2";
     options?: Management.ConnectionOptionsGoogleOAuth2;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=ip
  */
-export interface ConnectionResponseContentIp extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentIp extends Management.ConnectionResponseCommon {
     strategy: "ip";
     options?: Management.ConnectionOptionsIp;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=instagram
  */
-export interface ConnectionResponseContentInstagram extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentInstagram extends Management.ConnectionResponseCommon {
     strategy: "instagram";
     options?: Management.ConnectionOptionsInstagram;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=line
  */
-export interface ConnectionResponseContentLine extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentLine extends Management.ConnectionResponseCommon {
     strategy: "line";
     options?: Management.ConnectionOptionsLine;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=linkedin
  */
-export interface ConnectionResponseContentLinkedin extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentLinkedin extends Management.ConnectionResponseCommon {
     strategy: "linkedin";
     options?: Management.ConnectionOptionsLinkedin;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=miicard
  */
-export interface ConnectionResponseContentMiicard extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentMiicard extends Management.ConnectionResponseCommon {
     strategy: "miicard";
     options?: Management.ConnectionOptionsMiicard;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=oauth1
  */
-export interface ConnectionResponseContentOAuth1 extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentOAuth1 extends Management.ConnectionResponseCommon {
     strategy: "oauth1";
     options?: Management.ConnectionOptionsOAuth1;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=oauth2
  */
-export interface ConnectionResponseContentOAuth2 extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentOAuth2 extends Management.ConnectionResponseCommon {
     strategy: "oauth2";
     options?: Management.ConnectionOptionsOAuth2;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=oidc
  */
-export interface ConnectionResponseContentOidc extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentOidc extends Management.ConnectionResponseCommon {
     strategy: "oidc";
     options?: Management.ConnectionOptionsOidc;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=office365
  */
-export interface ConnectionResponseContentOffice365 extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentOffice365 extends Management.ConnectionResponseCommon {
     strategy: "office365";
     options?: Management.ConnectionOptionsOffice365;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=okta
  */
-export interface ConnectionResponseContentOkta extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentOkta extends Management.ConnectionResponseCommon {
     strategy: "okta";
     options?: Management.ConnectionOptionsOkta;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=paypal
  */
-export interface ConnectionResponseContentPaypal extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentPaypal extends Management.ConnectionResponseCommon {
     strategy: "paypal";
     options?: Management.ConnectionOptionsPaypal;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=paypal-sandbox
  */
-export interface ConnectionResponseContentPaypalSandbox extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentPaypalSandbox extends Management.ConnectionResponseCommon {
     strategy: "paypal-sandbox";
     options?: Management.ConnectionOptionsPaypalSandbox;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=pingfederate
  */
-export interface ConnectionResponseContentPingFederate extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentPingFederate extends Management.ConnectionResponseCommon {
     strategy: "pingfederate";
     options?: Management.ConnectionOptionsPingFederate;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=planningcenter
  */
-export interface ConnectionResponseContentPlanningCenter extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentPlanningCenter extends Management.ConnectionResponseCommon {
     strategy: "planningcenter";
     options?: Management.ConnectionOptionsPlanningCenter;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=renren
  */
-export interface ConnectionResponseContentRenren extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentRenren extends Management.ConnectionResponseCommon {
     strategy: "renren";
     options?: Management.ConnectionOptionsRenren;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=samlp
  */
-export interface ConnectionResponseContentSaml extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentSaml extends Management.ConnectionResponseCommon {
     strategy: "samlp";
     options?: Management.ConnectionOptionsSaml;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=sms
  */
-export interface ConnectionResponseContentSms extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentSms extends Management.ConnectionResponseCommon {
     strategy: "sms";
     options?: Management.ConnectionOptionsSms;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=salesforce
  */
-export interface ConnectionResponseContentSalesforce extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentSalesforce extends Management.ConnectionResponseCommon {
     strategy: "salesforce";
     options?: Management.ConnectionOptionsSalesforce;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=salesforce-community
  */
-export interface ConnectionResponseContentSalesforceCommunity extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentSalesforceCommunity extends Management.ConnectionResponseCommon {
     strategy: "salesforce-community";
     options?: Management.ConnectionOptionsSalesforceCommunity;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=salesforce-sandbox
  */
-export interface ConnectionResponseContentSalesforceSandbox extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentSalesforceSandbox extends Management.ConnectionResponseCommon {
     strategy: "salesforce-sandbox";
     options?: Management.ConnectionOptionsSalesforceSandbox;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=sharepoint
  */
-export interface ConnectionResponseContentSharepoint extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentSharepoint extends Management.ConnectionResponseCommon {
     strategy: "sharepoint";
     options?: Management.ConnectionOptionsSharepoint;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=shop
  */
-export interface ConnectionResponseContentShop extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentShop extends Management.ConnectionResponseCommon {
     strategy: "shop";
     options?: Management.ConnectionOptionsShop;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=shopify
  */
-export interface ConnectionResponseContentShopify extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentShopify extends Management.ConnectionResponseCommon {
     strategy: "shopify";
     options?: Management.ConnectionOptionsShopify;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=soundcloud
  */
-export interface ConnectionResponseContentSoundcloud extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentSoundcloud extends Management.ConnectionResponseCommon {
     strategy: "soundcloud";
     options?: Management.ConnectionOptionsSoundcloud;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=thecity
  */
-export interface ConnectionResponseContentTheCity extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentTheCity extends Management.ConnectionResponseCommon {
     strategy: "thecity";
     options?: Management.ConnectionOptionsTheCity;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=thecity-sandbox
  */
-export interface ConnectionResponseContentTheCitySandbox extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentTheCitySandbox extends Management.ConnectionResponseCommon {
     strategy: "thecity-sandbox";
     options?: Management.ConnectionOptionsTheCitySandbox;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=thirtysevensignals
  */
-export interface ConnectionResponseContentThirtySevenSignals extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentThirtySevenSignals extends Management.ConnectionResponseCommon {
     strategy: "thirtysevensignals";
     options?: Management.ConnectionOptionsThirtySevenSignals;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=twitter
  */
-export interface ConnectionResponseContentTwitter extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentTwitter extends Management.ConnectionResponseCommon {
     strategy: "twitter";
     options?: Management.ConnectionOptionsTwitter;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=untappd
  */
-export interface ConnectionResponseContentUntappd extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentUntappd extends Management.ConnectionResponseCommon {
     strategy: "untappd";
     options?: Management.ConnectionOptionsUntappd;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=vkontakte
  */
-export interface ConnectionResponseContentVkontakte extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentVkontakte extends Management.ConnectionResponseCommon {
     strategy: "vkontakte";
     options?: Management.ConnectionOptionsVkontakte;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=weibo
  */
-export interface ConnectionResponseContentWeibo extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentWeibo extends Management.ConnectionResponseCommon {
     strategy: "weibo";
     options?: Management.ConnectionOptionsWeibo;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=windowslive
  */
-export interface ConnectionResponseContentWindowsLive extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentWindowsLive extends Management.ConnectionResponseCommon {
     strategy: "windowslive";
     options?: Management.ConnectionOptionsWindowsLive;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=wordpress
  */
-export interface ConnectionResponseContentWordpress extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentWordpress extends Management.ConnectionResponseCommon {
     strategy: "wordpress";
     options?: Management.ConnectionOptionsWordpress;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=yahoo
  */
-export interface ConnectionResponseContentYahoo extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentYahoo extends Management.ConnectionResponseCommon {
     strategy: "yahoo";
     options?: Management.ConnectionOptionsYahoo;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=yammer
  */
-export interface ConnectionResponseContentYammer extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentYammer extends Management.ConnectionResponseCommon {
     strategy: "yammer";
     options?: Management.ConnectionOptionsYammer;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
  * Response for connections with strategy=yandex
  */
-export interface ConnectionResponseContentYandex extends Management.ConnectionRequestCommon {
+export interface ConnectionResponseContentYandex extends Management.ConnectionResponseCommon {
     strategy: "yandex";
     options?: Management.ConnectionOptionsYandex;
-    id?: Management.ConnectionId;
-    name?: Management.ConnectionName;
 }
 
 /**
- * Space separated list of scopes
+ * A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"]
  */
-export type ConnectionScopeString = string;
+export type ConnectionResponseModesSupported = string[];
+
+/**
+ * A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values
+ */
+export type ConnectionResponseTypesSupported = string[];
+
+/**
+ * Array of custom OAuth 2.0 scopes to request during authentication.
+ */
+export type ConnectionScopeArray = Management.ConnectionScopeItem[];
+
+/**
+ * OAuth 2.0 scopes to request from Azure AD during authentication. Each scope represents a permission (e.g., 'User.Read', 'Group.Read.All'). Only applies with Microsoft Identity Platform v2.0. See Microsoft Graph permissions reference for available scopes.
+ */
+export type ConnectionScopeAzureAd = string[];
+
+/**
+ * Array of OAuth 2.0 scopes requested during Google authentication.
+ */
+export type ConnectionScopeGoogleOAuth2 = Management.ConnectionScopeArray;
+
+/**
+ * A single OAuth 2.0 scope string
+ */
+export type ConnectionScopeItem = string;
+
+/**
+ * OAuth 2.0 scopes requested from the identity provider during authorization. Determines what user information and permissions Auth0 can access. Can be specified as a space-delimited string (e.g., 'openid profile email') or array of scope values. The 'useOauthSpecScope' setting controls delimiter behavior when using connection_scope parameter.
+ */
+export type ConnectionScopeOAuth2 = string | string[];
+
+/**
+ * Space-separated list of scopes requested during /authorize. Must contain openid, typically contains 'openid profile email'
+ */
+export type ConnectionScopeOidc = string;
+
+/**
+ * A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED
+ */
+export type ConnectionScopesSupported = (string[] | null) | undefined;
+
+/**
+ * Custom scripts to transform user profile data or modify OAuth2 flow behavior
+ */
+export interface ConnectionScriptsOAuth2 {
+    /** Custom JavaScript function to retrieve and transform user profile data from the identity provider. Called with the access token and token exchange response. Must return a user profile object. Executed in a sandboxed environment. If not provided, an empty profile object is used. */
+    fetchUserProfile?: string;
+    /** Custom JavaScript function to dynamically construct the logout URL for the identity provider. Called with the request query parameters and must invoke a callback with the logout URL. Only used if 'logoutUrl' is not configured. Executed in a sandboxed environment. */
+    getLogoutUrl?: string;
+}
+
+/**
+ * whether to send a nonce to the identity provider when `type=back_channel`
+ */
+export type ConnectionSendBackChannelNonce = boolean;
+
+export type ConnectionServiceDocumentation = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /** When using an external IdP, this flag determines  whether 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes are updated. In addition, it also determines whether the user is created when user doesnt exist previously. Possible values are 'on_each_login' (default value, it configures the connection to automatically create the user if necessary and update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to create the user and set the root attributes on first login only, allowing them to be independently updated thereafter), and 'never_on_login' (configures the connection not to create the user and not to set the root attributes from the external IdP, allowing them to be independently updated). */
 export const ConnectionSetUserRootAttributesEnum = {
@@ -4255,6 +4937,14 @@ export const ConnectionSetUserRootAttributesEnum = {
 } as const;
 export type ConnectionSetUserRootAttributesEnum =
     (typeof ConnectionSetUserRootAttributesEnum)[keyof typeof ConnectionSetUserRootAttributesEnum];
+
+/** Choose how Auth0 sets the email_verified field in the user profile. */
+export const ConnectionShouldTrustEmailVerifiedConnectionEnum = {
+    NeverSetEmailsAsVerified: "never_set_emails_as_verified",
+    AlwaysSetEmailsAsVerified: "always_set_emails_as_verified",
+} as const;
+export type ConnectionShouldTrustEmailVerifiedConnectionEnum =
+    (typeof ConnectionShouldTrustEmailVerifiedConnectionEnum)[keyof typeof ConnectionShouldTrustEmailVerifiedConnectionEnum];
 
 /**
  * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
@@ -4328,6 +5018,87 @@ export const ConnectionStrategyEnum = {
 } as const;
 export type ConnectionStrategyEnum = (typeof ConnectionStrategyEnum)[keyof typeof ConnectionStrategyEnum];
 
+/**
+ * Strategy version
+ */
+export type ConnectionStrategyVersionEnumAzureAd = number;
+
+/**
+ * A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public
+ */
+export type ConnectionSubjectTypesSupported = string[];
+
+/**
+ * Tenant domain
+ */
+export type ConnectionTenantDomain = (string | null) | undefined;
+
+export type ConnectionTenantDomainAzureAdOne = string;
+
+/**
+ * The Azure AD tenant ID as a UUID. The unique identifier for your Azure AD organization. Must be a valid 36-character UUID.
+ */
+export type ConnectionTenantIdAzureAd = string;
+
+/**
+ * Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string.
+ */
+export type ConnectionThumbprints = string[];
+
+/**
+ * URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow.
+ */
+export type ConnectionTokenEndpoint = Management.ConnectionHttpsUrlWithHttpFallback;
+
+/** Requested Client Authentication method for the Token Endpoint. */
+export const ConnectionTokenEndpointAuthMethodEnum = {
+    ClientSecretPost: "client_secret_post",
+    PrivateKeyJwt: "private_key_jwt",
+} as const;
+export type ConnectionTokenEndpointAuthMethodEnum =
+    (typeof ConnectionTokenEndpointAuthMethodEnum)[keyof typeof ConnectionTokenEndpointAuthMethodEnum];
+
+/**
+ * JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749].
+ */
+export type ConnectionTokenEndpointAuthMethodsSupported = string[];
+
+/** Algorithm used to sign client_assertions. */
+export const ConnectionTokenEndpointAuthSigningAlgEnum = {
+    Es256: "ES256",
+    Ps256: "PS256",
+    Rs256: "RS256",
+    Rs512: "RS512",
+} as const;
+export type ConnectionTokenEndpointAuthSigningAlgEnum =
+    (typeof ConnectionTokenEndpointAuthSigningAlgEnum)[keyof typeof ConnectionTokenEndpointAuthSigningAlgEnum];
+
+/**
+ * JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used.
+ */
+export type ConnectionTokenEndpointAuthSigningAlgValuesSupported = string[];
+
+export type ConnectionTokenEndpointOAuth2 = Management.ConnectionTokenEndpoint;
+
+export type ConnectionTokenEndpointOidc = Management.ConnectionTokenEndpoint;
+
+/** Connection type */
+export const ConnectionTypeEnumOidc = {
+    BackChannel: "back_channel",
+    FrontChannel: "front_channel",
+} as const;
+export type ConnectionTypeEnumOidc = (typeof ConnectionTypeEnumOidc)[keyof typeof ConnectionTypeEnumOidc];
+
+/**
+ * Connection type
+ */
+export type ConnectionTypeEnumOkta = "back_channel";
+
+/**
+ * Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values.
+ */
+export type ConnectionUiLocalesSupported = string[];
+
 export type ConnectionUpstreamAdditionalProperties =
     | Management.ConnectionUpstreamAlias
     | Management.ConnectionUpstreamValue;
@@ -4360,9 +5131,53 @@ export type ConnectionUpstreamParams =
     | (Record<string, (Management.ConnectionUpstreamAdditionalProperties | null) | undefined> | null)
     | undefined;
 
+/**
+ * Custom parameters to include in authentication requests to Azure AD. Accepts up to 10 key-value pairs for passing additional parameters like domain hints or tenant hints to the identity provider.
+ */
+export type ConnectionUpstreamParamsAzureAd = ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+
+export type ConnectionUpstreamParamsOidc = ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+
 export interface ConnectionUpstreamValue {
     value?: string;
 }
+
+/**
+ * When enabled (true), uses the Azure AD common endpoint for multi-tenant authentication. Allows users from any Azure AD organization to sign in. Requires userid_attribute set to 'sub' (not 'oid'). Cannot be used with SCIM provisioning. Defaults to false.
+ */
+export type ConnectionUseCommonEndpointAzureAd = boolean;
+
+/**
+ * The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol.
+ */
+export type ConnectionUseridAttributeAzureAd = Management.ConnectionUseridAttributeEnumAzureAd;
+
+/** User ID attribute to use. Only applies when waad_protocol=openid-connect */
+export const ConnectionUseridAttributeEnumAzureAd = {
+    Oid: "oid",
+    Sub: "sub",
+} as const;
+export type ConnectionUseridAttributeEnumAzureAd =
+    (typeof ConnectionUseridAttributeEnumAzureAd)[keyof typeof ConnectionUseridAttributeEnumAzureAd];
+
+/**
+ * JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT].
+ */
+export type ConnectionUserinfoEncryptionAlgValuesSupported = string[];
+
+/**
+ * JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT].
+ */
+export type ConnectionUserinfoEncryptionEncValuesSupported = string[];
+
+export type ConnectionUserinfoEndpoint = Management.ConnectionHttpsUrlWithHttpFallback;
+
+export type ConnectionUserinfoEndpointOidc = Management.ConnectionUserinfoEndpoint;
+
+/**
+ * JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included.
+ */
+export type ConnectionUserinfoSigningAlgValuesSupported = string[];
 
 export interface ConnectionUsernameValidationOptions {
     min: number;
@@ -4375,6 +5190,19 @@ export interface ConnectionUsernameValidationOptions {
 export interface ConnectionValidationOptions {
     username?: Management.ConnectionUsernameValidationOptions | null;
 }
+
+/**
+ * The authentication protocol for Azure AD v1 endpoints. 'openid-connect' (default, recommended) uses modern OAuth 2.0/OIDC. 'ws-federation' is a legacy SAML-based protocol for older integrations. Only available with Azure AD v1 API.
+ */
+export type ConnectionWaadProtocol = Management.ConnectionWaadProtocolEnumAzureAd;
+
+/** Available WAAD protocols */
+export const ConnectionWaadProtocolEnumAzureAd = {
+    WsFederation: "ws-federation",
+    OpenidConnect: "openid-connect",
+} as const;
+export type ConnectionWaadProtocolEnumAzureAd =
+    (typeof ConnectionWaadProtocolEnumAzureAd)[keyof typeof ConnectionWaadProtocolEnumAzureAd];
 
 /**
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
@@ -4544,6 +5372,7 @@ export interface CreateClientResponseContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+    token_exchange?: Management.ClientTokenExchangeConfiguration;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
@@ -4553,6 +5382,10 @@ export interface CreateClientResponseContent {
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface CreateConnectionCommon extends Management.ConnectionCommon {
+    name?: Management.ConnectionName;
 }
 
 export interface CreateConnectionProfileResponseContent {
@@ -4568,7 +5401,7 @@ export interface CreateConnectionProfileResponseContent {
 /**
  * Create a connection with strategy=ad
  */
-export interface CreateConnectionRequestContentAd extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentAd extends Management.CreateConnectionCommon {
     strategy: "ad";
     options?: Management.ConnectionOptionsAd;
 }
@@ -4576,7 +5409,7 @@ export interface CreateConnectionRequestContentAd extends Management.ConnectionR
 /**
  * Create a connection with strategy=adfs
  */
-export interface CreateConnectionRequestContentAdfs extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentAdfs extends Management.CreateConnectionCommon {
     strategy: "adfs";
     options?: Management.ConnectionOptionsAdfs;
 }
@@ -4584,7 +5417,7 @@ export interface CreateConnectionRequestContentAdfs extends Management.Connectio
 /**
  * Create a connection with strategy=aol
  */
-export interface CreateConnectionRequestContentAol extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentAol extends Management.CreateConnectionCommon {
     strategy: "aol";
     options?: Management.ConnectionOptionsAol;
 }
@@ -4592,7 +5425,7 @@ export interface CreateConnectionRequestContentAol extends Management.Connection
 /**
  * Create a connection with strategy=amazon
  */
-export interface CreateConnectionRequestContentAmazon extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentAmazon extends Management.CreateConnectionCommon {
     strategy: "amazon";
     options?: Management.ConnectionOptionsAmazon;
 }
@@ -4600,7 +5433,7 @@ export interface CreateConnectionRequestContentAmazon extends Management.Connect
 /**
  * Create a connection with strategy=apple
  */
-export interface CreateConnectionRequestContentApple extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentApple extends Management.CreateConnectionCommon {
     strategy: "apple";
     options?: Management.ConnectionOptionsApple;
 }
@@ -4608,7 +5441,7 @@ export interface CreateConnectionRequestContentApple extends Management.Connecti
 /**
  * Create a connection with strategy=auth0
  */
-export interface CreateConnectionRequestContentAuth0 extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentAuth0 extends Management.CreateConnectionCommon {
     strategy: "auth0";
     options?: Management.ConnectionOptionsAuth0;
 }
@@ -4616,7 +5449,7 @@ export interface CreateConnectionRequestContentAuth0 extends Management.Connecti
 /**
  * Create a connection with strategy=auth0-oidc
  */
-export interface CreateConnectionRequestContentAuth0Oidc extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentAuth0Oidc extends Management.CreateConnectionCommon {
     strategy: "auth0-oidc";
     options?: Management.ConnectionOptionsAuth0Oidc;
 }
@@ -4624,15 +5457,17 @@ export interface CreateConnectionRequestContentAuth0Oidc extends Management.Conn
 /**
  * Create a connection with strategy=waad
  */
-export interface CreateConnectionRequestContentAzureAd extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentAzureAd extends Management.CreateConnectionCommon {
     strategy: "waad";
     options?: Management.ConnectionOptionsAzureAd;
+    provisioning_ticket?: Management.ConnectionProvisioningTicket;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
 }
 
 /**
  * Create a connection with strategy=baidu
  */
-export interface CreateConnectionRequestContentBaidu extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentBaidu extends Management.CreateConnectionCommon {
     strategy: "baidu";
     options?: Management.ConnectionOptionsBaidu;
 }
@@ -4640,7 +5475,7 @@ export interface CreateConnectionRequestContentBaidu extends Management.Connecti
 /**
  * Create a connection with strategy=bitbucket
  */
-export interface CreateConnectionRequestContentBitbucket extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentBitbucket extends Management.CreateConnectionCommon {
     strategy: "bitbucket";
     options?: Management.ConnectionOptionsBitbucket;
 }
@@ -4648,7 +5483,7 @@ export interface CreateConnectionRequestContentBitbucket extends Management.Conn
 /**
  * Create a connection with strategy=bitly
  */
-export interface CreateConnectionRequestContentBitly extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentBitly extends Management.CreateConnectionCommon {
     strategy: "bitly";
     options?: Management.ConnectionOptionsBitly;
 }
@@ -4656,7 +5491,7 @@ export interface CreateConnectionRequestContentBitly extends Management.Connecti
 /**
  * Create a connection with strategy=box
  */
-export interface CreateConnectionRequestContentBox extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentBox extends Management.CreateConnectionCommon {
     strategy: "box";
     options?: Management.ConnectionOptionsBox;
 }
@@ -4664,7 +5499,7 @@ export interface CreateConnectionRequestContentBox extends Management.Connection
 /**
  * Create a connection with strategy=custom
  */
-export interface CreateConnectionRequestContentCustom extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentCustom extends Management.CreateConnectionCommon {
     strategy: "custom";
     options?: Management.ConnectionOptionsCustom;
 }
@@ -4672,7 +5507,7 @@ export interface CreateConnectionRequestContentCustom extends Management.Connect
 /**
  * Create a connection with strategy=daccount
  */
-export interface CreateConnectionRequestContentDaccount extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentDaccount extends Management.CreateConnectionCommon {
     strategy: "daccount";
     options?: Management.ConnectionOptionsDaccount;
 }
@@ -4680,7 +5515,7 @@ export interface CreateConnectionRequestContentDaccount extends Management.Conne
 /**
  * Create a connection with strategy=dropbox
  */
-export interface CreateConnectionRequestContentDropbox extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentDropbox extends Management.CreateConnectionCommon {
     strategy: "dropbox";
     options?: Management.ConnectionOptionsDropbox;
 }
@@ -4688,7 +5523,7 @@ export interface CreateConnectionRequestContentDropbox extends Management.Connec
 /**
  * Create a connection with strategy=dwolla
  */
-export interface CreateConnectionRequestContentDwolla extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentDwolla extends Management.CreateConnectionCommon {
     strategy: "dwolla";
     options?: Management.ConnectionOptionsDwolla;
 }
@@ -4696,7 +5531,7 @@ export interface CreateConnectionRequestContentDwolla extends Management.Connect
 /**
  * Create a connection with strategy=email
  */
-export interface CreateConnectionRequestContentEmail extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentEmail extends Management.CreateConnectionCommon {
     strategy: "email";
     options?: Management.ConnectionOptionsEmail;
 }
@@ -4704,7 +5539,7 @@ export interface CreateConnectionRequestContentEmail extends Management.Connecti
 /**
  * Create a connection with strategy=evernote
  */
-export interface CreateConnectionRequestContentEvernote extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentEvernote extends Management.CreateConnectionCommon {
     strategy: "evernote";
     options?: Management.ConnectionOptionsEvernote;
 }
@@ -4712,7 +5547,7 @@ export interface CreateConnectionRequestContentEvernote extends Management.Conne
 /**
  * Create a connection with strategy=evernote-sandbox
  */
-export interface CreateConnectionRequestContentEvernoteSandbox extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentEvernoteSandbox extends Management.CreateConnectionCommon {
     strategy: "evernote-sandbox";
     options?: Management.ConnectionOptionsEvernoteSandbox;
 }
@@ -4720,7 +5555,7 @@ export interface CreateConnectionRequestContentEvernoteSandbox extends Managemen
 /**
  * Create a connection with strategy=exact
  */
-export interface CreateConnectionRequestContentExact extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentExact extends Management.CreateConnectionCommon {
     strategy: "exact";
     options?: Management.ConnectionOptionsExact;
 }
@@ -4728,7 +5563,7 @@ export interface CreateConnectionRequestContentExact extends Management.Connecti
 /**
  * Create a connection with strategy=facebook
  */
-export interface CreateConnectionRequestContentFacebook extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentFacebook extends Management.CreateConnectionCommon {
     strategy: "facebook";
     options?: Management.ConnectionOptionsFacebook;
 }
@@ -4736,7 +5571,7 @@ export interface CreateConnectionRequestContentFacebook extends Management.Conne
 /**
  * Create a connection with strategy=fitbit
  */
-export interface CreateConnectionRequestContentFitbit extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentFitbit extends Management.CreateConnectionCommon {
     strategy: "fitbit";
     options?: Management.ConnectionOptionsFitbit;
 }
@@ -4744,7 +5579,7 @@ export interface CreateConnectionRequestContentFitbit extends Management.Connect
 /**
  * Create a connection with strategy=flickr
  */
-export interface CreateConnectionRequestContentFlickr extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentFlickr extends Management.CreateConnectionCommon {
     strategy: "flickr";
     options?: Management.ConnectionOptionsFlickr;
 }
@@ -4752,7 +5587,7 @@ export interface CreateConnectionRequestContentFlickr extends Management.Connect
 /**
  * Create a connection with strategy=github
  */
-export interface CreateConnectionRequestContentGitHub extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentGitHub extends Management.CreateConnectionCommon {
     strategy: "github";
     options?: Management.ConnectionOptionsGitHub;
 }
@@ -4760,7 +5595,7 @@ export interface CreateConnectionRequestContentGitHub extends Management.Connect
 /**
  * Create a connection with strategy=google-apps
  */
-export interface CreateConnectionRequestContentGoogleApps extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentGoogleApps extends Management.CreateConnectionCommon {
     strategy: "google-apps";
     options?: Management.ConnectionOptionsGoogleApps;
 }
@@ -4768,7 +5603,7 @@ export interface CreateConnectionRequestContentGoogleApps extends Management.Con
 /**
  * Create a connection with strategy=google-oauth2
  */
-export interface CreateConnectionRequestContentGoogleOAuth2 extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentGoogleOAuth2 extends Management.CreateConnectionCommon {
     strategy: "google-oauth2";
     options?: Management.ConnectionOptionsGoogleOAuth2;
 }
@@ -4776,7 +5611,7 @@ export interface CreateConnectionRequestContentGoogleOAuth2 extends Management.C
 /**
  * Create a connection with strategy=ip
  */
-export interface CreateConnectionRequestContentIp extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentIp extends Management.CreateConnectionCommon {
     strategy: "ip";
     options?: Management.ConnectionOptionsIp;
 }
@@ -4784,7 +5619,7 @@ export interface CreateConnectionRequestContentIp extends Management.ConnectionR
 /**
  * Create a connection with strategy=instagram
  */
-export interface CreateConnectionRequestContentInstagram extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentInstagram extends Management.CreateConnectionCommon {
     strategy: "instagram";
     options?: Management.ConnectionOptionsInstagram;
 }
@@ -4792,7 +5627,7 @@ export interface CreateConnectionRequestContentInstagram extends Management.Conn
 /**
  * Create a connection with strategy=line
  */
-export interface CreateConnectionRequestContentLine extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentLine extends Management.CreateConnectionCommon {
     strategy: "line";
     options?: Management.ConnectionOptionsLine;
 }
@@ -4800,7 +5635,7 @@ export interface CreateConnectionRequestContentLine extends Management.Connectio
 /**
  * Create a connection with strategy=linkedin
  */
-export interface CreateConnectionRequestContentLinkedin extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentLinkedin extends Management.CreateConnectionCommon {
     strategy: "linkedin";
     options?: Management.ConnectionOptionsLinkedin;
 }
@@ -4808,7 +5643,7 @@ export interface CreateConnectionRequestContentLinkedin extends Management.Conne
 /**
  * Create a connection with strategy=miicard
  */
-export interface CreateConnectionRequestContentMiicard extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentMiicard extends Management.CreateConnectionCommon {
     strategy: "miicard";
     options?: Management.ConnectionOptionsMiicard;
 }
@@ -4816,7 +5651,7 @@ export interface CreateConnectionRequestContentMiicard extends Management.Connec
 /**
  * Create a connection with strategy=oauth1
  */
-export interface CreateConnectionRequestContentOAuth1 extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentOAuth1 extends Management.CreateConnectionCommon {
     strategy: "oauth1";
     options?: Management.ConnectionOptionsOAuth1;
 }
@@ -4824,7 +5659,7 @@ export interface CreateConnectionRequestContentOAuth1 extends Management.Connect
 /**
  * Create a connection with strategy=oauth2
  */
-export interface CreateConnectionRequestContentOAuth2 extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentOAuth2 extends Management.CreateConnectionCommon {
     strategy: "oauth2";
     options?: Management.ConnectionOptionsOAuth2;
 }
@@ -4832,7 +5667,7 @@ export interface CreateConnectionRequestContentOAuth2 extends Management.Connect
 /**
  * Create a connection with strategy=oidc
  */
-export interface CreateConnectionRequestContentOidc extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentOidc extends Management.CreateConnectionCommon {
     strategy: "oidc";
     options?: Management.ConnectionOptionsOidc;
 }
@@ -4840,7 +5675,7 @@ export interface CreateConnectionRequestContentOidc extends Management.Connectio
 /**
  * Create a connection with strategy=office365
  */
-export interface CreateConnectionRequestContentOffice365 extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentOffice365 extends Management.CreateConnectionCommon {
     strategy: "office365";
     options?: Management.ConnectionOptionsOffice365;
 }
@@ -4848,7 +5683,7 @@ export interface CreateConnectionRequestContentOffice365 extends Management.Conn
 /**
  * Create a connection with strategy=okta
  */
-export interface CreateConnectionRequestContentOkta extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentOkta extends Management.CreateConnectionCommon {
     strategy: "okta";
     options?: Management.ConnectionOptionsOkta;
 }
@@ -4856,7 +5691,7 @@ export interface CreateConnectionRequestContentOkta extends Management.Connectio
 /**
  * Create a connection with strategy=paypal
  */
-export interface CreateConnectionRequestContentPaypal extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentPaypal extends Management.CreateConnectionCommon {
     strategy: "paypal";
     options?: Management.ConnectionOptionsPaypal;
 }
@@ -4864,7 +5699,7 @@ export interface CreateConnectionRequestContentPaypal extends Management.Connect
 /**
  * Create a connection with strategy=paypal-sandbox
  */
-export interface CreateConnectionRequestContentPaypalSandbox extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentPaypalSandbox extends Management.CreateConnectionCommon {
     strategy: "paypal-sandbox";
     options?: Management.ConnectionOptionsPaypalSandbox;
 }
@@ -4872,7 +5707,7 @@ export interface CreateConnectionRequestContentPaypalSandbox extends Management.
 /**
  * Create a connection with strategy=pingfederate
  */
-export interface CreateConnectionRequestContentPingFederate extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentPingFederate extends Management.CreateConnectionCommon {
     strategy: "pingfederate";
     options?: Management.ConnectionOptionsPingFederate;
 }
@@ -4880,7 +5715,7 @@ export interface CreateConnectionRequestContentPingFederate extends Management.C
 /**
  * Create a connection with strategy=planningcenter
  */
-export interface CreateConnectionRequestContentPlanningCenter extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentPlanningCenter extends Management.CreateConnectionCommon {
     strategy: "planningcenter";
     options?: Management.ConnectionOptionsPlanningCenter;
 }
@@ -4888,7 +5723,7 @@ export interface CreateConnectionRequestContentPlanningCenter extends Management
 /**
  * Create a connection with strategy=renren
  */
-export interface CreateConnectionRequestContentRenren extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentRenren extends Management.CreateConnectionCommon {
     strategy: "renren";
     options?: Management.ConnectionOptionsRenren;
 }
@@ -4896,7 +5731,7 @@ export interface CreateConnectionRequestContentRenren extends Management.Connect
 /**
  * Create a connection with strategy=samlp
  */
-export interface CreateConnectionRequestContentSaml extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
     strategy: "samlp";
     options?: Management.ConnectionOptionsSaml;
 }
@@ -4904,7 +5739,7 @@ export interface CreateConnectionRequestContentSaml extends Management.Connectio
 /**
  * Create a connection with strategy=sms
  */
-export interface CreateConnectionRequestContentSms extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentSms extends Management.CreateConnectionCommon {
     strategy: "sms";
     options?: Management.ConnectionOptionsSms;
 }
@@ -4912,7 +5747,7 @@ export interface CreateConnectionRequestContentSms extends Management.Connection
 /**
  * Create a connection with strategy=salesforce
  */
-export interface CreateConnectionRequestContentSalesforce extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentSalesforce extends Management.CreateConnectionCommon {
     strategy: "salesforce";
     options?: Management.ConnectionOptionsSalesforce;
 }
@@ -4920,7 +5755,7 @@ export interface CreateConnectionRequestContentSalesforce extends Management.Con
 /**
  * Create a connection with strategy=salesforce-community
  */
-export interface CreateConnectionRequestContentSalesforceCommunity extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentSalesforceCommunity extends Management.CreateConnectionCommon {
     strategy: "salesforce-community";
     options?: Management.ConnectionOptionsSalesforceCommunity;
 }
@@ -4928,7 +5763,7 @@ export interface CreateConnectionRequestContentSalesforceCommunity extends Manag
 /**
  * Create a connection with strategy=salesforce-sandbox
  */
-export interface CreateConnectionRequestContentSalesforceSandbox extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentSalesforceSandbox extends Management.CreateConnectionCommon {
     strategy: "salesforce-sandbox";
     options?: Management.ConnectionOptionsSalesforceSandbox;
 }
@@ -4936,7 +5771,7 @@ export interface CreateConnectionRequestContentSalesforceSandbox extends Managem
 /**
  * Create a connection with strategy=sharepoint
  */
-export interface CreateConnectionRequestContentSharepoint extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentSharepoint extends Management.CreateConnectionCommon {
     strategy: "sharepoint";
     options?: Management.ConnectionOptionsSharepoint;
 }
@@ -4944,7 +5779,7 @@ export interface CreateConnectionRequestContentSharepoint extends Management.Con
 /**
  * Create a connection with strategy=shop
  */
-export interface CreateConnectionRequestContentShop extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentShop extends Management.CreateConnectionCommon {
     strategy: "shop";
     options?: Management.ConnectionOptionsShop;
 }
@@ -4952,7 +5787,7 @@ export interface CreateConnectionRequestContentShop extends Management.Connectio
 /**
  * Create a connection with strategy=shopify
  */
-export interface CreateConnectionRequestContentShopify extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentShopify extends Management.CreateConnectionCommon {
     strategy: "shopify";
     options?: Management.ConnectionOptionsShopify;
 }
@@ -4960,7 +5795,7 @@ export interface CreateConnectionRequestContentShopify extends Management.Connec
 /**
  * Create a connection with strategy=soundcloud
  */
-export interface CreateConnectionRequestContentSoundcloud extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentSoundcloud extends Management.CreateConnectionCommon {
     strategy: "soundcloud";
     options?: Management.ConnectionOptionsSoundcloud;
 }
@@ -4968,7 +5803,7 @@ export interface CreateConnectionRequestContentSoundcloud extends Management.Con
 /**
  * Create a connection with strategy=thecity
  */
-export interface CreateConnectionRequestContentTheCity extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentTheCity extends Management.CreateConnectionCommon {
     strategy: "thecity";
     options?: Management.ConnectionOptionsTheCity;
 }
@@ -4976,7 +5811,7 @@ export interface CreateConnectionRequestContentTheCity extends Management.Connec
 /**
  * Create a connection with strategy=thecity-sandbox
  */
-export interface CreateConnectionRequestContentTheCitySandbox extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentTheCitySandbox extends Management.CreateConnectionCommon {
     strategy: "thecity-sandbox";
     options?: Management.ConnectionOptionsTheCitySandbox;
 }
@@ -4984,7 +5819,7 @@ export interface CreateConnectionRequestContentTheCitySandbox extends Management
 /**
  * Create a connection with strategy=thirtysevensignals
  */
-export interface CreateConnectionRequestContentThirtySevenSignals extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentThirtySevenSignals extends Management.CreateConnectionCommon {
     strategy: "thirtysevensignals";
     options?: Management.ConnectionOptionsThirtySevenSignals;
 }
@@ -4992,7 +5827,7 @@ export interface CreateConnectionRequestContentThirtySevenSignals extends Manage
 /**
  * Create a connection with strategy=twitter
  */
-export interface CreateConnectionRequestContentTwitter extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentTwitter extends Management.CreateConnectionCommon {
     strategy: "twitter";
     options?: Management.ConnectionOptionsTwitter;
 }
@@ -5000,7 +5835,7 @@ export interface CreateConnectionRequestContentTwitter extends Management.Connec
 /**
  * Create a connection with strategy=untappd
  */
-export interface CreateConnectionRequestContentUntappd extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentUntappd extends Management.CreateConnectionCommon {
     strategy: "untappd";
     options?: Management.ConnectionOptionsUntappd;
 }
@@ -5008,7 +5843,7 @@ export interface CreateConnectionRequestContentUntappd extends Management.Connec
 /**
  * Create a connection with strategy=vkontakte
  */
-export interface CreateConnectionRequestContentVkontakte extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentVkontakte extends Management.CreateConnectionCommon {
     strategy: "vkontakte";
     options?: Management.ConnectionOptionsVkontakte;
 }
@@ -5016,7 +5851,7 @@ export interface CreateConnectionRequestContentVkontakte extends Management.Conn
 /**
  * Create a connection with strategy=weibo
  */
-export interface CreateConnectionRequestContentWeibo extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentWeibo extends Management.CreateConnectionCommon {
     strategy: "weibo";
     options?: Management.ConnectionOptionsWeibo;
 }
@@ -5024,7 +5859,7 @@ export interface CreateConnectionRequestContentWeibo extends Management.Connecti
 /**
  * Create a connection with strategy=windowslive
  */
-export interface CreateConnectionRequestContentWindowsLive extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentWindowsLive extends Management.CreateConnectionCommon {
     strategy: "windowslive";
     options?: Management.ConnectionOptionsWindowsLive;
 }
@@ -5032,7 +5867,7 @@ export interface CreateConnectionRequestContentWindowsLive extends Management.Co
 /**
  * Create a connection with strategy=wordpress
  */
-export interface CreateConnectionRequestContentWordpress extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentWordpress extends Management.CreateConnectionCommon {
     strategy: "wordpress";
     options?: Management.ConnectionOptionsWordpress;
 }
@@ -5040,7 +5875,7 @@ export interface CreateConnectionRequestContentWordpress extends Management.Conn
 /**
  * Create a connection with strategy=yahoo
  */
-export interface CreateConnectionRequestContentYahoo extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentYahoo extends Management.CreateConnectionCommon {
     strategy: "yahoo";
     options?: Management.ConnectionOptionsYahoo;
 }
@@ -5048,7 +5883,7 @@ export interface CreateConnectionRequestContentYahoo extends Management.Connecti
 /**
  * Create a connection with strategy=yammer
  */
-export interface CreateConnectionRequestContentYammer extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentYammer extends Management.CreateConnectionCommon {
     strategy: "yammer";
     options?: Management.ConnectionOptionsYammer;
 }
@@ -5056,7 +5891,7 @@ export interface CreateConnectionRequestContentYammer extends Management.Connect
 /**
  * Create a connection with strategy=yandex
  */
-export interface CreateConnectionRequestContentYandex extends Management.ConnectionRequestCommon {
+export interface CreateConnectionRequestContentYandex extends Management.CreateConnectionCommon {
     strategy: "yandex";
     options?: Management.ConnectionOptionsYandex;
 }
@@ -5098,7 +5933,47 @@ export interface CreateCustomDomainResponseContent {
     custom_client_ip_header?: string | null;
     /** The TLS version policy */
     tls_policy?: string;
+    domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
+}
+
+export interface CreateDirectoryProvisioningRequestContent {
+    /** The mapping between Auth0 and IDP user attributes */
+    mapping?: Management.DirectoryProvisioningMappingItem[];
+    /** Whether periodic automatic synchronization is enabled */
+    synchronize_automatically?: boolean;
+}
+
+export interface CreateDirectoryProvisioningResponseContent {
+    /** The connection's identifier */
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
+    /** The connection's strategy */
+    strategy: string;
+    /** The mapping between Auth0 and IDP user attributes */
+    mapping: Management.DirectoryProvisioningMappingItem[];
+    /** Whether periodic automatic synchronization is enabled */
+    synchronize_automatically: boolean;
+    /** The timestamp at which the directory provisioning configuration was created */
+    created_at: string;
+    /** The timestamp at which the directory provisioning configuration was last updated */
+    updated_at: string;
+    /** The timestamp at which the connection was last synchronized */
+    last_synchronization_at?: string;
+    /** The status of the last synchronization */
+    last_synchronization_status?: string;
+    /** The error message of the last synchronization, if any */
+    last_synchronization_error?: string;
+}
+
+export interface CreateDirectorySynchronizationResponseContent {
+    /** The connection's identifier */
+    connection_id: string;
+    /** The synchronization's identifier */
+    synchronization_id: string;
+    /** The synchronization status */
+    status: string;
 }
 
 export interface CreateEmailProviderResponseContent {
@@ -5900,6 +6775,8 @@ export interface CreateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
+    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -6274,6 +7151,7 @@ export interface CustomDomain {
     custom_client_ip_header?: string | null;
     /** The TLS version policy */
     tls_policy?: string;
+    domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
 }
 
@@ -6553,6 +7431,13 @@ export const DeviceCredentialTypeEnum = {
 } as const;
 export type DeviceCredentialTypeEnum = (typeof DeviceCredentialTypeEnum)[keyof typeof DeviceCredentialTypeEnum];
 
+export interface DirectoryProvisioningMappingItem {
+    /** The field location in the Auth0 schema */
+    auth0: string;
+    /** The field location in the IDP schema */
+    idp: string;
+}
+
 /**
  * Certificate information. This object is relevant only for Custom Domains with Auth0-Managed Certificates.
  */
@@ -6582,6 +7467,11 @@ export const DomainCertificateStatusEnum = {
 } as const;
 export type DomainCertificateStatusEnum =
     (typeof DomainCertificateStatusEnum)[keyof typeof DomainCertificateStatusEnum];
+
+/**
+ * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
+ */
+export type DomainMetadata = Record<string, (string | null) | undefined>;
 
 /**
  * Domain verification settings.
@@ -6626,6 +7516,8 @@ export type DomainVerificationStatusEnum =
  */
 export interface EmailAttribute {
     identifier?: Management.ConnectionAttributeIdentifier;
+    /** Determines if the attribute is unique in a given connection */
+    unique?: boolean;
     /** Determines if property should be required for users */
     profile_required?: boolean;
     verification_method?: Management.VerificationMethodEnum;
@@ -9708,11 +10600,11 @@ export interface GetAculResponseContent {
     context_configuration?: string[];
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean;
+    /** Use page template with ACUL */
+    use_page_template?: boolean | null;
     /** An array of head tags */
     head_tags?: Management.AculHeadTag[];
     filters?: Management.AculFilters | null;
-    /** Use page template with ACUL */
-    use_page_template?: boolean | null;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -9955,6 +10847,7 @@ export interface GetClientResponseContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+    token_exchange?: Management.ClientTokenExchangeConfiguration;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
@@ -10032,6 +10925,7 @@ export interface GetCustomDomainResponseContent {
     custom_client_ip_header?: string | null;
     /** The TLS version policy */
     tls_policy?: string;
+    domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
 }
 
@@ -10047,6 +10941,34 @@ export interface GetCustomSigningKeysResponseContent {
  * An object containing custom dictionaries for a group of screens.
  */
 export type GetCustomTextsByLanguageResponseContent = Record<string, unknown>;
+
+export interface GetDirectoryProvisioningDefaultMappingResponseContent {
+    /** The mapping between Auth0 and IDP user attributes */
+    mapping?: Management.DirectoryProvisioningMappingItem[];
+}
+
+export interface GetDirectoryProvisioningResponseContent {
+    /** The connection's identifier */
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
+    /** The connection's strategy */
+    strategy: string;
+    /** The mapping between Auth0 and IDP user attributes */
+    mapping: Management.DirectoryProvisioningMappingItem[];
+    /** Whether periodic automatic synchronization is enabled */
+    synchronize_automatically: boolean;
+    /** The timestamp at which the directory provisioning configuration was created */
+    created_at: string;
+    /** The timestamp at which the directory provisioning configuration was last updated */
+    updated_at: string;
+    /** The timestamp at which the connection was last synchronized */
+    last_synchronization_at?: string;
+    /** The status of the last synchronization */
+    last_synchronization_status?: string;
+    /** The error message of the last synchronization, if any */
+    last_synchronization_error?: string;
+}
 
 export interface GetEmailProviderResponseContent {
     /** Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`. */
@@ -10453,12 +11375,28 @@ export interface GetOrganizationConnectionResponseContent {
     connection?: Management.OrganizationConnectionInformation;
 }
 
+export interface GetOrganizationDiscoveryDomainByNameResponseContent {
+    /** Organization discovery domain identifier. */
+    id: string;
+    /** The domain name to associate with the organization e.g. acme.com. */
+    domain: string;
+    status: Management.OrganizationDiscoveryDomainStatus;
+    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    use_for_organization_discovery?: boolean;
+    /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
+    verification_txt: string;
+    /** The full domain where the TXT record should be added. */
+    verification_host: string;
+}
+
 export interface GetOrganizationDiscoveryDomainResponseContent {
     /** Organization discovery domain identifier. */
     id: string;
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
+    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -11152,6 +12090,11 @@ export const IdentityProviderEnum = {
 export type IdentityProviderEnum = (typeof IdentityProviderEnum)[keyof typeof IdentityProviderEnum];
 
 /**
+ * Identity provider name of the identity. Only `auth0` is supported
+ */
+export type IdentityProviderOnlyAuth0Enum = "auth0";
+
+/**
  * Encryption key
  */
 export interface ImportEncryptionKeyResponseContent {
@@ -11400,7 +12343,11 @@ export interface ListConnectionsCheckpointPaginatedResponseContent {
     connections?: Management.ConnectionForList[];
 }
 
-export type ListCustomDomainsResponseContent = Management.CustomDomain[];
+export interface ListCustomDomainsPaginatedResponseContent {
+    custom_domains: Management.CustomDomain[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string;
+}
 
 export interface ListDeviceCredentialsOffsetPaginatedResponseContent {
     start?: number;
@@ -12435,6 +13382,8 @@ export interface OrganizationDiscoveryDomain {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
+    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -13255,6 +14204,7 @@ export interface RotateClientSecretResponseContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+    token_exchange?: Management.ClientTokenExchangeConfiguration;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
@@ -13573,6 +14523,14 @@ export interface SelfServiceProfileSsoTicketEnabledOrganization {
     show_as_button?: boolean;
 }
 
+/**
+ * Configuration for Google Workspace Directory Sync during the self-service flow.
+ */
+export interface SelfServiceProfileSsoTicketGoogleWorkspaceConfig {
+    /** Whether to enable Google Workspace Directory Sync for users during the self-service flow. */
+    sync_users: boolean;
+}
+
 /** The protocol used to connect to the the default application */
 export const SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum = {
     Samlp: "samlp",
@@ -13601,6 +14559,7 @@ export interface SelfServiceProfileSsoTicketIdpInitiatedOptions {
 export interface SelfServiceProfileSsoTicketProvisioningConfig {
     /** The scopes of the SCIM tokens generated during the self-service flow. */
     scopes?: Management.SelfServiceProfileSsoTicketProvisioningScopeEnum[];
+    google_workspace?: Management.SelfServiceProfileSsoTicketGoogleWorkspaceConfig;
     /** Lifetime of the tokens in seconds. Must be greater than 900. If not provided, the tokens don't expire. */
     token_lifetime?: number | null;
 }
@@ -13823,26 +14782,12 @@ export interface SetGuardianFactorsProviderPhoneTwilioResponseContent {
     sid?: string | null;
 }
 
-export interface SetGuardianFactorsProviderPushNotificationApnsRequestContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
-    p12?: string | null;
-}
-
 export interface SetGuardianFactorsProviderPushNotificationApnsResponseContent {
     sandbox?: boolean;
     bundle_id?: string | null;
 }
 
-export interface SetGuardianFactorsProviderPushNotificationFcmRequestContent {
-    server_key?: string | null;
-}
-
 export type SetGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
-
-export interface SetGuardianFactorsProviderPushNotificationFcmv1RequestContent {
-    server_credentials?: string | null;
-}
 
 export type SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
 
@@ -13964,7 +14909,7 @@ export type SetUserAuthenticationMethodsRequestContent = Management.SetUserAuthe
  */
 export type SetsCustomTextsByLanguageRequestContent = Record<string, unknown>;
 
-/** Algorithm used to sign JWTs. Can be `HS256` or `RS256`. `PS256` available via addon. */
+/** Algorithm used to sign JWTs. Can be `HS256` (default) or `RS256`. `PS256` available via addon. */
 export const SigningAlgorithmEnum = {
     Hs256: "HS256",
     Rs256: "RS256",
@@ -14436,11 +15381,11 @@ export interface UpdateAculResponseContent {
     context_configuration?: string[];
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
+    /** Use page template with ACUL */
+    use_page_template?: boolean | null;
     /** An array of head tags */
     head_tags?: Management.AculHeadTag[];
     filters?: Management.AculFilters | null;
-    /** Use page template with ACUL */
-    use_page_template?: boolean | null;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -14699,6 +15644,7 @@ export interface UpdateClientResponseContent {
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
+    token_exchange?: Management.ClientTokenExchangeConfiguration;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     token_quota?: Management.TokenQuota;
@@ -14798,7 +15744,38 @@ export interface UpdateCustomDomainResponseContent {
     custom_client_ip_header?: string | null;
     /** The TLS version policy */
     tls_policy?: string;
+    domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
+}
+
+export interface UpdateDirectoryProvisioningRequestContent {
+    /** The mapping between Auth0 and IDP user attributes */
+    mapping?: Management.DirectoryProvisioningMappingItem[];
+    /** Whether periodic automatic synchronization is enabled */
+    synchronize_automatically?: boolean;
+}
+
+export interface UpdateDirectoryProvisioningResponseContent {
+    /** The connection's identifier */
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
+    /** The connection's strategy */
+    strategy: string;
+    /** The mapping between Auth0 and IDP user attributes */
+    mapping: Management.DirectoryProvisioningMappingItem[];
+    /** Whether periodic automatic synchronization is enabled */
+    synchronize_automatically: boolean;
+    /** The timestamp at which the directory provisioning configuration was created */
+    created_at: string;
+    /** The timestamp at which the directory provisioning configuration was last updated */
+    updated_at: string;
+    /** The timestamp at which the connection was last synchronized */
+    last_synchronization_at?: string;
+    /** The status of the last synchronization */
+    last_synchronization_status?: string;
+    /** The error message of the last synchronization, if any */
+    last_synchronization_error?: string;
 }
 
 export interface UpdateEmailProviderResponseContent {
@@ -14918,6 +15895,15 @@ export interface UpdateGuardianFactorDuoSettingsResponseContent {
     host?: string;
 }
 
+export interface UpdateGuardianFactorsProviderPushNotificationApnsResponseContent {
+    sandbox?: boolean;
+    bundle_id?: string | null;
+}
+
+export type UpdateGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
+
+export type UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
+
 export interface UpdateGuardianFactorsProviderPushNotificationSnsResponseContent {
     aws_access_key_id?: string | null;
     aws_secret_access_key?: string | null;
@@ -14987,6 +15973,8 @@ export interface UpdateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
+    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -15900,6 +16888,7 @@ export interface VerifyCustomDomainResponseContent {
     custom_client_ip_header?: string | null;
     /** The TLS version policy */
     tls_policy?: string;
+    domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
 }
 

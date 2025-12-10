@@ -2349,7 +2349,7 @@ await client.connections.checkStatus("id");
 
 ## CustomDomains
 
-<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">list</a>() -> Management.ListCustomDomainsResponseContent</code></summary>
+<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.CustomDomain, Management.ListCustomDomainsPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -2377,7 +2377,33 @@ Retrieve details on <a href="https://auth0.com/docs/custom-domains">custom domai
 <dd>
 
 ```typescript
-await client.customDomains.list();
+const pageableResponse = await client.customDomains.list({
+    take: 1,
+    from: "from",
+    q: "q",
+    fields: "fields",
+    include_fields: true,
+    sort: "sort",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.customDomains.list({
+    take: 1,
+    from: "from",
+    q: "q",
+    fields: "fields",
+    include_fields: true,
+    sort: "sort",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -2389,6 +2415,14 @@ await client.customDomains.list();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListCustomDomainsRequestParameters`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -9081,6 +9115,8 @@ await client.tickets.changePassword();
 
 Retrieve a list of all Token Exchange Profiles available in your tenant.
 
+By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+
 This endpoint supports Checkpoint pagination. To search by checkpoint, use the following parameters:
 
 <ul>
@@ -9171,6 +9207,8 @@ const response = page.response;
 
 Create a new Token Exchange Profile within your tenant.
 
+By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+
 </dd>
 </dl>
 </dd>
@@ -9238,6 +9276,8 @@ await client.tokenExchangeProfiles.create({
 
 Retrieve details about a single Token Exchange Profile specified by ID.
 
+By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+
 </dd>
 </dl>
 </dd>
@@ -9301,6 +9341,8 @@ await client.tokenExchangeProfiles.get("id");
 
 Delete a Token Exchange Profile within your tenant.
 
+By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta's Master Subscription Agreement</a>. It is your responsibility to securely validate the user's subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+
 </dd>
 </dl>
 </dd>
@@ -9363,6 +9405,8 @@ await client.tokenExchangeProfiles.delete("id");
 <dd>
 
 Update a Token Exchange Profile within your tenant.
+
+By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta's Master Subscription Agreement</a>. It is your responsibility to securely validate the user's subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
 
 </dd>
 </dl>
@@ -14196,6 +14240,339 @@ await client.connections.clients.update("id", [
 </dl>
 </details>
 
+## Connections DirectoryProvisioning
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">get</a>(id) -> Management.GetDirectoryProvisioningResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the directory provisioning configuration of a connection.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to retrieve its directory provisioning configuration
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">create</a>(id, { ...params }) -> Management.CreateDirectoryProvisioningResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a directory provisioning configuration for a connection.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.create("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to create its directory provisioning configuration
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateDirectoryProvisioningRequestContent | null`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete the directory provisioning configuration of a connection.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to delete its directory provisioning configuration
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateDirectoryProvisioningResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the directory provisioning configuration of a connection.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to create its directory provisioning configuration
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateDirectoryProvisioningRequestContent | null`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">getDefaultMapping</a>(id) -> Management.GetDirectoryProvisioningDefaultMappingResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the directory provisioning default attribute mapping of a connection.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.getDefaultMapping("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to retrieve its directory provisioning configuration
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Connections Keys
 
 <details><summary><code>client.connections.keys.<a href="/src/management/api/resources/connections/resources/keys/client/Client.ts">get</a>(id) -> Management.ConnectionKey[]</code></summary>
@@ -14733,6 +15110,71 @@ await client.connections.users.deleteByEmail("id", {
 <dd>
 
 **requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Connections DirectoryProvisioning Synchronizations
+
+<details><summary><code>client.connections.directoryProvisioning.synchronizations.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/client/Client.ts">create</a>(id) -> Management.CreateDirectorySynchronizationResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Request an on-demand synchronization of the directory.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.synchronizations.create("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to trigger synchronization for
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `SynchronizationsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16992,7 +17434,7 @@ await client.guardian.factors.pushNotification.getApnsProvider();
 <dl>
 <dd>
 
-Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
+Overwrite all configuration details of the multi-factor authentication APNS provider associated with your tenant.
 
 </dd>
 </dl>
@@ -17008,7 +17450,7 @@ Modify configuration details of the multi-factor authentication APNS provider as
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.setApnsProvider({});
+await client.guardian.factors.pushNotification.setApnsProvider();
 ```
 
 </dd>
@@ -17043,7 +17485,7 @@ await client.guardian.factors.pushNotification.setApnsProvider({});
 </dl>
 </details>
 
-<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">setFcmProvider</a>({ ...params }) -> Management.SetGuardianFactorsProviderPushNotificationFcmResponseContent</code></summary>
+<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateApnsProvider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationApnsResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -17055,7 +17497,7 @@ await client.guardian.factors.pushNotification.setApnsProvider({});
 <dl>
 <dd>
 
-Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
+Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
 
 </dd>
 </dl>
@@ -17071,7 +17513,70 @@ Modify configuration details of the multi-factor authentication FCM provider ass
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.setFcmProvider({});
+await client.guardian.factors.pushNotification.updateApnsProvider();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateGuardianFactorsProviderPushNotificationApnsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PushNotificationClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">setFcmProvider</a>({ ...params }) -> Management.SetGuardianFactorsProviderPushNotificationFcmResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Overwrite all configuration details of the multi-factor authentication FCM provider associated with your tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.pushNotification.setFcmProvider();
 ```
 
 </dd>
@@ -17106,7 +17611,133 @@ await client.guardian.factors.pushNotification.setFcmProvider({});
 </dl>
 </details>
 
+<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateFcmProvider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationFcmResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.pushNotification.updateFcmProvider();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateGuardianFactorsProviderPushNotificationFcmRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PushNotificationClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">setFcmv1Provider</a>({ ...params }) -> Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Overwrite all configuration details of the multi-factor authentication FCMV1 provider associated with your tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.pushNotification.setFcmv1Provider();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PushNotificationClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateFcmv1Provider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -17134,7 +17765,7 @@ Modify configuration details of the multi-factor authentication FCMV1 provider a
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.setFcmv1Provider({});
+await client.guardian.factors.pushNotification.updateFcmv1Provider();
 ```
 
 </dd>
@@ -17150,7 +17781,7 @@ await client.guardian.factors.pushNotification.setFcmv1Provider({});
 <dl>
 <dd>
 
-**request:** `Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent`
+**request:** `Management.UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent`
 
 </dd>
 </dl>
@@ -19745,7 +20376,7 @@ const response = page.response;
 <dl>
 <dd>
 
-Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
+Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
 
 </dd>
 </dl>
@@ -19960,7 +20591,7 @@ await client.organizations.discoveryDomains.delete("id", "discovery_domain_id");
 <dl>
 <dd>
 
-Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
+Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
 
 </dd>
 </dl>
@@ -21346,32 +21977,6 @@ const response = page.response;
 
 Learn more about <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring render settings</a> for advanced customization.
 
-<p>
-  Example <code>head_tags</code> array. See our <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>documentation</a> on using Liquid variables within head tags.
-</p>
-<pre>{
-  "head_tags": [
-    {
-      "tag": "script",
-      "attributes": {
-        "defer": true,
-        "src": "URL_TO_ASSET",
-        "async": true,
-        "integrity": [
-          "ASSET_SHA"
-        ]
-      }
-    },
-    {
-      "tag": "link",
-      "attributes": {
-        "href": "URL_TO_ASSET",
-        "rel": "stylesheet"
-      }
-    }
-  ]
-}
-</pre>
 </dd>
 </dl>
 </dd>
@@ -21513,32 +22118,6 @@ await client.prompts.rendering.get("login", "login");
 
 Learn more about <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring render settings</a> for advanced customization.
 
-<p>
-  Example <code>head_tags</code> array. See our <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>documentation</a> on using Liquid variables within head tags.
-</p>
-<pre>{
-  "head_tags": [
-    {
-      "tag": "script",
-      "attributes": {
-        "defer": true,
-        "src": "URL_TO_ASSET",
-        "async": true,
-        "integrity": [
-          "ASSET_SHA"
-        ]
-      }
-    },
-    {
-      "tag": "link",
-      "attributes": {
-        "href": "URL_TO_ASSET",
-        "rel": "stylesheet"
-      }
-    }
-  ]
-}
-</pre>
 </dd>
 </dl>
 </dd>
