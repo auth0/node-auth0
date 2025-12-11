@@ -1,5 +1,29 @@
 # Change Log
 
+## [v5.2.0](https://github.com/auth0/node-auth0/tree/v5.2.0) (2025-12-10)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.1.0...v5.2.0)
+
+**Added**
+
+- feat: Directory Provisioning API for connections [\#1278](https://github.com/auth0/node-auth0/pull/1278) ([developerkunal](https://github.com/developerkunal))
+- feat: Guardian Push Notification `updateApnsProvider()`, `updateFcmProvider()`, `updateFcmv1Provider()` methods [\#1278](https://github.com/auth0/node-auth0/pull/1278) ([developerkunal](https://github.com/developerkunal))
+- feat: Client Token Exchange `token_exchange` configuration [\#1278](https://github.com/auth0/node-auth0/pull/1278) ([developerkunal](https://github.com/developerkunal))
+- feat: Organization Discovery Domains `use_for_organization_discovery` field [\#1278](https://github.com/auth0/node-auth0/pull/1278) ([developerkunal](https://github.com/developerkunal))
+- feat: Custom Domain `domain_metadata` field [\#1278](https://github.com/auth0/node-auth0/pull/1278) ([developerkunal](https://github.com/developerkunal))
+- feat: Change Password Ticket `identity` option [\#1278](https://github.com/auth0/node-auth0/pull/1278) ([developerkunal](https://github.com/developerkunal))
+- feat: Connection Profiles API [\#1277](https://github.com/auth0/node-auth0/pull/1277) ([developerkunal](https://github.com/developerkunal))
+- feat: Organization Express Configuration API [\#1277](https://github.com/auth0/node-auth0/pull/1277) ([developerkunal](https://github.com/developerkunal))
+- feat: SDK logging support [\#1274](https://github.com/auth0/node-auth0/pull/1274) ([developerkunal](https://github.com/developerkunal))
+
+**Fixed**
+
+- fix: Resolve `hasNextPage()` infinite loop when `per_page` is not specified [\#1279](https://github.com/auth0/node-auth0/pull/1279) ([developerkunal](https://github.com/developerkunal))
+
+**Changed**
+
+- Guardian Push Notification `setApnsProvider()`, `setFcmProvider()`, `setFcmv1Provider()` now use PUT instead of PATCH [\#1278](https://github.com/auth0/node-auth0/pull/1278) ([developerkunal](https://github.com/developerkunal))
+
 ## [v5.1.0](https://github.com/auth0/node-auth0/tree/v5.1.0) (2025-11-06)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.0.0...v5.1.0)
