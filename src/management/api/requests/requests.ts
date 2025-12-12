@@ -1150,6 +1150,14 @@ export interface UpdateSettingsRequestContent {
 
 /**
  * @example
+ *     {}
+ */
+export interface UpdateRefreshTokenRequestContent {
+    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
+}
+
+/**
+ * @example
  *     {
  *         page: 1,
  *         per_page: 1,
@@ -3228,6 +3236,8 @@ export interface CreateSelfServiceProfileSsoTicketRequestContent {
     ttl_sec?: number;
     domain_aliases_config?: Management.SelfServiceProfileSsoTicketDomainAliasesConfig;
     provisioning_config?: Management.SelfServiceProfileSsoTicketProvisioningConfig;
+    /** Indicates whether a verified domain should be used for organization discovery during authentication. */
+    use_for_organization_discovery?: boolean;
 }
 
 /**

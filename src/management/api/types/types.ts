@@ -541,6 +541,9 @@ export const OauthScope = {
      * Read Refresh Tokens */
     ReadRefreshTokens: "read:refresh_tokens",
     /**
+     * Update Refresh Tokens */
+    UpdateRefreshTokens: "update:refresh_tokens",
+    /**
      * Delete Refresh Tokens */
     DeleteRefreshTokens: "delete:refresh_tokens",
     /**
@@ -11474,6 +11477,7 @@ export interface GetRefreshTokenResponseContent {
     rotating?: boolean;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[];
+    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
     last_exchanged_at?: Management.RefreshTokenDate;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -13869,6 +13873,11 @@ export const RefreshTokenExpirationTypeEnum = {
 export type RefreshTokenExpirationTypeEnum =
     (typeof RefreshTokenExpirationTypeEnum)[keyof typeof RefreshTokenExpirationTypeEnum];
 
+/**
+ * Metadata associated with the refresh token, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
+ */
+export type RefreshTokenMetadata = (Record<string, unknown> | null) | undefined;
+
 export interface RefreshTokenResourceServer {
     /** Resource server ID */
     audience?: string;
@@ -13894,6 +13903,7 @@ export interface RefreshTokenResponseContent {
     rotating?: boolean;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[];
+    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
     last_exchanged_at?: Management.RefreshTokenDate;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -16000,6 +16010,28 @@ export interface UpdatePhoneTemplateResponseContent {
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
     disabled: boolean;
+}
+
+export interface UpdateRefreshTokenResponseContent {
+    /** The ID of the refresh token */
+    id?: string;
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id?: string;
+    created_at?: Management.RefreshTokenDate;
+    idle_expires_at?: Management.RefreshTokenDate;
+    expires_at?: Management.RefreshTokenDate;
+    device?: Management.RefreshTokenDevice;
+    /** ID of the client application granted with this refresh token */
+    client_id?: string;
+    session_id?: (Management.RefreshTokenSessionId | undefined) | null;
+    /** True if the token is a rotating refresh token */
+    rotating?: boolean;
+    /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
+    resource_servers?: Management.RefreshTokenResourceServer[];
+    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
+    last_exchanged_at?: Management.RefreshTokenDate;
+    /** Accepts any additional properties */
+    [key: string]: any;
 }
 
 export interface UpdateResourceServerResponseContent {
