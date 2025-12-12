@@ -533,6 +533,8 @@ export interface UpdateConnectionRequestContent {
 /**
  * @example
  *     {
+ *         take: 1,
+ *         from: "from",
  *         q: "q",
  *         fields: "fields",
  *         include_fields: true,
@@ -540,6 +542,10 @@ export interface UpdateConnectionRequestContent {
  *     }
  */
 export interface ListCustomDomainsRequestParameters {
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
     /** Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>. */
     q?: string | null;
     /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
@@ -2547,58 +2553,6 @@ export interface SetGuardianFactorPhoneTemplatesRequestContent {
  * @example
  *     {}
  */
-export interface SetGuardianFactorsProviderPushNotificationApnsRequestContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
-    p12?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateGuardianFactorsProviderPushNotificationApnsRequestContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
-    p12?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface SetGuardianFactorsProviderPushNotificationFcmRequestContent {
-    server_key?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateGuardianFactorsProviderPushNotificationFcmRequestContent {
-    server_key?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface SetGuardianFactorsProviderPushNotificationFcmv1RequestContent {
-    server_credentials?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent {
-    server_credentials?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
 export interface SetGuardianFactorsProviderPushNotificationSnsRequestContent {
     aws_access_key_id?: string | null;
     aws_secret_access_key?: string | null;
@@ -2848,8 +2802,6 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
 }
 
 /**
@@ -2858,8 +2810,6 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
  */
 export interface UpdateOrganizationDiscoveryDomainRequestContent {
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
 }
 
 /**
