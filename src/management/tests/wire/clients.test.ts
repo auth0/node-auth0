@@ -401,7 +401,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -681,12 +680,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
             },
             default_organization: {
                 organization_id: "organization_id",
@@ -1028,7 +1021,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -1302,12 +1294,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
             },
             default_organization: {
                 organization_id: "organization_id",
@@ -1662,7 +1648,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -1940,12 +1925,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
             },
             default_organization: {
                 organization_id: "organization_id",
@@ -2277,7 +2256,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [{ audience: "audience", scope: ["scope"] }],
             },
             default_organization: { organization_id: "organization_id", flows: ["client_credentials"] },
             organization_usage: "deny",
@@ -2554,12 +2532,6 @@ describe("ClientsClient", () => {
                 infinite_token_lifetime: true,
                 idle_token_lifetime: 1,
                 infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
             },
             default_organization: {
                 organization_id: "organization_id",

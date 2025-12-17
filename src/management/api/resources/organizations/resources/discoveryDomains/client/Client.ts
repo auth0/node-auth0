@@ -142,7 +142,7 @@ export class DiscoveryDomainsClient {
     }
 
     /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+     * Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
      *
      * @param {string} id - ID of the organization.
      * @param {Management.CreateOrganizationDiscoveryDomainRequestContent} request
@@ -405,7 +405,7 @@ export class DiscoveryDomainsClient {
     }
 
     /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+     * Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
      *
      * @param {string} id - ID of the organization.
      * @param {string} discovery_domain_id - ID of the discovery domain to update.

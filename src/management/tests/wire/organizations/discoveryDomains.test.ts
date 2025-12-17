@@ -16,7 +16,6 @@ describe("DiscoveryDomainsClient", () => {
                     id: "id",
                     domain: "domain",
                     status: "pending",
-                    use_for_organization_discovery: true,
                     verification_txt: "verification_txt",
                     verification_host: "verification_host",
                 },
@@ -37,7 +36,6 @@ describe("DiscoveryDomainsClient", () => {
                     id: "id",
                     domain: "domain",
                     status: "pending",
-                    use_for_organization_discovery: true,
                     verification_txt: "verification_txt",
                     verification_host: "verification_host",
                 },
@@ -152,7 +150,6 @@ describe("DiscoveryDomainsClient", () => {
             id: "id",
             domain: "domain",
             status: "pending",
-            use_for_organization_discovery: true,
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         };
@@ -172,7 +169,6 @@ describe("DiscoveryDomainsClient", () => {
             id: "id",
             domain: "domain",
             status: "pending",
-            use_for_organization_discovery: true,
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         });
@@ -312,7 +308,6 @@ describe("DiscoveryDomainsClient", () => {
             id: "id",
             domain: "domain",
             status: "pending",
-            use_for_organization_discovery: true,
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         };
@@ -329,7 +324,6 @@ describe("DiscoveryDomainsClient", () => {
             id: "id",
             domain: "domain",
             status: "pending",
-            use_for_organization_discovery: true,
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         });
@@ -520,7 +514,6 @@ describe("DiscoveryDomainsClient", () => {
             id: "id",
             domain: "domain",
             status: "pending",
-            use_for_organization_discovery: true,
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         };
@@ -538,7 +531,6 @@ describe("DiscoveryDomainsClient", () => {
             id: "id",
             domain: "domain",
             status: "pending",
-            use_for_organization_discovery: true,
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         });
