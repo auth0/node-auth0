@@ -304,6 +304,127 @@ describe("DiscoveryDomainsClient", () => {
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
+    test("getByName (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            id: "id",
+            domain: "domain",
+            status: "pending",
+            use_for_organization_discovery: true,
+            verification_txt: "verification_txt",
+            verification_host: "verification_host",
+        };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/discovery-domains/name/discovery_domain")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+        expect(response).toEqual({
+            id: "id",
+            domain: "domain",
+            status: "pending",
+            use_for_organization_discovery: true,
+            verification_txt: "verification_txt",
+            verification_host: "verification_host",
+        });
+    });
+
+    test("getByName (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/discovery-domains/name/discovery_domain")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("getByName (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/discovery-domains/name/discovery_domain")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("getByName (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/discovery-domains/name/discovery_domain")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("getByName (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/discovery-domains/name/discovery_domain")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("getByName (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/organizations/id/discovery-domains/name/discovery_domain")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });

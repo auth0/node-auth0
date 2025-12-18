@@ -6818,6 +6818,77 @@ await client.refreshTokens.delete("id");
 </dl>
 </details>
 
+<details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateRefreshTokenResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a refresh token by its ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.refreshTokens.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the refresh token to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateRefreshTokenRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RefreshTokensClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## ResourceServers
 
 <details><summary><code>client.resourceServers.<a href="/src/management/api/resources/resourceServers/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent></code></summary>
@@ -20398,6 +20469,77 @@ await client.organizations.discoveryDomains.create("id", {
 <dd>
 
 **request:** `Management.CreateOrganizationDiscoveryDomainRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">getByName</a>(id, discovery_domain) -> Management.GetOrganizationDiscoveryDomainByNameResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details about a single organization discovery domain specified by domain name.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**discovery_domain:** `string` — Domain name of the discovery domain.
 
 </dd>
 </dl>
