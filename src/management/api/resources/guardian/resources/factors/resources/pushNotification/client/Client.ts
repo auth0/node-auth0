@@ -101,7 +101,7 @@ export class PushNotificationClient {
     }
 
     /**
-     * Overwrite all configuration details of the multi-factor authentication APNS provider associated with your tenant.
+     * Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
      *
      * @param {Management.SetGuardianFactorsProviderPushNotificationApnsRequestContent} request
      * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -111,17 +111,17 @@ export class PushNotificationClient {
      * @throws {@link Management.ForbiddenError}
      *
      * @example
-     *     await client.guardian.factors.pushNotification.setApnsProvider()
+     *     await client.guardian.factors.pushNotification.setApnsProvider({})
      */
     public setApnsProvider(
-        request: Management.SetGuardianFactorsProviderPushNotificationApnsRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationApnsRequestContent,
         requestOptions?: PushNotificationClient.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderPushNotificationApnsResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setApnsProvider(request, requestOptions));
     }
 
     private async __setApnsProvider(
-        request: Management.SetGuardianFactorsProviderPushNotificationApnsRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationApnsRequestContent,
         requestOptions?: PushNotificationClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationApnsResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -137,7 +137,7 @@ export class PushNotificationClient {
                     environments.ManagementEnvironment.Default,
                 "guardian/factors/push-notification/providers/apns",
             ),
-            method: "PUT",
+            method: "PATCH",
             headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
@@ -176,94 +176,13 @@ export class PushNotificationClient {
         return handleNonStatusCodeError(
             _response.error,
             _response.rawResponse,
-            "PUT",
-            "/guardian/factors/push-notification/providers/apns",
-        );
-    }
-
-    /**
-     * Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
-     *
-     * @param {Management.UpdateGuardianFactorsProviderPushNotificationApnsRequestContent} request
-     * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     *
-     * @example
-     *     await client.guardian.factors.pushNotification.updateApnsProvider()
-     */
-    public updateApnsProvider(
-        request: Management.UpdateGuardianFactorsProviderPushNotificationApnsRequestContent = {},
-        requestOptions?: PushNotificationClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateGuardianFactorsProviderPushNotificationApnsResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__updateApnsProvider(request, requestOptions));
-    }
-
-    private async __updateApnsProvider(
-        request: Management.UpdateGuardianFactorsProviderPushNotificationApnsRequestContent = {},
-        requestOptions?: PushNotificationClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateGuardianFactorsProviderPushNotificationApnsResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "guardian/factors/push-notification/providers/apns",
-            ),
-            method: "PATCH",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.UpdateGuardianFactorsProviderPushNotificationApnsResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
             "PATCH",
             "/guardian/factors/push-notification/providers/apns",
         );
     }
 
     /**
-     * Overwrite all configuration details of the multi-factor authentication FCM provider associated with your tenant.
+     * Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
      *
      * @param {Management.SetGuardianFactorsProviderPushNotificationFcmRequestContent} request
      * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -273,17 +192,17 @@ export class PushNotificationClient {
      * @throws {@link Management.ForbiddenError}
      *
      * @example
-     *     await client.guardian.factors.pushNotification.setFcmProvider()
+     *     await client.guardian.factors.pushNotification.setFcmProvider({})
      */
     public setFcmProvider(
-        request: Management.SetGuardianFactorsProviderPushNotificationFcmRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationFcmRequestContent,
         requestOptions?: PushNotificationClient.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderPushNotificationFcmResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setFcmProvider(request, requestOptions));
     }
 
     private async __setFcmProvider(
-        request: Management.SetGuardianFactorsProviderPushNotificationFcmRequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationFcmRequestContent,
         requestOptions?: PushNotificationClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationFcmResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -299,7 +218,7 @@ export class PushNotificationClient {
                     environments.ManagementEnvironment.Default,
                 "guardian/factors/push-notification/providers/fcm",
             ),
-            method: "PUT",
+            method: "PATCH",
             headers: _headers,
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
@@ -338,94 +257,13 @@ export class PushNotificationClient {
         return handleNonStatusCodeError(
             _response.error,
             _response.rawResponse,
-            "PUT",
-            "/guardian/factors/push-notification/providers/fcm",
-        );
-    }
-
-    /**
-     * Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
-     *
-     * @param {Management.UpdateGuardianFactorsProviderPushNotificationFcmRequestContent} request
-     * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     *
-     * @example
-     *     await client.guardian.factors.pushNotification.updateFcmProvider()
-     */
-    public updateFcmProvider(
-        request: Management.UpdateGuardianFactorsProviderPushNotificationFcmRequestContent = {},
-        requestOptions?: PushNotificationClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateGuardianFactorsProviderPushNotificationFcmResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__updateFcmProvider(request, requestOptions));
-    }
-
-    private async __updateFcmProvider(
-        request: Management.UpdateGuardianFactorsProviderPushNotificationFcmRequestContent = {},
-        requestOptions?: PushNotificationClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateGuardianFactorsProviderPushNotificationFcmResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "guardian/factors/push-notification/providers/fcm",
-            ),
-            method: "PATCH",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.UpdateGuardianFactorsProviderPushNotificationFcmResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
             "PATCH",
             "/guardian/factors/push-notification/providers/fcm",
         );
     }
 
     /**
-     * Overwrite all configuration details of the multi-factor authentication FCMV1 provider associated with your tenant.
+     * Modify configuration details of the multi-factor authentication FCMV1 provider associated with your tenant.
      *
      * @param {Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent} request
      * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -435,17 +273,17 @@ export class PushNotificationClient {
      * @throws {@link Management.ForbiddenError}
      *
      * @example
-     *     await client.guardian.factors.pushNotification.setFcmv1Provider()
+     *     await client.guardian.factors.pushNotification.setFcmv1Provider({})
      */
     public setFcmv1Provider(
-        request: Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent,
         requestOptions?: PushNotificationClient.RequestOptions,
     ): core.HttpResponsePromise<Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__setFcmv1Provider(request, requestOptions));
     }
 
     private async __setFcmv1Provider(
-        request: Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent = {},
+        request: Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent,
         requestOptions?: PushNotificationClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -461,87 +299,6 @@ export class PushNotificationClient {
                     environments.ManagementEnvironment.Default,
                 "guardian/factors/push-notification/providers/fcmv1",
             ),
-            method: "PUT",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "PUT",
-            "/guardian/factors/push-notification/providers/fcmv1",
-        );
-    }
-
-    /**
-     * Modify configuration details of the multi-factor authentication FCMV1 provider associated with your tenant.
-     *
-     * @param {Management.UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent} request
-     * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     *
-     * @example
-     *     await client.guardian.factors.pushNotification.updateFcmv1Provider()
-     */
-    public updateFcmv1Provider(
-        request: Management.UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent = {},
-        requestOptions?: PushNotificationClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__updateFcmv1Provider(request, requestOptions));
-    }
-
-    private async __updateFcmv1Provider(
-        request: Management.UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent = {},
-        requestOptions?: PushNotificationClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "guardian/factors/push-notification/providers/fcmv1",
-            ),
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
@@ -556,7 +313,7 @@ export class PushNotificationClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent,
+                data: _response.body as Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }

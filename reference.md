@@ -2378,6 +2378,8 @@ Retrieve details on <a href="https://auth0.com/docs/custom-domains">custom domai
 
 ```typescript
 await client.customDomains.list({
+    take: 1,
+    from: "from",
     q: "q",
     fields: "fields",
     include_fields: true,
@@ -6800,77 +6802,6 @@ await client.refreshTokens.delete("id");
 <dd>
 
 **id:** `string` — ID of the refresh token to delete.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `RefreshTokensClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateRefreshTokenResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update a refresh token by its ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.refreshTokens.update("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the refresh token to update.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateRefreshTokenRequestContent`
 
 </dd>
 </dl>
@@ -17484,7 +17415,7 @@ await client.guardian.factors.pushNotification.getApnsProvider();
 <dl>
 <dd>
 
-Overwrite all configuration details of the multi-factor authentication APNS provider associated with your tenant.
+Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
 
 </dd>
 </dl>
@@ -17500,7 +17431,7 @@ Overwrite all configuration details of the multi-factor authentication APNS prov
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.setApnsProvider();
+await client.guardian.factors.pushNotification.setApnsProvider({});
 ```
 
 </dd>
@@ -17535,69 +17466,6 @@ await client.guardian.factors.pushNotification.setApnsProvider();
 </dl>
 </details>
 
-<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateApnsProvider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationApnsResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.guardian.factors.pushNotification.updateApnsProvider();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateGuardianFactorsProviderPushNotificationApnsRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PushNotificationClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">setFcmProvider</a>({ ...params }) -> Management.SetGuardianFactorsProviderPushNotificationFcmResponseContent</code></summary>
 <dl>
 <dd>
@@ -17610,7 +17478,7 @@ await client.guardian.factors.pushNotification.updateApnsProvider();
 <dl>
 <dd>
 
-Overwrite all configuration details of the multi-factor authentication FCM provider associated with your tenant.
+Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
 
 </dd>
 </dl>
@@ -17626,7 +17494,7 @@ Overwrite all configuration details of the multi-factor authentication FCM provi
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.setFcmProvider();
+await client.guardian.factors.pushNotification.setFcmProvider({});
 ```
 
 </dd>
@@ -17661,133 +17529,7 @@ await client.guardian.factors.pushNotification.setFcmProvider();
 </dl>
 </details>
 
-<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateFcmProvider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationFcmResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.guardian.factors.pushNotification.updateFcmProvider();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateGuardianFactorsProviderPushNotificationFcmRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PushNotificationClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">setFcmv1Provider</a>({ ...params }) -> Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Overwrite all configuration details of the multi-factor authentication FCMV1 provider associated with your tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.guardian.factors.pushNotification.setFcmv1Provider();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PushNotificationClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateFcmv1Provider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -17815,7 +17557,7 @@ Modify configuration details of the multi-factor authentication FCMV1 provider a
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.updateFcmv1Provider();
+await client.guardian.factors.pushNotification.setFcmv1Provider({});
 ```
 
 </dd>
@@ -17831,7 +17573,7 @@ await client.guardian.factors.pushNotification.updateFcmv1Provider();
 <dl>
 <dd>
 
-**request:** `Management.UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent`
+**request:** `Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent`
 
 </dd>
 </dl>
@@ -20426,7 +20168,7 @@ const response = page.response;
 <dl>
 <dd>
 
-Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
 
 </dd>
 </dl>
@@ -20469,77 +20211,6 @@ await client.organizations.discoveryDomains.create("id", {
 <dd>
 
 **request:** `Management.CreateOrganizationDiscoveryDomainRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">getByName</a>(id, discovery_domain) -> Management.GetOrganizationDiscoveryDomainByNameResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a single organization discovery domain specified by domain name.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the organization.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**discovery_domain:** `string` — Domain name of the discovery domain.
 
 </dd>
 </dl>
@@ -20712,7 +20383,7 @@ await client.organizations.discoveryDomains.delete("id", "discovery_domain_id");
 <dl>
 <dd>
 
-Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
 
 </dd>
 </dl>

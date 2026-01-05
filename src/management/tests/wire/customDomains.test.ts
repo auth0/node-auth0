@@ -37,6 +37,8 @@ describe("CustomDomainsClient", () => {
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.customDomains.list({
+            take: 1,
+            from: "from",
             q: "q",
             fields: "fields",
             include_fields: true,
