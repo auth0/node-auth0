@@ -21,7 +21,6 @@ describe("RefreshTokenClient", () => {
                     session_id: "session_id",
                     rotating: true,
                     resource_servers: [{}],
-                    refresh_token_metadata: { key: "value" },
                     last_exchanged_at: "2024-01-15T09:30:00Z",
                 },
             ],
@@ -47,9 +46,6 @@ describe("RefreshTokenClient", () => {
                     session_id: "session_id",
                     rotating: true,
                     resource_servers: [{}],
-                    refresh_token_metadata: {
-                        key: "value",
-                    },
                     last_exchanged_at: "2024-01-15T09:30:00Z",
                 },
             ],

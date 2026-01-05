@@ -87,14 +87,14 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { sandbox: true, bundle_id: "bundle_id" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/apns")
+            .patch("/guardian/factors/push-notification/providers/apns")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.guardian.factors.pushNotification.setApnsProvider();
+        const response = await client.guardian.factors.pushNotification.setApnsProvider({});
         expect(response).toEqual({
             sandbox: true,
             bundle_id: "bundle_id",
@@ -108,7 +108,7 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/apns")
+            .patch("/guardian/factors/push-notification/providers/apns")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(400)
@@ -116,7 +116,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.setApnsProvider();
+            return await client.guardian.factors.pushNotification.setApnsProvider({});
         }).rejects.toThrow(Management.BadRequestError);
     });
 
@@ -127,7 +127,7 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/apns")
+            .patch("/guardian/factors/push-notification/providers/apns")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -135,7 +135,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.setApnsProvider();
+            return await client.guardian.factors.pushNotification.setApnsProvider({});
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -146,84 +146,6 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/apns")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.setApnsProvider();
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("updateApnsProvider (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { sandbox: true, bundle_id: "bundle_id" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/apns")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.guardian.factors.pushNotification.updateApnsProvider();
-        expect(response).toEqual({
-            sandbox: true,
-            bundle_id: "bundle_id",
-        });
-    });
-
-    test("updateApnsProvider (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/apns")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateApnsProvider();
-        }).rejects.toThrow(Management.BadRequestError);
-    });
-
-    test("updateApnsProvider (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/apns")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateApnsProvider();
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("updateApnsProvider (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/apns")
             .jsonBody(rawRequestBody)
             .respondWith()
@@ -232,7 +154,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateApnsProvider();
+            return await client.guardian.factors.pushNotification.setApnsProvider({});
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
@@ -243,14 +165,14 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcm")
+            .patch("/guardian/factors/push-notification/providers/fcm")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.guardian.factors.pushNotification.setFcmProvider();
+        const response = await client.guardian.factors.pushNotification.setFcmProvider({});
         expect(response).toEqual({
             key: "value",
         });
@@ -263,7 +185,7 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcm")
+            .patch("/guardian/factors/push-notification/providers/fcm")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(400)
@@ -271,7 +193,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.setFcmProvider();
+            return await client.guardian.factors.pushNotification.setFcmProvider({});
         }).rejects.toThrow(Management.BadRequestError);
     });
 
@@ -282,7 +204,7 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcm")
+            .patch("/guardian/factors/push-notification/providers/fcm")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -290,7 +212,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.setFcmProvider();
+            return await client.guardian.factors.pushNotification.setFcmProvider({});
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -301,83 +223,6 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcm")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.setFcmProvider();
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("updateFcmProvider (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/fcm")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.guardian.factors.pushNotification.updateFcmProvider();
-        expect(response).toEqual({
-            key: "value",
-        });
-    });
-
-    test("updateFcmProvider (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/fcm")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateFcmProvider();
-        }).rejects.toThrow(Management.BadRequestError);
-    });
-
-    test("updateFcmProvider (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/fcm")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateFcmProvider();
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("updateFcmProvider (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcm")
             .jsonBody(rawRequestBody)
             .respondWith()
@@ -386,7 +231,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateFcmProvider();
+            return await client.guardian.factors.pushNotification.setFcmProvider({});
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
@@ -397,14 +242,14 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcmv1")
+            .patch("/guardian/factors/push-notification/providers/fcmv1")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.guardian.factors.pushNotification.setFcmv1Provider();
+        const response = await client.guardian.factors.pushNotification.setFcmv1Provider({});
         expect(response).toEqual({
             key: "value",
         });
@@ -417,7 +262,7 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcmv1")
+            .patch("/guardian/factors/push-notification/providers/fcmv1")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(400)
@@ -425,7 +270,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.setFcmv1Provider();
+            return await client.guardian.factors.pushNotification.setFcmv1Provider({});
         }).rejects.toThrow(Management.BadRequestError);
     });
 
@@ -436,7 +281,7 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcmv1")
+            .patch("/guardian/factors/push-notification/providers/fcmv1")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -444,7 +289,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.setFcmv1Provider();
+            return await client.guardian.factors.pushNotification.setFcmv1Provider({});
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -455,83 +300,6 @@ describe("PushNotificationClient", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .put("/guardian/factors/push-notification/providers/fcmv1")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.setFcmv1Provider();
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("updateFcmv1Provider (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/fcmv1")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.guardian.factors.pushNotification.updateFcmv1Provider();
-        expect(response).toEqual({
-            key: "value",
-        });
-    });
-
-    test("updateFcmv1Provider (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/fcmv1")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateFcmv1Provider();
-        }).rejects.toThrow(Management.BadRequestError);
-    });
-
-    test("updateFcmv1Provider (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/guardian/factors/push-notification/providers/fcmv1")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateFcmv1Provider();
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("updateFcmv1Provider (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcmv1")
             .jsonBody(rawRequestBody)
             .respondWith()
@@ -540,7 +308,7 @@ describe("PushNotificationClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.guardian.factors.pushNotification.updateFcmv1Provider();
+            return await client.guardian.factors.pushNotification.setFcmv1Provider({});
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
