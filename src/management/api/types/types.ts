@@ -541,9 +541,6 @@ export const OauthScope = {
      * Read Refresh Tokens */
     ReadRefreshTokens: "read:refresh_tokens",
     /**
-     * Update Refresh Tokens */
-    UpdateRefreshTokens: "update:refresh_tokens",
-    /**
      * Delete Refresh Tokens */
     DeleteRefreshTokens: "delete:refresh_tokens",
     /**
@@ -2690,15 +2687,6 @@ export interface ClientRefreshTokenConfiguration {
     idle_token_lifetime?: number;
     /** Prevents tokens from expiring without use when `true` (takes precedence over `idle_token_lifetime` values) */
     infinite_idle_token_lifetime?: boolean;
-    /** A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers */
-    policies?: Management.ClientRefreshTokenPolicy[];
-}
-
-export interface ClientRefreshTokenPolicy {
-    /** The identifier of the resource server to which the Multi Resource Refresh Token Policy applies */
-    audience: string;
-    /** The resource server permissions granted under the Multi Resource Refresh Token Policy, defining the context in which an access token can be used */
-    scope: string[];
 }
 
 export const ClientSessionTransferAllowedAuthenticationMethodsEnum = {
@@ -3657,7 +3645,7 @@ export type ConnectionOptionsBitly = Management.ConnectionOptionsOAuth2Common;
 export type ConnectionOptionsBox = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * Common attributes for connection options including non-persistent attributes and Cross App Access
+ * Common attributes for connection options including non-persistent attributes and cross-app access
  */
 export interface ConnectionOptionsCommon {
     non_persistent_attrs?: Management.ConnectionNonPersistentAttrs;
@@ -6778,8 +6766,6 @@ export interface CreateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -11378,28 +11364,12 @@ export interface GetOrganizationConnectionResponseContent {
     connection?: Management.OrganizationConnectionInformation;
 }
 
-export interface GetOrganizationDiscoveryDomainByNameResponseContent {
-    /** Organization discovery domain identifier. */
-    id: string;
-    /** The domain name to associate with the organization e.g. acme.com. */
-    domain: string;
-    status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
-    /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
-    verification_txt: string;
-    /** The full domain where the TXT record should be added. */
-    verification_host: string;
-}
-
 export interface GetOrganizationDiscoveryDomainResponseContent {
     /** Organization discovery domain identifier. */
     id: string;
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -11477,7 +11447,6 @@ export interface GetRefreshTokenResponseContent {
     rotating?: boolean;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
     last_exchanged_at?: Management.RefreshTokenDate;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -13382,8 +13351,6 @@ export interface OrganizationDiscoveryDomain {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -13873,11 +13840,6 @@ export const RefreshTokenExpirationTypeEnum = {
 export type RefreshTokenExpirationTypeEnum =
     (typeof RefreshTokenExpirationTypeEnum)[keyof typeof RefreshTokenExpirationTypeEnum];
 
-/**
- * Metadata associated with the refresh token, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
- */
-export type RefreshTokenMetadata = (Record<string, unknown> | null) | undefined;
-
 export interface RefreshTokenResourceServer {
     /** Resource server ID */
     audience?: string;
@@ -13903,7 +13865,6 @@ export interface RefreshTokenResponseContent {
     rotating?: boolean;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
     last_exchanged_at?: Management.RefreshTokenDate;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -14788,12 +14749,26 @@ export interface SetGuardianFactorsProviderPhoneTwilioResponseContent {
     sid?: string | null;
 }
 
+export interface SetGuardianFactorsProviderPushNotificationApnsRequestContent {
+    sandbox?: boolean;
+    bundle_id?: string | null;
+    p12?: string | null;
+}
+
 export interface SetGuardianFactorsProviderPushNotificationApnsResponseContent {
     sandbox?: boolean;
     bundle_id?: string | null;
 }
 
+export interface SetGuardianFactorsProviderPushNotificationFcmRequestContent {
+    server_key?: string | null;
+}
+
 export type SetGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
+
+export interface SetGuardianFactorsProviderPushNotificationFcmv1RequestContent {
+    server_credentials?: string | null;
+}
 
 export type SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
 
@@ -15901,15 +15876,6 @@ export interface UpdateGuardianFactorDuoSettingsResponseContent {
     host?: string;
 }
 
-export interface UpdateGuardianFactorsProviderPushNotificationApnsResponseContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
-}
-
-export type UpdateGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
-
-export type UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
-
 export interface UpdateGuardianFactorsProviderPushNotificationSnsResponseContent {
     aws_access_key_id?: string | null;
     aws_secret_access_key?: string | null;
@@ -15979,8 +15945,6 @@ export interface UpdateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -16010,28 +15974,6 @@ export interface UpdatePhoneTemplateResponseContent {
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
     disabled: boolean;
-}
-
-export interface UpdateRefreshTokenResponseContent {
-    /** The ID of the refresh token */
-    id?: string;
-    /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.RefreshTokenDate;
-    idle_expires_at?: Management.RefreshTokenDate;
-    expires_at?: Management.RefreshTokenDate;
-    device?: Management.RefreshTokenDevice;
-    /** ID of the client application granted with this refresh token */
-    client_id?: string;
-    session_id?: (Management.RefreshTokenSessionId | undefined) | null;
-    /** True if the token is a rotating refresh token */
-    rotating?: boolean;
-    /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
-    resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
-    last_exchanged_at?: Management.RefreshTokenDate;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 export interface UpdateResourceServerResponseContent {
