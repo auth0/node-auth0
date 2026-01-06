@@ -142,7 +142,7 @@ export class DiscoveryDomainsClient {
     }
 
     /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+     * Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
      *
      * @param {string} id - ID of the organization.
      * @param {Management.CreateOrganizationDiscoveryDomainRequestContent} request
@@ -233,94 +233,6 @@ export class DiscoveryDomainsClient {
             _response.rawResponse,
             "POST",
             "/organizations/{id}/discovery-domains",
-        );
-    }
-
-    /**
-     * Retrieve details about a single organization discovery domain specified by domain name.
-     *
-     *
-     * @param {string} id - ID of the organization.
-     * @param {string} discovery_domain - Domain name of the discovery domain.
-     * @param {DiscoveryDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.organizations.discoveryDomains.getByName("id", "discovery_domain")
-     */
-    public getByName(
-        id: string,
-        discovery_domain: string,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetOrganizationDiscoveryDomainByNameResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__getByName(id, discovery_domain, requestOptions));
-    }
-
-    private async __getByName(
-        id: string,
-        discovery_domain: string,
-        requestOptions?: DiscoveryDomainsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetOrganizationDiscoveryDomainByNameResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/name/${core.url.encodePathParam(discovery_domain)}`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.GetOrganizationDiscoveryDomainByNameResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "GET",
-            "/organizations/{id}/discovery-domains/name/{discovery_domain}",
         );
     }
 
@@ -493,7 +405,7 @@ export class DiscoveryDomainsClient {
     }
 
     /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+     * Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
      *
      * @param {string} id - ID of the organization.
      * @param {string} discovery_domain_id - ID of the discovery domain to update.

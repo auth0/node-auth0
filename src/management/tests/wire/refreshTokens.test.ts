@@ -27,7 +27,6 @@ describe("RefreshTokensClient", () => {
             session_id: "session_id",
             rotating: true,
             resource_servers: [{ audience: "audience", scopes: "scopes" }],
-            refresh_token_metadata: { key: "value" },
             last_exchanged_at: "2024-01-15T09:30:00Z",
         };
         server.mockEndpoint().get("/refresh-tokens/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -56,9 +55,6 @@ describe("RefreshTokensClient", () => {
                     scopes: "scopes",
                 },
             ],
-            refresh_token_metadata: {
-                key: "value",
-            },
             last_exchanged_at: "2024-01-15T09:30:00Z",
         });
     });
@@ -190,166 +186,6 @@ describe("RefreshTokensClient", () => {
 
         await expect(async () => {
             return await client.refreshTokens.delete("id");
-        }).rejects.toThrow(Management.TooManyRequestsError);
-    });
-
-    test("update (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = {
-            id: "id",
-            user_id: "user_id",
-            created_at: "2024-01-15T09:30:00Z",
-            idle_expires_at: "2024-01-15T09:30:00Z",
-            expires_at: "2024-01-15T09:30:00Z",
-            device: {
-                initial_ip: "initial_ip",
-                initial_asn: "initial_asn",
-                initial_user_agent: "initial_user_agent",
-                last_ip: "last_ip",
-                last_asn: "last_asn",
-                last_user_agent: "last_user_agent",
-            },
-            client_id: "client_id",
-            session_id: "session_id",
-            rotating: true,
-            resource_servers: [{ audience: "audience", scopes: "scopes" }],
-            refresh_token_metadata: { key: "value" },
-            last_exchanged_at: "2024-01-15T09:30:00Z",
-        };
-        server
-            .mockEndpoint()
-            .patch("/refresh-tokens/id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.refreshTokens.update("id");
-        expect(response).toEqual({
-            id: "id",
-            user_id: "user_id",
-            created_at: "2024-01-15T09:30:00Z",
-            idle_expires_at: "2024-01-15T09:30:00Z",
-            expires_at: "2024-01-15T09:30:00Z",
-            device: {
-                initial_ip: "initial_ip",
-                initial_asn: "initial_asn",
-                initial_user_agent: "initial_user_agent",
-                last_ip: "last_ip",
-                last_asn: "last_asn",
-                last_user_agent: "last_user_agent",
-            },
-            client_id: "client_id",
-            session_id: "session_id",
-            rotating: true,
-            resource_servers: [
-                {
-                    audience: "audience",
-                    scopes: "scopes",
-                },
-            ],
-            refresh_token_metadata: {
-                key: "value",
-            },
-            last_exchanged_at: "2024-01-15T09:30:00Z",
-        });
-    });
-
-    test("update (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/refresh-tokens/id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.refreshTokens.update("id");
-        }).rejects.toThrow(Management.BadRequestError);
-    });
-
-    test("update (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/refresh-tokens/id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.refreshTokens.update("id");
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("update (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/refresh-tokens/id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.refreshTokens.update("id");
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("update (5)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/refresh-tokens/id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(404)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.refreshTokens.update("id");
-        }).rejects.toThrow(Management.NotFoundError);
-    });
-
-    test("update (6)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint()
-            .patch("/refresh-tokens/id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.refreshTokens.update("id");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 });
