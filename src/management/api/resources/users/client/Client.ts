@@ -13,6 +13,7 @@ import { AuthenticatorsClient } from "../resources/authenticators/client/Client.
 import { ConnectedAccountsClient } from "../resources/connectedAccounts/client/Client.js";
 import { EnrollmentsClient } from "../resources/enrollments/client/Client.js";
 import { FederatedConnectionsTokensetsClient } from "../resources/federatedConnectionsTokensets/client/Client.js";
+import { GroupsClient } from "../resources/groups/client/Client.js";
 import { IdentitiesClient } from "../resources/identities/client/Client.js";
 import { LogsClient } from "../resources/logs/client/Client.js";
 import { MultifactorClient } from "../resources/multifactor/client/Client.js";
@@ -36,6 +37,7 @@ export class UsersClient {
     protected _connectedAccounts: ConnectedAccountsClient | undefined;
     protected _enrollments: EnrollmentsClient | undefined;
     protected _federatedConnectionsTokensets: FederatedConnectionsTokensetsClient | undefined;
+    protected _groups: GroupsClient | undefined;
     protected _identities: IdentitiesClient | undefined;
     protected _logs: LogsClient | undefined;
     protected _multifactor: MultifactorClient | undefined;
@@ -68,6 +70,10 @@ export class UsersClient {
 
     public get federatedConnectionsTokensets(): FederatedConnectionsTokensetsClient {
         return (this._federatedConnectionsTokensets ??= new FederatedConnectionsTokensetsClient(this._options));
+    }
+
+    public get groups(): GroupsClient {
+        return (this._groups ??= new GroupsClient(this._options));
     }
 
     public get identities(): IdentitiesClient {
