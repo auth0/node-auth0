@@ -3347,7 +3347,7 @@ await client.emailTemplates.update("verify_email");
 
 ## EventStreams
 
-<details><summary><code>client.eventStreams.<a href="/src/management/api/resources/eventStreams/client/Client.ts">list</a>({ ...params }) -> Management.EventStreamResponseContent[]</code></summary>
+<details><summary><code>client.eventStreams.<a href="/src/management/api/resources/eventStreams/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.EventStreamResponseContent, Management.ListEventStreamsResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -3360,10 +3360,25 @@ await client.emailTemplates.update("verify_email");
 <dd>
 
 ```typescript
-await client.eventStreams.list({
+const pageableResponse = await client.eventStreams.list({
     from: "from",
     take: 1,
 });
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.eventStreams.list({
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -4438,6 +4453,162 @@ await client.userGrants.delete("id");
 <dd>
 
 **requestOptions:** `UserGrantsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Groups
+
+<details><summary><code>client.groups.<a href="/src/management/api/resources/groups/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Group, Management.ListGroupsPaginatedResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all groups in your tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.groups.list({
+    connection_id: "connection_id",
+    name: "name",
+    external_id: "external_id",
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.groups.list({
+    connection_id: "connection_id",
+    name: "name",
+    external_id: "external_id",
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.groups.<a href="/src/management/api/resources/groups/client/Client.ts">get</a>(id) -> Management.GetGroupResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a group by its ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.groups.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for the group (service-generated).
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16485,6 +16656,101 @@ await client.flows.vault.connections.update("id");
 </dl>
 </details>
 
+## Groups Members
+
+<details><summary><code>client.groups.members.<a href="/src/management/api/resources/groups/resources/members/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.GroupMember, Management.GetGroupMembersResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all users that are a member of this group.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.groups.members.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.groups.members.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for the group (service-generated).
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetGroupMembersRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MembersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Guardian Enrollments
 
 <details><summary><code>client.guardian.enrollments.<a href="/src/management/api/resources/guardian/resources/enrollments/client/Client.ts">createTicket</a>({ ...params }) -> Management.CreateGuardianEnrollmentTicketResponseContent</code></summary>
@@ -21991,7 +22257,7 @@ await client.organizations.members.roles.delete("id", "user_id", {
 
 ## Prompts Rendering
 
-<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ListAculsResponseContentItem, Management.ListAculsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -24565,6 +24831,101 @@ await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
 <dd>
 
 **requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Users Groups
+
+<details><summary><code>client.users.groups.<a href="/src/management/api/resources/users/resources/groups/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.UserGroupsResponseSchema, Management.GetUserGroupsPaginatedResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all groups to which this user belongs.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.users.groups.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.users.groups.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the user to list groups for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetUserGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
 
 </dd>
 </dl>

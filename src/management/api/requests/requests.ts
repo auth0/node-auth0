@@ -52,6 +52,8 @@ export interface CreateActionRequestContent {
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretRequest[];
+    /** The list of action modules and their versions used by this action. */
+    modules?: Management.ActionModuleReference[];
     /** True if the action should be deployed after creation. */
     deploy?: boolean;
 }
@@ -84,6 +86,8 @@ export interface UpdateActionRequestContent {
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretRequest[];
+    /** The list of action modules and their versions used by this action. */
+    modules?: Management.ActionModuleReference[];
 }
 
 /**
@@ -894,6 +898,35 @@ export interface ListUserGrantsRequestParameters {
 export interface DeleteUserGrantByUserIdRequestParameters {
     /** user_id of the grant to delete. */
     user_id: string;
+}
+
+/**
+ * @example
+ *     {
+ *         connection_id: "connection_id",
+ *         name: "name",
+ *         external_id: "external_id",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListGroupsRequestParameters {
+    /** Filter groups by connection ID. */
+    connection_id?: string | null;
+    /** Filter groups by name. */
+    name?: string | null;
+    /** Filter groups by external ID. */
+    external_id?: string | null;
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
 }
 
 /**
@@ -2473,6 +2506,26 @@ export interface UpdateFlowsVaultConnectionRequestContent {
 /**
  * @example
  *     {
+ *         fields: "fields",
+ *         include_fields: true,
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface GetGroupMembersRequestParameters {
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         user_id: "user_id"
  *     }
  */
@@ -3316,6 +3369,8 @@ export interface UpdateTenantSettingsRequestContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
+    /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
+    enable_ai_guide?: boolean;
 }
 
 export namespace UpdateTenantSettingsRequestContent {
@@ -3472,6 +3527,26 @@ export interface GetUserConnectedAccountsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results to return.  Defaults to 10 with a maximum of 20 */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         fields: "fields",
+ *         include_fields: true,
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface GetUserGroupsRequestParameters {
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
     take?: number | null;
 }
 
