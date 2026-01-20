@@ -51,12 +51,10 @@ export class UserBlocksClient {
         requestOptions?: UserBlocksClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListUserBlocksByIdentifierResponseContent>> {
         const { identifier, consider_brute_force_enablement: considerBruteForceEnablement } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        _queryParams["identifier"] = identifier;
-        if (considerBruteForceEnablement !== undefined) {
-            _queryParams["consider_brute_force_enablement"] = considerBruteForceEnablement?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            identifier,
+            consider_brute_force_enablement: considerBruteForceEnablement,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -138,8 +136,9 @@ export class UserBlocksClient {
         requestOptions?: UserBlocksClient.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { identifier } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        _queryParams["identifier"] = identifier;
+        const _queryParams: Record<string, unknown> = {
+            identifier,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -220,11 +219,9 @@ export class UserBlocksClient {
         requestOptions?: UserBlocksClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListUserBlocksResponseContent>> {
         const { consider_brute_force_enablement: considerBruteForceEnablement } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (considerBruteForceEnablement !== undefined) {
-            _queryParams["consider_brute_force_enablement"] = considerBruteForceEnablement?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            consider_brute_force_enablement: considerBruteForceEnablement,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

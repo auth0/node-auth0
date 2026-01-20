@@ -15,7 +15,6 @@ import { EmailTemplatesClient } from "./api/resources/emailTemplates/client/Clie
 import { EventStreamsClient } from "./api/resources/eventStreams/client/Client.js";
 import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { FormsClient } from "./api/resources/forms/client/Client.js";
-import { GroupsClient } from "./api/resources/groups/client/Client.js";
 import { GuardianClient } from "./api/resources/guardian/client/Client.js";
 import { HooksClient } from "./api/resources/hooks/client/Client.js";
 import { JobsClient } from "./api/resources/jobs/client/Client.js";
@@ -69,7 +68,6 @@ export class ManagementClient {
     protected _flows: FlowsClient | undefined;
     protected _forms: FormsClient | undefined;
     protected _userGrants: UserGrantsClient | undefined;
-    protected _groups: GroupsClient | undefined;
     protected _hooks: HooksClient | undefined;
     protected _jobs: JobsClient | undefined;
     protected _logStreams: LogStreamsClient | undefined;
@@ -154,10 +152,6 @@ export class ManagementClient {
 
     public get userGrants(): UserGrantsClient {
         return (this._userGrants ??= new UserGrantsClient(this._options));
-    }
-
-    public get groups(): GroupsClient {
-        return (this._groups ??= new GroupsClient(this._options));
     }
 
     public get hooks(): HooksClient {

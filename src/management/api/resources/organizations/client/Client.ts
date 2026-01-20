@@ -97,16 +97,11 @@ export class OrganizationsClient {
                 request: Management.ListOrganizationsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationsPaginatedResponseContent>> => {
                 const { from: from_, take = 50, sort } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (sort !== undefined) {
-                    _queryParams["sort"] = sort;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                    sort,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

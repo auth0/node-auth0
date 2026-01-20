@@ -62,7 +62,7 @@ describe("TokenExchangeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(400)
@@ -80,7 +80,7 @@ describe("TokenExchangeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(401)
@@ -98,7 +98,7 @@ describe("TokenExchangeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(403)
@@ -116,7 +116,7 @@ describe("TokenExchangeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(429)

@@ -29,7 +29,6 @@ describe("VersionsClient", () => {
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
                     supported_triggers: [{ id: "id" }],
-                    modules: [{}],
                 },
             ],
         };
@@ -65,7 +64,6 @@ describe("VersionsClient", () => {
                             id: "id",
                         },
                     ],
-                    modules: [{}],
                 },
             ],
         };
@@ -189,14 +187,6 @@ describe("VersionsClient", () => {
                     binding_policy: "trigger-bound",
                 },
             ],
-            modules: [
-                {
-                    module_id: "module_id",
-                    module_name: "module_name",
-                    module_version_id: "module_version_id",
-                    module_version_number: 1,
-                },
-            ],
         };
         server
             .mockEndpoint()
@@ -264,14 +254,6 @@ describe("VersionsClient", () => {
                         },
                     ],
                     binding_policy: "trigger-bound",
-                },
-            ],
-            modules: [
-                {
-                    module_id: "module_id",
-                    module_name: "module_name",
-                    module_version_id: "module_version_id",
-                    module_version_number: 1,
                 },
             ],
         });
@@ -404,14 +386,6 @@ describe("VersionsClient", () => {
                     binding_policy: "trigger-bound",
                 },
             ],
-            modules: [
-                {
-                    module_id: "module_id",
-                    module_name: "module_name",
-                    module_version_id: "module_version_id",
-                    module_version_number: 1,
-                },
-            ],
         };
         server
             .mockEndpoint()
@@ -479,14 +453,6 @@ describe("VersionsClient", () => {
                         },
                     ],
                     binding_policy: "trigger-bound",
-                },
-            ],
-            modules: [
-                {
-                    module_id: "module_id",
-                    module_name: "module_name",
-                    module_version_id: "module_version_id",
-                    module_version_number: 1,
                 },
             ],
         });

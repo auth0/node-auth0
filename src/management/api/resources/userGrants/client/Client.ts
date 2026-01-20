@@ -58,25 +58,14 @@ export class UserGrantsClient {
                     client_id: clientId,
                     audience,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (userId !== undefined) {
-                    _queryParams["user_id"] = userId;
-                }
-                if (clientId !== undefined) {
-                    _queryParams["client_id"] = clientId;
-                }
-                if (audience !== undefined) {
-                    _queryParams["audience"] = audience;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    per_page: perPage,
+                    page,
+                    include_totals: includeTotals,
+                    user_id: userId,
+                    client_id: clientId,
+                    audience,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -171,8 +160,9 @@ export class UserGrantsClient {
         requestOptions?: UserGrantsClient.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { user_id: userId } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        _queryParams["user_id"] = userId;
+        const _queryParams: Record<string, unknown> = {
+            user_id: userId,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

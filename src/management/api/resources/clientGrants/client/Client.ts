@@ -64,25 +64,14 @@ export class ClientGrantsClient {
                     allow_any_organization: allowAnyOrganization,
                     subject_type: subjectType,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (audience !== undefined) {
-                    _queryParams["audience"] = audience;
-                }
-                if (clientId !== undefined) {
-                    _queryParams["client_id"] = clientId;
-                }
-                if (allowAnyOrganization !== undefined) {
-                    _queryParams["allow_any_organization"] = allowAnyOrganization?.toString() ?? null;
-                }
-                if (subjectType !== undefined) {
-                    _queryParams["subject_type"] = subjectType;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                    audience,
+                    client_id: clientId,
+                    allow_any_organization: allowAnyOrganization,
+                    subject_type: subjectType !== undefined ? subjectType : undefined,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

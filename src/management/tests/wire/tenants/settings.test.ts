@@ -73,7 +73,6 @@ describe("SettingsClient", () => {
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             resource_parameter_profile: "audience",
-            enable_ai_guide: true,
         };
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -173,7 +172,6 @@ describe("SettingsClient", () => {
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             resource_parameter_profile: "audience",
-            enable_ai_guide: true,
         });
     });
 
@@ -293,7 +291,6 @@ describe("SettingsClient", () => {
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             resource_parameter_profile: "audience",
-            enable_ai_guide: true,
         };
         server
             .mockEndpoint()
@@ -397,7 +394,6 @@ describe("SettingsClient", () => {
             authorization_response_iss_parameter_supported: true,
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             resource_parameter_profile: "audience",
-            enable_ai_guide: true,
         });
     });
 

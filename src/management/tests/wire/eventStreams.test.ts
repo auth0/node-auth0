@@ -9,66 +9,49 @@ describe("EventStreamsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = {
-            eventStreams: [
-                {
-                    id: "id",
-                    name: "name",
-                    subscriptions: [{}],
-                    destination: {
-                        type: "webhook",
-                        configuration: {
-                            webhook_endpoint: "webhook_endpoint",
-                            webhook_authorization: { method: "basic", username: "username" },
-                        },
+        const rawResponseBody = [
+            {
+                id: "id",
+                name: "name",
+                subscriptions: [{}],
+                destination: {
+                    type: "webhook",
+                    configuration: {
+                        webhook_endpoint: "webhook_endpoint",
+                        webhook_authorization: { method: "basic", username: "username" },
                     },
-                    status: "enabled",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
                 },
-            ],
-            next: "next",
-        };
-        server
-            .mockEndpoint({ once: false })
-            .get("/event-streams")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
+                status: "enabled",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
+            },
+        ];
+        server.mockEndpoint().get("/event-streams").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const expected = {
-            eventStreams: [
-                {
-                    id: "id",
-                    name: "name",
-                    subscriptions: [{}],
-                    destination: {
-                        type: "webhook",
-                        configuration: {
-                            webhook_endpoint: "webhook_endpoint",
-                            webhook_authorization: {
-                                method: "basic",
-                                username: "username",
-                            },
-                        },
-                    },
-                    status: "enabled",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-            next: "next",
-        };
-        const page = await client.eventStreams.list({
+        const response = await client.eventStreams.list({
             from: "from",
             take: 1,
         });
-
-        expect(expected.eventStreams).toEqual(page.data);
-        expect(page.hasNextPage()).toBe(true);
-        const nextPage = await page.getNextPage();
-        expect(expected.eventStreams).toEqual(nextPage.data);
+        expect(response).toEqual([
+            {
+                id: "id",
+                name: "name",
+                subscriptions: [{}],
+                destination: {
+                    type: "webhook",
+                    configuration: {
+                        webhook_endpoint: "webhook_endpoint",
+                        webhook_authorization: {
+                            method: "basic",
+                            username: "username",
+                        },
+                    },
+                },
+                status: "enabled",
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
+            },
+        ]);
     });
 
     test("list (2)", async () => {
@@ -76,13 +59,7 @@ describe("EventStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/event-streams")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/event-streams").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.eventStreams.list();
@@ -94,13 +71,7 @@ describe("EventStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/event-streams")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/event-streams").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.eventStreams.list();
@@ -112,13 +83,7 @@ describe("EventStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/event-streams")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/event-streams").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.eventStreams.list();
@@ -130,13 +95,7 @@ describe("EventStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/event-streams")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/event-streams").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.eventStreams.list();

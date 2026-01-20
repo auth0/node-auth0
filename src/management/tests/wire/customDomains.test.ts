@@ -14,7 +14,6 @@ describe("CustomDomainsClient", () => {
                 custom_domain_id: "custom_domain_id",
                 domain: "domain",
                 primary: true,
-                is_default: true,
                 status: "pending_verification",
                 type: "auth0_managed_certs",
                 origin_domain_name: "origin_domain_name",
@@ -38,6 +37,8 @@ describe("CustomDomainsClient", () => {
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.customDomains.list({
+            take: 1,
+            from: "from",
             q: "q",
             fields: "fields",
             include_fields: true,
@@ -48,7 +49,6 @@ describe("CustomDomainsClient", () => {
                 custom_domain_id: "custom_domain_id",
                 domain: "domain",
                 primary: true,
-                is_default: true,
                 status: "pending_verification",
                 type: "auth0_managed_certs",
                 origin_domain_name: "origin_domain_name",
@@ -302,7 +302,6 @@ describe("CustomDomainsClient", () => {
             custom_domain_id: "custom_domain_id",
             domain: "domain",
             primary: true,
-            is_default: true,
             status: "pending_verification",
             type: "auth0_managed_certs",
             origin_domain_name: "origin_domain_name",
@@ -329,7 +328,6 @@ describe("CustomDomainsClient", () => {
             custom_domain_id: "custom_domain_id",
             domain: "domain",
             primary: true,
-            is_default: true,
             status: "pending_verification",
             type: "auth0_managed_certs",
             origin_domain_name: "origin_domain_name",
@@ -508,7 +506,6 @@ describe("CustomDomainsClient", () => {
             custom_domain_id: "custom_domain_id",
             domain: "domain",
             primary: true,
-            is_default: true,
             status: "pending_verification",
             type: "auth0_managed_certs",
             verification: {
@@ -541,7 +538,6 @@ describe("CustomDomainsClient", () => {
             custom_domain_id: "custom_domain_id",
             domain: "domain",
             primary: true,
-            is_default: true,
             status: "pending_verification",
             type: "auth0_managed_certs",
             verification: {

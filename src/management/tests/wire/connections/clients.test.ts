@@ -43,7 +43,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections/id/clients")
             .respondWith()
             .statusCode(400)
@@ -61,7 +61,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections/id/clients")
             .respondWith()
             .statusCode(401)
@@ -79,7 +79,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections/id/clients")
             .respondWith()
             .statusCode(403)
@@ -97,7 +97,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections/id/clients")
             .respondWith()
             .statusCode(404)
@@ -115,7 +115,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections/id/clients")
             .respondWith()
             .statusCode(429)

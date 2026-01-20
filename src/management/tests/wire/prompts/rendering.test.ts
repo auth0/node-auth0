@@ -12,11 +12,8 @@ describe("RenderingClient", () => {
         const rawResponseBody = {
             configs: [
                 {
-                    tenant: "tenant",
-                    prompt: "prompt",
-                    screen: "screen",
                     rendering_mode: "advanced",
-                    context_configuration: ["branding.settings"],
+                    context_configuration: ["context_configuration"],
                     default_head_tags_disabled: true,
                     use_page_template: true,
                     head_tags: [{}],
@@ -37,11 +34,8 @@ describe("RenderingClient", () => {
         const expected = {
             configs: [
                 {
-                    tenant: "tenant",
-                    prompt: "prompt",
-                    screen: "screen",
                     rendering_mode: "advanced",
-                    context_configuration: ["branding.settings"],
+                    context_configuration: ["context_configuration"],
                     default_head_tags_disabled: true,
                     use_page_template: true,
                     head_tags: [{}],
@@ -391,7 +385,7 @@ describe("RenderingClient", () => {
             prompt: "prompt",
             screen: "screen",
             rendering_mode: "advanced",
-            context_configuration: ["branding.settings"],
+            context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
             use_page_template: true,
             head_tags: [{ tag: "tag", attributes: { key: "value" }, content: "content" }],
@@ -416,7 +410,7 @@ describe("RenderingClient", () => {
             prompt: "prompt",
             screen: "screen",
             rendering_mode: "advanced",
-            context_configuration: ["branding.settings"],
+            context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
             use_page_template: true,
             head_tags: [
@@ -563,7 +557,7 @@ describe("RenderingClient", () => {
         const rawRequestBody = {};
         const rawResponseBody = {
             rendering_mode: "advanced",
-            context_configuration: ["branding.settings"],
+            context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
             use_page_template: true,
             head_tags: [{ tag: "tag", attributes: { key: "value" }, content: "content" }],
@@ -586,7 +580,7 @@ describe("RenderingClient", () => {
         const response = await client.prompts.rendering.update("login", "login");
         expect(response).toEqual({
             rendering_mode: "advanced",
-            context_configuration: ["branding.settings"],
+            context_configuration: ["context_configuration"],
             default_head_tags_disabled: true,
             use_page_template: true,
             head_tags: [

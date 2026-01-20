@@ -21,7 +21,6 @@ describe("RefreshTokenClient", () => {
                     session_id: "session_id",
                     rotating: true,
                     resource_servers: [{}],
-                    refresh_token_metadata: { key: "value" },
                     last_exchanged_at: "2024-01-15T09:30:00Z",
                 },
             ],
@@ -47,9 +46,6 @@ describe("RefreshTokenClient", () => {
                     session_id: "session_id",
                     rotating: true,
                     resource_servers: [{}],
-                    refresh_token_metadata: {
-                        key: "value",
-                    },
                     last_exchanged_at: "2024-01-15T09:30:00Z",
                 },
             ],
@@ -72,7 +68,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(401)
@@ -90,7 +86,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(403)
@@ -108,7 +104,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(404)
@@ -126,7 +122,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(429)
