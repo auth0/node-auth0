@@ -139,14 +139,14 @@ export const OauthScope = {
      * Create Connections */
     CreateConnections: "create:connections",
     /**
+     * Read Directory Provisionings */
+    ReadDirectoryProvisionings: "read:directory_provisionings",
+    /**
      * Update Connections */
     UpdateConnections: "update:connections",
     /**
      * Delete Connections */
     DeleteConnections: "delete:connections",
-    /**
-     * Read Directory Provisionings */
-    ReadDirectoryProvisionings: "read:directory_provisionings",
     /**
      * Create Directory Provisionings */
     CreateDirectoryProvisionings: "create:directory_provisionings",
@@ -327,6 +327,9 @@ export const OauthScope = {
     /**
      * Read Group Members */
     ReadGroupMembers: "read:group_members",
+    /**
+     * Read Group Roles */
+    ReadGroupRoles: "read:group_roles",
     /**
      * Create Group Roles */
     CreateGroupRoles: "create:group_roles",
@@ -947,6 +950,56 @@ export const ActionExecutionStatusEnum = {
 } as const;
 export type ActionExecutionStatusEnum = (typeof ActionExecutionStatusEnum)[keyof typeof ActionExecutionStatusEnum];
 
+export interface ActionModuleAction {
+    /** The unique ID of the action. */
+    action_id?: string;
+    /** The name of the action. */
+    action_name?: string;
+    /** The ID of the module version this action is using. */
+    module_version_id?: string;
+    /** The version number of the module this action is using. */
+    module_version_number?: number;
+    /** The triggers that this action supports. */
+    supported_triggers?: Management.ActionTrigger[];
+}
+
+export interface ActionModuleDependency {
+    /** The name of the npm dependency. */
+    name?: string;
+    /** The version of the npm dependency. */
+    version?: string;
+}
+
+export interface ActionModuleDependencyRequest {
+    /** The name of the npm dependency. */
+    name: string;
+    /** The version of the npm dependency. */
+    version: string;
+}
+
+export interface ActionModuleListItem {
+    /** The unique ID of the module. */
+    id?: string;
+    /** The name of the module. */
+    name?: string;
+    /** The source code from the module's draft version. */
+    code?: string;
+    /** The npm dependencies from the module's draft version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The secrets from the module's draft version (names and timestamps only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** The number of deployed actions using this module. */
+    actions_using_module_total?: number;
+    /** Whether all draft changes have been published as a version. */
+    all_changes_published?: boolean;
+    /** The version number of the latest published version. Omitted if no versions have been published. */
+    latest_version_number?: number;
+    /** Timestamp when the module was created. */
+    created_at?: string;
+    /** Timestamp when the module was last updated. */
+    updated_at?: string;
+}
+
 /**
  * Reference to a module and its version used by an action.
  */
@@ -959,6 +1012,55 @@ export interface ActionModuleReference {
     module_version_id?: string;
     /** The version number of the module. */
     module_version_number?: number;
+}
+
+export interface ActionModuleSecret {
+    /** The name of the secret. */
+    name?: string;
+    /** The time when the secret was last updated. */
+    updated_at?: string;
+}
+
+export interface ActionModuleSecretRequest {
+    /** The name of the secret. */
+    name: string;
+    /** The value of the secret. */
+    value: string;
+}
+
+export interface ActionModuleVersion {
+    /** The unique ID for this version. */
+    id?: string;
+    /** The ID of the parent module. */
+    module_id?: string;
+    /** The sequential version number. */
+    version_number?: number;
+    /** The exact source code that was published with this version. */
+    code?: string;
+    /** Secrets available to this version (name and updated_at only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** Dependencies locked to this version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The timestamp when this version was created. */
+    created_at?: string;
+}
+
+/**
+ * The latest published version as a reference object. Omitted if no versions have been published.
+ */
+export interface ActionModuleVersionReference {
+    /** The unique ID of the version. */
+    id?: string;
+    /** The version number. */
+    version_number?: number;
+    /** The source code from this version. */
+    code?: string;
+    /** The npm dependencies from this version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The secrets from this version (names and timestamps only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** Timestamp when the version was created. */
+    created_at?: string;
 }
 
 export interface ActionSecretRequest {
@@ -1244,7 +1346,10 @@ export type AnomalyIpFormat = string;
  */
 export type AppMetadata = Record<string, unknown>;
 
-export type AssessorsTypeEnum = "new-device";
+export const AssessorsTypeEnum = {
+    NewDevice: "new-device",
+} as const;
+export type AssessorsTypeEnum = (typeof AssessorsTypeEnum)[keyof typeof AssessorsTypeEnum];
 
 export interface AssociateOrganizationClientGrantResponseContent {
     /** ID of the client grant. */
@@ -1808,7 +1913,11 @@ export interface CertificateSubjectDnCredential {
     pem?: string;
 }
 
-export type CertificateSubjectDnCredentialTypeEnum = "cert_subject_dn";
+export const CertificateSubjectDnCredentialTypeEnum = {
+    CertSubjectDn: "cert_subject_dn",
+} as const;
+export type CertificateSubjectDnCredentialTypeEnum =
+    (typeof CertificateSubjectDnCredentialTypeEnum)[keyof typeof CertificateSubjectDnCredentialTypeEnum];
 
 /**
  * The user's identity. If you set this value, you must also send the user_id parameter.
@@ -2507,7 +2616,11 @@ export interface ClientDefaultOrganization {
     flows: Management.ClientDefaultOrganizationFlowsEnum[];
 }
 
-export type ClientDefaultOrganizationFlowsEnum = "client_credentials";
+export const ClientDefaultOrganizationFlowsEnum = {
+    ClientCredentials: "client_credentials",
+} as const;
+export type ClientDefaultOrganizationFlowsEnum =
+    (typeof ClientDefaultOrganizationFlowsEnum)[keyof typeof ClientDefaultOrganizationFlowsEnum];
 
 /**
  * Encryption used for WsFed responses with this client.
@@ -2561,11 +2674,13 @@ export interface ClientGrantResponseContent {
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean;
     subject_type?: Management.ClientGrantSubjectTypeEnum;
-    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** Types of authorization_details allowed for this client grant. */
     authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean;
 }
 
-/** The type of application access the client grant allows. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href="https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+/** The type of application access the client grant allows. */
 export const ClientGrantSubjectTypeEnum = {
     Client: "client",
     User: "user",
@@ -2857,7 +2972,11 @@ export interface ClientTokenExchangeConfigurationOrNull {
     allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[];
 }
 
-export type ClientTokenExchangeTypeEnum = "custom_authentication";
+export const ClientTokenExchangeTypeEnum = {
+    CustomAuthentication: "custom_authentication",
+} as const;
+export type ClientTokenExchangeTypeEnum =
+    (typeof ClientTokenExchangeTypeEnum)[keyof typeof ClientTokenExchangeTypeEnum];
 
 export interface ConnectedAccount {
     /** The unique identifier for the connected account. */
@@ -2877,10 +2996,12 @@ export interface ConnectedAccount {
     expires_at?: string;
 }
 
-/**
- * The access type for the connected account.
- */
-export type ConnectedAccountAccessTypeEnum = "offline";
+/** The access type for the connected account. */
+export const ConnectedAccountAccessTypeEnum = {
+    Offline: "offline",
+} as const;
+export type ConnectedAccountAccessTypeEnum =
+    (typeof ConnectedAccountAccessTypeEnum)[keyof typeof ConnectedAccountAccessTypeEnum];
 
 /**
  * A list of the Authentication Context Class References that this OP supports
@@ -2901,6 +3022,21 @@ export type ConnectionAdminAccessTokenGoogleApps = string;
  * Google Workspace admin refresh token used to obtain new access tokens for the [Google Directory API](https://developers.google.com/admin-sdk/directory). This token is granted when a Google Workspace admin authorizes Auth0 to access directory data.
  */
 export type ConnectionAdminRefreshTokenGoogleApps = string;
+
+/**
+ * IP address of the AD connector agent used to validate that authentication requests originate from the corporate network for Kerberos authentication  (managed by the AD Connector agent).
+ */
+export type ConnectionAgentIpad = string;
+
+/**
+ * When enabled, allows direct username/password authentication through the AD connector agent instead of WS-Federation protocol (managed by the AD Connector agent).
+ */
+export type ConnectionAgentModeAd = boolean;
+
+/**
+ * Version identifier of the installed AD connector agent software (managed by the AD Connector agent).
+ */
+export type ConnectionAgentVersionAd = string;
 
 /**
  * List of allowed audiences in the ID token for Google Native Social Login
@@ -2931,7 +3067,7 @@ export interface ConnectionAttributeIdentifier {
 export type ConnectionAttributeMapAttributes = Record<string, unknown>;
 
 /**
- * Mapping of claims received from the identity provider (IdP)
+ * Configuration for mapping claims from the identity provider to Auth0 user profile attributes. Allows customizing which IdP claims populate user fields and how they are transformed.
  */
 export interface ConnectionAttributeMapOidc {
     attributes?: Management.ConnectionAttributeMapAttributes;
@@ -3004,11 +3140,16 @@ export type ConnectionAuthorizationEndpoint = string;
 export type ConnectionAuthorizationEndpointOAuth2 = Management.ConnectionAuthorizationEndpoint;
 
 /**
- * Indicates whether brute force protection is enabled.
+ * Enables Auth0's brute force protection to prevent credential stuffing attacks. When enabled, blocks suspicious login attempts from specific IP addresses after repeated failures.
  */
 export type ConnectionBruteForceProtection = boolean;
 
-export type ConnectionCalculatedThumbprintSaml = Management.ConnectionSha1ThumbprintSaml;
+export type ConnectionCalculatedThumbprintSaml = Management.ConnectionSha1Thumbprint;
+
+/**
+ * Array of X.509 certificates in PEM format used for validating SAML signatures from the AD identity provider (managed by the AD Connector agent).
+ */
+export type ConnectionCertsAd = string[];
 
 /**
  * JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims.
@@ -3038,6 +3179,11 @@ export type ConnectionClientId = string;
 export type ConnectionClientIdAzureAd = Management.ConnectionClientId;
 
 /**
+ * Your Facebook App ID. You can find this in your [Facebook Developers Console](https://developers.facebook.com/apps) under the App Settings section.
+ */
+export type ConnectionClientIdFacebook = Management.ConnectionClientId;
+
+/**
  * Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
  */
 export type ConnectionClientIdGoogleApps = Management.ConnectionClientId;
@@ -3045,7 +3191,7 @@ export type ConnectionClientIdGoogleApps = Management.ConnectionClientId;
 /**
  * Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
  */
-export type ConnectionClientIdGoogleOAuth2 = (string | null) | undefined;
+export type ConnectionClientIdGoogleOAuth2 = string;
 
 export type ConnectionClientIdOAuth2 = Management.ConnectionClientId;
 
@@ -3067,6 +3213,11 @@ export type ConnectionClientSecret = string;
 export type ConnectionClientSecretAzureAd = string;
 
 /**
+ * Your Facebook App Secret. You can find this in your [Facebook Developers Console](https://developers.facebook.com/apps) under the App Settings section.
+ */
+export type ConnectionClientSecretFacebook = Management.ConnectionClientSecret;
+
+/**
  * Your Google OAuth 2.0 client secret. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
  */
 export type ConnectionClientSecretGoogleApps = Management.ConnectionClientSecret;
@@ -3074,7 +3225,7 @@ export type ConnectionClientSecretGoogleApps = Management.ConnectionClientSecret
 /**
  * Your Google OAuth 2.0 client secret. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
  */
-export type ConnectionClientSecretGoogleOAuth2 = (string | null) | undefined;
+export type ConnectionClientSecretGoogleOAuth2 = string;
 
 export type ConnectionClientSecretOAuth2 = Management.ConnectionClientSecret;
 
@@ -3103,7 +3254,7 @@ export interface ConnectionConnectedAccountsPurpose {
 }
 
 /**
- * PKCE configuration for the connection
+ * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
  */
 export interface ConnectionConnectionSettings {
     pkce?: Management.ConnectionConnectionSettingsPkceEnum;
@@ -3147,9 +3298,18 @@ export interface ConnectionCustomScripts {
 export type ConnectionDebugSaml = boolean;
 
 /**
- * Private key in PEM format used to decrypt encrypted SAML Assertions received from the identity provider. Required when the identity provider encrypts assertions for enhanced security. Can be a string (PEM) or an object with key-value pairs.
+ * Private key used to decrypt encrypted SAML Assertions received from the identity provider. Required when the identity provider encrypts assertions for enhanced security. Can be a string (PEM) or an object with key-value pairs.
  */
-export type ConnectionDecryptionKeySaml = string;
+export type ConnectionDecryptionKeySaml =
+    /**
+     * Key pair with 'key' and 'cert' properties. */
+    | {
+          cert?: string | undefined;
+          key?: string | undefined;
+      }
+    /**
+     * Private key in PEM format. */
+    | string;
 
 /**
  * The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL.
@@ -3175,7 +3335,7 @@ export type ConnectionDigestAlgorithmSaml = Management.ConnectionDigestAlgorithm
 export type ConnectionDisableSelfServiceChangePassword = boolean;
 
 /**
- * Set to true to disable signups
+ * When true, prevents new user registration through this connection. Existing users can still authenticate. Useful for invite-only applications or during user migration.
  */
 export type ConnectionDisableSignup = boolean;
 
@@ -3185,7 +3345,7 @@ export type ConnectionDisableSignup = boolean;
 export type ConnectionDisableSignupSms = Management.ConnectionDisableSignup;
 
 /**
- * OIDC discovery URL. Discovery runs only when connection.options.oidc_metadata is empty and a discovery_url is provided.
+ * URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features.
  */
 export type ConnectionDiscoveryUrl = Management.ConnectionHttpsUrlWithHttpFallback255;
 
@@ -3200,9 +3360,14 @@ export type ConnectionDisplayName = string;
 export type ConnectionDisplayValuesSupported = string[];
 
 /**
- * Domain aliases for the connection
+ * Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication.
  */
 export type ConnectionDomainAliases = Management.ConnectionDomainAliasesItemsOne[];
+
+/**
+ * List of domain names that can be used with identifier-first authentication flow to route users to this AD connection; each domain must be a valid DNS name up to 256 characters
+ */
+export type ConnectionDomainAliasesAd = string[];
 
 /**
  * Alternative domain names associated with this Azure AD tenant. Allows users from multiple verified domains to authenticate through this connection. Can be an array of domain strings.
@@ -3239,7 +3404,15 @@ export interface ConnectionEmailEmail {
     from?: Management.ConnectionEmailFromEmail;
     subject?: Management.ConnectionEmailSubjectEmail;
     /** Email template syntax type */
-    syntax?: "liquid";
+    syntax?: ConnectionEmailEmail.Syntax;
+}
+
+export namespace ConnectionEmailEmail {
+    /** Email template syntax type */
+    export const Syntax = {
+        Liquid: "liquid",
+    } as const;
+    export type Syntax = (typeof Syntax)[keyof typeof Syntax];
 }
 
 /**
@@ -3502,6 +3675,9 @@ export type ConnectionHttpsUrlWithHttpFallback255 = Management.ConnectionHttpsUr
  */
 export type ConnectionIconUrl = string;
 
+/**
+ * URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows.
+ */
 export type ConnectionIconUrlAdfs = Management.ConnectionIconUrl;
 
 /**
@@ -3509,8 +3685,14 @@ export type ConnectionIconUrlAdfs = Management.ConnectionIconUrl;
  */
 export type ConnectionIconUrlAzureAd = Management.ConnectionIconUrl;
 
+/**
+ * URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows.
+ */
 export type ConnectionIconUrlGoogleApps = Management.ConnectionIconUrl;
 
+/**
+ * URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows.
+ */
 export type ConnectionIconUrlGoogleOAuth2 = Management.ConnectionIconUrl;
 
 /**
@@ -3651,9 +3833,14 @@ export type ConnectionIdentityProviderEnum =
     (typeof ConnectionIdentityProviderEnum)[keyof typeof ConnectionIdentityProviderEnum];
 
 /**
- * Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store
+ * Enables lazy migration mode for importing users from an external database. When a user authenticates, their credentials are validated against the legacy store, then the user is created in Auth0 for future logins.
  */
 export type ConnectionImportMode = boolean;
+
+/**
+ * Array of IP address ranges in CIDR notation used to determine if authentication requests originate from the corporate network for Kerberos or certificate authentication.
+ */
+export type ConnectionIpsAd = string[];
 
 /**
  * <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.)
@@ -3781,7 +3968,31 @@ export type ConnectionOptions = Record<string, unknown>;
 /**
  * Options for the 'ad' connection
  */
-export type ConnectionOptionsAd = Record<string, unknown>;
+export interface ConnectionOptionsAd extends Management.ConnectionOptionsCommon {
+    agentIP?: Management.ConnectionAgentIpad;
+    agentMode?: Management.ConnectionAgentModeAd;
+    agentVersion?: Management.ConnectionAgentVersionAd;
+    brute_force_protection?: Management.ConnectionBruteForceProtection;
+    /** Enables client SSL certificate authentication for the AD connector, requiring HTTPS on the sign-in endpoint */
+    certAuth?: boolean;
+    certs?: Management.ConnectionCertsAd;
+    /** When enabled, disables caching of AD connector authentication results to ensure real-time validation against the directory */
+    disable_cache?: boolean;
+    /** When enabled, hides the 'Forgot Password' link on login pages to prevent users from initiating self-service password resets */
+    disable_self_service_change_password?: boolean;
+    domain_aliases?: Management.ConnectionDomainAliasesAd;
+    icon_url?: Management.ConnectionIconUrl;
+    ips?: Management.ConnectionIpsAd;
+    /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
+    kerberos?: boolean;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    signInEndpoint?: Management.ConnectionSignInEndpointAd;
+    tenant_domain?: Management.ConnectionTenantDomainAd;
+    thumbprints?: Management.ConnectionThumbprintsAd;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'adfs' connection
@@ -3794,7 +4005,6 @@ export interface ConnectionOptionsAdfs extends Management.ConnectionOptionsCommo
     entityId?: string;
     fedMetadataXml?: Management.ConnectionMetadataXmlAdfs;
     icon_url?: Management.ConnectionIconUrlAdfs;
-    /** Previous certificate thumbprints kept for rollover compatibility. */
     prev_thumbprints?: Management.ConnectionThumbprints;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
     should_trust_email_verified_connection?: Management.ConnectionShouldTrustEmailVerifiedConnectionEnum;
@@ -3808,9 +4018,21 @@ export interface ConnectionOptionsAdfs extends Management.ConnectionOptionsCommo
     [key: string]: any;
 }
 
-export type ConnectionOptionsAol = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'aol' connection
+ */
+export interface ConnectionOptionsAol extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsAmazon = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'amazon' connection
+ */
+export interface ConnectionOptionsAmazon extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'apple' connection
@@ -3870,7 +4092,12 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
 /**
  * Options for the 'auth0-oidc' connection
  */
-export type ConnectionOptionsAuth0Oidc = Record<string, unknown>;
+export interface ConnectionOptionsAuth0Oidc {
+    client_id?: Management.ConnectionClientId;
+    client_secret?: Management.ConnectionClientSecret;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'waad' connection
@@ -3990,13 +4217,37 @@ export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCo
     [key: string]: any;
 }
 
-export type ConnectionOptionsBaidu = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'baidu' connection
+ */
+export interface ConnectionOptionsBaidu extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsBitbucket = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'bitbucket' connection
+ */
+export interface ConnectionOptionsBitbucket extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsBitly = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'bitly' connection
+ */
+export interface ConnectionOptionsBitly extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsBox = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'box' connection
+ */
+export interface ConnectionOptionsBox extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Common attributes for connection options including non-persistent attributes and Cross App Access
@@ -4050,8 +4301,7 @@ export interface ConnectionOptionsCommonSaml {
     signSAMLRequest?: Management.ConnectionSignSamlRequestSaml;
     signatureAlgorithm?: Management.ConnectionSignatureAlgorithmSaml;
     tenant_domain?: Management.ConnectionTenantDomainSaml;
-    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
-    thumbprints?: Management.ConnectionSha1ThumbprintRelaxedValidationSaml[];
+    thumbprints?: Management.ConnectionThumbprintsSaml;
     upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
 }
 
@@ -4060,16 +4310,34 @@ export interface ConnectionOptionsCommonSaml {
  */
 export type ConnectionOptionsCustom = Record<string, unknown>;
 
-export type ConnectionOptionsDaccount = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'daccount' connection
+ */
+export interface ConnectionOptionsDaccount extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * When true, enables DEFLATE compression for SAML requests sent via HTTP-Redirect binding.
  */
 export type ConnectionOptionsDeflateSaml = boolean;
 
-export type ConnectionOptionsDropbox = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'dropbox' connection
+ */
+export interface ConnectionOptionsDropbox extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsDwolla = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'dwolla' connection
+ */
+export interface ConnectionOptionsDwolla extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'email' connection
@@ -4086,33 +4354,141 @@ export interface ConnectionOptionsEmail extends Management.ConnectionOptionsComm
     [key: string]: any;
 }
 
-export type ConnectionOptionsEvernote = Management.ConnectionOptionsEvernoteCommon;
+/**
+ * Options for the evernote family of connections
+ */
+export interface ConnectionOptionsEvernote extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsEvernoteCommon = Record<string, unknown>;
-
-export type ConnectionOptionsEvernoteSandbox = Management.ConnectionOptionsEvernoteCommon;
-
-export type ConnectionOptionsExact = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'exact' connection
+ */
+export interface ConnectionOptionsExact extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'facebook' connection
  */
-export type ConnectionOptionsFacebook = Record<string, unknown>;
+export interface ConnectionOptionsFacebook extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdFacebook;
+    client_secret?: Management.ConnectionClientSecretFacebook;
+    freeform_scopes?: Management.ConnectionScopeArrayFacebook;
+    upstream_params?: Management.ConnectionUpstreamParamsFacebook;
+    scope?: Management.ConnectionScopeFacebook;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    /** Grants permission to both read and manage ads for ad accounts you own or have been granted access to by the owner. By default, your app may only access ad accounts owned by admins of the app when in developer mode. */
+    ads_management?: boolean;
+    /** Grants access to the Ads Insights API to pull ads report information for ad accounts you own or have been granted access to by the owner of other ad accounts. */
+    ads_read?: boolean;
+    /** Provides access to a social context. Deprecated on April 30th, 2019. */
+    allow_context_profile_field?: boolean;
+    /** Grants permission to read and write with the Business Manager API. */
+    business_management?: boolean;
+    /** Grants permission to access a person's primary email address. */
+    email?: boolean;
+    /** Grants permission to publicly available group member information. */
+    groups_access_member_info?: boolean;
+    /** Grants permission to retrieve all the information captured within a lead. */
+    leads_retrieval?: boolean;
+    /** Enables your app to read a person's notifications and mark them as read. This permission does not let you send notifications to a person. Deprecated in Graph API v2.3. */
+    manage_notifications?: boolean;
+    /** Grants permission to retrieve Page Access Tokens for the Pages and Apps that the person administers. Apps need both manage_pages and publish_pages to be able to publish as a Page. */
+    manage_pages?: boolean;
+    /** Allows the app to perform POST and DELETE operations on endpoints used for managing a Page's Call To Action buttons. */
+    pages_manage_cta?: boolean;
+    /** Grants permission to manage Instant Articles on behalf of Facebook Pages administered by people using your app. */
+    pages_manage_instant_articles?: boolean;
+    /** Grants permission to send and receive messages through a Facebook Page. */
+    pages_messaging?: boolean;
+    /** Grants permission to use the phone number messaging feature. */
+    pages_messaging_phone_number?: boolean;
+    /** Grants permission to send messages using Facebook Pages at any time after the first user interaction. Your app may only send advertising or promotional content through sponsored messages or within 24 hours of user interaction. */
+    pages_messaging_subscriptions?: boolean;
+    /** Grants access to show the list of the Pages that a person manages. */
+    pages_show_list?: boolean;
+    /** Provides access to a user's public profile information including id, first_name, last_name, middle_name, name, name_format, picture, and short_name. This is the most basic permission and is required by Facebook. */
+    public_profile?: boolean;
+    /** Allows your app to publish to the Open Graph using Built-in Actions, Achievements, Scores, or Custom Actions. Deprecated on August 1st, 2018. */
+    publish_actions?: boolean;
+    /** Grants permission to publish posts, comments, and like Pages managed by a person using your app. Your app must also have manage_pages to publish as a Page. */
+    publish_pages?: boolean;
+    /** Grants permission to post content into a group on behalf of a user who has granted the app this permission. */
+    publish_to_groups?: boolean;
+    /** Grants permission to publish live videos to the app User's timeline. */
+    publish_video?: boolean;
+    /** Grants read-only access to the Audience Network Insights data for Apps the person owns. */
+    read_audience_network_insights?: boolean;
+    /** Grants read-only access to the Insights data for Pages, Apps, and web domains the person owns. */
+    read_insights?: boolean;
+    /** Provides the ability to read the messages in a person's Facebook Inbox through the inbox edge and the thread node. Deprecated in Graph API v2.3. */
+    read_mailbox?: boolean;
+    /** Grants permission to read from the Page Inboxes of the Pages managed by a person. This permission is often used alongside the manage_pages permission. */
+    read_page_mailboxes?: boolean;
+    /** Provides access to read the posts in a person's News Feed, or the posts on their Profile. Deprecated in Graph API v2.3. */
+    read_stream?: boolean;
+    /** Grants permission to access a person's age range. */
+    user_age_range?: boolean;
+    /** Grants permission to access a person's birthday. */
+    user_birthday?: boolean;
+    /** Grants read-only access to the Events a person is a host of or has RSVPed to. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
+    user_events?: boolean;
+    /** Grants permission to access a list of friends that also use said app. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
+    user_friends?: boolean;
+    /** Grants permission to access a person's gender. */
+    user_gender?: boolean;
+    /** Enables your app to read the Groups a person is a member of through the groups edge on the User object. Deprecated in Graph API v2.3. */
+    user_groups?: boolean;
+    /** Grants permission to access a person's hometown location set in their User Profile. */
+    user_hometown?: boolean;
+    /** Grants permission to access the list of all Facebook Pages that a person has liked. */
+    user_likes?: boolean;
+    /** Grants permission to access the Facebook Profile URL of the user of your app. */
+    user_link?: boolean;
+    /** Provides access to a person's current city through the location field on the User object. The current city is set by a person on their Profile. */
+    user_location?: boolean;
+    /** Enables your app to read the Groups a person is an admin of through the groups edge on the User object. Deprecated in Graph API v3.0. */
+    user_managed_groups?: boolean;
+    /** Provides access to the photos a person has uploaded or been tagged in. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
+    user_photos?: boolean;
+    /** Provides access to the posts on a person's Timeline including their own posts, posts they are tagged in, and posts other people make on their Timeline. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
+    user_posts?: boolean;
+    /** Provides access to a person's statuses. These are posts on Facebook which don't include links, videos or photos. Deprecated in Graph API v2.3. */
+    user_status?: boolean;
+    /** Provides access to the Places a person has been tagged at in photos, videos, statuses and links. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
+    user_tagged_places?: boolean;
+    /** Provides access to the videos a person has uploaded or been tagged in. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
+    user_videos?: boolean;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'fitbit' connection
  */
-export type ConnectionOptionsFitbit = Record<string, unknown>;
+export interface ConnectionOptionsFitbit extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'flickr' connection
  */
-export type ConnectionOptionsFlickr = Record<string, unknown>;
+export interface ConnectionOptionsFlickr extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'github' connection
  */
-export type ConnectionOptionsGitHub = Record<string, unknown>;
+export interface ConnectionOptionsGitHub extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'google-apps' connection
@@ -4155,9 +4531,16 @@ export interface ConnectionOptionsGoogleApps extends Management.ConnectionOption
  * Options for the 'google-oauth2' connection
  */
 export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOptionsCommon {
+    allowed_audiences?: Management.ConnectionAllowedAudiencesGoogleOAuth2;
+    client_id?: Management.ConnectionClientIdGoogleOAuth2;
+    client_secret?: Management.ConnectionClientSecretGoogleOAuth2;
+    freeform_scopes?: Management.ConnectionFreeformScopesGoogleOAuth2;
+    icon_url?: Management.ConnectionIconUrlGoogleOAuth2;
+    scope?: Management.ConnectionScopeGoogleOAuth2;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
     /** View and manage user's ad applications, ad units, and channels in AdSense */
     adsense_management?: boolean;
-    allowed_audiences?: Management.ConnectionAllowedAudiencesGoogleOAuth2;
     /** View user's configuration information and reports */
     analytics?: boolean;
     /** View and manage user's posts and blogs on Blogger and Blogger comments */
@@ -4174,8 +4557,6 @@ export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOpti
     calendar_settings_readonly?: boolean;
     /** Read access to user's chrome web store */
     chrome_web_store?: boolean;
-    client_id?: (Management.ConnectionClientIdGoogleOAuth2 | undefined) | null;
-    client_secret?: (Management.ConnectionClientSecretGoogleOAuth2 | undefined) | null;
     /** Full access to the authenticated user's contacts */
     contacts?: boolean;
     /** Full access to the authenticated user's contacts */
@@ -4218,7 +4599,6 @@ export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOpti
     drive_scripts?: boolean;
     /** Email and verified email flag */
     email?: boolean;
-    freeform_scopes?: Management.ConnectionFreeformScopesGoogleOAuth2;
     /** Full access to the account's mailboxes, including permanent deletion of threads and messages */
     gmail?: boolean;
     /** Read all resources and their metadata—no write operations */
@@ -4253,7 +4633,6 @@ export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOpti
     google_drive_files?: boolean;
     /** Associate user with its public Google profile */
     google_plus?: boolean;
-    icon_url?: Management.ConnectionIconUrlGoogleOAuth2;
     /** View and manage user's best-available current location and location history in Google Latitude */
     latitude_best?: boolean;
     /** View and manage user's city-level current location and location history in Google Latitude */
@@ -4268,15 +4647,12 @@ export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOpti
     picasa_web?: boolean;
     /** Name, public profile URL, photo, country, language, and timezone */
     profile?: boolean;
-    scope?: Management.ConnectionScopeGoogleOAuth2;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
     /** View and manage user's sites on Google Sites */
     sites?: boolean;
     /** Full access to create, edit, organize, and delete all your tasks */
     tasks?: boolean;
     /** Read-only access to view your tasks and task lists */
     tasks_readonly?: boolean;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
     /** View, manage and view statistics user's short URLs */
     url_shortener?: boolean;
     /** View and manage user's sites and messages, view keywords */
@@ -4324,21 +4700,48 @@ export interface ConnectionOptionsIdpinitiatedSaml {
     enabled?: boolean;
 }
 
-export type ConnectionOptionsInstagram = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'instagram' connection
+ */
+export interface ConnectionOptionsInstagram extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsLine = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'line' connection
+ */
+export interface ConnectionOptionsLine extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'linkedin' connection
  */
-export type ConnectionOptionsLinkedin = Record<string, unknown>;
+export interface ConnectionOptionsLinkedin extends Management.ConnectionOptionsOAuth2Common {
+    strategy_version?: Management.ConnectionStrategyVersionEnumLinkedin;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsMiicard = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'miicard' connection
+ */
+export interface ConnectionOptionsMiicard extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'oauth1' connection
  */
-export type ConnectionOptionsOAuth1 = Record<string, unknown>;
+export interface ConnectionOptionsOAuth1 {
+    client_id?: Management.ConnectionClientId;
+    client_secret?: Management.ConnectionClientSecret;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'oauth2' connection
@@ -4433,14 +4836,19 @@ export interface ConnectionOptionsOidcMetadata {
 /**
  * Options for the 'office365' connection
  */
-export type ConnectionOptionsOffice365 = Record<string, unknown>;
+export interface ConnectionOptionsOffice365 {
+    client_id?: Management.ConnectionClientId;
+    client_secret?: Management.ConnectionClientSecret;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'okta' connection
  */
 export interface ConnectionOptionsOkta
-    extends Management.ConnectionOptionsCommonOidc,
-        Management.ConnectionOptionsCommon {
+    extends Management.ConnectionOptionsCommon,
+        Management.ConnectionOptionsCommonOidc {
     attribute_map?: Management.ConnectionAttributeMapOkta;
     domain?: Management.ConnectionDomainOkta;
     type?: Management.ConnectionTypeEnumOkta;
@@ -4448,9 +4856,13 @@ export interface ConnectionOptionsOkta
     [key: string]: any;
 }
 
-export type ConnectionOptionsPaypal = Management.ConnectionOptionsOAuth2Common;
-
-export type ConnectionOptionsPaypalSandbox = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the paypal family of connections
+ */
+export interface ConnectionOptionsPaypal extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'pingfederate' connection
@@ -4467,9 +4879,18 @@ export interface ConnectionOptionsPingFederate
 /**
  * Options for the 'planningcenter' connection
  */
-export type ConnectionOptionsPlanningCenter = Record<string, unknown>;
+export interface ConnectionOptionsPlanningCenter extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsRenren = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'renren' connection
+ */
+export interface ConnectionOptionsRenren extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'samlp' connection
@@ -4521,54 +4942,126 @@ export interface ConnectionOptionsSms extends Management.ConnectionOptionsCommon
     [key: string]: any;
 }
 
-export type ConnectionOptionsSalesforce = Management.ConnectionOptionsSalesforceCommon;
+/**
+ * Options for the salesforce family of connections
+ */
+export interface ConnectionOptionsSalesforce extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsSalesforceCommon = Record<string, unknown>;
-
-export type ConnectionOptionsSalesforceCommunity = Management.ConnectionOptionsSalesforceCommon;
-
-export type ConnectionOptionsSalesforceSandbox = Management.ConnectionOptionsSalesforceCommon;
-
-export type ConnectionOptionsSharepoint = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'sharepoint' connection
+ */
+export interface ConnectionOptionsSharepoint extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'shop' connection
  */
-export type ConnectionOptionsShop = Record<string, unknown>;
+export interface ConnectionOptionsShop extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsShopify = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'shopify' connection
+ */
+export interface ConnectionOptionsShopify extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsSoundcloud = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'soundcloud' connection
+ */
+export interface ConnectionOptionsSoundcloud extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsTheCity = Management.ConnectionOptionsOAuth2Common;
-
-export type ConnectionOptionsTheCitySandbox = Management.ConnectionOptionsOAuth2Common;
-
-export type ConnectionOptionsThirtySevenSignals = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'thirtysevensignals' connection
+ */
+export interface ConnectionOptionsThirtySevenSignals extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'twitter' connection
  */
-export type ConnectionOptionsTwitter = Record<string, unknown>;
+export interface ConnectionOptionsTwitter extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsUntappd = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'untappd' connection
+ */
+export interface ConnectionOptionsUntappd extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsVkontakte = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'vkontakte' connection
+ */
+export interface ConnectionOptionsVkontakte extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsWeibo = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'weibo' connection
+ */
+export interface ConnectionOptionsWeibo extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Options for the 'windowslive' connection
  */
-export type ConnectionOptionsWindowsLive = Record<string, unknown>;
+export interface ConnectionOptionsWindowsLive extends Management.ConnectionOptionsOAuth2Common {
+    strategy_version?: Management.ConnectionStrategyVersionEnumWindowsLive;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsWordpress = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'wordpress' connection
+ */
+export interface ConnectionOptionsWordpress extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsYahoo = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'yahoo' connection
+ */
+export interface ConnectionOptionsYahoo extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsYammer = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'yammer' connection
+ */
+export interface ConnectionOptionsYammer extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
-export type ConnectionOptionsYandex = Management.ConnectionOptionsOAuth2Common;
+/**
+ * Options for the 'yandex' connection
+ */
+export interface ConnectionOptionsYandex extends Management.ConnectionOptionsOAuth2Common {
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 /**
  * Passkey authentication enablement
@@ -4842,12 +5335,7 @@ export type ConnectionProviderEnumSms = (typeof ConnectionProviderEnumSms)[keyof
 export type ConnectionProviderSms = Management.ConnectionProviderEnumSms;
 
 /**
- * A ticket used for provisioning the connection
- */
-export type ConnectionProvisioningTicket = string;
-
-/**
- * A ticket used for provisioning the connection
+ * A ticket URL used for provisioning the connection
  */
 export type ConnectionProvisioningTicketUrl = string;
 
@@ -4859,7 +5347,7 @@ export type ConnectionRealmFallback = boolean;
 /**
  * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
  */
-export type ConnectionRealmsAuth0 = string[];
+export type ConnectionRealms = string[];
 
 /**
  * The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL.
@@ -4910,517 +5398,925 @@ export type ConnectionRequiresUsername = boolean;
 
 export interface ConnectionResponseCommon extends Management.CreateConnectionCommon {
     id?: Management.ConnectionId;
+    realms?: Management.ConnectionRealms;
 }
 
 /**
  * Response for connections with strategy=ad
  */
 export interface ConnectionResponseContentAd extends Management.ConnectionResponseCommon {
-    strategy: "ad";
+    strategy: ConnectionResponseContentAd.Strategy;
     options?: Management.ConnectionOptionsAd;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
+}
+
+export namespace ConnectionResponseContentAd {
+    export const Strategy = {
+        Ad: "ad",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=adfs
  */
 export interface ConnectionResponseContentAdfs extends Management.ConnectionResponseCommon {
-    strategy: "adfs";
+    strategy: ConnectionResponseContentAdfs.Strategy;
     options?: Management.ConnectionOptionsAdfs;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentAdfs {
+    export const Strategy = {
+        Adfs: "adfs",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=aol
  */
 export interface ConnectionResponseContentAol extends Management.ConnectionResponseCommon {
-    strategy: "aol";
+    strategy: ConnectionResponseContentAol.Strategy;
     options?: Management.ConnectionOptionsAol;
+}
+
+export namespace ConnectionResponseContentAol {
+    export const Strategy = {
+        Aol: "aol",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=amazon
  */
 export interface ConnectionResponseContentAmazon extends Management.ConnectionResponseCommon {
-    strategy: "amazon";
+    strategy: ConnectionResponseContentAmazon.Strategy;
     options?: Management.ConnectionOptionsAmazon;
+}
+
+export namespace ConnectionResponseContentAmazon {
+    export const Strategy = {
+        Amazon: "amazon",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=apple
  */
 export interface ConnectionResponseContentApple extends Management.ConnectionResponseCommon {
-    strategy: "apple";
+    strategy: ConnectionResponseContentApple.Strategy;
     options?: Management.ConnectionOptionsApple;
+}
+
+export namespace ConnectionResponseContentApple {
+    export const Strategy = {
+        Apple: "apple",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=auth0
  */
 export interface ConnectionResponseContentAuth0 extends Management.ConnectionResponseCommon {
-    strategy: "auth0";
+    strategy: ConnectionResponseContentAuth0.Strategy;
     options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealmsAuth0;
+}
+
+export namespace ConnectionResponseContentAuth0 {
+    export const Strategy = {
+        Auth0: "auth0",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=auth0-oidc
  */
 export interface ConnectionResponseContentAuth0Oidc extends Management.ConnectionResponseCommon {
-    strategy: "auth0-oidc";
+    strategy: ConnectionResponseContentAuth0Oidc.Strategy;
     options?: Management.ConnectionOptionsAuth0Oidc;
+}
+
+export namespace ConnectionResponseContentAuth0Oidc {
+    export const Strategy = {
+        Auth0Oidc: "auth0-oidc",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=waad
  */
 export interface ConnectionResponseContentAzureAd extends Management.ConnectionResponseCommon {
-    strategy: "waad";
+    strategy: ConnectionResponseContentAzureAd.Strategy;
     options?: Management.ConnectionOptionsAzureAd;
-    provisioning_ticket?: Management.ConnectionProvisioningTicket;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
     show_as_button?: Management.ConnectionShowAsButton;
-    strategy_version?: Management.ConnectionStrategyVersionEnumAzureAd;
+}
+
+export namespace ConnectionResponseContentAzureAd {
+    export const Strategy = {
+        Waad: "waad",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=baidu
  */
 export interface ConnectionResponseContentBaidu extends Management.ConnectionResponseCommon {
-    strategy: "baidu";
+    strategy: ConnectionResponseContentBaidu.Strategy;
     options?: Management.ConnectionOptionsBaidu;
+}
+
+export namespace ConnectionResponseContentBaidu {
+    export const Strategy = {
+        Baidu: "baidu",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=bitbucket
  */
 export interface ConnectionResponseContentBitbucket extends Management.ConnectionResponseCommon {
-    strategy: "bitbucket";
+    strategy: ConnectionResponseContentBitbucket.Strategy;
     options?: Management.ConnectionOptionsBitbucket;
+}
+
+export namespace ConnectionResponseContentBitbucket {
+    export const Strategy = {
+        Bitbucket: "bitbucket",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=bitly
  */
 export interface ConnectionResponseContentBitly extends Management.ConnectionResponseCommon {
-    strategy: "bitly";
+    strategy: ConnectionResponseContentBitly.Strategy;
     options?: Management.ConnectionOptionsBitly;
+}
+
+export namespace ConnectionResponseContentBitly {
+    export const Strategy = {
+        Bitly: "bitly",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=box
  */
 export interface ConnectionResponseContentBox extends Management.ConnectionResponseCommon {
-    strategy: "box";
+    strategy: ConnectionResponseContentBox.Strategy;
     options?: Management.ConnectionOptionsBox;
+}
+
+export namespace ConnectionResponseContentBox {
+    export const Strategy = {
+        Box: "box",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=custom
  */
 export interface ConnectionResponseContentCustom extends Management.ConnectionResponseCommon {
-    strategy: "custom";
+    strategy: ConnectionResponseContentCustom.Strategy;
     options?: Management.ConnectionOptionsCustom;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
+}
+
+export namespace ConnectionResponseContentCustom {
+    export const Strategy = {
+        Custom: "custom",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=daccount
  */
 export interface ConnectionResponseContentDaccount extends Management.ConnectionResponseCommon {
-    strategy: "daccount";
+    strategy: ConnectionResponseContentDaccount.Strategy;
     options?: Management.ConnectionOptionsDaccount;
+}
+
+export namespace ConnectionResponseContentDaccount {
+    export const Strategy = {
+        Daccount: "daccount",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=dropbox
  */
 export interface ConnectionResponseContentDropbox extends Management.ConnectionResponseCommon {
-    strategy: "dropbox";
+    strategy: ConnectionResponseContentDropbox.Strategy;
     options?: Management.ConnectionOptionsDropbox;
+}
+
+export namespace ConnectionResponseContentDropbox {
+    export const Strategy = {
+        Dropbox: "dropbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=dwolla
  */
 export interface ConnectionResponseContentDwolla extends Management.ConnectionResponseCommon {
-    strategy: "dwolla";
+    strategy: ConnectionResponseContentDwolla.Strategy;
     options?: Management.ConnectionOptionsDwolla;
+}
+
+export namespace ConnectionResponseContentDwolla {
+    export const Strategy = {
+        Dwolla: "dwolla",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=email
  */
 export interface ConnectionResponseContentEmail extends Management.ConnectionResponseCommon {
-    strategy: "email";
+    strategy: ConnectionResponseContentEmail.Strategy;
     options?: Management.ConnectionOptionsEmail;
+}
+
+export namespace ConnectionResponseContentEmail {
+    export const Strategy = {
+        Email: "email",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=evernote
  */
 export interface ConnectionResponseContentEvernote extends Management.ConnectionResponseCommon {
-    strategy: "evernote";
+    strategy: ConnectionResponseContentEvernote.Strategy;
     options?: Management.ConnectionOptionsEvernote;
+}
+
+export namespace ConnectionResponseContentEvernote {
+    export const Strategy = {
+        Evernote: "evernote",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=evernote-sandbox
  */
 export interface ConnectionResponseContentEvernoteSandbox extends Management.ConnectionResponseCommon {
-    strategy: "evernote-sandbox";
-    options?: Management.ConnectionOptionsEvernoteSandbox;
+    strategy: ConnectionResponseContentEvernoteSandbox.Strategy;
+    options?: Management.ConnectionOptionsEvernote;
+}
+
+export namespace ConnectionResponseContentEvernoteSandbox {
+    export const Strategy = {
+        EvernoteSandbox: "evernote-sandbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=exact
  */
 export interface ConnectionResponseContentExact extends Management.ConnectionResponseCommon {
-    strategy: "exact";
+    strategy: ConnectionResponseContentExact.Strategy;
     options?: Management.ConnectionOptionsExact;
+}
+
+export namespace ConnectionResponseContentExact {
+    export const Strategy = {
+        Exact: "exact",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=facebook
  */
 export interface ConnectionResponseContentFacebook extends Management.ConnectionResponseCommon {
-    strategy: "facebook";
+    strategy: ConnectionResponseContentFacebook.Strategy;
     options?: Management.ConnectionOptionsFacebook;
+}
+
+export namespace ConnectionResponseContentFacebook {
+    export const Strategy = {
+        Facebook: "facebook",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=fitbit
  */
 export interface ConnectionResponseContentFitbit extends Management.ConnectionResponseCommon {
-    strategy: "fitbit";
+    strategy: ConnectionResponseContentFitbit.Strategy;
     options?: Management.ConnectionOptionsFitbit;
+}
+
+export namespace ConnectionResponseContentFitbit {
+    export const Strategy = {
+        Fitbit: "fitbit",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=flickr
  */
 export interface ConnectionResponseContentFlickr extends Management.ConnectionResponseCommon {
-    strategy: "flickr";
+    strategy: ConnectionResponseContentFlickr.Strategy;
     options?: Management.ConnectionOptionsFlickr;
+}
+
+export namespace ConnectionResponseContentFlickr {
+    export const Strategy = {
+        Flickr: "flickr",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=github
  */
 export interface ConnectionResponseContentGitHub extends Management.ConnectionResponseCommon {
-    strategy: "github";
+    strategy: ConnectionResponseContentGitHub.Strategy;
     options?: Management.ConnectionOptionsGitHub;
+}
+
+export namespace ConnectionResponseContentGitHub {
+    export const Strategy = {
+        Github: "github",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=google-apps
  */
 export interface ConnectionResponseContentGoogleApps extends Management.ConnectionResponseCommon {
-    strategy: "google-apps";
+    strategy: ConnectionResponseContentGoogleApps.Strategy;
     options?: Management.ConnectionOptionsGoogleApps;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentGoogleApps {
+    export const Strategy = {
+        GoogleApps: "google-apps",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=google-oauth2
  */
 export interface ConnectionResponseContentGoogleOAuth2 extends Management.ConnectionResponseCommon {
-    strategy: "google-oauth2";
+    strategy: ConnectionResponseContentGoogleOAuth2.Strategy;
     options?: Management.ConnectionOptionsGoogleOAuth2;
+}
+
+export namespace ConnectionResponseContentGoogleOAuth2 {
+    export const Strategy = {
+        GoogleOauth2: "google-oauth2",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=ip
  */
 export interface ConnectionResponseContentIp extends Management.ConnectionResponseCommon {
-    strategy: "ip";
+    strategy: ConnectionResponseContentIp.Strategy;
     options?: Management.ConnectionOptionsIp;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentIp {
+    export const Strategy = {
+        Ip: "ip",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=instagram
  */
 export interface ConnectionResponseContentInstagram extends Management.ConnectionResponseCommon {
-    strategy: "instagram";
+    strategy: ConnectionResponseContentInstagram.Strategy;
     options?: Management.ConnectionOptionsInstagram;
+}
+
+export namespace ConnectionResponseContentInstagram {
+    export const Strategy = {
+        Instagram: "instagram",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=line
  */
 export interface ConnectionResponseContentLine extends Management.ConnectionResponseCommon {
-    strategy: "line";
+    strategy: ConnectionResponseContentLine.Strategy;
     options?: Management.ConnectionOptionsLine;
+}
+
+export namespace ConnectionResponseContentLine {
+    export const Strategy = {
+        Line: "line",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=linkedin
  */
 export interface ConnectionResponseContentLinkedin extends Management.ConnectionResponseCommon {
-    strategy: "linkedin";
+    strategy: ConnectionResponseContentLinkedin.Strategy;
     options?: Management.ConnectionOptionsLinkedin;
+}
+
+export namespace ConnectionResponseContentLinkedin {
+    export const Strategy = {
+        Linkedin: "linkedin",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=miicard
  */
 export interface ConnectionResponseContentMiicard extends Management.ConnectionResponseCommon {
-    strategy: "miicard";
+    strategy: ConnectionResponseContentMiicard.Strategy;
     options?: Management.ConnectionOptionsMiicard;
+}
+
+export namespace ConnectionResponseContentMiicard {
+    export const Strategy = {
+        Miicard: "miicard",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=oauth1
  */
 export interface ConnectionResponseContentOAuth1 extends Management.ConnectionResponseCommon {
-    strategy: "oauth1";
+    strategy: ConnectionResponseContentOAuth1.Strategy;
     options?: Management.ConnectionOptionsOAuth1;
+}
+
+export namespace ConnectionResponseContentOAuth1 {
+    export const Strategy = {
+        Oauth1: "oauth1",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=oauth2
  */
 export interface ConnectionResponseContentOAuth2 extends Management.ConnectionResponseCommon {
-    strategy: "oauth2";
+    strategy: ConnectionResponseContentOAuth2.Strategy;
     options?: Management.ConnectionOptionsOAuth2;
+}
+
+export namespace ConnectionResponseContentOAuth2 {
+    export const Strategy = {
+        Oauth2: "oauth2",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=oidc
  */
 export interface ConnectionResponseContentOidc extends Management.ConnectionResponseCommon {
-    strategy: "oidc";
+    strategy: ConnectionResponseContentOidc.Strategy;
     options?: Management.ConnectionOptionsOidc;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentOidc {
+    export const Strategy = {
+        Oidc: "oidc",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=office365
  */
 export interface ConnectionResponseContentOffice365 extends Management.ConnectionResponseCommon {
-    strategy: "office365";
+    strategy: ConnectionResponseContentOffice365.Strategy;
     options?: Management.ConnectionOptionsOffice365;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentOffice365 {
+    export const Strategy = {
+        Office365: "office365",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=okta
  */
 export interface ConnectionResponseContentOkta extends Management.ConnectionResponseCommon {
-    strategy: "okta";
+    strategy: ConnectionResponseContentOkta.Strategy;
     options?: Management.ConnectionOptionsOkta;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentOkta {
+    export const Strategy = {
+        Okta: "okta",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=paypal
  */
 export interface ConnectionResponseContentPaypal extends Management.ConnectionResponseCommon {
-    strategy: "paypal";
+    strategy: ConnectionResponseContentPaypal.Strategy;
     options?: Management.ConnectionOptionsPaypal;
+}
+
+export namespace ConnectionResponseContentPaypal {
+    export const Strategy = {
+        Paypal: "paypal",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=paypal-sandbox
  */
 export interface ConnectionResponseContentPaypalSandbox extends Management.ConnectionResponseCommon {
-    strategy: "paypal-sandbox";
-    options?: Management.ConnectionOptionsPaypalSandbox;
+    strategy: ConnectionResponseContentPaypalSandbox.Strategy;
+    options?: Management.ConnectionOptionsPaypal;
+}
+
+export namespace ConnectionResponseContentPaypalSandbox {
+    export const Strategy = {
+        PaypalSandbox: "paypal-sandbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=pingfederate
  */
 export interface ConnectionResponseContentPingFederate extends Management.ConnectionResponseCommon {
-    strategy: "pingfederate";
+    strategy: ConnectionResponseContentPingFederate.Strategy;
     options?: Management.ConnectionOptionsPingFederate;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentPingFederate {
+    export const Strategy = {
+        Pingfederate: "pingfederate",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=planningcenter
  */
 export interface ConnectionResponseContentPlanningCenter extends Management.ConnectionResponseCommon {
-    strategy: "planningcenter";
+    strategy: ConnectionResponseContentPlanningCenter.Strategy;
     options?: Management.ConnectionOptionsPlanningCenter;
+}
+
+export namespace ConnectionResponseContentPlanningCenter {
+    export const Strategy = {
+        Planningcenter: "planningcenter",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=renren
  */
 export interface ConnectionResponseContentRenren extends Management.ConnectionResponseCommon {
-    strategy: "renren";
+    strategy: ConnectionResponseContentRenren.Strategy;
     options?: Management.ConnectionOptionsRenren;
+}
+
+export namespace ConnectionResponseContentRenren {
+    export const Strategy = {
+        Renren: "renren",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=samlp
  */
 export interface ConnectionResponseContentSaml extends Management.ConnectionResponseCommon {
-    strategy: "samlp";
+    strategy: ConnectionResponseContentSaml.Strategy;
     options?: Management.ConnectionOptionsSaml;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentSaml {
+    export const Strategy = {
+        Samlp: "samlp",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=sms
  */
 export interface ConnectionResponseContentSms extends Management.ConnectionResponseCommon {
-    strategy: "sms";
+    strategy: ConnectionResponseContentSms.Strategy;
     options?: Management.ConnectionOptionsSms;
+}
+
+export namespace ConnectionResponseContentSms {
+    export const Strategy = {
+        Sms: "sms",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=salesforce
  */
 export interface ConnectionResponseContentSalesforce extends Management.ConnectionResponseCommon {
-    strategy: "salesforce";
+    strategy: ConnectionResponseContentSalesforce.Strategy;
     options?: Management.ConnectionOptionsSalesforce;
+}
+
+export namespace ConnectionResponseContentSalesforce {
+    export const Strategy = {
+        Salesforce: "salesforce",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=salesforce-community
  */
 export interface ConnectionResponseContentSalesforceCommunity extends Management.ConnectionResponseCommon {
-    strategy: "salesforce-community";
-    options?: Management.ConnectionOptionsSalesforceCommunity;
+    strategy: ConnectionResponseContentSalesforceCommunity.Strategy;
+    options?: Management.ConnectionOptionsSalesforce;
+}
+
+export namespace ConnectionResponseContentSalesforceCommunity {
+    export const Strategy = {
+        SalesforceCommunity: "salesforce-community",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=salesforce-sandbox
  */
 export interface ConnectionResponseContentSalesforceSandbox extends Management.ConnectionResponseCommon {
-    strategy: "salesforce-sandbox";
-    options?: Management.ConnectionOptionsSalesforceSandbox;
+    strategy: ConnectionResponseContentSalesforceSandbox.Strategy;
+    options?: Management.ConnectionOptionsSalesforce;
+}
+
+export namespace ConnectionResponseContentSalesforceSandbox {
+    export const Strategy = {
+        SalesforceSandbox: "salesforce-sandbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=sharepoint
  */
 export interface ConnectionResponseContentSharepoint extends Management.ConnectionResponseCommon {
-    strategy: "sharepoint";
+    strategy: ConnectionResponseContentSharepoint.Strategy;
     options?: Management.ConnectionOptionsSharepoint;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace ConnectionResponseContentSharepoint {
+    export const Strategy = {
+        Sharepoint: "sharepoint",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=shop
  */
 export interface ConnectionResponseContentShop extends Management.ConnectionResponseCommon {
-    strategy: "shop";
+    strategy: ConnectionResponseContentShop.Strategy;
     options?: Management.ConnectionOptionsShop;
+}
+
+export namespace ConnectionResponseContentShop {
+    export const Strategy = {
+        Shop: "shop",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=shopify
  */
 export interface ConnectionResponseContentShopify extends Management.ConnectionResponseCommon {
-    strategy: "shopify";
+    strategy: ConnectionResponseContentShopify.Strategy;
     options?: Management.ConnectionOptionsShopify;
+}
+
+export namespace ConnectionResponseContentShopify {
+    export const Strategy = {
+        Shopify: "shopify",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=soundcloud
  */
 export interface ConnectionResponseContentSoundcloud extends Management.ConnectionResponseCommon {
-    strategy: "soundcloud";
+    strategy: ConnectionResponseContentSoundcloud.Strategy;
     options?: Management.ConnectionOptionsSoundcloud;
 }
 
-/**
- * Response for connections with strategy=thecity
- */
-export interface ConnectionResponseContentTheCity extends Management.ConnectionResponseCommon {
-    strategy: "thecity";
-    options?: Management.ConnectionOptionsTheCity;
-}
-
-/**
- * Response for connections with strategy=thecity-sandbox
- */
-export interface ConnectionResponseContentTheCitySandbox extends Management.ConnectionResponseCommon {
-    strategy: "thecity-sandbox";
-    options?: Management.ConnectionOptionsTheCitySandbox;
+export namespace ConnectionResponseContentSoundcloud {
+    export const Strategy = {
+        Soundcloud: "soundcloud",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=thirtysevensignals
  */
 export interface ConnectionResponseContentThirtySevenSignals extends Management.ConnectionResponseCommon {
-    strategy: "thirtysevensignals";
+    strategy: ConnectionResponseContentThirtySevenSignals.Strategy;
     options?: Management.ConnectionOptionsThirtySevenSignals;
+}
+
+export namespace ConnectionResponseContentThirtySevenSignals {
+    export const Strategy = {
+        Thirtysevensignals: "thirtysevensignals",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=twitter
  */
 export interface ConnectionResponseContentTwitter extends Management.ConnectionResponseCommon {
-    strategy: "twitter";
+    strategy: ConnectionResponseContentTwitter.Strategy;
     options?: Management.ConnectionOptionsTwitter;
+}
+
+export namespace ConnectionResponseContentTwitter {
+    export const Strategy = {
+        Twitter: "twitter",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=untappd
  */
 export interface ConnectionResponseContentUntappd extends Management.ConnectionResponseCommon {
-    strategy: "untappd";
+    strategy: ConnectionResponseContentUntappd.Strategy;
     options?: Management.ConnectionOptionsUntappd;
+}
+
+export namespace ConnectionResponseContentUntappd {
+    export const Strategy = {
+        Untappd: "untappd",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=vkontakte
  */
 export interface ConnectionResponseContentVkontakte extends Management.ConnectionResponseCommon {
-    strategy: "vkontakte";
+    strategy: ConnectionResponseContentVkontakte.Strategy;
     options?: Management.ConnectionOptionsVkontakte;
+}
+
+export namespace ConnectionResponseContentVkontakte {
+    export const Strategy = {
+        Vkontakte: "vkontakte",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=weibo
  */
 export interface ConnectionResponseContentWeibo extends Management.ConnectionResponseCommon {
-    strategy: "weibo";
+    strategy: ConnectionResponseContentWeibo.Strategy;
     options?: Management.ConnectionOptionsWeibo;
+}
+
+export namespace ConnectionResponseContentWeibo {
+    export const Strategy = {
+        Weibo: "weibo",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=windowslive
  */
 export interface ConnectionResponseContentWindowsLive extends Management.ConnectionResponseCommon {
-    strategy: "windowslive";
+    strategy: ConnectionResponseContentWindowsLive.Strategy;
     options?: Management.ConnectionOptionsWindowsLive;
+}
+
+export namespace ConnectionResponseContentWindowsLive {
+    export const Strategy = {
+        Windowslive: "windowslive",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=wordpress
  */
 export interface ConnectionResponseContentWordpress extends Management.ConnectionResponseCommon {
-    strategy: "wordpress";
+    strategy: ConnectionResponseContentWordpress.Strategy;
     options?: Management.ConnectionOptionsWordpress;
+}
+
+export namespace ConnectionResponseContentWordpress {
+    export const Strategy = {
+        Wordpress: "wordpress",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=yahoo
  */
 export interface ConnectionResponseContentYahoo extends Management.ConnectionResponseCommon {
-    strategy: "yahoo";
+    strategy: ConnectionResponseContentYahoo.Strategy;
     options?: Management.ConnectionOptionsYahoo;
+}
+
+export namespace ConnectionResponseContentYahoo {
+    export const Strategy = {
+        Yahoo: "yahoo",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=yammer
  */
 export interface ConnectionResponseContentYammer extends Management.ConnectionResponseCommon {
-    strategy: "yammer";
+    strategy: ConnectionResponseContentYammer.Strategy;
     options?: Management.ConnectionOptionsYammer;
+}
+
+export namespace ConnectionResponseContentYammer {
+    export const Strategy = {
+        Yammer: "yammer",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Response for connections with strategy=yandex
  */
 export interface ConnectionResponseContentYandex extends Management.ConnectionResponseCommon {
-    strategy: "yandex";
+    strategy: ConnectionResponseContentYandex.Strategy;
     options?: Management.ConnectionOptionsYandex;
+}
+
+export namespace ConnectionResponseContentYandex {
+    export const Strategy = {
+        Yandex: "yandex",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
@@ -5439,9 +6335,19 @@ export type ConnectionResponseTypesSupported = string[];
 export type ConnectionScopeArray = Management.ConnectionScopeItem[];
 
 /**
+ * Array of custom OAuth 2.0 scopes to request during authentication.
+ */
+export type ConnectionScopeArrayFacebook = Management.ConnectionScopeItem[];
+
+/**
  * OAuth 2.0 scopes to request from Azure AD during authentication. Each scope represents a permission (e.g., 'User.Read', 'Group.Read.All'). Only applies with Microsoft Identity Platform v2.0. See Microsoft Graph permissions reference for available scopes.
  */
 export type ConnectionScopeAzureAd = string[];
+
+/**
+ * Computed comma-separated OAuth scope string sent to Facebook.
+ */
+export type ConnectionScopeFacebook = string;
 
 /**
  * Additional OAuth scopes requested beyond the default `email profile` scopes; ignored unless `allow_setting_login_scopes` is true.
@@ -5469,7 +6375,7 @@ export type ConnectionScopeItemGoogleApps = string;
 export type ConnectionScopeOAuth2 = string | string[];
 
 /**
- * Space-separated list of scopes requested during /authorize. Must contain openid, typically contains 'openid profile email'
+ * Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider.
  */
 export type ConnectionScopeOidc = string;
 
@@ -5489,7 +6395,7 @@ export interface ConnectionScriptsOAuth2 {
 }
 
 /**
- * whether to send a nonce to the identity provider when `type=back_channel`
+ * When true and type is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation.
  */
 export type ConnectionSendBackChannelNonce = boolean;
 
@@ -5505,14 +6411,9 @@ export type ConnectionSetUserRootAttributesEnum =
     (typeof ConnectionSetUserRootAttributesEnum)[keyof typeof ConnectionSetUserRootAttributesEnum];
 
 /**
- * SHA-1 thumbprint allowing standard format or relaxed legacy hex string.
- */
-export type ConnectionSha1ThumbprintRelaxedValidationSaml = Management.ConnectionSha1ThumbprintSaml;
-
-/**
  * SHA-1 thumbprint of the certificate
  */
-export type ConnectionSha1ThumbprintSaml = string;
+export type ConnectionSha1Thumbprint = string;
 
 /** Choose how Auth0 sets the email_verified field in the user profile. */
 export const ConnectionShouldTrustEmailVerifiedConnectionEnum = {
@@ -5526,6 +6427,11 @@ export type ConnectionShouldTrustEmailVerifiedConnectionEnum =
  * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`.
  */
 export type ConnectionShowAsButton = boolean;
+
+/**
+ * The sign-in endpoint type for the AD-LDAP connector agent (managed by the AD Connector agent).
+ */
+export type ConnectionSignInEndpointAd = Management.ConnectionHttpsUrlWithHttpFallback255;
 
 /**
  * Passive Requestor (WS-Fed) sign-in endpoint discovered from metadata or provided explicitly.
@@ -5658,9 +6564,14 @@ export const ConnectionStrategyEnum = {
 export type ConnectionStrategyEnum = (typeof ConnectionStrategyEnum)[keyof typeof ConnectionStrategyEnum];
 
 /**
- * Strategy version
+ * Version number of the linkedin strategy implementation.
  */
-export type ConnectionStrategyVersionEnumAzureAd = number;
+export type ConnectionStrategyVersionEnumLinkedin = number;
+
+/**
+ * Version number of the windowslive strategy implementation.
+ */
+export type ConnectionStrategyVersionEnumWindowsLive = number;
 
 /**
  * A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public
@@ -5685,6 +6596,11 @@ export type ConnectionTemplateSyntaxEnumSms =
  */
 export type ConnectionTenantDomain = string;
 
+/**
+ * Primary AD domain hint used for HRD and discovery.
+ */
+export type ConnectionTenantDomainAd = string;
+
 export type ConnectionTenantDomainAzureAdOne = string;
 
 /**
@@ -5704,9 +6620,19 @@ export type ConnectionTenantIdAzureAd = string;
  */
 export type ConnectionThumbprints = string[];
 
+/**
+ * Array of certificate SHA-1 thumbprints for validating signatures. Managed by Auth0 when using the AD Connector agent.
+ */
+export type ConnectionThumbprintsAd = Management.ConnectionSha1Thumbprint[];
+
+/**
+ * SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string.
+ */
+export type ConnectionThumbprintsSaml = Management.ConnectionSha1Thumbprint[];
+
 export type ConnectionTokenEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
 
-/** Requested Client Authentication method for the Token Endpoint. */
+/** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. */
 export const ConnectionTokenEndpointAuthMethodEnum = {
     ClientSecretPost: "client_secret_post",
     PrivateKeyJwt: "private_key_jwt",
@@ -5791,17 +6717,18 @@ export type ConnectionTwilioSidSms = string;
  */
 export type ConnectionTwilioTokenSms = string;
 
-/** Connection type */
+/** OIDC communication channel type. 'back_channel' (confidential client) exchanges tokens server-side for stronger security; 'front_channel' handles responses in the browser. */
 export const ConnectionTypeEnumOidc = {
     BackChannel: "back_channel",
     FrontChannel: "front_channel",
 } as const;
 export type ConnectionTypeEnumOidc = (typeof ConnectionTypeEnumOidc)[keyof typeof ConnectionTypeEnumOidc];
 
-/**
- * Connection type
- */
-export type ConnectionTypeEnumOkta = "back_channel";
+/** Connection type */
+export const ConnectionTypeEnumOkta = {
+    BackChannel: "back_channel",
+} as const;
+export type ConnectionTypeEnumOkta = (typeof ConnectionTypeEnumOkta)[keyof typeof ConnectionTypeEnumOkta];
 
 /**
  * Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values.
@@ -5841,6 +6768,11 @@ export type ConnectionUpstreamParams =
     | undefined;
 
 export type ConnectionUpstreamParamsAdfs = ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+
+/**
+ * Options for adding parameters in the request to the upstream IdP. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type ConnectionUpstreamParamsFacebook = Record<string, Management.ConnectionUpstreamAdditionalProperties>;
 
 export interface ConnectionUpstreamValue {
     value?: string;
@@ -5917,6 +6849,47 @@ export type ConnectionWaadProtocolEnumAzureAd =
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
  */
 export type ConnectionsMetadata = Record<string, (string | null) | undefined>;
+
+export interface CreateActionModuleResponseContent {
+    /** The unique ID of the module. */
+    id?: string;
+    /** The name of the module. */
+    name?: string;
+    /** The source code from the module's draft version. */
+    code?: string;
+    /** The npm dependencies from the module's draft version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The secrets from the module's draft version (names and timestamps only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** The number of deployed actions using this module. */
+    actions_using_module_total?: number;
+    /** Whether all draft changes have been published as a version. */
+    all_changes_published?: boolean;
+    /** The version number of the latest published version. Omitted if no versions have been published. */
+    latest_version_number?: number;
+    /** Timestamp when the module was created. */
+    created_at?: string;
+    /** Timestamp when the module was last updated. */
+    updated_at?: string;
+    latest_version?: Management.ActionModuleVersionReference;
+}
+
+export interface CreateActionModuleVersionResponseContent {
+    /** The unique ID for this version. */
+    id?: string;
+    /** The ID of the parent module. */
+    module_id?: string;
+    /** The sequential version number. */
+    version_number?: number;
+    /** The exact source code that was published with this version. */
+    code?: string;
+    /** Secrets available to this version (name and updated_at only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** Dependencies locked to this version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The timestamp when this version was created. */
+    created_at?: string;
+}
 
 export interface CreateActionResponseContent {
     /** The unique ID of the action. */
@@ -6009,8 +6982,10 @@ export interface CreateClientGrantResponseContent {
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean;
     subject_type?: Management.ClientGrantSubjectTypeEnum;
-    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** Types of authorization_details allowed for this client grant. */
     authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean;
 }
 
 export interface CreateClientResponseContent {
@@ -6125,509 +7100,911 @@ export interface CreateConnectionProfileResponseContent {
  * Create a connection with strategy=ad
  */
 export interface CreateConnectionRequestContentAd extends Management.CreateConnectionCommon {
-    strategy: "ad";
+    strategy: CreateConnectionRequestContentAd.Strategy;
     options?: Management.ConnectionOptionsAd;
+}
+
+export namespace CreateConnectionRequestContentAd {
+    export const Strategy = {
+        Ad: "ad",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=adfs
  */
 export interface CreateConnectionRequestContentAdfs extends Management.CreateConnectionCommon {
-    strategy: "adfs";
+    strategy: CreateConnectionRequestContentAdfs.Strategy;
     options?: Management.ConnectionOptionsAdfs;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentAdfs {
+    export const Strategy = {
+        Adfs: "adfs",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=aol
  */
 export interface CreateConnectionRequestContentAol extends Management.CreateConnectionCommon {
-    strategy: "aol";
+    strategy: CreateConnectionRequestContentAol.Strategy;
     options?: Management.ConnectionOptionsAol;
+}
+
+export namespace CreateConnectionRequestContentAol {
+    export const Strategy = {
+        Aol: "aol",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=amazon
  */
 export interface CreateConnectionRequestContentAmazon extends Management.CreateConnectionCommon {
-    strategy: "amazon";
+    strategy: CreateConnectionRequestContentAmazon.Strategy;
     options?: Management.ConnectionOptionsAmazon;
+}
+
+export namespace CreateConnectionRequestContentAmazon {
+    export const Strategy = {
+        Amazon: "amazon",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=apple
  */
 export interface CreateConnectionRequestContentApple extends Management.CreateConnectionCommon {
-    strategy: "apple";
+    strategy: CreateConnectionRequestContentApple.Strategy;
     options?: Management.ConnectionOptionsApple;
+}
+
+export namespace CreateConnectionRequestContentApple {
+    export const Strategy = {
+        Apple: "apple",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=auth0
  */
 export interface CreateConnectionRequestContentAuth0 extends Management.CreateConnectionCommon {
-    strategy: "auth0";
+    strategy: CreateConnectionRequestContentAuth0.Strategy;
     options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealmsAuth0;
+    realms?: Management.ConnectionRealms;
+}
+
+export namespace CreateConnectionRequestContentAuth0 {
+    export const Strategy = {
+        Auth0: "auth0",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=auth0-oidc
  */
 export interface CreateConnectionRequestContentAuth0Oidc extends Management.CreateConnectionCommon {
-    strategy: "auth0-oidc";
+    strategy: CreateConnectionRequestContentAuth0Oidc.Strategy;
     options?: Management.ConnectionOptionsAuth0Oidc;
+}
+
+export namespace CreateConnectionRequestContentAuth0Oidc {
+    export const Strategy = {
+        Auth0Oidc: "auth0-oidc",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=waad
  */
 export interface CreateConnectionRequestContentAzureAd extends Management.CreateConnectionCommon {
-    strategy: "waad";
+    strategy: CreateConnectionRequestContentAzureAd.Strategy;
     options?: Management.ConnectionOptionsAzureAd;
-    provisioning_ticket?: Management.ConnectionProvisioningTicket;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentAzureAd {
+    export const Strategy = {
+        Waad: "waad",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=baidu
  */
 export interface CreateConnectionRequestContentBaidu extends Management.CreateConnectionCommon {
-    strategy: "baidu";
+    strategy: CreateConnectionRequestContentBaidu.Strategy;
     options?: Management.ConnectionOptionsBaidu;
+}
+
+export namespace CreateConnectionRequestContentBaidu {
+    export const Strategy = {
+        Baidu: "baidu",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=bitbucket
  */
 export interface CreateConnectionRequestContentBitbucket extends Management.CreateConnectionCommon {
-    strategy: "bitbucket";
+    strategy: CreateConnectionRequestContentBitbucket.Strategy;
     options?: Management.ConnectionOptionsBitbucket;
+}
+
+export namespace CreateConnectionRequestContentBitbucket {
+    export const Strategy = {
+        Bitbucket: "bitbucket",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=bitly
  */
 export interface CreateConnectionRequestContentBitly extends Management.CreateConnectionCommon {
-    strategy: "bitly";
+    strategy: CreateConnectionRequestContentBitly.Strategy;
     options?: Management.ConnectionOptionsBitly;
+}
+
+export namespace CreateConnectionRequestContentBitly {
+    export const Strategy = {
+        Bitly: "bitly",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=box
  */
 export interface CreateConnectionRequestContentBox extends Management.CreateConnectionCommon {
-    strategy: "box";
+    strategy: CreateConnectionRequestContentBox.Strategy;
     options?: Management.ConnectionOptionsBox;
+}
+
+export namespace CreateConnectionRequestContentBox {
+    export const Strategy = {
+        Box: "box",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=custom
  */
 export interface CreateConnectionRequestContentCustom extends Management.CreateConnectionCommon {
-    strategy: "custom";
+    strategy: CreateConnectionRequestContentCustom.Strategy;
     options?: Management.ConnectionOptionsCustom;
+}
+
+export namespace CreateConnectionRequestContentCustom {
+    export const Strategy = {
+        Custom: "custom",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=daccount
  */
 export interface CreateConnectionRequestContentDaccount extends Management.CreateConnectionCommon {
-    strategy: "daccount";
+    strategy: CreateConnectionRequestContentDaccount.Strategy;
     options?: Management.ConnectionOptionsDaccount;
+}
+
+export namespace CreateConnectionRequestContentDaccount {
+    export const Strategy = {
+        Daccount: "daccount",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=dropbox
  */
 export interface CreateConnectionRequestContentDropbox extends Management.CreateConnectionCommon {
-    strategy: "dropbox";
+    strategy: CreateConnectionRequestContentDropbox.Strategy;
     options?: Management.ConnectionOptionsDropbox;
+}
+
+export namespace CreateConnectionRequestContentDropbox {
+    export const Strategy = {
+        Dropbox: "dropbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=dwolla
  */
 export interface CreateConnectionRequestContentDwolla extends Management.CreateConnectionCommon {
-    strategy: "dwolla";
+    strategy: CreateConnectionRequestContentDwolla.Strategy;
     options?: Management.ConnectionOptionsDwolla;
+}
+
+export namespace CreateConnectionRequestContentDwolla {
+    export const Strategy = {
+        Dwolla: "dwolla",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=email
  */
 export interface CreateConnectionRequestContentEmail extends Management.CreateConnectionCommon {
-    strategy: "email";
+    strategy: CreateConnectionRequestContentEmail.Strategy;
     options?: Management.ConnectionOptionsEmail;
+}
+
+export namespace CreateConnectionRequestContentEmail {
+    export const Strategy = {
+        Email: "email",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=evernote
  */
 export interface CreateConnectionRequestContentEvernote extends Management.CreateConnectionCommon {
-    strategy: "evernote";
+    strategy: CreateConnectionRequestContentEvernote.Strategy;
     options?: Management.ConnectionOptionsEvernote;
+}
+
+export namespace CreateConnectionRequestContentEvernote {
+    export const Strategy = {
+        Evernote: "evernote",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=evernote-sandbox
  */
 export interface CreateConnectionRequestContentEvernoteSandbox extends Management.CreateConnectionCommon {
-    strategy: "evernote-sandbox";
-    options?: Management.ConnectionOptionsEvernoteSandbox;
+    strategy: CreateConnectionRequestContentEvernoteSandbox.Strategy;
+    options?: Management.ConnectionOptionsEvernote;
+}
+
+export namespace CreateConnectionRequestContentEvernoteSandbox {
+    export const Strategy = {
+        EvernoteSandbox: "evernote-sandbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=exact
  */
 export interface CreateConnectionRequestContentExact extends Management.CreateConnectionCommon {
-    strategy: "exact";
+    strategy: CreateConnectionRequestContentExact.Strategy;
     options?: Management.ConnectionOptionsExact;
+}
+
+export namespace CreateConnectionRequestContentExact {
+    export const Strategy = {
+        Exact: "exact",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=facebook
  */
 export interface CreateConnectionRequestContentFacebook extends Management.CreateConnectionCommon {
-    strategy: "facebook";
+    strategy: CreateConnectionRequestContentFacebook.Strategy;
     options?: Management.ConnectionOptionsFacebook;
+}
+
+export namespace CreateConnectionRequestContentFacebook {
+    export const Strategy = {
+        Facebook: "facebook",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=fitbit
  */
 export interface CreateConnectionRequestContentFitbit extends Management.CreateConnectionCommon {
-    strategy: "fitbit";
+    strategy: CreateConnectionRequestContentFitbit.Strategy;
     options?: Management.ConnectionOptionsFitbit;
+}
+
+export namespace CreateConnectionRequestContentFitbit {
+    export const Strategy = {
+        Fitbit: "fitbit",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=flickr
  */
 export interface CreateConnectionRequestContentFlickr extends Management.CreateConnectionCommon {
-    strategy: "flickr";
+    strategy: CreateConnectionRequestContentFlickr.Strategy;
     options?: Management.ConnectionOptionsFlickr;
+}
+
+export namespace CreateConnectionRequestContentFlickr {
+    export const Strategy = {
+        Flickr: "flickr",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=github
  */
 export interface CreateConnectionRequestContentGitHub extends Management.CreateConnectionCommon {
-    strategy: "github";
+    strategy: CreateConnectionRequestContentGitHub.Strategy;
     options?: Management.ConnectionOptionsGitHub;
+}
+
+export namespace CreateConnectionRequestContentGitHub {
+    export const Strategy = {
+        Github: "github",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=google-apps
  */
 export interface CreateConnectionRequestContentGoogleApps extends Management.CreateConnectionCommon {
-    strategy: "google-apps";
+    strategy: CreateConnectionRequestContentGoogleApps.Strategy;
     options?: Management.ConnectionOptionsGoogleApps;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentGoogleApps {
+    export const Strategy = {
+        GoogleApps: "google-apps",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=google-oauth2
  */
 export interface CreateConnectionRequestContentGoogleOAuth2 extends Management.CreateConnectionCommon {
-    strategy: "google-oauth2";
+    strategy: CreateConnectionRequestContentGoogleOAuth2.Strategy;
     options?: Management.ConnectionOptionsGoogleOAuth2;
+}
+
+export namespace CreateConnectionRequestContentGoogleOAuth2 {
+    export const Strategy = {
+        GoogleOauth2: "google-oauth2",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=ip
  */
 export interface CreateConnectionRequestContentIp extends Management.CreateConnectionCommon {
-    strategy: "ip";
+    strategy: CreateConnectionRequestContentIp.Strategy;
     options?: Management.ConnectionOptionsIp;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentIp {
+    export const Strategy = {
+        Ip: "ip",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=instagram
  */
 export interface CreateConnectionRequestContentInstagram extends Management.CreateConnectionCommon {
-    strategy: "instagram";
+    strategy: CreateConnectionRequestContentInstagram.Strategy;
     options?: Management.ConnectionOptionsInstagram;
+}
+
+export namespace CreateConnectionRequestContentInstagram {
+    export const Strategy = {
+        Instagram: "instagram",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=line
  */
 export interface CreateConnectionRequestContentLine extends Management.CreateConnectionCommon {
-    strategy: "line";
+    strategy: CreateConnectionRequestContentLine.Strategy;
     options?: Management.ConnectionOptionsLine;
+}
+
+export namespace CreateConnectionRequestContentLine {
+    export const Strategy = {
+        Line: "line",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=linkedin
  */
 export interface CreateConnectionRequestContentLinkedin extends Management.CreateConnectionCommon {
-    strategy: "linkedin";
+    strategy: CreateConnectionRequestContentLinkedin.Strategy;
     options?: Management.ConnectionOptionsLinkedin;
+}
+
+export namespace CreateConnectionRequestContentLinkedin {
+    export const Strategy = {
+        Linkedin: "linkedin",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=miicard
  */
 export interface CreateConnectionRequestContentMiicard extends Management.CreateConnectionCommon {
-    strategy: "miicard";
+    strategy: CreateConnectionRequestContentMiicard.Strategy;
     options?: Management.ConnectionOptionsMiicard;
+}
+
+export namespace CreateConnectionRequestContentMiicard {
+    export const Strategy = {
+        Miicard: "miicard",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=oauth1
  */
 export interface CreateConnectionRequestContentOAuth1 extends Management.CreateConnectionCommon {
-    strategy: "oauth1";
+    strategy: CreateConnectionRequestContentOAuth1.Strategy;
     options?: Management.ConnectionOptionsOAuth1;
+}
+
+export namespace CreateConnectionRequestContentOAuth1 {
+    export const Strategy = {
+        Oauth1: "oauth1",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=oauth2
  */
 export interface CreateConnectionRequestContentOAuth2 extends Management.CreateConnectionCommon {
-    strategy: "oauth2";
+    strategy: CreateConnectionRequestContentOAuth2.Strategy;
     options?: Management.ConnectionOptionsOAuth2;
+}
+
+export namespace CreateConnectionRequestContentOAuth2 {
+    export const Strategy = {
+        Oauth2: "oauth2",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=oidc
  */
 export interface CreateConnectionRequestContentOidc extends Management.CreateConnectionCommon {
-    strategy: "oidc";
+    strategy: CreateConnectionRequestContentOidc.Strategy;
     options?: Management.ConnectionOptionsOidc;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentOidc {
+    export const Strategy = {
+        Oidc: "oidc",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=office365
  */
 export interface CreateConnectionRequestContentOffice365 extends Management.CreateConnectionCommon {
-    strategy: "office365";
+    strategy: CreateConnectionRequestContentOffice365.Strategy;
     options?: Management.ConnectionOptionsOffice365;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentOffice365 {
+    export const Strategy = {
+        Office365: "office365",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=okta
  */
 export interface CreateConnectionRequestContentOkta extends Management.CreateConnectionCommon {
-    strategy: "okta";
+    strategy: CreateConnectionRequestContentOkta.Strategy;
     options?: Management.ConnectionOptionsOkta;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentOkta {
+    export const Strategy = {
+        Okta: "okta",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=paypal
  */
 export interface CreateConnectionRequestContentPaypal extends Management.CreateConnectionCommon {
-    strategy: "paypal";
+    strategy: CreateConnectionRequestContentPaypal.Strategy;
     options?: Management.ConnectionOptionsPaypal;
+}
+
+export namespace CreateConnectionRequestContentPaypal {
+    export const Strategy = {
+        Paypal: "paypal",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=paypal-sandbox
  */
 export interface CreateConnectionRequestContentPaypalSandbox extends Management.CreateConnectionCommon {
-    strategy: "paypal-sandbox";
-    options?: Management.ConnectionOptionsPaypalSandbox;
+    strategy: CreateConnectionRequestContentPaypalSandbox.Strategy;
+    options?: Management.ConnectionOptionsPaypal;
+}
+
+export namespace CreateConnectionRequestContentPaypalSandbox {
+    export const Strategy = {
+        PaypalSandbox: "paypal-sandbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=pingfederate
  */
 export interface CreateConnectionRequestContentPingFederate extends Management.CreateConnectionCommon {
-    strategy: "pingfederate";
+    strategy: CreateConnectionRequestContentPingFederate.Strategy;
     options?: Management.ConnectionOptionsPingFederate;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentPingFederate {
+    export const Strategy = {
+        Pingfederate: "pingfederate",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=planningcenter
  */
 export interface CreateConnectionRequestContentPlanningCenter extends Management.CreateConnectionCommon {
-    strategy: "planningcenter";
+    strategy: CreateConnectionRequestContentPlanningCenter.Strategy;
     options?: Management.ConnectionOptionsPlanningCenter;
+}
+
+export namespace CreateConnectionRequestContentPlanningCenter {
+    export const Strategy = {
+        Planningcenter: "planningcenter",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=renren
  */
 export interface CreateConnectionRequestContentRenren extends Management.CreateConnectionCommon {
-    strategy: "renren";
+    strategy: CreateConnectionRequestContentRenren.Strategy;
     options?: Management.ConnectionOptionsRenren;
+}
+
+export namespace CreateConnectionRequestContentRenren {
+    export const Strategy = {
+        Renren: "renren",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=samlp
  */
 export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
-    strategy: "samlp";
+    strategy: CreateConnectionRequestContentSaml.Strategy;
     options?: Management.ConnectionOptionsSaml;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentSaml {
+    export const Strategy = {
+        Samlp: "samlp",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=sms
  */
 export interface CreateConnectionRequestContentSms extends Management.CreateConnectionCommon {
-    strategy: "sms";
+    strategy: CreateConnectionRequestContentSms.Strategy;
     options?: Management.ConnectionOptionsSms;
+}
+
+export namespace CreateConnectionRequestContentSms {
+    export const Strategy = {
+        Sms: "sms",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=salesforce
  */
 export interface CreateConnectionRequestContentSalesforce extends Management.CreateConnectionCommon {
-    strategy: "salesforce";
+    strategy: CreateConnectionRequestContentSalesforce.Strategy;
     options?: Management.ConnectionOptionsSalesforce;
+}
+
+export namespace CreateConnectionRequestContentSalesforce {
+    export const Strategy = {
+        Salesforce: "salesforce",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=salesforce-community
  */
 export interface CreateConnectionRequestContentSalesforceCommunity extends Management.CreateConnectionCommon {
-    strategy: "salesforce-community";
-    options?: Management.ConnectionOptionsSalesforceCommunity;
+    strategy: CreateConnectionRequestContentSalesforceCommunity.Strategy;
+    options?: Management.ConnectionOptionsSalesforce;
+}
+
+export namespace CreateConnectionRequestContentSalesforceCommunity {
+    export const Strategy = {
+        SalesforceCommunity: "salesforce-community",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=salesforce-sandbox
  */
 export interface CreateConnectionRequestContentSalesforceSandbox extends Management.CreateConnectionCommon {
-    strategy: "salesforce-sandbox";
-    options?: Management.ConnectionOptionsSalesforceSandbox;
+    strategy: CreateConnectionRequestContentSalesforceSandbox.Strategy;
+    options?: Management.ConnectionOptionsSalesforce;
+}
+
+export namespace CreateConnectionRequestContentSalesforceSandbox {
+    export const Strategy = {
+        SalesforceSandbox: "salesforce-sandbox",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=sharepoint
  */
 export interface CreateConnectionRequestContentSharepoint extends Management.CreateConnectionCommon {
-    strategy: "sharepoint";
+    strategy: CreateConnectionRequestContentSharepoint.Strategy;
     options?: Management.ConnectionOptionsSharepoint;
     show_as_button?: Management.ConnectionShowAsButton;
+}
+
+export namespace CreateConnectionRequestContentSharepoint {
+    export const Strategy = {
+        Sharepoint: "sharepoint",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=shop
  */
 export interface CreateConnectionRequestContentShop extends Management.CreateConnectionCommon {
-    strategy: "shop";
+    strategy: CreateConnectionRequestContentShop.Strategy;
     options?: Management.ConnectionOptionsShop;
+}
+
+export namespace CreateConnectionRequestContentShop {
+    export const Strategy = {
+        Shop: "shop",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=shopify
  */
 export interface CreateConnectionRequestContentShopify extends Management.CreateConnectionCommon {
-    strategy: "shopify";
+    strategy: CreateConnectionRequestContentShopify.Strategy;
     options?: Management.ConnectionOptionsShopify;
+}
+
+export namespace CreateConnectionRequestContentShopify {
+    export const Strategy = {
+        Shopify: "shopify",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=soundcloud
  */
 export interface CreateConnectionRequestContentSoundcloud extends Management.CreateConnectionCommon {
-    strategy: "soundcloud";
+    strategy: CreateConnectionRequestContentSoundcloud.Strategy;
     options?: Management.ConnectionOptionsSoundcloud;
 }
 
-/**
- * Create a connection with strategy=thecity
- */
-export interface CreateConnectionRequestContentTheCity extends Management.CreateConnectionCommon {
-    strategy: "thecity";
-    options?: Management.ConnectionOptionsTheCity;
-}
-
-/**
- * Create a connection with strategy=thecity-sandbox
- */
-export interface CreateConnectionRequestContentTheCitySandbox extends Management.CreateConnectionCommon {
-    strategy: "thecity-sandbox";
-    options?: Management.ConnectionOptionsTheCitySandbox;
+export namespace CreateConnectionRequestContentSoundcloud {
+    export const Strategy = {
+        Soundcloud: "soundcloud",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=thirtysevensignals
  */
 export interface CreateConnectionRequestContentThirtySevenSignals extends Management.CreateConnectionCommon {
-    strategy: "thirtysevensignals";
+    strategy: CreateConnectionRequestContentThirtySevenSignals.Strategy;
     options?: Management.ConnectionOptionsThirtySevenSignals;
+}
+
+export namespace CreateConnectionRequestContentThirtySevenSignals {
+    export const Strategy = {
+        Thirtysevensignals: "thirtysevensignals",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=twitter
  */
 export interface CreateConnectionRequestContentTwitter extends Management.CreateConnectionCommon {
-    strategy: "twitter";
+    strategy: CreateConnectionRequestContentTwitter.Strategy;
     options?: Management.ConnectionOptionsTwitter;
+}
+
+export namespace CreateConnectionRequestContentTwitter {
+    export const Strategy = {
+        Twitter: "twitter",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=untappd
  */
 export interface CreateConnectionRequestContentUntappd extends Management.CreateConnectionCommon {
-    strategy: "untappd";
+    strategy: CreateConnectionRequestContentUntappd.Strategy;
     options?: Management.ConnectionOptionsUntappd;
+}
+
+export namespace CreateConnectionRequestContentUntappd {
+    export const Strategy = {
+        Untappd: "untappd",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=vkontakte
  */
 export interface CreateConnectionRequestContentVkontakte extends Management.CreateConnectionCommon {
-    strategy: "vkontakte";
+    strategy: CreateConnectionRequestContentVkontakte.Strategy;
     options?: Management.ConnectionOptionsVkontakte;
+}
+
+export namespace CreateConnectionRequestContentVkontakte {
+    export const Strategy = {
+        Vkontakte: "vkontakte",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=weibo
  */
 export interface CreateConnectionRequestContentWeibo extends Management.CreateConnectionCommon {
-    strategy: "weibo";
+    strategy: CreateConnectionRequestContentWeibo.Strategy;
     options?: Management.ConnectionOptionsWeibo;
+}
+
+export namespace CreateConnectionRequestContentWeibo {
+    export const Strategy = {
+        Weibo: "weibo",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=windowslive
  */
 export interface CreateConnectionRequestContentWindowsLive extends Management.CreateConnectionCommon {
-    strategy: "windowslive";
+    strategy: CreateConnectionRequestContentWindowsLive.Strategy;
     options?: Management.ConnectionOptionsWindowsLive;
+}
+
+export namespace CreateConnectionRequestContentWindowsLive {
+    export const Strategy = {
+        Windowslive: "windowslive",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=wordpress
  */
 export interface CreateConnectionRequestContentWordpress extends Management.CreateConnectionCommon {
-    strategy: "wordpress";
+    strategy: CreateConnectionRequestContentWordpress.Strategy;
     options?: Management.ConnectionOptionsWordpress;
+}
+
+export namespace CreateConnectionRequestContentWordpress {
+    export const Strategy = {
+        Wordpress: "wordpress",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=yahoo
  */
 export interface CreateConnectionRequestContentYahoo extends Management.CreateConnectionCommon {
-    strategy: "yahoo";
+    strategy: CreateConnectionRequestContentYahoo.Strategy;
     options?: Management.ConnectionOptionsYahoo;
+}
+
+export namespace CreateConnectionRequestContentYahoo {
+    export const Strategy = {
+        Yahoo: "yahoo",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=yammer
  */
 export interface CreateConnectionRequestContentYammer extends Management.CreateConnectionCommon {
-    strategy: "yammer";
+    strategy: CreateConnectionRequestContentYammer.Strategy;
     options?: Management.ConnectionOptionsYammer;
+}
+
+export namespace CreateConnectionRequestContentYammer {
+    export const Strategy = {
+        Yammer: "yammer",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 /**
  * Create a connection with strategy=yandex
  */
 export interface CreateConnectionRequestContentYandex extends Management.CreateConnectionCommon {
-    strategy: "yandex";
+    strategy: CreateConnectionRequestContentYandex.Strategy;
     options?: Management.ConnectionOptionsYandex;
+}
+
+export namespace CreateConnectionRequestContentYandex {
+    export const Strategy = {
+        Yandex: "yandex",
+    } as const;
+    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
 
 export interface CreateConnectionResponseContent {
@@ -6660,6 +8037,8 @@ export interface CreateCustomDomainResponseContent {
     domain: string;
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
+    /** Whether this is the default custom domain (true) or not (false). */
+    is_default?: boolean;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     verification: Management.DomainVerification;
@@ -6669,6 +8048,8 @@ export interface CreateCustomDomainResponseContent {
     tls_policy?: string;
     domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string;
 }
 
 export interface CreateDirectoryProvisioningRequestContent {
@@ -7509,7 +8890,7 @@ export interface CreateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
@@ -7614,7 +8995,7 @@ export interface CreateResourceServerResponseContent {
     enforce_policies?: boolean;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -7889,6 +9270,8 @@ export interface CustomDomain {
     tls_policy?: string;
     domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string;
 }
 
 export type CustomDomainCustomClientIpHeader = (Management.CustomDomainCustomClientIpHeaderEnum | null) | undefined;
@@ -7921,10 +9304,11 @@ export const CustomDomainStatusFilterEnum = {
 export type CustomDomainStatusFilterEnum =
     (typeof CustomDomainStatusFilterEnum)[keyof typeof CustomDomainStatusFilterEnum];
 
-/**
- * Custom domain TLS policy. Must be `recommended`, includes TLS 1.2.
- */
-export type CustomDomainTlsPolicyEnum = "recommended";
+/** Custom domain TLS policy. Must be `recommended`, includes TLS 1.2. */
+export const CustomDomainTlsPolicyEnum = {
+    Recommended: "recommended",
+} as const;
+export type CustomDomainTlsPolicyEnum = (typeof CustomDomainTlsPolicyEnum)[keyof typeof CustomDomainTlsPolicyEnum];
 
 /** Custom domain provisioning type. Can be `auth0_managed_certs` or `self_managed_certs`. */
 export const CustomDomainTypeEnum = {
@@ -7933,10 +9317,12 @@ export const CustomDomainTypeEnum = {
 } as const;
 export type CustomDomainTypeEnum = (typeof CustomDomainTypeEnum)[keyof typeof CustomDomainTypeEnum];
 
-/**
- * Custom domain verification method. Must be `txt`.
- */
-export type CustomDomainVerificationMethodEnum = "txt";
+/** Custom domain verification method. Must be `txt`. */
+export const CustomDomainVerificationMethodEnum = {
+    Txt: "txt",
+} as const;
+export type CustomDomainVerificationMethodEnum =
+    (typeof CustomDomainVerificationMethodEnum)[keyof typeof CustomDomainVerificationMethodEnum];
 
 export interface CustomProviderConfiguration {
     delivery_methods: Management.CustomProviderDeliveryMethodEnum[];
@@ -8004,7 +9390,11 @@ export interface CustomSigningKeyJwk {
     "x5t#S256"?: string;
 }
 
-export type CustomSigningKeyOperationEnum = "verify";
+export const CustomSigningKeyOperationEnum = {
+    Verify: "verify",
+} as const;
+export type CustomSigningKeyOperationEnum =
+    (typeof CustomSigningKeyOperationEnum)[keyof typeof CustomSigningKeyOperationEnum];
 
 /** Key type */
 export const CustomSigningKeyTypeEnum = {
@@ -8013,10 +9403,11 @@ export const CustomSigningKeyTypeEnum = {
 } as const;
 export type CustomSigningKeyTypeEnum = (typeof CustomSigningKeyTypeEnum)[keyof typeof CustomSigningKeyTypeEnum];
 
-/**
- * Key use
- */
-export type CustomSigningKeyUseEnum = "sig";
+/** Key use */
+export const CustomSigningKeyUseEnum = {
+    Sig: "sig",
+} as const;
+export type CustomSigningKeyUseEnum = (typeof CustomSigningKeyUseEnum)[keyof typeof CustomSigningKeyUseEnum];
 
 export interface DailyStats {
     /** Date these events occurred in ISO 8601 format. */
@@ -8166,10 +9557,12 @@ export interface DeviceCredential {
     client_id?: string;
 }
 
-/**
- * Type of credential. Must be `public_key`.
- */
-export type DeviceCredentialPublicKeyTypeEnum = "public_key";
+/** Type of credential. Must be `public_key`. */
+export const DeviceCredentialPublicKeyTypeEnum = {
+    PublicKey: "public_key",
+} as const;
+export type DeviceCredentialPublicKeyTypeEnum =
+    (typeof DeviceCredentialPublicKeyTypeEnum)[keyof typeof DeviceCredentialPublicKeyTypeEnum];
 
 /** Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested */
 export const DeviceCredentialTypeEnum = {
@@ -8178,6 +9571,29 @@ export const DeviceCredentialTypeEnum = {
     RotatingRefreshToken: "rotating_refresh_token",
 } as const;
 export type DeviceCredentialTypeEnum = (typeof DeviceCredentialTypeEnum)[keyof typeof DeviceCredentialTypeEnum];
+
+export interface DirectoryProvisioning {
+    /** The connection's identifier */
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
+    /** The connection's strategy */
+    strategy: string;
+    /** The mapping between Auth0 and IDP user attributes */
+    mapping: Management.DirectoryProvisioningMappingItem[];
+    /** Whether periodic automatic synchronization is enabled */
+    synchronize_automatically: boolean;
+    /** The timestamp at which the directory provisioning configuration was created */
+    created_at: string;
+    /** The timestamp at which the directory provisioning configuration was last updated */
+    updated_at: string;
+    /** The timestamp at which the connection was last synchronized */
+    last_synchronization_at?: string;
+    /** The status of the last synchronization */
+    last_synchronization_status?: string;
+    /** The error message of the last synchronization, if any */
+    last_synchronization_error?: string;
+}
 
 export interface DirectoryProvisioningMappingItem {
     /** The field location in the Auth0 schema */
@@ -8272,10 +9688,11 @@ export interface EmailAttribute {
     signup?: Management.SignupVerified;
 }
 
-/**
- * Set to <code>eu</code> if your domain is provisioned to use Mailgun's EU region. Otherwise, set to <code>null</code>.
- */
-export type EmailMailgunRegionEnum = "eu";
+/** Set to <code>eu</code> if your domain is provisioned to use Mailgun's EU region. Otherwise, set to <code>null</code>. */
+export const EmailMailgunRegionEnum = {
+    Eu: "eu",
+} as const;
+export type EmailMailgunRegionEnum = (typeof EmailMailgunRegionEnum)[keyof typeof EmailMailgunRegionEnum];
 
 /**
  * Credentials required to use the provider.
@@ -8354,10 +9771,11 @@ export type EmailProviderSettings = Record<string, unknown>;
  */
 export type EmailSmtpHost = string;
 
-/**
- * Set to <code>eu</code> to use SparkPost service hosted in Western Europe. To use SparkPost hosted in North America, set it to <code>null</code>.
- */
-export type EmailSparkPostRegionEnum = "eu";
+/** Set to <code>eu</code> to use SparkPost service hosted in Western Europe. To use SparkPost hosted in North America, set it to <code>null</code>. */
+export const EmailSparkPostRegionEnum = {
+    Eu: "eu",
+} as const;
+export type EmailSparkPostRegionEnum = (typeof EmailSparkPostRegionEnum)[keyof typeof EmailSparkPostRegionEnum];
 
 /**
  * Specific provider setting
@@ -8407,10 +9825,12 @@ export interface EncryptionKey {
     public_key?: string;
 }
 
-/**
- * Encryption algorithm that shall be used to wrap your key material
- */
-export type EncryptionKeyPublicWrappingAlgorithm = "CKM_RSA_AES_KEY_WRAP";
+/** Encryption algorithm that shall be used to wrap your key material */
+export const EncryptionKeyPublicWrappingAlgorithm = {
+    CkmRsaAesKeyWrap: "CKM_RSA_AES_KEY_WRAP",
+} as const;
+export type EncryptionKeyPublicWrappingAlgorithm =
+    (typeof EncryptionKeyPublicWrappingAlgorithm)[keyof typeof EncryptionKeyPublicWrappingAlgorithm];
 
 /** Key state */
 export const EncryptionKeyState = {
@@ -8443,7 +9863,11 @@ export interface EventStreamActionDestination {
     configuration: Management.EventStreamActionConfiguration;
 }
 
-export type EventStreamActionDestinationTypeEnum = "action";
+export const EventStreamActionDestinationTypeEnum = {
+    Action: "action",
+} as const;
+export type EventStreamActionDestinationTypeEnum =
+    (typeof EventStreamActionDestinationTypeEnum)[keyof typeof EventStreamActionDestinationTypeEnum];
 
 export interface EventStreamActionResponseContent {
     /** Unique identifier for the event stream. */
@@ -8525,10 +9949,12 @@ export const EventStreamDeliveryEventTypeEnum = {
 export type EventStreamDeliveryEventTypeEnum =
     (typeof EventStreamDeliveryEventTypeEnum)[keyof typeof EventStreamDeliveryEventTypeEnum];
 
-/**
- * Delivery status
- */
-export type EventStreamDeliveryStatusEnum = "failed";
+/** Delivery status */
+export const EventStreamDeliveryStatusEnum = {
+    Failed: "failed",
+} as const;
+export type EventStreamDeliveryStatusEnum =
+    (typeof EventStreamDeliveryStatusEnum)[keyof typeof EventStreamDeliveryStatusEnum];
 
 export type EventStreamDestinationPatch =
     | Management.EventStreamWebhookDestination
@@ -8592,7 +10018,11 @@ export interface EventStreamEventBridgeDestination {
     configuration: Management.EventStreamEventBridgeConfiguration;
 }
 
-export type EventStreamEventBridgeDestinationTypeEnum = "eventbridge";
+export const EventStreamEventBridgeDestinationTypeEnum = {
+    Eventbridge: "eventbridge",
+} as const;
+export type EventStreamEventBridgeDestinationTypeEnum =
+    (typeof EventStreamEventBridgeDestinationTypeEnum)[keyof typeof EventStreamEventBridgeDestinationTypeEnum];
 
 export interface EventStreamEventBridgeResponseContent {
     /** Unique identifier for the event stream. */
@@ -8687,10 +10117,12 @@ export interface EventStreamWebhookBasicAuth {
     username: string;
 }
 
-/**
- * Type of authorization.
- */
-export type EventStreamWebhookBasicAuthMethodEnum = "basic";
+/** Type of authorization. */
+export const EventStreamWebhookBasicAuthMethodEnum = {
+    Basic: "basic",
+} as const;
+export type EventStreamWebhookBasicAuthMethodEnum =
+    (typeof EventStreamWebhookBasicAuthMethodEnum)[keyof typeof EventStreamWebhookBasicAuthMethodEnum];
 
 /**
  * Bearer Authorization for HTTP requests (e.g., 'Bearer token').
@@ -8699,10 +10131,12 @@ export interface EventStreamWebhookBearerAuth {
     method: Management.EventStreamWebhookBearerAuthMethodEnum;
 }
 
-/**
- * Type of authorization.
- */
-export type EventStreamWebhookBearerAuthMethodEnum = "bearer";
+/** Type of authorization. */
+export const EventStreamWebhookBearerAuthMethodEnum = {
+    Bearer: "bearer",
+} as const;
+export type EventStreamWebhookBearerAuthMethodEnum =
+    (typeof EventStreamWebhookBearerAuthMethodEnum)[keyof typeof EventStreamWebhookBearerAuthMethodEnum];
 
 /**
  * Configuration specific to a webhook destination.
@@ -8718,7 +10152,11 @@ export interface EventStreamWebhookDestination {
     configuration: Management.EventStreamWebhookConfiguration;
 }
 
-export type EventStreamWebhookDestinationTypeEnum = "webhook";
+export const EventStreamWebhookDestinationTypeEnum = {
+    Webhook: "webhook",
+} as const;
+export type EventStreamWebhookDestinationTypeEnum =
+    (typeof EventStreamWebhookDestinationTypeEnum)[keyof typeof EventStreamWebhookDestinationTypeEnum];
 
 export interface EventStreamWebhookResponseContent {
     /** Unique identifier for the event stream. */
@@ -8830,11 +10268,22 @@ export type FlowActionActivecampaign =
 export interface FlowActionActivecampaignListContacts {
     id: string;
     alias?: string;
-    type: "ACTIVECAMPAIGN";
-    action: "LIST_CONTACTS";
+    type: FlowActionActivecampaignListContacts.Type;
+    action: FlowActionActivecampaignListContacts.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionActivecampaignListContactsParams;
+}
+
+export namespace FlowActionActivecampaignListContacts {
+    export const Type = {
+        Activecampaign: "ACTIVECAMPAIGN",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        ListContacts: "LIST_CONTACTS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionActivecampaignListContactsParams {
@@ -8845,11 +10294,22 @@ export interface FlowActionActivecampaignListContactsParams {
 export interface FlowActionActivecampaignUpsertContact {
     id: string;
     alias?: string;
-    type: "ACTIVECAMPAIGN";
-    action: "UPSERT_CONTACT";
+    type: FlowActionActivecampaignUpsertContact.Type;
+    action: FlowActionActivecampaignUpsertContact.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionActivecampaignUpsertContactParams;
+}
+
+export namespace FlowActionActivecampaignUpsertContact {
+    export const Type = {
+        Activecampaign: "ACTIVECAMPAIGN",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        UpsertContact: "UPSERT_CONTACT",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionActivecampaignUpsertContactParams {
@@ -8871,11 +10331,22 @@ export type FlowActionAirtable =
 export interface FlowActionAirtableCreateRecord {
     id: string;
     alias?: string;
-    type: "AIRTABLE";
-    action: "CREATE_RECORD";
+    type: FlowActionAirtableCreateRecord.Type;
+    action: FlowActionAirtableCreateRecord.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAirtableCreateRecordParams;
+}
+
+export namespace FlowActionAirtableCreateRecord {
+    export const Type = {
+        Airtable: "AIRTABLE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        CreateRecord: "CREATE_RECORD",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAirtableCreateRecordParams {
@@ -8890,11 +10361,22 @@ export type FlowActionAirtableCreateRecordParamsFields = Record<string, unknown>
 export interface FlowActionAirtableListRecords {
     id: string;
     alias?: string;
-    type: "AIRTABLE";
-    action: "LIST_RECORDS";
+    type: FlowActionAirtableListRecords.Type;
+    action: FlowActionAirtableListRecords.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAirtableListRecordsParams;
+}
+
+export namespace FlowActionAirtableListRecords {
+    export const Type = {
+        Airtable: "AIRTABLE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        ListRecords: "LIST_RECORDS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAirtableListRecordsParams {
@@ -8908,11 +10390,22 @@ export interface FlowActionAirtableListRecordsParams {
 export interface FlowActionAirtableUpdateRecord {
     id: string;
     alias?: string;
-    type: "AIRTABLE";
-    action: "UPDATE_RECORD";
+    type: FlowActionAirtableUpdateRecord.Type;
+    action: FlowActionAirtableUpdateRecord.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAirtableUpdateRecordParams;
+}
+
+export namespace FlowActionAirtableUpdateRecord {
+    export const Type = {
+        Airtable: "AIRTABLE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        UpdateRecord: "UPDATE_RECORD",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAirtableUpdateRecordParams {
@@ -8930,16 +10423,29 @@ export type FlowActionAuth0 =
     | Management.FlowActionAuth0GetUser
     | Management.FlowActionAuth0UpdateUser
     | Management.FlowActionAuth0SendRequest
-    | Management.FlowActionAuth0SendEmail;
+    | Management.FlowActionAuth0SendEmail
+    | Management.FlowActionAuth0SendSms
+    | Management.FlowActionAuth0MakeCall;
 
 export interface FlowActionAuth0CreateUser {
     id: string;
     alias?: string;
-    type: "AUTH0";
-    action: "CREATE_USER";
+    type: FlowActionAuth0CreateUser.Type;
+    action: FlowActionAuth0CreateUser.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAuth0CreateUserParams;
+}
+
+export namespace FlowActionAuth0CreateUser {
+    export const Type = {
+        Auth0: "AUTH0",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        CreateUser: "CREATE_USER",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0CreateUserParams {
@@ -8952,11 +10458,22 @@ export type FlowActionAuth0CreateUserParamsPayload = Record<string, unknown>;
 export interface FlowActionAuth0GetUser {
     id: string;
     alias?: string;
-    type: "AUTH0";
-    action: "GET_USER";
+    type: FlowActionAuth0GetUser.Type;
+    action: FlowActionAuth0GetUser.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAuth0GetUserParams;
+}
+
+export namespace FlowActionAuth0GetUser {
+    export const Type = {
+        Auth0: "AUTH0",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        GetUser: "GET_USER",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0GetUserParams {
@@ -8964,14 +10481,55 @@ export interface FlowActionAuth0GetUserParams {
     user_id: string;
 }
 
+export interface FlowActionAuth0MakeCall {
+    id: string;
+    alias?: string;
+    type: FlowActionAuth0MakeCall.Type;
+    action: FlowActionAuth0MakeCall.Action;
+    allow_failure?: boolean;
+    mask_output?: boolean;
+    params: Management.FlowActionAuth0MakeCallParams;
+}
+
+export namespace FlowActionAuth0MakeCall {
+    export const Type = {
+        Auth0: "AUTH0",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        MakeCall: "MAKE_CALL",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
+}
+
+export interface FlowActionAuth0MakeCallParams {
+    from?: string;
+    to: string;
+    message: string;
+    custom_vars?: Management.FlowActionAuth0MakeCallParamsCustomVars;
+}
+
+export type FlowActionAuth0MakeCallParamsCustomVars = Record<string, unknown>;
+
 export interface FlowActionAuth0SendEmail {
     id: string;
     alias?: string;
-    type: "AUTH0";
-    action: "SEND_EMAIL";
+    type: FlowActionAuth0SendEmail.Type;
+    action: FlowActionAuth0SendEmail.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAuth0SendEmailParams;
+}
+
+export namespace FlowActionAuth0SendEmail {
+    export const Type = {
+        Auth0: "AUTH0",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendEmail: "SEND_EMAIL",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0SendEmailParams {
@@ -8994,11 +10552,22 @@ export type FlowActionAuth0SendEmailParamsTo = string;
 export interface FlowActionAuth0SendRequest {
     id: string;
     alias?: string;
-    type: "AUTH0";
-    action: "SEND_REQUEST";
+    type: FlowActionAuth0SendRequest.Type;
+    action: FlowActionAuth0SendRequest.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAuth0SendRequestParams;
+}
+
+export namespace FlowActionAuth0SendRequest {
+    export const Type = {
+        Auth0: "AUTH0",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendRequest: "SEND_REQUEST",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0SendRequestParams {
@@ -9041,14 +10610,55 @@ export namespace FlowActionAuth0SendRequestParamsQueryParams {
     export type Value = number | string;
 }
 
+export interface FlowActionAuth0SendSms {
+    id: string;
+    alias?: string;
+    type: FlowActionAuth0SendSms.Type;
+    action: FlowActionAuth0SendSms.Action;
+    allow_failure?: boolean;
+    mask_output?: boolean;
+    params: Management.FlowActionAuth0SendSmsParams;
+}
+
+export namespace FlowActionAuth0SendSms {
+    export const Type = {
+        Auth0: "AUTH0",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendSms: "SEND_SMS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
+}
+
+export interface FlowActionAuth0SendSmsParams {
+    from?: string;
+    to: string;
+    message: string;
+    custom_vars?: Management.FlowActionAuth0SendSmsParamsCustomVars;
+}
+
+export type FlowActionAuth0SendSmsParamsCustomVars = Record<string, unknown>;
+
 export interface FlowActionAuth0UpdateUser {
     id: string;
     alias?: string;
-    type: "AUTH0";
-    action: "UPDATE_USER";
+    type: FlowActionAuth0UpdateUser.Type;
+    action: FlowActionAuth0UpdateUser.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionAuth0UpdateUserParams;
+}
+
+export namespace FlowActionAuth0UpdateUser {
+    export const Type = {
+        Auth0: "AUTH0",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        UpdateUser: "UPDATE_USER",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0UpdateUserParams {
@@ -9064,11 +10674,22 @@ export type FlowActionBigquery = Management.FlowActionBigqueryInsertRows;
 export interface FlowActionBigqueryInsertRows {
     id: string;
     alias?: string;
-    type: "BIGQUERY";
-    action: "INSERT_ROWS";
+    type: FlowActionBigqueryInsertRows.Type;
+    action: FlowActionBigqueryInsertRows.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionBigqueryInsertRowsParams;
+}
+
+export namespace FlowActionBigqueryInsertRows {
+    export const Type = {
+        Bigquery: "BIGQUERY",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        InsertRows: "INSERT_ROWS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionBigqueryInsertRowsParams {
@@ -9085,11 +10706,22 @@ export type FlowActionClearbit = Management.FlowActionClearbitFindPerson | Manag
 export interface FlowActionClearbitFindCompany {
     id: string;
     alias?: string;
-    type: "CLEARBIT";
-    action: "FIND_COMPANY";
+    type: FlowActionClearbitFindCompany.Type;
+    action: FlowActionClearbitFindCompany.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionClearbitFindCompanyParams;
+}
+
+export namespace FlowActionClearbitFindCompany {
+    export const Type = {
+        Clearbit: "CLEARBIT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        FindCompany: "FIND_COMPANY",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionClearbitFindCompanyParams {
@@ -9100,11 +10732,22 @@ export interface FlowActionClearbitFindCompanyParams {
 export interface FlowActionClearbitFindPerson {
     id: string;
     alias?: string;
-    type: "CLEARBIT";
-    action: "FIND_PERSON";
+    type: FlowActionClearbitFindPerson.Type;
+    action: FlowActionClearbitFindPerson.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionClearbitFindPersonParams;
+}
+
+export namespace FlowActionClearbitFindPerson {
+    export const Type = {
+        Clearbit: "CLEARBIT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        FindPerson: "FIND_PERSON",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionClearbitFindPersonParams {
@@ -9117,11 +10760,22 @@ export type FlowActionEmail = Management.FlowActionEmailVerifyEmail;
 export interface FlowActionEmailVerifyEmail {
     id: string;
     alias?: string;
-    type: "EMAIL";
-    action: "VERIFY_EMAIL";
+    type: FlowActionEmailVerifyEmail.Type;
+    action: FlowActionEmailVerifyEmail.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionEmailVerifyEmailParams;
+}
+
+export namespace FlowActionEmailVerifyEmail {
+    export const Type = {
+        Email: "EMAIL",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        VerifyEmail: "VERIFY_EMAIL",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionEmailVerifyEmailParams {
@@ -9150,11 +10804,22 @@ export type FlowActionFlow =
 export interface FlowActionFlowBooleanCondition {
     id: string;
     alias?: string;
-    type: "FLOW";
-    action: "BOOLEAN_CONDITION";
+    type: FlowActionFlowBooleanCondition.Type;
+    action: FlowActionFlowBooleanCondition.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionFlowBooleanConditionParams;
+}
+
+export namespace FlowActionFlowBooleanCondition {
+    export const Type = {
+        Flow: "FLOW",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        BooleanCondition: "BOOLEAN_CONDITION",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowBooleanConditionParams {
@@ -9165,11 +10830,22 @@ export interface FlowActionFlowBooleanConditionParams {
 export interface FlowActionFlowDelayFlow {
     id: string;
     alias?: string;
-    type: "FLOW";
-    action: "DELAY_FLOW";
+    type: FlowActionFlowDelayFlow.Type;
+    action: FlowActionFlowDelayFlow.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionFlowDelayFlowParams;
+}
+
+export namespace FlowActionFlowDelayFlow {
+    export const Type = {
+        Flow: "FLOW",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        DelayFlow: "DELAY_FLOW",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowDelayFlowParams {
@@ -9192,11 +10868,22 @@ export type FlowActionFlowDelayFlowParamsNumber = number | string;
 export interface FlowActionFlowDoNothing {
     id: string;
     alias?: string;
-    type: "FLOW";
-    action: "DO_NOTHING";
+    type: FlowActionFlowDoNothing.Type;
+    action: FlowActionFlowDoNothing.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params?: Management.FlowActionFlowDoNothingParams;
+}
+
+export namespace FlowActionFlowDoNothing {
+    export const Type = {
+        Flow: "FLOW",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        DoNothing: "DO_NOTHING",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowDoNothingParams {}
@@ -9204,11 +10891,22 @@ export interface FlowActionFlowDoNothingParams {}
 export interface FlowActionFlowErrorMessage {
     id: string;
     alias?: string;
-    type: "FLOW";
-    action: "ERROR_MESSAGE";
+    type: FlowActionFlowErrorMessage.Type;
+    action: FlowActionFlowErrorMessage.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionFlowErrorMessageParams;
+}
+
+export namespace FlowActionFlowErrorMessage {
+    export const Type = {
+        Flow: "FLOW",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        ErrorMessage: "ERROR_MESSAGE",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowErrorMessageParams {
@@ -9218,11 +10916,22 @@ export interface FlowActionFlowErrorMessageParams {
 export interface FlowActionFlowMapValue {
     id: string;
     alias?: string;
-    type: "FLOW";
-    action: "MAP_VALUE";
+    type: FlowActionFlowMapValue.Type;
+    action: FlowActionFlowMapValue.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionFlowMapValueParams;
+}
+
+export namespace FlowActionFlowMapValue {
+    export const Type = {
+        Flow: "FLOW",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        MapValue: "MAP_VALUE",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowMapValueParams {
@@ -9246,11 +10955,22 @@ export type FlowActionFlowMapValueParamsInput = string | number;
 export interface FlowActionFlowReturnJson {
     id: string;
     alias?: string;
-    type: "FLOW";
-    action: "RETURN_JSON";
+    type: FlowActionFlowReturnJson.Type;
+    action: FlowActionFlowReturnJson.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionFlowReturnJsonParams;
+}
+
+export namespace FlowActionFlowReturnJson {
+    export const Type = {
+        Flow: "FLOW",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        ReturnJson: "RETURN_JSON",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowReturnJsonParams {
@@ -9264,11 +10984,22 @@ export type FlowActionFlowReturnJsonParamsPayloadObject = Record<string, unknown
 export interface FlowActionFlowStoreVars {
     id: string;
     alias?: string;
-    type: "FLOW";
-    action: "STORE_VARS";
+    type: FlowActionFlowStoreVars.Type;
+    action: FlowActionFlowStoreVars.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionFlowStoreVarsParams;
+}
+
+export namespace FlowActionFlowStoreVars {
+    export const Type = {
+        Flow: "FLOW",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        StoreVars: "STORE_VARS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowStoreVarsParams {
@@ -9282,11 +11013,22 @@ export type FlowActionGoogleSheets = Management.FlowActionGoogleSheetsAddRow;
 export interface FlowActionGoogleSheetsAddRow {
     id: string;
     alias?: string;
-    type: "GOOGLE_SHEETS";
-    action: "ADD_ROW";
+    type: FlowActionGoogleSheetsAddRow.Type;
+    action: FlowActionGoogleSheetsAddRow.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionGoogleSheetsAddRowParams;
+}
+
+export namespace FlowActionGoogleSheetsAddRow {
+    export const Type = {
+        GoogleSheets: "GOOGLE_SHEETS",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        AddRow: "ADD_ROW",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionGoogleSheetsAddRowParams {
@@ -9305,11 +11047,22 @@ export type FlowActionHttp = Management.FlowActionHttpSendRequest;
 export interface FlowActionHttpSendRequest {
     id: string;
     alias?: string;
-    type: "HTTP";
-    action: "SEND_REQUEST";
+    type: FlowActionHttpSendRequest.Type;
+    action: FlowActionHttpSendRequest.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionHttpSendRequestParams;
+}
+
+export namespace FlowActionHttpSendRequest {
+    export const Type = {
+        Http: "HTTP",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendRequest: "SEND_REQUEST",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionHttpSendRequestParams {
@@ -9371,11 +11124,22 @@ export type FlowActionHubspot =
 export interface FlowActionHubspotEnrollContact {
     id: string;
     alias?: string;
-    type: "HUBSPOT";
-    action: "ENROLL_CONTACT";
+    type: FlowActionHubspotEnrollContact.Type;
+    action: FlowActionHubspotEnrollContact.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionHubspotEnrollContactParams;
+}
+
+export namespace FlowActionHubspotEnrollContact {
+    export const Type = {
+        Hubspot: "HUBSPOT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        EnrollContact: "ENROLL_CONTACT",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionHubspotEnrollContactParams {
@@ -9389,11 +11153,22 @@ export type FlowActionHubspotEnrollContactParamsWorkflowId = string | number;
 export interface FlowActionHubspotGetContact {
     id: string;
     alias?: string;
-    type: "HUBSPOT";
-    action: "GET_CONTACT";
+    type: FlowActionHubspotGetContact.Type;
+    action: FlowActionHubspotGetContact.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionHubspotGetContactParams;
+}
+
+export namespace FlowActionHubspotGetContact {
+    export const Type = {
+        Hubspot: "HUBSPOT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        GetContact: "GET_CONTACT",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionHubspotGetContactParams {
@@ -9404,11 +11179,22 @@ export interface FlowActionHubspotGetContactParams {
 export interface FlowActionHubspotUpsertContact {
     id: string;
     alias?: string;
-    type: "HUBSPOT";
-    action: "UPSERT_CONTACT";
+    type: FlowActionHubspotUpsertContact.Type;
+    action: FlowActionHubspotUpsertContact.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionHubspotUpsertContactParams;
+}
+
+export namespace FlowActionHubspotUpsertContact {
+    export const Type = {
+        Hubspot: "HUBSPOT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        UpsertContact: "UPSERT_CONTACT",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionHubspotUpsertContactParams {
@@ -9431,11 +11217,22 @@ export type FlowActionJson =
 export interface FlowActionJsonCreateJson {
     id: string;
     alias?: string;
-    type: "JSON";
-    action: "CREATE_JSON";
+    type: FlowActionJsonCreateJson.Type;
+    action: FlowActionJsonCreateJson.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionJsonCreateJsonParams;
+}
+
+export namespace FlowActionJsonCreateJson {
+    export const Type = {
+        Json: "JSON",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        CreateJson: "CREATE_JSON",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJsonCreateJsonParams {
@@ -9447,11 +11244,22 @@ export type FlowActionJsonCreateJsonParamsObject = Record<string, unknown>;
 export interface FlowActionJsonParseJson {
     id: string;
     alias?: string;
-    type: "JSON";
-    action: "PARSE_JSON";
+    type: FlowActionJsonParseJson.Type;
+    action: FlowActionJsonParseJson.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionJsonParseJsonParams;
+}
+
+export namespace FlowActionJsonParseJson {
+    export const Type = {
+        Json: "JSON",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        ParseJson: "PARSE_JSON",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJsonParseJsonParams {
@@ -9461,11 +11269,22 @@ export interface FlowActionJsonParseJsonParams {
 export interface FlowActionJsonSerializeJson {
     id: string;
     alias?: string;
-    type: "JSON";
-    action: "SERIALIZE_JSON";
+    type: FlowActionJsonSerializeJson.Type;
+    action: FlowActionJsonSerializeJson.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionJsonSerializeJsonParams;
+}
+
+export namespace FlowActionJsonSerializeJson {
+    export const Type = {
+        Json: "JSON",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SerializeJson: "SERIALIZE_JSON",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJsonSerializeJsonParams {
@@ -9484,11 +11303,22 @@ export type FlowActionJwt =
 export interface FlowActionJwtDecodeJwt {
     id: string;
     alias?: string;
-    type: "JWT";
-    action: "DECODE_JWT";
+    type: FlowActionJwtDecodeJwt.Type;
+    action: FlowActionJwtDecodeJwt.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionJwtDecodeJwtParams;
+}
+
+export namespace FlowActionJwtDecodeJwt {
+    export const Type = {
+        Jwt: "JWT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        DecodeJwt: "DECODE_JWT",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJwtDecodeJwtParams {
@@ -9498,11 +11328,22 @@ export interface FlowActionJwtDecodeJwtParams {
 export interface FlowActionJwtSignJwt {
     id: string;
     alias?: string;
-    type: "JWT";
-    action: "SIGN_JWT";
+    type: FlowActionJwtSignJwt.Type;
+    action: FlowActionJwtSignJwt.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionJwtSignJwtParams;
+}
+
+export namespace FlowActionJwtSignJwt {
+    export const Type = {
+        Jwt: "JWT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SignJwt: "SIGN_JWT",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJwtSignJwtParams {
@@ -9519,11 +11360,22 @@ export type FlowActionJwtSignJwtParamsPayload = Record<string, unknown>;
 export interface FlowActionJwtVerifyJwt {
     id: string;
     alias?: string;
-    type: "JWT";
-    action: "VERIFY_JWT";
+    type: FlowActionJwtVerifyJwt.Type;
+    action: FlowActionJwtVerifyJwt.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionJwtVerifyJwtParams;
+}
+
+export namespace FlowActionJwtVerifyJwt {
+    export const Type = {
+        Jwt: "JWT",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        VerifyJwt: "VERIFY_JWT",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJwtVerifyJwtParams {
@@ -9538,11 +11390,22 @@ export type FlowActionMailchimp = Management.FlowActionMailchimpUpsertMember;
 export interface FlowActionMailchimpUpsertMember {
     id: string;
     alias?: string;
-    type: "MAILCHIMP";
-    action: "UPSERT_MEMBER";
+    type: FlowActionMailchimpUpsertMember.Type;
+    action: FlowActionMailchimpUpsertMember.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionMailchimpUpsertMemberParams;
+}
+
+export namespace FlowActionMailchimpUpsertMember {
+    export const Type = {
+        Mailchimp: "MAILCHIMP",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        UpsertMember: "UPSERT_MEMBER",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionMailchimpUpsertMemberParams {
@@ -9564,11 +11427,22 @@ export type FlowActionMailjet = Management.FlowActionMailjetSendEmail;
 export interface FlowActionMailjetSendEmail {
     id: string;
     alias?: string;
-    type: "MAILJET";
-    action: "SEND_EMAIL";
+    type: FlowActionMailjetSendEmail.Type;
+    action: FlowActionMailjetSendEmail.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionMailjetSendEmailParams;
+}
+
+export namespace FlowActionMailjetSendEmail {
+    export const Type = {
+        Mailjet: "MAILJET",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendEmail: "SEND_EMAIL",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export type FlowActionMailjetSendEmailParams =
@@ -9587,11 +11461,22 @@ export type FlowActionOtp = Management.FlowActionOtpGenerateCode | Management.Fl
 export interface FlowActionOtpGenerateCode {
     id: string;
     alias?: string;
-    type: "OTP";
-    action: "GENERATE_CODE";
+    type: FlowActionOtpGenerateCode.Type;
+    action: FlowActionOtpGenerateCode.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionOtpGenerateCodeParams;
+}
+
+export namespace FlowActionOtpGenerateCode {
+    export const Type = {
+        Otp: "OTP",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        GenerateCode: "GENERATE_CODE",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionOtpGenerateCodeParams {
@@ -9602,11 +11487,22 @@ export interface FlowActionOtpGenerateCodeParams {
 export interface FlowActionOtpVerifyCode {
     id: string;
     alias?: string;
-    type: "OTP";
-    action: "VERIFY_CODE";
+    type: FlowActionOtpVerifyCode.Type;
+    action: FlowActionOtpVerifyCode.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionOtpVerifyCodeParams;
+}
+
+export namespace FlowActionOtpVerifyCode {
+    export const Type = {
+        Otp: "OTP",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        VerifyCode: "VERIFY_CODE",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionOtpVerifyCodeParams {
@@ -9624,11 +11520,22 @@ export type FlowActionPipedrive =
 export interface FlowActionPipedriveAddDeal {
     id: string;
     alias?: string;
-    type: "PIPEDRIVE";
-    action: "ADD_DEAL";
+    type: FlowActionPipedriveAddDeal.Type;
+    action: FlowActionPipedriveAddDeal.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionPipedriveAddDealParams;
+}
+
+export namespace FlowActionPipedriveAddDeal {
+    export const Type = {
+        Pipedrive: "PIPEDRIVE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        AddDeal: "ADD_DEAL",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionPipedriveAddDealParams {
@@ -9655,11 +11562,22 @@ export type FlowActionPipedriveAddDealParamsUserId = string | number;
 export interface FlowActionPipedriveAddOrganization {
     id: string;
     alias?: string;
-    type: "PIPEDRIVE";
-    action: "ADD_ORGANIZATION";
+    type: FlowActionPipedriveAddOrganization.Type;
+    action: FlowActionPipedriveAddOrganization.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionPipedriveAddOrganizationParams;
+}
+
+export namespace FlowActionPipedriveAddOrganization {
+    export const Type = {
+        Pipedrive: "PIPEDRIVE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        AddOrganization: "ADD_ORGANIZATION",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionPipedriveAddOrganizationParams {
@@ -9676,11 +11594,22 @@ export type FlowActionPipedriveAddOrganizationParamsOwnerId = string | number;
 export interface FlowActionPipedriveAddPerson {
     id: string;
     alias?: string;
-    type: "PIPEDRIVE";
-    action: "ADD_PERSON";
+    type: FlowActionPipedriveAddPerson.Type;
+    action: FlowActionPipedriveAddPerson.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionPipedriveAddPersonParams;
+}
+
+export namespace FlowActionPipedriveAddPerson {
+    export const Type = {
+        Pipedrive: "PIPEDRIVE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        AddPerson: "ADD_PERSON",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionPipedriveAddPersonParams {
@@ -9708,11 +11637,22 @@ export type FlowActionSalesforce =
 export interface FlowActionSalesforceCreateLead {
     id: string;
     alias?: string;
-    type: "SALESFORCE";
-    action: "CREATE_LEAD";
+    type: FlowActionSalesforceCreateLead.Type;
+    action: FlowActionSalesforceCreateLead.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionSalesforceCreateLeadParams;
+}
+
+export namespace FlowActionSalesforceCreateLead {
+    export const Type = {
+        Salesforce: "SALESFORCE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        CreateLead: "CREATE_LEAD",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceCreateLeadParams {
@@ -9730,11 +11670,22 @@ export type FlowActionSalesforceCreateLeadParamsPayload = Record<string, unknown
 export interface FlowActionSalesforceGetLead {
     id: string;
     alias?: string;
-    type: "SALESFORCE";
-    action: "GET_LEAD";
+    type: FlowActionSalesforceGetLead.Type;
+    action: FlowActionSalesforceGetLead.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionSalesforceGetLeadParams;
+}
+
+export namespace FlowActionSalesforceGetLead {
+    export const Type = {
+        Salesforce: "SALESFORCE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        GetLead: "GET_LEAD",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceGetLeadParams {
@@ -9745,11 +11696,22 @@ export interface FlowActionSalesforceGetLeadParams {
 export interface FlowActionSalesforceSearchLeads {
     id: string;
     alias?: string;
-    type: "SALESFORCE";
-    action: "SEARCH_LEADS";
+    type: FlowActionSalesforceSearchLeads.Type;
+    action: FlowActionSalesforceSearchLeads.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionSalesforceSearchLeadsParams;
+}
+
+export namespace FlowActionSalesforceSearchLeads {
+    export const Type = {
+        Salesforce: "SALESFORCE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SearchLeads: "SEARCH_LEADS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceSearchLeadsParams {
@@ -9772,11 +11734,22 @@ export namespace FlowActionSalesforceSearchLeadsParams {
 export interface FlowActionSalesforceUpdateLead {
     id: string;
     alias?: string;
-    type: "SALESFORCE";
-    action: "UPDATE_LEAD";
+    type: FlowActionSalesforceUpdateLead.Type;
+    action: FlowActionSalesforceUpdateLead.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionSalesforceUpdateLeadParams;
+}
+
+export namespace FlowActionSalesforceUpdateLead {
+    export const Type = {
+        Salesforce: "SALESFORCE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        UpdateLead: "UPDATE_LEAD",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceUpdateLeadParams {
@@ -9792,11 +11765,22 @@ export type FlowActionSendgrid = Management.FlowActionSendgridSendEmail;
 export interface FlowActionSendgridSendEmail {
     id: string;
     alias?: string;
-    type: "SENDGRID";
-    action: "SEND_EMAIL";
+    type: FlowActionSendgridSendEmail.Type;
+    action: FlowActionSendgridSendEmail.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionSendgridSendEmailParams;
+}
+
+export namespace FlowActionSendgridSendEmail {
+    export const Type = {
+        Sendgrid: "SENDGRID",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendEmail: "SEND_EMAIL",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSendgridSendEmailParams {
@@ -9817,11 +11801,22 @@ export type FlowActionSlack = Management.FlowActionSlackPostMessage;
 export interface FlowActionSlackPostMessage {
     id: string;
     alias?: string;
-    type: "SLACK";
-    action: "POST_MESSAGE";
+    type: FlowActionSlackPostMessage.Type;
+    action: FlowActionSlackPostMessage.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionSlackPostMessageParams;
+}
+
+export namespace FlowActionSlackPostMessage {
+    export const Type = {
+        Slack: "SLACK",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        PostMessage: "POST_MESSAGE",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSlackPostMessageParams {
@@ -9864,11 +11859,22 @@ export type FlowActionStripe =
 export interface FlowActionStripeAddTaxId {
     id: string;
     alias?: string;
-    type: "STRIPE";
-    action: "ADD_TAX_ID";
+    type: FlowActionStripeAddTaxId.Type;
+    action: FlowActionStripeAddTaxId.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionStripeAddTaxIdParams;
+}
+
+export namespace FlowActionStripeAddTaxId {
+    export const Type = {
+        Stripe: "STRIPE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        AddTaxId: "ADD_TAX_ID",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeAddTaxIdParams {
@@ -9890,11 +11896,22 @@ export interface FlowActionStripeAddress {
 export interface FlowActionStripeCreateCustomer {
     id: string;
     alias?: string;
-    type: "STRIPE";
-    action: "CREATE_CUSTOMER";
+    type: FlowActionStripeCreateCustomer.Type;
+    action: FlowActionStripeCreateCustomer.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionStripeCreateCustomerParams;
+}
+
+export namespace FlowActionStripeCreateCustomer {
+    export const Type = {
+        Stripe: "STRIPE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        CreateCustomer: "CREATE_CUSTOMER",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeCreateCustomerParams {
@@ -9912,11 +11929,22 @@ export interface FlowActionStripeCreateCustomerParams {
 export interface FlowActionStripeCreatePortalSession {
     id: string;
     alias?: string;
-    type: "STRIPE";
-    action: "CREATE_PORTAL_SESSION";
+    type: FlowActionStripeCreatePortalSession.Type;
+    action: FlowActionStripeCreatePortalSession.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionStripeCreatePortalSessionParams;
+}
+
+export namespace FlowActionStripeCreatePortalSession {
+    export const Type = {
+        Stripe: "STRIPE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        CreatePortalSession: "CREATE_PORTAL_SESSION",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeCreatePortalSessionParams {
@@ -9928,11 +11956,22 @@ export interface FlowActionStripeCreatePortalSessionParams {
 export interface FlowActionStripeDeleteTaxId {
     id: string;
     alias?: string;
-    type: "STRIPE";
-    action: "DELETE_TAX_ID";
+    type: FlowActionStripeDeleteTaxId.Type;
+    action: FlowActionStripeDeleteTaxId.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionStripeDeleteTaxIdParams;
+}
+
+export namespace FlowActionStripeDeleteTaxId {
+    export const Type = {
+        Stripe: "STRIPE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        DeleteTaxId: "DELETE_TAX_ID",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeDeleteTaxIdParams {
@@ -9944,11 +11983,22 @@ export interface FlowActionStripeDeleteTaxIdParams {
 export interface FlowActionStripeFindCustomers {
     id: string;
     alias?: string;
-    type: "STRIPE";
-    action: "FIND_CUSTOMERS";
+    type: FlowActionStripeFindCustomers.Type;
+    action: FlowActionStripeFindCustomers.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionStripeFindCustomersParams;
+}
+
+export namespace FlowActionStripeFindCustomers {
+    export const Type = {
+        Stripe: "STRIPE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        FindCustomers: "FIND_CUSTOMERS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeFindCustomersParams {
@@ -9959,11 +12009,22 @@ export interface FlowActionStripeFindCustomersParams {
 export interface FlowActionStripeGetCustomer {
     id: string;
     alias?: string;
-    type: "STRIPE";
-    action: "GET_CUSTOMER";
+    type: FlowActionStripeGetCustomer.Type;
+    action: FlowActionStripeGetCustomer.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionStripeGetCustomerParams;
+}
+
+export namespace FlowActionStripeGetCustomer {
+    export const Type = {
+        Stripe: "STRIPE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        GetCustomer: "GET_CUSTOMER",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeGetCustomerParams {
@@ -9981,11 +12042,22 @@ export interface FlowActionStripeTaxId {
 export interface FlowActionStripeUpdateCustomer {
     id: string;
     alias?: string;
-    type: "STRIPE";
-    action: "UPDATE_CUSTOMER";
+    type: FlowActionStripeUpdateCustomer.Type;
+    action: FlowActionStripeUpdateCustomer.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionStripeUpdateCustomerParams;
+}
+
+export namespace FlowActionStripeUpdateCustomer {
+    export const Type = {
+        Stripe: "STRIPE",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        UpdateCustomer: "UPDATE_CUSTOMER",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeUpdateCustomerParams {
@@ -10005,11 +12077,22 @@ export type FlowActionTelegram = Management.FlowActionTelegramSendMessage;
 export interface FlowActionTelegramSendMessage {
     id: string;
     alias?: string;
-    type: "TELEGRAM";
-    action: "SEND_MESSAGE";
+    type: FlowActionTelegramSendMessage.Type;
+    action: FlowActionTelegramSendMessage.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionTelegramSendMessageParams;
+}
+
+export namespace FlowActionTelegramSendMessage {
+    export const Type = {
+        Telegram: "TELEGRAM",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendMessage: "SEND_MESSAGE",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionTelegramSendMessageParams {
@@ -10023,11 +12106,22 @@ export type FlowActionTwilio = Management.FlowActionTwilioMakeCall | Management.
 export interface FlowActionTwilioMakeCall {
     id: string;
     alias?: string;
-    type: "TWILIO";
-    action: "MAKE_CALL";
+    type: FlowActionTwilioMakeCall.Type;
+    action: FlowActionTwilioMakeCall.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionTwilioMakeCallParams;
+}
+
+export namespace FlowActionTwilioMakeCall {
+    export const Type = {
+        Twilio: "TWILIO",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        MakeCall: "MAKE_CALL",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionTwilioMakeCallParams {
@@ -10040,11 +12134,22 @@ export interface FlowActionTwilioMakeCallParams {
 export interface FlowActionTwilioSendSms {
     id: string;
     alias?: string;
-    type: "TWILIO";
-    action: "SEND_SMS";
+    type: FlowActionTwilioSendSms.Type;
+    action: FlowActionTwilioSendSms.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionTwilioSendSmsParams;
+}
+
+export namespace FlowActionTwilioSendSms {
+    export const Type = {
+        Twilio: "TWILIO",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendSms: "SEND_SMS",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionTwilioSendSmsParams {
@@ -10059,11 +12164,22 @@ export type FlowActionWhatsapp = Management.FlowActionWhatsappSendMessage;
 export interface FlowActionWhatsappSendMessage {
     id: string;
     alias?: string;
-    type: "WHATSAPP";
-    action: "SEND_MESSAGE";
+    type: FlowActionWhatsappSendMessage.Type;
+    action: FlowActionWhatsappSendMessage.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionWhatsappSendMessageParams;
+}
+
+export namespace FlowActionWhatsappSendMessage {
+    export const Type = {
+        Whatsapp: "WHATSAPP",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SendMessage: "SEND_MESSAGE",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionWhatsappSendMessageParams {
@@ -10100,11 +12216,22 @@ export type FlowActionXml = Management.FlowActionXmlParseXml | Management.FlowAc
 export interface FlowActionXmlParseXml {
     id: string;
     alias?: string;
-    type: "XML";
-    action: "PARSE_XML";
+    type: FlowActionXmlParseXml.Type;
+    action: FlowActionXmlParseXml.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionXmlParseXmlParams;
+}
+
+export namespace FlowActionXmlParseXml {
+    export const Type = {
+        Xml: "XML",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        ParseXml: "PARSE_XML",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionXmlParseXmlParams {
@@ -10114,11 +12241,22 @@ export interface FlowActionXmlParseXmlParams {
 export interface FlowActionXmlSerializeXml {
     id: string;
     alias?: string;
-    type: "XML";
-    action: "SERIALIZE_XML";
+    type: FlowActionXmlSerializeXml.Type;
+    action: FlowActionXmlSerializeXml.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionXmlSerializeXmlParams;
+}
+
+export namespace FlowActionXmlSerializeXml {
+    export const Type = {
+        Xml: "XML",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        SerializeXml: "SERIALIZE_XML",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionXmlSerializeXmlParams {
@@ -10134,11 +12272,22 @@ export type FlowActionZapier = Management.FlowActionZapierTriggerWebhook;
 export interface FlowActionZapierTriggerWebhook {
     id: string;
     alias?: string;
-    type: "ZAPIER";
-    action: "TRIGGER_WEBHOOK";
+    type: FlowActionZapierTriggerWebhook.Type;
+    action: FlowActionZapierTriggerWebhook.Action;
     allow_failure?: boolean;
     mask_output?: boolean;
     params: Management.FlowActionZapierTriggerWebhookParams;
+}
+
+export namespace FlowActionZapierTriggerWebhook {
+    export const Type = {
+        Zapier: "ZAPIER",
+    } as const;
+    export type Type = (typeof Type)[keyof typeof Type];
+    export const Action = {
+        TriggerWebhook: "TRIGGER_WEBHOOK",
+    } as const;
+    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionZapierTriggerWebhookParams {
@@ -10279,133 +12428,211 @@ export interface FlowsVaultConnectioSetupTwilioApiKey {
     api_key: string;
 }
 
-export type FlowsVaultConnectioSetupTypeApiKeyEnum = "API_KEY";
+export const FlowsVaultConnectioSetupTypeApiKeyEnum = {
+    ApiKey: "API_KEY",
+} as const;
+export type FlowsVaultConnectioSetupTypeApiKeyEnum =
+    (typeof FlowsVaultConnectioSetupTypeApiKeyEnum)[keyof typeof FlowsVaultConnectioSetupTypeApiKeyEnum];
 
-export type FlowsVaultConnectioSetupTypeBearerEnum = "BEARER";
+export const FlowsVaultConnectioSetupTypeBearerEnum = {
+    Bearer: "BEARER",
+} as const;
+export type FlowsVaultConnectioSetupTypeBearerEnum =
+    (typeof FlowsVaultConnectioSetupTypeBearerEnum)[keyof typeof FlowsVaultConnectioSetupTypeBearerEnum];
 
-export type FlowsVaultConnectioSetupTypeJwtEnum = "JWT";
+export const FlowsVaultConnectioSetupTypeJwtEnum = {
+    Jwt: "JWT",
+} as const;
+export type FlowsVaultConnectioSetupTypeJwtEnum =
+    (typeof FlowsVaultConnectioSetupTypeJwtEnum)[keyof typeof FlowsVaultConnectioSetupTypeJwtEnum];
 
-export type FlowsVaultConnectioSetupTypeKeyPairEnum = "KEY_PAIR";
+export const FlowsVaultConnectioSetupTypeKeyPairEnum = {
+    KeyPair: "KEY_PAIR",
+} as const;
+export type FlowsVaultConnectioSetupTypeKeyPairEnum =
+    (typeof FlowsVaultConnectioSetupTypeKeyPairEnum)[keyof typeof FlowsVaultConnectioSetupTypeKeyPairEnum];
 
-export type FlowsVaultConnectioSetupTypeOauthAppEnum = "OAUTH_APP";
+export const FlowsVaultConnectioSetupTypeOauthAppEnum = {
+    OauthApp: "OAUTH_APP",
+} as const;
+export type FlowsVaultConnectioSetupTypeOauthAppEnum =
+    (typeof FlowsVaultConnectioSetupTypeOauthAppEnum)[keyof typeof FlowsVaultConnectioSetupTypeOauthAppEnum];
 
-export type FlowsVaultConnectioSetupTypeOauthCodeEnum = "OAUTH_CODE";
+export const FlowsVaultConnectioSetupTypeOauthCodeEnum = {
+    OauthCode: "OAUTH_CODE",
+} as const;
+export type FlowsVaultConnectioSetupTypeOauthCodeEnum =
+    (typeof FlowsVaultConnectioSetupTypeOauthCodeEnum)[keyof typeof FlowsVaultConnectioSetupTypeOauthCodeEnum];
 
-export type FlowsVaultConnectioSetupTypeOauthJwtEnum = "OAUTH_JWT";
+export const FlowsVaultConnectioSetupTypeOauthJwtEnum = {
+    OauthJwt: "OAUTH_JWT",
+} as const;
+export type FlowsVaultConnectioSetupTypeOauthJwtEnum =
+    (typeof FlowsVaultConnectioSetupTypeOauthJwtEnum)[keyof typeof FlowsVaultConnectioSetupTypeOauthJwtEnum];
 
-export type FlowsVaultConnectioSetupTypeTokenEnum = "TOKEN";
+export const FlowsVaultConnectioSetupTypeTokenEnum = {
+    Token: "TOKEN",
+} as const;
+export type FlowsVaultConnectioSetupTypeTokenEnum =
+    (typeof FlowsVaultConnectioSetupTypeTokenEnum)[keyof typeof FlowsVaultConnectioSetupTypeTokenEnum];
 
-export type FlowsVaultConnectioSetupTypeWebhookEnum = "WEBHOOK";
+export const FlowsVaultConnectioSetupTypeWebhookEnum = {
+    Webhook: "WEBHOOK",
+} as const;
+export type FlowsVaultConnectioSetupTypeWebhookEnum =
+    (typeof FlowsVaultConnectioSetupTypeWebhookEnum)[keyof typeof FlowsVaultConnectioSetupTypeWebhookEnum];
 
 export interface FlowsVaultConnectioSetupWebhook {
     type: Management.FlowsVaultConnectioSetupTypeWebhookEnum;
     url: string;
 }
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdActivecampaignEnum = "ACTIVECAMPAIGN";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdActivecampaignEnum = {
+    Activecampaign: "ACTIVECAMPAIGN",
+} as const;
+export type FlowsVaultConnectionAppIdActivecampaignEnum =
+    (typeof FlowsVaultConnectionAppIdActivecampaignEnum)[keyof typeof FlowsVaultConnectionAppIdActivecampaignEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdAirtableEnum = "AIRTABLE";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdAirtableEnum = {
+    Airtable: "AIRTABLE",
+} as const;
+export type FlowsVaultConnectionAppIdAirtableEnum =
+    (typeof FlowsVaultConnectionAppIdAirtableEnum)[keyof typeof FlowsVaultConnectionAppIdAirtableEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdAuth0Enum = "AUTH0";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdAuth0Enum = {
+    Auth0: "AUTH0",
+} as const;
+export type FlowsVaultConnectionAppIdAuth0Enum =
+    (typeof FlowsVaultConnectionAppIdAuth0Enum)[keyof typeof FlowsVaultConnectionAppIdAuth0Enum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdBigqueryEnum = "BIGQUERY";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdBigqueryEnum = {
+    Bigquery: "BIGQUERY",
+} as const;
+export type FlowsVaultConnectionAppIdBigqueryEnum =
+    (typeof FlowsVaultConnectionAppIdBigqueryEnum)[keyof typeof FlowsVaultConnectionAppIdBigqueryEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdClearbitEnum = "CLEARBIT";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdClearbitEnum = {
+    Clearbit: "CLEARBIT",
+} as const;
+export type FlowsVaultConnectionAppIdClearbitEnum =
+    (typeof FlowsVaultConnectionAppIdClearbitEnum)[keyof typeof FlowsVaultConnectionAppIdClearbitEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdDocusignEnum = "DOCUSIGN";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdDocusignEnum = {
+    Docusign: "DOCUSIGN",
+} as const;
+export type FlowsVaultConnectionAppIdDocusignEnum =
+    (typeof FlowsVaultConnectionAppIdDocusignEnum)[keyof typeof FlowsVaultConnectionAppIdDocusignEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdGoogleSheetsEnum = "GOOGLE_SHEETS";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdGoogleSheetsEnum = {
+    GoogleSheets: "GOOGLE_SHEETS",
+} as const;
+export type FlowsVaultConnectionAppIdGoogleSheetsEnum =
+    (typeof FlowsVaultConnectionAppIdGoogleSheetsEnum)[keyof typeof FlowsVaultConnectionAppIdGoogleSheetsEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdHttpEnum = "HTTP";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdHttpEnum = {
+    Http: "HTTP",
+} as const;
+export type FlowsVaultConnectionAppIdHttpEnum =
+    (typeof FlowsVaultConnectionAppIdHttpEnum)[keyof typeof FlowsVaultConnectionAppIdHttpEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdHubspotEnum = "HUBSPOT";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdHubspotEnum = {
+    Hubspot: "HUBSPOT",
+} as const;
+export type FlowsVaultConnectionAppIdHubspotEnum =
+    (typeof FlowsVaultConnectionAppIdHubspotEnum)[keyof typeof FlowsVaultConnectionAppIdHubspotEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdJwtEnum = "JWT";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdJwtEnum = {
+    Jwt: "JWT",
+} as const;
+export type FlowsVaultConnectionAppIdJwtEnum =
+    (typeof FlowsVaultConnectionAppIdJwtEnum)[keyof typeof FlowsVaultConnectionAppIdJwtEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdMailchimpEnum = "MAILCHIMP";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdMailchimpEnum = {
+    Mailchimp: "MAILCHIMP",
+} as const;
+export type FlowsVaultConnectionAppIdMailchimpEnum =
+    (typeof FlowsVaultConnectionAppIdMailchimpEnum)[keyof typeof FlowsVaultConnectionAppIdMailchimpEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdMailjetEnum = "MAILJET";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdMailjetEnum = {
+    Mailjet: "MAILJET",
+} as const;
+export type FlowsVaultConnectionAppIdMailjetEnum =
+    (typeof FlowsVaultConnectionAppIdMailjetEnum)[keyof typeof FlowsVaultConnectionAppIdMailjetEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdPipedriveEnum = "PIPEDRIVE";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdPipedriveEnum = {
+    Pipedrive: "PIPEDRIVE",
+} as const;
+export type FlowsVaultConnectionAppIdPipedriveEnum =
+    (typeof FlowsVaultConnectionAppIdPipedriveEnum)[keyof typeof FlowsVaultConnectionAppIdPipedriveEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdSalesforceEnum = "SALESFORCE";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdSalesforceEnum = {
+    Salesforce: "SALESFORCE",
+} as const;
+export type FlowsVaultConnectionAppIdSalesforceEnum =
+    (typeof FlowsVaultConnectionAppIdSalesforceEnum)[keyof typeof FlowsVaultConnectionAppIdSalesforceEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdSendgridEnum = "SENDGRID";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdSendgridEnum = {
+    Sendgrid: "SENDGRID",
+} as const;
+export type FlowsVaultConnectionAppIdSendgridEnum =
+    (typeof FlowsVaultConnectionAppIdSendgridEnum)[keyof typeof FlowsVaultConnectionAppIdSendgridEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdSlackEnum = "SLACK";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdSlackEnum = {
+    Slack: "SLACK",
+} as const;
+export type FlowsVaultConnectionAppIdSlackEnum =
+    (typeof FlowsVaultConnectionAppIdSlackEnum)[keyof typeof FlowsVaultConnectionAppIdSlackEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdStripeEnum = "STRIPE";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdStripeEnum = {
+    Stripe: "STRIPE",
+} as const;
+export type FlowsVaultConnectionAppIdStripeEnum =
+    (typeof FlowsVaultConnectionAppIdStripeEnum)[keyof typeof FlowsVaultConnectionAppIdStripeEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdTelegramEnum = "TELEGRAM";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdTelegramEnum = {
+    Telegram: "TELEGRAM",
+} as const;
+export type FlowsVaultConnectionAppIdTelegramEnum =
+    (typeof FlowsVaultConnectionAppIdTelegramEnum)[keyof typeof FlowsVaultConnectionAppIdTelegramEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdTwilioEnum = "TWILIO";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdTwilioEnum = {
+    Twilio: "TWILIO",
+} as const;
+export type FlowsVaultConnectionAppIdTwilioEnum =
+    (typeof FlowsVaultConnectionAppIdTwilioEnum)[keyof typeof FlowsVaultConnectionAppIdTwilioEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdWhatsappEnum = "WHATSAPP";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdWhatsappEnum = {
+    Whatsapp: "WHATSAPP",
+} as const;
+export type FlowsVaultConnectionAppIdWhatsappEnum =
+    (typeof FlowsVaultConnectionAppIdWhatsappEnum)[keyof typeof FlowsVaultConnectionAppIdWhatsappEnum];
 
-/**
- * Flows Vault Connection app identifier.
- */
-export type FlowsVaultConnectionAppIdZapierEnum = "ZAPIER";
+/** Flows Vault Connection app identifier. */
+export const FlowsVaultConnectionAppIdZapierEnum = {
+    Zapier: "ZAPIER",
+} as const;
+export type FlowsVaultConnectionAppIdZapierEnum =
+    (typeof FlowsVaultConnectionAppIdZapierEnum)[keyof typeof FlowsVaultConnectionAppIdZapierEnum];
 
 export interface FlowsVaultConnectionSummary {
     /** Flows Vault Connection identifier. */
@@ -10555,29 +12782,69 @@ export interface FormBlockRichTextConfig {
     content?: string;
 }
 
-export type FormBlockTypeDividerConst = "DIVIDER";
+export const FormBlockTypeDividerConst = {
+    Divider: "DIVIDER",
+} as const;
+export type FormBlockTypeDividerConst = (typeof FormBlockTypeDividerConst)[keyof typeof FormBlockTypeDividerConst];
 
-export type FormBlockTypeHtmlConst = "HTML";
+export const FormBlockTypeHtmlConst = {
+    Html: "HTML",
+} as const;
+export type FormBlockTypeHtmlConst = (typeof FormBlockTypeHtmlConst)[keyof typeof FormBlockTypeHtmlConst];
 
-export type FormBlockTypeImageConst = "IMAGE";
+export const FormBlockTypeImageConst = {
+    Image: "IMAGE",
+} as const;
+export type FormBlockTypeImageConst = (typeof FormBlockTypeImageConst)[keyof typeof FormBlockTypeImageConst];
 
-export type FormBlockTypeJumpButtonConst = "JUMP_BUTTON";
+export const FormBlockTypeJumpButtonConst = {
+    JumpButton: "JUMP_BUTTON",
+} as const;
+export type FormBlockTypeJumpButtonConst =
+    (typeof FormBlockTypeJumpButtonConst)[keyof typeof FormBlockTypeJumpButtonConst];
 
-export type FormBlockTypeNextButtonConst = "NEXT_BUTTON";
+export const FormBlockTypeNextButtonConst = {
+    NextButton: "NEXT_BUTTON",
+} as const;
+export type FormBlockTypeNextButtonConst =
+    (typeof FormBlockTypeNextButtonConst)[keyof typeof FormBlockTypeNextButtonConst];
 
-export type FormBlockTypePreviousButtonConst = "PREVIOUS_BUTTON";
+export const FormBlockTypePreviousButtonConst = {
+    PreviousButton: "PREVIOUS_BUTTON",
+} as const;
+export type FormBlockTypePreviousButtonConst =
+    (typeof FormBlockTypePreviousButtonConst)[keyof typeof FormBlockTypePreviousButtonConst];
 
-export type FormBlockTypeResendButtonConst = "RESEND_BUTTON";
+export const FormBlockTypeResendButtonConst = {
+    ResendButton: "RESEND_BUTTON",
+} as const;
+export type FormBlockTypeResendButtonConst =
+    (typeof FormBlockTypeResendButtonConst)[keyof typeof FormBlockTypeResendButtonConst];
 
-export type FormBlockTypeRichTextConst = "RICH_TEXT";
+export const FormBlockTypeRichTextConst = {
+    RichText: "RICH_TEXT",
+} as const;
+export type FormBlockTypeRichTextConst = (typeof FormBlockTypeRichTextConst)[keyof typeof FormBlockTypeRichTextConst];
 
 export type FormComponent = Management.FormBlock | Management.FormWidget | Management.FormField;
 
-export type FormComponentCategoryBlockConst = "BLOCK";
+export const FormComponentCategoryBlockConst = {
+    Block: "BLOCK",
+} as const;
+export type FormComponentCategoryBlockConst =
+    (typeof FormComponentCategoryBlockConst)[keyof typeof FormComponentCategoryBlockConst];
 
-export type FormComponentCategoryFieldConst = "FIELD";
+export const FormComponentCategoryFieldConst = {
+    Field: "FIELD",
+} as const;
+export type FormComponentCategoryFieldConst =
+    (typeof FormComponentCategoryFieldConst)[keyof typeof FormComponentCategoryFieldConst];
 
-export type FormComponentCategoryWidgetConst = "WIDGET";
+export const FormComponentCategoryWidgetConst = {
+    Widget: "WIDGET",
+} as const;
+export type FormComponentCategoryWidgetConst =
+    (typeof FormComponentCategoryWidgetConst)[keyof typeof FormComponentCategoryWidgetConst];
 
 export interface FormEndingNode {
     redirection?: Management.FormEndingNodeRedirection;
@@ -10590,7 +12857,10 @@ export interface FormEndingNodeAfterSubmit {
     flow_id?: string;
 }
 
-export type FormEndingNodeId = "$ending";
+export const FormEndingNodeId = {
+    Ending: "$ending",
+} as const;
+export type FormEndingNodeId = (typeof FormEndingNodeId)[keyof typeof FormEndingNodeId];
 
 export type FormEndingNodeNullable = (Management.FormEndingNode | null) | undefined;
 
@@ -10937,9 +13207,17 @@ export interface FormFieldPaymentConfigChargeOneOffOneOff {
 
 export type FormFieldPaymentConfigChargeOneOffOneOffAmount = string | number;
 
-export type FormFieldPaymentConfigChargeTypeOneOffConst = "ONE_OFF";
+export const FormFieldPaymentConfigChargeTypeOneOffConst = {
+    OneOff: "ONE_OFF",
+} as const;
+export type FormFieldPaymentConfigChargeTypeOneOffConst =
+    (typeof FormFieldPaymentConfigChargeTypeOneOffConst)[keyof typeof FormFieldPaymentConfigChargeTypeOneOffConst];
 
-export type FormFieldPaymentConfigChargeTypeSubscriptionConst = "SUBSCRIPTION";
+export const FormFieldPaymentConfigChargeTypeSubscriptionConst = {
+    Subscription: "SUBSCRIPTION",
+} as const;
+export type FormFieldPaymentConfigChargeTypeSubscriptionConst =
+    (typeof FormFieldPaymentConfigChargeTypeSubscriptionConst)[keyof typeof FormFieldPaymentConfigChargeTypeSubscriptionConst];
 
 export interface FormFieldPaymentConfigCredentials {
     public_key: string;
@@ -10960,7 +13238,11 @@ export interface FormFieldPaymentConfigFields {
     trustmarks?: boolean;
 }
 
-export type FormFieldPaymentConfigProviderEnum = "STRIPE";
+export const FormFieldPaymentConfigProviderEnum = {
+    Stripe: "STRIPE",
+} as const;
+export type FormFieldPaymentConfigProviderEnum =
+    (typeof FormFieldPaymentConfigProviderEnum)[keyof typeof FormFieldPaymentConfigProviderEnum];
 
 export type FormFieldPaymentConfigSubscription = Record<string, unknown>;
 
@@ -11020,37 +13302,85 @@ export interface FormFieldTextConfig {
     max_length?: number;
 }
 
-export type FormFieldTypeBooleanConst = "BOOLEAN";
+export const FormFieldTypeBooleanConst = {
+    Boolean: "BOOLEAN",
+} as const;
+export type FormFieldTypeBooleanConst = (typeof FormFieldTypeBooleanConst)[keyof typeof FormFieldTypeBooleanConst];
 
-export type FormFieldTypeCardsConst = "CARDS";
+export const FormFieldTypeCardsConst = {
+    Cards: "CARDS",
+} as const;
+export type FormFieldTypeCardsConst = (typeof FormFieldTypeCardsConst)[keyof typeof FormFieldTypeCardsConst];
 
-export type FormFieldTypeChoiceConst = "CHOICE";
+export const FormFieldTypeChoiceConst = {
+    Choice: "CHOICE",
+} as const;
+export type FormFieldTypeChoiceConst = (typeof FormFieldTypeChoiceConst)[keyof typeof FormFieldTypeChoiceConst];
 
-export type FormFieldTypeCustomConst = "CUSTOM";
+export const FormFieldTypeCustomConst = {
+    Custom: "CUSTOM",
+} as const;
+export type FormFieldTypeCustomConst = (typeof FormFieldTypeCustomConst)[keyof typeof FormFieldTypeCustomConst];
 
-export type FormFieldTypeDateConst = "DATE";
+export const FormFieldTypeDateConst = {
+    Date: "DATE",
+} as const;
+export type FormFieldTypeDateConst = (typeof FormFieldTypeDateConst)[keyof typeof FormFieldTypeDateConst];
 
-export type FormFieldTypeDropdownConst = "DROPDOWN";
+export const FormFieldTypeDropdownConst = {
+    Dropdown: "DROPDOWN",
+} as const;
+export type FormFieldTypeDropdownConst = (typeof FormFieldTypeDropdownConst)[keyof typeof FormFieldTypeDropdownConst];
 
-export type FormFieldTypeEmailConst = "EMAIL";
+export const FormFieldTypeEmailConst = {
+    Email: "EMAIL",
+} as const;
+export type FormFieldTypeEmailConst = (typeof FormFieldTypeEmailConst)[keyof typeof FormFieldTypeEmailConst];
 
-export type FormFieldTypeFileConst = "FILE";
+export const FormFieldTypeFileConst = {
+    File: "FILE",
+} as const;
+export type FormFieldTypeFileConst = (typeof FormFieldTypeFileConst)[keyof typeof FormFieldTypeFileConst];
 
-export type FormFieldTypeLegalConst = "LEGAL";
+export const FormFieldTypeLegalConst = {
+    Legal: "LEGAL",
+} as const;
+export type FormFieldTypeLegalConst = (typeof FormFieldTypeLegalConst)[keyof typeof FormFieldTypeLegalConst];
 
-export type FormFieldTypeNumberConst = "NUMBER";
+export const FormFieldTypeNumberConst = {
+    Number: "NUMBER",
+} as const;
+export type FormFieldTypeNumberConst = (typeof FormFieldTypeNumberConst)[keyof typeof FormFieldTypeNumberConst];
 
-export type FormFieldTypePasswordConst = "PASSWORD";
+export const FormFieldTypePasswordConst = {
+    Password: "PASSWORD",
+} as const;
+export type FormFieldTypePasswordConst = (typeof FormFieldTypePasswordConst)[keyof typeof FormFieldTypePasswordConst];
 
-export type FormFieldTypePaymentConst = "PAYMENT";
+export const FormFieldTypePaymentConst = {
+    Payment: "PAYMENT",
+} as const;
+export type FormFieldTypePaymentConst = (typeof FormFieldTypePaymentConst)[keyof typeof FormFieldTypePaymentConst];
 
-export type FormFieldTypeSocialConst = "SOCIAL";
+export const FormFieldTypeSocialConst = {
+    Social: "SOCIAL",
+} as const;
+export type FormFieldTypeSocialConst = (typeof FormFieldTypeSocialConst)[keyof typeof FormFieldTypeSocialConst];
 
-export type FormFieldTypeTelConst = "TEL";
+export const FormFieldTypeTelConst = {
+    Tel: "TEL",
+} as const;
+export type FormFieldTypeTelConst = (typeof FormFieldTypeTelConst)[keyof typeof FormFieldTypeTelConst];
 
-export type FormFieldTypeTextConst = "TEXT";
+export const FormFieldTypeTextConst = {
+    Text: "TEXT",
+} as const;
+export type FormFieldTypeTextConst = (typeof FormFieldTypeTextConst)[keyof typeof FormFieldTypeTextConst];
 
-export type FormFieldTypeUrlConst = "URL";
+export const FormFieldTypeUrlConst = {
+    Url: "URL",
+} as const;
+export type FormFieldTypeUrlConst = (typeof FormFieldTypeUrlConst)[keyof typeof FormFieldTypeUrlConst];
 
 export interface FormFieldUrl {
     id: string;
@@ -11117,11 +13447,20 @@ export type FormNodeListNullable = (Management.FormNodeList | null) | undefined;
 
 export type FormNodePointer = string | Management.FormEndingNodeId;
 
-export type FormNodeTypeFlowConst = "FLOW";
+export const FormNodeTypeFlowConst = {
+    Flow: "FLOW",
+} as const;
+export type FormNodeTypeFlowConst = (typeof FormNodeTypeFlowConst)[keyof typeof FormNodeTypeFlowConst];
 
-export type FormNodeTypeRouterConst = "ROUTER";
+export const FormNodeTypeRouterConst = {
+    Router: "ROUTER",
+} as const;
+export type FormNodeTypeRouterConst = (typeof FormNodeTypeRouterConst)[keyof typeof FormNodeTypeRouterConst];
 
-export type FormNodeTypeStepConst = "STEP";
+export const FormNodeTypeStepConst = {
+    Step: "STEP",
+} as const;
+export type FormNodeTypeStepConst = (typeof FormNodeTypeStepConst)[keyof typeof FormNodeTypeStepConst];
 
 export interface FormRouter {
     id: string;
@@ -11240,11 +13579,23 @@ export interface FormWidgetRecaptchaConfig {
     secret_key: string;
 }
 
-export type FormWidgetTypeAuth0VerifiableCredentialsConst = "AUTH0_VERIFIABLE_CREDENTIALS";
+export const FormWidgetTypeAuth0VerifiableCredentialsConst = {
+    Auth0VerifiableCredentials: "AUTH0_VERIFIABLE_CREDENTIALS",
+} as const;
+export type FormWidgetTypeAuth0VerifiableCredentialsConst =
+    (typeof FormWidgetTypeAuth0VerifiableCredentialsConst)[keyof typeof FormWidgetTypeAuth0VerifiableCredentialsConst];
 
-export type FormWidgetTypeGMapsAddressConst = "GMAPS_ADDRESS";
+export const FormWidgetTypeGMapsAddressConst = {
+    GmapsAddress: "GMAPS_ADDRESS",
+} as const;
+export type FormWidgetTypeGMapsAddressConst =
+    (typeof FormWidgetTypeGMapsAddressConst)[keyof typeof FormWidgetTypeGMapsAddressConst];
 
-export type FormWidgetTypeRecaptchaConst = "RECAPTCHA";
+export const FormWidgetTypeRecaptchaConst = {
+    Recaptcha: "RECAPTCHA",
+} as const;
+export type FormWidgetTypeRecaptchaConst =
+    (typeof FormWidgetTypeRecaptchaConst)[keyof typeof FormWidgetTypeRecaptchaConst];
 
 export const FormsRequestParametersHydrateEnum = {
     FlowCount: "flow_count",
@@ -11266,6 +13617,74 @@ export interface GetActionExecutionResponseContent {
     created_at?: string;
     /** The time that the exeution finished executing. */
     updated_at?: string;
+}
+
+export interface GetActionModuleActionsResponseContent {
+    /** A list of action references. */
+    actions?: Management.ActionModuleAction[];
+    /** The total number of actions using this module. */
+    total?: number;
+    /** The page index of the returned results. */
+    page?: number;
+    /** The number of results requested per page. */
+    per_page?: number;
+}
+
+export interface GetActionModuleResponseContent {
+    /** The unique ID of the module. */
+    id?: string;
+    /** The name of the module. */
+    name?: string;
+    /** The source code from the module's draft version. */
+    code?: string;
+    /** The npm dependencies from the module's draft version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The secrets from the module's draft version (names and timestamps only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** The number of deployed actions using this module. */
+    actions_using_module_total?: number;
+    /** Whether all draft changes have been published as a version. */
+    all_changes_published?: boolean;
+    /** The version number of the latest published version. Omitted if no versions have been published. */
+    latest_version_number?: number;
+    /** Timestamp when the module was created. */
+    created_at?: string;
+    /** Timestamp when the module was last updated. */
+    updated_at?: string;
+    latest_version?: Management.ActionModuleVersionReference;
+}
+
+export interface GetActionModuleVersionResponseContent {
+    /** The unique ID for this version. */
+    id?: string;
+    /** The ID of the parent module. */
+    module_id?: string;
+    /** The sequential version number. */
+    version_number?: number;
+    /** The exact source code that was published with this version. */
+    code?: string;
+    /** Secrets available to this version (name and updated_at only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** Dependencies locked to this version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The timestamp when this version was created. */
+    created_at?: string;
+}
+
+export interface GetActionModuleVersionsResponseContent {
+    /** A list of ActionsModuleVersion objects. */
+    versions?: Management.ActionModuleVersion[];
+}
+
+export interface GetActionModulesResponseContent {
+    /** A list of ActionsModule objects. */
+    modules?: Management.ActionModuleListItem[];
+    /** The total number of modules in the tenant. */
+    total?: number;
+    /** The page index of the returned results. */
+    page?: number;
+    /** The number of results requested per page. */
+    per_page?: number;
 }
 
 export interface GetActionResponseContent {
@@ -11516,6 +13935,27 @@ export interface GetClientCredentialResponseContent {
     [key: string]: any;
 }
 
+export interface GetClientGrantResponseContent {
+    /** ID of the client grant. */
+    id?: string;
+    /** ID of the client. */
+    client_id?: string;
+    /** The audience (API identifier) of this client grant. */
+    audience?: string;
+    /** Scopes allowed for this client grant. */
+    scope?: string[];
+    organization_usage?: Management.ClientGrantOrganizationUsageEnum;
+    /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
+    allow_any_organization?: boolean;
+    /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
+    is_system?: boolean;
+    subject_type?: Management.ClientGrantSubjectTypeEnum;
+    /** Types of authorization_details allowed for this client grant. */
+    authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean;
+}
+
 export interface GetClientResponseContent {
     /** ID of this client. */
     client_id?: string;
@@ -11680,6 +14120,8 @@ export interface GetCustomDomainResponseContent {
     tls_policy?: string;
     domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string;
 }
 
 /**
@@ -12165,7 +14607,7 @@ export interface GetOrganizationDiscoveryDomainByNameResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
@@ -12179,7 +14621,7 @@ export interface GetOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
@@ -12290,7 +14732,7 @@ export interface GetResourceServerResponseContent {
     enforce_policies?: boolean;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -12916,10 +15358,12 @@ export const IdentityProviderEnum = {
 } as const;
 export type IdentityProviderEnum = (typeof IdentityProviderEnum)[keyof typeof IdentityProviderEnum];
 
-/**
- * Identity provider name of the identity. Only `auth0` is supported
- */
-export type IdentityProviderOnlyAuth0Enum = "auth0";
+/** Identity provider name of the identity. Only `auth0` is supported */
+export const IdentityProviderOnlyAuth0Enum = {
+    Auth0: "auth0",
+} as const;
+export type IdentityProviderOnlyAuth0Enum =
+    (typeof IdentityProviderOnlyAuth0Enum)[keyof typeof IdentityProviderOnlyAuth0Enum];
 
 /**
  * Encryption key
@@ -13197,6 +15641,13 @@ export interface ListDeviceCredentialsOffsetPaginatedResponseContent {
     limit?: number;
     total?: number;
     device_credentials?: Management.DeviceCredential[];
+}
+
+export interface ListDirectoryProvisioningsResponseContent {
+    /** List of directory provisioning configurations */
+    directory_provisionings: Management.DirectoryProvisioning[];
+    /** The cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string;
 }
 
 export interface ListEncryptionKeyOffsetPaginatedResponseContent {
@@ -13543,9 +15994,9 @@ export interface LogLocationInfo {
     /** Full city name in English. */
     city_name?: string;
     /** Global latitude (horizontal) position. */
-    latitude?: string;
+    latitude?: number;
     /** Global longitude (vertical) position. */
-    longitude?: string;
+    longitude?: number;
     /** Time zone name as found in the <a href="https://www.iana.org/time-zones">tz database</a>. */
     time_zone?: string;
     /** Continent the country is located within. Can be `AF` (Africa), `AN` (Antarctica), `AS` (Asia), `EU` (Europe), `NA` (North America), `OC` (Oceania) or `SA` (South America). */
@@ -13566,7 +16017,10 @@ export interface LogSecurityContext {
     [key: string]: any;
 }
 
-export type LogStreamDatadogEnum = "datadog";
+export const LogStreamDatadogEnum = {
+    Datadog: "datadog",
+} as const;
+export type LogStreamDatadogEnum = (typeof LogStreamDatadogEnum)[keyof typeof LogStreamDatadogEnum];
 
 /** Datadog region */
 export const LogStreamDatadogRegionEnum = {
@@ -13600,7 +16054,10 @@ export interface LogStreamDatadogSink {
     datadogRegion: Management.LogStreamDatadogRegionEnum;
 }
 
-export type LogStreamEventBridgeEnum = "eventbridge";
+export const LogStreamEventBridgeEnum = {
+    Eventbridge: "eventbridge",
+} as const;
+export type LogStreamEventBridgeEnum = (typeof LogStreamEventBridgeEnum)[keyof typeof LogStreamEventBridgeEnum];
 
 export interface LogStreamEventBridgeResponseSchema {
     /** The id of the log stream */
@@ -13669,7 +16126,10 @@ export const LogStreamEventBridgeSinkRegionEnum = {
 export type LogStreamEventBridgeSinkRegionEnum =
     (typeof LogStreamEventBridgeSinkRegionEnum)[keyof typeof LogStreamEventBridgeSinkRegionEnum];
 
-export type LogStreamEventGridEnum = "eventgrid";
+export const LogStreamEventGridEnum = {
+    Eventgrid: "eventgrid",
+} as const;
+export type LogStreamEventGridEnum = (typeof LogStreamEventGridEnum)[keyof typeof LogStreamEventGridEnum];
 
 /** Azure Region Name */
 export const LogStreamEventGridRegionEnum = {
@@ -13771,10 +16231,11 @@ export const LogStreamFilterGroupNameEnum = {
 export type LogStreamFilterGroupNameEnum =
     (typeof LogStreamFilterGroupNameEnum)[keyof typeof LogStreamFilterGroupNameEnum];
 
-/**
- * Filter type. Currently `category` is the only valid type.
- */
-export type LogStreamFilterTypeEnum = "category";
+/** Filter type. Currently `category` is the only valid type. */
+export const LogStreamFilterTypeEnum = {
+    Category: "category",
+} as const;
+export type LogStreamFilterTypeEnum = (typeof LogStreamFilterTypeEnum)[keyof typeof LogStreamFilterTypeEnum];
 
 /** HTTP JSON format */
 export const LogStreamHttpContentFormatEnum = {
@@ -13785,7 +16246,10 @@ export const LogStreamHttpContentFormatEnum = {
 export type LogStreamHttpContentFormatEnum =
     (typeof LogStreamHttpContentFormatEnum)[keyof typeof LogStreamHttpContentFormatEnum];
 
-export type LogStreamHttpEnum = "http";
+export const LogStreamHttpEnum = {
+    Http: "http",
+} as const;
+export type LogStreamHttpEnum = (typeof LogStreamHttpEnum)[keyof typeof LogStreamHttpEnum];
 
 export interface LogStreamHttpResponseSchema {
     /** The id of the log stream */
@@ -13816,7 +16280,10 @@ export interface LogStreamHttpSink {
     httpCustomHeaders?: Management.HttpCustomHeader[];
 }
 
-export type LogStreamMixpanelEnum = "mixpanel";
+export const LogStreamMixpanelEnum = {
+    Mixpanel: "mixpanel",
+} as const;
+export type LogStreamMixpanelEnum = (typeof LogStreamMixpanelEnum)[keyof typeof LogStreamMixpanelEnum];
 
 /** Mixpanel Region */
 export const LogStreamMixpanelRegionEnum = {
@@ -13863,7 +16330,10 @@ export interface LogStreamMixpanelSinkPatch {
     mixpanelServiceAccountPassword?: string;
 }
 
-export type LogStreamPiiAlgorithmEnum = "xxhash";
+export const LogStreamPiiAlgorithmEnum = {
+    Xxhash: "xxhash",
+} as const;
+export type LogStreamPiiAlgorithmEnum = (typeof LogStreamPiiAlgorithmEnum)[keyof typeof LogStreamPiiAlgorithmEnum];
 
 export interface LogStreamPiiConfig {
     log_fields: Management.LogStreamPiiLogFieldsEnum[];
@@ -13897,7 +16367,10 @@ export type LogStreamResponseSchema =
     | Management.LogStreamSegmentResponseSchema
     | Management.LogStreamMixpanelResponseSchema;
 
-export type LogStreamSegmentEnum = "segment";
+export const LogStreamSegmentEnum = {
+    Segment: "segment",
+} as const;
+export type LogStreamSegmentEnum = (typeof LogStreamSegmentEnum)[keyof typeof LogStreamSegmentEnum];
 
 export interface LogStreamSegmentResponseSchema {
     /** The id of the log stream */
@@ -13934,7 +16407,10 @@ export type LogStreamSinkPatch =
     | Management.LogStreamSegmentSink
     | Management.LogStreamMixpanelSinkPatch;
 
-export type LogStreamSplunkEnum = "splunk";
+export const LogStreamSplunkEnum = {
+    Splunk: "splunk",
+} as const;
+export type LogStreamSplunkEnum = (typeof LogStreamSplunkEnum)[keyof typeof LogStreamSplunkEnum];
 
 export interface LogStreamSplunkResponseSchema {
     /** The id of the log stream */
@@ -13972,7 +16448,10 @@ export const LogStreamStatusEnum = {
 } as const;
 export type LogStreamStatusEnum = (typeof LogStreamStatusEnum)[keyof typeof LogStreamStatusEnum];
 
-export type LogStreamSumoEnum = "sumo";
+export const LogStreamSumoEnum = {
+    Sumo: "sumo",
+} as const;
+export type LogStreamSumoEnum = (typeof LogStreamSumoEnum)[keyof typeof LogStreamSumoEnum];
 
 export interface LogStreamSumoResponseSchema {
     /** The id of the log stream */
@@ -14242,7 +16721,7 @@ export interface OrganizationDiscoveryDomain {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
@@ -14416,10 +16895,11 @@ export interface PhoneAttribute {
     signup?: Management.SignupVerified;
 }
 
-/**
- * This depicts the type of notifications this provider can receive.
- */
-export type PhoneProviderChannelEnum = "phone";
+/** This depicts the type of notifications this provider can receive. */
+export const PhoneProviderChannelEnum = {
+    Phone: "phone",
+} as const;
+export type PhoneProviderChannelEnum = (typeof PhoneProviderChannelEnum)[keyof typeof PhoneProviderChannelEnum];
 
 export type PhoneProviderConfiguration =
     | Management.TwilioProviderConfiguration
@@ -14678,10 +17158,12 @@ export const PublicKeyCredentialAlgorithmEnum = {
 export type PublicKeyCredentialAlgorithmEnum =
     (typeof PublicKeyCredentialAlgorithmEnum)[keyof typeof PublicKeyCredentialAlgorithmEnum];
 
-/**
- * Credential type. Supported types: public_key.
- */
-export type PublicKeyCredentialTypeEnum = "public_key";
+/** Credential type. Supported types: public_key. */
+export const PublicKeyCredentialTypeEnum = {
+    PublicKey: "public_key",
+} as const;
+export type PublicKeyCredentialTypeEnum =
+    (typeof PublicKeyCredentialTypeEnum)[keyof typeof PublicKeyCredentialTypeEnum];
 
 export type RefreshTokenDate =
     /**
@@ -14816,7 +17298,7 @@ export interface ResourceServer {
     enforce_policies?: boolean;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -14824,7 +17306,11 @@ export interface ResourceServer {
     client_id?: string;
 }
 
-export type ResourceServerConsentPolicyEnum = ("transactional-authorization-with-mfa" | null) | undefined;
+export const ResourceServerConsentPolicyEnum = {
+    TransactionalAuthorizationWithMfa: "transactional-authorization-with-mfa",
+} as const;
+export type ResourceServerConsentPolicyEnum =
+    (typeof ResourceServerConsentPolicyEnum)[keyof typeof ResourceServerConsentPolicyEnum];
 
 /**
  * Proof-of-Possession configuration for access tokens
@@ -14851,7 +17337,7 @@ export interface ResourceServerScope {
 }
 
 /**
- * Defines application access permission for a resource server. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href="https://www.okta.com/legal/"> Master Subscription Agreement.</a>
+ * Defines application access permission for a resource server
  */
 export interface ResourceServerSubjectTypeAuthorization {
     user?: Management.ResourceServerSubjectTypeAuthorizationUser;
@@ -14927,10 +17413,12 @@ export const ResourceServerTokenEncryptionAlgorithmEnum = {
 export type ResourceServerTokenEncryptionAlgorithmEnum =
     (typeof ResourceServerTokenEncryptionAlgorithmEnum)[keyof typeof ResourceServerTokenEncryptionAlgorithmEnum];
 
-/**
- * Format of the encrypted JWT payload.
- */
-export type ResourceServerTokenEncryptionFormatEnum = "compact-nested-jwe";
+/** Format of the encrypted JWT payload. */
+export const ResourceServerTokenEncryptionFormatEnum = {
+    CompactNestedJwe: "compact-nested-jwe",
+} as const;
+export type ResourceServerTokenEncryptionFormatEnum =
+    (typeof ResourceServerTokenEncryptionFormatEnum)[keyof typeof ResourceServerTokenEncryptionFormatEnum];
 
 export interface ResourceServerTokenEncryptionKey {
     /** Name of the encryption key. */
@@ -14974,6 +17462,30 @@ export interface RoleUser {
     name?: string;
     /** Email address of this user. */
     email?: string;
+}
+
+export interface RollbackActionModuleResponseContent {
+    /** The unique ID of the module. */
+    id?: string;
+    /** The name of the module. */
+    name?: string;
+    /** The source code from the module's draft version. */
+    code?: string;
+    /** The npm dependencies from the module's draft version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The secrets from the module's draft version (names and timestamps only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** The number of deployed actions using this module. */
+    actions_using_module_total?: number;
+    /** Whether all draft changes have been published as a version. */
+    all_changes_published?: boolean;
+    /** The version number of the latest published version. Omitted if no versions have been published. */
+    latest_version_number?: number;
+    /** Timestamp when the module was created. */
+    created_at?: string;
+    /** Timestamp when the module was last updated. */
+    updated_at?: string;
+    latest_version?: Management.ActionModuleVersionReference;
 }
 
 export interface RotateClientSecretResponseContent {
@@ -15310,15 +17822,19 @@ export interface SelfServiceProfileBrandingProperties {
     [key: string]: any;
 }
 
-/**
- * The language of the custom text.
- */
-export type SelfServiceProfileCustomTextLanguageEnum = "en";
+/** The language of the custom text. */
+export const SelfServiceProfileCustomTextLanguageEnum = {
+    En: "en",
+} as const;
+export type SelfServiceProfileCustomTextLanguageEnum =
+    (typeof SelfServiceProfileCustomTextLanguageEnum)[keyof typeof SelfServiceProfileCustomTextLanguageEnum];
 
-/**
- * The page where the custom text is shown.
- */
-export type SelfServiceProfileCustomTextPageEnum = "get-started";
+/** The page where the custom text is shown. */
+export const SelfServiceProfileCustomTextPageEnum = {
+    GetStarted: "get-started",
+} as const;
+export type SelfServiceProfileCustomTextPageEnum =
+    (typeof SelfServiceProfileCustomTextPageEnum)[keyof typeof SelfServiceProfileCustomTextPageEnum];
 
 /**
  * The description of the self-service Profile.
@@ -16140,10 +18656,12 @@ export interface TokenExchangeProfileResponseContent {
     [key: string]: any;
 }
 
-/**
- * The type of the profile, which controls how the profile will be executed when receiving a token exchange request.
- */
-export type TokenExchangeProfileTypeEnum = "custom_authentication";
+/** The type of the profile, which controls how the profile will be executed when receiving a token exchange request. */
+export const TokenExchangeProfileTypeEnum = {
+    CustomAuthentication: "custom_authentication",
+} as const;
+export type TokenExchangeProfileTypeEnum =
+    (typeof TokenExchangeProfileTypeEnum)[keyof typeof TokenExchangeProfileTypeEnum];
 
 export interface TokenQuota {
     client_credentials: Management.TokenQuotaClientCredentials;
@@ -16195,6 +18713,30 @@ export type UniversalLoginExperienceEnum =
 
 export interface UpdateActionBindingsResponseContent {
     bindings?: Management.ActionBinding[];
+}
+
+export interface UpdateActionModuleResponseContent {
+    /** The unique ID of the module. */
+    id?: string;
+    /** The name of the module. */
+    name?: string;
+    /** The source code from the module's draft version. */
+    code?: string;
+    /** The npm dependencies from the module's draft version. */
+    dependencies?: Management.ActionModuleDependency[];
+    /** The secrets from the module's draft version (names and timestamps only, values never returned). */
+    secrets?: Management.ActionModuleSecret[];
+    /** The number of deployed actions using this module. */
+    actions_using_module_total?: number;
+    /** Whether all draft changes have been published as a version. */
+    all_changes_published?: boolean;
+    /** The version number of the latest published version. Omitted if no versions have been published. */
+    latest_version_number?: number;
+    /** Timestamp when the module was created. */
+    created_at?: string;
+    /** Timestamp when the module was last updated. */
+    updated_at?: string;
+    latest_version?: Management.ActionModuleVersionReference;
 }
 
 export interface UpdateActionResponseContent {
@@ -16413,8 +18955,10 @@ export interface UpdateClientGrantResponseContent {
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean;
     subject_type?: Management.ClientGrantSubjectTypeEnum;
-    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** Types of authorization_details allowed for this client grant. */
     authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean;
 }
 
 export interface UpdateClientResponseContent {
@@ -16603,7 +19147,7 @@ export interface UpdateConnectionRequestContentApple extends Management.Connecti
  */
 export interface UpdateConnectionRequestContentAuth0 extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealmsAuth0;
+    realms?: Management.ConnectionRealms;
 }
 
 /**
@@ -16695,7 +19239,7 @@ export interface UpdateConnectionRequestContentEvernote extends Management.Conne
  * Update a connection with strategy=evernote-sandbox
  */
 export interface UpdateConnectionRequestContentEvernoteSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsEvernoteSandbox;
+    options?: Management.ConnectionOptionsEvernote;
 }
 
 /**
@@ -16833,7 +19377,7 @@ export interface UpdateConnectionRequestContentPaypal extends Management.Connect
  * Update a connection with strategy=paypal-sandbox
  */
 export interface UpdateConnectionRequestContentPaypalSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPaypalSandbox;
+    options?: Management.ConnectionOptionsPaypal;
 }
 
 /**
@@ -16884,14 +19428,14 @@ export interface UpdateConnectionRequestContentSalesforce extends Management.Con
  * Update a connection with strategy=salesforce-community
  */
 export interface UpdateConnectionRequestContentSalesforceCommunity extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforceCommunity;
+    options?: Management.ConnectionOptionsSalesforce;
 }
 
 /**
  * Update a connection with strategy=salesforce-sandbox
  */
 export interface UpdateConnectionRequestContentSalesforceSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforceSandbox;
+    options?: Management.ConnectionOptionsSalesforce;
 }
 
 /**
@@ -16921,20 +19465,6 @@ export interface UpdateConnectionRequestContentShopify extends Management.Connec
  */
 export interface UpdateConnectionRequestContentSoundcloud extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsSoundcloud;
-}
-
-/**
- * Update a connection with strategy=thecity
- */
-export interface UpdateConnectionRequestContentTheCity extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsTheCity;
-}
-
-/**
- * Update a connection with strategy=thecity-sandbox
- */
-export interface UpdateConnectionRequestContentTheCitySandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsTheCitySandbox;
 }
 
 /**
@@ -17048,6 +19578,8 @@ export interface UpdateCustomDomainResponseContent {
     tls_policy?: string;
     domain_metadata?: Management.DomainMetadata;
     certificate?: Management.DomainCertificate;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string;
 }
 
 export interface UpdateDirectoryProvisioningRequestContent {
@@ -17275,7 +19807,7 @@ export interface UpdateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
@@ -17356,7 +19888,7 @@ export interface UpdateResourceServerResponseContent {
     enforce_policies?: boolean;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -17787,10 +20319,12 @@ export interface UserAttributeProfileUserId {
     strategy_overrides?: Management.UserAttributeProfileStrategyOverridesUserId;
 }
 
-/**
- * OIDC mapping for user ID
- */
-export type UserAttributeProfileUserIdOidcMappingEnum = "sub";
+/** OIDC mapping for user ID */
+export const UserAttributeProfileUserIdOidcMappingEnum = {
+    Sub: "sub",
+} as const;
+export type UserAttributeProfileUserIdOidcMappingEnum =
+    (typeof UserAttributeProfileUserIdOidcMappingEnum)[keyof typeof UserAttributeProfileUserIdOidcMappingEnum];
 
 /** OIDC mapping override for this strategy */
 export const UserAttributeProfileUserIdOidcStrategyOverrideMapping = {
@@ -18233,4 +20767,8 @@ export interface X509CertificateCredential {
     pem: string;
 }
 
-export type X509CertificateCredentialTypeEnum = "x509_cert";
+export const X509CertificateCredentialTypeEnum = {
+    X509Cert: "x509_cert",
+} as const;
+export type X509CertificateCredentialTypeEnum =
+    (typeof X509CertificateCredentialTypeEnum)[keyof typeof X509CertificateCredentialTypeEnum];

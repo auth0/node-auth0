@@ -22,6 +22,7 @@ describe("ClientGrantsClient", () => {
                     is_system: true,
                     subject_type: "client",
                     authorization_details_types: ["authorization_details_types"],
+                    allow_all_scopes: true,
                 },
             ],
         };
@@ -46,6 +47,7 @@ describe("ClientGrantsClient", () => {
                     is_system: true,
                     subject_type: "client",
                     authorization_details_types: ["authorization_details_types"],
+                    allow_all_scopes: true,
                 },
             ],
         };
@@ -132,6 +134,7 @@ describe("ClientGrantsClient", () => {
             is_system: true,
             subject_type: "client",
             authorization_details_types: ["authorization_details_types"],
+            allow_all_scopes: true,
         };
         server
             .mockEndpoint()
@@ -156,6 +159,7 @@ describe("ClientGrantsClient", () => {
             is_system: true,
             subject_type: "client",
             authorization_details_types: ["authorization_details_types"],
+            allow_all_scopes: true,
         });
     });
 
@@ -291,6 +295,87 @@ describe("ClientGrantsClient", () => {
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
+    test("get (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            id: "id",
+            client_id: "client_id",
+            audience: "audience",
+            scope: ["scope"],
+            organization_usage: "deny",
+            allow_any_organization: true,
+            is_system: true,
+            subject_type: "client",
+            authorization_details_types: ["authorization_details_types"],
+            allow_all_scopes: true,
+        };
+        server.mockEndpoint().get("/client-grants/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const response = await client.clientGrants.get("id");
+        expect(response).toEqual({
+            id: "id",
+            client_id: "client_id",
+            audience: "audience",
+            scope: ["scope"],
+            organization_usage: "deny",
+            allow_any_organization: true,
+            is_system: true,
+            subject_type: "client",
+            authorization_details_types: ["authorization_details_types"],
+            allow_all_scopes: true,
+        });
+    });
+
+    test("get (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/client-grants/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clientGrants.get("id");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("get (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/client-grants/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clientGrants.get("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/client-grants/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clientGrants.get("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("get (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/client-grants/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.clientGrants.get("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
@@ -387,6 +472,7 @@ describe("ClientGrantsClient", () => {
             is_system: true,
             subject_type: "client",
             authorization_details_types: ["authorization_details_types"],
+            allow_all_scopes: true,
         };
         server
             .mockEndpoint()
@@ -408,6 +494,7 @@ describe("ClientGrantsClient", () => {
             is_system: true,
             subject_type: "client",
             authorization_details_types: ["authorization_details_types"],
+            allow_all_scopes: true,
         });
     });
 

@@ -29,6 +29,115 @@ export class DirectoryProvisioningClient {
     }
 
     /**
+     * Retrieve a list of directory provisioning configurations of a tenant.
+     *
+     * @param {Management.ListDirectoryProvisioningsRequestParameters} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.list({
+     *         from: "from",
+     *         take: 1
+     *     })
+     */
+    public async list(
+        request: Management.ListDirectoryProvisioningsRequestParameters = {},
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.Page<Management.DirectoryProvisioning, Management.ListDirectoryProvisioningsResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.ListDirectoryProvisioningsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListDirectoryProvisioningsResponseContent>> => {
+                const { from: from_, take = 50 } = request;
+                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+                if (from_ !== undefined) {
+                    _queryParams["from"] = from_;
+                }
+                if (take !== undefined) {
+                    _queryParams["take"] = take?.toString() ?? null;
+                }
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "connections-directory-provisionings",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.ListDirectoryProvisioningsResponseContent,
+                        rawResponse: _response.rawResponse,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(
+                    _response.error,
+                    _response.rawResponse,
+                    "GET",
+                    "/connections-directory-provisionings",
+                );
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.DirectoryProvisioning, Management.ListDirectoryProvisioningsResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.directory_provisionings ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
+    }
+
+    /**
      * Retrieve the directory provisioning configuration of a connection.
      *
      * @param {string} id - The id of the connection to retrieve its directory provisioning configuration

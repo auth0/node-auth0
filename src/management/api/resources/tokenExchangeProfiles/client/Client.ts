@@ -164,7 +164,8 @@ export class TokenExchangeProfilesClient {
      *     await client.tokenExchangeProfiles.create({
      *         name: "name",
      *         subject_token_type: "subject_token_type",
-     *         action_id: "action_id"
+     *         action_id: "action_id",
+     *         type: "custom_authentication"
      *     })
      */
     public create(
@@ -196,7 +197,7 @@ export class TokenExchangeProfilesClient {
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
-            body: { ...request, type: "custom_authentication" },
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
