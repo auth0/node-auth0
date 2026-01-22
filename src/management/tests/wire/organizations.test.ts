@@ -53,13 +53,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();
@@ -71,13 +65,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();
@@ -89,13 +77,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();
@@ -107,13 +89,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();

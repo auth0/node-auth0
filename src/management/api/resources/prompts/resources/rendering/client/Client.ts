@@ -49,7 +49,7 @@ export class RenderingClient {
     public async list(
         request: Management.ListAculsRequestParameters = {},
         requestOptions?: RenderingClient.RequestOptions,
-    ): Promise<core.Page<Management.ListAculsResponseContentItem, Management.ListAculsOffsetPaginatedResponseContent>> {
+    ): Promise<core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
                 request: Management.ListAculsRequestParameters,
@@ -64,31 +64,16 @@ export class RenderingClient {
                     screen,
                     rendering_mode: renderingMode,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (prompt !== undefined) {
-                    _queryParams["prompt"] = prompt;
-                }
-                if (screen !== undefined) {
-                    _queryParams["screen"] = screen;
-                }
-                if (renderingMode !== undefined) {
-                    _queryParams["rendering_mode"] = renderingMode;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    fields,
+                    include_fields: includeFields,
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    prompt,
+                    screen,
+                    rendering_mode: renderingMode !== undefined ? renderingMode : undefined,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -154,10 +139,7 @@ export class RenderingClient {
         );
         let _offset = request?.page != null ? request?.page : 0;
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Page<
-            Management.ListAculsResponseContentItem,
-            Management.ListAculsOffsetPaginatedResponseContent
-        >({
+        return new core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) => (response?.configs ?? []).length >= Math.floor(request?.per_page ?? 50),

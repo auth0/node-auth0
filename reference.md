@@ -2,7 +2,7 @@
 
 ## Actions
 
-<details><summary><code>client.actions.<a href="/src/management/api/resources/actions/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Action, Management.ListActionsPaginatedResponseContent></code></summary>
+<details><summary><code>client.actions.<a href="/src/management/api/resources/actions/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Action, Management.ListActionsPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -628,7 +628,7 @@ await client.branding.update();
 
 ## ClientGrants
 
-<details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ClientGrantResponseContent, Management.ListClientGrantPaginatedResponseContent></code></summary>
+<details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.ClientGrantResponseContent, Management.ListClientGrantPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -919,7 +919,7 @@ await client.clientGrants.update("id");
 
 ## Clients
 
-<details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Client, Management.ListClientsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Client, Management.ListClientsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -1438,7 +1438,7 @@ await client.clients.rotateSecret("id");
 
 ## ConnectionProfiles
 
-<details><summary><code>client.connectionProfiles.<a href="/src/management/api/resources/connectionProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ConnectionProfile, Management.ListConnectionProfilesPaginatedResponseContent></code></summary>
+<details><summary><code>client.connectionProfiles.<a href="/src/management/api/resources/connectionProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.ConnectionProfile, Management.ListConnectionProfilesPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -1901,7 +1901,7 @@ await client.connectionProfiles.update("id");
 
 ## Connections
 
-<details><summary><code>client.connections.<a href="/src/management/api/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ConnectionForList, Management.ListConnectionsCheckpointPaginatedResponseContent></code></summary>
+<details><summary><code>client.connections.<a href="/src/management/api/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.ConnectionForList, Management.ListConnectionsCheckpointPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -2378,6 +2378,8 @@ Retrieve details on <a href="https://auth0.com/docs/custom-domains">custom domai
 
 ```typescript
 await client.customDomains.list({
+    take: 1,
+    from: "from",
     q: "q",
     fields: "fields",
     include_fields: true,
@@ -2846,7 +2848,7 @@ await client.customDomains.verify("id");
 
 ## DeviceCredentials
 
-<details><summary><code>client.deviceCredentials.<a href="/src/management/api/resources/deviceCredentials/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.DeviceCredential, Management.ListDeviceCredentialsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.deviceCredentials.<a href="/src/management/api/resources/deviceCredentials/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.DeviceCredential, Management.ListDeviceCredentialsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -3347,7 +3349,7 @@ await client.emailTemplates.update("verify_email");
 
 ## EventStreams
 
-<details><summary><code>client.eventStreams.<a href="/src/management/api/resources/eventStreams/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.EventStreamResponseContent, Management.ListEventStreamsResponseContent></code></summary>
+<details><summary><code>client.eventStreams.<a href="/src/management/api/resources/eventStreams/client/Client.ts">list</a>({ ...params }) -> Management.EventStreamResponseContent[]</code></summary>
 <dl>
 <dd>
 
@@ -3360,25 +3362,10 @@ await client.emailTemplates.update("verify_email");
 <dd>
 
 ```typescript
-const pageableResponse = await client.eventStreams.list({
+await client.eventStreams.list({
     from: "from",
     take: 1,
 });
-for await (const item of pageableResponse) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.eventStreams.list({
-    from: "from",
-    take: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-
-// You can also access the underlying response
-const response = page.response;
 ```
 
 </dd>
@@ -3684,7 +3671,7 @@ await client.eventStreams.test("id", {
 
 ## Flows
 
-<details><summary><code>client.flows.<a href="/src/management/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.flows.<a href="/src/management/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -3966,7 +3953,7 @@ await client.flows.update("id");
 
 ## Forms
 
-<details><summary><code>client.forms.<a href="/src/management/api/resources/forms/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.forms.<a href="/src/management/api/resources/forms/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -4246,7 +4233,7 @@ await client.forms.update("id");
 
 ## UserGrants
 
-<details><summary><code>client.userGrants.<a href="/src/management/api/resources/userGrants/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserGrant, Management.ListUserGrantsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.userGrants.<a href="/src/management/api/resources/userGrants/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.UserGrant, Management.ListUserGrantsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -4463,165 +4450,9 @@ await client.userGrants.delete("id");
 </dl>
 </details>
 
-## Groups
-
-<details><summary><code>client.groups.<a href="/src/management/api/resources/groups/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Group, Management.ListGroupsPaginatedResponseContent></code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all groups in your tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-const pageableResponse = await client.groups.list({
-    connection_id: "connection_id",
-    name: "name",
-    external_id: "external_id",
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-for await (const item of pageableResponse) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.groups.list({
-    connection_id: "connection_id",
-    name: "name",
-    external_id: "external_id",
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-
-// You can also access the underlying response
-const response = page.response;
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.ListGroupsRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `GroupsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.groups.<a href="/src/management/api/resources/groups/client/Client.ts">get</a>(id) -> Management.GetGroupResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a group by its ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.groups.get("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for the group (service-generated).
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `GroupsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 ## Hooks
 
-<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Hook, Management.ListHooksOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Hook, Management.ListHooksOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -5695,7 +5526,7 @@ await client.logStreams.update("id");
 
 ## Logs
 
-<details><summary><code>client.logs.<a href="/src/management/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Log, Management.ListLogOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.logs.<a href="/src/management/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Log, Management.ListLogOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -5879,7 +5710,7 @@ await client.logs.get("id");
 
 ## NetworkAcls
 
-<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.NetworkAclsResponseContent, Management.ListNetworkAclsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.networkAcls.<a href="/src/management/api/resources/networkAcls/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.NetworkAclsResponseContent, Management.ListNetworkAclsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -6311,7 +6142,7 @@ await client.networkAcls.update("id");
 
 ## Organizations
 
-<details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Organization, Management.ListOrganizationsPaginatedResponseContent></code></summary>
+<details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Organization, Management.ListOrganizationsPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -6989,80 +6820,9 @@ await client.refreshTokens.delete("id");
 </dl>
 </details>
 
-<details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateRefreshTokenResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update a refresh token by its ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.refreshTokens.update("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the refresh token to update.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateRefreshTokenRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `RefreshTokensClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 ## ResourceServers
 
-<details><summary><code>client.resourceServers.<a href="/src/management/api/resources/resourceServers/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.resourceServers.<a href="/src/management/api/resources/resourceServers/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -7421,7 +7181,7 @@ await client.resourceServers.update("id");
 
 ## Roles
 
-<details><summary><code>client.roles.<a href="/src/management/api/resources/roles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Role, Management.ListRolesOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.roles.<a href="/src/management/api/resources/roles/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Role, Management.ListRolesOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -7774,7 +7534,7 @@ await client.roles.update("id");
 
 ## Rules
 
-<details><summary><code>client.rules.<a href="/src/management/api/resources/rules/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Rule, Management.ListRulesOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.rules.<a href="/src/management/api/resources/rules/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Rule, Management.ListRulesOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -8336,7 +8096,7 @@ await client.rulesConfigs.delete("key");
 
 ## SelfServiceProfiles
 
-<details><summary><code>client.selfServiceProfiles.<a href="/src/management/api/resources/selfServiceProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.SelfServiceProfile, Management.ListSelfServiceProfilesPaginatedResponseContent></code></summary>
+<details><summary><code>client.selfServiceProfiles.<a href="/src/management/api/resources/selfServiceProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.SelfServiceProfile, Management.ListSelfServiceProfilesPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -9322,7 +9082,7 @@ await client.tickets.changePassword();
 
 ## TokenExchangeProfiles
 
-<details><summary><code>client.tokenExchangeProfiles.<a href="/src/management/api/resources/tokenExchangeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.TokenExchangeProfileResponseContent, Management.ListTokenExchangeProfileResponseContent></code></summary>
+<details><summary><code>client.tokenExchangeProfiles.<a href="/src/management/api/resources/tokenExchangeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.TokenExchangeProfileResponseContent, Management.ListTokenExchangeProfileResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -9688,7 +9448,7 @@ await client.tokenExchangeProfiles.update("id");
 
 ## UserAttributeProfiles
 
-<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserAttributeProfile, Management.ListUserAttributeProfilesPaginatedResponseContent></code></summary>
+<details><summary><code>client.userAttributeProfiles.<a href="/src/management/api/resources/userAttributeProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.UserAttributeProfile, Management.ListUserAttributeProfilesPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -10432,7 +10192,7 @@ await client.userBlocks.delete("id");
 
 ## Users
 
-<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.UserResponseSchema, Management.ListUsersOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.UserResponseSchema, Management.ListUsersOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -11095,7 +10855,7 @@ await client.users.revokeAccess("id");
 
 ## Actions Versions
 
-<details><summary><code>client.actions.versions.<a href="/src/management/api/resources/actions/resources/versions/client/Client.ts">list</a>(actionId, { ...params }) -> core.Page<Management.ActionVersion, Management.ListActionVersionsPaginatedResponseContent></code></summary>
+<details><summary><code>client.actions.versions.<a href="/src/management/api/resources/actions/resources/versions/client/Client.ts">list</a>(actionId, { ...params }) -> core.Page&lt;Management.ActionVersion, Management.ListActionVersionsPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -11458,7 +11218,7 @@ await client.actions.triggers.list();
 
 ## Actions Triggers Bindings
 
-<details><summary><code>client.actions.triggers.bindings.<a href="/src/management/api/resources/actions/resources/triggers/resources/bindings/client/Client.ts">list</a>(triggerId, { ...params }) -> core.Page<Management.ActionBinding, Management.ListActionBindingsPaginatedResponseContent></code></summary>
+<details><summary><code>client.actions.triggers.bindings.<a href="/src/management/api/resources/actions/resources/triggers/resources/bindings/client/Client.ts">list</a>(triggerId, { ...params }) -> core.Page&lt;Management.ActionBinding, Management.ListActionBindingsPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -13734,7 +13494,7 @@ await client.branding.phone.templates.test("id", {
 
 ## ClientGrants Organizations
 
-<details><summary><code>client.clientGrants.organizations.<a href="/src/management/api/resources/clientGrants/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Organization, Management.ListClientGrantOrganizationsPaginatedResponseContent></code></summary>
+<details><summary><code>client.clientGrants.organizations.<a href="/src/management/api/resources/clientGrants/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.Organization, Management.ListClientGrantOrganizationsPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -14206,7 +13966,7 @@ await client.clients.credentials.update("client_id", "credential_id");
 
 ## Clients Connections
 
-<details><summary><code>client.clients.connections.<a href="/src/management/api/resources/clients/resources/connections/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionForList, Management.ListClientConnectionsResponseContent></code></summary>
+<details><summary><code>client.clients.connections.<a href="/src/management/api/resources/clients/resources/connections/client/Client.ts">get</a>(id, { ...params }) -> core.Page&lt;Management.ConnectionForList, Management.ListClientConnectionsResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -14309,7 +14069,7 @@ const response = page.response;
 
 ## Connections Clients
 
-<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionEnabledClient, Management.GetConnectionEnabledClientsResponseContent></code></summary>
+<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">get</a>(id, { ...params }) -> core.Page&lt;Management.ConnectionEnabledClient, Management.GetConnectionEnabledClientsResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -16184,7 +15944,7 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 
 ## Flows Executions
 
-<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flow_id, { ...params }) -> core.Page<Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent></code></summary>
+<details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flow_id, { ...params }) -> core.Page&lt;Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -16380,7 +16140,7 @@ await client.flows.executions.delete("flow_id", "execution_id");
 
 ## Flows Vault Connections
 
-<details><summary><code>client.flows.vault.connections.<a href="/src/management/api/resources/flows/resources/vault/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.FlowsVaultConnectionSummary, Management.ListFlowsVaultConnectionsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.flows.vault.connections.<a href="/src/management/api/resources/flows/resources/vault/resources/connections/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.FlowsVaultConnectionSummary, Management.ListFlowsVaultConnectionsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -16646,101 +16406,6 @@ await client.flows.vault.connections.update("id");
 <dd>
 
 **requestOptions:** `ConnectionsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Groups Members
-
-<details><summary><code>client.groups.members.<a href="/src/management/api/resources/groups/resources/members/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.GroupMember, Management.GetGroupMembersResponseContent></code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all users that are a member of this group.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-const pageableResponse = await client.groups.members.get("id", {
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-for await (const item of pageableResponse) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.groups.members.get("id", {
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-
-// You can also access the underlying response
-const response = page.response;
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for the group (service-generated).
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.GetGroupMembersRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `MembersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -17750,7 +17415,7 @@ await client.guardian.factors.pushNotification.getApnsProvider();
 <dl>
 <dd>
 
-Overwrite all configuration details of the multi-factor authentication APNS provider associated with your tenant.
+Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
 
 </dd>
 </dl>
@@ -17766,7 +17431,7 @@ Overwrite all configuration details of the multi-factor authentication APNS prov
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.setApnsProvider();
+await client.guardian.factors.pushNotification.setApnsProvider({});
 ```
 
 </dd>
@@ -17801,69 +17466,6 @@ await client.guardian.factors.pushNotification.setApnsProvider();
 </dl>
 </details>
 
-<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateApnsProvider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationApnsResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Modify configuration details of the multi-factor authentication APNS provider associated with your tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.guardian.factors.pushNotification.updateApnsProvider();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateGuardianFactorsProviderPushNotificationApnsRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PushNotificationClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">setFcmProvider</a>({ ...params }) -> Management.SetGuardianFactorsProviderPushNotificationFcmResponseContent</code></summary>
 <dl>
 <dd>
@@ -17876,7 +17478,7 @@ await client.guardian.factors.pushNotification.updateApnsProvider();
 <dl>
 <dd>
 
-Overwrite all configuration details of the multi-factor authentication FCM provider associated with your tenant.
+Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
 
 </dd>
 </dl>
@@ -17892,7 +17494,7 @@ Overwrite all configuration details of the multi-factor authentication FCM provi
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.setFcmProvider();
+await client.guardian.factors.pushNotification.setFcmProvider({});
 ```
 
 </dd>
@@ -17927,133 +17529,7 @@ await client.guardian.factors.pushNotification.setFcmProvider();
 </dl>
 </details>
 
-<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateFcmProvider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationFcmResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Modify configuration details of the multi-factor authentication FCM provider associated with your tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.guardian.factors.pushNotification.updateFcmProvider();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateGuardianFactorsProviderPushNotificationFcmRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PushNotificationClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">setFcmv1Provider</a>({ ...params }) -> Management.SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Overwrite all configuration details of the multi-factor authentication FCMV1 provider associated with your tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.guardian.factors.pushNotification.setFcmv1Provider();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `PushNotificationClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.guardian.factors.pushNotification.<a href="/src/management/api/resources/guardian/resources/factors/resources/pushNotification/client/Client.ts">updateFcmv1Provider</a>({ ...params }) -> Management.UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent</code></summary>
 <dl>
 <dd>
 
@@ -18081,7 +17557,7 @@ Modify configuration details of the multi-factor authentication FCMV1 provider a
 <dd>
 
 ```typescript
-await client.guardian.factors.pushNotification.updateFcmv1Provider();
+await client.guardian.factors.pushNotification.setFcmv1Provider({});
 ```
 
 </dd>
@@ -18097,7 +17573,7 @@ await client.guardian.factors.pushNotification.updateFcmv1Provider();
 <dl>
 <dd>
 
-**request:** `Management.UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent`
+**request:** `Management.SetGuardianFactorsProviderPushNotificationFcmv1RequestContent`
 
 </dd>
 </dl>
@@ -19690,7 +19166,7 @@ await client.keys.customSigning.delete();
 
 ## Keys Encryption
 
-<details><summary><code>client.keys.encryption.<a href="/src/management/api/resources/keys/resources/encryption/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.EncryptionKey, Management.ListEncryptionKeyOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.keys.encryption.<a href="/src/management/api/resources/keys/resources/encryption/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.EncryptionKey, Management.ListEncryptionKeyOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -20395,7 +19871,7 @@ await client.keys.signing.revoke("kid");
 
 ## Organizations ClientGrants
 
-<details><summary><code>client.organizations.clientGrants.<a href="/src/management/api/resources/organizations/resources/clientGrants/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationClientGrant, Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.organizations.clientGrants.<a href="/src/management/api/resources/organizations/resources/clientGrants/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationClientGrant, Management.ListOrganizationClientGrantsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -20591,7 +20067,7 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 
 ## Organizations DiscoveryDomains
 
-<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationDiscoveryDomain, Management.ListOrganizationDiscoveryDomainsResponseContent></code></summary>
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationDiscoveryDomain, Management.ListOrganizationDiscoveryDomainsResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -20692,7 +20168,7 @@ const response = page.response;
 <dl>
 <dd>
 
-Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
 
 </dd>
 </dl>
@@ -20735,77 +20211,6 @@ await client.organizations.discoveryDomains.create("id", {
 <dd>
 
 **request:** `Management.CreateOrganizationDiscoveryDomainRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">getByName</a>(id, discovery_domain) -> Management.GetOrganizationDiscoveryDomainByNameResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a single organization discovery domain specified by domain name.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the organization.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**discovery_domain:** `string` — Domain name of the discovery domain.
 
 </dd>
 </dl>
@@ -20978,7 +20383,7 @@ await client.organizations.discoveryDomains.delete("id", "discovery_domain_id");
 <dl>
 <dd>
 
-Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+Update the verification status for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>.
 
 </dd>
 </dl>
@@ -21047,7 +20452,7 @@ await client.organizations.discoveryDomains.update("id", "discovery_domain_id");
 
 ## Organizations EnabledConnections
 
-<details><summary><code>client.organizations.enabledConnections.<a href="/src/management/api/resources/organizations/resources/enabledConnections/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationConnection, Management.ListOrganizationConnectionsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.organizations.enabledConnections.<a href="/src/management/api/resources/organizations/resources/enabledConnections/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationConnection, Management.ListOrganizationConnectionsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -21438,7 +20843,7 @@ await client.organizations.enabledConnections.update("id", "connectionId");
 
 ## Organizations Invitations
 
-<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationInvitation, Management.ListOrganizationInvitationsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.organizations.invitations.<a href="/src/management/api/resources/organizations/resources/invitations/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationInvitation, Management.ListOrganizationInvitationsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -21739,7 +21144,7 @@ await client.organizations.invitations.delete("id", "invitation_id");
 
 ## Organizations Members
 
-<details><summary><code>client.organizations.members.<a href="/src/management/api/resources/organizations/resources/members/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.OrganizationMember, Management.ListOrganizationMembersPaginatedResponseContent></code></summary>
+<details><summary><code>client.organizations.members.<a href="/src/management/api/resources/organizations/resources/members/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationMember, Management.ListOrganizationMembersPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -21988,7 +21393,7 @@ await client.organizations.members.delete("id", {
 
 ## Organizations Members Roles
 
-<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">list</a>(id, user_id, { ...params }) -> core.Page<Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.organizations.members.roles.<a href="/src/management/api/resources/organizations/resources/members/resources/roles/client/Client.ts">list</a>(id, user_id, { ...params }) -> core.Page&lt;Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -22257,7 +21662,7 @@ await client.organizations.members.roles.delete("id", "user_id", {
 
 ## Prompts Rendering
 
-<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ListAculsResponseContentItem, Management.ListAculsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -23108,7 +22513,7 @@ await client.riskAssessments.settings.newDevice.update({
 
 ## Roles Permissions
 
-<details><summary><code>client.roles.permissions.<a href="/src/management/api/resources/roles/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.PermissionsResponsePayload, Management.ListRolePermissionsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.roles.permissions.<a href="/src/management/api/resources/roles/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.PermissionsResponsePayload, Management.ListRolePermissionsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -23357,7 +22762,7 @@ await client.roles.permissions.delete("id", {
 
 ## Roles Users
 
-<details><summary><code>client.roles.users.<a href="/src/management/api/resources/roles/resources/users/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.RoleUser, Management.ListRoleUsersPaginatedResponseContent></code></summary>
+<details><summary><code>client.roles.users.<a href="/src/management/api/resources/roles/resources/users/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.RoleUser, Management.ListRoleUsersPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -23989,7 +23394,7 @@ await client.tenants.settings.update();
 
 ## Users AuthenticationMethods
 
-<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.UserAuthenticationMethod, Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.authenticationMethods.<a href="/src/management/api/resources/users/resources/authenticationMethods/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.UserAuthenticationMethod, Management.ListUserAuthenticationMethodsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -24566,7 +23971,7 @@ await client.users.authenticators.deleteAll("id");
 
 ## Users ConnectedAccounts
 
-<details><summary><code>client.users.connectedAccounts.<a href="/src/management/api/resources/users/resources/connectedAccounts/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.ConnectedAccount, Management.ListUserConnectedAccountsResponseContent></code></summary>
+<details><summary><code>client.users.connectedAccounts.<a href="/src/management/api/resources/users/resources/connectedAccounts/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.ConnectedAccount, Management.ListUserConnectedAccountsResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -24841,101 +24246,6 @@ await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
 </dl>
 </details>
 
-## Users Groups
-
-<details><summary><code>client.users.groups.<a href="/src/management/api/resources/users/resources/groups/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.UserGroupsResponseSchema, Management.GetUserGroupsPaginatedResponseContent></code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all groups to which this user belongs.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-const pageableResponse = await client.users.groups.get("id", {
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-for await (const item of pageableResponse) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.users.groups.get("id", {
-    fields: "fields",
-    include_fields: true,
-    from: "from",
-    take: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-
-// You can also access the underlying response
-const response = page.response;
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the user to list groups for.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.GetUserGroupsRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `GroupsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 ## Users Identities
 
 <details><summary><code>client.users.identities.<a href="/src/management/api/resources/users/resources/identities/client/Client.ts">link</a>(id, { ...params }) -> Management.UserIdentity[]</code></summary>
@@ -25118,7 +24428,7 @@ await client.users.identities.delete("id", "ad", "user_id");
 
 ## Users Logs
 
-<details><summary><code>client.users.logs.<a href="/src/management/api/resources/users/resources/logs/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Log, Management.UserListLogOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.logs.<a href="/src/management/api/resources/users/resources/logs/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.Log, Management.UserListLogOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -25355,7 +24665,7 @@ await client.users.multifactor.deleteProvider("id", "duo");
 
 ## Users Organizations
 
-<details><summary><code>client.users.organizations.<a href="/src/management/api/resources/users/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Organization, Management.ListUserOrganizationsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.organizations.<a href="/src/management/api/resources/users/resources/organizations/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.Organization, Management.ListUserOrganizationsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -25448,7 +24758,7 @@ const response = page.response;
 
 ## Users Permissions
 
-<details><summary><code>client.users.permissions.<a href="/src/management/api/resources/users/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.UserPermissionSchema, Management.ListUserPermissionsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.permissions.<a href="/src/management/api/resources/users/resources/permissions/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.UserPermissionSchema, Management.ListUserPermissionsOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -25773,7 +25083,7 @@ await client.users.riskAssessments.clear("id", {
 
 ## Users Roles
 
-<details><summary><code>client.users.roles.<a href="/src/management/api/resources/users/resources/roles/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.Role, Management.ListUserRolesOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.roles.<a href="/src/management/api/resources/users/resources/roles/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.Role, Management.ListUserRolesOffsetPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -26018,7 +25328,7 @@ await client.users.roles.delete("id", {
 
 ## Users RefreshToken
 
-<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">list</a>(user_id, { ...params }) -> core.Page<Management.RefreshTokenResponseContent, Management.ListRefreshTokensPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.refreshToken.<a href="/src/management/api/resources/users/resources/refreshToken/client/Client.ts">list</a>(user_id, { ...params }) -> core.Page&lt;Management.RefreshTokenResponseContent, Management.ListRefreshTokensPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -26172,7 +25482,7 @@ await client.users.refreshToken.delete("user_id");
 
 ## Users Sessions
 
-<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">list</a>(user_id, { ...params }) -> core.Page<Management.SessionResponseContent, Management.ListUserSessionsPaginatedResponseContent></code></summary>
+<details><summary><code>client.users.sessions.<a href="/src/management/api/resources/users/resources/sessions/client/Client.ts">list</a>(user_id, { ...params }) -> core.Page&lt;Management.SessionResponseContent, Management.ListUserSessionsPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -26326,7 +25636,7 @@ await client.users.sessions.delete("user_id");
 
 ## VerifiableCredentials Verification Templates
 
-<details><summary><code>client.verifiableCredentials.verification.templates.<a href="/src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.VerifiableCredentialTemplateResponse, Management.ListVerifiableCredentialTemplatesPaginatedResponseContent></code></summary>
+<details><summary><code>client.verifiableCredentials.verification.templates.<a href="/src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.VerifiableCredentialTemplateResponse, Management.ListVerifiableCredentialTemplatesPaginatedResponseContent&gt;</code></summary>
 <dl>
 <dd>
 

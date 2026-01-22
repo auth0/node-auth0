@@ -48,13 +48,10 @@ export class ExecutionsClient {
                 request: Management.ExecutionsListRequest,
             ): Promise<core.WithRawResponse<Management.ListFlowExecutionsPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -161,15 +158,9 @@ export class ExecutionsClient {
         requestOptions?: ExecutionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetFlowExecutionResponseContent>> {
         const { hydrate } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (hydrate !== undefined) {
-            if (Array.isArray(hydrate)) {
-                _queryParams["hydrate"] = hydrate.map((item) => item);
-            } else {
-                _queryParams["hydrate"] = hydrate;
-            }
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            hydrate: Array.isArray(hydrate) ? hydrate.map((item) => item) : hydrate !== undefined ? hydrate : undefined,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

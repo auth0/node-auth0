@@ -52,8 +52,6 @@ export interface CreateActionRequestContent {
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretRequest[];
-    /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
     /** True if the action should be deployed after creation. */
     deploy?: boolean;
 }
@@ -86,8 +84,6 @@ export interface UpdateActionRequestContent {
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretRequest[];
-    /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
 }
 
 /**
@@ -537,6 +533,8 @@ export interface UpdateConnectionRequestContent {
 /**
  * @example
  *     {
+ *         take: 1,
+ *         from: "from",
  *         q: "q",
  *         fields: "fields",
  *         include_fields: true,
@@ -544,6 +542,10 @@ export interface UpdateConnectionRequestContent {
  *     }
  */
 export interface ListCustomDomainsRequestParameters {
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
     /** Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>. */
     q?: string | null;
     /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
@@ -903,35 +905,6 @@ export interface DeleteUserGrantByUserIdRequestParameters {
 /**
  * @example
  *     {
- *         connection_id: "connection_id",
- *         name: "name",
- *         external_id: "external_id",
- *         fields: "fields",
- *         include_fields: true,
- *         from: "from",
- *         take: 1
- *     }
- */
-export interface ListGroupsRequestParameters {
-    /** Filter groups by connection ID. */
-    connection_id?: string | null;
-    /** Filter groups by name. */
-    name?: string | null;
-    /** Filter groups by external ID. */
-    external_id?: string | null;
-    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
-    fields?: string | null;
-    /** Whether specified fields are to be included (true) or excluded (false). */
-    include_fields?: boolean | null;
-    /** Optional Id from which to start selection. */
-    from?: string | null;
-    /** Number of results per page. Defaults to 50. */
-    take?: number | null;
-}
-
-/**
- * @example
- *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
@@ -1179,14 +1152,6 @@ export interface UpdateSettingsRequestContent {
     identifier_first?: boolean | null;
     /** Use WebAuthn with Device Biometrics as the first authentication factor */
     webauthn_platform_first_factor?: boolean | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateRefreshTokenRequestContent {
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
 }
 
 /**
@@ -2506,26 +2471,6 @@ export interface UpdateFlowsVaultConnectionRequestContent {
 /**
  * @example
  *     {
- *         fields: "fields",
- *         include_fields: true,
- *         from: "from",
- *         take: 1
- *     }
- */
-export interface GetGroupMembersRequestParameters {
-    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
-    fields?: string | null;
-    /** Whether specified fields are to be included (true) or excluded (false). */
-    include_fields?: boolean | null;
-    /** Optional Id from which to start selection. */
-    from?: string | null;
-    /** Number of results per page. Defaults to 50. */
-    take?: number | null;
-}
-
-/**
- * @example
- *     {
  *         user_id: "user_id"
  *     }
  */
@@ -2602,58 +2547,6 @@ export interface SetGuardianFactorPhoneTemplatesRequestContent {
     enrollment_message: string;
     /** Message sent to the user when they are prompted to verify their account. */
     verification_message: string;
-}
-
-/**
- * @example
- *     {}
- */
-export interface SetGuardianFactorsProviderPushNotificationApnsRequestContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
-    p12?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateGuardianFactorsProviderPushNotificationApnsRequestContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
-    p12?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface SetGuardianFactorsProviderPushNotificationFcmRequestContent {
-    server_key?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateGuardianFactorsProviderPushNotificationFcmRequestContent {
-    server_key?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface SetGuardianFactorsProviderPushNotificationFcmv1RequestContent {
-    server_credentials?: string | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateGuardianFactorsProviderPushNotificationFcmv1RequestContent {
-    server_credentials?: string | null;
 }
 
 /**
@@ -2909,8 +2802,6 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
 }
 
 /**
@@ -2919,8 +2810,6 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
  */
 export interface UpdateOrganizationDiscoveryDomainRequestContent {
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
 }
 
 /**
@@ -3289,8 +3178,6 @@ export interface CreateSelfServiceProfileSsoTicketRequestContent {
     ttl_sec?: number;
     domain_aliases_config?: Management.SelfServiceProfileSsoTicketDomainAliasesConfig;
     provisioning_config?: Management.SelfServiceProfileSsoTicketProvisioningConfig;
-    /** Indicates whether a verified domain should be used for organization discovery during authentication. */
-    use_for_organization_discovery?: boolean;
 }
 
 /**
@@ -3369,8 +3256,6 @@ export interface UpdateTenantSettingsRequestContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
-    /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
-    enable_ai_guide?: boolean;
 }
 
 export namespace UpdateTenantSettingsRequestContent {
@@ -3527,26 +3412,6 @@ export interface GetUserConnectedAccountsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results to return.  Defaults to 10 with a maximum of 20 */
-    take?: number | null;
-}
-
-/**
- * @example
- *     {
- *         fields: "fields",
- *         include_fields: true,
- *         from: "from",
- *         take: 1
- *     }
- */
-export interface GetUserGroupsRequestParameters {
-    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
-    fields?: string | null;
-    /** Whether specified fields are to be included (true) or excluded (false). */
-    include_fields?: boolean | null;
-    /** Optional Id from which to start selection. */
-    from?: string | null;
-    /** Number of results per page. Defaults to 50. */
     take?: number | null;
 }
 

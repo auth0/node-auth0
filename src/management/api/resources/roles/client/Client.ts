@@ -69,19 +69,12 @@ export class RolesClient {
                     include_totals: includeTotals = true,
                     name_filter: nameFilter,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (nameFilter !== undefined) {
-                    _queryParams["name_filter"] = nameFilter;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    per_page: perPage,
+                    page,
+                    include_totals: includeTotals,
+                    name_filter: nameFilter,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

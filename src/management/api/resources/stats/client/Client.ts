@@ -121,15 +121,10 @@ export class StatsClient {
         requestOptions?: StatsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.DailyStats[]>> {
         const { from: from_, to } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (from_ !== undefined) {
-            _queryParams["from"] = from_;
-        }
-
-        if (to !== undefined) {
-            _queryParams["to"] = to;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            from: from_,
+            to,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

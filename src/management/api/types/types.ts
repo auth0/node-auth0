@@ -328,12 +328,6 @@ export const OauthScope = {
      * Read Group Members */
     ReadGroupMembers: "read:group_members",
     /**
-     * Create Group Roles */
-    CreateGroupRoles: "create:group_roles",
-    /**
-     * Delete Group Roles */
-    DeleteGroupRoles: "delete:group_roles",
-    /**
      * Create Guardian Enrollment Tickets */
     CreateGuardianEnrollmentTickets: "create:guardian_enrollment_tickets",
     /**
@@ -546,9 +540,6 @@ export const OauthScope = {
     /**
      * Read Refresh Tokens */
     ReadRefreshTokens: "read:refresh_tokens",
-    /**
-     * Update Refresh Tokens */
-    UpdateRefreshTokens: "update:refresh_tokens",
     /**
      * Delete Refresh Tokens */
     DeleteRefreshTokens: "delete:refresh_tokens",
@@ -795,8 +786,6 @@ export interface Action {
     built_at?: string;
     /** True if the action should be deployed after creation. */
     deploy?: boolean;
-    /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
 }
 
 /**
@@ -910,8 +899,6 @@ export interface ActionDeployedVersion {
     updated_at?: string;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
     supported_triggers?: Management.ActionTrigger[];
-    /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
 }
 
 /**
@@ -946,20 +933,6 @@ export const ActionExecutionStatusEnum = {
     Suspended: "suspended",
 } as const;
 export type ActionExecutionStatusEnum = (typeof ActionExecutionStatusEnum)[keyof typeof ActionExecutionStatusEnum];
-
-/**
- * Reference to a module and its version used by an action.
- */
-export interface ActionModuleReference {
-    /** The unique ID of the module. */
-    module_id?: string;
-    /** The name of the module. */
-    module_name?: string;
-    /** The ID of the specific module version. */
-    module_version_id?: string;
-    /** The version number of the module. */
-    module_version_number?: number;
-}
 
 export interface ActionSecretRequest {
     /** The name of the particular secret, e.g. API_KEY. */
@@ -1036,8 +1009,6 @@ export interface ActionVersion {
     updated_at?: string;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
     supported_triggers?: Management.ActionTrigger[];
-    /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
 }
 
 /** The build status of this specific version. */
@@ -1088,12 +1059,9 @@ export interface AculConfigsItem {
     screen: Management.ScreenGroupNameEnum;
     rendering_mode?: Management.AculRenderingModeEnum;
     context_configuration?: Management.AculContextConfiguration;
-    /** Override Universal Login default head tags */
-    default_head_tags_disabled?: boolean | null;
-    /** Use page template with ACUL */
-    use_page_template?: boolean | null;
-    /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
+    default_head_tags_disabled?: (Management.AculDefaultHeadTagsDisabled | undefined) | null;
+    use_page_template?: (Management.AculUsePageTemplate | undefined) | null;
+    head_tags?: Management.AculHeadTags;
     filters?: Management.AculFilters | null;
 }
 
@@ -1134,6 +1102,11 @@ export const AculContextEnum = {
     TransactionCustomDomainDomain: "transaction.custom_domain.domain",
 } as const;
 export type AculContextEnum = (typeof AculContextEnum)[keyof typeof AculContextEnum];
+
+/**
+ * Override Universal Login default head tags
+ */
+export type AculDefaultHeadTagsDisabled = (boolean | null) | undefined;
 
 /**
  * Domains array filter items
@@ -1187,6 +1160,11 @@ export type AculHeadTagAttributes = Record<string, unknown>;
  */
 export type AculHeadTagContent = string;
 
+/**
+ * An array of head tags
+ */
+export type AculHeadTags = Management.AculHeadTag[];
+
 /** Type of match to apply */
 export const AculMatchTypeEnum = {
     IncludesAny: "includes_any",
@@ -1221,6 +1199,26 @@ export const AculRenderingModeEnum = {
     Standard: "standard",
 } as const;
 export type AculRenderingModeEnum = (typeof AculRenderingModeEnum)[keyof typeof AculRenderingModeEnum];
+
+export interface AculResponseContent {
+    rendering_mode?: Management.AculRenderingModeEnum;
+    /** Context values to make available */
+    context_configuration?: string[];
+    /** Override Universal Login default head tags */
+    default_head_tags_disabled?: boolean | null;
+    /** Use page template with ACUL */
+    use_page_template?: boolean | null;
+    /** An array of head tags */
+    head_tags?: Management.AculHeadTag[];
+    filters?: Management.AculFilters | null;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Use page template with ACUL
+ */
+export type AculUsePageTemplate = (boolean | null) | undefined;
 
 export interface AddOrganizationConnectionResponseContent {
     /** ID of the connection. */
@@ -1798,18 +1796,6 @@ export interface BulkUpdateAculResponseContent {
     [key: string]: any;
 }
 
-export interface CertificateSubjectDnCredential {
-    credential_type: Management.CertificateSubjectDnCredentialTypeEnum;
-    /** Friendly name for a credential. */
-    name?: string;
-    /** Subject Distinguished Name. Mutually exclusive with `pem` property. Applies to `cert_subject_dn` credential type. */
-    subject_dn?: string;
-    /** PEM-formatted X509 certificate. Must be JSON escaped. Mutually exclusive with `subject_dn` property. */
-    pem?: string;
-}
-
-export type CertificateSubjectDnCredentialTypeEnum = "cert_subject_dn";
-
 /**
  * The user's identity. If you set this value, you must also send the user_id parameter.
  */
@@ -2373,46 +2359,26 @@ export type ClientAsyncApprovalNotificationsChannelsApiPostConfiguration =
  * Defines client authentication methods.
  */
 export interface ClientAuthenticationMethod {
-    private_key_jwt?: Management.ClientAuthenticationMethodPrivateKeyJwt;
+    private_key_jwt?: Management.PrivateKeyJwt;
     tls_client_auth?: Management.ClientAuthenticationMethodTlsClientAuth;
     self_signed_tls_client_auth?: Management.ClientAuthenticationMethodSelfSignedTlsClientAuth;
 }
 
 /**
- * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
- */
-export interface ClientAuthenticationMethodPrivateKeyJwt {
-    credentials: Management.ClientAuthenticationMethodPrivateKeyJwtCredentials;
-}
-
-/**
- * A list of unique and previously created credential IDs enabled on the client for Private Key JWT authentication.
- */
-export type ClientAuthenticationMethodPrivateKeyJwtCredentials = Management.CredentialId[];
-
-/**
  * Defines `self_signed_tls_client_auth` client authentication method. If the property is defined, the client is configured to use mTLS authentication method utilizing self-signed certificate.
  */
 export interface ClientAuthenticationMethodSelfSignedTlsClientAuth {
-    credentials: Management.ClientAuthenticationMethodSelfSignedTlsClientAuthCredentials;
+    /** A list of unique and previously created credential IDs enabled on the client for mTLS authentication utilizing self-signed certificate. */
+    credentials: Management.CredentialId[];
 }
-
-/**
- * A list of unique and previously created credential IDs enabled on the client for mTLS authentication utilizing self-signed certificate.
- */
-export type ClientAuthenticationMethodSelfSignedTlsClientAuthCredentials = Management.CredentialId[];
 
 /**
  * Defines `tls_client_auth` client authentication method. If the property is defined, the client is configured to use CA-based mTLS authentication method.
  */
 export interface ClientAuthenticationMethodTlsClientAuth {
-    credentials: Management.ClientAuthenticationMethodTlsClientAuthCredentials;
+    /** A list of unique and previously created credential IDs enabled on the client for CA-based mTLS authentication. */
+    credentials: Management.CredentialId[];
 }
-
-/**
- * A list of unique and previously created credential IDs enabled on the client for CA-based mTLS authentication.
- */
-export type ClientAuthenticationMethodTlsClientAuthCredentials = Management.CredentialId[];
 
 /** Defines the compliance level for this client, which may restrict it's capabilities */
 export const ClientComplianceLevelEnum = {
@@ -2428,34 +2394,10 @@ export type ClientComplianceLevelEnum = (typeof ClientComplianceLevelEnum)[keyof
  * Defines client authentication methods.
  */
 export interface ClientCreateAuthenticationMethod {
-    private_key_jwt?: Management.ClientCreateAuthenticationMethodPrivateKeyJwt;
-    tls_client_auth?: Management.ClientCreateAuthenticationMethodTlsClientAuth;
-    self_signed_tls_client_auth?: Management.CreateClientAuthenticationMethodSelfSignedTlsClientAuth;
+    private_key_jwt?: Management.PrivateKeyJwt;
+    tls_client_auth?: Management.ClientAuthenticationMethodTlsClientAuth;
+    self_signed_tls_client_auth?: Management.ClientAuthenticationMethodSelfSignedTlsClientAuth;
 }
-
-/**
- * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
- */
-export interface ClientCreateAuthenticationMethodPrivateKeyJwt {
-    credentials: Management.ClientCreateAuthenticationMethodPrivateKeyJwtCredentials;
-}
-
-/**
- * Fully defined credentials that will be enabled on the client for Private Key JWT authentication.
- */
-export type ClientCreateAuthenticationMethodPrivateKeyJwtCredentials = Management.PublicKeyCredential[];
-
-/**
- * Defines `tls_client_auth` client authentication method. If the property is defined, the client is configured to use CA-based mTLS authentication method.
- */
-export interface ClientCreateAuthenticationMethodTlsClientAuth {
-    credentials: Management.ClientCreateAuthenticationMethodTlsClientAuthCredentials;
-}
-
-/**
- * Fully defined credentials that will be enabled on the client for CA-based mTLS authentication.
- */
-export type ClientCreateAuthenticationMethodTlsClientAuthCredentials = Management.CertificateSubjectDnCredential[];
 
 export interface ClientCredential {
     /** ID of the credential. Generated on creation. */
@@ -2745,15 +2687,6 @@ export interface ClientRefreshTokenConfiguration {
     idle_token_lifetime?: number;
     /** Prevents tokens from expiring without use when `true` (takes precedence over `idle_token_lifetime` values) */
     infinite_idle_token_lifetime?: boolean;
-    /** A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers */
-    policies?: Management.ClientRefreshTokenPolicy[];
-}
-
-export interface ClientRefreshTokenPolicy {
-    /** The identifier of the resource server to which the Multi Resource Refresh Token Policy applies */
-    audience: string;
-    /** The resource server permissions granted under the Multi Resource Refresh Token Policy, defining the context in which an access token can be used */
-    scope: string[];
 }
 
 export const ClientSessionTransferAllowedAuthenticationMethodsEnum = {
@@ -2767,20 +2700,20 @@ export type ClientSessionTransferAllowedAuthenticationMethodsEnum =
  * Native to Web SSO Configuration
  */
 export interface ClientSessionTransferConfiguration {
-    /** Indicates whether an app can issue a Session Transfer Token through Token Exchange. If set to 'false', the app will not be able to issue a Session Transfer Token. Usually configured in the native application. Default value is `false`. */
+    /** Indicates whether an app can issue a Session Transfer Token through Token Exchange. If set to 'false', the app will not be able to issue a Session Transfer Token. Usually configured in the native application. */
     can_create_session_transfer_token?: boolean;
-    /** Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application. Default value is `true`, applicable only in Native to Web SSO context. */
+    /** Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application. */
     enforce_cascade_revocation?: boolean;
-    /** Indicates whether an app can create a session from a Session Transfer Token received via indicated methods. Can include `cookie` and/or `query`. Usually configured in the web application. Default value is an empty array []. */
+    /** Indicates whether an app can create a session from a Session Transfer Token received via indicated methods. Can include `cookie` and/or `query`. Usually configured in the web application. */
     allowed_authentication_methods?: Management.ClientSessionTransferAllowedAuthenticationMethodsEnum[];
     enforce_device_binding?: Management.ClientSessionTransferDeviceBindingEnum;
-    /** Indicates whether Refresh Tokens are allowed to be issued when authenticating with a Session Transfer Token. Usually configured in the web application. Default value is `false`. */
+    /** Indicates whether Refresh Tokens are allowed to be issued when authenticating with a Session Transfer Token. Usually configured in the web application. */
     allow_refresh_token?: boolean;
-    /** Indicates whether Refresh Tokens created during a Native to Web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application. Default value is `true`, applicable only in Native to Web SSO context. */
+    /** Indicates whether Refresh Tokens created during a native-to-web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application. */
     enforce_online_refresh_tokens?: boolean;
 }
 
-/** Indicates whether device binding security should be enforced for the app. If set to 'ip', the app will enforce device binding by IP, meaning that consumption of Session Transfer Token must be done from the same IP of the issuer. Likewise, if set to 'asn', device binding is enforced by ASN, meaning consumption of Session Transfer Token must be done from the same ASN as the issuer. If set to 'none', device binding is not enforced. Usually configured in the web application. Default value is `ip`. */
+/** Indicates whether device binding security should be enforced for the app. If set to 'ip', the app will enforce device binding by IP, meaning that consumption of Session Transfer Token must be done from the same IP of the issuer. Likewise, if set to 'asn', device binding is enforced by ASN, meaning consumption of Session Transfer Token must be done from the same ASN as the issuer. If set to 'null', device binding is not enforced. Usually configured in the web application. */
 export const ClientSessionTransferDeviceBindingEnum = {
     Ip: "ip",
     Asn: "asn",
@@ -2888,31 +2821,9 @@ export type ConnectedAccountAccessTypeEnum = "offline";
 export type ConnectionAcrValuesSupported = string[];
 
 /**
- * Expiration timestamp for the `admin_access_token` in ISO 8601 format. Auth0 uses this value to determine when to refresh the token.
- */
-export type ConnectionAdminAccessTokenExpiresInGoogleApps = string;
-
-/**
- * Google Workspace admin access token used to retrieve extended user attributes (such as group memberships, admin status, and suspension state) from the [Google Directory API](https://developers.google.com/admin-sdk/directory). This token is automatically managed by Auth0.
- */
-export type ConnectionAdminAccessTokenGoogleApps = string;
-
-/**
- * Google Workspace admin refresh token used to obtain new access tokens for the [Google Directory API](https://developers.google.com/admin-sdk/directory). This token is granted when a Google Workspace admin authorizes Auth0 to access directory data.
- */
-export type ConnectionAdminRefreshTokenGoogleApps = string;
-
-/**
  * List of allowed audiences in the ID token for Google Native Social Login
  */
 export type ConnectionAllowedAudiencesGoogleOAuth2 = string[];
-
-export type ConnectionApiEnableUsers = boolean;
-
-/**
- * Enables integration with the Google Workspace Admin SDK Directory API. When true, Auth0 can retrieve extended user attributes (admin status, suspension status, group memberships) and supports inbound directory provisioning (SCIM). Defaults to true.
- */
-export type ConnectionApiEnableUsersGoogleApps = Management.ConnectionApiEnableUsers;
 
 /**
  * The Azure AD application domain (e.g., 'contoso.onmicrosoft.com'). Used primarily with WS-Federation protocol and Azure AD v1 endpoints.
@@ -2922,7 +2833,6 @@ export type ConnectionAppDomainAzureAd = string;
 export interface ConnectionAttributeIdentifier {
     /** Determines if the attribute is used for identification */
     active?: boolean;
-    default_method?: Management.DefaultMethodEmailIdentifierEnum;
 }
 
 /**
@@ -2968,11 +2878,6 @@ export interface ConnectionAttributes {
 export type ConnectionAuthParamsAdditionalPropertiesOAuth2 = string;
 
 /**
- * Authentication Parameters (must be valid JSON string)
- */
-export type ConnectionAuthParamsEmail = string;
-
-/**
  * Maps parameter names from Auth0's /authorize endpoint to the identity provider's authorization endpoint parameters. For example, mapping 'audience' to 'resource' transforms the parameter name during authorization requests. Applied after authParams merging. See https://auth0.com/docs/authenticate/identity-providers/social-identity-providers/oauth2#pass-dynamic-parameters
  */
 export type ConnectionAuthParamsMap = Record<string, string>;
@@ -2988,8 +2893,6 @@ export type ConnectionAuthParamsOAuth2 = Record<string, Management.ConnectionAut
 export interface ConnectionAuthenticationMethods {
     password?: Management.ConnectionPasswordAuthenticationMethod;
     passkey?: Management.ConnectionPasskeyAuthenticationMethod;
-    email_otp?: Management.ConnectionEmailOtpAuthenticationMethod;
-    phone_otp?: Management.ConnectionPhoneOtpAuthenticationMethod;
 }
 
 /**
@@ -3007,8 +2910,6 @@ export type ConnectionAuthorizationEndpointOAuth2 = Management.ConnectionAuthori
  * Indicates whether brute force protection is enabled.
  */
 export type ConnectionBruteForceProtection = boolean;
-
-export type ConnectionCalculatedThumbprintSaml = Management.ConnectionSha1ThumbprintSaml;
 
 /**
  * JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims.
@@ -3040,21 +2941,11 @@ export type ConnectionClientIdAzureAd = Management.ConnectionClientId;
 /**
  * Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
  */
-export type ConnectionClientIdGoogleApps = Management.ConnectionClientId;
-
-/**
- * Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
- */
 export type ConnectionClientIdGoogleOAuth2 = (string | null) | undefined;
 
 export type ConnectionClientIdOAuth2 = Management.ConnectionClientId;
 
 export type ConnectionClientIdOidc = Management.ConnectionClientId;
-
-/**
- * The response protocol used to communicate with the default application.
- */
-export type ConnectionClientProtocolSaml = Management.ConnectionOptionsIdpInitiatedClientProtocolEnumSaml;
 
 /**
  * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
@@ -3065,11 +2956,6 @@ export type ConnectionClientSecret = string;
  * The client secret (application password) from your Azure AD app registration. Used to authenticate your application when exchanging authorization codes for tokens.
  */
 export type ConnectionClientSecretAzureAd = string;
-
-/**
- * Your Google OAuth 2.0 client secret. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
- */
-export type ConnectionClientSecretGoogleApps = Management.ConnectionClientSecret;
 
 /**
  * Your Google OAuth 2.0 client secret. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
@@ -3087,6 +2973,8 @@ export interface ConnectionCommon {
     enabled_clients?: Management.ConnectionEnabledClients;
     is_domain_connection?: Management.ConnectionIsDomainConnection;
     metadata?: Management.ConnectionsMetadata;
+    realms?: Management.ConnectionRealms;
+    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -3142,34 +3030,6 @@ export interface ConnectionCustomScripts {
 }
 
 /**
- * When true, enables detailed SAML debugging by issuing 'w' (warning) events in tenant logs containing SAML request/response details. WARNING: Potentially exposes sensitive user information (PII, credentials) and should only be enabled temporarily for debugging purposes.
- */
-export type ConnectionDebugSaml = boolean;
-
-/**
- * Private key in PEM format used to decrypt encrypted SAML Assertions received from the identity provider. Required when the identity provider encrypts assertions for enhanced security. Can be a string (PEM) or an object with key-value pairs.
- */
-export type ConnectionDecryptionKeySaml = string;
-
-/**
- * The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL.
- */
-export type ConnectionDestinationUrlSaml = Management.ConnectionHttpsUrlWithHttpFallback255;
-
-/** Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'. */
-export const ConnectionDigestAlgorithmEnumSaml = {
-    Sha1: "sha1",
-    Sha256: "sha256",
-} as const;
-export type ConnectionDigestAlgorithmEnumSaml =
-    (typeof ConnectionDigestAlgorithmEnumSaml)[keyof typeof ConnectionDigestAlgorithmEnumSaml];
-
-/**
- * Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'.
- */
-export type ConnectionDigestAlgorithmSaml = Management.ConnectionDigestAlgorithmEnumSaml;
-
-/**
  * Indicates whether to disable self-service change password. Set to true to stop the "Forgot Password" being displayed on login pages
  */
 export type ConnectionDisableSelfServiceChangePassword = boolean;
@@ -3180,14 +3040,9 @@ export type ConnectionDisableSelfServiceChangePassword = boolean;
 export type ConnectionDisableSignup = boolean;
 
 /**
- * Controls whether new user signups are allowed via SMS authentication
- */
-export type ConnectionDisableSignupSms = Management.ConnectionDisableSignup;
-
-/**
  * OIDC discovery URL. Discovery runs only when connection.options.oidc_metadata is empty and a discovery_url is provided.
  */
-export type ConnectionDiscoveryUrl = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionDiscoveryUrl = string;
 
 /**
  * Connection name used in the new universal login experience
@@ -3199,66 +3054,17 @@ export type ConnectionDisplayName = string;
  */
 export type ConnectionDisplayValuesSupported = string[];
 
-/**
- * Domain aliases for the connection
- */
-export type ConnectionDomainAliases = Management.ConnectionDomainAliasesItemsOne[];
+export type ConnectionDomainAliasesOne = string[];
 
 /**
  * Alternative domain names associated with this Azure AD tenant. Allows users from multiple verified domains to authenticate through this connection. Can be an array of domain strings.
  */
 export type ConnectionDomainAliasesAzureAd = string[];
 
-export type ConnectionDomainAliasesItemsOne = string;
-
-/**
- * Domain aliases for the connection
- */
-export type ConnectionDomainAliasesSaml = Management.ConnectionDomainAliasesItemsOne[];
-
-/**
- * Primary Google Workspace domain name that users must belong to.
- */
-export type ConnectionDomainGoogleApps = string;
-
 /**
  * Domain of the Okta organization (e.g., dev-123456.okta.com). Should be just the domain of the okta server with no scheme or trailing backslash. Discovery runs only when connection.options.oidc_metadata is empty and a domain is provided
  */
 export type ConnectionDomainOkta = string;
-
-/**
- * Email body content
- */
-export type ConnectionEmailBodyEmail = string;
-
-/**
- * Email template configuration
- */
-export interface ConnectionEmailEmail {
-    body?: Management.ConnectionEmailBodyEmail;
-    from?: Management.ConnectionEmailFromEmail;
-    subject?: Management.ConnectionEmailSubjectEmail;
-    /** Email template syntax type */
-    syntax?: "liquid";
-}
-
-/**
- * From email address
- */
-export type ConnectionEmailFromEmail = string;
-
-/**
- * Email OTP authentication enablement
- */
-export interface ConnectionEmailOtpAuthenticationMethod {
-    /** Determines whether email OTP is enabled */
-    enabled?: boolean;
-}
-
-/**
- * Email subject line
- */
-export type ConnectionEmailSubjectEmail = string;
 
 /**
  * Set to true to inject context into custom DB scripts (warning: cannot be disabled once enabled)
@@ -3290,11 +3096,6 @@ export type ConnectionEndSessionEndpoint = string;
 export type ConnectionEndSessionEndpointOAuth2 = Management.ConnectionEndSessionEndpoint;
 
 /**
- * The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider.
- */
-export type ConnectionEntityIdSaml = string;
-
-/**
  * Indicates to store whether the user is a domain administrator.
  */
 export type ConnectionExtAdmin = boolean;
@@ -3305,41 +3106,19 @@ export type ConnectionExtAdmin = boolean;
 export type ConnectionExtAgreedTerms = boolean;
 
 /**
- * Fetches the `agreedToTerms` flag from the Google Directory profile.
- */
-export type ConnectionExtAgreedTermsGoogleApps = Management.ConnectionExtAgreedTerms;
-
-/**
  * Indicates whether to store a list of the Office 365 assigned plans for the user.
  */
 export type ConnectionExtAssignedPlans = boolean;
 
-export type ConnectionExtGroups = boolean;
-
 /**
  * When enabled (true), retrieves and stores Azure AD security group memberships for the user. Requires Microsoft Graph API permissions (Directory.Read.All). Allows configuring max_groups_to_retrieve.
  */
-export type ConnectionExtGroupsAzureAd = Management.ConnectionExtGroups;
-
-/**
- * Enables enrichment with Google group memberships (required for `ext_groups_extended`).
- */
-export type ConnectionExtGroupsGoogleApps = Management.ConnectionExtGroups;
-
-/**
- * Fetches the Google Directory admin flag for the signing-in user.
- */
-export type ConnectionExtIsAdminGoogleApps = Management.ConnectionExtAdmin;
+export type ConnectionExtGroups = boolean;
 
 /**
  * Indicates to store whether a user's account is suspended.
  */
 export type ConnectionExtIsSuspended = boolean;
-
-/**
- * Fetches the Google Directory suspended flag for the signing-in user.
- */
-export type ConnectionExtIsSuspendedGoogleApps = Management.ConnectionExtIsSuspended;
 
 /**
  * When enabled (true), retrieves extended profile attributes from Azure AD via Microsoft Graph API (job title, department, office location, etc.). Requires Graph API permissions. Only available with Azure AD v1 or when explicitly enabled for v2.
@@ -3358,15 +3137,6 @@ export interface ConnectionFederatedConnectionsAccessTokens {
  * Mapping of user profile fields returned from the OAuth2 provider to Auth0 user attributes
  */
 export type ConnectionFieldsMap = Record<string, string>;
-
-/**
- * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
- */
-export type ConnectionFieldsMapSaml = Record<string, ConnectionFieldsMapSaml.Value>;
-
-export namespace ConnectionFieldsMapSaml {
-    export type Value = string | string[];
-}
 
 export interface ConnectionForList {
     /** The name of the connection */
@@ -3404,19 +3174,9 @@ export interface ConnectionForOrganization {
 }
 
 /**
- * When set to true, the gateway receives HTTP request details including IP address and User Agent from the client.
- */
-export type ConnectionForwardReqInfoSms = boolean;
-
-/**
  * Array of custom OAuth 2.0 scopes to request from Google during authentication. Use this to request scopes not covered by the predefined scope options.
  */
 export type ConnectionFreeformScopesGoogleOAuth2 = Management.ConnectionScopeArray;
-
-/**
- * The sender phone number or alphanumeric sender ID for outgoing SMS messages
- */
-export type ConnectionFromSms = string;
 
 /**
  * Token-based authentication settings to be applied when connection is using an sms strategy.
@@ -3437,86 +3197,23 @@ export interface ConnectionGatewayAuthentication {
 }
 
 /**
- * `aud` claim value in the JWT sent to the SMS gateway. Identifies the gateway service (e.g., 'urn:MySmsGateway').
- */
-export type ConnectionGatewayAuthenticationAudienceSms = string;
-
-/**
- * The Authorization header type when calling the SMS gateway. Set to 'bearer' for JWT token authentication.
- */
-export type ConnectionGatewayAuthenticationMethodSms = string;
-
-/**
- * Optional token-based authentication configuration for the SMS gateway
- */
-export interface ConnectionGatewayAuthenticationSms {
-    audience: Management.ConnectionGatewayAuthenticationAudienceSms;
-    method: Management.ConnectionGatewayAuthenticationMethodSms;
-    /** The secret used to sign the JSON Web Token sent to the SMS gateway */
-    secret: string;
-    /** Set to true if the secret is base64-url-encoded */
-    secret_base64_encoded?: boolean;
-    subject?: Management.ConnectionGatewayAuthenticationSubjectSms;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
-/**
- * `sub` claim value in the JWT sent to the SMS gateway. Identifies the requester (e.g., 'urn:Auth0').
- */
-export type ConnectionGatewayAuthenticationSubjectSms = string;
-
-/**
- * The URL of your SMS gateway. Auth0 must be able to reach this URL for it to use your gateway to send messages on your behalf.
- */
-export type ConnectionGatewayUrlSms = Management.ConnectionHttpsUrlWithHttpFallback255;
-
-/**
- * Expected 'iss' (Issuer) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT issuer matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_sub.
- */
-export type ConnectionGlobalTokenRevocationJwtIssSaml = string;
-
-/**
- * Expected 'sub' (Subject) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT subject matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_iss.
- */
-export type ConnectionGlobalTokenRevocationJwtSubSaml = string;
-
-/**
  * A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"].
  */
 export type ConnectionGrantTypesSupported = string[];
 
-/**
- * When enabled, users who sign in with their Google account through a social login will be automatically routed to this Google Workspace connection if their email domain matches the configured tenant_domain or domain_aliases. This ensures enterprise users authenticate through their organization's Google Workspace identity provider rather than through a generic Google social login, enabling access to directory-based attributes and enforcing organizational security policies. Defaults to true for new connections.
- */
-export type ConnectionHandleLoginFromSocialGoogleApps = boolean;
-
 export type ConnectionHttpsUrlWithHttpFallback = string;
-
-export type ConnectionHttpsUrlWithHttpFallback2048 = Management.ConnectionHttpsUrlWithHttpFallback;
-
-export type ConnectionHttpsUrlWithHttpFallback255 = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /**
  * https url of the icon to be shown
  */
 export type ConnectionIconUrl = string;
 
-export type ConnectionIconUrlAdfs = Management.ConnectionIconUrl;
-
 /**
  * URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows.
  */
 export type ConnectionIconUrlAzureAd = Management.ConnectionIconUrl;
 
-export type ConnectionIconUrlGoogleApps = Management.ConnectionIconUrl;
-
 export type ConnectionIconUrlGoogleOAuth2 = Management.ConnectionIconUrl;
-
-/**
- * URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows.
- */
-export type ConnectionIconUrlSaml = Management.ConnectionIconUrl;
 
 /**
  * The connection's identifier
@@ -3660,9 +3357,9 @@ export type ConnectionImportMode = boolean;
  */
 export type ConnectionIsDomainConnection = boolean;
 
-export type ConnectionIssuer = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionIssuer = Management.ConnectionHttpsUrlWithHttpFallback;
 
-export type ConnectionJwksUri = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionJwksUri = Management.ConnectionHttpsUrlWithHttpFallback;
 
 export interface ConnectionKey {
     /** The key id of the signing key */
@@ -3720,31 +3417,6 @@ export type ConnectionMappingModeEnumOkta =
 export type ConnectionMaxGroupsToRetrieve = string;
 
 /**
- * Twilio Messaging Service SID
- */
-export type ConnectionMessagingServiceSidSms = string;
-
-/**
- * HTTPS URL to the identity provider's SAML metadata document. When provided, Auth0 automatically fetches and parses the metadata to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Use metadataUrl OR metadataXml, not both.
- */
-export type ConnectionMetadataUrlSaml = Management.ConnectionHttpsUrlWithHttpFallback2048;
-
-/**
- * Standard IdP metadata XML payload used across SAML-compatible strategies.
- */
-export type ConnectionMetadataXml = string;
-
-/**
- * Inline XML alternative to 'adfs_server'. Cannot be set together with 'adfs_server'.
- */
-export type ConnectionMetadataXmlAdfs = Management.ConnectionMetadataXml;
-
-/**
- * SAML metadata XML document from the identity provider. When provided, automatically parsed to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Deleted after parsing to avoid persisting large documents. Not persisted to database - deleted after parsing metadata. Use metadataUrl OR metadataXml, not both.
- */
-export type ConnectionMetadataXmlSaml = Management.ConnectionMetadataXml;
-
-/**
  * Multi-factor authentication configuration
  */
 export interface ConnectionMfa {
@@ -3769,9 +3441,9 @@ export type ConnectionNamePrefixTemplate = string;
  */
 export type ConnectionNonPersistentAttrs = string[];
 
-export type ConnectionOpPolicyUri = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionOpPolicyUri = Management.ConnectionHttpsUrlWithHttpFallback;
 
-export type ConnectionOpTosUri = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionOpTosUri = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /**
  * In order to return options in the response, the `read:connections_options` scope must be present
@@ -3786,27 +3458,7 @@ export type ConnectionOptionsAd = Record<string, unknown>;
 /**
  * Options for the 'adfs' connection
  */
-export interface ConnectionOptionsAdfs extends Management.ConnectionOptionsCommon {
-    /** ADFS federation metadata host or XML URL used to discover WS-Fed endpoints and certificates. Errors if adfs_server and fedMetadataXml are both absent. */
-    adfs_server?: string;
-    domain_aliases?: Management.ConnectionDomainAliases;
-    /** The entity identifier (Issuer) for the ADFS Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. */
-    entityId?: string;
-    fedMetadataXml?: Management.ConnectionMetadataXmlAdfs;
-    icon_url?: Management.ConnectionIconUrlAdfs;
-    /** Previous certificate thumbprints kept for rollover compatibility. */
-    prev_thumbprints?: Management.ConnectionThumbprints;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    should_trust_email_verified_connection?: Management.ConnectionShouldTrustEmailVerifiedConnectionEnum;
-    signInEndpoint?: Management.ConnectionSignInEndpointAdfs;
-    tenant_domain?: Management.ConnectionTenantDomain;
-    thumbprints?: Management.ConnectionThumbprints;
-    upstream_params?: (Management.ConnectionUpstreamParamsAdfs | undefined) | null;
-    /** Custom ADFS claim to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single ADFS claim name). */
-    user_id_attribute?: string;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
+export type ConnectionOptionsAdfs = Record<string, unknown>;
 
 export type ConnectionOptionsAol = Management.ConnectionOptionsOAuth2Common;
 
@@ -3834,8 +3486,6 @@ export interface ConnectionOptionsApple extends Management.ConnectionOptionsComm
     /** Apple Team ID */
     team_id?: string | null;
     upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 /**
@@ -3863,8 +3513,6 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
     realm_fallback?: Management.ConnectionRealmFallback;
     requires_username?: Management.ConnectionRequiresUsername;
     validation?: Management.ConnectionValidationOptions | null;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 /**
@@ -3917,7 +3565,7 @@ export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCo
     ext_given_name?: boolean;
     /** When false, prevents storing the list of Azure AD group IDs the user is a member of. When true (default), group membership IDs are persisted. See ext_groups for retrieving group details. */
     ext_group_ids?: boolean;
-    ext_groups?: Management.ConnectionExtGroupsAzureAd;
+    ext_groups?: Management.ConnectionExtGroups;
     ext_is_suspended?: Management.ConnectionExtIsSuspended;
     /** When false, prevents storing the user's job title from Azure AD. When true (default), job title information is persisted in the user profile. */
     ext_job_title?: boolean;
@@ -3980,14 +3628,12 @@ export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCo
     tenant_domain?: Management.ConnectionTenantDomainAzureAdOne;
     tenantId?: Management.ConnectionTenantIdAzureAd;
     thumbprints?: Management.ConnectionThumbprints;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    upstream_params?: Management.ConnectionUpstreamParamsAzureAd | undefined;
     /** Indicates WS-Federation protocol usage. When true, uses WS-Federation; when false, uses OpenID Connect. */
     use_wsfed?: boolean;
     useCommonEndpoint?: Management.ConnectionUseCommonEndpointAzureAd;
     userid_attribute?: Management.ConnectionUseridAttributeAzureAd;
     waad_protocol?: Management.ConnectionWaadProtocol;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 export type ConnectionOptionsBaidu = Management.ConnectionOptionsOAuth2Common;
@@ -3999,7 +3645,7 @@ export type ConnectionOptionsBitly = Management.ConnectionOptionsOAuth2Common;
 export type ConnectionOptionsBox = Management.ConnectionOptionsOAuth2Common;
 
 /**
- * Common attributes for connection options including non-persistent attributes and Cross App Access
+ * Common attributes for connection options including non-persistent attributes and cross-app access
  */
 export interface ConnectionOptionsCommon {
     non_persistent_attrs?: Management.ConnectionNonPersistentAttrs;
@@ -4014,7 +3660,7 @@ export interface ConnectionOptionsCommonOidc {
     client_secret?: Management.ConnectionClientSecretOidc;
     connection_settings?: Management.ConnectionConnectionSettings;
     federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
-    domain_aliases?: Management.ConnectionDomainAliases;
+    domain_aliases?: Management.ConnectionDomainAliasesOne;
     icon_url?: Management.ConnectionIconUrl;
     id_token_signed_response_algs?: (Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null;
     issuer?: Management.ConnectionIssuer;
@@ -4023,36 +3669,14 @@ export interface ConnectionOptionsCommonOidc {
     scope?: Management.ConnectionScopeOidc;
     send_back_channel_nonce?: Management.ConnectionSendBackChannelNonce;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    tenant_domain?: Management.ConnectionTenantDomain;
+    tenant_domain?: (Management.ConnectionTenantDomain | undefined) | null;
     token_endpoint?: Management.ConnectionTokenEndpointOidc;
     token_endpoint_auth_method?: Management.ConnectionTokenEndpointAuthMethodEnum | null;
     token_endpoint_auth_signing_alg?: Management.ConnectionTokenEndpointAuthSigningAlgEnum | null;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    upstream_params?: Management.ConnectionUpstreamParamsOidc | undefined;
     userinfo_endpoint?: Management.ConnectionUserinfoEndpointOidc;
     /** Accepts any additional properties */
     [key: string]: any;
-}
-
-/**
- * Common options for SAML-based enterprise connections (shared by samlp and pingfederate).
- */
-export interface ConnectionOptionsCommonSaml {
-    cert?: Management.ConnectionSigningCertificateDerSaml;
-    decryptionKey?: Management.ConnectionDecryptionKeySaml;
-    digestAlgorithm?: Management.ConnectionDigestAlgorithmSaml;
-    domain_aliases?: Management.ConnectionDomainAliasesSaml;
-    entityId?: Management.ConnectionEntityIdSaml;
-    icon_url?: Management.ConnectionIconUrlSaml;
-    idpinitiated?: Management.ConnectionOptionsIdpinitiatedSaml;
-    protocolBinding?: Management.ConnectionProtocolBindingSaml;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    signInEndpoint?: Management.ConnectionSignInEndpointSaml;
-    signSAMLRequest?: Management.ConnectionSignSamlRequestSaml;
-    signatureAlgorithm?: Management.ConnectionSignatureAlgorithmSaml;
-    tenant_domain?: Management.ConnectionTenantDomainSaml;
-    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
-    thumbprints?: Management.ConnectionSha1ThumbprintRelaxedValidationSaml[];
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
 }
 
 /**
@@ -4062,11 +3686,6 @@ export type ConnectionOptionsCustom = Record<string, unknown>;
 
 export type ConnectionOptionsDaccount = Management.ConnectionOptionsOAuth2Common;
 
-/**
- * When true, enables DEFLATE compression for SAML requests sent via HTTP-Redirect binding.
- */
-export type ConnectionOptionsDeflateSaml = boolean;
-
 export type ConnectionOptionsDropbox = Management.ConnectionOptionsOAuth2Common;
 
 export type ConnectionOptionsDwolla = Management.ConnectionOptionsOAuth2Common;
@@ -4074,17 +3693,7 @@ export type ConnectionOptionsDwolla = Management.ConnectionOptionsOAuth2Common;
 /**
  * Options for the 'email' connection
  */
-export interface ConnectionOptionsEmail extends Management.ConnectionOptionsCommon {
-    authParams?: Management.ConnectionAuthParamsEmail;
-    brute_force_protection: Management.ConnectionBruteForceProtection;
-    disable_signup?: Management.ConnectionDisableSignup;
-    email: Management.ConnectionEmailEmail;
-    /** Connection name */
-    name: string;
-    totp?: Management.ConnectionTotpEmail;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
+export type ConnectionOptionsEmail = Record<string, unknown>;
 
 export type ConnectionOptionsEvernote = Management.ConnectionOptionsEvernoteCommon;
 
@@ -4117,39 +3726,7 @@ export type ConnectionOptionsGitHub = Record<string, unknown>;
 /**
  * Options for the 'google-apps' connection
  */
-export interface ConnectionOptionsGoogleApps extends Management.ConnectionOptionsCommon {
-    admin_access_token?: Management.ConnectionAdminAccessTokenGoogleApps;
-    admin_access_token_expiresin?: Management.ConnectionAdminAccessTokenExpiresInGoogleApps;
-    admin_refresh_token?: Management.ConnectionAdminRefreshTokenGoogleApps;
-    /** When true, allows customization of OAuth scopes requested during user login. Custom scopes are appended to the mandatory email and profile scopes. When false or omitted, only the default email and profile scopes are used. This property is automatically enabled when Token Vault or Connected Accounts features are activated. */
-    allow_setting_login_scopes?: boolean;
-    api_enable_users?: Management.ConnectionApiEnableUsersGoogleApps;
-    client_id: Management.ConnectionClientIdGoogleApps;
-    client_secret?: Management.ConnectionClientSecretGoogleApps;
-    domain?: Management.ConnectionDomainGoogleApps;
-    domain_aliases?: Management.ConnectionDomainAliases;
-    /** Whether the OAuth flow requests the `email` scope. */
-    email?: boolean;
-    ext_agreed_terms?: Management.ConnectionExtAgreedTermsGoogleApps;
-    ext_groups?: Management.ConnectionExtGroupsGoogleApps;
-    /** Controls whether enriched group entries include `id`, `email`, `name` (true) or only the group name (false); can only be set when `ext_groups` is true. */
-    ext_groups_extended?: boolean;
-    ext_is_admin?: Management.ConnectionExtIsAdminGoogleApps;
-    ext_is_suspended?: Management.ConnectionExtIsSuspendedGoogleApps;
-    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
-    handle_login_from_social?: Management.ConnectionHandleLoginFromSocialGoogleApps;
-    icon_url?: Management.ConnectionIconUrlGoogleApps;
-    /** Determines how Auth0 generates the user_id for Google Workspace users. When false (default), the user's email address is used. When true, Google's stable numeric user ID is used instead, which persists even if the user's email changes. This setting can only be configured when creating the connection and cannot be changed afterward. */
-    map_user_id_to_id?: boolean;
-    /** Whether the OAuth flow requests the `profile` scope. */
-    profile?: boolean;
-    scope?: Management.ConnectionScopeGoogleApps;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    tenant_domain?: Management.ConnectionTenantDomainGoogleApps;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
+export type ConnectionOptionsGoogleApps = Record<string, unknown>;
 
 /**
  * Options for the 'google-oauth2' connection
@@ -4293,36 +3870,12 @@ export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOpti
     youtube_upload?: boolean;
     /** View and manage your assets and associated content on YouTube */
     youtubepartner?: boolean;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 /**
  * Options for the 'ip' connection
  */
 export type ConnectionOptionsIp = Record<string, unknown>;
-
-/** The response protocol used to communicate with the default application. */
-export const ConnectionOptionsIdpInitiatedClientProtocolEnumSaml = {
-    Oidc: "oidc",
-    Samlp: "samlp",
-    Wsfed: "wsfed",
-} as const;
-export type ConnectionOptionsIdpInitiatedClientProtocolEnumSaml =
-    (typeof ConnectionOptionsIdpInitiatedClientProtocolEnumSaml)[keyof typeof ConnectionOptionsIdpInitiatedClientProtocolEnumSaml];
-
-/**
- * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
- */
-export interface ConnectionOptionsIdpinitiatedSaml {
-    /** The query string sent to the default application */
-    client_authorizequery?: string;
-    /** The client ID to use for IdP-initiated login requests. */
-    client_id?: string;
-    client_protocol?: Management.ConnectionClientProtocolSaml;
-    /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
-    enabled?: boolean;
-}
 
 export type ConnectionOptionsInstagram = Management.ConnectionOptionsOAuth2Common;
 
@@ -4362,8 +3915,6 @@ export interface ConnectionOptionsOAuth2 extends Management.ConnectionOptionsCom
     upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
     /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
     useOauthSpecScope?: boolean;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 export interface ConnectionOptionsOAuth2Common extends Management.ConnectionOptionsCommon {
@@ -4377,13 +3928,10 @@ export interface ConnectionOptionsOAuth2Common extends Management.ConnectionOpti
  * Options for the 'oidc' connection
  */
 export interface ConnectionOptionsOidc
-    extends Management.ConnectionOptionsCommonOidc,
-        Management.ConnectionOptionsCommon {
+    extends Management.ConnectionOptionsCommonOidc, Management.ConnectionOptionsCommon {
     attribute_map?: Management.ConnectionAttributeMapOidc;
     discovery_url?: Management.ConnectionDiscoveryUrl;
     type?: Management.ConnectionTypeEnumOidc;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 /**
@@ -4439,13 +3987,10 @@ export type ConnectionOptionsOffice365 = Record<string, unknown>;
  * Options for the 'okta' connection
  */
 export interface ConnectionOptionsOkta
-    extends Management.ConnectionOptionsCommonOidc,
-        Management.ConnectionOptionsCommon {
+    extends Management.ConnectionOptionsCommonOidc, Management.ConnectionOptionsCommon {
     attribute_map?: Management.ConnectionAttributeMapOkta;
     domain?: Management.ConnectionDomainOkta;
     type?: Management.ConnectionTypeEnumOkta;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 export type ConnectionOptionsPaypal = Management.ConnectionOptionsOAuth2Common;
@@ -4455,14 +4000,7 @@ export type ConnectionOptionsPaypalSandbox = Management.ConnectionOptionsOAuth2C
 /**
  * Options for the 'pingfederate' connection
  */
-export interface ConnectionOptionsPingFederate
-    extends Management.ConnectionOptionsCommonSaml,
-        Management.ConnectionOptionsCommon {
-    pingFederateBaseUrl: Management.ConnectionPingFederateBaseUrl;
-    signingCert?: Management.ConnectionSigningCertificatePemPingFederate;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
+export type ConnectionOptionsPingFederate = Record<string, unknown>;
 
 /**
  * Options for the 'planningcenter' connection
@@ -4474,52 +4012,12 @@ export type ConnectionOptionsRenren = Management.ConnectionOptionsOAuth2Common;
 /**
  * Options for the 'samlp' connection
  */
-export interface ConnectionOptionsSaml
-    extends Management.ConnectionOptionsCommonSaml,
-        Management.ConnectionOptionsCommon {
-    debug?: Management.ConnectionDebugSaml;
-    deflate?: Management.ConnectionOptionsDeflateSaml;
-    destinationUrl?: Management.ConnectionDestinationUrlSaml;
-    /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
-    disableSignout?: boolean;
-    fieldsMap?: Management.ConnectionFieldsMapSaml;
-    global_token_revocation_jwt_iss?: Management.ConnectionGlobalTokenRevocationJwtIssSaml;
-    global_token_revocation_jwt_sub?: Management.ConnectionGlobalTokenRevocationJwtSubSaml;
-    metadataUrl?: Management.ConnectionMetadataUrlSaml;
-    metadataXml?: Management.ConnectionMetadataXmlSaml;
-    recipientUrl?: Management.ConnectionRecipientUrlSaml;
-    requestTemplate?: Management.ConnectionRequestTemplateSaml;
-    signingCert?: Management.ConnectionSigningCertSaml;
-    signing_key?: Management.ConnectionSigningKeySaml;
-    signOutEndpoint?: Management.ConnectionSignOutEndpointSaml;
-    user_id_attribute?: Management.ConnectionUserIdAttributeSaml;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
+export type ConnectionOptionsSaml = Record<string, unknown>;
 
 /**
  * Options for the 'sms' connection
  */
-export interface ConnectionOptionsSms extends Management.ConnectionOptionsCommon {
-    /** Whether brute force protection is enabled */
-    brute_force_protection?: boolean;
-    disable_signup?: Management.ConnectionDisableSignupSms;
-    forward_req_info?: Management.ConnectionForwardReqInfoSms;
-    from?: Management.ConnectionFromSms;
-    gateway_authentication?: Management.ConnectionGatewayAuthenticationSms | null;
-    gateway_url?: Management.ConnectionGatewayUrlSms;
-    messaging_service_sid?: Management.ConnectionMessagingServiceSidSms;
-    /** Connection name */
-    name?: string;
-    provider?: Management.ConnectionProviderSms;
-    syntax?: Management.ConnectionTemplateSyntaxEnumSms;
-    template?: Management.ConnectionTemplateSms;
-    totp?: Management.ConnectionTotpSms;
-    twilio_sid?: Management.ConnectionTwilioSidSms;
-    twilio_token?: Management.ConnectionTwilioTokenSms;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
+export type ConnectionOptionsSms = Record<string, unknown>;
 
 export type ConnectionOptionsSalesforce = Management.ConnectionOptionsSalesforceCommon;
 
@@ -4648,24 +4146,6 @@ export const ConnectionPasswordPolicyEnum = {
 } as const;
 export type ConnectionPasswordPolicyEnum =
     (typeof ConnectionPasswordPolicyEnum)[keyof typeof ConnectionPasswordPolicyEnum];
-
-/**
- * Phone OTP authentication enablement
- */
-export interface ConnectionPhoneOtpAuthenticationMethod {
-    /** Determines whether phone OTP is enabled */
-    enabled?: boolean;
-}
-
-/**
- * URL provided by PingFederate which returns information used for creating the connection
- */
-export type ConnectionPingFederateBaseUrl = Management.ConnectionPingFederateBaseUrlPingFederate;
-
-/**
- * PingFederate base URL constrained to HTTP/HTTPS with length bounds
- */
-export type ConnectionPingFederateBaseUrlPingFederate = Management.ConnectionHttpsUrlWithHttpFallback;
 
 export interface ConnectionProfile {
     id?: Management.ConnectionProfileId;
@@ -4816,31 +4296,6 @@ export interface ConnectionPropertiesOptions {
     [key: string]: any;
 }
 
-/** Valid SAML protocol bindings */
-export const ConnectionProtocolBindingEnumSaml = {
-    UrnOasisNamesTcSaml20BindingsHttpPost: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-    UrnOasisNamesTcSaml20BindingsHttpRedirect: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-} as const;
-export type ConnectionProtocolBindingEnumSaml =
-    (typeof ConnectionProtocolBindingEnumSaml)[keyof typeof ConnectionProtocolBindingEnumSaml];
-
-/**
- * SAML protocol binding mechanism for sending authentication requests to the identity provider.
- */
-export type ConnectionProtocolBindingSaml = Management.ConnectionProtocolBindingEnumSaml;
-
-/** SMS provider values. Use 'sms_gateway' to use a custom SMS gateway instead of Twilio. */
-export const ConnectionProviderEnumSms = {
-    SmsGateway: "sms_gateway",
-    Twilio: "twilio",
-} as const;
-export type ConnectionProviderEnumSms = (typeof ConnectionProviderEnumSms)[keyof typeof ConnectionProviderEnumSms];
-
-/**
- * SMS provider. Set to 'sms_gateway' to use a custom SMS gateway instead of Twilio.
- */
-export type ConnectionProviderSms = Management.ConnectionProviderEnumSms;
-
 /**
  * A ticket used for provisioning the connection
  */
@@ -4859,14 +4314,9 @@ export type ConnectionRealmFallback = boolean;
 /**
  * Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm.
  */
-export type ConnectionRealmsAuth0 = string[];
+export type ConnectionRealms = string[];
 
-/**
- * The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL.
- */
-export type ConnectionRecipientUrlSaml = Management.ConnectionHttpsUrlWithHttpFallback255;
-
-export type ConnectionRegistrationEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionRegistrationEndpoint = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /**
  * JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference.
@@ -4887,11 +4337,6 @@ export type ConnectionRequestObjectSigningAlgValuesSupported = string[];
  * Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false.
  */
 export type ConnectionRequestParameterSupported = boolean;
-
-/**
- * Custom XML template for SAML authentication requests. Supports variable substitution using @@variableName@@ syntax. When not provided, uses default SAML AuthnRequest template. See https://auth0.com/docs/authenticate/protocols/saml/saml-sso-integrations/configure-auth0-saml-service-provider#customize-the-request-template
- */
-export type ConnectionRequestTemplateSaml = string;
 
 /**
  * Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false.
@@ -4926,7 +4371,6 @@ export interface ConnectionResponseContentAd extends Management.ConnectionRespon
 export interface ConnectionResponseContentAdfs extends Management.ConnectionResponseCommon {
     strategy: "adfs";
     options?: Management.ConnectionOptionsAdfs;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -4959,7 +4403,6 @@ export interface ConnectionResponseContentApple extends Management.ConnectionRes
 export interface ConnectionResponseContentAuth0 extends Management.ConnectionResponseCommon {
     strategy: "auth0";
     options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealmsAuth0;
 }
 
 /**
@@ -4978,7 +4421,6 @@ export interface ConnectionResponseContentAzureAd extends Management.ConnectionR
     options?: Management.ConnectionOptionsAzureAd;
     provisioning_ticket?: Management.ConnectionProvisioningTicket;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
     strategy_version?: Management.ConnectionStrategyVersionEnumAzureAd;
 }
 
@@ -5116,7 +4558,6 @@ export interface ConnectionResponseContentGitHub extends Management.ConnectionRe
 export interface ConnectionResponseContentGoogleApps extends Management.ConnectionResponseCommon {
     strategy: "google-apps";
     options?: Management.ConnectionOptionsGoogleApps;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5133,7 +4574,6 @@ export interface ConnectionResponseContentGoogleOAuth2 extends Management.Connec
 export interface ConnectionResponseContentIp extends Management.ConnectionResponseCommon {
     strategy: "ip";
     options?: Management.ConnectionOptionsIp;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5190,7 +4630,6 @@ export interface ConnectionResponseContentOAuth2 extends Management.ConnectionRe
 export interface ConnectionResponseContentOidc extends Management.ConnectionResponseCommon {
     strategy: "oidc";
     options?: Management.ConnectionOptionsOidc;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5199,7 +4638,6 @@ export interface ConnectionResponseContentOidc extends Management.ConnectionResp
 export interface ConnectionResponseContentOffice365 extends Management.ConnectionResponseCommon {
     strategy: "office365";
     options?: Management.ConnectionOptionsOffice365;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5208,7 +4646,6 @@ export interface ConnectionResponseContentOffice365 extends Management.Connectio
 export interface ConnectionResponseContentOkta extends Management.ConnectionResponseCommon {
     strategy: "okta";
     options?: Management.ConnectionOptionsOkta;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5233,8 +4670,6 @@ export interface ConnectionResponseContentPaypalSandbox extends Management.Conne
 export interface ConnectionResponseContentPingFederate extends Management.ConnectionResponseCommon {
     strategy: "pingfederate";
     options?: Management.ConnectionOptionsPingFederate;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5259,7 +4694,6 @@ export interface ConnectionResponseContentRenren extends Management.ConnectionRe
 export interface ConnectionResponseContentSaml extends Management.ConnectionResponseCommon {
     strategy: "samlp";
     options?: Management.ConnectionOptionsSaml;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5300,7 +4734,6 @@ export interface ConnectionResponseContentSalesforceSandbox extends Management.C
 export interface ConnectionResponseContentSharepoint extends Management.ConnectionResponseCommon {
     strategy: "sharepoint";
     options?: Management.ConnectionOptionsSharepoint;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -5444,11 +4877,6 @@ export type ConnectionScopeArray = Management.ConnectionScopeItem[];
 export type ConnectionScopeAzureAd = string[];
 
 /**
- * Additional OAuth scopes requested beyond the default `email profile` scopes; ignored unless `allow_setting_login_scopes` is true.
- */
-export type ConnectionScopeGoogleApps = Management.ConnectionScopeItemGoogleApps[];
-
-/**
  * Array of OAuth 2.0 scopes requested during Google authentication.
  */
 export type ConnectionScopeGoogleOAuth2 = Management.ConnectionScopeArray;
@@ -5457,11 +4885,6 @@ export type ConnectionScopeGoogleOAuth2 = Management.ConnectionScopeArray;
  * A single OAuth 2.0 scope string
  */
 export type ConnectionScopeItem = string;
-
-/**
- * An OAuth scope string.
- */
-export type ConnectionScopeItemGoogleApps = string;
 
 /**
  * OAuth 2.0 scopes requested from the identity provider during authorization. Determines what user information and permissions Auth0 can access. Can be specified as a space-delimited string (e.g., 'openid profile email') or array of scope values. The 'useOauthSpecScope' setting controls delimiter behavior when using connection_scope parameter.
@@ -5493,7 +4916,7 @@ export interface ConnectionScriptsOAuth2 {
  */
 export type ConnectionSendBackChannelNonce = boolean;
 
-export type ConnectionServiceDocumentation = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionServiceDocumentation = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /** When using an external IdP, this flag determines  whether 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes are updated. In addition, it also determines whether the user is created when user doesnt exist previously. Possible values are 'on_each_login' (default value, it configures the connection to automatically create the user if necessary and update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to create the user and set the root attributes on first login only, allowing them to be independently updated thereafter), and 'never_on_login' (configures the connection not to create the user and not to set the root attributes from the external IdP, allowing them to be independently updated). */
 export const ConnectionSetUserRootAttributesEnum = {
@@ -5504,16 +4927,6 @@ export const ConnectionSetUserRootAttributesEnum = {
 export type ConnectionSetUserRootAttributesEnum =
     (typeof ConnectionSetUserRootAttributesEnum)[keyof typeof ConnectionSetUserRootAttributesEnum];
 
-/**
- * SHA-1 thumbprint allowing standard format or relaxed legacy hex string.
- */
-export type ConnectionSha1ThumbprintRelaxedValidationSaml = Management.ConnectionSha1ThumbprintSaml;
-
-/**
- * SHA-1 thumbprint of the certificate
- */
-export type ConnectionSha1ThumbprintSaml = string;
-
 /** Choose how Auth0 sets the email_verified field in the user profile. */
 export const ConnectionShouldTrustEmailVerifiedConnectionEnum = {
     NeverSetEmailsAsVerified: "never_set_emails_as_verified",
@@ -5523,72 +4936,9 @@ export type ConnectionShouldTrustEmailVerifiedConnectionEnum =
     (typeof ConnectionShouldTrustEmailVerifiedConnectionEnum)[keyof typeof ConnectionShouldTrustEmailVerifiedConnectionEnum];
 
 /**
- * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`.
+ * Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.)
  */
 export type ConnectionShowAsButton = boolean;
-
-/**
- * Passive Requestor (WS-Fed) sign-in endpoint discovered from metadata or provided explicitly.
- */
-export type ConnectionSignInEndpointAdfs = Management.ConnectionHttpsUrlWithHttpFallback2048;
-
-/**
- * Identity provider's SAML SingleSignOnService endpoint URL where Auth0 sends SAML authentication requests. This is the primary login URL for the SAML connection. Required unless using metadataUrl or metadataXml.
- */
-export type ConnectionSignInEndpointSaml = Management.ConnectionHttpsUrlWithHttpFallback2048;
-
-/**
- * Identity provider's SAML SingleLogoutService endpoint URL where Auth0 sends logout requests for federated sign-out. When not provided, defaults to signInEndpoint. Only used if disableSignout is false.
- */
-export type ConnectionSignOutEndpointSaml = Management.ConnectionHttpsUrlWithHttpFallback2048;
-
-/**
- * When true, Auth0 signs SAML authentication requests using the connection's signing key. The signature includes the request's digest and is validated by the identity provider. Defaults to false (unsigned requests).
- */
-export type ConnectionSignSamlRequestSaml = boolean;
-
-/** Valid SAML signature algorithms */
-export const ConnectionSignatureAlgorithmEnumSaml = {
-    RsaSha1: "rsa-sha1",
-    RsaSha256: "rsa-sha256",
-} as const;
-export type ConnectionSignatureAlgorithmEnumSaml =
-    (typeof ConnectionSignatureAlgorithmEnumSaml)[keyof typeof ConnectionSignatureAlgorithmEnumSaml];
-
-/**
- * Algorithm used to sign SAML authentication requests and logout requests using the connection's signing key. Common values: 'rsa-sha256' (RSA signature with SHA-256 digest) or 'rsa-sha1'. Defaults to 'rsa-sha256'.
- */
-export type ConnectionSignatureAlgorithmSaml = Management.ConnectionSignatureAlgorithmEnumSaml;
-
-/**
- * Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification.
- */
-export type ConnectionSigningCertSaml = Management.ConnectionSigningCertificatePemSaml;
-
-/**
- * X.509 signing certificate from the identity provider in .der format. Used to validate signatures in SAML Responses and Assertions. This is an alternative to signingCert and is kept for backward compatibility. Prefer using signingCert instead.
- */
-export type ConnectionSigningCertificateDerSaml = string;
-
-/**
- * Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification.
- */
-export type ConnectionSigningCertificatePemPingFederate = string;
-
-/**
- * Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification.
- */
-export type ConnectionSigningCertificatePemSaml = string;
-
-/**
- * Key pair with 'key' and 'cert' properties for signing SAML messages
- */
-export interface ConnectionSigningKeySaml {
-    /** Base64-encoded X.509 certificate in PEM format used by Auth0 to sign SAML requests and logout messages. */
-    cert?: string;
-    /** Private key in PEM format used by Auth0 to sign SAML requests and logout messages. */
-    key?: string;
-}
 
 export const ConnectionStrategyEnum = {
     Ad: "ad",
@@ -5668,31 +5018,11 @@ export type ConnectionStrategyVersionEnumAzureAd = number;
 export type ConnectionSubjectTypesSupported = string[];
 
 /**
- * SMS message template. Use `@@password@@` as a placeholder for the verification code.
- */
-export type ConnectionTemplateSms = string;
-
-/** SMS template syntax type. Set to 'md_with_macros' to enable macro processing in templates. */
-export const ConnectionTemplateSyntaxEnumSms = {
-    Liquid: "liquid",
-    MdWithMacros: "md_with_macros",
-} as const;
-export type ConnectionTemplateSyntaxEnumSms =
-    (typeof ConnectionTemplateSyntaxEnumSms)[keyof typeof ConnectionTemplateSyntaxEnumSms];
-
-/**
  * Tenant domain
  */
-export type ConnectionTenantDomain = string;
+export type ConnectionTenantDomain = (string | null) | undefined;
 
 export type ConnectionTenantDomainAzureAdOne = string;
-
-/**
- * The Google Workspace primary domain used to identify the organization during authentication.
- */
-export type ConnectionTenantDomainGoogleApps = Management.ConnectionTenantDomain;
-
-export type ConnectionTenantDomainSaml = Management.ConnectionTenantDomain;
 
 /**
  * The Azure AD tenant ID as a UUID. The unique identifier for your Azure AD organization. Must be a valid 36-character UUID.
@@ -5704,7 +5034,10 @@ export type ConnectionTenantIdAzureAd = string;
  */
 export type ConnectionThumbprints = string[];
 
-export type ConnectionTokenEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow.
+ */
+export type ConnectionTokenEndpoint = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /** Requested Client Authentication method for the Token Endpoint. */
 export const ConnectionTokenEndpointAuthMethodEnum = {
@@ -5737,59 +5070,6 @@ export type ConnectionTokenEndpointAuthSigningAlgValuesSupported = string[];
 export type ConnectionTokenEndpointOAuth2 = Management.ConnectionTokenEndpoint;
 
 export type ConnectionTokenEndpointOidc = Management.ConnectionTokenEndpoint;
-
-export interface ConnectionTotpEmail {
-    length?: Management.ConnectionTotpLengthEmail;
-    time_step?: Management.ConnectionTotpTimeStepEmail;
-}
-
-/**
- * Length of the TOTP code
- */
-export type ConnectionTotpLengthEmail = Management.ConnectionTotpLengthPasswordless;
-
-/**
- * Length of the TOTP code
- */
-export type ConnectionTotpLengthPasswordless = number;
-
-/**
- * Number of digits in the verification code
- */
-export type ConnectionTotpLengthSms = Management.ConnectionTotpLengthPasswordless;
-
-/**
- * Time-based One-Time Password (TOTP) options
- */
-export interface ConnectionTotpSms {
-    length?: Management.ConnectionTotpLengthSms;
-    time_step?: Management.ConnectionTotpTimeStepSms;
-}
-
-/**
- * Time step for TOTP in seconds
- */
-export type ConnectionTotpTimeStepEmail = Management.ConnectionTotpTimeStepPasswordless;
-
-/**
- * Time step for TOTP in seconds
- */
-export type ConnectionTotpTimeStepPasswordless = number;
-
-/**
- * Code validity duration in seconds
- */
-export type ConnectionTotpTimeStepSms = Management.ConnectionTotpTimeStepPasswordless;
-
-/**
- * Twilio Account SID
- */
-export type ConnectionTwilioSidSms = string;
-
-/**
- * Twilio Auth Token
- */
-export type ConnectionTwilioTokenSms = string;
 
 /** Connection type */
 export const ConnectionTypeEnumOidc = {
@@ -5840,7 +5120,12 @@ export type ConnectionUpstreamParams =
     | (Record<string, (Management.ConnectionUpstreamAdditionalProperties | null) | undefined> | null)
     | undefined;
 
-export type ConnectionUpstreamParamsAdfs = ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+/**
+ * Custom parameters to include in authentication requests to Azure AD. Accepts up to 10 key-value pairs for passing additional parameters like domain hints or tenant hints to the identity provider.
+ */
+export type ConnectionUpstreamParamsAzureAd = ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+
+export type ConnectionUpstreamParamsOidc = ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
 
 export interface ConnectionUpstreamValue {
     value?: string;
@@ -5850,11 +5135,6 @@ export interface ConnectionUpstreamValue {
  * When enabled (true), uses the Azure AD common endpoint for multi-tenant authentication. Allows users from any Azure AD organization to sign in. Requires userid_attribute set to 'sub' (not 'oid'). Cannot be used with SCIM provisioning. Defaults to false.
  */
 export type ConnectionUseCommonEndpointAzureAd = boolean;
-
-/**
- * Custom SAML assertion attribute to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single SAML attribute name).
- */
-export type ConnectionUserIdAttributeSaml = string;
 
 /**
  * The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol.
@@ -5879,7 +5159,7 @@ export type ConnectionUserinfoEncryptionAlgValuesSupported = string[];
  */
 export type ConnectionUserinfoEncryptionEncValuesSupported = string[];
 
-export type ConnectionUserinfoEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
+export type ConnectionUserinfoEndpoint = Management.ConnectionHttpsUrlWithHttpFallback;
 
 export type ConnectionUserinfoEndpointOidc = Management.ConnectionUserinfoEndpoint;
 
@@ -5948,8 +5228,6 @@ export interface CreateActionResponseContent {
     built_at?: string;
     /** True if the action should be deployed after creation. */
     deploy?: boolean;
-    /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
 }
 
 /**
@@ -5981,18 +5259,6 @@ export interface CreateBrandingThemeResponseContent {
     themeId: string;
     widget: Management.BrandingThemeWidget;
 }
-
-/**
- * Defines `self_signed_tls_client_auth` client authentication method. If the property is defined, the client is configured to use mTLS authentication method utilizing self-signed certificate.
- */
-export interface CreateClientAuthenticationMethodSelfSignedTlsClientAuth {
-    credentials: Management.CreateClientAuthenticationMethodSelfSignedTlsClientAuthCredentials;
-}
-
-/**
- * Fully defined credentials that will be enabled on the client for mTLS authentication utilizing self-signed certificate.
- */
-export type CreateClientAuthenticationMethodSelfSignedTlsClientAuthCredentials = Management.X509CertificateCredential[];
 
 export interface CreateClientGrantResponseContent {
     /** ID of the client grant. */
@@ -6135,7 +5401,6 @@ export interface CreateConnectionRequestContentAd extends Management.CreateConne
 export interface CreateConnectionRequestContentAdfs extends Management.CreateConnectionCommon {
     strategy: "adfs";
     options?: Management.ConnectionOptionsAdfs;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6168,7 +5433,6 @@ export interface CreateConnectionRequestContentApple extends Management.CreateCo
 export interface CreateConnectionRequestContentAuth0 extends Management.CreateConnectionCommon {
     strategy: "auth0";
     options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealmsAuth0;
 }
 
 /**
@@ -6187,7 +5451,6 @@ export interface CreateConnectionRequestContentAzureAd extends Management.Create
     options?: Management.ConnectionOptionsAzureAd;
     provisioning_ticket?: Management.ConnectionProvisioningTicket;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6324,7 +5587,6 @@ export interface CreateConnectionRequestContentGitHub extends Management.CreateC
 export interface CreateConnectionRequestContentGoogleApps extends Management.CreateConnectionCommon {
     strategy: "google-apps";
     options?: Management.ConnectionOptionsGoogleApps;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6341,7 +5603,6 @@ export interface CreateConnectionRequestContentGoogleOAuth2 extends Management.C
 export interface CreateConnectionRequestContentIp extends Management.CreateConnectionCommon {
     strategy: "ip";
     options?: Management.ConnectionOptionsIp;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6398,7 +5659,6 @@ export interface CreateConnectionRequestContentOAuth2 extends Management.CreateC
 export interface CreateConnectionRequestContentOidc extends Management.CreateConnectionCommon {
     strategy: "oidc";
     options?: Management.ConnectionOptionsOidc;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6407,7 +5667,6 @@ export interface CreateConnectionRequestContentOidc extends Management.CreateCon
 export interface CreateConnectionRequestContentOffice365 extends Management.CreateConnectionCommon {
     strategy: "office365";
     options?: Management.ConnectionOptionsOffice365;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6416,7 +5675,6 @@ export interface CreateConnectionRequestContentOffice365 extends Management.Crea
 export interface CreateConnectionRequestContentOkta extends Management.CreateConnectionCommon {
     strategy: "okta";
     options?: Management.ConnectionOptionsOkta;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6441,7 +5699,6 @@ export interface CreateConnectionRequestContentPaypalSandbox extends Management.
 export interface CreateConnectionRequestContentPingFederate extends Management.CreateConnectionCommon {
     strategy: "pingfederate";
     options?: Management.ConnectionOptionsPingFederate;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6466,7 +5723,6 @@ export interface CreateConnectionRequestContentRenren extends Management.CreateC
 export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
     strategy: "samlp";
     options?: Management.ConnectionOptionsSaml;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -6507,7 +5763,6 @@ export interface CreateConnectionRequestContentSalesforceSandbox extends Managem
 export interface CreateConnectionRequestContentSharepoint extends Management.CreateConnectionCommon {
     strategy: "sharepoint";
     options?: Management.ConnectionOptionsSharepoint;
-    show_as_button?: Management.ConnectionShowAsButton;
 }
 
 /**
@@ -7509,8 +6764,6 @@ export interface CreateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -7876,8 +7129,6 @@ export interface CustomDomain {
     domain: string;
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
-    /** Whether this is the default custom domain (true) or not (false). */
-    is_default?: boolean;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     /** Intermediate address. */
@@ -8035,14 +7286,6 @@ export interface DailyStats {
     [key: string]: any;
 }
 
-/** Default authentication method for email identifier */
-export const DefaultMethodEmailIdentifierEnum = {
-    Password: "password",
-    EmailOtp: "email_otp",
-} as const;
-export type DefaultMethodEmailIdentifierEnum =
-    (typeof DefaultMethodEmailIdentifierEnum)[keyof typeof DefaultMethodEmailIdentifierEnum];
-
 /**
  * Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.
  */
@@ -8108,8 +7351,6 @@ export interface DeployActionResponseContent {
     updated_at?: string;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
     supported_triggers?: Management.ActionTrigger[];
-    /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
 }
 
 export interface DeployActionVersionRequestBodyParams {
@@ -8148,8 +7389,6 @@ export interface DeployActionVersionResponseContent {
     updated_at?: string;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
     supported_triggers?: Management.ActionTrigger[];
-    /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
 }
 
 export interface DeviceCredential {
@@ -11298,8 +10537,6 @@ export interface GetActionResponseContent {
     built_at?: string;
     /** True if the action should be deployed after creation. */
     deploy?: boolean;
-    /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
 }
 
 export interface GetActionVersionResponseContent {
@@ -11331,8 +10568,6 @@ export interface GetActionVersionResponseContent {
     updated_at?: string;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
     supported_triggers?: Management.ActionTrigger[];
-    /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
 }
 
 /**
@@ -11348,9 +10583,10 @@ export interface GetAculResponseContent {
     /** Name of the screen */
     screen?: string;
     rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    /** Context values to make available */
+    context_configuration?: string[];
     /** Override Universal Login default head tags */
-    default_head_tags_disabled?: boolean | null;
+    default_head_tags_disabled?: boolean;
     /** Use page template with ACUL */
     use_page_template?: boolean | null;
     /** An array of head tags */
@@ -11667,8 +10903,6 @@ export interface GetCustomDomainResponseContent {
     domain: string;
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
-    /** Whether this is the default custom domain (true) or not (false). */
-    is_default?: boolean;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     /** Intermediate address. */
@@ -11864,37 +11098,6 @@ export interface GetFormResponseContent {
     updated_at: string;
     embedded_at?: string;
     submitted_at?: string;
-}
-
-export interface GetGroupMembersResponseContent {
-    members: Management.GroupMember[];
-    /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-}
-
-/**
- * Represents the metadata of a group. Member lists are retrieved via a separate endpoint.
- */
-export interface GetGroupResponseContent {
-    /** Unique identifier for the group (service-generated). */
-    id: string;
-    /** Name of the group. Must be unique within its scope (connection, organization, or tenant). Must contain between 1 and 128 printable ASCII characters. */
-    name: string;
-    /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
-    external_id?: string;
-    /** Identifier for the connection this group belongs to (if a connection group). */
-    connection_id?: string;
-    /** Identifier for the organization this group belongs to (if an organization group). */
-    organization_id?: string | null;
-    /** Identifier for the tenant this group belongs to. */
-    tenant_name: string;
-    description?: string | null;
-    /** Timestamp of when the group was created. */
-    created_at: string;
-    /** Timestamp of when the group was last updated. */
-    updated_at: string;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 export interface GetGuardianEnrollmentResponseContent {
@@ -12159,28 +11362,12 @@ export interface GetOrganizationConnectionResponseContent {
     connection?: Management.OrganizationConnectionInformation;
 }
 
-export interface GetOrganizationDiscoveryDomainByNameResponseContent {
-    /** Organization discovery domain identifier. */
-    id: string;
-    /** The domain name to associate with the organization e.g. acme.com. */
-    domain: string;
-    status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
-    /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
-    verification_txt: string;
-    /** The full domain where the TXT record should be added. */
-    verification_host: string;
-}
-
 export interface GetOrganizationDiscoveryDomainResponseContent {
     /** Organization discovery domain identifier. */
     id: string;
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -12258,7 +11445,6 @@ export interface GetRefreshTokenResponseContent {
     rotating?: boolean;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
     last_exchanged_at?: Management.RefreshTokenDate;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -12515,8 +11701,6 @@ export interface GetTenantSettingsResponseContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
-    /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
-    enable_ai_guide?: boolean;
 }
 
 export interface GetTokenExchangeProfileResponseContent {
@@ -12601,15 +11785,6 @@ export interface GetUserAuthenticationMethodResponseContent {
     aaguid?: string;
     /** Applies to webauthn/passkey authentication methods only. The credential's relying party identifier. */
     relying_party_identifier?: string;
-}
-
-export interface GetUserGroupsPaginatedResponseContent {
-    groups: Management.UserGroupsResponseSchema[];
-    /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-    start?: number;
-    limit?: number;
-    total?: number;
 }
 
 export interface GetUserResponseContent {
@@ -12700,37 +11875,6 @@ export interface Group {
     /** Accepts any additional properties */
     [key: string]: any;
 }
-
-/**
- * Represents the metadata of a group membership.
- */
-export interface GroupMember {
-    /** Unique identifier for the member. */
-    id?: string;
-    member_type?: Management.GroupMemberTypeEnum;
-    type?: Management.GroupTypeEnum;
-    /** Identifier for the connection this group belongs to (if a connection group). */
-    connection_id?: string;
-    /** Timestamp of when the membership was created. */
-    created_at?: string;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
-/** Type of the member. */
-export const GroupMemberTypeEnum = {
-    User: "user",
-    Group: "group",
-} as const;
-export type GroupMemberTypeEnum = (typeof GroupMemberTypeEnum)[keyof typeof GroupMemberTypeEnum];
-
-/** Type of the group. */
-export const GroupTypeEnum = {
-    Connection: "connection",
-    Organization: "organization",
-    Tenant: "tenant",
-} as const;
-export type GroupTypeEnum = (typeof GroupTypeEnum)[keyof typeof GroupTypeEnum];
 
 /**
  * Enrollment date and time.
@@ -13114,33 +12258,13 @@ export interface ListActionsPaginatedResponseContent {
 }
 
 export interface ListAculsOffsetPaginatedResponseContent {
-    configs?: Management.ListAculsResponseContentItem[];
+    configs?: Management.AculResponseContent[];
     /** the index of the first configuration in the response (before filtering) */
     start?: number;
     /** the maximum number of configurations shown per page (before filtering) */
     limit?: number;
     /** the total number of configurations on this tenant */
     total?: number;
-}
-
-export interface ListAculsResponseContentItem {
-    /** Tenant ID */
-    tenant?: string;
-    /** Name of the prompt */
-    prompt?: string;
-    /** Name of the screen */
-    screen?: string;
-    rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
-    /** Override Universal Login default head tags */
-    default_head_tags_disabled?: boolean | null;
-    /** Use page template with ACUL */
-    use_page_template?: boolean | null;
-    /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
-    filters?: Management.AculFilters | null;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 export interface ListBrandingPhoneProvidersResponseContent {
@@ -13210,14 +12334,6 @@ export interface ListEncryptionKeyOffsetPaginatedResponseContent {
     keys?: Management.EncryptionKey[];
 }
 
-export interface ListEventStreamsResponseContent {
-    eventStreams?: Management.EventStreamResponseContent[];
-    /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results. */
-    next?: string;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
 export interface ListFlowExecutionsPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
     next?: string;
@@ -13243,15 +12359,6 @@ export interface ListFormsOffsetPaginatedResponseContent {
     limit?: number;
     total?: number;
     forms?: Management.FormSummary[];
-}
-
-export interface ListGroupsPaginatedResponseContent {
-    groups: Management.Group[];
-    /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-    start?: number;
-    limit?: number;
-    total?: number;
 }
 
 export type ListGuardianPoliciesResponseContent = Management.MfaPolicyEnum[];
@@ -14242,8 +13349,6 @@ export interface OrganizationDiscoveryDomain {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -14529,6 +13634,18 @@ export const PreferredAuthenticationMethodEnum = {
 export type PreferredAuthenticationMethodEnum =
     (typeof PreferredAuthenticationMethodEnum)[keyof typeof PreferredAuthenticationMethodEnum];
 
+/**
+ * Defines `private_key_jwt` client authentication method. If this property is defined, the client is enabled to use the Private Key JWT authentication method.
+ */
+export interface PrivateKeyJwt {
+    credentials: Management.PrivateKeyJwtCredentials;
+}
+
+/**
+ * A list of unique and previously created credential IDs enabled on the client for Private Key JWT authentication.
+ */
+export type PrivateKeyJwtCredentials = Management.CredentialId[];
+
 /** Name of the prompt */
 export const PromptGroupNameEnum = {
     Login: "login",
@@ -14721,11 +13838,6 @@ export const RefreshTokenExpirationTypeEnum = {
 export type RefreshTokenExpirationTypeEnum =
     (typeof RefreshTokenExpirationTypeEnum)[keyof typeof RefreshTokenExpirationTypeEnum];
 
-/**
- * Metadata associated with the refresh token, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
- */
-export type RefreshTokenMetadata = (Record<string, unknown> | null) | undefined;
-
 export interface RefreshTokenResourceServer {
     /** Resource server ID */
     audience?: string;
@@ -14751,7 +13863,6 @@ export interface RefreshTokenResponseContent {
     rotating?: boolean;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
     last_exchanged_at?: Management.RefreshTokenDate;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -15636,12 +14747,26 @@ export interface SetGuardianFactorsProviderPhoneTwilioResponseContent {
     sid?: string | null;
 }
 
+export interface SetGuardianFactorsProviderPushNotificationApnsRequestContent {
+    sandbox?: boolean;
+    bundle_id?: string | null;
+    p12?: string | null;
+}
+
 export interface SetGuardianFactorsProviderPushNotificationApnsResponseContent {
     sandbox?: boolean;
     bundle_id?: string | null;
 }
 
+export interface SetGuardianFactorsProviderPushNotificationFcmRequestContent {
+    server_key?: string | null;
+}
+
 export type SetGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
+
+export interface SetGuardianFactorsProviderPushNotificationFcmv1RequestContent {
+    server_credentials?: string | null;
+}
 
 export type SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
 
@@ -16227,13 +15352,12 @@ export interface UpdateActionResponseContent {
     built_at?: string;
     /** True if the action should be deployed after creation. */
     deploy?: boolean;
-    /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
 }
 
 export interface UpdateAculResponseContent {
     rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    /** Context values to make available */
+    context_configuration?: string[];
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
     /** Use page template with ACUL */
@@ -16562,451 +15686,6 @@ export interface UpdateConnectionProfileResponseContent {
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
 }
 
-/**
- * Update a connection with strategy=ad
- */
-export interface UpdateConnectionRequestContentAd extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAd;
-}
-
-/**
- * Update a connection with strategy=adfs
- */
-export interface UpdateConnectionRequestContentAdfs extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAdfs;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=aol
- */
-export interface UpdateConnectionRequestContentAol extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAol;
-}
-
-/**
- * Update a connection with strategy=amazon
- */
-export interface UpdateConnectionRequestContentAmazon extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAmazon;
-}
-
-/**
- * Update a connection with strategy=apple
- */
-export interface UpdateConnectionRequestContentApple extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsApple;
-}
-
-/**
- * Update a connection with strategy=auth0
- */
-export interface UpdateConnectionRequestContentAuth0 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealmsAuth0;
-}
-
-/**
- * Update a connection with strategy=auth0-oidc
- */
-export interface UpdateConnectionRequestContentAuth0Oidc extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAuth0Oidc;
-}
-
-/**
- * Update a connection with strategy=waad
- */
-export interface UpdateConnectionRequestContentAzureAd extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAzureAd;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=baidu
- */
-export interface UpdateConnectionRequestContentBaidu extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsBaidu;
-}
-
-/**
- * Update a connection with strategy=bitbucket
- */
-export interface UpdateConnectionRequestContentBitbucket extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsBitbucket;
-}
-
-/**
- * Update a connection with strategy=bitly
- */
-export interface UpdateConnectionRequestContentBitly extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsBitly;
-}
-
-/**
- * Update a connection with strategy=box
- */
-export interface UpdateConnectionRequestContentBox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsBox;
-}
-
-/**
- * Update a connection with strategy=custom
- */
-export interface UpdateConnectionRequestContentCustom extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsCustom;
-}
-
-/**
- * Update a connection with strategy=daccount
- */
-export interface UpdateConnectionRequestContentDaccount extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsDaccount;
-}
-
-/**
- * Update a connection with strategy=dropbox
- */
-export interface UpdateConnectionRequestContentDropbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsDropbox;
-}
-
-/**
- * Update a connection with strategy=dwolla
- */
-export interface UpdateConnectionRequestContentDwolla extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsDwolla;
-}
-
-/**
- * Update a connection with strategy=email
- */
-export interface UpdateConnectionRequestContentEmail extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsEmail;
-}
-
-/**
- * Update a connection with strategy=evernote
- */
-export interface UpdateConnectionRequestContentEvernote extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsEvernote;
-}
-
-/**
- * Update a connection with strategy=evernote-sandbox
- */
-export interface UpdateConnectionRequestContentEvernoteSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsEvernoteSandbox;
-}
-
-/**
- * Update a connection with strategy=exact
- */
-export interface UpdateConnectionRequestContentExact extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsExact;
-}
-
-/**
- * Update a connection with strategy=facebook
- */
-export interface UpdateConnectionRequestContentFacebook extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsFacebook;
-}
-
-/**
- * Update a connection with strategy=fitbit
- */
-export interface UpdateConnectionRequestContentFitbit extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsFitbit;
-}
-
-/**
- * Update a connection with strategy=flickr
- */
-export interface UpdateConnectionRequestContentFlickr extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsFlickr;
-}
-
-/**
- * Update a connection with strategy=github
- */
-export interface UpdateConnectionRequestContentGitHub extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsGitHub;
-}
-
-/**
- * Update a connection with strategy=google-apps
- */
-export interface UpdateConnectionRequestContentGoogleApps extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsGoogleApps;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=google-oauth2
- */
-export interface UpdateConnectionRequestContentGoogleOAuth2 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsGoogleOAuth2;
-}
-
-/**
- * Update a connection with strategy=ip
- */
-export interface UpdateConnectionRequestContentIp extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsIp;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=instagram
- */
-export interface UpdateConnectionRequestContentInstagram extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsInstagram;
-}
-
-/**
- * Update a connection with strategy=line
- */
-export interface UpdateConnectionRequestContentLine extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsLine;
-}
-
-/**
- * Update a connection with strategy=linkedin
- */
-export interface UpdateConnectionRequestContentLinkedin extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsLinkedin;
-}
-
-/**
- * Update a connection with strategy=miicard
- */
-export interface UpdateConnectionRequestContentMiicard extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsMiicard;
-}
-
-/**
- * Update a connection with strategy=oauth1
- */
-export interface UpdateConnectionRequestContentOAuth1 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOAuth1;
-}
-
-/**
- * Update a connection with strategy=oauth2
- */
-export interface UpdateConnectionRequestContentOAuth2 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOAuth2;
-}
-
-/**
- * Update a connection with strategy=oidc
- */
-export interface UpdateConnectionRequestContentOidc extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOidc;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=office365
- */
-export interface UpdateConnectionRequestContentOffice365 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOffice365;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=okta
- */
-export interface UpdateConnectionRequestContentOkta extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOkta;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=paypal
- */
-export interface UpdateConnectionRequestContentPaypal extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPaypal;
-}
-
-/**
- * Update a connection with strategy=paypal-sandbox
- */
-export interface UpdateConnectionRequestContentPaypalSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPaypalSandbox;
-}
-
-/**
- * Update a connection with strategy=pingfederate
- */
-export interface UpdateConnectionRequestContentPingFederate extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPingFederate;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=planningcenter
- */
-export interface UpdateConnectionRequestContentPlanningCenter extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPlanningCenter;
-}
-
-/**
- * Update a connection with strategy=renren
- */
-export interface UpdateConnectionRequestContentRenren extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsRenren;
-}
-
-/**
- * Update a connection with strategy=samlp
- */
-export interface UpdateConnectionRequestContentSaml extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSaml;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=sms
- */
-export interface UpdateConnectionRequestContentSms extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSms;
-}
-
-/**
- * Update a connection with strategy=salesforce
- */
-export interface UpdateConnectionRequestContentSalesforce extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforce;
-}
-
-/**
- * Update a connection with strategy=salesforce-community
- */
-export interface UpdateConnectionRequestContentSalesforceCommunity extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforceCommunity;
-}
-
-/**
- * Update a connection with strategy=salesforce-sandbox
- */
-export interface UpdateConnectionRequestContentSalesforceSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforceSandbox;
-}
-
-/**
- * Update a connection with strategy=sharepoint
- */
-export interface UpdateConnectionRequestContentSharepoint extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSharepoint;
-    show_as_button?: Management.ConnectionShowAsButton;
-}
-
-/**
- * Update a connection with strategy=shop
- */
-export interface UpdateConnectionRequestContentShop extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsShop;
-}
-
-/**
- * Update a connection with strategy=shopify
- */
-export interface UpdateConnectionRequestContentShopify extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsShopify;
-}
-
-/**
- * Update a connection with strategy=soundcloud
- */
-export interface UpdateConnectionRequestContentSoundcloud extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSoundcloud;
-}
-
-/**
- * Update a connection with strategy=thecity
- */
-export interface UpdateConnectionRequestContentTheCity extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsTheCity;
-}
-
-/**
- * Update a connection with strategy=thecity-sandbox
- */
-export interface UpdateConnectionRequestContentTheCitySandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsTheCitySandbox;
-}
-
-/**
- * Update a connection with strategy=thirtysevensignals
- */
-export interface UpdateConnectionRequestContentThirtySevenSignals extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsThirtySevenSignals;
-}
-
-/**
- * Update a connection with strategy=twitter
- */
-export interface UpdateConnectionRequestContentTwitter extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsTwitter;
-}
-
-/**
- * Update a connection with strategy=untappd
- */
-export interface UpdateConnectionRequestContentUntappd extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsUntappd;
-}
-
-/**
- * Update a connection with strategy=vkontakte
- */
-export interface UpdateConnectionRequestContentVkontakte extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsVkontakte;
-}
-
-/**
- * Update a connection with strategy=weibo
- */
-export interface UpdateConnectionRequestContentWeibo extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsWeibo;
-}
-
-/**
- * Update a connection with strategy=windowslive
- */
-export interface UpdateConnectionRequestContentWindowsLive extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsWindowsLive;
-}
-
-/**
- * Update a connection with strategy=wordpress
- */
-export interface UpdateConnectionRequestContentWordpress extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsWordpress;
-}
-
-/**
- * Update a connection with strategy=yahoo
- */
-export interface UpdateConnectionRequestContentYahoo extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsYahoo;
-}
-
-/**
- * Update a connection with strategy=yammer
- */
-export interface UpdateConnectionRequestContentYammer extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsYammer;
-}
-
-/**
- * Update a connection with strategy=yandex
- */
-export interface UpdateConnectionRequestContentYandex extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsYandex;
-}
-
 export interface UpdateConnectionResponseContent {
     /** The name of the connection */
     name?: string;
@@ -17037,8 +15716,6 @@ export interface UpdateCustomDomainResponseContent {
     domain: string;
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
-    /** Whether this is the default custom domain (true) or not (false). */
-    is_default?: boolean;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     verification: Management.DomainVerification;
@@ -17197,15 +15874,6 @@ export interface UpdateGuardianFactorDuoSettingsResponseContent {
     host?: string;
 }
 
-export interface UpdateGuardianFactorsProviderPushNotificationApnsResponseContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
-}
-
-export type UpdateGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
-
-export type UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
-
 export interface UpdateGuardianFactorsProviderPushNotificationSnsResponseContent {
     aws_access_key_id?: string | null;
     aws_secret_access_key?: string | null;
@@ -17275,8 +15943,6 @@ export interface UpdateOrganizationDiscoveryDomainResponseContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this domain should be used for organization discovery. Note: This field is only returned when the ss_org_dove_enabled feature flag is enabled for the tenant. */
-    use_for_organization_discovery?: boolean;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -17306,28 +15972,6 @@ export interface UpdatePhoneTemplateResponseContent {
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
     disabled: boolean;
-}
-
-export interface UpdateRefreshTokenResponseContent {
-    /** The ID of the refresh token */
-    id?: string;
-    /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.RefreshTokenDate;
-    idle_expires_at?: Management.RefreshTokenDate;
-    expires_at?: Management.RefreshTokenDate;
-    device?: Management.RefreshTokenDevice;
-    /** ID of the client application granted with this refresh token */
-    client_id?: string;
-    session_id?: (Management.RefreshTokenSessionId | undefined) | null;
-    /** True if the token is a rotating refresh token */
-    rotating?: boolean;
-    /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
-    resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
-    last_exchanged_at?: Management.RefreshTokenDate;
-    /** Accepts any additional properties */
-    [key: string]: any;
 }
 
 export interface UpdateResourceServerResponseContent {
@@ -17540,8 +16184,6 @@ export interface UpdateTenantSettingsResponseContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
-    /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
-    enable_ai_guide?: boolean;
 }
 
 export interface UpdateTokenQuota {
@@ -18224,13 +16866,3 @@ export interface VerifyEmailTicketResponseContent {
     /** Accepts any additional properties */
     [key: string]: any;
 }
-
-export interface X509CertificateCredential {
-    credential_type: Management.X509CertificateCredentialTypeEnum;
-    /** Friendly name for a credential. */
-    name?: string;
-    /** PEM-formatted X509 certificate. Must be JSON escaped. */
-    pem: string;
-}
-
-export type X509CertificateCredentialTypeEnum = "x509_cert";

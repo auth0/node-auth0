@@ -53,7 +53,7 @@ describe("OrganizationsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(400)
@@ -71,7 +71,7 @@ describe("OrganizationsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(401)
@@ -89,7 +89,7 @@ describe("OrganizationsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(403)
@@ -107,7 +107,7 @@ describe("OrganizationsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(429)

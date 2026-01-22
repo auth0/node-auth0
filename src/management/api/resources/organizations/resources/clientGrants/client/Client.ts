@@ -63,29 +63,14 @@ export class ClientGrantsClient {
                     per_page: perPage = 50,
                     include_totals: includeTotals = true,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (audience !== undefined) {
-                    _queryParams["audience"] = audience;
-                }
-                if (clientId !== undefined) {
-                    _queryParams["client_id"] = clientId;
-                }
-                if (grantIds !== undefined) {
-                    if (Array.isArray(grantIds)) {
-                        _queryParams["grant_ids"] = grantIds.map((item) => item);
-                    } else {
-                        _queryParams["grant_ids"] = grantIds;
-                    }
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    audience,
+                    client_id: clientId,
+                    grant_ids: grantIds,
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

@@ -56,26 +56,13 @@ export class ResourceServersClient {
                     include_totals: includeTotals = true,
                     include_fields: includeFields,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (identifiers !== undefined) {
-                    if (Array.isArray(identifiers)) {
-                        _queryParams["identifiers"] = identifiers.map((item) => item);
-                    } else {
-                        _queryParams["identifiers"] = identifiers;
-                    }
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    identifiers,
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    include_fields: includeFields,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -264,11 +251,9 @@ export class ResourceServersClient {
         requestOptions?: ResourceServersClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetResourceServerResponseContent>> {
         const { include_fields: includeFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            include_fields: includeFields,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

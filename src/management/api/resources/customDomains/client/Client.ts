@@ -34,6 +34,8 @@ export class CustomDomainsClient {
      *
      * @example
      *     await client.customDomains.list({
+     *         take: 1,
+     *         from: "from",
      *         q: "q",
      *         fields: "fields",
      *         include_fields: true,
@@ -51,24 +53,15 @@ export class CustomDomainsClient {
         request: Management.ListCustomDomainsRequestParameters = {},
         requestOptions?: CustomDomainsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListCustomDomainsResponseContent>> {
-        const { q, fields, include_fields: includeFields, sort } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (q !== undefined) {
-            _queryParams["q"] = q;
-        }
-
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
-        if (sort !== undefined) {
-            _queryParams["sort"] = sort;
-        }
-
+        const { take = 50, from: from_, q, fields, include_fields: includeFields, sort } = request;
+        const _queryParams: Record<string, unknown> = {
+            take,
+            from: from_,
+            q,
+            fields,
+            include_fields: includeFields,
+            sort,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

@@ -67,25 +67,14 @@ export class InvitationsClient {
                     include_fields: includeFields,
                     sort,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (sort !== undefined) {
-                    _queryParams["sort"] = sort;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    fields,
+                    include_fields: includeFields,
+                    sort,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -300,15 +289,10 @@ export class InvitationsClient {
         requestOptions?: InvitationsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetOrganizationInvitationResponseContent>> {
         const { fields, include_fields: includeFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            fields,
+            include_fields: includeFields,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

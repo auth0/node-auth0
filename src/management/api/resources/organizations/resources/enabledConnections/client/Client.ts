@@ -56,16 +56,11 @@ export class EnabledConnectionsClient {
                 request: Management.ListOrganizationConnectionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationConnectionsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
