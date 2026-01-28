@@ -9,6 +9,7 @@ import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCode
 import * as errors from "../../../../errors/index.js";
 import * as Management from "../../../index.js";
 import { ExecutionsClient } from "../resources/executions/client/Client.js";
+import { ModulesClient } from "../resources/modules/client/Client.js";
 import { TriggersClient } from "../resources/triggers/client/Client.js";
 import { VersionsClient } from "../resources/versions/client/Client.js";
 
@@ -22,6 +23,7 @@ export class ActionsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ActionsClient.Options>;
     protected _versions: VersionsClient | undefined;
     protected _executions: ExecutionsClient | undefined;
+    protected _modules: ModulesClient | undefined;
     protected _triggers: TriggersClient | undefined;
 
     constructor(options: ActionsClient.Options) {
@@ -34,6 +36,10 @@ export class ActionsClient {
 
     public get executions(): ExecutionsClient {
         return (this._executions ??= new ExecutionsClient(this._options));
+    }
+
+    public get modules(): ModulesClient {
+        return (this._modules ??= new ModulesClient(this._options));
     }
 
     public get triggers(): TriggersClient {

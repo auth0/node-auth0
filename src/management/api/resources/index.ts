@@ -13,6 +13,7 @@ export * as emailTemplates from "./emailTemplates/index.js";
 export * as eventStreams from "./eventStreams/index.js";
 export * from "./eventStreams/types/index.js";
 export * as flows from "./flows/index.js";
+export * from "./flows/types/index.js";
 export * as forms from "./forms/index.js";
 export * as groups from "./groups/index.js";
 export * as guardian from "./guardian/index.js";

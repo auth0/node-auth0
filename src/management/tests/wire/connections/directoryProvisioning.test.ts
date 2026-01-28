@@ -5,6 +5,140 @@ import { ManagementClient } from "../../../Client";
 import { mockServerPool } from "../../mock-server/MockServerPool";
 
 describe("DirectoryProvisioningClient", () => {
+    test("list (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            directory_provisionings: [
+                {
+                    connection_id: "connection_id",
+                    connection_name: "connection_name",
+                    strategy: "strategy",
+                    mapping: [{ auth0: "auth0", idp: "idp" }],
+                    synchronize_automatically: true,
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    last_synchronization_at: "2024-01-15T09:30:00Z",
+                    last_synchronization_status: "last_synchronization_status",
+                    last_synchronization_error: "last_synchronization_error",
+                },
+            ],
+            next: "next",
+        };
+        server
+            .mockEndpoint({ once: false })
+            .get("/connections-directory-provisionings")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            directory_provisionings: [
+                {
+                    connection_id: "connection_id",
+                    connection_name: "connection_name",
+                    strategy: "strategy",
+                    mapping: [
+                        {
+                            auth0: "auth0",
+                            idp: "idp",
+                        },
+                    ],
+                    synchronize_automatically: true,
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    last_synchronization_at: "2024-01-15T09:30:00Z",
+                    last_synchronization_status: "last_synchronization_status",
+                    last_synchronization_error: "last_synchronization_error",
+                },
+            ],
+            next: "next",
+        };
+        const page = await client.connections.directoryProvisioning.list({
+            from: "from",
+            take: 1,
+        });
+
+        expect(expected.directory_provisionings).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.directory_provisionings).toEqual(nextPage.data);
+    });
+
+    test("list (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint({ once: false })
+            .get("/connections-directory-provisionings")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.list();
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint({ once: false })
+            .get("/connections-directory-provisionings")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.list();
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("list (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint({ once: false })
+            .get("/connections-directory-provisionings")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.list();
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("list (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint({ once: false })
+            .get("/connections-directory-provisionings")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.list();
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });

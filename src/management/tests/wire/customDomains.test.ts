@@ -33,6 +33,7 @@ describe("CustomDomainsClient", () => {
                     certificate_authority: "letsencrypt",
                     renews_before: "renews_before",
                 },
+                relying_party_identifier: "relying_party_identifier",
             },
         ];
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -74,6 +75,7 @@ describe("CustomDomainsClient", () => {
                     certificate_authority: "letsencrypt",
                     renews_before: "renews_before",
                 },
+                relying_party_identifier: "relying_party_identifier",
             },
         ]);
     });
@@ -122,6 +124,7 @@ describe("CustomDomainsClient", () => {
             custom_domain_id: "custom_domain_id",
             domain: "domain",
             primary: true,
+            is_default: true,
             status: "pending_verification",
             type: "auth0_managed_certs",
             verification: {
@@ -139,6 +142,7 @@ describe("CustomDomainsClient", () => {
                 certificate_authority: "letsencrypt",
                 renews_before: "renews_before",
             },
+            relying_party_identifier: "relying_party_identifier",
         };
         server
             .mockEndpoint()
@@ -157,6 +161,7 @@ describe("CustomDomainsClient", () => {
             custom_domain_id: "custom_domain_id",
             domain: "domain",
             primary: true,
+            is_default: true,
             status: "pending_verification",
             type: "auth0_managed_certs",
             verification: {
@@ -181,6 +186,7 @@ describe("CustomDomainsClient", () => {
                 certificate_authority: "letsencrypt",
                 renews_before: "renews_before",
             },
+            relying_party_identifier: "relying_party_identifier",
         });
     });
 
@@ -321,6 +327,7 @@ describe("CustomDomainsClient", () => {
                 certificate_authority: "letsencrypt",
                 renews_before: "renews_before",
             },
+            relying_party_identifier: "relying_party_identifier",
         };
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -355,6 +362,7 @@ describe("CustomDomainsClient", () => {
                 certificate_authority: "letsencrypt",
                 renews_before: "renews_before",
             },
+            relying_party_identifier: "relying_party_identifier",
         });
     });
 
@@ -526,6 +534,7 @@ describe("CustomDomainsClient", () => {
                 certificate_authority: "letsencrypt",
                 renews_before: "renews_before",
             },
+            relying_party_identifier: "relying_party_identifier",
         };
         server
             .mockEndpoint()
@@ -566,6 +575,7 @@ describe("CustomDomainsClient", () => {
                 certificate_authority: "letsencrypt",
                 renews_before: "renews_before",
             },
+            relying_party_identifier: "relying_party_identifier",
         });
     });
 

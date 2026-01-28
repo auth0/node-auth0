@@ -137,7 +137,7 @@ export interface ListClientGrantsRequestParameters {
     client_id?: string | null;
     /** Optional filter on allow_any_organization. */
     allow_any_organization?: Management.ClientGrantAllowAnyOrganizationEnum | null;
-    /** The type of application access the client grant allows. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href="https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** The type of application access the client grant allows. */
     subject_type?: Management.ClientGrantSubjectTypeEnum | null;
 }
 
@@ -159,8 +159,10 @@ export interface CreateClientGrantRequestContent {
     /** Scopes allowed for this client grant. */
     scope?: string[];
     subject_type?: Management.ClientGrantSubjectTypeEnum;
-    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** Types of authorization_details allowed for this client grant. */
     authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean;
 }
 
 /**
@@ -173,8 +175,10 @@ export interface UpdateClientGrantRequestContent {
     organization_usage?: Management.ClientGrantOrganizationNullableUsageEnum | null;
     /** Controls allowing any organization to be used with this grant */
     allow_any_organization?: boolean | null;
-    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** Types of authorization_details allowed for this client grant. */
     authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean | null;
 }
 
 /**
@@ -569,6 +573,8 @@ export interface CreateCustomDomainRequestContent {
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
     domain_metadata?: Management.DomainMetadata;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided, the full domain will be used. */
+    relying_party_identifier?: string;
 }
 
 /**
@@ -579,6 +585,8 @@ export interface UpdateCustomDomainRequestContent {
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
     domain_metadata?: Management.DomainMetadata;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. Set to null to remove the rpId and fall back to using the full domain. */
+    relying_party_identifier?: string | null;
 }
 
 /**
@@ -617,6 +625,7 @@ export interface ListDeviceCredentialsRequestParameters {
  * @example
  *     {
  *         device_name: "device_name",
+ *         type: "public_key",
  *         value: "value",
  *         device_id: "device_id"
  *     }
@@ -624,6 +633,7 @@ export interface ListDeviceCredentialsRequestParameters {
 export interface CreatePublicKeyDeviceCredentialRequestContent {
     /** Name for this device easily recognized by owner. */
     device_name: string;
+    type: Management.DeviceCredentialPublicKeyTypeEnum;
     /** Base64 encoded string containing the credential. */
     value: string;
     /** Unique identifier for the device. Recommend using <a href="http://developer.android.com/reference/android/provider/Settings.Secure.html#ANDROID_ID">Android_ID</a> on Android and <a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIDevice_Class/index.html#//apple_ref/occ/instp/UIDevice/identifierForVendor">identifierForVendor</a>. */
@@ -763,7 +773,7 @@ export interface FlowsListRequest {
     /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean | null;
     /** hydration param */
-    hydrate?: ("form_count" | null) | ("form_count" | null)[];
+    hydrate?: (Management.FlowsListRequestHydrateItem | null) | (Management.FlowsListRequestHydrateItem | null)[];
     /** flag to filter by sync/async flows */
     synchronous?: boolean | null;
 }
@@ -1237,7 +1247,7 @@ export interface CreateResourceServerRequestContent {
     /** Whether to enforce authorization policies (true) or to ignore them (false). */
     enforce_policies?: boolean;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -1276,7 +1286,7 @@ export interface UpdateResourceServerRequestContent {
     /** Whether authorization policies are enforced (true) or not enforced (false). */
     enforce_policies?: boolean;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[];
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -1563,7 +1573,8 @@ export interface TokenExchangeProfilesListRequest {
  *     {
  *         name: "name",
  *         subject_token_type: "subject_token_type",
- *         action_id: "action_id"
+ *         action_id: "action_id",
+ *         type: "custom_authentication"
  *     }
  */
 export interface CreateTokenExchangeProfileRequestContent {
@@ -1573,6 +1584,7 @@ export interface CreateTokenExchangeProfileRequestContent {
     subject_token_type: string;
     /** The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger. */
     action_id: string;
+    type: Management.TokenExchangeProfileTypeEnum;
 }
 
 /**
@@ -1848,6 +1860,80 @@ export interface ListActionVersionsRequestParameters {
     page?: number | null;
     /** This field specify the maximum number of results to be returned by the server. 20 by default */
     per_page?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         page: 1,
+ *         per_page: 1
+ *     }
+ */
+export interface GetActionModulesRequestParameters {
+    /** Page index of the results to return. First page is 0. */
+    page?: number | null;
+    /** Number of results per page. Paging is disabled if parameter not sent. */
+    per_page?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         code: "code"
+ *     }
+ */
+export interface CreateActionModuleRequestContent {
+    /** The name of the action module. */
+    name: string;
+    /** The source code of the action module. */
+    code: string;
+    /** The secrets to associate with the action module. */
+    secrets?: Management.ActionModuleSecretRequest[];
+    /** The npm dependencies of the action module. */
+    dependencies?: Management.ActionModuleDependencyRequest[];
+    /** The API version of the module. */
+    api_version?: string;
+    /** Whether to publish the module immediately after creation. */
+    publish?: boolean;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateActionModuleRequestContent {
+    /** The source code of the action module. */
+    code?: string;
+    /** The secrets to associate with the action module. */
+    secrets?: Management.ActionModuleSecretRequest[];
+    /** The npm dependencies of the action module. */
+    dependencies?: Management.ActionModuleDependencyRequest[];
+}
+
+/**
+ * @example
+ *     {
+ *         page: 1,
+ *         per_page: 1
+ *     }
+ */
+export interface GetActionModuleActionsRequestParameters {
+    /** Page index of the results to return. First page is 0. */
+    page?: number | null;
+    /** Number of results per page. */
+    per_page?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         module_version_id: "module_version_id"
+ *     }
+ */
+export interface RollbackActionModuleRequestParameters {
+    /** The unique ID of the module version to roll back to. */
+    module_version_id: string;
 }
 
 /**
@@ -2318,6 +2404,20 @@ export interface ConnectionsGetRequest {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListDirectoryProvisioningsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         take: 1,
  *         from: "from"
  *     }
@@ -2473,7 +2573,9 @@ export interface ExecutionsListRequest {
  */
 export interface ExecutionsGetRequest {
     /** Hydration param */
-    hydrate?: ("debug" | null) | ("debug" | null)[];
+    hydrate?:
+        | (Management.flows.ExecutionsGetRequestHydrateItem | null)
+        | (Management.flows.ExecutionsGetRequestHydrateItem | null)[];
 }
 
 /**
@@ -2909,7 +3011,7 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
 }
 
@@ -2919,7 +3021,7 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
  */
 export interface UpdateOrganizationDiscoveryDomainRequestContent {
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
 }
 

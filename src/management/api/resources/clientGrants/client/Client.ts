@@ -240,6 +240,83 @@ export class ClientGrantsClient {
     }
 
     /**
+     * Retrieve a single <a href="https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants">client grant</a>, including the
+     * scopes associated with the application/API pair.
+     *
+     * @param {string} id - The ID of the client grant to retrieve.
+     * @param {ClientGrantsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.clientGrants.get("id")
+     */
+    public get(
+        id: string,
+        requestOptions?: ClientGrantsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetClientGrantResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
+    }
+
+    private async __get(
+        id: string,
+        requestOptions?: ClientGrantsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetClientGrantResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `client-grants/${core.url.encodePathParam(id)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.GetClientGrantResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/client-grants/{id}");
+    }
+
+    /**
      * Delete the <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a> from your machine-to-machine application.
      *
      * @param {string} id - ID of the client grant to delete.

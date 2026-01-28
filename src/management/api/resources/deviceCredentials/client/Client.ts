@@ -181,6 +181,7 @@ export class DeviceCredentialsClient {
      * @example
      *     await client.deviceCredentials.createPublicKey({
      *         device_name: "device_name",
+     *         type: "public_key",
      *         value: "value",
      *         device_id: "device_id"
      *     })
@@ -214,7 +215,7 @@ export class DeviceCredentialsClient {
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
-            body: { ...request, type: "public_key" },
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
