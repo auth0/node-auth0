@@ -1,5 +1,15 @@
 # Change Log
 
+## [v5.3.0](https://github.com/auth0/node-auth0/tree/v5.3.0) (2026-01-29)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.2.0...v5.3.0)
+
+**Added**
+
+- Feat: Added support for Actions Modules API, Connection OTP Authentication and Custom Domain Passkey rpId [\#1292](https://github.com/auth0/node-auth0/pull/1292) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Feat: Added support for SCIM Groups API and Self-Service Organization Domain endpoints [\#1289](https://github.com/auth0/node-auth0/pull/1289) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: Refresh Token Metadata API and Organization Discovery Domain by Name [\#1283](https://github.com/auth0/node-auth0/pull/1283) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.2.0](https://github.com/auth0/node-auth0/tree/v5.2.0) (2025-12-10)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.1.0...v5.2.0)

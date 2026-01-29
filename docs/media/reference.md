@@ -783,6 +783,70 @@ await client.clientGrants.create({
 </dl>
 </details>
 
+<details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">get</a>(id) -> Management.GetClientGrantResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a single <a href="https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants">client grant</a>, including the
+scopes associated with the application/API pair.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.clientGrants.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the client grant to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientGrantsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">delete</a>(id) -> void</code></summary>
 <dl>
 <dd>
@@ -2020,7 +2084,9 @@ const response = page.response;
 <dl>
 <dd>
 
-Creates a new connection according to the JSON object received in <code>body</code>.<br/>
+Creates a new connection according to the JSON object received in <code>body</code>.
+
+<b>Note:</b> If a connection with the same name was recently deleted and had a large number of associated users, the deletion may still be processing. Creating a new connection with that name before the deletion completes may fail or produce unexpected results.
 
 </dd>
 </dl>
@@ -2161,6 +2227,8 @@ await client.connections.get("id", {
 <dd>
 
 Removes a specific <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> from your tenant. This action cannot be undone. Once removed, users can no longer use this connection to authenticate.
+
+<b>Note:</b> If your connection has a large amount of users associated with it, please be aware that this operation can be long running after the response is returned and may impact concurrent <a href="https://auth0.com/docs/api/management/v2/connections/post-connections">create connection</a> requests, if they use an identical connection name.
 
 </dd>
 </dl>
@@ -2971,6 +3039,7 @@ When refresh token rotation is enabled, the endpoint becomes consistent. For mor
 ```typescript
 await client.deviceCredentials.createPublicKey({
     device_name: "device_name",
+    type: "public_key",
     value: "value",
     device_id: "device_id",
 });
@@ -3347,7 +3416,7 @@ await client.emailTemplates.update("verify_email");
 
 ## EventStreams
 
-<details><summary><code>client.eventStreams.<a href="/src/management/api/resources/eventStreams/client/Client.ts">list</a>({ ...params }) -> Management.EventStreamResponseContent[]</code></summary>
+<details><summary><code>client.eventStreams.<a href="/src/management/api/resources/eventStreams/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.EventStreamResponseContent, Management.ListEventStreamsResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -3360,10 +3429,25 @@ await client.emailTemplates.update("verify_email");
 <dd>
 
 ```typescript
-await client.eventStreams.list({
+const pageableResponse = await client.eventStreams.list({
     from: "from",
     take: 1,
 });
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.eventStreams.list({
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -4438,6 +4522,162 @@ await client.userGrants.delete("id");
 <dd>
 
 **requestOptions:** `UserGrantsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Groups
+
+<details><summary><code>client.groups.<a href="/src/management/api/resources/groups/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.Group, Management.ListGroupsPaginatedResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all groups in your tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.groups.list({
+    connection_id: "connection_id",
+    name: "name",
+    external_id: "external_id",
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.groups.list({
+    connection_id: "connection_id",
+    name: "name",
+    external_id: "external_id",
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.groups.<a href="/src/management/api/resources/groups/client/Client.ts">get</a>(id) -> Management.GetGroupResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a group by its ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.groups.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for the group (service-generated).
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -6800,6 +7040,77 @@ await client.refreshTokens.delete("id");
 <dd>
 
 **id:** `string` — ID of the refresh token to delete.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RefreshTokensClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateRefreshTokenResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a refresh token by its ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.refreshTokens.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the refresh token to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateRefreshTokenRequestContent`
 
 </dd>
 </dl>
@@ -9206,6 +9517,7 @@ await client.tokenExchangeProfiles.create({
     name: "name",
     subject_token_type: "subject_token_type",
     action_id: "action_id",
+    type: "custom_authentication",
 });
 ```
 
@@ -11157,6 +11469,514 @@ await client.actions.executions.get("id");
 </dl>
 </details>
 
+## Actions Modules
+
+<details><summary><code>client.actions.modules.<a href="/src/management/api/resources/actions/resources/modules/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ActionModuleListItem, Management.GetActionModulesResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a paginated list of all Actions Modules with optional filtering and totals.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.actions.modules.list({
+    page: 1,
+    per_page: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.actions.modules.list({
+    page: 1,
+    per_page: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.GetActionModulesRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ModulesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.<a href="/src/management/api/resources/actions/resources/modules/client/Client.ts">create</a>({ ...params }) -> Management.CreateActionModuleResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new Actions Module for reusable code across actions.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.create({
+    name: "name",
+    code: "code",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateActionModuleRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ModulesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.<a href="/src/management/api/resources/actions/resources/modules/client/Client.ts">get</a>(id) -> Management.GetActionModuleResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details of a specific Actions Module by its unique identifier.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the action module to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ModulesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.<a href="/src/management/api/resources/actions/resources/modules/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Permanently delete an Actions Module. This will fail if the module is still in use by any actions.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the Actions Module to delete.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ModulesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.<a href="/src/management/api/resources/actions/resources/modules/client/Client.ts">update</a>(id, { ...params }) -> Management.UpdateActionModuleResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update properties of an existing Actions Module, such as code, dependencies, or secrets.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the action module to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateActionModuleRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ModulesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.<a href="/src/management/api/resources/actions/resources/modules/client/Client.ts">listActions</a>(id, { ...params }) -> core.Page<Management.ActionModuleAction, Management.GetActionModuleActionsResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Lists all actions that are using a specific Actions Module, showing which deployed action versions reference this Actions Module.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.actions.modules.listActions("id", {
+    page: 1,
+    per_page: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.actions.modules.listActions("id", {
+    page: 1,
+    per_page: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The unique ID of the module.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetActionModuleActionsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ModulesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.<a href="/src/management/api/resources/actions/resources/modules/client/Client.ts">rollback</a>(id, { ...params }) -> Management.RollbackActionModuleResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Rolls back an Actions Module's draft to a previously created version. This action copies the code, dependencies, and secrets from the specified version into the current draft.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.rollback("id", {
+    module_version_id: "module_version_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The unique ID of the module to roll back.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.RollbackActionModuleRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ModulesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Actions Triggers
 
 <details><summary><code>client.actions.triggers.<a href="/src/management/api/resources/actions/resources/triggers/client/Client.ts">list</a>() -> Management.ListActionTriggersResponseContent</code></summary>
@@ -11204,6 +12024,205 @@ await client.actions.triggers.list();
 <dd>
 
 **requestOptions:** `TriggersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Actions Modules Versions
+
+<details><summary><code>client.actions.modules.versions.<a href="/src/management/api/resources/actions/resources/modules/resources/versions/client/Client.ts">list</a>(id) -> Management.GetActionModuleVersionsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all published versions of a specific Actions Module.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.versions.list("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The unique ID of the module.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VersionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.versions.<a href="/src/management/api/resources/actions/resources/modules/resources/versions/client/Client.ts">create</a>(id) -> Management.CreateActionModuleVersionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Creates a new immutable version of an Actions Module from the current draft version. This publishes the draft as a new version that can be referenced by actions, while maintaining the existing draft for continued development.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.versions.create("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the action module to create a version for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VersionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.actions.modules.versions.<a href="/src/management/api/resources/actions/resources/modules/resources/versions/client/Client.ts">get</a>(id, versionId) -> Management.GetActionModuleVersionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the details of a specific, immutable version of an Actions Module.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.actions.modules.versions.get("id", "versionId");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The unique ID of the module.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — The unique ID of the module version to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `VersionsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14065,9 +15084,9 @@ const response = page.response;
 </dl>
 </details>
 
-## Connections Clients
+## Connections DirectoryProvisioning
 
-<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionEnabledClient, Management.GetConnectionEnabledClientsResponseContent></code></summary>
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.DirectoryProvisioning, Management.ListDirectoryProvisioningsResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -14079,9 +15098,7 @@ const response = page.response;
 <dl>
 <dd>
 
-Retrieve all clients that have the specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> enabled.
-
-<b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+Retrieve a list of directory provisioning configurations of a tenant.
 
 </dd>
 </dl>
@@ -14097,18 +15114,18 @@ Retrieve all clients that have the specified <a href="https://auth0.com/docs/aut
 <dd>
 
 ```typescript
-const pageableResponse = await client.connections.clients.get("id", {
-    take: 1,
+const pageableResponse = await client.connections.directoryProvisioning.list({
     from: "from",
+    take: 1,
 });
 for await (const item of pageableResponse) {
     console.log(item);
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.connections.clients.get("id", {
-    take: 1,
+let page = await client.connections.directoryProvisioning.list({
     from: "from",
+    take: 1,
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -14131,7 +15148,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**id:** `string` — The id of the connection for which enabled clients are to be retrieved
+**request:** `Management.ListDirectoryProvisioningsRequestParameters`
 
 </dd>
 </dl>
@@ -14139,15 +15156,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**request:** `Management.GetConnectionEnabledClientsRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ClientsClient.RequestOptions`
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
 
 </dd>
 </dl>
@@ -14157,69 +15166,6 @@ const response = page.response;
 </dd>
 </dl>
 </details>
-
-<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">update</a>(id, { ...params }) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.connections.clients.update("id", [
-    {
-        client_id: "client_id",
-        status: true,
-    },
-]);
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — The id of the connection to modify
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateEnabledClientConnectionsRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ClientsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Connections DirectoryProvisioning
 
 <details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">get</a>(id) -> Management.GetDirectoryProvisioningResponseContent</code></summary>
 <dl>
@@ -14542,6 +15488,160 @@ await client.connections.directoryProvisioning.getDefaultMapping("id");
 <dd>
 
 **requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Connections Clients
+
+<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.ConnectionEnabledClient, Management.GetConnectionEnabledClientsResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all clients that have the specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> enabled.
+
+<b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.connections.clients.get("id", {
+    take: 1,
+    from: "from",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.connections.clients.get("id", {
+    take: 1,
+    from: "from",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection for which enabled clients are to be retrieved
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetConnectionEnabledClientsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.clients.<a href="/src/management/api/resources/connections/resources/clients/client/Client.ts">update</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.clients.update("id", [
+    {
+        client_id: "client_id",
+        status: true,
+    },
+]);
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to modify
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateEnabledClientConnectionsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16404,6 +17504,101 @@ await client.flows.vault.connections.update("id");
 <dd>
 
 **requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Groups Members
+
+<details><summary><code>client.groups.members.<a href="/src/management/api/resources/groups/resources/members/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.GroupMember, Management.GetGroupMembersResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all users that are a member of this group.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.groups.members.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.groups.members.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for the group (service-generated).
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetGroupMembersRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MembersClient.RequestOptions`
 
 </dd>
 </dl>
@@ -20355,7 +21550,7 @@ const response = page.response;
 <dl>
 <dd>
 
-Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+Create a new discovery domain for an organization.
 
 </dd>
 </dl>
@@ -20398,6 +21593,77 @@ await client.organizations.discoveryDomains.create("id", {
 <dd>
 
 **request:** `Management.CreateOrganizationDiscoveryDomainRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DiscoveryDomainsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">getByName</a>(id, discovery_domain) -> Management.GetOrganizationDiscoveryDomainByNameResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details about a single organization discovery domain specified by domain name.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**discovery_domain:** `string` — Domain name of the discovery domain.
 
 </dd>
 </dl>
@@ -21849,7 +23115,7 @@ await client.organizations.members.roles.delete("id", "user_id", {
 
 ## Prompts Rendering
 
-<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.AculResponseContent, Management.ListAculsOffsetPaginatedResponseContent></code></summary>
+<details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page<Management.ListAculsResponseContentItem, Management.ListAculsOffsetPaginatedResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -24423,6 +25689,101 @@ await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
 <dd>
 
 **requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Users Groups
+
+<details><summary><code>client.users.groups.<a href="/src/management/api/resources/users/resources/groups/client/Client.ts">get</a>(id, { ...params }) -> core.Page<Management.UserGroupsResponseSchema, Management.GetUserGroupsPaginatedResponseContent></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all groups to which this user belongs.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.users.groups.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.users.groups.get("id", {
+    fields: "fields",
+    include_fields: true,
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the user to list groups for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetUserGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
 
 </dd>
 </dl>
