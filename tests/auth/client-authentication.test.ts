@@ -238,7 +238,7 @@ describe("mTLS-authentication", () => {
             clientId,
             agent: new Agent({
                 connect: { cert: "my-cert", key: "my-key" },
-            }) as Dispatcher,
+            }) as unknown as Dispatcher,
             useMTLS: true,
         });
         await auth0.oauth.clientCredentialsGrant({
