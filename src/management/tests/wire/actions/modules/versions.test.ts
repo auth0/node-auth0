@@ -21,17 +21,19 @@ describe("VersionsClient", () => {
                     created_at: "2024-01-15T09:30:00Z",
                 },
             ],
+            total: 1,
+            page: 1,
+            per_page: 1,
         };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.actions.modules.versions.list("id");
-        expect(response).toEqual({
+        const expected = {
             versions: [
                 {
                     id: "id",
@@ -43,7 +45,19 @@ describe("VersionsClient", () => {
                     created_at: "2024-01-15T09:30:00Z",
                 },
             ],
+            total: 1,
+            page: 1,
+            per_page: 1,
+        };
+        const page = await client.actions.modules.versions.list("id", {
+            page: 1,
+            per_page: 1,
         });
+
+        expect(expected.versions).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.versions).toEqual(nextPage.data);
     });
 
     test("list (2)", async () => {
@@ -52,7 +66,7 @@ describe("VersionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
             .respondWith()
             .statusCode(400)
@@ -70,7 +84,7 @@ describe("VersionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
             .respondWith()
             .statusCode(401)
@@ -88,7 +102,7 @@ describe("VersionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
             .respondWith()
             .statusCode(403)
@@ -106,7 +120,7 @@ describe("VersionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
             .respondWith()
             .statusCode(404)
@@ -124,7 +138,7 @@ describe("VersionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
             .respondWith()
             .statusCode(429)

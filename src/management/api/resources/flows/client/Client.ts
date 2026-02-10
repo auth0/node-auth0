@@ -35,7 +35,7 @@ export class FlowsClient {
     }
 
     /**
-     * @param {Management.FlowsListRequest} request
+     * @param {Management.ListFlowsRequestParameters} request
      * @param {FlowsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -52,12 +52,12 @@ export class FlowsClient {
      *     })
      */
     public async list(
-        request: Management.FlowsListRequest = {},
+        request: Management.ListFlowsRequestParameters = {},
         requestOptions?: FlowsClient.RequestOptions,
     ): Promise<core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.FlowsListRequest,
+                request: Management.ListFlowsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListFlowsOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
