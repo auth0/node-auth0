@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.3.1](https://github.com/auth0/node-auth0/tree/v5.3.1) (2026-02-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.3.0...v5.3.1)
+
+**Added**
+
+- Feat: Added pagination support for Actions Modules Versions API and type improvements [\#1298](https://github.com/auth0/node-auth0/pull/1298) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.3.0](https://github.com/auth0/node-auth0/tree/v5.3.0) (2026-01-29)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.2.0...v5.3.0)
