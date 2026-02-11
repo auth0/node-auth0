@@ -226,7 +226,7 @@ export class VersionsClient {
      *
      * @param {string} actionId - The ID of an action.
      * @param {string} id - The ID of an action version.
-     * @param {Management.DeployActionVersionRequestContent | undefined} request
+     * @param {Management.DeployActionVersionRequestContent | null} request
      * @param {VersionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -240,7 +240,7 @@ export class VersionsClient {
     public deploy(
         actionId: string,
         id: string,
-        request?: Management.DeployActionVersionRequestContent | undefined,
+        request?: Management.DeployActionVersionRequestContent | null,
         requestOptions?: VersionsClient.RequestOptions,
     ): core.HttpResponsePromise<Management.DeployActionVersionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__deploy(actionId, id, request, requestOptions));
@@ -249,7 +249,7 @@ export class VersionsClient {
     private async __deploy(
         actionId: string,
         id: string,
-        request?: Management.DeployActionVersionRequestContent | undefined,
+        request?: Management.DeployActionVersionRequestContent | null,
         requestOptions?: VersionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.DeployActionVersionResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();

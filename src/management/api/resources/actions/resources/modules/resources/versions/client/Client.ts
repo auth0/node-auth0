@@ -29,6 +29,7 @@ export class VersionsClient {
      * List all published versions of a specific Actions Module.
      *
      * @param {string} id - The unique ID of the module.
+     * @param {Management.GetActionModuleVersionsRequestParameters} request
      * @param {VersionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -38,75 +39,105 @@ export class VersionsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.actions.modules.versions.list("id")
+     *     await client.actions.modules.versions.list("id", {
+     *         page: 1,
+     *         per_page: 1
+     *     })
      */
-    public list(
+    public async list(
         id: string,
+        request: Management.GetActionModuleVersionsRequestParameters = {},
         requestOptions?: VersionsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetActionModuleVersionsResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__list(id, requestOptions));
-    }
-
-    private async __list(
-        id: string,
-        requestOptions?: VersionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetActionModuleVersionsResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `actions/modules/${core.url.encodePathParam(id)}/versions`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.GetActionModuleVersionsResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+    ): Promise<core.Page<Management.ActionModuleVersion, Management.GetActionModuleVersionsResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.GetActionModuleVersionsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.GetActionModuleVersionsResponseContent>> => {
+                const { page = 0, per_page: perPage = 50 } = request;
+                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+                if (page !== undefined) {
+                    _queryParams["page"] = page?.toString() ?? null;
+                }
+                if (perPage !== undefined) {
+                    _queryParams["per_page"] = perPage?.toString() ?? null;
+                }
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        `actions/modules/${core.url.encodePathParam(id)}/versions`,
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.GetActionModuleVersionsResponseContent,
                         rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "GET",
-            "/actions/modules/{id}/versions",
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(
+                    _response.error,
+                    _response.rawResponse,
+                    "GET",
+                    "/actions/modules/{id}/versions",
+                );
+            },
         );
+        let _offset = request?.page != null ? request?.page : 0;
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.ActionModuleVersion, Management.GetActionModuleVersionsResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) => (response?.versions ?? []).length >= Math.floor(request?.per_page ?? 50),
+            getItems: (response) => response?.versions ?? [],
+            loadPage: (_response) => {
+                _offset += 1;
+                return list(core.setObjectProperty(request, "page", _offset));
+            },
+        });
     }
 
     /**

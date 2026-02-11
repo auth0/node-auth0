@@ -3804,7 +3804,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**request:** `Management.FlowsListRequest`
+**request:** `Management.ListFlowsRequestParameters`
 
 </dd>
 </dl>
@@ -11385,7 +11385,7 @@ await client.actions.versions.deploy("actionId", "id");
 <dl>
 <dd>
 
-**request:** `Management.DeployActionVersionRequestContent | undefined`
+**request:** `Management.DeployActionVersionRequestContent | null`
 
 </dd>
 </dl>
@@ -12036,7 +12036,7 @@ await client.actions.triggers.list();
 
 ## Actions Modules Versions
 
-<details><summary><code>client.actions.modules.versions.<a href="/src/management/api/resources/actions/resources/modules/resources/versions/client/Client.ts">list</a>(id) -> Management.GetActionModuleVersionsResponseContent</code></summary>
+<details><summary><code>client.actions.modules.versions.<a href="/src/management/api/resources/actions/resources/modules/resources/versions/client/Client.ts">list</a>(id, { ...params }) -> core.Page<Management.ActionModuleVersion, Management.GetActionModuleVersionsResponseContent></code></summary>
 <dl>
 <dd>
 
@@ -12064,7 +12064,25 @@ List all published versions of a specific Actions Module.
 <dd>
 
 ```typescript
-await client.actions.modules.versions.list("id");
+const pageableResponse = await client.actions.modules.versions.list("id", {
+    page: 1,
+    per_page: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.actions.modules.versions.list("id", {
+    page: 1,
+    per_page: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -12081,6 +12099,14 @@ await client.actions.modules.versions.list("id");
 <dd>
 
 **id:** `string` — The unique ID of the module.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.GetActionModuleVersionsRequestParameters`
 
 </dd>
 </dl>
@@ -17097,7 +17123,7 @@ const response = page.response;
 <dl>
 <dd>
 
-**request:** `Management.ExecutionsListRequest`
+**request:** `Management.ListFlowExecutionsRequestParameters`
 
 </dd>
 </dl>
@@ -17161,7 +17187,7 @@ await client.flows.executions.get("flow_id", "execution_id");
 <dl>
 <dd>
 
-**request:** `Management.ExecutionsGetRequest`
+**request:** `Management.GetFlowExecutionRequestParameters`
 
 </dd>
 </dl>

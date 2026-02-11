@@ -194,7 +194,7 @@ describe("ResourceServersClient", () => {
             },
             consent_policy: "transactional-authorization-with-mfa",
             authorization_details: [{ key: "value" }],
-            proof_of_possession: { mechanism: "mtls", required: true },
+            proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
             client_id: "client_id",
         };
@@ -247,6 +247,7 @@ describe("ResourceServersClient", () => {
             proof_of_possession: {
                 mechanism: "mtls",
                 required: true,
+                required_for: "public_clients",
             },
             subject_type_authorization: {
                 user: {
@@ -389,7 +390,7 @@ describe("ResourceServersClient", () => {
             },
             consent_policy: "transactional-authorization-with-mfa",
             authorization_details: [{ key: "value" }],
-            proof_of_possession: { mechanism: "mtls", required: true },
+            proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
             client_id: "client_id",
         };
@@ -441,6 +442,7 @@ describe("ResourceServersClient", () => {
             proof_of_possession: {
                 mechanism: "mtls",
                 required: true,
+                required_for: "public_clients",
             },
             subject_type_authorization: {
                 user: {
@@ -650,7 +652,7 @@ describe("ResourceServersClient", () => {
             },
             consent_policy: "transactional-authorization-with-mfa",
             authorization_details: [{ key: "value" }],
-            proof_of_possession: { mechanism: "mtls", required: true },
+            proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
             client_id: "client_id",
         };
@@ -701,6 +703,7 @@ describe("ResourceServersClient", () => {
             proof_of_possession: {
                 mechanism: "mtls",
                 required: true,
+                required_for: "public_clients",
             },
             subject_type_authorization: {
                 user: {

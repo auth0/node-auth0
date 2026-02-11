@@ -4,17 +4,17 @@ import * as Management from "../index.js";
 
 export const OauthScope = {
     /**
-     * Read Actions */
-    ReadActions: "read:actions",
-    /**
      * Create Actions */
     CreateActions: "create:actions",
     /**
-     * Delete Actions */
-    DeleteActions: "delete:actions",
+     * Read Actions */
+    ReadActions: "read:actions",
     /**
      * Update Actions */
     UpdateActions: "update:actions",
+    /**
+     * Delete Actions */
+    DeleteActions: "delete:actions",
     /**
      * Read Anomaly Blocks */
     ReadAnomalyBlocks: "read:anomaly_blocks",
@@ -22,20 +22,23 @@ export const OauthScope = {
      * Delete Anomaly Blocks */
     DeleteAnomalyBlocks: "delete:anomaly_blocks",
     /**
-     * Read Shields */
-    ReadShields: "read:shields",
-    /**
-     * Create Shields */
-    CreateShields: "create:shields",
-    /**
-     * Update Shields */
-    UpdateShields: "update:shields",
-    /**
      * Read Attack Protection */
     ReadAttackProtection: "read:attack_protection",
     /**
      * Update Attack Protection */
     UpdateAttackProtection: "update:attack_protection",
+    /**
+     * Create Authentication Methods */
+    CreateAuthenticationMethods: "create:authentication_methods",
+    /**
+     * Read Authentication Methods */
+    ReadAuthenticationMethods: "read:authentication_methods",
+    /**
+     * Update Authentication Methods */
+    UpdateAuthenticationMethods: "update:authentication_methods",
+    /**
+     * Delete Authentication Methods */
+    DeleteAuthenticationMethods: "delete:authentication_methods",
     /**
      * Read Branding */
     ReadBranding: "read:branding",
@@ -43,65 +46,14 @@ export const OauthScope = {
      * Update Branding */
     UpdateBranding: "update:branding",
     /**
-     * Read Phone Providers */
-    ReadPhoneProviders: "read:phone_providers",
-    /**
-     * Create Phone Providers */
-    CreatePhoneProviders: "create:phone_providers",
-    /**
-     * Update Phone Providers */
-    UpdatePhoneProviders: "update:phone_providers",
-    /**
-     * Delete Phone Providers */
-    DeletePhoneProviders: "delete:phone_providers",
-    /**
-     * Read Phone Templates */
-    ReadPhoneTemplates: "read:phone_templates",
-    /**
-     * Create Phone Templates */
-    CreatePhoneTemplates: "create:phone_templates",
-    /**
-     * Update Phone Templates */
-    UpdatePhoneTemplates: "update:phone_templates",
-    /**
-     * Delete Phone Templates */
-    DeletePhoneTemplates: "delete:phone_templates",
-    /**
      * Delete Branding */
     DeleteBranding: "delete:branding",
     /**
-     * Read Client Grants */
-    ReadClientGrants: "read:client_grants",
-    /**
-     * Create Client Grants */
-    CreateClientGrants: "create:client_grants",
-    /**
-     * Update Client Grants */
-    UpdateClientGrants: "update:client_grants",
-    /**
-     * Delete Client Grants */
-    DeleteClientGrants: "delete:client_grants",
-    /**
-     * Read Organization Client Grants */
-    ReadOrganizationClientGrants: "read:organization_client_grants",
-    /**
-     * Read Clients */
-    ReadClients: "read:clients",
-    /**
-     * Read Client Keys */
-    ReadClientKeys: "read:client_keys",
+     * Create Client Credentials */
+    CreateClientCredentials: "create:client_credentials",
     /**
      * Read Client Credentials */
     ReadClientCredentials: "read:client_credentials",
-    /**
-     * Read Client Summary */
-    ReadClientSummary: "read:client_summary",
-    /**
-     * Create Clients */
-    CreateClients: "create:clients",
-    /**
-     * Create Client Credentials */
-    CreateClientCredentials: "create:client_credentials",
     /**
      * Update Client Credentials */
     UpdateClientCredentials: "update:client_credentials",
@@ -109,26 +61,47 @@ export const OauthScope = {
      * Delete Client Credentials */
     DeleteClientCredentials: "delete:client_credentials",
     /**
-     * Update Clients */
-    UpdateClients: "update:clients",
+     * Create Client Grants */
+    CreateClientGrants: "create:client_grants",
+    /**
+     * Read Client Grants */
+    ReadClientGrants: "read:client_grants",
+    /**
+     * Update Client Grants */
+    UpdateClientGrants: "update:client_grants",
+    /**
+     * Delete Client Grants */
+    DeleteClientGrants: "delete:client_grants",
+    /**
+     * Read Client Keys */
+    ReadClientKeys: "read:client_keys",
     /**
      * Update Client Keys */
     UpdateClientKeys: "update:client_keys",
     /**
+     * Read Client Summary */
+    ReadClientSummary: "read:client_summary",
+    /**
      * Update Client Token Vault Privileged Access */
     UpdateClientTokenVaultPrivilegedAccess: "update:client_token_vault_privileged_access",
+    /**
+     * Create Clients */
+    CreateClients: "create:clients",
+    /**
+     * Read Clients */
+    ReadClients: "read:clients",
+    /**
+     * Update Clients */
+    UpdateClients: "update:clients",
     /**
      * Delete Clients */
     DeleteClients: "delete:clients",
     /**
-     * Read Connections */
-    ReadConnections: "read:connections",
+     * Create Connection Profiles */
+    CreateConnectionProfiles: "create:connection_profiles",
     /**
      * Read Connection Profiles */
     ReadConnectionProfiles: "read:connection_profiles",
-    /**
-     * Create Connection Profiles */
-    CreateConnectionProfiles: "create:connection_profiles",
     /**
      * Update Connection Profiles */
     UpdateConnectionProfiles: "update:connection_profiles",
@@ -139,8 +112,8 @@ export const OauthScope = {
      * Create Connections */
     CreateConnections: "create:connections",
     /**
-     * Read Directory Provisionings */
-    ReadDirectoryProvisionings: "read:directory_provisionings",
+     * Read Connections */
+    ReadConnections: "read:connections",
     /**
      * Update Connections */
     UpdateConnections: "update:connections",
@@ -148,56 +121,38 @@ export const OauthScope = {
      * Delete Connections */
     DeleteConnections: "delete:connections",
     /**
-     * Create Directory Provisionings */
-    CreateDirectoryProvisionings: "create:directory_provisionings",
-    /**
-     * Update Directory Provisionings */
-    UpdateDirectoryProvisionings: "update:directory_provisionings",
-    /**
-     * Delete Directory Provisionings */
-    DeleteDirectoryProvisionings: "delete:directory_provisionings",
-    /**
-     * Read Users */
-    ReadUsers: "read:users",
+     * Create Connections Keys */
+    CreateConnectionsKeys: "create:connections_keys",
     /**
      * Read Connections Keys */
     ReadConnectionsKeys: "read:connections_keys",
     /**
-     * Create Connections Keys */
-    CreateConnectionsKeys: "create:connections_keys",
-    /**
      * Update Connections Keys */
     UpdateConnectionsKeys: "update:connections_keys",
     /**
-     * Read Scim Config */
-    ReadScimConfig: "read:scim_config",
+     * Read Current User */
+    ReadCurrentUser: "read:current_user",
     /**
-     * Create Scim Config */
-    CreateScimConfig: "create:scim_config",
+     * Delete Current User */
+    DeleteCurrentUser: "delete:current_user",
     /**
-     * Update Scim Config */
-    UpdateScimConfig: "update:scim_config",
+     * Create Current User Device Credentials */
+    CreateCurrentUserDeviceCredentials: "create:current_user_device_credentials",
     /**
-     * Delete Scim Config */
-    DeleteScimConfig: "delete:scim_config",
+     * Delete Current User Device Credentials */
+    DeleteCurrentUserDeviceCredentials: "delete:current_user_device_credentials",
     /**
-     * Read Scim Token */
-    ReadScimToken: "read:scim_token",
+     * Update Current User Identities */
+    UpdateCurrentUserIdentities: "update:current_user_identities",
     /**
-     * Create Scim Token */
-    CreateScimToken: "create:scim_token",
-    /**
-     * Delete Scim Token */
-    DeleteScimToken: "delete:scim_token",
-    /**
-     * Delete Users */
-    DeleteUsers: "delete:users",
-    /**
-     * Read Custom Domains */
-    ReadCustomDomains: "read:custom_domains",
+     * Update Current User Metadata */
+    UpdateCurrentUserMetadata: "update:current_user_metadata",
     /**
      * Create Custom Domains */
     CreateCustomDomains: "create:custom_domains",
+    /**
+     * Read Custom Domains */
+    ReadCustomDomains: "read:custom_domains",
     /**
      * Update Custom Domains */
     UpdateCustomDomains: "update:custom_domains",
@@ -205,26 +160,47 @@ export const OauthScope = {
      * Delete Custom Domains */
     DeleteCustomDomains: "delete:custom_domains",
     /**
+     * Create Custom Signing Keys */
+    CreateCustomSigningKeys: "create:custom_signing_keys",
+    /**
+     * Read Custom Signing Keys */
+    ReadCustomSigningKeys: "read:custom_signing_keys",
+    /**
+     * Update Custom Signing Keys */
+    UpdateCustomSigningKeys: "update:custom_signing_keys",
+    /**
+     * Delete Custom Signing Keys */
+    DeleteCustomSigningKeys: "delete:custom_signing_keys",
+    /**
      * Read Device Credentials */
     ReadDeviceCredentials: "read:device_credentials",
-    /**
-     * Create Current User Device Credentials */
-    CreateCurrentUserDeviceCredentials: "create:current_user_device_credentials",
     /**
      * Delete Device Credentials */
     DeleteDeviceCredentials: "delete:device_credentials",
     /**
-     * Delete Current User Device Credentials */
-    DeleteCurrentUserDeviceCredentials: "delete:current_user_device_credentials",
+     * Create Directory Provisionings */
+    CreateDirectoryProvisionings: "create:directory_provisionings",
     /**
-     * Update Device Codes */
-    UpdateDeviceCodes: "update:device_codes",
+     * Read Directory Provisionings */
+    ReadDirectoryProvisionings: "read:directory_provisionings",
     /**
-     * Read Device Codes */
-    ReadDeviceCodes: "read:device_codes",
+     * Update Directory Provisionings */
+    UpdateDirectoryProvisionings: "update:directory_provisionings",
     /**
-     * Create Test Email Dispatch */
-    CreateTestEmailDispatch: "create:test_email_dispatch",
+     * Delete Directory Provisionings */
+    DeleteDirectoryProvisionings: "delete:directory_provisionings",
+    /**
+     * Create Email Provider */
+    CreateEmailProvider: "create:email_provider",
+    /**
+     * Read Email Provider */
+    ReadEmailProvider: "read:email_provider",
+    /**
+     * Update Email Provider */
+    UpdateEmailProvider: "update:email_provider",
+    /**
+     * Delete Email Provider */
+    DeleteEmailProvider: "delete:email_provider",
     /**
      * Create Email Templates */
     CreateEmailTemplates: "create:email_templates",
@@ -235,32 +211,17 @@ export const OauthScope = {
      * Update Email Templates */
     UpdateEmailTemplates: "update:email_templates",
     /**
-     * Read Email Provider */
-    ReadEmailProvider: "read:email_provider",
+     * Create Encryption Keys */
+    CreateEncryptionKeys: "create:encryption_keys",
     /**
-     * Create Email Provider */
-    CreateEmailProvider: "create:email_provider",
+     * Read Encryption Keys */
+    ReadEncryptionKeys: "read:encryption_keys",
     /**
-     * Update Email Provider */
-    UpdateEmailProvider: "update:email_provider",
+     * Update Encryption Keys */
+    UpdateEncryptionKeys: "update:encryption_keys",
     /**
-     * Delete Email Provider */
-    DeleteEmailProvider: "delete:email_provider",
-    /**
-     * Read Entitlements */
-    ReadEntitlements: "read:entitlements",
-    /**
-     * Read Event Streams */
-    ReadEventStreams: "read:event_streams",
-    /**
-     * Create Event Streams */
-    CreateEventStreams: "create:event_streams",
-    /**
-     * Update Event Streams */
-    UpdateEventStreams: "update:event_streams",
-    /**
-     * Delete Event Streams */
-    DeleteEventStreams: "delete:event_streams",
+     * Delete Encryption Keys */
+    DeleteEncryptionKeys: "delete:encryption_keys",
     /**
      * Read Event Deliveries */
     ReadEventDeliveries: "read:event_deliveries",
@@ -268,35 +229,29 @@ export const OauthScope = {
      * Update Event Deliveries */
     UpdateEventDeliveries: "update:event_deliveries",
     /**
-     * Read Events */
-    ReadEvents: "read:events",
+     * Create Event Streams */
+    CreateEventStreams: "create:event_streams",
     /**
-     * Read Extensions */
-    ReadExtensions: "read:extensions",
+     * Read Event Streams */
+    ReadEventStreams: "read:event_streams",
     /**
-     * Read Flows */
-    ReadFlows: "read:flows",
+     * Update Event Streams */
+    UpdateEventStreams: "update:event_streams",
+    /**
+     * Delete Event Streams */
+    DeleteEventStreams: "delete:event_streams",
+    /**
+     * Read Federated Connections Tokens */
+    ReadFederatedConnectionsTokens: "read:federated_connections_tokens",
+    /**
+     * Delete Federated Connections Tokens */
+    DeleteFederatedConnectionsTokens: "delete:federated_connections_tokens",
     /**
      * Create Flows */
     CreateFlows: "create:flows",
     /**
-     * Read Flows Vault Connections */
-    ReadFlowsVaultConnections: "read:flows_vault_connections",
-    /**
-     * Create Flows Vault Connections */
-    CreateFlowsVaultConnections: "create:flows_vault_connections",
-    /**
-     * Update Flows Vault Connections */
-    UpdateFlowsVaultConnections: "update:flows_vault_connections",
-    /**
-     * Delete Flows Vault Connections */
-    DeleteFlowsVaultConnections: "delete:flows_vault_connections",
-    /**
-     * Read Flows Executions */
-    ReadFlowsExecutions: "read:flows_executions",
-    /**
-     * Delete Flows Executions */
-    DeleteFlowsExecutions: "delete:flows_executions",
+     * Read Flows */
+    ReadFlows: "read:flows",
     /**
      * Update Flows */
     UpdateFlows: "update:flows",
@@ -304,11 +259,29 @@ export const OauthScope = {
      * Delete Flows */
     DeleteFlows: "delete:flows",
     /**
-     * Read Forms */
-    ReadForms: "read:forms",
+     * Read Flows Executions */
+    ReadFlowsExecutions: "read:flows_executions",
+    /**
+     * Delete Flows Executions */
+    DeleteFlowsExecutions: "delete:flows_executions",
+    /**
+     * Create Flows Vault Connections */
+    CreateFlowsVaultConnections: "create:flows_vault_connections",
+    /**
+     * Read Flows Vault Connections */
+    ReadFlowsVaultConnections: "read:flows_vault_connections",
+    /**
+     * Update Flows Vault Connections */
+    UpdateFlowsVaultConnections: "update:flows_vault_connections",
+    /**
+     * Delete Flows Vault Connections */
+    DeleteFlowsVaultConnections: "delete:flows_vault_connections",
     /**
      * Create Forms */
     CreateForms: "create:forms",
+    /**
+     * Read Forms */
+    ReadForms: "read:forms",
     /**
      * Update Forms */
     UpdateForms: "update:forms",
@@ -322,20 +295,11 @@ export const OauthScope = {
      * Delete Grants */
     DeleteGrants: "delete:grants",
     /**
-     * Read Groups */
-    ReadGroups: "read:groups",
-    /**
      * Read Group Members */
     ReadGroupMembers: "read:group_members",
     /**
-     * Read Group Roles */
-    ReadGroupRoles: "read:group_roles",
-    /**
-     * Create Group Roles */
-    CreateGroupRoles: "create:group_roles",
-    /**
-     * Delete Group Roles */
-    DeleteGroupRoles: "delete:group_roles",
+     * Read Groups */
+    ReadGroups: "read:groups",
     /**
      * Create Guardian Enrollment Tickets */
     CreateGuardianEnrollmentTickets: "create:guardian_enrollment_tickets",
@@ -352,17 +316,11 @@ export const OauthScope = {
      * Update Guardian Factors */
     UpdateGuardianFactors: "update:guardian_factors",
     /**
-     * Read Mfa Policies */
-    ReadMfaPolicies: "read:mfa_policies",
-    /**
-     * Update Mfa Policies */
-    UpdateMfaPolicies: "update:mfa_policies",
+     * Create Hooks */
+    CreateHooks: "create:hooks",
     /**
      * Read Hooks */
     ReadHooks: "read:hooks",
-    /**
-     * Create Hooks */
-    CreateHooks: "create:hooks",
     /**
      * Update Hooks */
     UpdateHooks: "update:hooks",
@@ -370,68 +328,11 @@ export const OauthScope = {
      * Delete Hooks */
     DeleteHooks: "delete:hooks",
     /**
-     * Read Insights */
-    ReadInsights: "read:insights",
-    /**
-     * Read Stats */
-    ReadStats: "read:stats",
-    /**
-     * Read Integrations */
-    ReadIntegrations: "read:integrations",
-    /**
-     * Create Integrations */
-    CreateIntegrations: "create:integrations",
-    /**
-     * Update Integrations */
-    UpdateIntegrations: "update:integrations",
-    /**
-     * Delete Integrations */
-    DeleteIntegrations: "delete:integrations",
-    /**
-     * Create Users */
-    CreateUsers: "create:users",
-    /**
-     * Update Users */
-    UpdateUsers: "update:users",
-    /**
-     * Read Custom Signing Keys */
-    ReadCustomSigningKeys: "read:custom_signing_keys",
-    /**
-     * Create Custom Signing Keys */
-    CreateCustomSigningKeys: "create:custom_signing_keys",
-    /**
-     * Update Custom Signing Keys */
-    UpdateCustomSigningKeys: "update:custom_signing_keys",
-    /**
-     * Delete Custom Signing Keys */
-    DeleteCustomSigningKeys: "delete:custom_signing_keys",
-    /**
-     * Read Encryption Keys */
-    ReadEncryptionKeys: "read:encryption_keys",
-    /**
-     * Create Encryption Keys */
-    CreateEncryptionKeys: "create:encryption_keys",
-    /**
-     * Update Encryption Keys */
-    UpdateEncryptionKeys: "update:encryption_keys",
-    /**
-     * Delete Encryption Keys */
-    DeleteEncryptionKeys: "delete:encryption_keys",
-    /**
-     * Read Signing Keys */
-    ReadSigningKeys: "read:signing_keys",
-    /**
-     * Create Signing Keys */
-    CreateSigningKeys: "create:signing_keys",
-    /**
-     * Update Signing Keys */
-    UpdateSigningKeys: "update:signing_keys",
+     * Create Log Streams */
+    CreateLogStreams: "create:log_streams",
     /**
      * Read Log Streams */
     ReadLogStreams: "read:log_streams",
-    /**
-     * Create Log Streams */
-    CreateLogStreams: "create:log_streams",
     /**
      * Update Log Streams */
     UpdateLogStreams: "update:log_streams",
@@ -445,17 +346,17 @@ export const OauthScope = {
      * Read Logs Users */
     ReadLogsUsers: "read:logs_users",
     /**
-     * Read Tenant Settings */
-    ReadTenantSettings: "read:tenant_settings",
+     * Read Mfa Policies */
+    ReadMfaPolicies: "read:mfa_policies",
     /**
-     * Update Tenant Settings */
-    UpdateTenantSettings: "update:tenant_settings",
-    /**
-     * Read Network Acls */
-    ReadNetworkAcls: "read:network_acls",
+     * Update Mfa Policies */
+    UpdateMfaPolicies: "update:mfa_policies",
     /**
      * Create Network Acls */
     CreateNetworkAcls: "create:network_acls",
+    /**
+     * Read Network Acls */
+    ReadNetworkAcls: "read:network_acls",
     /**
      * Update Network Acls */
     UpdateNetworkAcls: "update:network_acls",
@@ -463,29 +364,17 @@ export const OauthScope = {
      * Delete Network Acls */
     DeleteNetworkAcls: "delete:network_acls",
     /**
-     * Read Organizations */
-    ReadOrganizations: "read:organizations",
-    /**
-     * Read Organizations Summary */
-    ReadOrganizationsSummary: "read:organizations_summary",
-    /**
-     * Create Organizations */
-    CreateOrganizations: "create:organizations",
-    /**
-     * Create Organization Connections */
-    CreateOrganizationConnections: "create:organization_connections",
-    /**
-     * Update Organizations */
-    UpdateOrganizations: "update:organizations",
-    /**
-     * Delete Organizations */
-    DeleteOrganizations: "delete:organizations",
-    /**
      * Create Organization Client Grants */
     CreateOrganizationClientGrants: "create:organization_client_grants",
     /**
+     * Read Organization Client Grants */
+    ReadOrganizationClientGrants: "read:organization_client_grants",
+    /**
      * Delete Organization Client Grants */
     DeleteOrganizationClientGrants: "delete:organization_client_grants",
+    /**
+     * Create Organization Connections */
+    CreateOrganizationConnections: "create:organization_connections",
     /**
      * Read Organization Connections */
     ReadOrganizationConnections: "read:organization_connections",
@@ -496,11 +385,11 @@ export const OauthScope = {
      * Delete Organization Connections */
     DeleteOrganizationConnections: "delete:organization_connections",
     /**
-     * Read Organization Discovery Domains */
-    ReadOrganizationDiscoveryDomains: "read:organization_discovery_domains",
-    /**
      * Create Organization Discovery Domains */
     CreateOrganizationDiscoveryDomains: "create:organization_discovery_domains",
+    /**
+     * Read Organization Discovery Domains */
+    ReadOrganizationDiscoveryDomains: "read:organization_discovery_domains",
     /**
      * Update Organization Discovery Domains */
     UpdateOrganizationDiscoveryDomains: "update:organization_discovery_domains",
@@ -508,44 +397,77 @@ export const OauthScope = {
      * Delete Organization Discovery Domains */
     DeleteOrganizationDiscoveryDomains: "delete:organization_discovery_domains",
     /**
-     * Read Organization Invitations */
-    ReadOrganizationInvitations: "read:organization_invitations",
-    /**
      * Create Organization Invitations */
     CreateOrganizationInvitations: "create:organization_invitations",
+    /**
+     * Read Organization Invitations */
+    ReadOrganizationInvitations: "read:organization_invitations",
     /**
      * Delete Organization Invitations */
     DeleteOrganizationInvitations: "delete:organization_invitations",
     /**
-     * Read Organization Members */
-    ReadOrganizationMembers: "read:organization_members",
-    /**
-     * Create Organization Members */
-    CreateOrganizationMembers: "create:organization_members",
-    /**
-     * Delete Organization Members */
-    DeleteOrganizationMembers: "delete:organization_members",
+     * Create Organization Member Roles */
+    CreateOrganizationMemberRoles: "create:organization_member_roles",
     /**
      * Read Organization Member Roles */
     ReadOrganizationMemberRoles: "read:organization_member_roles",
     /**
-     * Create Organization Member Roles */
-    CreateOrganizationMemberRoles: "create:organization_member_roles",
-    /**
      * Delete Organization Member Roles */
     DeleteOrganizationMemberRoles: "delete:organization_member_roles",
+    /**
+     * Create Organization Members */
+    CreateOrganizationMembers: "create:organization_members",
+    /**
+     * Read Organization Members */
+    ReadOrganizationMembers: "read:organization_members",
+    /**
+     * Delete Organization Members */
+    DeleteOrganizationMembers: "delete:organization_members",
+    /**
+     * Create Organizations */
+    CreateOrganizations: "create:organizations",
+    /**
+     * Read Organizations */
+    ReadOrganizations: "read:organizations",
+    /**
+     * Update Organizations */
+    UpdateOrganizations: "update:organizations",
+    /**
+     * Delete Organizations */
+    DeleteOrganizations: "delete:organizations",
+    /**
+     * Read Organizations Summary */
+    ReadOrganizationsSummary: "read:organizations_summary",
+    /**
+     * Create Phone Providers */
+    CreatePhoneProviders: "create:phone_providers",
+    /**
+     * Read Phone Providers */
+    ReadPhoneProviders: "read:phone_providers",
+    /**
+     * Update Phone Providers */
+    UpdatePhoneProviders: "update:phone_providers",
+    /**
+     * Delete Phone Providers */
+    DeletePhoneProviders: "delete:phone_providers",
+    /**
+     * Create Phone Templates */
+    CreatePhoneTemplates: "create:phone_templates",
+    /**
+     * Read Phone Templates */
+    ReadPhoneTemplates: "read:phone_templates",
+    /**
+     * Update Phone Templates */
+    UpdatePhoneTemplates: "update:phone_templates",
+    /**
+     * Delete Phone Templates */
+    DeletePhoneTemplates: "delete:phone_templates",
     /**
      * Read Prompts */
     ReadPrompts: "read:prompts",
     /**
      * Update Prompts */
     UpdatePrompts: "update:prompts",
-    /**
-     * Read Resource Servers */
-    ReadResourceServers: "read:resource_servers",
-    /**
-     * Update Resource Servers */
-    UpdateResourceServers: "update:resource_servers",
     /**
      * Read Refresh Tokens */
     ReadRefreshTokens: "read:refresh_tokens",
@@ -559,14 +481,29 @@ export const OauthScope = {
      * Create Resource Servers */
     CreateResourceServers: "create:resource_servers",
     /**
+     * Read Resource Servers */
+    ReadResourceServers: "read:resource_servers",
+    /**
+     * Update Resource Servers */
+    UpdateResourceServers: "update:resource_servers",
+    /**
      * Delete Resource Servers */
     DeleteResourceServers: "delete:resource_servers",
     /**
-     * Read Roles */
-    ReadRoles: "read:roles",
+     * Create Role Members */
+    CreateRoleMembers: "create:role_members",
+    /**
+     * Read Role Members */
+    ReadRoleMembers: "read:role_members",
+    /**
+     * Delete Role Members */
+    DeleteRoleMembers: "delete:role_members",
     /**
      * Create Roles */
     CreateRoles: "create:roles",
+    /**
+     * Read Roles */
+    ReadRoles: "read:roles",
     /**
      * Update Roles */
     UpdateRoles: "update:roles",
@@ -574,20 +511,17 @@ export const OauthScope = {
      * Delete Roles */
     DeleteRoles: "delete:roles",
     /**
-     * Read Role Members */
-    ReadRoleMembers: "read:role_members",
-    /**
-     * Create Role Members */
-    CreateRoleMembers: "create:role_members",
+     * Create Rules */
+    CreateRules: "create:rules",
     /**
      * Read Rules */
     ReadRules: "read:rules",
     /**
-     * Create Rules */
-    CreateRules: "create:rules",
-    /**
      * Update Rules */
     UpdateRules: "update:rules",
+    /**
+     * Delete Rules */
+    DeleteRules: "delete:rules",
     /**
      * Read Rules Configs */
     ReadRulesConfigs: "read:rules_configs",
@@ -598,23 +532,26 @@ export const OauthScope = {
      * Delete Rules Configs */
     DeleteRulesConfigs: "delete:rules_configs",
     /**
-     * Delete Rules */
-    DeleteRules: "delete:rules",
+     * Create Scim Config */
+    CreateScimConfig: "create:scim_config",
     /**
-     * Read Security Metrics */
-    ReadSecurityMetrics: "read:security_metrics",
+     * Read Scim Config */
+    ReadScimConfig: "read:scim_config",
     /**
-     * Read Self Service Profiles */
-    ReadSelfServiceProfiles: "read:self_service_profiles",
+     * Update Scim Config */
+    UpdateScimConfig: "update:scim_config",
     /**
-     * Create Self Service Profiles */
-    CreateSelfServiceProfiles: "create:self_service_profiles",
+     * Delete Scim Config */
+    DeleteScimConfig: "delete:scim_config",
     /**
-     * Update Self Service Profiles */
-    UpdateSelfServiceProfiles: "update:self_service_profiles",
+     * Create Scim Token */
+    CreateScimToken: "create:scim_token",
     /**
-     * Delete Self Service Profiles */
-    DeleteSelfServiceProfiles: "delete:self_service_profiles",
+     * Read Scim Token */
+    ReadScimToken: "read:scim_token",
+    /**
+     * Delete Scim Token */
+    DeleteScimToken: "delete:scim_token",
     /**
      * Read Self Service Profile Custom Texts */
     ReadSelfServiceProfileCustomTexts: "read:self_service_profile_custom_texts",
@@ -622,11 +559,17 @@ export const OauthScope = {
      * Update Self Service Profile Custom Texts */
     UpdateSelfServiceProfileCustomTexts: "update:self_service_profile_custom_texts",
     /**
-     * Create Sso Access Tickets */
-    CreateSsoAccessTickets: "create:sso_access_tickets",
+     * Create Self Service Profiles */
+    CreateSelfServiceProfiles: "create:self_service_profiles",
     /**
-     * Delete Sso Access Tickets */
-    DeleteSsoAccessTickets: "delete:sso_access_tickets",
+     * Read Self Service Profiles */
+    ReadSelfServiceProfiles: "read:self_service_profiles",
+    /**
+     * Update Self Service Profiles */
+    UpdateSelfServiceProfiles: "update:self_service_profiles",
+    /**
+     * Delete Self Service Profiles */
+    DeleteSelfServiceProfiles: "delete:self_service_profiles",
     /**
      * Read Sessions */
     ReadSessions: "read:sessions",
@@ -637,53 +580,35 @@ export const OauthScope = {
      * Delete Sessions */
     DeleteSessions: "delete:sessions",
     /**
-     * Delete Tenants */
-    DeleteTenants: "delete:tenants",
+     * Create Signing Keys */
+    CreateSigningKeys: "create:signing_keys",
     /**
-     * Run Checks */
-    RunChecks: "run:checks",
+     * Read Signing Keys */
+    ReadSigningKeys: "read:signing_keys",
     /**
-     * Read Checks */
-    ReadChecks: "read:checks",
+     * Update Signing Keys */
+    UpdateSigningKeys: "update:signing_keys",
     /**
-     * Read Tenant Feature Flags */
-    ReadTenantFeatureFlags: "read:tenant_feature_flags",
+     * Create Sso Access Tickets */
+    CreateSsoAccessTickets: "create:sso_access_tickets",
     /**
-     * Read Tenant Invitations */
-    ReadTenantInvitations: "read:tenant_invitations",
+     * Delete Sso Access Tickets */
+    DeleteSsoAccessTickets: "delete:sso_access_tickets",
     /**
-     * Create Tenant Invitations */
-    CreateTenantInvitations: "create:tenant_invitations",
+     * Read Stats */
+    ReadStats: "read:stats",
     /**
-     * Update Tenant Invitations */
-    UpdateTenantInvitations: "update:tenant_invitations",
+     * Read Tenant Settings */
+    ReadTenantSettings: "read:tenant_settings",
     /**
-     * Delete Tenant Invitations */
-    DeleteTenantInvitations: "delete:tenant_invitations",
-    /**
-     * Read Tenant Members */
-    ReadTenantMembers: "read:tenant_members",
-    /**
-     * Update Tenant Members */
-    UpdateTenantMembers: "update:tenant_members",
-    /**
-     * Delete Tenant Members */
-    DeleteTenantMembers: "delete:tenant_members",
-    /**
-     * Read Owners */
-    ReadOwners: "read:owners",
-    /**
-     * Delete Owners */
-    DeleteOwners: "delete:owners",
-    /**
-     * Create User Tickets */
-    CreateUserTickets: "create:user_tickets",
-    /**
-     * Read Token Exchange Profiles */
-    ReadTokenExchangeProfiles: "read:token_exchange_profiles",
+     * Update Tenant Settings */
+    UpdateTenantSettings: "update:tenant_settings",
     /**
      * Create Token Exchange Profiles */
     CreateTokenExchangeProfiles: "create:token_exchange_profiles",
+    /**
+     * Read Token Exchange Profiles */
+    ReadTokenExchangeProfiles: "read:token_exchange_profiles",
     /**
      * Update Token Exchange Profiles */
     UpdateTokenExchangeProfiles: "update:token_exchange_profiles",
@@ -691,14 +616,11 @@ export const OauthScope = {
      * Delete Token Exchange Profiles */
     DeleteTokenExchangeProfiles: "delete:token_exchange_profiles",
     /**
-     * Read Entity Counts */
-    ReadEntityCounts: "read:entity_counts",
+     * Create User Attribute Profiles */
+    CreateUserAttributeProfiles: "create:user_attribute_profiles",
     /**
      * Read User Attribute Profiles */
     ReadUserAttributeProfiles: "read:user_attribute_profiles",
-    /**
-     * Create User Attribute Profiles */
-    CreateUserAttributeProfiles: "create:user_attribute_profiles",
     /**
      * Update User Attribute Profiles */
     UpdateUserAttributeProfiles: "update:user_attribute_profiles",
@@ -709,56 +631,29 @@ export const OauthScope = {
      * Read User Idp Tokens */
     ReadUserIdpTokens: "read:user_idp_tokens",
     /**
-     * Read Current User */
-    ReadCurrentUser: "read:current_user",
+     * Create User Tickets */
+    CreateUserTickets: "create:user_tickets",
+    /**
+     * Create Users */
+    CreateUsers: "create:users",
+    /**
+     * Read Users */
+    ReadUsers: "read:users",
+    /**
+     * Update Users */
+    UpdateUsers: "update:users",
+    /**
+     * Delete Users */
+    DeleteUsers: "delete:users",
     /**
      * Update Users App Metadata */
     UpdateUsersAppMetadata: "update:users_app_metadata",
     /**
-     * Update Current User Metadata */
-    UpdateCurrentUserMetadata: "update:current_user_metadata",
-    /**
-     * Delete Current User */
-    DeleteCurrentUser: "delete:current_user",
-    /**
-     * Read User Application Passwords */
-    ReadUserApplicationPasswords: "read:user_application_passwords",
-    /**
-     * Create User Application Passwords */
-    CreateUserApplicationPasswords: "create:user_application_passwords",
-    /**
-     * Delete User Application Passwords */
-    DeleteUserApplicationPasswords: "delete:user_application_passwords",
-    /**
-     * Read Authentication Methods */
-    ReadAuthenticationMethods: "read:authentication_methods",
-    /**
-     * Update Authentication Methods */
-    UpdateAuthenticationMethods: "update:authentication_methods",
-    /**
-     * Create Authentication Methods */
-    CreateAuthenticationMethods: "create:authentication_methods",
-    /**
-     * Delete Authentication Methods */
-    DeleteAuthenticationMethods: "delete:authentication_methods",
-    /**
-     * Read Federated Connections Tokens */
-    ReadFederatedConnectionsTokens: "read:federated_connections_tokens",
-    /**
-     * Delete Federated Connections Tokens */
-    DeleteFederatedConnectionsTokens: "delete:federated_connections_tokens",
-    /**
-     * Update Current User Identities */
-    UpdateCurrentUserIdentities: "update:current_user_identities",
-    /**
-     * Delete Role Members */
-    DeleteRoleMembers: "delete:role_members",
+     * Create Vdcs Templates */
+    CreateVdcsTemplates: "create:vdcs_templates",
     /**
      * Read Vdcs Templates */
     ReadVdcsTemplates: "read:vdcs_templates",
-    /**
-     * Create Vdcs Templates */
-    CreateVdcsTemplates: "create:vdcs_templates",
     /**
      * Update Vdcs Templates */
     UpdateVdcsTemplates: "update:vdcs_templates",
@@ -1896,6 +1791,24 @@ export interface BreachedPasswordDetectionStage {
     "pre-user-registration"?: Management.BreachedPasswordDetectionPreUserRegistrationStage;
     "pre-change-password"?: Management.BreachedPasswordDetectionPreChangePasswordStage;
 }
+
+/**
+ * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
+ *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
+ */
+export const BruteForceProtectionModeEnum = {
+    CountPerIdentifierAndIp: "count_per_identifier_and_ip",
+    CountPerIdentifier: "count_per_identifier",
+} as const;
+export type BruteForceProtectionModeEnum =
+    (typeof BruteForceProtectionModeEnum)[keyof typeof BruteForceProtectionModeEnum];
+
+export const BruteForceProtectionShieldsEnum = {
+    Block: "block",
+    UserNotification: "user_notification",
+} as const;
+export type BruteForceProtectionShieldsEnum =
+    (typeof BruteForceProtectionShieldsEnum)[keyof typeof BruteForceProtectionShieldsEnum];
 
 export interface BulkUpdateAculResponseContent {
     configs: Management.AculConfigs;
@@ -3043,6 +2956,13 @@ export type ConnectionAgentVersionAd = string;
  */
 export type ConnectionAllowedAudiencesGoogleOAuth2 = string[];
 
+/** Specifies the API behavior for password authentication */
+export const ConnectionApiBehaviorEnum = {
+    Required: "required",
+    Optional: "optional",
+} as const;
+export type ConnectionApiBehaviorEnum = (typeof ConnectionApiBehaviorEnum)[keyof typeof ConnectionApiBehaviorEnum];
+
 export type ConnectionApiEnableUsers = boolean;
 
 /**
@@ -3140,6 +3060,11 @@ export type ConnectionAuthorizationEndpoint = string;
 export type ConnectionAuthorizationEndpointOAuth2 = Management.ConnectionAuthorizationEndpoint;
 
 /**
+ * Base URL override for the Exact Online API endpoint used for OAuth2 authorization and API requests. Defaults to https://start.exactonline.nl.
+ */
+export type ConnectionBaseUrlExact = Management.ConnectionHttpsUrlWithHttpFallback;
+
+/**
  * Enables Auth0's brute force protection to prevent credential stuffing attacks. When enabled, blocks suspicious login attempts from specific IP addresses after repeated failures.
  */
 export type ConnectionBruteForceProtection = boolean;
@@ -3174,9 +3099,24 @@ export type ConnectionClaimsSupported = string[];
 /**
  * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
+export type ConnectionClientIdBitbucket = string;
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
+ */
 export type ConnectionClientId = string;
 
+/**
+ * OAuth 2.0 client identifier obtained from Amazon Developer Console during Login with Amazon application registration. When not provided, Auth0 development keys are used for testing purposes.
+ */
+export type ConnectionClientIdAmazon = Management.ConnectionClientId;
+
 export type ConnectionClientIdAzureAd = Management.ConnectionClientId;
+
+/**
+ * OAuth2.0 client identifier for the Exact Online connection, obtained when registering your application in the Exact App Center.
+ */
+export type ConnectionClientIdExact = Management.ConnectionClientId;
 
 /**
  * Your Facebook App ID. You can find this in your [Facebook Developers Console](https://developers.facebook.com/apps) under the App Settings section.
@@ -3193,9 +3133,29 @@ export type ConnectionClientIdGoogleApps = Management.ConnectionClientId;
  */
 export type ConnectionClientIdGoogleOAuth2 = string;
 
+/**
+ * LINE Channel ID issued by LINE during application registration. This value identifies your Auth0 connection to LINE.
+ */
+export type ConnectionClientIdLine = string;
+
 export type ConnectionClientIdOAuth2 = Management.ConnectionClientId;
 
 export type ConnectionClientIdOidc = Management.ConnectionClientId;
+
+/**
+ * OAuth 2.0 client identifier issued by PayPal during application registration. This value identifies your Auth0 connection to PayPal. Leave empty to use Auth0 Dev Keys.
+ */
+export type ConnectionClientIdPaypal = Management.ConnectionClientId;
+
+/**
+ * The OAuth 2.0 client identifier
+ */
+export type ConnectionClientIdSalesforce = string;
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
+ */
+export type ConnectionClientIdWindowsLive = string;
 
 /**
  * The response protocol used to communicate with the default application.
@@ -3208,9 +3168,21 @@ export type ConnectionClientProtocolSaml = Management.ConnectionOptionsIdpInitia
 export type ConnectionClientSecret = string;
 
 /**
+ * OAuth 2.0 client secret obtained from Amazon Developer Console during Login with Amazon application registration. Used to authenticate your application when exchanging authorization codes for tokens.
+ */
+export type ConnectionClientSecretAmazon = Management.ConnectionClientSecret;
+
+/**
  * The client secret (application password) from your Azure AD app registration. Used to authenticate your application when exchanging authorization codes for tokens.
  */
 export type ConnectionClientSecretAzureAd = string;
+
+export type ConnectionClientSecretBitbucket = Management.ConnectionClientSecret;
+
+/**
+ * OAuth2.0 client secret for the Exact Online connection, obtained when registering your application in the Exact App Center.
+ */
+export type ConnectionClientSecretExact = Management.ConnectionClientSecret;
 
 /**
  * Your Facebook App Secret. You can find this in your [Facebook Developers Console](https://developers.facebook.com/apps) under the App Settings section.
@@ -3227,18 +3199,38 @@ export type ConnectionClientSecretGoogleApps = Management.ConnectionClientSecret
  */
 export type ConnectionClientSecretGoogleOAuth2 = string;
 
+/**
+ * LINE Channel Secret issued by provider during application registration. This value is used to authenticate your Auth0 connection to the identity provider.
+ */
+export type ConnectionClientSecretLine = string;
+
 export type ConnectionClientSecretOAuth2 = Management.ConnectionClientSecret;
 
 export type ConnectionClientSecretOidc = Management.ConnectionClientSecret;
 
+/**
+ * OAuth 2.0 client secret issued by PayPal during application registration. Leave empty to use Auth0 Dev Keys.
+ */
+export type ConnectionClientSecretPaypal = Management.ConnectionClientSecret;
+
+/**
+ * The OAuth 2.0 client secret
+ */
+export type ConnectionClientSecretSalesforce = string;
+
+export type ConnectionClientSecretWindowsLive = Management.ConnectionClientSecret;
+
 export interface ConnectionCommon {
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
     display_name?: Management.ConnectionDisplayName;
     enabled_clients?: Management.ConnectionEnabledClients;
     is_domain_connection?: Management.ConnectionIsDomainConnection;
     metadata?: Management.ConnectionsMetadata;
 }
+
+/**
+ * The base URL of your Salesforce Community (Experience Cloud) site. When specified, authentication flows will use this Community URL instead of the standard Salesforce login page, enabling users to authenticate through your branded Community portal.
+ */
+export type ConnectionCommunityBaseUrlSalesforce = Management.ConnectionHttpsUrlWithHttpFallback;
 
 /**
  * A hash of configuration key/value pairs.
@@ -3251,6 +3243,14 @@ export type ConnectionConfiguration = Record<string, string>;
 export interface ConnectionConnectedAccountsPurpose {
     active: boolean;
     cross_app_access?: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface ConnectionConnectedAccountsPurposeXaa {
+    cross_app_access?: boolean;
+    active: boolean;
 }
 
 /**
@@ -3582,9 +3582,29 @@ export interface ConnectionForOrganization {
 export type ConnectionForwardReqInfoSms = boolean;
 
 /**
+ * Additional OAuth scopes to request from Amazon beyond the standard profile and postal_code scopes. These scopes must be valid Amazon Login scopes.
+ */
+export type ConnectionFreeformScopesAmazon = Management.ConnectionScopeArray;
+
+/**
  * Array of custom OAuth 2.0 scopes to request from Google during authentication. Use this to request scopes not covered by the predefined scope options.
  */
 export type ConnectionFreeformScopesGoogleOAuth2 = Management.ConnectionScopeArray;
+
+/**
+ * Additional OAuth scopes to request from PayPal beyond the standard attribute scopes. Enter valid PayPal scopes from their documentation. Invalid scopes may cause authentication errors.
+ */
+export type ConnectionFreeformScopesPaypal = Management.ConnectionScopeArray;
+
+/**
+ * Additional OAuth scopes to request from Salesforce beyond the standard profile permissions. Enter valid scopes from the Salesforce documentation. Invalid scopes may cause authentication errors.
+ */
+export type ConnectionFreeformScopesSalesforce = Management.ConnectionScopeArray;
+
+/**
+ * Custom OAuth scopes not predefined in the standard scope list.
+ */
+export type ConnectionFreeformScopesWindowsLive = Management.ConnectionScopeArray;
 
 /**
  * The sender phone number or alphanumeric sender ID for outgoing SMS messages
@@ -4029,7 +4049,17 @@ export interface ConnectionOptionsAol extends Management.ConnectionOptionsOAuth2
 /**
  * Options for the 'amazon' connection
  */
-export interface ConnectionOptionsAmazon extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsAmazon extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdAmazon;
+    client_secret?: Management.ConnectionClientSecretAmazon;
+    freeform_scopes?: Management.ConnectionFreeformScopesAmazon;
+    /** When enabled, requests the user's postal code from Amazon during authentication. This adds the 'postal_code' scope to the authorization request. */
+    postal_code?: boolean;
+    /** When enabled, requests the user's basic profile information (name, email, user ID) from Amazon during authentication. This scope is always enabled for Amazon connections. */
+    profile?: boolean;
+    scope?: Management.ConnectionScopeAmazon;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4228,7 +4258,13 @@ export interface ConnectionOptionsBaidu extends Management.ConnectionOptionsOAut
 /**
  * Options for the 'bitbucket' connection
  */
-export interface ConnectionOptionsBitbucket extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsBitbucket extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdBitbucket;
+    client_secret?: Management.ConnectionClientSecretBitbucket;
+    freeform_scopes?: Management.ConnectionScopeArray;
+    profile?: Management.ConnectionProfileBitbucket;
+    scope?: Management.ConnectionScopeArray;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4248,6 +4284,26 @@ export interface ConnectionOptionsBox extends Management.ConnectionOptionsOAuth2
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
+ */
+export type ConnectionOptionsClientIdGithub = string;
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
+ */
+export type ConnectionOptionsClientIdTwitter = string;
+
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. This value is used to authenticate your Auth0 connection to the identity provider.
+ */
+export type ConnectionOptionsClientSecretGithub = string;
+
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. This value is used to authenticate your Auth0 connection to the identity provider.
+ */
+export type ConnectionOptionsClientSecretTwitter = string;
 
 /**
  * Common attributes for connection options including non-persistent attributes and Cross App Access
@@ -4306,7 +4362,7 @@ export interface ConnectionOptionsCommonSaml {
 }
 
 /**
- * Options for the 'custom' connection
+ * Options for 'custom' connections
  */
 export type ConnectionOptionsCustom = Record<string, unknown>;
 
@@ -4357,7 +4413,7 @@ export interface ConnectionOptionsEmail extends Management.ConnectionOptionsComm
 /**
  * Options for the evernote family of connections
  */
-export interface ConnectionOptionsEvernote extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsEvernote extends Management.ConnectionOptionsOAuth1Common {
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4365,7 +4421,14 @@ export interface ConnectionOptionsEvernote extends Management.ConnectionOptionsO
 /**
  * Options for the 'exact' connection
  */
-export interface ConnectionOptionsExact extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsExact extends Management.ConnectionOptionsCommon {
+    baseUrl?: Management.ConnectionBaseUrlExact;
+    client_id?: Management.ConnectionClientIdExact;
+    client_secret?: Management.ConnectionClientSecretExact;
+    /** Enables retrieval of basic profile attributes from Exact Online including name, username, picture, email, gender, and language. */
+    profile?: boolean;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4477,15 +4540,66 @@ export interface ConnectionOptionsFitbit extends Management.ConnectionOptionsOAu
 /**
  * Options for the 'flickr' connection
  */
-export interface ConnectionOptionsFlickr extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsFlickr extends Management.ConnectionOptionsOAuth1Common {
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 /**
+ * Array of custom OAuth 2.0 scopes to request from GitHub during authentication. Use this to request scopes not covered by the predefined scope options.
+ */
+export type ConnectionOptionsFreeformScopesGithub = Management.ConnectionScopeArray;
+
+/**
  * Options for the 'github' connection
  */
-export interface ConnectionOptionsGitHub extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsGitHub extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionOptionsClientIdGithub;
+    client_secret?: Management.ConnectionOptionsClientSecretGithub;
+    freeform_scopes?: Management.ConnectionOptionsFreeformScopesGithub;
+    scope?: Management.ConnectionOptionsScopeGithub;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** Requests the GitHub admin:org scope so Auth0 can fully manage organizations, teams, and memberships on behalf of the user. */
+    admin_org?: boolean;
+    /** Requests the admin:public_key scope to allow creating, updating, and deleting the user's SSH public keys. */
+    admin_public_key?: boolean;
+    /** Requests the admin:repo_hook scope so Auth0 can read, write, ping, and delete repository webhooks. */
+    admin_repo_hook?: boolean;
+    /** Requests the delete_repo scope so the user can remove repositories they administer while signing in through Auth0. */
+    delete_repo?: boolean;
+    /** Requests the user:email scope so Auth0 pulls addresses from GitHub's /user/emails endpoint and populates the profile. */
+    email?: boolean;
+    /** Requests the user:follow scope to allow following or unfollowing GitHub users for the signed-in account. */
+    follow?: boolean;
+    /** Requests the gist scope so the application can create or update gists on behalf of the user. */
+    gist?: boolean;
+    /** Requests the notifications scope to read GitHub inbox notifications; repo also implicitly grants this access. */
+    notifications?: boolean;
+    /** Controls the GitHub read:user call that returns the user's basic profile (name, avatar, profile URL) and is on by default for successful logins. */
+    profile?: boolean;
+    /** Requests the public_repo scope for read and write operations on public repositories, deployments, and statuses. */
+    public_repo?: boolean;
+    /** Requests the read:org scope so Auth0 can view organizations, teams, and membership lists without making changes. */
+    read_org?: boolean;
+    /** Requests the read:public_key scope so Auth0 can list and inspect the user's SSH public keys. */
+    read_public_key?: boolean;
+    /** Requests the read:repo_hook scope to read and ping repository webhooks. */
+    read_repo_hook?: boolean;
+    /** Requests the read:user scope to load extended profile information, implicitly covering user:email and user:follow. */
+    read_user?: boolean;
+    /** Requests the repo scope for read and write access to both public and private repositories, deployments, and statuses. */
+    repo?: boolean;
+    /** Requests the repo_deployment scope in order to read and write deployment statuses for repositories. */
+    repo_deployment?: boolean;
+    /** Requests the repo:status scope to manage commit statuses on public and private repositories. */
+    repo_status?: boolean;
+    /** Requests the write:org scope so Auth0 can change whether organization memberships are publicized. */
+    write_org?: boolean;
+    /** Requests the write:public_key scope to create or update SSH public keys for the user. */
+    write_public_key?: boolean;
+    /** Requests the write:repo_hook scope so Auth0 can read, create, update, and ping repository webhooks. */
+    write_repo_hook?: boolean;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4711,7 +4825,17 @@ export interface ConnectionOptionsInstagram extends Management.ConnectionOptions
 /**
  * Options for the 'line' connection
  */
-export interface ConnectionOptionsLine extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsLine extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdLine;
+    client_secret?: Management.ConnectionClientSecretLine;
+    freeform_scopes?: Management.ConnectionScopeArray;
+    scope?: Management.ConnectionScopeArray;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** Permission to request the user's email address from LINE. When enabled, adds the 'email' scope to OAuth requests. Note: LINE requires special approval to access user email addresses. */
+    email?: boolean;
+    /** Permission to request the user's basic profile information from LINE. When enabled, adds the 'profile' scope to OAuth requests. LINE requires this scope to retrieve user display name, profile picture, and status message. */
+    profile?: boolean;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4721,6 +4845,12 @@ export interface ConnectionOptionsLine extends Management.ConnectionOptionsOAuth
  */
 export interface ConnectionOptionsLinkedin extends Management.ConnectionOptionsOAuth2Common {
     strategy_version?: Management.ConnectionStrategyVersionEnumLinkedin;
+    /** When enabled, requests the basic_profile scope from LinkedIn to access basic profile information. */
+    basic_profile?: boolean;
+    /** When enabled, requests the email scope from LinkedIn to access the user's email address. */
+    email?: boolean;
+    /** When enabled, requests the profile scope from LinkedIn to access profile information. */
+    profile?: boolean;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4741,6 +4871,15 @@ export interface ConnectionOptionsOAuth1 {
     client_secret?: Management.ConnectionClientSecret;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface ConnectionOptionsOAuth1Common extends Management.ConnectionOptionsCommon {
+    /** OAuth 1.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id?: string;
+    /** OAuth 1.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when signing requests and exchanging request tokens and verifiers for access tokens. May be null for public clients. */
+    client_secret?: string;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
 }
 
 /**
@@ -4772,8 +4911,9 @@ export interface ConnectionOptionsOAuth2 extends Management.ConnectionOptionsCom
 export interface ConnectionOptionsOAuth2Common extends Management.ConnectionOptionsCommon {
     client_id?: Management.ConnectionClientId;
     client_secret?: Management.ConnectionClientSecret;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    scope?: Management.ConnectionScopeOAuth2;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
 }
 
 /**
@@ -4857,9 +4997,22 @@ export interface ConnectionOptionsOkta
 }
 
 /**
- * Options for the paypal family of connections
+ * Options for the 'paypal' and 'paypal-sandbox' connections
  */
-export interface ConnectionOptionsPaypal extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsPaypal extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdPaypal;
+    client_secret?: Management.ConnectionClientSecretPaypal;
+    freeform_scopes?: Management.ConnectionFreeformScopesPaypal;
+    scope?: Management.ConnectionScopePaypal;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    /** When enabled, requests the 'address' scope from PayPal to access the user's address information. */
+    address?: boolean;
+    /** When enabled, requests the 'email' scope from PayPal to access the user's email address. */
+    email?: boolean;
+    /** When enabled, requests the 'phone' scope from PayPal to access the user's phone number. */
+    phone?: boolean;
+    /** When enabled, requests the 'profile' scope from PayPal to access basic profile information including first name, last name, date of birth, time zone, locale, and language. This scope is always enabled by the system. */
+    profile?: boolean;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4883,6 +5036,14 @@ export interface ConnectionOptionsPlanningCenter extends Management.ConnectionOp
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/** Allowed protocol identifiers for Twitter connections. Use oauth1 for the legacy v1.1 OAuth flow or oauth2 for the newer OAuth 2.0 flow. */
+export const ConnectionOptionsProtocolEnumTwitter = {
+    Oauth1: "oauth1",
+    Oauth2: "oauth2",
+} as const;
+export type ConnectionOptionsProtocolEnumTwitter =
+    (typeof ConnectionOptionsProtocolEnumTwitter)[keyof typeof ConnectionOptionsProtocolEnumTwitter];
 
 /**
  * Options for the 'renren' connection
@@ -4943,12 +5104,39 @@ export interface ConnectionOptionsSms extends Management.ConnectionOptionsCommon
 }
 
 /**
- * Options for the salesforce family of connections
+ * Options for the salesforce family of connections (salesforce, salesforce-sandbox, salesforce-community)
  */
-export interface ConnectionOptionsSalesforce extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsSalesforce extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdSalesforce;
+    client_secret?: Management.ConnectionClientSecretSalesforce;
+    freeform_scopes?: Management.ConnectionFreeformScopesSalesforce;
+    /** When enabled, requests the Salesforce profile scope to retrieve basic user information including user_id, organization_id, username, display_name, email, status, photos, and URLs. */
+    profile?: boolean;
+    scope?: Management.ConnectionScopeSalesforce;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/**
+ * Options for the 'salesforce-community' connection
+ */
+export interface ConnectionOptionsSalesforceCommunity extends Management.ConnectionOptionsSalesforce {
+    community_base_url?: Management.ConnectionCommunityBaseUrlSalesforce;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Scope options for GitHub connections.
+ */
+export type ConnectionOptionsScopeGithub = Management.ConnectionScopeArray;
+
+/**
+ * Array of OAuth 2.0 scopes to request from Twitter during authentication. Use this to request scopes not covered by the predefined scope options.
+ */
+export type ConnectionOptionsScopeTwitter = Management.ConnectionScopeArray;
 
 /**
  * Options for the 'sharepoint' connection
@@ -4993,7 +5181,22 @@ export interface ConnectionOptionsThirtySevenSignals extends Management.Connecti
 /**
  * Options for the 'twitter' connection
  */
-export interface ConnectionOptionsTwitter extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsTwitter extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionOptionsClientIdTwitter;
+    client_secret?: Management.ConnectionOptionsClientSecretTwitter;
+    freeform_scopes?: Management.ConnectionScopeArray;
+    protocol?: Management.ConnectionOptionsProtocolEnumTwitter;
+    scope?: Management.ConnectionOptionsScopeTwitter;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** Request long-lived refresh tokens so your app can act on behalf of users even when they’re not actively signed in. Typical Twitter use case: keeping a background service synced without forcing users to reauthorize every session. */
+    offline_access?: boolean;
+    /** Pull account profile metadata such as display name, bio, location, and URL so downstream apps can prefill or personalize user experiences. */
+    profile?: boolean;
+    /** Allow the application to read a user’s public and protected Tweets—required for timelines, analytics, or moderation workflows. */
+    tweet_read?: boolean;
+    /** Read non-Tweet user information (e.g., followers/following, account settings) to power relationship graphs or audience insights. */
+    users_read?: boolean;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5025,8 +5228,130 @@ export interface ConnectionOptionsWeibo extends Management.ConnectionOptionsOAut
 /**
  * Options for the 'windowslive' connection
  */
-export interface ConnectionOptionsWindowsLive extends Management.ConnectionOptionsOAuth2Common {
+export interface ConnectionOptionsWindowsLive extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdWindowsLive;
+    client_secret?: Management.ConnectionClientSecretWindowsLive;
+    freeform_scopes?: Management.ConnectionFreeformScopesWindowsLive;
+    scope?: Management.ConnectionScopeArrayWindowsLive;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
     strategy_version?: Management.ConnectionStrategyVersionEnumWindowsLive;
+    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    /** When enabled, requests access to user's applications. */
+    applications?: boolean;
+    /** When enabled, requests permission to create applications. */
+    applications_create?: boolean;
+    /** When enabled, requests read access to user's basic profile information and contacts list. */
+    basic?: boolean;
+    /** When enabled, requests read access to user's birth day, month, and year. */
+    birthday?: boolean;
+    /** When enabled, requests read access to user's calendars and events. */
+    calendars?: boolean;
+    /** When enabled, requests read and write access to user's calendars and events. */
+    calendars_update?: boolean;
+    /** When enabled, requests read access to contacts' birth day and birth month. */
+    contacts_birthday?: boolean;
+    /** When enabled, requests read access to user's calendars and shared calendars/events from others. */
+    contacts_calendars?: boolean;
+    /** When enabled, requests permission to create new contacts in user's address book. */
+    contacts_create?: boolean;
+    /** When enabled, requests read access to user's and shared albums, photos, videos, and audio. */
+    contacts_photos?: boolean;
+    /** When enabled, requests read access to OneDrive files shared by other users. */
+    contacts_skydrive?: boolean;
+    /** When enabled, allows the app to have the same access to information in the directory as the signed-in user. */
+    directory_accessasuser_all?: boolean;
+    /** When enabled, allows the app to read data in your organization's directory, such as users, groups, and apps. */
+    directory_read_all?: boolean;
+    /** When enabled, allows the app to read and write data in your organization's directory, such as users and groups. */
+    directory_readwrite_all?: boolean;
+    /** When enabled, requests read access to personal, preferred, and business email addresses. */
+    emails?: boolean;
+    /** When enabled, requests permission to create events on user's default calendar. */
+    events_create?: boolean;
+    /** When enabled, requests permission to read the user's calendars. */
+    graph_calendars?: boolean;
+    /** When enabled, requests permission to read and write the user's calendars. */
+    graph_calendars_update?: boolean;
+    /** When enabled, requests permission to read the user's contacts. */
+    graph_contacts?: boolean;
+    /** When enabled, requests permission to read and write the user's contacts. */
+    graph_contacts_update?: boolean;
+    /** When enabled, requests permission to read the user's device information. */
+    graph_device?: boolean;
+    /** When enabled, requests permission to send commands to the user's devices. */
+    graph_device_command?: boolean;
+    /** When enabled, requests permission to read the user's emails. */
+    graph_emails?: boolean;
+    /** When enabled, requests permission to read and write the user's emails. */
+    graph_emails_update?: boolean;
+    /** When enabled, requests permission to read the user's files. */
+    graph_files?: boolean;
+    /** When enabled, requests permission to read all files the user has access to. */
+    graph_files_all?: boolean;
+    /** When enabled, requests permission to read and write all files the user has access to. */
+    graph_files_all_update?: boolean;
+    /** When enabled, requests permission to read and write the user's files. */
+    graph_files_update?: boolean;
+    /** When enabled, requests permission to read the user's OneNote notebooks. */
+    graph_notes?: boolean;
+    /** When enabled, requests permission to create new OneNote notebooks. */
+    graph_notes_create?: boolean;
+    /** When enabled, requests permission to read and write the user's OneNote notebooks. */
+    graph_notes_update?: boolean;
+    /** When enabled, requests permission to read the user's tasks. */
+    graph_tasks?: boolean;
+    /** When enabled, requests permission to read and write the user's tasks. */
+    graph_tasks_update?: boolean;
+    /** When enabled, requests permission to read the user's profile. */
+    graph_user?: boolean;
+    /** When enabled, requests permission to read the user's activity history. */
+    graph_user_activity?: boolean;
+    /** When enabled, requests permission to read and write the user's profile. */
+    graph_user_update?: boolean;
+    /** When enabled, allows the app to read all group properties and memberships. */
+    group_read_all?: boolean;
+    /** When enabled, allows the app to create groups, read all group properties and memberships, update group properties and memberships, and delete groups. */
+    group_readwrite_all?: boolean;
+    /** When enabled, allows the app to create, read, update, and delete all mail in all mailboxes. */
+    mail_readwrite_all?: boolean;
+    /** When enabled, allows the app to send mail as users in the organization. */
+    mail_send?: boolean;
+    /** When enabled, requests access to user's Windows Live Messenger data. */
+    messenger?: boolean;
+    /** When enabled, requests a refresh token for offline access. */
+    offline_access?: boolean;
+    /** When enabled, requests read access to personal, business, and mobile phone numbers. */
+    phone_numbers?: boolean;
+    /** When enabled, requests read access to user's photos, videos, audio, and albums. */
+    photos?: boolean;
+    /** When enabled, requests read access to personal and business postal addresses. */
+    postal_addresses?: boolean;
+    /** When enabled, allows the app to read the role-based access control (RBAC) settings for your company's directory. */
+    rolemanagement_read_all?: boolean;
+    /** When enabled, allows the app to read and write the role-based access control (RBAC) settings for your company's directory. */
+    rolemanagement_readwrite_directory?: boolean;
+    /** When enabled, requests permission to share content with other users. */
+    share?: boolean;
+    /** When enabled, provides single sign-in behavior for users already signed into their Microsoft account. */
+    signin?: boolean;
+    /** When enabled, allows the app to read documents and list items in all SharePoint site collections. */
+    sites_read_all?: boolean;
+    /** When enabled, allows the app to create, read, update, and delete documents and list items in all SharePoint site collections. */
+    sites_readwrite_all?: boolean;
+    /** When enabled, requests read access to user's files stored on OneDrive. */
+    skydrive?: boolean;
+    /** When enabled, requests read and write access to user's OneDrive files. */
+    skydrive_update?: boolean;
+    /** When enabled, allows the app to read the names and descriptions of all teams. */
+    team_readbasic_all?: boolean;
+    /** When enabled, allows the app to read and write all teams' information and change team membership. */
+    team_readwrite_all?: boolean;
+    /** When enabled, allows the app to read the full set of profile properties, reports, and managers of all users. */
+    user_read_all?: boolean;
+    /** When enabled, allows the app to read a basic set of profile properties of all users in the directory. */
+    user_readbasic_all?: boolean;
+    /** When enabled, requests read access to employer and work position information. */
+    work_profile?: boolean;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5097,6 +5422,8 @@ export interface ConnectionPasskeyOptions {
 export interface ConnectionPasswordAuthenticationMethod {
     /** Determines whether passwords are enabled */
     enabled?: boolean;
+    api_behavior?: Management.ConnectionApiBehaviorEnum;
+    signup_behavior?: Management.ConnectionSignupBehaviorEnum;
 }
 
 /**
@@ -5169,6 +5496,11 @@ export interface ConnectionProfile {
     connection_config?: Management.ConnectionProfileConfig;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
 }
+
+/**
+ * `profile` is a boolean that controls whether basic profile information (name, picture, email) is requested from Bitbucket during authentication. When `true`, the connection requests access to the user's basic profile data.
+ */
+export type ConnectionProfileBitbucket = boolean;
 
 /**
  * Connection profile configuration.
@@ -5340,6 +5672,14 @@ export type ConnectionProviderSms = Management.ConnectionProviderEnumSms;
 export type ConnectionProvisioningTicketUrl = string;
 
 /**
+ * Purposes for a connection
+ */
+export interface ConnectionPurposes {
+    authentication?: Management.ConnectionAuthenticationPurpose;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+}
+
+/**
  * Indicates whether to use realm fallback.
  */
 export type ConnectionRealmFallback = boolean;
@@ -5404,7 +5744,9 @@ export interface ConnectionResponseCommon extends Management.CreateConnectionCom
 /**
  * Response for connections with strategy=ad
  */
-export interface ConnectionResponseContentAd extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentAd
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAd.Strategy;
     options?: Management.ConnectionOptionsAd;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -5420,7 +5762,9 @@ export namespace ConnectionResponseContentAd {
 /**
  * Response for connections with strategy=adfs
  */
-export interface ConnectionResponseContentAdfs extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentAdfs
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAdfs.Strategy;
     options?: Management.ConnectionOptionsAdfs;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -5437,7 +5781,9 @@ export namespace ConnectionResponseContentAdfs {
 /**
  * Response for connections with strategy=aol
  */
-export interface ConnectionResponseContentAol extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentAol
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAol.Strategy;
     options?: Management.ConnectionOptionsAol;
 }
@@ -5452,7 +5798,9 @@ export namespace ConnectionResponseContentAol {
 /**
  * Response for connections with strategy=amazon
  */
-export interface ConnectionResponseContentAmazon extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentAmazon
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAmazon.Strategy;
     options?: Management.ConnectionOptionsAmazon;
 }
@@ -5467,7 +5815,9 @@ export namespace ConnectionResponseContentAmazon {
 /**
  * Response for connections with strategy=apple
  */
-export interface ConnectionResponseContentApple extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentApple
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentApple.Strategy;
     options?: Management.ConnectionOptionsApple;
 }
@@ -5482,7 +5832,9 @@ export namespace ConnectionResponseContentApple {
 /**
  * Response for connections with strategy=auth0
  */
-export interface ConnectionResponseContentAuth0 extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentAuth0
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAuth0.Strategy;
     options?: Management.ConnectionOptionsAuth0;
 }
@@ -5497,7 +5849,9 @@ export namespace ConnectionResponseContentAuth0 {
 /**
  * Response for connections with strategy=auth0-oidc
  */
-export interface ConnectionResponseContentAuth0Oidc extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentAuth0Oidc
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAuth0Oidc.Strategy;
     options?: Management.ConnectionOptionsAuth0Oidc;
 }
@@ -5512,7 +5866,9 @@ export namespace ConnectionResponseContentAuth0Oidc {
 /**
  * Response for connections with strategy=waad
  */
-export interface ConnectionResponseContentAzureAd extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentAzureAd
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAzureAd.Strategy;
     options?: Management.ConnectionOptionsAzureAd;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -5529,7 +5885,9 @@ export namespace ConnectionResponseContentAzureAd {
 /**
  * Response for connections with strategy=baidu
  */
-export interface ConnectionResponseContentBaidu extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentBaidu
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBaidu.Strategy;
     options?: Management.ConnectionOptionsBaidu;
 }
@@ -5544,7 +5902,9 @@ export namespace ConnectionResponseContentBaidu {
 /**
  * Response for connections with strategy=bitbucket
  */
-export interface ConnectionResponseContentBitbucket extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentBitbucket
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBitbucket.Strategy;
     options?: Management.ConnectionOptionsBitbucket;
 }
@@ -5559,7 +5919,9 @@ export namespace ConnectionResponseContentBitbucket {
 /**
  * Response for connections with strategy=bitly
  */
-export interface ConnectionResponseContentBitly extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentBitly
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBitly.Strategy;
     options?: Management.ConnectionOptionsBitly;
 }
@@ -5574,7 +5936,9 @@ export namespace ConnectionResponseContentBitly {
 /**
  * Response for connections with strategy=box
  */
-export interface ConnectionResponseContentBox extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentBox
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBox.Strategy;
     options?: Management.ConnectionOptionsBox;
 }
@@ -5589,7 +5953,9 @@ export namespace ConnectionResponseContentBox {
 /**
  * Response for connections with strategy=custom
  */
-export interface ConnectionResponseContentCustom extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentCustom
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentCustom.Strategy;
     options?: Management.ConnectionOptionsCustom;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -5605,7 +5971,9 @@ export namespace ConnectionResponseContentCustom {
 /**
  * Response for connections with strategy=daccount
  */
-export interface ConnectionResponseContentDaccount extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentDaccount
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentDaccount.Strategy;
     options?: Management.ConnectionOptionsDaccount;
 }
@@ -5620,7 +5988,9 @@ export namespace ConnectionResponseContentDaccount {
 /**
  * Response for connections with strategy=dropbox
  */
-export interface ConnectionResponseContentDropbox extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentDropbox
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentDropbox.Strategy;
     options?: Management.ConnectionOptionsDropbox;
 }
@@ -5635,7 +6005,9 @@ export namespace ConnectionResponseContentDropbox {
 /**
  * Response for connections with strategy=dwolla
  */
-export interface ConnectionResponseContentDwolla extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentDwolla
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentDwolla.Strategy;
     options?: Management.ConnectionOptionsDwolla;
 }
@@ -5650,7 +6022,9 @@ export namespace ConnectionResponseContentDwolla {
 /**
  * Response for connections with strategy=email
  */
-export interface ConnectionResponseContentEmail extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentEmail
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentEmail.Strategy;
     options?: Management.ConnectionOptionsEmail;
 }
@@ -5665,7 +6039,9 @@ export namespace ConnectionResponseContentEmail {
 /**
  * Response for connections with strategy=evernote
  */
-export interface ConnectionResponseContentEvernote extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentEvernote
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentEvernote.Strategy;
     options?: Management.ConnectionOptionsEvernote;
 }
@@ -5680,7 +6056,9 @@ export namespace ConnectionResponseContentEvernote {
 /**
  * Response for connections with strategy=evernote-sandbox
  */
-export interface ConnectionResponseContentEvernoteSandbox extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentEvernoteSandbox
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentEvernoteSandbox.Strategy;
     options?: Management.ConnectionOptionsEvernote;
 }
@@ -5695,7 +6073,9 @@ export namespace ConnectionResponseContentEvernoteSandbox {
 /**
  * Response for connections with strategy=exact
  */
-export interface ConnectionResponseContentExact extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentExact
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentExact.Strategy;
     options?: Management.ConnectionOptionsExact;
 }
@@ -5710,7 +6090,9 @@ export namespace ConnectionResponseContentExact {
 /**
  * Response for connections with strategy=facebook
  */
-export interface ConnectionResponseContentFacebook extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentFacebook
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentFacebook.Strategy;
     options?: Management.ConnectionOptionsFacebook;
 }
@@ -5725,7 +6107,9 @@ export namespace ConnectionResponseContentFacebook {
 /**
  * Response for connections with strategy=fitbit
  */
-export interface ConnectionResponseContentFitbit extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentFitbit
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentFitbit.Strategy;
     options?: Management.ConnectionOptionsFitbit;
 }
@@ -5740,7 +6124,9 @@ export namespace ConnectionResponseContentFitbit {
 /**
  * Response for connections with strategy=flickr
  */
-export interface ConnectionResponseContentFlickr extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentFlickr
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentFlickr.Strategy;
     options?: Management.ConnectionOptionsFlickr;
 }
@@ -5755,7 +6141,9 @@ export namespace ConnectionResponseContentFlickr {
 /**
  * Response for connections with strategy=github
  */
-export interface ConnectionResponseContentGitHub extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentGitHub
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentGitHub.Strategy;
     options?: Management.ConnectionOptionsGitHub;
 }
@@ -5770,7 +6158,9 @@ export namespace ConnectionResponseContentGitHub {
 /**
  * Response for connections with strategy=google-apps
  */
-export interface ConnectionResponseContentGoogleApps extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentGoogleApps
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentGoogleApps.Strategy;
     options?: Management.ConnectionOptionsGoogleApps;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -5787,7 +6177,9 @@ export namespace ConnectionResponseContentGoogleApps {
 /**
  * Response for connections with strategy=google-oauth2
  */
-export interface ConnectionResponseContentGoogleOAuth2 extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentGoogleOAuth2
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentGoogleOAuth2.Strategy;
     options?: Management.ConnectionOptionsGoogleOAuth2;
 }
@@ -5802,7 +6194,9 @@ export namespace ConnectionResponseContentGoogleOAuth2 {
 /**
  * Response for connections with strategy=ip
  */
-export interface ConnectionResponseContentIp extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentIp
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentIp.Strategy;
     options?: Management.ConnectionOptionsIp;
     show_as_button?: Management.ConnectionShowAsButton;
@@ -5818,7 +6212,9 @@ export namespace ConnectionResponseContentIp {
 /**
  * Response for connections with strategy=instagram
  */
-export interface ConnectionResponseContentInstagram extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentInstagram
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentInstagram.Strategy;
     options?: Management.ConnectionOptionsInstagram;
 }
@@ -5833,7 +6229,9 @@ export namespace ConnectionResponseContentInstagram {
 /**
  * Response for connections with strategy=line
  */
-export interface ConnectionResponseContentLine extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentLine
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentLine.Strategy;
     options?: Management.ConnectionOptionsLine;
 }
@@ -5848,7 +6246,9 @@ export namespace ConnectionResponseContentLine {
 /**
  * Response for connections with strategy=linkedin
  */
-export interface ConnectionResponseContentLinkedin extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentLinkedin
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentLinkedin.Strategy;
     options?: Management.ConnectionOptionsLinkedin;
 }
@@ -5863,7 +6263,9 @@ export namespace ConnectionResponseContentLinkedin {
 /**
  * Response for connections with strategy=miicard
  */
-export interface ConnectionResponseContentMiicard extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentMiicard
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentMiicard.Strategy;
     options?: Management.ConnectionOptionsMiicard;
 }
@@ -5878,7 +6280,9 @@ export namespace ConnectionResponseContentMiicard {
 /**
  * Response for connections with strategy=oauth1
  */
-export interface ConnectionResponseContentOAuth1 extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentOAuth1
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOAuth1.Strategy;
     options?: Management.ConnectionOptionsOAuth1;
 }
@@ -5893,7 +6297,9 @@ export namespace ConnectionResponseContentOAuth1 {
 /**
  * Response for connections with strategy=oauth2
  */
-export interface ConnectionResponseContentOAuth2 extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentOAuth2
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOAuth2.Strategy;
     options?: Management.ConnectionOptionsOAuth2;
 }
@@ -5910,6 +6316,8 @@ export namespace ConnectionResponseContentOAuth2 {
  */
 export interface ConnectionResponseContentOidc extends Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOidc.Strategy;
+    authentication?: Management.ConnectionAuthenticationPurpose;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa;
     options?: Management.ConnectionOptionsOidc;
     show_as_button?: Management.ConnectionShowAsButton;
 }
@@ -5924,7 +6332,9 @@ export namespace ConnectionResponseContentOidc {
 /**
  * Response for connections with strategy=office365
  */
-export interface ConnectionResponseContentOffice365 extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentOffice365
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOffice365.Strategy;
     options?: Management.ConnectionOptionsOffice365;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -5941,7 +6351,9 @@ export namespace ConnectionResponseContentOffice365 {
 /**
  * Response for connections with strategy=okta
  */
-export interface ConnectionResponseContentOkta extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentOkta
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOkta.Strategy;
     options?: Management.ConnectionOptionsOkta;
     show_as_button?: Management.ConnectionShowAsButton;
@@ -5957,7 +6369,9 @@ export namespace ConnectionResponseContentOkta {
 /**
  * Response for connections with strategy=paypal
  */
-export interface ConnectionResponseContentPaypal extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentPaypal
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPaypal.Strategy;
     options?: Management.ConnectionOptionsPaypal;
 }
@@ -5972,7 +6386,9 @@ export namespace ConnectionResponseContentPaypal {
 /**
  * Response for connections with strategy=paypal-sandbox
  */
-export interface ConnectionResponseContentPaypalSandbox extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentPaypalSandbox
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPaypalSandbox.Strategy;
     options?: Management.ConnectionOptionsPaypal;
 }
@@ -5987,7 +6403,9 @@ export namespace ConnectionResponseContentPaypalSandbox {
 /**
  * Response for connections with strategy=pingfederate
  */
-export interface ConnectionResponseContentPingFederate extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentPingFederate
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPingFederate.Strategy;
     options?: Management.ConnectionOptionsPingFederate;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -6004,7 +6422,9 @@ export namespace ConnectionResponseContentPingFederate {
 /**
  * Response for connections with strategy=planningcenter
  */
-export interface ConnectionResponseContentPlanningCenter extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentPlanningCenter
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPlanningCenter.Strategy;
     options?: Management.ConnectionOptionsPlanningCenter;
 }
@@ -6019,7 +6439,9 @@ export namespace ConnectionResponseContentPlanningCenter {
 /**
  * Response for connections with strategy=renren
  */
-export interface ConnectionResponseContentRenren extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentRenren
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentRenren.Strategy;
     options?: Management.ConnectionOptionsRenren;
 }
@@ -6034,7 +6456,9 @@ export namespace ConnectionResponseContentRenren {
 /**
  * Response for connections with strategy=samlp
  */
-export interface ConnectionResponseContentSaml extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentSaml
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSaml.Strategy;
     options?: Management.ConnectionOptionsSaml;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
@@ -6051,7 +6475,9 @@ export namespace ConnectionResponseContentSaml {
 /**
  * Response for connections with strategy=sms
  */
-export interface ConnectionResponseContentSms extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentSms
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSms.Strategy;
     options?: Management.ConnectionOptionsSms;
 }
@@ -6066,7 +6492,9 @@ export namespace ConnectionResponseContentSms {
 /**
  * Response for connections with strategy=salesforce
  */
-export interface ConnectionResponseContentSalesforce extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentSalesforce
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSalesforce.Strategy;
     options?: Management.ConnectionOptionsSalesforce;
 }
@@ -6081,9 +6509,11 @@ export namespace ConnectionResponseContentSalesforce {
 /**
  * Response for connections with strategy=salesforce-community
  */
-export interface ConnectionResponseContentSalesforceCommunity extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentSalesforceCommunity
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSalesforceCommunity.Strategy;
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforceCommunity;
 }
 
 export namespace ConnectionResponseContentSalesforceCommunity {
@@ -6096,7 +6526,9 @@ export namespace ConnectionResponseContentSalesforceCommunity {
 /**
  * Response for connections with strategy=salesforce-sandbox
  */
-export interface ConnectionResponseContentSalesforceSandbox extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentSalesforceSandbox
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSalesforceSandbox.Strategy;
     options?: Management.ConnectionOptionsSalesforce;
 }
@@ -6111,7 +6543,9 @@ export namespace ConnectionResponseContentSalesforceSandbox {
 /**
  * Response for connections with strategy=sharepoint
  */
-export interface ConnectionResponseContentSharepoint extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentSharepoint
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSharepoint.Strategy;
     options?: Management.ConnectionOptionsSharepoint;
     show_as_button?: Management.ConnectionShowAsButton;
@@ -6127,7 +6561,9 @@ export namespace ConnectionResponseContentSharepoint {
 /**
  * Response for connections with strategy=shop
  */
-export interface ConnectionResponseContentShop extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentShop
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentShop.Strategy;
     options?: Management.ConnectionOptionsShop;
 }
@@ -6142,7 +6578,9 @@ export namespace ConnectionResponseContentShop {
 /**
  * Response for connections with strategy=shopify
  */
-export interface ConnectionResponseContentShopify extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentShopify
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentShopify.Strategy;
     options?: Management.ConnectionOptionsShopify;
 }
@@ -6157,7 +6595,9 @@ export namespace ConnectionResponseContentShopify {
 /**
  * Response for connections with strategy=soundcloud
  */
-export interface ConnectionResponseContentSoundcloud extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentSoundcloud
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSoundcloud.Strategy;
     options?: Management.ConnectionOptionsSoundcloud;
 }
@@ -6172,7 +6612,9 @@ export namespace ConnectionResponseContentSoundcloud {
 /**
  * Response for connections with strategy=thirtysevensignals
  */
-export interface ConnectionResponseContentThirtySevenSignals extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentThirtySevenSignals
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentThirtySevenSignals.Strategy;
     options?: Management.ConnectionOptionsThirtySevenSignals;
 }
@@ -6187,7 +6629,9 @@ export namespace ConnectionResponseContentThirtySevenSignals {
 /**
  * Response for connections with strategy=twitter
  */
-export interface ConnectionResponseContentTwitter extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentTwitter
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentTwitter.Strategy;
     options?: Management.ConnectionOptionsTwitter;
 }
@@ -6202,7 +6646,9 @@ export namespace ConnectionResponseContentTwitter {
 /**
  * Response for connections with strategy=untappd
  */
-export interface ConnectionResponseContentUntappd extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentUntappd
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentUntappd.Strategy;
     options?: Management.ConnectionOptionsUntappd;
 }
@@ -6217,7 +6663,9 @@ export namespace ConnectionResponseContentUntappd {
 /**
  * Response for connections with strategy=vkontakte
  */
-export interface ConnectionResponseContentVkontakte extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentVkontakte
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentVkontakte.Strategy;
     options?: Management.ConnectionOptionsVkontakte;
 }
@@ -6232,7 +6680,9 @@ export namespace ConnectionResponseContentVkontakte {
 /**
  * Response for connections with strategy=weibo
  */
-export interface ConnectionResponseContentWeibo extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentWeibo
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentWeibo.Strategy;
     options?: Management.ConnectionOptionsWeibo;
 }
@@ -6247,7 +6697,9 @@ export namespace ConnectionResponseContentWeibo {
 /**
  * Response for connections with strategy=windowslive
  */
-export interface ConnectionResponseContentWindowsLive extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentWindowsLive
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentWindowsLive.Strategy;
     options?: Management.ConnectionOptionsWindowsLive;
 }
@@ -6262,7 +6714,9 @@ export namespace ConnectionResponseContentWindowsLive {
 /**
  * Response for connections with strategy=wordpress
  */
-export interface ConnectionResponseContentWordpress extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentWordpress
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentWordpress.Strategy;
     options?: Management.ConnectionOptionsWordpress;
 }
@@ -6277,7 +6731,9 @@ export namespace ConnectionResponseContentWordpress {
 /**
  * Response for connections with strategy=yahoo
  */
-export interface ConnectionResponseContentYahoo extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentYahoo
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentYahoo.Strategy;
     options?: Management.ConnectionOptionsYahoo;
 }
@@ -6292,7 +6748,9 @@ export namespace ConnectionResponseContentYahoo {
 /**
  * Response for connections with strategy=yammer
  */
-export interface ConnectionResponseContentYammer extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentYammer
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentYammer.Strategy;
     options?: Management.ConnectionOptionsYammer;
 }
@@ -6307,7 +6765,9 @@ export namespace ConnectionResponseContentYammer {
 /**
  * Response for connections with strategy=yandex
  */
-export interface ConnectionResponseContentYandex extends Management.ConnectionResponseCommon {
+export interface ConnectionResponseContentYandex
+    extends Management.ConnectionPurposes,
+        Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentYandex.Strategy;
     options?: Management.ConnectionOptionsYandex;
 }
@@ -6330,6 +6790,11 @@ export type ConnectionResponseModesSupported = string[];
 export type ConnectionResponseTypesSupported = string[];
 
 /**
+ * OAuth 2.0 scopes that will be requested from Amazon during authorization. This is automatically populated based on the profile and postal_code settings, plus any freeform_scopes.
+ */
+export type ConnectionScopeAmazon = Management.ConnectionScopeArray;
+
+/**
  * Array of custom OAuth 2.0 scopes to request during authentication.
  */
 export type ConnectionScopeArray = Management.ConnectionScopeItem[];
@@ -6338,6 +6803,11 @@ export type ConnectionScopeArray = Management.ConnectionScopeItem[];
  * Array of custom OAuth 2.0 scopes to request during authentication.
  */
 export type ConnectionScopeArrayFacebook = Management.ConnectionScopeItem[];
+
+/**
+ * Array of custom OAuth 2.0 scopes to request during authentication.
+ */
+export type ConnectionScopeArrayWindowsLive = Management.ConnectionScopeArray;
 
 /**
  * OAuth 2.0 scopes to request from Azure AD during authentication. Each scope represents a permission (e.g., 'User.Read', 'Group.Read.All'). Only applies with Microsoft Identity Platform v2.0. See Microsoft Graph permissions reference for available scopes.
@@ -6378,6 +6848,16 @@ export type ConnectionScopeOAuth2 = string | string[];
  * Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider.
  */
 export type ConnectionScopeOidc = string;
+
+/**
+ * OAuth 2.0 scopes requested from PayPal during authorization. Built automatically from the enabled attribute flags (profile, email, address, phone) plus any freeform_scopes. Always includes 'openid' as the base scope.
+ */
+export type ConnectionScopePaypal = Management.ConnectionScopeArray;
+
+/**
+ * OAuth scopes to request from Salesforce. This is computed from enabled permission options and any additional freeform scopes.
+ */
+export type ConnectionScopeSalesforce = Management.ConnectionScopeArray;
 
 /**
  * A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED
@@ -6495,6 +6975,14 @@ export interface ConnectionSigningKeySaml {
     /** Private key in PEM format used by Auth0 to sign SAML requests and logout messages. */
     key?: string;
 }
+
+/** Specifies the signup behavior for password authentication */
+export const ConnectionSignupBehaviorEnum = {
+    Allow: "allow",
+    Block: "block",
+} as const;
+export type ConnectionSignupBehaviorEnum =
+    (typeof ConnectionSignupBehaviorEnum)[keyof typeof ConnectionSignupBehaviorEnum];
 
 export const ConnectionStrategyEnum = {
     Ad: "ad",
@@ -7267,7 +7755,9 @@ export namespace CreateConnectionRequestContentBitly {
 /**
  * Create a connection with strategy=box
  */
-export interface CreateConnectionRequestContentBox extends Management.CreateConnectionCommon {
+export interface CreateConnectionRequestContentBox
+    extends Management.ConnectionPurposes,
+        Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentBox.Strategy;
     options?: Management.ConnectionOptionsBox;
 }
@@ -7447,7 +7937,9 @@ export namespace CreateConnectionRequestContentFlickr {
 /**
  * Create a connection with strategy=github
  */
-export interface CreateConnectionRequestContentGitHub extends Management.CreateConnectionCommon {
+export interface CreateConnectionRequestContentGitHub
+    extends Management.ConnectionPurposes,
+        Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentGitHub.Strategy;
     options?: Management.ConnectionOptionsGitHub;
 }
@@ -7478,7 +7970,9 @@ export namespace CreateConnectionRequestContentGoogleApps {
 /**
  * Create a connection with strategy=google-oauth2
  */
-export interface CreateConnectionRequestContentGoogleOAuth2 extends Management.CreateConnectionCommon {
+export interface CreateConnectionRequestContentGoogleOAuth2
+    extends Management.ConnectionPurposes,
+        Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentGoogleOAuth2.Strategy;
     options?: Management.ConnectionOptionsGoogleOAuth2;
 }
@@ -7584,7 +8078,9 @@ export namespace CreateConnectionRequestContentOAuth1 {
 /**
  * Create a connection with strategy=oauth2
  */
-export interface CreateConnectionRequestContentOAuth2 extends Management.CreateConnectionCommon {
+export interface CreateConnectionRequestContentOAuth2
+    extends Management.ConnectionPurposes,
+        Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOAuth2.Strategy;
     options?: Management.ConnectionOptionsOAuth2;
 }
@@ -7601,6 +8097,8 @@ export namespace CreateConnectionRequestContentOAuth2 {
  */
 export interface CreateConnectionRequestContentOidc extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOidc.Strategy;
+    authentication?: Management.ConnectionAuthenticationPurpose;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa;
     options?: Management.ConnectionOptionsOidc;
     show_as_button?: Management.ConnectionShowAsButton;
 }
@@ -7771,7 +8269,7 @@ export namespace CreateConnectionRequestContentSalesforce {
  */
 export interface CreateConnectionRequestContentSalesforceCommunity extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSalesforceCommunity.Strategy;
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforceCommunity;
 }
 
 export namespace CreateConnectionRequestContentSalesforceCommunity {
@@ -7935,7 +8433,9 @@ export namespace CreateConnectionRequestContentWeibo {
 /**
  * Create a connection with strategy=windowslive
  */
-export interface CreateConnectionRequestContentWindowsLive extends Management.CreateConnectionCommon {
+export interface CreateConnectionRequestContentWindowsLive
+    extends Management.ConnectionPurposes,
+        Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentWindowsLive.Strategy;
     options?: Management.ConnectionOptionsWindowsLive;
 }
@@ -8143,9 +8643,9 @@ export interface CreateEncryptionKeyResponseContent {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid: string;
+    parent_kid?: string | null;
     /** Public key in PEM format */
-    public_key?: string;
+    public_key?: string | null;
 }
 
 /** Type of the encryption key to be created. */
@@ -8370,13 +8870,37 @@ export interface CreateFlowsVaultConnectionGoogleSheetsUninitialized {
 
 export type CreateFlowsVaultConnectionHttp =
     | Management.CreateFlowsVaultConnectionHttpBearer
+    | Management.CreateFlowsVaultConnectionHttpBasicAuth
+    | Management.CreateFlowsVaultConnectionHttpApiKey
+    | Management.CreateFlowsVaultConnectionHttpOauthClientCredentials
     | Management.CreateFlowsVaultConnectionHttpUninitialized;
+
+export interface CreateFlowsVaultConnectionHttpApiKey {
+    /** Flows Vault Connection name. */
+    name: string;
+    app_id: Management.FlowsVaultConnectionAppIdHttpEnum;
+    setup: Management.FlowsVaultConnectionHttpApiKeySetup;
+}
+
+export interface CreateFlowsVaultConnectionHttpBasicAuth {
+    /** Flows Vault Connection name. */
+    name: string;
+    app_id: Management.FlowsVaultConnectionAppIdHttpEnum;
+    setup: Management.FlowsVaultConnectionHttpBasicAuthSetup;
+}
 
 export interface CreateFlowsVaultConnectionHttpBearer {
     /** Flows Vault Connection name. */
     name: string;
     app_id: Management.FlowsVaultConnectionAppIdHttpEnum;
     setup: Management.FlowsVaultConnectioSetupHttpBearer;
+}
+
+export interface CreateFlowsVaultConnectionHttpOauthClientCredentials {
+    /** Flows Vault Connection name. */
+    name: string;
+    app_id: Management.FlowsVaultConnectionAppIdHttpEnum;
+    setup: Management.FlowsVaultConnectionHttpOauthClientCredentialsSetup;
 }
 
 export interface CreateFlowsVaultConnectionHttpUninitialized {
@@ -9202,9 +9726,9 @@ export interface CreateVerifiableCredentialTemplateResponseContent {
     dialect?: string;
     presentation?: Management.MdlPresentationRequest;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string;
+    custom_certificate_authority?: string | null;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string;
+    well_known_trusted_issuers?: string | null;
     /** The date and time the template was created. */
     created_at?: string;
     /** The date and time the template was created. */
@@ -9503,12 +10027,10 @@ export interface DeployActionResponseContent {
     modules?: Management.ActionModuleReference[];
 }
 
-export interface DeployActionVersionRequestBodyParams {
+export interface DeployActionVersionRequestContent {
     /** True if the draft of the action should be updated with the reverted version. */
     update_draft?: boolean;
 }
-
-export type DeployActionVersionRequestContent = (Management.DeployActionVersionRequestBodyParams | null) | undefined;
 
 export interface DeployActionVersionResponseContent {
     /** The unique id of an action version. */
@@ -9820,9 +10342,9 @@ export interface EncryptionKey {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid: string;
+    parent_kid?: string | null;
     /** Public key in PEM format */
-    public_key?: string;
+    public_key?: string | null;
 }
 
 /** Encryption algorithm that shall be used to wrap your key material */
@@ -10227,9 +10749,9 @@ export interface FederatedConnectionTokenSet {
     id?: string;
     connection?: string;
     scope?: string;
-    expires_at?: string;
+    expires_at?: string | null;
     issued_at?: string;
-    last_used_at?: string;
+    last_used_at?: string | null;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -12634,6 +13156,54 @@ export const FlowsVaultConnectionAppIdZapierEnum = {
 export type FlowsVaultConnectionAppIdZapierEnum =
     (typeof FlowsVaultConnectionAppIdZapierEnum)[keyof typeof FlowsVaultConnectionAppIdZapierEnum];
 
+export interface FlowsVaultConnectionHttpApiKeySetup {
+    type: Management.FlowsVaultConnectionSetupTypeApiKeyEnum;
+    name: string;
+    value: string;
+    in: Management.FlowsVaultConnectionHttpApiKeySetupInEnum;
+}
+
+export const FlowsVaultConnectionHttpApiKeySetupInEnum = {
+    Header: "HEADER",
+    Query: "QUERY",
+} as const;
+export type FlowsVaultConnectionHttpApiKeySetupInEnum =
+    (typeof FlowsVaultConnectionHttpApiKeySetupInEnum)[keyof typeof FlowsVaultConnectionHttpApiKeySetupInEnum];
+
+export interface FlowsVaultConnectionHttpBasicAuthSetup {
+    type: Management.FlowsVaultConnectionSetupTypeBasicAuthEnum;
+    username: string;
+    password?: string;
+}
+
+export interface FlowsVaultConnectionHttpOauthClientCredentialsSetup {
+    type: Management.FlowsVaultConnectionSetupTypeOauthClientCredentialsEnum;
+    client_id: string;
+    client_secret: string;
+    token_endpoint: string;
+    audience?: string;
+    resource?: string;
+    scope?: string;
+}
+
+export const FlowsVaultConnectionSetupTypeApiKeyEnum = {
+    ApiKey: "API_KEY",
+} as const;
+export type FlowsVaultConnectionSetupTypeApiKeyEnum =
+    (typeof FlowsVaultConnectionSetupTypeApiKeyEnum)[keyof typeof FlowsVaultConnectionSetupTypeApiKeyEnum];
+
+export const FlowsVaultConnectionSetupTypeBasicAuthEnum = {
+    BasicAuth: "BASIC_AUTH",
+} as const;
+export type FlowsVaultConnectionSetupTypeBasicAuthEnum =
+    (typeof FlowsVaultConnectionSetupTypeBasicAuthEnum)[keyof typeof FlowsVaultConnectionSetupTypeBasicAuthEnum];
+
+export const FlowsVaultConnectionSetupTypeOauthClientCredentialsEnum = {
+    OauthClientCredentials: "OAUTH_CLIENT_CREDENTIALS",
+} as const;
+export type FlowsVaultConnectionSetupTypeOauthClientCredentialsEnum =
+    (typeof FlowsVaultConnectionSetupTypeOauthClientCredentialsEnum)[keyof typeof FlowsVaultConnectionSetupTypeOauthClientCredentialsEnum];
+
 export interface FlowsVaultConnectionSummary {
     /** Flows Vault Connection identifier. */
     id: string;
@@ -13674,6 +14244,12 @@ export interface GetActionModuleVersionResponseContent {
 export interface GetActionModuleVersionsResponseContent {
     /** A list of ActionsModuleVersion objects. */
     versions?: Management.ActionModuleVersion[];
+    /** The total number of versions for this module. */
+    total?: number;
+    /** The page index of the returned results. */
+    page?: number;
+    /** The number of results requested per page. */
+    per_page?: number;
 }
 
 export interface GetActionModulesResponseContent {
@@ -13878,38 +14454,12 @@ export interface GetBruteForceSettingsResponseContent {
      * Action to take when a brute force protection threshold is violated.
      *         Possible values: <code>block</code>, <code>user_notification</code>.
      */
-    shields?: GetBruteForceSettingsResponseContent.Shields.Item[];
+    shields?: Management.BruteForceProtectionShieldsEnum[];
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[];
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    mode?: GetBruteForceSettingsResponseContent.Mode;
+    mode?: Management.BruteForceProtectionModeEnum;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number;
-}
-
-export namespace GetBruteForceSettingsResponseContent {
-    export type Shields = Shields.Item[];
-
-    export namespace Shields {
-        export const Item = {
-            Block: "block",
-            UserNotification: "user_notification",
-        } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
-    }
-
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    export const Mode = {
-        CountPerIdentifierAndIp: "count_per_identifier_and_ip",
-        CountPerIdentifier: "count_per_identifier",
-    } as const;
-    export type Mode = (typeof Mode)[keyof typeof Mode];
 }
 
 export interface GetClientCredentialResponseContent {
@@ -14209,9 +14759,9 @@ export interface GetEncryptionKeyResponseContent {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid: string;
+    parent_kid?: string | null;
     /** Public key in PEM format */
-    public_key?: string;
+    public_key?: string | null;
 }
 
 /**
@@ -14233,6 +14783,12 @@ export type GetEventStreamResponseContent =
     | Management.EventStreamWebhookResponseContent
     | Management.EventStreamEventBridgeResponseContent
     | Management.EventStreamActionResponseContent;
+
+export const GetFlowExecutionRequestParametersHydrateEnum = {
+    Debug: "debug",
+} as const;
+export type GetFlowExecutionRequestParametersHydrateEnum =
+    (typeof GetFlowExecutionRequestParametersHydrateEnum)[keyof typeof GetFlowExecutionRequestParametersHydrateEnum];
 
 export interface GetFlowExecutionResponseContent {
     /** Flow execution identifier */
@@ -14499,6 +15055,23 @@ export interface GetJobResponseContent {
     format?: Management.JobFileFormatEnum;
     /** Status details. */
     status_details?: string;
+    summary?: Management.GetJobSummary;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Job execution summary.
+ */
+export interface GetJobSummary {
+    /** Number of failed operations. */
+    failed?: number;
+    /** Number of updated records. */
+    updated?: number;
+    /** Number of inserted records. */
+    inserted?: number;
+    /** Total number of operations. */
+    total?: number;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -14957,6 +15530,8 @@ export interface GetTenantSettingsResponseContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
+    /** Whether Phone Consolidated Experience is enabled for this tenant. */
+    phone_consolidated_experience?: boolean;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean;
 }
@@ -15107,9 +15682,9 @@ export interface GetVerifiableCredentialTemplateResponseContent {
     dialect?: string;
     presentation?: Management.MdlPresentationRequest;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string;
+    custom_certificate_authority?: string | null;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string;
+    well_known_trusted_issuers?: string | null;
     /** The date and time the template was created. */
     created_at?: string;
     /** The date and time the template was created. */
@@ -15378,9 +15953,9 @@ export interface ImportEncryptionKeyResponseContent {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid: string;
+    parent_kid?: string | null;
     /** Public key in PEM format */
-    public_key?: string;
+    public_key?: string | null;
 }
 
 /**
@@ -15682,6 +16257,12 @@ export interface ListFlowsOffsetPaginatedResponseContent {
     flows?: Management.FlowSummary[];
 }
 
+export const ListFlowsRequestParametersHydrateEnum = {
+    FormCount: "form_count",
+} as const;
+export type ListFlowsRequestParametersHydrateEnum =
+    (typeof ListFlowsRequestParametersHydrateEnum)[keyof typeof ListFlowsRequestParametersHydrateEnum];
+
 export interface ListFlowsVaultConnectionsOffsetPaginatedResponseContent {
     start?: number;
     limit?: number;
@@ -15919,7 +16500,7 @@ export interface ListUsersOffsetPaginatedResponseContent {
 
 export interface ListVerifiableCredentialTemplatesPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
-    next?: string;
+    next?: string | null;
     templates?: Management.VerifiableCredentialTemplateResponse[];
 }
 
@@ -16828,6 +17409,7 @@ export const PartialGroupsEnum = {
     SignupId: "signup-id",
     SignupPassword: "signup-password",
     CustomizedConsent: "customized-consent",
+    Passkeys: "passkeys",
 } as const;
 export type PartialGroupsEnum = (typeof PartialGroupsEnum)[keyof typeof PartialGroupsEnum];
 
@@ -17319,6 +17901,7 @@ export interface ResourceServerProofOfPossession {
     mechanism: Management.ResourceServerProofOfPossessionMechanismEnum;
     /** Whether the use of Proof-of-Possession is required for the resource server */
     required: boolean;
+    required_for?: Management.ResourceServerProofOfPossessionRequiredForEnum;
 }
 
 /** Intended mechanism for Proof-of-Possession */
@@ -17328,6 +17911,15 @@ export const ResourceServerProofOfPossessionMechanismEnum = {
 } as const;
 export type ResourceServerProofOfPossessionMechanismEnum =
     (typeof ResourceServerProofOfPossessionMechanismEnum)[keyof typeof ResourceServerProofOfPossessionMechanismEnum];
+
+/** Specifies which client types require Proof-of-Possession */
+export const ResourceServerProofOfPossessionRequiredForEnum = {
+    PublicClients: "public_clients",
+    ConfidentialClients: "confidential_clients",
+    AllClients: "all_clients",
+} as const;
+export type ResourceServerProofOfPossessionRequiredForEnum =
+    (typeof ResourceServerProofOfPossessionRequiredForEnum)[keyof typeof ResourceServerProofOfPossessionRequiredForEnum];
 
 export interface ResourceServerScope {
     /** Value of this scope. */
@@ -17760,9 +18352,9 @@ export const ScreenGroupNameEnum = {
     BruteForceProtectionUnblockSuccess: "brute-force-protection-unblock-success",
     BruteForceProtectionUnblockFailure: "brute-force-protection-unblock-failure",
     AsyncApprovalError: "async-approval-error",
-    AsyncApprovalWrongUser: "async-approval-wrong-user",
     AsyncApprovalAccepted: "async-approval-accepted",
     AsyncApprovalDenied: "async-approval-denied",
+    AsyncApprovalWrongUser: "async-approval-wrong-user",
 } as const;
 export type ScreenGroupNameEnum = (typeof ScreenGroupNameEnum)[keyof typeof ScreenGroupNameEnum];
 
@@ -17801,6 +18393,8 @@ export const SelfServiceProfileAllowedStrategyEnum = {
     GoogleApps: "google-apps",
     Adfs: "adfs",
     Okta: "okta",
+    Auth0Samlp: "auth0-samlp",
+    OktaSamlp: "okta-samlp",
     KeycloakSamlp: "keycloak-samlp",
     Pingfederate: "pingfederate",
 } as const;
@@ -17966,7 +18560,7 @@ export interface SessionAuthenticationSignal {
     name?: string;
     timestamp?: Management.SessionDate;
     /** A specific MFA factor. Only present when "name" is set to "mfa" */
-    "^type$"?: string;
+    type?: string;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18612,6 +19206,92 @@ export interface TenantSettingsSessions {
     oidc_logout_prompt_enabled?: boolean;
 }
 
+export const TenantSettingsSupportedLocalesEnum = {
+    Am: "am",
+    Ar: "ar",
+    ArEg: "ar-EG",
+    ArSa: "ar-SA",
+    Az: "az",
+    Bg: "bg",
+    Bn: "bn",
+    Bs: "bs",
+    CaEs: "ca-ES",
+    Cnr: "cnr",
+    Cs: "cs",
+    Cy: "cy",
+    Da: "da",
+    De: "de",
+    El: "el",
+    En: "en",
+    EnCa: "en-CA",
+    Es: "es",
+    Es419: "es-419",
+    EsAr: "es-AR",
+    EsMx: "es-MX",
+    Et: "et",
+    EuEs: "eu-ES",
+    Fa: "fa",
+    Fi: "fi",
+    Fr: "fr",
+    FrCa: "fr-CA",
+    FrFr: "fr-FR",
+    GlEs: "gl-ES",
+    Gu: "gu",
+    He: "he",
+    Hi: "hi",
+    Hr: "hr",
+    Hu: "hu",
+    Hy: "hy",
+    Id: "id",
+    Is: "is",
+    It: "it",
+    Ja: "ja",
+    Ka: "ka",
+    Kk: "kk",
+    Kn: "kn",
+    Ko: "ko",
+    Lt: "lt",
+    Lv: "lv",
+    Mk: "mk",
+    Ml: "ml",
+    Mn: "mn",
+    Mr: "mr",
+    Ms: "ms",
+    My: "my",
+    Nb: "nb",
+    Nl: "nl",
+    Nn: "nn",
+    No: "no",
+    Pa: "pa",
+    Pl: "pl",
+    Pt: "pt",
+    PtBr: "pt-BR",
+    PtPt: "pt-PT",
+    Ro: "ro",
+    Ru: "ru",
+    Sk: "sk",
+    Sl: "sl",
+    So: "so",
+    Sq: "sq",
+    Sr: "sr",
+    Sv: "sv",
+    Sw: "sw",
+    Ta: "ta",
+    Te: "te",
+    Th: "th",
+    Tl: "tl",
+    Tr: "tr",
+    Uk: "uk",
+    Ur: "ur",
+    Vi: "vi",
+    Zgh: "zgh",
+    ZhCn: "zh-CN",
+    ZhHk: "zh-HK",
+    ZhTw: "zh-TW",
+} as const;
+export type TenantSettingsSupportedLocalesEnum =
+    (typeof TenantSettingsSupportedLocalesEnum)[keyof typeof TenantSettingsSupportedLocalesEnum];
+
 /**
  * The payload for the action.
  */
@@ -18906,38 +19586,12 @@ export interface UpdateBruteForceSettingsResponseContent {
      * Action to take when a brute force protection threshold is violated.
      *         Possible values: <code>block</code>, <code>user_notification</code>.
      */
-    shields?: UpdateBruteForceSettingsResponseContent.Shields.Item[];
+    shields?: Management.BruteForceProtectionShieldsEnum[];
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[];
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    mode?: UpdateBruteForceSettingsResponseContent.Mode;
+    mode?: Management.BruteForceProtectionModeEnum;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number;
-}
-
-export namespace UpdateBruteForceSettingsResponseContent {
-    export type Shields = Shields.Item[];
-
-    export namespace Shields {
-        export const Item = {
-            Block: "block",
-            UserNotification: "user_notification",
-        } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
-    }
-
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    export const Mode = {
-        CountPerIdentifierAndIp: "count_per_identifier_and_ip",
-        CountPerIdentifier: "count_per_identifier",
-    } as const;
-    export type Mode = (typeof Mode)[keyof typeof Mode];
 }
 
 export interface UpdateClientGrantResponseContent {
@@ -19189,7 +19843,7 @@ export interface UpdateConnectionRequestContentBitly extends Management.Connecti
 /**
  * Update a connection with strategy=box
  */
-export interface UpdateConnectionRequestContentBox extends Management.ConnectionCommon {
+export interface UpdateConnectionRequestContentBox extends Management.ConnectionCommon, Management.ConnectionPurposes {
     options?: Management.ConnectionOptionsBox;
 }
 
@@ -19273,7 +19927,9 @@ export interface UpdateConnectionRequestContentFlickr extends Management.Connect
 /**
  * Update a connection with strategy=github
  */
-export interface UpdateConnectionRequestContentGitHub extends Management.ConnectionCommon {
+export interface UpdateConnectionRequestContentGitHub
+    extends Management.ConnectionCommon,
+        Management.ConnectionPurposes {
     options?: Management.ConnectionOptionsGitHub;
 }
 
@@ -19288,7 +19944,9 @@ export interface UpdateConnectionRequestContentGoogleApps extends Management.Con
 /**
  * Update a connection with strategy=google-oauth2
  */
-export interface UpdateConnectionRequestContentGoogleOAuth2 extends Management.ConnectionCommon {
+export interface UpdateConnectionRequestContentGoogleOAuth2
+    extends Management.ConnectionCommon,
+        Management.ConnectionPurposes {
     options?: Management.ConnectionOptionsGoogleOAuth2;
 }
 
@@ -19338,7 +19996,9 @@ export interface UpdateConnectionRequestContentOAuth1 extends Management.Connect
 /**
  * Update a connection with strategy=oauth2
  */
-export interface UpdateConnectionRequestContentOAuth2 extends Management.ConnectionCommon {
+export interface UpdateConnectionRequestContentOAuth2
+    extends Management.ConnectionCommon,
+        Management.ConnectionPurposes {
     options?: Management.ConnectionOptionsOAuth2;
 }
 
@@ -19347,6 +20007,8 @@ export interface UpdateConnectionRequestContentOAuth2 extends Management.Connect
  */
 export interface UpdateConnectionRequestContentOidc extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsOidc;
+    authentication?: Management.ConnectionAuthenticationPurpose;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa;
     show_as_button?: Management.ConnectionShowAsButton;
 }
 
@@ -19428,7 +20090,7 @@ export interface UpdateConnectionRequestContentSalesforce extends Management.Con
  * Update a connection with strategy=salesforce-community
  */
 export interface UpdateConnectionRequestContentSalesforceCommunity extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforceCommunity;
 }
 
 /**
@@ -19505,7 +20167,9 @@ export interface UpdateConnectionRequestContentWeibo extends Management.Connecti
 /**
  * Update a connection with strategy=windowslive
  */
-export interface UpdateConnectionRequestContentWindowsLive extends Management.ConnectionCommon {
+export interface UpdateConnectionRequestContentWindowsLive
+    extends Management.ConnectionCommon,
+        Management.ConnectionPurposes {
     options?: Management.ConnectionOptionsWindowsLive;
 }
 
@@ -19644,7 +20308,7 @@ export interface UpdateEmailTemplateResponseContent {
 }
 
 export interface UpdateEnabledClientConnectionsRequestContentItem {
-    /** The client_id of the client to be the subject to change status */
+    /** The client_id of the client whose status will be changed. Note that the limit per PATCH request is 50 clients. */
     client_id: string;
     /** Whether the connection is enabled or not for this client_id */
     status: boolean;
@@ -19699,6 +20363,9 @@ export type UpdateFlowsVaultConnectionSetup =
     | Management.FlowsVaultConnectioSetupBigqueryOauthJwt
     | Management.FlowsVaultConnectioSetupSecretApiKey
     | Management.FlowsVaultConnectioSetupHttpBearer
+    | Management.FlowsVaultConnectionHttpBasicAuthSetup
+    | Management.FlowsVaultConnectionHttpApiKeySetup
+    | Management.FlowsVaultConnectionHttpOauthClientCredentialsSetup
     | Management.FlowsVaultConnectioSetupJwt
     | Management.FlowsVaultConnectioSetupMailjetApiKey
     | Management.FlowsVaultConnectioSetupToken
@@ -20072,6 +20739,8 @@ export interface UpdateTenantSettingsResponseContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
+    /** Whether Phone Consolidated Experience is enabled for this tenant. */
+    phone_consolidated_experience?: boolean;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean;
 }
@@ -20175,9 +20844,9 @@ export interface UpdateVerifiableCredentialTemplateResponseContent {
     dialect?: string;
     presentation?: Management.MdlPresentationRequest;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string;
+    custom_certificate_authority?: string | null;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string;
+    well_known_trusted_issuers?: string | null;
     /** The date and time the template was created. */
     created_at?: string;
     /** The date and time the template was created. */
@@ -20713,9 +21382,9 @@ export interface VerifiableCredentialTemplateResponse {
     dialect?: string;
     presentation?: Management.MdlPresentationRequest;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string;
+    custom_certificate_authority?: string | null;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string;
+    well_known_trusted_issuers?: string | null;
     /** The date and time the template was created. */
     created_at?: string;
     /** The date and time the template was created. */

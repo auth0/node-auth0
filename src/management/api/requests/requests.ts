@@ -765,7 +765,7 @@ export interface CreateEventStreamTestEventRequestContent {
  *         synchronous: true
  *     }
  */
-export interface FlowsListRequest {
+export interface ListFlowsRequestParameters {
     /** Page index of the results to return. First page is 0. */
     page?: number | null;
     /** Number of results per page. Defaults to 50. */
@@ -773,7 +773,9 @@ export interface FlowsListRequest {
     /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean | null;
     /** hydration param */
-    hydrate?: (Management.FlowsListRequestHydrateItem | null) | (Management.FlowsListRequestHydrateItem | null)[];
+    hydrate?:
+        | (Management.ListFlowsRequestParametersHydrateEnum | null)
+        | (Management.ListFlowsRequestParametersHydrateEnum | null)[];
     /** flag to filter by sync/async flows */
     synchronous?: boolean | null;
 }
@@ -1943,6 +1945,20 @@ export interface RollbackActionModuleRequestParameters {
  *         per_page: 1
  *     }
  */
+export interface GetActionModuleVersionsRequestParameters {
+    /** Use this field to request a specific page of the list results. */
+    page?: number | null;
+    /** The maximum number of results to be returned by the server in a single response. 20 by default. */
+    per_page?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         page: 1,
+ *         per_page: 1
+ *     }
+ */
 export interface ListActionTriggerBindingsRequestParameters {
     /** Use this field to request a specific page of the list results. */
     page?: number | null;
@@ -2004,38 +2020,12 @@ export interface UpdateBruteForceSettingsRequestContent {
      * Action to take when a brute force protection threshold is violated.
      *         Possible values: <code>block</code>, <code>user_notification</code>.
      */
-    shields?: UpdateBruteForceSettingsRequestContent.Shields.Item[];
+    shields?: Management.BruteForceProtectionShieldsEnum[];
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[];
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    mode?: UpdateBruteForceSettingsRequestContent.Mode;
+    mode?: Management.BruteForceProtectionModeEnum;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number;
-}
-
-export namespace UpdateBruteForceSettingsRequestContent {
-    export type Shields = Shields.Item[];
-
-    export namespace Shields {
-        export const Item = {
-            Block: "block",
-            UserNotification: "user_notification",
-        } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
-    }
-
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    export const Mode = {
-        CountPerIdentifierAndIp: "count_per_identifier_and_ip",
-        CountPerIdentifier: "count_per_identifier",
-    } as const;
-    export type Mode = (typeof Mode)[keyof typeof Mode];
 }
 
 /**
@@ -2560,7 +2550,7 @@ export interface CreateEventStreamRedeliveryRequestContent {
  *         take: 1
  *     }
  */
-export interface ExecutionsListRequest {
+export interface ListFlowExecutionsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -2571,11 +2561,11 @@ export interface ExecutionsListRequest {
  * @example
  *     {}
  */
-export interface ExecutionsGetRequest {
+export interface GetFlowExecutionRequestParameters {
     /** Hydration param */
     hydrate?:
-        | (Management.flows.ExecutionsGetRequestHydrateItem | null)
-        | (Management.flows.ExecutionsGetRequestHydrateItem | null)[];
+        | (Management.GetFlowExecutionRequestParametersHydrateEnum | null)
+        | (Management.GetFlowExecutionRequestParametersHydrateEnum | null)[];
 }
 
 /**
@@ -3449,7 +3439,7 @@ export interface UpdateTenantSettingsRequestContent {
     /** The default absolute redirection uri, must be https */
     default_redirection_uri?: string;
     /** Supported locales for the user interface */
-    enabled_locales?: UpdateTenantSettingsRequestContent.EnabledLocales.Item[];
+    enabled_locales?: Management.TenantSettingsSupportedLocalesEnum[];
     session_cookie?: Management.SessionCookieSchema | null;
     sessions?: Management.TenantSettingsSessions | null;
     oidc_logout?: Management.TenantOidcLogoutSettings;
@@ -3473,97 +3463,8 @@ export interface UpdateTenantSettingsRequestContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean;
-}
-
-export namespace UpdateTenantSettingsRequestContent {
-    export type EnabledLocales = EnabledLocales.Item[];
-
-    export namespace EnabledLocales {
-        export const Item = {
-            Am: "am",
-            Ar: "ar",
-            ArEg: "ar-EG",
-            ArSa: "ar-SA",
-            Az: "az",
-            Bg: "bg",
-            Bn: "bn",
-            Bs: "bs",
-            CaEs: "ca-ES",
-            Cnr: "cnr",
-            Cs: "cs",
-            Cy: "cy",
-            Da: "da",
-            De: "de",
-            El: "el",
-            En: "en",
-            EnCa: "en-CA",
-            Es: "es",
-            Es419: "es-419",
-            EsAr: "es-AR",
-            EsMx: "es-MX",
-            Et: "et",
-            EuEs: "eu-ES",
-            Fa: "fa",
-            Fi: "fi",
-            Fr: "fr",
-            FrCa: "fr-CA",
-            FrFr: "fr-FR",
-            GlEs: "gl-ES",
-            Gu: "gu",
-            He: "he",
-            Hi: "hi",
-            Hr: "hr",
-            Hu: "hu",
-            Hy: "hy",
-            Id: "id",
-            Is: "is",
-            It: "it",
-            Ja: "ja",
-            Ka: "ka",
-            Kk: "kk",
-            Kn: "kn",
-            Ko: "ko",
-            Lt: "lt",
-            Lv: "lv",
-            Mk: "mk",
-            Ml: "ml",
-            Mn: "mn",
-            Mr: "mr",
-            Ms: "ms",
-            My: "my",
-            Nb: "nb",
-            Nl: "nl",
-            Nn: "nn",
-            No: "no",
-            Pa: "pa",
-            Pl: "pl",
-            Pt: "pt",
-            PtBr: "pt-BR",
-            PtPt: "pt-PT",
-            Ro: "ro",
-            Ru: "ru",
-            Sk: "sk",
-            Sl: "sl",
-            So: "so",
-            Sq: "sq",
-            Sr: "sr",
-            Sv: "sv",
-            Sw: "sw",
-            Ta: "ta",
-            Te: "te",
-            Th: "th",
-            Tl: "tl",
-            Tr: "tr",
-            Uk: "uk",
-            Ur: "ur",
-            Vi: "vi",
-            Zgh: "zgh",
-            ZhCn: "zh-CN",
-            ZhHk: "zh-HK",
-            ZhTw: "zh-TW",
-        } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
-    }
+    /** Whether Phone Consolidated Experience is enabled for this tenant. */
+    phone_consolidated_experience?: boolean;
 }
 
 /**
@@ -3861,7 +3762,7 @@ export interface CreateVerifiableCredentialTemplateRequestContent {
     type: string;
     dialect: string;
     presentation: Management.MdlPresentationRequest;
-    custom_certificate_authority?: string;
+    custom_certificate_authority?: string | null;
     well_known_trusted_issuers: string;
 }
 
@@ -3870,10 +3771,10 @@ export interface CreateVerifiableCredentialTemplateRequestContent {
  *     {}
  */
 export interface UpdateVerifiableCredentialTemplateRequestContent {
-    name?: string;
-    type?: string;
-    dialect?: string;
+    name?: string | null;
+    type?: string | null;
+    dialect?: string | null;
     presentation?: Management.MdlPresentationRequest;
-    well_known_trusted_issuers?: string;
-    version?: number;
+    well_known_trusted_issuers?: string | null;
+    version?: number | null;
 }

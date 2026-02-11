@@ -20,6 +20,7 @@ describe("JobsClient", () => {
             time_left_seconds: 1,
             format: "json",
             status_details: "status_details",
+            summary: { failed: 1, updated: 1, inserted: 1, total: 1 },
         };
         server.mockEndpoint().get("/jobs/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -35,6 +36,12 @@ describe("JobsClient", () => {
             time_left_seconds: 1,
             format: "json",
             status_details: "status_details",
+            summary: {
+                failed: 1,
+                updated: 1,
+                inserted: 1,
+                total: 1,
+            },
         });
     });
 

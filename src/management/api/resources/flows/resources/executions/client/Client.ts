@@ -24,7 +24,7 @@ export class ExecutionsClient {
 
     /**
      * @param {string} flow_id - Flow id
-     * @param {Management.ExecutionsListRequest} request
+     * @param {Management.ListFlowExecutionsRequestParameters} request
      * @param {ExecutionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -40,12 +40,12 @@ export class ExecutionsClient {
      */
     public async list(
         flow_id: string,
-        request: Management.ExecutionsListRequest = {},
+        request: Management.ListFlowExecutionsRequestParameters = {},
         requestOptions?: ExecutionsClient.RequestOptions,
     ): Promise<core.Page<Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ExecutionsListRequest,
+                request: Management.ListFlowExecutionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListFlowExecutionsPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
                 const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
@@ -134,7 +134,7 @@ export class ExecutionsClient {
     /**
      * @param {string} flow_id - Flow id
      * @param {string} execution_id - Flow execution id
-     * @param {Management.ExecutionsGetRequest} request
+     * @param {Management.GetFlowExecutionRequestParameters} request
      * @param {ExecutionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -148,7 +148,7 @@ export class ExecutionsClient {
     public get(
         flow_id: string,
         execution_id: string,
-        request: Management.ExecutionsGetRequest = {},
+        request: Management.GetFlowExecutionRequestParameters = {},
         requestOptions?: ExecutionsClient.RequestOptions,
     ): core.HttpResponsePromise<Management.GetFlowExecutionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(flow_id, execution_id, request, requestOptions));
@@ -157,7 +157,7 @@ export class ExecutionsClient {
     private async __get(
         flow_id: string,
         execution_id: string,
-        request: Management.ExecutionsGetRequest = {},
+        request: Management.GetFlowExecutionRequestParameters = {},
         requestOptions?: ExecutionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetFlowExecutionResponseContent>> {
         const { hydrate } = request;
