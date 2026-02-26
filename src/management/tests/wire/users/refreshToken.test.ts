@@ -72,7 +72,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(401)
@@ -90,7 +90,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(403)
@@ -108,7 +108,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(404)
@@ -126,7 +126,7 @@ describe("RefreshTokenClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
             .respondWith()
             .statusCode(429)

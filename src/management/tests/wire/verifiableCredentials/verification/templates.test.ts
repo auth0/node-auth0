@@ -70,7 +70,7 @@ describe("TemplatesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
             .respondWith()
             .statusCode(400)
@@ -88,7 +88,7 @@ describe("TemplatesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
             .respondWith()
             .statusCode(401)
@@ -106,7 +106,7 @@ describe("TemplatesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
             .respondWith()
             .statusCode(403)
@@ -124,7 +124,7 @@ describe("TemplatesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
             .respondWith()
             .statusCode(429)

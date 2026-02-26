@@ -665,36 +665,36 @@ export type OauthScope = (typeof OauthScope)[keyof typeof OauthScope];
 
 export interface Action {
     /** The unique ID of the action. */
-    id?: string;
+    id?: string | undefined;
     /** The name of an action. */
-    name?: string;
+    name?: string | undefined;
     /** The list of triggers that this action supports. At this time, an action can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** True if all of an Action's contents have been deployed. */
-    all_changes_deployed?: boolean;
+    all_changes_deployed?: boolean | undefined;
     /** The time when this action was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this action was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The source code of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this action depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** The Node runtime. For example: `node22`, defaults to `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    deployed_version?: Management.ActionDeployedVersion;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    deployed_version?: Management.ActionDeployedVersion | undefined;
     /** installed_integration_id is the fk reference to the InstalledIntegration entity. */
-    installed_integration_id?: string;
-    integration?: Management.Integration;
-    status?: Management.ActionBuildStatusEnum;
+    installed_integration_id?: string | undefined;
+    integration?: Management.Integration | undefined;
+    status?: Management.ActionBuildStatusEnum | undefined;
     /** The time when this action was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** True if the action should be deployed after creation. */
-    deploy?: boolean;
+    deploy?: boolean | undefined;
     /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 /**
@@ -702,17 +702,17 @@ export interface Action {
  */
 export interface ActionBase {
     /** The unique ID of the action. */
-    id?: string;
+    id?: string | undefined;
     /** The name of an action. */
-    name?: string;
+    name?: string | undefined;
     /** The list of triggers that this action supports. At this time, an action can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** True if all of an Action's contents have been deployed. */
-    all_changes_deployed?: boolean;
+    all_changes_deployed?: boolean | undefined;
     /** The time when this action was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this action was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 /**
@@ -720,24 +720,24 @@ export interface ActionBase {
  */
 export interface ActionBinding {
     /** The unique ID of this binding. */
-    id?: string;
-    trigger_id?: Management.ActionTriggerTypeEnum;
+    id?: string | undefined;
+    trigger_id?: Management.ActionTriggerTypeEnum | undefined;
     /** The name of the binding. */
-    display_name?: string;
-    action?: Management.Action;
+    display_name?: string | undefined;
+    action?: Management.Action | undefined;
     /** The time when the binding was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when the binding was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 /**
  * A reference to an action. An action can be referred to by ID or by Name.
  */
 export interface ActionBindingRef {
-    type?: Management.ActionBindingRefTypeEnum;
+    type?: Management.ActionBindingRefTypeEnum | undefined;
     /** The id or name of an action that is being bound to a trigger. */
-    value?: string;
+    value?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -760,9 +760,9 @@ export type ActionBindingTypeEnum = (typeof ActionBindingTypeEnum)[keyof typeof 
 export interface ActionBindingWithRef {
     ref: Management.ActionBindingRef;
     /** The name of the binding. */
-    display_name?: string;
+    display_name?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretRequest[];
+    secrets?: Management.ActionSecretRequest[] | undefined;
 }
 
 /** The build status of this action. */
@@ -781,44 +781,44 @@ export type ActionBuildStatusEnum = (typeof ActionBuildStatusEnum)[keyof typeof 
  */
 export interface ActionDeployedVersion {
     /** The unique id of an action version. */
-    id?: string;
+    id?: string | undefined;
     /** The id of the action to which this version belongs. */
-    action_id?: string;
+    action_id?: string | undefined;
     /** The source code of this specific version of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this specific version depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** Indicates if this specific version is the currently one deployed. */
-    deployed?: boolean;
+    deployed?: boolean | undefined;
     /** The Node runtime. For example: `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    status?: Management.ActionVersionBuildStatusEnum;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    status?: Management.ActionVersionBuildStatusEnum | undefined;
     /** The index of this version in list of versions for the action. */
-    number?: number;
+    number?: number | undefined;
     /** Any errors that occurred while the version was being built. */
-    errors?: Management.ActionError[];
-    action?: Management.ActionBase;
+    errors?: Management.ActionError[] | undefined;
+    action?: Management.ActionBase | undefined;
     /** The time when this version was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** The time when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is being built. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 /**
  * Error is a generic error with a human readable id which should be easily referenced in support tickets.
  */
 export interface ActionError {
-    id?: string;
-    msg?: string;
-    url?: string;
+    id?: string | undefined;
+    msg?: string | undefined;
+    url?: string | undefined;
 }
 
 /**
@@ -826,12 +826,12 @@ export interface ActionError {
  */
 export interface ActionExecutionResult {
     /** The name of the action that was executed. */
-    action_name?: string;
-    error?: Management.ActionError;
+    action_name?: string | undefined;
+    error?: Management.ActionError | undefined;
     /** The time when the action was started. */
-    started_at?: string;
+    started_at?: string | undefined;
     /** The time when the action finished executing. */
-    ended_at?: string;
+    ended_at?: string | undefined;
 }
 
 /** The overall status of an execution. */
@@ -847,22 +847,22 @@ export type ActionExecutionStatusEnum = (typeof ActionExecutionStatusEnum)[keyof
 
 export interface ActionModuleAction {
     /** The unique ID of the action. */
-    action_id?: string;
+    action_id?: string | undefined;
     /** The name of the action. */
-    action_name?: string;
+    action_name?: string | undefined;
     /** The ID of the module version this action is using. */
-    module_version_id?: string;
+    module_version_id?: string | undefined;
     /** The version number of the module this action is using. */
-    module_version_number?: number;
+    module_version_number?: number | undefined;
     /** The triggers that this action supports. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
 }
 
 export interface ActionModuleDependency {
     /** The name of the npm dependency. */
-    name?: string;
+    name?: string | undefined;
     /** The version of the npm dependency. */
-    version?: string;
+    version?: string | undefined;
 }
 
 export interface ActionModuleDependencyRequest {
@@ -874,25 +874,25 @@ export interface ActionModuleDependencyRequest {
 
 export interface ActionModuleListItem {
     /** The unique ID of the module. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the module. */
-    name?: string;
+    name?: string | undefined;
     /** The source code from the module's draft version. */
-    code?: string;
+    code?: string | undefined;
     /** The npm dependencies from the module's draft version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The secrets from the module's draft version (names and timestamps only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** The number of deployed actions using this module. */
-    actions_using_module_total?: number;
+    actions_using_module_total?: number | undefined;
     /** Whether all draft changes have been published as a version. */
-    all_changes_published?: boolean;
+    all_changes_published?: boolean | undefined;
     /** The version number of the latest published version. Omitted if no versions have been published. */
-    latest_version_number?: number;
+    latest_version_number?: number | undefined;
     /** Timestamp when the module was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the module was last updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 /**
@@ -900,20 +900,20 @@ export interface ActionModuleListItem {
  */
 export interface ActionModuleReference {
     /** The unique ID of the module. */
-    module_id?: string;
+    module_id?: string | undefined;
     /** The name of the module. */
-    module_name?: string;
+    module_name?: string | undefined;
     /** The ID of the specific module version. */
-    module_version_id?: string;
+    module_version_id?: string | undefined;
     /** The version number of the module. */
-    module_version_number?: number;
+    module_version_number?: number | undefined;
 }
 
 export interface ActionModuleSecret {
     /** The name of the secret. */
-    name?: string;
+    name?: string | undefined;
     /** The time when the secret was last updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 export interface ActionModuleSecretRequest {
@@ -925,19 +925,19 @@ export interface ActionModuleSecretRequest {
 
 export interface ActionModuleVersion {
     /** The unique ID for this version. */
-    id?: string;
+    id?: string | undefined;
     /** The ID of the parent module. */
-    module_id?: string;
+    module_id?: string | undefined;
     /** The sequential version number. */
-    version_number?: number;
+    version_number?: number | undefined;
     /** The exact source code that was published with this version. */
-    code?: string;
+    code?: string | undefined;
     /** Secrets available to this version (name and updated_at only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** Dependencies locked to this version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The timestamp when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
 }
 
 /**
@@ -945,33 +945,33 @@ export interface ActionModuleVersion {
  */
 export interface ActionModuleVersionReference {
     /** The unique ID of the version. */
-    id?: string;
+    id?: string | undefined;
     /** The version number. */
-    version_number?: number;
+    version_number?: number | undefined;
     /** The source code from this version. */
-    code?: string;
+    code?: string | undefined;
     /** The npm dependencies from this version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The secrets from this version (names and timestamps only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** Timestamp when the version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
 }
 
 export interface ActionSecretRequest {
     /** The name of the particular secret, e.g. API_KEY. */
-    name?: string;
+    name?: string | undefined;
     /** The value of the particular secret, e.g. secret123. A secret's value can only be set upon creation. A secret's value will never be returned by the API. */
-    value?: string;
+    value?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ActionSecretResponse {
     /** The name of the particular secret, e.g. API_KEY. */
-    name?: string;
+    name?: string | undefined;
     /** The time when the secret was last updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -979,16 +979,16 @@ export interface ActionSecretResponse {
 export interface ActionTrigger {
     id: Management.ActionTriggerTypeEnum;
     /** The version of a trigger. v1, v2, etc. */
-    version?: string;
+    version?: string | undefined;
     /** status points to the trigger status. */
-    status?: string;
+    status?: string | undefined;
     /** runtimes supported by this trigger. */
-    runtimes?: string[];
+    runtimes?: string[] | undefined;
     /** Runtime that will be used when none is specified when creating an action. */
-    default_runtime?: string;
+    default_runtime?: string | undefined;
     /** compatible_triggers informs which other trigger supports the same event and api. */
-    compatible_triggers?: Management.ActionTriggerCompatibleTrigger[];
-    binding_policy?: Management.ActionBindingTypeEnum;
+    compatible_triggers?: Management.ActionTriggerCompatibleTrigger[] | undefined;
+    binding_policy?: Management.ActionBindingTypeEnum | undefined;
 }
 
 export interface ActionTriggerCompatibleTrigger {
@@ -1006,35 +1006,35 @@ export type ActionTriggerTypeEnum = string;
 
 export interface ActionVersion {
     /** The unique id of an action version. */
-    id?: string;
+    id?: string | undefined;
     /** The id of the action to which this version belongs. */
-    action_id?: string;
+    action_id?: string | undefined;
     /** The source code of this specific version of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this specific version depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** Indicates if this specific version is the currently one deployed. */
-    deployed?: boolean;
+    deployed?: boolean | undefined;
     /** The Node runtime. For example: `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    status?: Management.ActionVersionBuildStatusEnum;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    status?: Management.ActionVersionBuildStatusEnum | undefined;
     /** The index of this version in list of versions for the action. */
-    number?: number;
+    number?: number | undefined;
     /** Any errors that occurred while the version was being built. */
-    errors?: Management.ActionError[];
-    action?: Management.ActionBase;
+    errors?: Management.ActionError[] | undefined;
+    action?: Management.ActionBase | undefined;
     /** The time when this version was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** The time when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is being built. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 /** The build status of this specific version. */
@@ -1054,11 +1054,11 @@ export type ActionVersionBuildStatusEnum =
  */
 export interface ActionVersionDependency {
     /** name is the name of the npm module, e.g. lodash */
-    name?: string;
+    name?: string | undefined;
     /** description is the version of the npm module, e.g. 4.17.1 */
-    version?: string;
+    version?: string | undefined;
     /** registry_url is an optional value used primarily for private npm registries. */
-    registry_url?: string;
+    registry_url?: string | undefined;
 }
 
 /**
@@ -1083,15 +1083,15 @@ export type AculClientMetadata = Record<string, unknown>;
 export interface AculConfigsItem {
     prompt: Management.PromptGroupNameEnum;
     screen: Management.ScreenGroupNameEnum;
-    rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    rendering_mode?: Management.AculRenderingModeEnum | undefined;
+    context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
-    default_head_tags_disabled?: boolean | null;
+    default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
-    use_page_template?: boolean | null;
+    use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
-    filters?: Management.AculFilters | null;
+    head_tags?: Management.AculHeadTag[] | undefined;
+    filters?: (Management.AculFilters | null) | undefined;
 }
 
 /**
@@ -1155,20 +1155,20 @@ export type AculDomainMetadata = Record<string, unknown>;
  * Optional filters to apply rendering rules to specific entities
  */
 export interface AculFilters {
-    match_type?: Management.AculMatchTypeEnum;
+    match_type?: Management.AculMatchTypeEnum | undefined;
     /** Clients filter */
-    clients?: Management.AculClientFilter[];
+    clients?: Management.AculClientFilter[] | undefined;
     /** Organizations filter */
-    organizations?: Management.AculOrganizationFilter[];
+    organizations?: Management.AculOrganizationFilter[] | undefined;
     /** Domains filter */
-    domains?: Management.AculDomainFilter[];
+    domains?: Management.AculDomainFilter[] | undefined;
 }
 
 export interface AculHeadTag {
     /** Any HTML element valid for use in the head tag */
-    tag?: string;
-    attributes?: Management.AculHeadTagAttributes;
-    content?: Management.AculHeadTagContent;
+    tag?: string | undefined;
+    attributes?: Management.AculHeadTagAttributes | undefined;
+    content?: Management.AculHeadTagContent | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1221,14 +1221,14 @@ export type AculRenderingModeEnum = (typeof AculRenderingModeEnum)[keyof typeof 
 
 export interface AddOrganizationConnectionResponseContent {
     /** ID of the connection. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
-    assign_membership_on_login?: boolean;
+    assign_membership_on_login?: boolean | undefined;
     /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
-    show_as_button?: boolean;
+    show_as_button?: boolean | undefined;
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
-    is_signup_enabled?: boolean;
-    connection?: Management.OrganizationConnectionInformation;
+    is_signup_enabled?: boolean | undefined;
+    connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
 /**
@@ -1241,6 +1241,7 @@ export type AnomalyIpFormat = string;
  */
 export type AppMetadata = Record<string, unknown>;
 
+/** Assessors to clear. */
 export const AssessorsTypeEnum = {
     NewDevice: "new-device",
 } as const;
@@ -1248,16 +1249,16 @@ export type AssessorsTypeEnum = (typeof AssessorsTypeEnum)[keyof typeof Assessor
 
 export interface AssociateOrganizationClientGrantResponseContent {
     /** ID of the client grant. */
-    id?: string;
+    id?: string | undefined;
     /** ID of the client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The audience (API identifier) of this client grant */
-    audience?: string;
+    audience?: string | undefined;
     /** Scopes allowed for this client grant. */
-    scope?: string[];
-    organization_usage?: Management.OrganizationUsageEnum;
+    scope?: string[] | undefined;
+    organization_usage?: Management.OrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
-    allow_any_organization?: boolean;
+    allow_any_organization?: boolean | undefined;
 }
 
 export const AsyncApprovalNotificationsChannelsEnum = {
@@ -1269,13 +1270,13 @@ export type AsyncApprovalNotificationsChannelsEnum =
 
 export interface AttackProtectionCaptchaArkoseResponseContent {
     /** The site key for the Arkose captcha provider. */
-    site_key?: string;
+    site_key?: string | undefined;
     /** Whether the captcha should fail open. */
-    fail_open?: boolean;
+    fail_open?: boolean | undefined;
     /** The subdomain used for client requests to the Arkose captcha provider. */
-    client_subdomain?: string;
+    client_subdomain?: string | undefined;
     /** The subdomain used for server-side verification requests to the Arkose captcha provider. */
-    verify_subdomain?: string;
+    verify_subdomain?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1287,21 +1288,21 @@ export interface AttackProtectionCaptchaAuthChallengeRequest {
 
 export interface AttackProtectionCaptchaAuthChallengeResponseContent {
     /** Whether the auth challenge should fail open. */
-    fail_open?: boolean;
+    fail_open?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface AttackProtectionCaptchaFriendlyCaptchaResponseContent {
     /** The site key for the Friendly Captcha provider. */
-    site_key?: string;
+    site_key?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface AttackProtectionCaptchaHcaptchaResponseContent {
     /** The site key for the hCaptcha provider. */
-    site_key?: string;
+    site_key?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1321,16 +1322,16 @@ export type AttackProtectionCaptchaProviderId =
 
 export interface AttackProtectionCaptchaRecaptchaEnterpriseResponseContent {
     /** The site key for the reCAPTCHA Enterprise provider. */
-    site_key?: string;
+    site_key?: string | undefined;
     /** The project ID for the reCAPTCHA Enterprise provider. */
-    project_id?: string;
+    project_id?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface AttackProtectionCaptchaRecaptchaV2ResponseContent {
     /** The site key for the reCAPTCHA v2 provider. */
-    site_key?: string;
+    site_key?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1343,11 +1344,11 @@ export interface AttackProtectionUpdateCaptchaArkose {
     /** The secret key for the Arkose captcha provider. */
     secret: string;
     /** The subdomain used for client requests to the Arkose captcha provider. */
-    client_subdomain?: string;
+    client_subdomain?: string | undefined;
     /** The subdomain used for server-side verification requests to the Arkose captcha provider. */
-    verify_subdomain?: string;
+    verify_subdomain?: string | undefined;
     /** Whether the captcha should fail open. */
-    fail_open?: boolean;
+    fail_open?: boolean | undefined;
 }
 
 export interface AttackProtectionUpdateCaptchaFriendlyCaptcha {
@@ -1478,8 +1479,8 @@ export type BotDetectionMonitoringModeEnabled = boolean;
  */
 export interface BrandingColors {
     /** Accent color. */
-    primary?: string;
-    page_background?: Management.BrandingPageBackground;
+    primary?: string | undefined;
+    page_background?: Management.BrandingPageBackground | undefined;
 }
 
 /**
@@ -1487,7 +1488,7 @@ export interface BrandingColors {
  */
 export interface BrandingFont {
     /** URL for the custom font. The URL must point to a font file and not a stylesheet. Must use HTTPS. */
-    url?: string;
+    url?: string | undefined;
 }
 
 /**
@@ -1544,12 +1545,12 @@ export type BrandingThemeBordersInputsStyleEnum =
 
 export interface BrandingThemeColors {
     /** Base Focus Color */
-    base_focus_color?: string;
+    base_focus_color?: string | undefined;
     /** Base Hover Color */
-    base_hover_color?: string;
+    base_hover_color?: string | undefined;
     /** Body text */
     body_text: string;
-    captcha_widget_theme?: Management.BrandingThemeColorsCaptchaWidgetThemeEnum;
+    captcha_widget_theme?: Management.BrandingThemeColorsCaptchaWidgetThemeEnum | undefined;
     /** Error */
     error: string;
     /** Header */
@@ -1571,7 +1572,7 @@ export interface BrandingThemeColors {
     /** Primary button label */
     primary_button_label: string;
     /** Read only background */
-    read_only_background?: string;
+    read_only_background?: string | undefined;
     /** Secondary button border */
     secondary_button_border: string;
     /** Secondary button label */
@@ -1761,7 +1762,7 @@ export interface BreachedPasswordDetectionPreChangePasswordStage {
      * Action to take when a breached password is detected during a password reset.
      *               Possible values: <code>block</code>, <code>admin_notification</code>.
      */
-    shields?: Management.BreachedPasswordDetectionPreChangePasswordShieldsEnum[];
+    shields?: Management.BreachedPasswordDetectionPreChangePasswordShieldsEnum[] | undefined;
 }
 
 export const BreachedPasswordDetectionPreUserRegistrationShieldsEnum = {
@@ -1776,7 +1777,7 @@ export interface BreachedPasswordDetectionPreUserRegistrationStage {
      * Action to take when a breached password is detected during a signup.
      *               Possible values: <code>block</code>, <code>admin_notification</code>.
      */
-    shields?: Management.BreachedPasswordDetectionPreUserRegistrationShieldsEnum[];
+    shields?: Management.BreachedPasswordDetectionPreUserRegistrationShieldsEnum[] | undefined;
 }
 
 export const BreachedPasswordDetectionShieldsEnum = {
@@ -1788,8 +1789,8 @@ export type BreachedPasswordDetectionShieldsEnum =
     (typeof BreachedPasswordDetectionShieldsEnum)[keyof typeof BreachedPasswordDetectionShieldsEnum];
 
 export interface BreachedPasswordDetectionStage {
-    "pre-user-registration"?: Management.BreachedPasswordDetectionPreUserRegistrationStage;
-    "pre-change-password"?: Management.BreachedPasswordDetectionPreChangePasswordStage;
+    "pre-user-registration"?: Management.BreachedPasswordDetectionPreUserRegistrationStage | undefined;
+    "pre-change-password"?: Management.BreachedPasswordDetectionPreChangePasswordStage | undefined;
 }
 
 /**
@@ -1819,11 +1820,11 @@ export interface BulkUpdateAculResponseContent {
 export interface CertificateSubjectDnCredential {
     credential_type: Management.CertificateSubjectDnCredentialTypeEnum;
     /** Friendly name for a credential. */
-    name?: string;
+    name?: string | undefined;
     /** Subject Distinguished Name. Mutually exclusive with `pem` property. Applies to `cert_subject_dn` credential type. */
-    subject_dn?: string;
+    subject_dn?: string | undefined;
     /** PEM-formatted X509 certificate. Must be JSON escaped. Mutually exclusive with `subject_dn` property. */
-    pem?: string;
+    pem?: string | undefined;
 }
 
 export const CertificateSubjectDnCredentialTypeEnum = {
@@ -1840,7 +1841,7 @@ export interface ChangePasswordTicketIdentity {
     user_id: string;
     provider: Management.IdentityProviderOnlyAuth0Enum;
     /** connection_id of the identity. */
-    connection_id?: string;
+    connection_id?: string | undefined;
 }
 
 export interface ChangePasswordTicketResponseContent {
@@ -1852,94 +1853,96 @@ export interface ChangePasswordTicketResponseContent {
 
 export interface Client {
     /** ID of this client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Name of the tenant this client belongs to. */
-    tenant?: string;
+    tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
-    name?: string;
+    name?: string | undefined;
     /** Free text description of this client (max length: 140 characters). */
-    description?: string;
+    description?: string | undefined;
     /** Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false). */
-    global?: boolean;
+    global?: boolean | undefined;
     /** Client secret (which you must not make public). */
-    client_secret?: string;
-    app_type?: Management.ClientAppTypeEnum;
+    client_secret?: string | undefined;
+    app_type?: Management.ClientAppTypeEnum | undefined;
     /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
-    logo_uri?: string;
+    logo_uri?: string | undefined;
     /** Whether this client a first party client (true) or not (false). */
-    is_first_party?: boolean;
+    is_first_party?: boolean | undefined;
     /** Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false). */
-    oidc_conformant?: boolean;
+    oidc_conformant?: boolean | undefined;
     /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
-    callbacks?: string[];
+    callbacks?: string[] | undefined;
     /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
-    allowed_origins?: string[];
+    allowed_origins?: string[] | undefined;
     /** Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>. */
-    web_origins?: string[];
+    web_origins?: string[] | undefined;
     /** List of audiences/realms for SAML protocol. Used by the wsfed addon. */
-    client_aliases?: string[];
+    client_aliases?: string[] | undefined;
     /** List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed. */
-    allowed_clients?: string[];
+    allowed_clients?: string[] | undefined;
     /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
-    allowed_logout_urls?: string[];
-    session_transfer?: Management.ClientSessionTransferConfiguration | null;
-    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    allowed_logout_urls?: string[] | undefined;
+    session_transfer?: (Management.ClientSessionTransferConfiguration | null) | undefined;
+    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings | undefined;
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
-    grant_types?: string[];
-    jwt_configuration?: Management.ClientJwtConfiguration;
-    signing_keys?: Management.ClientSigningKeys;
-    encryption_key?: Management.ClientEncryptionKey | null;
+    grant_types?: string[] | undefined;
+    jwt_configuration?: Management.ClientJwtConfiguration | undefined;
+    signing_keys?: Management.ClientSigningKeys | undefined;
+    encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
-    sso?: boolean;
+    sso?: boolean | undefined;
     /** Whether Single Sign On is disabled (true) or enabled (true). Defaults to true. */
-    sso_disabled?: boolean;
+    sso_disabled?: boolean | undefined;
     /** Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false). */
-    cross_origin_authentication?: boolean;
+    cross_origin_authentication?: boolean | undefined;
     /** URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page. */
-    cross_origin_loc?: string;
+    cross_origin_loc?: string | undefined;
     /** Whether a custom login page is to be used (true) or the default provided login page (false). */
-    custom_login_page_on?: boolean;
+    custom_login_page_on?: boolean | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. */
-    custom_login_page?: string;
+    custom_login_page?: string | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. (Used on Previews) */
-    custom_login_page_preview?: string;
+    custom_login_page_preview?: string | undefined;
     /** HTML form template to be used for WS-Federation. */
-    form_template?: string;
-    addons?: Management.ClientAddons;
-    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum;
+    form_template?: string | undefined;
+    addons?: Management.ClientAddons | undefined;
+    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum | undefined;
     /** If true, trust that the IP specified in the `auth0-forwarded-for` header is the end-user's IP for brute-force-protection on token endpoint. */
-    is_token_endpoint_ip_header_trusted?: boolean;
-    client_metadata?: Management.ClientMetadata;
-    mobile?: Management.ClientMobile;
+    is_token_endpoint_ip_header_trusted?: boolean | undefined;
+    client_metadata?: Management.ClientMetadata | undefined;
+    mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
-    initiate_login_uri?: string;
-    refresh_token?: Management.ClientRefreshTokenConfiguration | null;
-    default_organization?: Management.ClientDefaultOrganization | null;
-    organization_usage?: Management.ClientOrganizationUsageEnum;
-    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum;
+    initiate_login_uri?: string | undefined;
+    refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
+    default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
+    organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum | undefined;
     /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
-    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
-    client_authentication_methods?: Management.ClientAuthenticationMethod | null;
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | undefined;
+    client_authentication_methods?: (Management.ClientAuthenticationMethod | null) | undefined;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
-    require_pushed_authorization_requests?: boolean;
+    require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
-    require_proof_of_possession?: boolean;
-    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId;
-    compliance_level?: Management.ClientComplianceLevelEnum | null;
+    require_proof_of_possession?: boolean | undefined;
+    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
-    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
-    token_exchange?: Management.ClientTokenExchangeConfiguration;
+    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | undefined;
+    token_exchange?: Management.ClientTokenExchangeConfiguration | undefined;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
-    par_request_expiry?: number | null;
-    token_quota?: Management.TokenQuota;
-    express_configuration?: Management.ExpressConfiguration;
+    par_request_expiry?: (number | null) | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    express_configuration?: Management.ExpressConfiguration | undefined;
     /** The identifier of the resource server that this client is linked to. */
-    resource_server_identifier?: string;
-    async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+    resource_server_identifier?: string | undefined;
+    async_approval_notification_channels?:
+        | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
+        | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1949,11 +1952,11 @@ export interface Client {
  */
 export interface ClientAddonAws {
     /** AWS principal ARN, e.g. `arn:aws:iam::010616021751:saml-provider/idpname` */
-    principal?: string;
+    principal?: string | undefined;
     /** AWS role ARN, e.g. `arn:aws:iam::010616021751:role/foo` */
-    role?: string;
+    role?: string | undefined;
     /** AWS token lifetime in seconds */
-    lifetime_in_seconds?: number;
+    lifetime_in_seconds?: number | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1963,31 +1966,31 @@ export interface ClientAddonAws {
  */
 export interface ClientAddonAzureBlob {
     /** Your Azure storage account name. Usually first segment in your Azure storage URL. e.g. `https://acme-org.blob.core.windows.net` would be the account name `acme-org`. */
-    accountName?: string;
+    accountName?: string | undefined;
     /** Access key associated with this storage account. */
-    storageAccessKey?: string;
+    storageAccessKey?: string | undefined;
     /** Container to request a token for. e.g. `my-container`. */
-    containerName?: string;
+    containerName?: string | undefined;
     /** Entity to request a token for. e.g. `my-blob`. If blank the computed SAS will apply to the entire storage container. */
-    blobName?: string;
+    blobName?: string | undefined;
     /** Expiration in minutes for the generated token (default of 5 minutes). */
-    expiration?: number;
+    expiration?: number | undefined;
     /** Shared access policy identifier defined in your storage account resource. */
-    signedIdentifier?: string;
+    signedIdentifier?: string | undefined;
     /** Indicates if the issued token has permission to read the content, properties, metadata and block list. Use the blob as the source of a copy operation. */
-    blob_read?: boolean;
+    blob_read?: boolean | undefined;
     /** Indicates if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account. */
-    blob_write?: boolean;
+    blob_write?: boolean | undefined;
     /** Indicates if the issued token has permission to delete the blob. */
-    blob_delete?: boolean;
+    blob_delete?: boolean | undefined;
     /** Indicates if the issued token has permission to read the content, properties, metadata or block list of any blob in the container. Use any blob in the container as the source of a copy operation */
-    container_read?: boolean;
+    container_read?: boolean | undefined;
     /** Indicates that for any blob in the container if the issued token has permission to create or write content, properties, metadata, or block list. Snapshot or lease the blob. Resize the blob (page blob only). Use the blob as the destination of a copy operation within the same account. */
-    container_write?: boolean;
+    container_write?: boolean | undefined;
     /** Indicates if issued token has permission to delete any blob in the container. */
-    container_delete?: boolean;
+    container_delete?: boolean | undefined;
     /** Indicates if the issued token has permission to list blobs in the container. */
-    container_list?: boolean;
+    container_list?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -1997,15 +2000,15 @@ export interface ClientAddonAzureBlob {
  */
 export interface ClientAddonAzureSb {
     /** Your Azure Service Bus namespace. Usually the first segment of your Service Bus URL (e.g. `https://acme-org.servicebus.windows.net` would be `acme-org`). */
-    namespace?: string;
+    namespace?: string | undefined;
     /** Your shared access policy name defined in your Service Bus entity. */
-    sasKeyName?: string;
+    sasKeyName?: string | undefined;
     /** Primary Key associated with your shared access policy. */
-    sasKey?: string;
+    sasKey?: string | undefined;
     /** Entity you want to request a token for. e.g. `my-queue`.' */
-    entityPath?: string;
+    entityPath?: string | undefined;
     /** Optional expiration in minutes for the generated token. Defaults to 5 minutes. */
-    expiration?: number;
+    expiration?: number | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2035,7 +2038,7 @@ export type ClientAddonDropbox = Record<string, unknown>;
  */
 export interface ClientAddonEchoSign {
     /** Your custom domain found in your EchoSign URL. e.g. `https://acme-org.echosign.com` would be `acme-org`. */
-    domain?: string;
+    domain?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2045,7 +2048,7 @@ export interface ClientAddonEchoSign {
  */
 export interface ClientAddonEgnyte {
     /** Your custom domain found in your Egnyte URL. e.g. `https://acme-org.egnyte.com` would be `acme-org`. */
-    domain?: string;
+    domain?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2055,15 +2058,15 @@ export interface ClientAddonEgnyte {
  */
 export interface ClientAddonFirebase {
     /** Google Firebase Secret. (SDK 2 only). */
-    secret?: string;
+    secret?: string | undefined;
     /** Optional ID of the private key to obtain kid header in the issued token (SDK v3+ tokens only). */
-    private_key_id?: string;
+    private_key_id?: string | undefined;
     /** Private Key for signing the token (SDK v3+ tokens only). */
-    private_key?: string;
+    private_key?: string | undefined;
     /** ID of the Service Account you have created (shown as `client_email` in the generated JSON file, SDK v3+ tokens only). */
-    client_email?: string;
+    client_email?: string | undefined;
     /** Optional expiration in seconds for the generated token. Defaults to 3600 seconds (SDK v3+ tokens only). */
-    lifetime_in_seconds?: number;
+    lifetime_in_seconds?: number | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2079,9 +2082,9 @@ export interface ClientAddonLayer {
     /** Private key for signing the Layer token. */
     privateKey: string;
     /** Name of the property used as the unique user id in Layer. If not specified `user_id` is used. */
-    principal?: string;
+    principal?: string | undefined;
     /** Optional expiration in minutes for the generated token. Defaults to 5 minutes. */
-    expiration?: number;
+    expiration?: number | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2101,7 +2104,7 @@ export interface ClientAddonMscrm {
  */
 export interface ClientAddonNewRelic {
     /** Your New Relic Account ID found in your New Relic URL after the `/accounts/` path. e.g. `https://rpm.newrelic.com/accounts/123456/query` would be `123456`. */
-    account?: string;
+    account?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2116,9 +2119,9 @@ export interface ClientAddonOag {}
  */
 export interface ClientAddonOffice365 {
     /** Your Office 365 domain name. e.g. `acme-org.com`. */
-    domain?: string;
+    domain?: string | undefined;
     /** Optional Auth0 database connection for testing an already-configured Office 365 tenant. */
-    connection?: string;
+    connection?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2137,22 +2140,22 @@ export interface ClientAddonRms {
  * SAML2 addon indicator (no configuration settings needed for SAML2 addon).
  */
 export interface ClientAddonSaml {
-    mappings?: Management.ClientAddonSamlMapping;
-    audience?: string;
-    recipient?: string;
-    createUpnClaim?: boolean;
-    mapUnknownClaimsAsIs?: boolean;
-    passthroughClaimsWithNoMapping?: boolean;
-    mapIdentities?: boolean;
-    signatureAlgorithm?: string;
-    digestAlgorithm?: string;
-    issuer?: string;
-    destination?: string;
-    lifetimeInSeconds?: number;
-    signResponse?: boolean;
-    nameIdentifierFormat?: string;
-    nameIdentifierProbes?: string[];
-    authnContextClassRef?: string;
+    mappings?: Management.ClientAddonSamlMapping | undefined;
+    audience?: string | undefined;
+    recipient?: string | undefined;
+    createUpnClaim?: boolean | undefined;
+    mapUnknownClaimsAsIs?: boolean | undefined;
+    passthroughClaimsWithNoMapping?: boolean | undefined;
+    mapIdentities?: boolean | undefined;
+    signatureAlgorithm?: string | undefined;
+    digestAlgorithm?: string | undefined;
+    issuer?: string | undefined;
+    destination?: string | undefined;
+    lifetimeInSeconds?: number | undefined;
+    signResponse?: boolean | undefined;
+    nameIdentifierFormat?: string | undefined;
+    nameIdentifierProbes?: string[] | undefined;
+    authnContextClassRef?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2164,26 +2167,26 @@ export type ClientAddonSamlMapping = Record<string, unknown>;
  */
 export interface ClientAddonSapapi {
     /** If activated in the OAuth 2.0 client configuration (transaction SOAUTH2) the SAML attribute client_id must be set and equal the client_id form parameter of the access token request. */
-    clientid?: string;
+    clientid?: string | undefined;
     /** Name of the property in the user object that maps to a SAP username. e.g. `email`. */
-    usernameAttribute?: string;
+    usernameAttribute?: string | undefined;
     /** Your SAP OData server OAuth2 token endpoint URL. */
-    tokenEndpointUrl?: string;
+    tokenEndpointUrl?: string | undefined;
     /** Requested scope for SAP APIs. */
-    scope?: string;
+    scope?: string | undefined;
     /** Service account password to use to authenticate API calls to the token endpoint. */
-    servicePassword?: string;
+    servicePassword?: string | undefined;
     /** NameID element of the Subject which can be used to express the user's identity. Defaults to `urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified`. */
-    nameIdentifierFormat?: string;
+    nameIdentifierFormat?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ClientAddonSsoIntegration {
     /** SSO integration name */
-    name?: string;
+    name?: string | undefined;
     /** SSO integration version installed */
-    version?: string;
+    version?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2193,7 +2196,7 @@ export interface ClientAddonSsoIntegration {
  */
 export interface ClientAddonSalesforce {
     /** Arbitrary logical URL that identifies the Saleforce resource. e.g. `https://acme-org.com`. */
-    entity_id?: string;
+    entity_id?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2203,13 +2206,13 @@ export interface ClientAddonSalesforce {
  */
 export interface ClientAddonSalesforceApi {
     /** Consumer Key assigned by Salesforce to the Connected App. */
-    clientid?: string;
+    clientid?: string | undefined;
     /** Name of the property in the user object that maps to a Salesforce username. e.g. `email`. */
-    principal?: string;
+    principal?: string | undefined;
     /** Community name. */
-    communityName?: string;
+    communityName?: string | undefined;
     /** Community url section. */
-    community_url_section?: string;
+    community_url_section?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2219,13 +2222,13 @@ export interface ClientAddonSalesforceApi {
  */
 export interface ClientAddonSalesforceSandboxApi {
     /** Consumer Key assigned by Salesforce to the Connected App. */
-    clientid?: string;
+    clientid?: string | undefined;
     /** Name of the property in the user object that maps to a Salesforce username. e.g. `email`. */
-    principal?: string;
+    principal?: string | undefined;
     /** Community name. */
-    communityName?: string;
+    communityName?: string | undefined;
     /** Community url section. */
-    community_url_section?: string;
+    community_url_section?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2235,9 +2238,9 @@ export interface ClientAddonSalesforceSandboxApi {
  */
 export interface ClientAddonSentry {
     /** Generated slug for your Sentry organization. Found in your Sentry URL. e.g. `https://sentry.acme.com/acme-org/` would be `acme-org`. */
-    org_slug?: string;
+    org_slug?: string | undefined;
     /** URL prefix only if running Sentry Community Edition, otherwise leave should be blank. */
-    base_url?: string;
+    base_url?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2247,8 +2250,8 @@ export interface ClientAddonSentry {
  */
 export interface ClientAddonSharePoint {
     /** Internal SharePoint application URL. */
-    url?: string;
-    external_url?: Management.ClientAddonSharePointExternalUrl;
+    url?: string | undefined;
+    external_url?: Management.ClientAddonSharePointExternalUrl | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2273,7 +2276,7 @@ export interface ClientAddonSlack {
  */
 export interface ClientAddonSpringCm {
     /** SpringCM ACS URL, e.g. `https://na11.springcm.com/atlas/sso/SSOEndpoint.ashx`. */
-    acsurl?: string;
+    acsurl?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2283,7 +2286,7 @@ export interface ClientAddonSpringCm {
  */
 export interface ClientAddonWams {
     /** Your master key for Windows Azure Mobile Services. */
-    masterkey?: string;
+    masterkey?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2298,7 +2301,7 @@ export type ClientAddonWsFed = Record<string, unknown>;
  */
 export interface ClientAddonZendesk {
     /** Zendesk account name usually first segment in your Zendesk URL. e.g. `https://acme-org.zendesk.com` would be `acme-org`. */
-    accountName?: string;
+    accountName?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2308,7 +2311,7 @@ export interface ClientAddonZendesk {
  */
 export interface ClientAddonZoom {
     /** Zoom account name usually first segment of your Zoom URL, e.g. `https://acme-org.zoom.us` would be `acme-org`. */
-    account?: string;
+    account?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2317,36 +2320,36 @@ export interface ClientAddonZoom {
  * Addons enabled for this client and their associated configurations.
  */
 export interface ClientAddons {
-    aws?: Management.ClientAddonAws;
-    azure_blob?: Management.ClientAddonAzureBlob;
-    azure_sb?: Management.ClientAddonAzureSb;
-    rms?: Management.ClientAddonRms;
-    mscrm?: Management.ClientAddonMscrm;
-    slack?: Management.ClientAddonSlack;
-    sentry?: Management.ClientAddonSentry;
-    box?: Management.ClientAddonBox;
-    cloudbees?: Management.ClientAddonCloudBees;
-    concur?: Management.ClientAddonConcur;
-    dropbox?: Management.ClientAddonDropbox;
-    echosign?: Management.ClientAddonEchoSign;
-    egnyte?: Management.ClientAddonEgnyte;
-    firebase?: Management.ClientAddonFirebase;
-    newrelic?: Management.ClientAddonNewRelic;
-    office365?: Management.ClientAddonOffice365;
-    salesforce?: Management.ClientAddonSalesforce;
-    salesforce_api?: Management.ClientAddonSalesforceApi;
-    salesforce_sandbox_api?: Management.ClientAddonSalesforceSandboxApi;
-    samlp?: Management.ClientAddonSaml;
-    layer?: Management.ClientAddonLayer;
-    sap_api?: Management.ClientAddonSapapi;
-    sharepoint?: Management.ClientAddonSharePoint;
-    springcm?: Management.ClientAddonSpringCm;
-    wams?: Management.ClientAddonWams;
-    wsfed?: Management.ClientAddonWsFed;
-    zendesk?: Management.ClientAddonZendesk;
-    zoom?: Management.ClientAddonZoom;
-    sso_integration?: Management.ClientAddonSsoIntegration;
-    oag?: Management.ClientAddonOag | null;
+    aws?: Management.ClientAddonAws | undefined;
+    azure_blob?: Management.ClientAddonAzureBlob | undefined;
+    azure_sb?: Management.ClientAddonAzureSb | undefined;
+    rms?: Management.ClientAddonRms | undefined;
+    mscrm?: Management.ClientAddonMscrm | undefined;
+    slack?: Management.ClientAddonSlack | undefined;
+    sentry?: Management.ClientAddonSentry | undefined;
+    box?: Management.ClientAddonBox | undefined;
+    cloudbees?: Management.ClientAddonCloudBees | undefined;
+    concur?: Management.ClientAddonConcur | undefined;
+    dropbox?: Management.ClientAddonDropbox | undefined;
+    echosign?: Management.ClientAddonEchoSign | undefined;
+    egnyte?: Management.ClientAddonEgnyte | undefined;
+    firebase?: Management.ClientAddonFirebase | undefined;
+    newrelic?: Management.ClientAddonNewRelic | undefined;
+    office365?: Management.ClientAddonOffice365 | undefined;
+    salesforce?: Management.ClientAddonSalesforce | undefined;
+    salesforce_api?: Management.ClientAddonSalesforceApi | undefined;
+    salesforce_sandbox_api?: Management.ClientAddonSalesforceSandboxApi | undefined;
+    samlp?: Management.ClientAddonSaml | undefined;
+    layer?: Management.ClientAddonLayer | undefined;
+    sap_api?: Management.ClientAddonSapapi | undefined;
+    sharepoint?: Management.ClientAddonSharePoint | undefined;
+    springcm?: Management.ClientAddonSpringCm | undefined;
+    wams?: Management.ClientAddonWams | undefined;
+    wsfed?: Management.ClientAddonWsFed | undefined;
+    zendesk?: Management.ClientAddonZendesk | undefined;
+    zoom?: Management.ClientAddonZoom | undefined;
+    sso_integration?: Management.ClientAddonSsoIntegration | undefined;
+    oag?: (Management.ClientAddonOag | null) | undefined;
 }
 
 /** The type of application this client represents */
@@ -2395,9 +2398,9 @@ export type ClientAsyncApprovalNotificationsChannelsApiPostConfiguration =
  * Defines client authentication methods.
  */
 export interface ClientAuthenticationMethod {
-    private_key_jwt?: Management.ClientAuthenticationMethodPrivateKeyJwt;
-    tls_client_auth?: Management.ClientAuthenticationMethodTlsClientAuth;
-    self_signed_tls_client_auth?: Management.ClientAuthenticationMethodSelfSignedTlsClientAuth;
+    private_key_jwt?: Management.ClientAuthenticationMethodPrivateKeyJwt | undefined;
+    tls_client_auth?: Management.ClientAuthenticationMethodTlsClientAuth | undefined;
+    self_signed_tls_client_auth?: Management.ClientAuthenticationMethodSelfSignedTlsClientAuth | undefined;
 }
 
 /**
@@ -2450,9 +2453,9 @@ export type ClientComplianceLevelEnum = (typeof ClientComplianceLevelEnum)[keyof
  * Defines client authentication methods.
  */
 export interface ClientCreateAuthenticationMethod {
-    private_key_jwt?: Management.ClientCreateAuthenticationMethodPrivateKeyJwt;
-    tls_client_auth?: Management.ClientCreateAuthenticationMethodTlsClientAuth;
-    self_signed_tls_client_auth?: Management.CreateClientAuthenticationMethodSelfSignedTlsClientAuth;
+    private_key_jwt?: Management.ClientCreateAuthenticationMethodPrivateKeyJwt | undefined;
+    tls_client_auth?: Management.ClientCreateAuthenticationMethodTlsClientAuth | undefined;
+    self_signed_tls_client_auth?: Management.CreateClientAuthenticationMethodSelfSignedTlsClientAuth | undefined;
 }
 
 /**
@@ -2481,23 +2484,23 @@ export type ClientCreateAuthenticationMethodTlsClientAuthCredentials = Managemen
 
 export interface ClientCredential {
     /** ID of the credential. Generated on creation. */
-    id?: string;
+    id?: string | undefined;
     /** The name given to the credential by the user. */
-    name?: string;
+    name?: string | undefined;
     /** The key identifier of the credential, generated on creation. */
-    kid?: string;
-    alg?: Management.ClientCredentialAlgorithmEnum;
-    credential_type?: Management.ClientCredentialTypeEnum;
+    kid?: string | undefined;
+    alg?: Management.ClientCredentialAlgorithmEnum | undefined;
+    credential_type?: Management.ClientCredentialTypeEnum | undefined;
     /** The X509 certificate's Subject Distinguished Name */
-    subject_dn?: string;
+    subject_dn?: string | undefined;
     /** The X509 certificate's SHA256 thumbprint */
-    thumbprint_sha256?: string;
+    thumbprint_sha256?: string | undefined;
     /** The ISO 8601 formatted date the credential was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The ISO 8601 formatted date the credential was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The ISO 8601 formatted date representing the expiration of the credential. */
-    expires_at?: string;
+    expires_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2540,11 +2543,11 @@ export type ClientDefaultOrganizationFlowsEnum =
  */
 export interface ClientEncryptionKey {
     /** Encryption Public RSA Key. */
-    pub?: string;
+    pub?: string | undefined;
     /** Encryption certificate for public key in X.509 (.CER) format. */
-    cert?: string;
+    cert?: string | undefined;
     /** Encryption certificate name for this certificate in the format `/CN={domain}`. */
-    subject?: string;
+    subject?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2574,23 +2577,23 @@ export type ClientGrantOrganizationUsageEnum =
 
 export interface ClientGrantResponseContent {
     /** ID of the client grant. */
-    id?: string;
+    id?: string | undefined;
     /** ID of the client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The audience (API identifier) of this client grant. */
-    audience?: string;
+    audience?: string | undefined;
     /** Scopes allowed for this client grant. */
-    scope?: string[];
-    organization_usage?: Management.ClientGrantOrganizationUsageEnum;
+    scope?: string[] | undefined;
+    organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
-    allow_any_organization?: boolean;
+    allow_any_organization?: boolean | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
-    is_system?: boolean;
-    subject_type?: Management.ClientGrantSubjectTypeEnum;
+    is_system?: boolean | undefined;
+    subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
     /** Types of authorization_details allowed for this client grant. */
-    authorization_details_types?: string[];
+    authorization_details_types?: string[] | undefined;
     /** If enabled, all scopes configured on the resource server are allowed for this grant. */
-    allow_all_scopes?: boolean;
+    allow_all_scopes?: boolean | undefined;
 }
 
 /** The type of application access the client grant allows. */
@@ -2605,11 +2608,11 @@ export type ClientGrantSubjectTypeEnum = (typeof ClientGrantSubjectTypeEnum)[key
  */
 export interface ClientJwtConfiguration {
     /** Number of seconds the JWT will be valid for (affects `exp` claim). */
-    lifetime_in_seconds?: number;
+    lifetime_in_seconds?: number | undefined;
     /** Whether the client secret is base64 encoded (true) or unencoded (false). */
-    secret_encoded?: boolean;
-    scopes?: Management.ClientJwtConfigurationScopes;
-    alg?: Management.SigningAlgorithmEnum;
+    secret_encoded?: boolean | undefined;
+    scopes?: Management.ClientJwtConfigurationScopes | undefined;
+    alg?: Management.SigningAlgorithmEnum | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2628,8 +2631,8 @@ export type ClientMetadata = Record<string, unknown>;
  * Additional configuration for native mobile apps.
  */
 export interface ClientMobile {
-    android?: Management.ClientMobileAndroid;
-    ios?: Management.ClientMobileiOs;
+    android?: Management.ClientMobileAndroid | undefined;
+    ios?: Management.ClientMobileiOs | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2639,9 +2642,9 @@ export interface ClientMobile {
  */
 export interface ClientMobileAndroid {
     /** App package name found in AndroidManifest.xml. */
-    app_package_name?: string;
+    app_package_name?: string | undefined;
     /** SHA256 fingerprints of the app's signing certificate. Multiple fingerprints can be used to support different versions of your app, such as debug and production builds. */
-    sha256_cert_fingerprints?: string[];
+    sha256_cert_fingerprints?: string[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2651,9 +2654,9 @@ export interface ClientMobileAndroid {
  */
 export interface ClientMobileiOs {
     /** Identifier assigned to the Apple account that signs and uploads the app to the store. */
-    team_id?: string;
+    team_id?: string | undefined;
     /** Assigned by developer to the app as its unique identifier inside the store. Usually this is a reverse domain plus the app name, e.g. `com.you.MyApp`. */
-    app_bundle_identifier?: string;
+    app_bundle_identifier?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2662,8 +2665,8 @@ export interface ClientMobileiOs {
  * Configuration for OIDC backchannel logout initiators
  */
 export interface ClientOidcBackchannelLogoutInitiators {
-    mode?: Management.ClientOidcBackchannelLogoutInitiatorsModeEnum;
-    selected_initiators?: Management.ClientOidcBackchannelLogoutInitiatorsEnum[];
+    mode?: Management.ClientOidcBackchannelLogoutInitiatorsModeEnum | undefined;
+    selected_initiators?: Management.ClientOidcBackchannelLogoutInitiatorsEnum[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2696,7 +2699,7 @@ export type ClientOidcBackchannelLogoutInitiatorsModeEnum =
  */
 export interface ClientOidcBackchannelLogoutSessionMetadata {
     /** The `include` property determines whether session metadata is included in the logout token. */
-    include?: boolean;
+    include?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2706,9 +2709,9 @@ export interface ClientOidcBackchannelLogoutSessionMetadata {
  */
 export interface ClientOidcBackchannelLogoutSettings {
     /** Comma-separated list of URLs that are valid to call back from Auth0 for OIDC backchannel logout. Currently only one URL is allowed. */
-    backchannel_logout_urls?: string[];
-    backchannel_logout_initiators?: Management.ClientOidcBackchannelLogoutInitiators;
-    backchannel_logout_session_metadata?: Management.ClientOidcBackchannelLogoutSessionMetadata | null;
+    backchannel_logout_urls?: string[] | undefined;
+    backchannel_logout_initiators?: Management.ClientOidcBackchannelLogoutInitiators | undefined;
+    backchannel_logout_session_metadata?: (Management.ClientOidcBackchannelLogoutSessionMetadata | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2764,17 +2767,17 @@ export interface ClientRefreshTokenConfiguration {
     rotation_type: Management.RefreshTokenRotationTypeEnum;
     expiration_type: Management.RefreshTokenExpirationTypeEnum;
     /** Period in seconds where the previous refresh token can be exchanged without triggering breach detection */
-    leeway?: number;
+    leeway?: number | undefined;
     /** Period (in seconds) for which refresh tokens will remain valid */
-    token_lifetime?: number;
+    token_lifetime?: number | undefined;
     /** Prevents tokens from having a set lifetime when `true` (takes precedence over `token_lifetime` values) */
-    infinite_token_lifetime?: boolean;
+    infinite_token_lifetime?: boolean | undefined;
     /** Period (in seconds) for which refresh tokens will remain valid without use */
-    idle_token_lifetime?: number;
+    idle_token_lifetime?: number | undefined;
     /** Prevents tokens from expiring without use when `true` (takes precedence over `idle_token_lifetime` values) */
-    infinite_idle_token_lifetime?: boolean;
+    infinite_idle_token_lifetime?: boolean | undefined;
     /** A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers */
-    policies?: Management.ClientRefreshTokenPolicy[];
+    policies?: Management.ClientRefreshTokenPolicy[] | undefined;
 }
 
 export interface ClientRefreshTokenPolicy {
@@ -2796,16 +2799,16 @@ export type ClientSessionTransferAllowedAuthenticationMethodsEnum =
  */
 export interface ClientSessionTransferConfiguration {
     /** Indicates whether an app can issue a Session Transfer Token through Token Exchange. If set to 'false', the app will not be able to issue a Session Transfer Token. Usually configured in the native application. Default value is `false`. */
-    can_create_session_transfer_token?: boolean;
+    can_create_session_transfer_token?: boolean | undefined;
     /** Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application. Default value is `true`, applicable only in Native to Web SSO context. */
-    enforce_cascade_revocation?: boolean;
+    enforce_cascade_revocation?: boolean | undefined;
     /** Indicates whether an app can create a session from a Session Transfer Token received via indicated methods. Can include `cookie` and/or `query`. Usually configured in the web application. Default value is an empty array []. */
-    allowed_authentication_methods?: Management.ClientSessionTransferAllowedAuthenticationMethodsEnum[];
-    enforce_device_binding?: Management.ClientSessionTransferDeviceBindingEnum;
+    allowed_authentication_methods?: Management.ClientSessionTransferAllowedAuthenticationMethodsEnum[] | undefined;
+    enforce_device_binding?: Management.ClientSessionTransferDeviceBindingEnum | undefined;
     /** Indicates whether Refresh Tokens are allowed to be issued when authenticating with a Session Transfer Token. Usually configured in the web application. Default value is `false`. */
-    allow_refresh_token?: boolean;
+    allow_refresh_token?: boolean | undefined;
     /** Indicates whether Refresh Tokens created during a Native to Web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application. Default value is `true`, applicable only in Native to Web SSO context. */
-    enforce_online_refresh_tokens?: boolean;
+    enforce_online_refresh_tokens?: boolean | undefined;
 }
 
 /** Indicates whether device binding security should be enforced for the app. If set to 'ip', the app will enforce device binding by IP, meaning that consumption of Session Transfer Token must be done from the same IP of the issuer. Likewise, if set to 'asn', device binding is enforced by ASN, meaning consumption of Session Transfer Token must be done from the same ASN as the issuer. If set to 'none', device binding is not enforced. Usually configured in the web application. Default value is `ip`. */
@@ -2822,8 +2825,8 @@ export type ClientSessionTransferDeviceBindingEnum =
  */
 export interface ClientSignedRequestObjectWithCredentialId {
     /** Indicates whether the JAR requests are mandatory */
-    required?: boolean;
-    credentials?: Management.CredentialId[];
+    required?: boolean | undefined;
+    credentials?: Management.CredentialId[] | undefined;
 }
 
 /**
@@ -2831,17 +2834,17 @@ export interface ClientSignedRequestObjectWithCredentialId {
  */
 export interface ClientSignedRequestObjectWithPublicKey {
     /** Indicates whether the JAR requests are mandatory */
-    required?: boolean;
-    credentials?: Management.PublicKeyCredential[];
+    required?: boolean | undefined;
+    credentials?: Management.PublicKeyCredential[] | undefined;
 }
 
 export interface ClientSigningKey {
     /** Signing certificate public key and chain in PKCS#7 (.P7B) format. */
-    pkcs7?: string;
+    pkcs7?: string | undefined;
     /** Signing certificate public key in X.509 (.CER) format. */
-    cert?: string;
+    cert?: string | undefined;
     /** Subject name for this certificate in the format `/CN={domain}`. */
-    subject?: string;
+    subject?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2874,7 +2877,7 @@ export type ClientTokenEndpointAuthMethodOrNullEnum =
  */
 export interface ClientTokenExchangeConfiguration {
     /** List the enabled token exchange types for this client. */
-    allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[];
+    allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[] | undefined;
 }
 
 /**
@@ -2882,11 +2885,12 @@ export interface ClientTokenExchangeConfiguration {
  */
 export interface ClientTokenExchangeConfigurationOrNull {
     /** List the enabled token exchange types for this client. */
-    allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[];
+    allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[] | undefined;
 }
 
 export const ClientTokenExchangeTypeEnum = {
     CustomAuthentication: "custom_authentication",
+    OnBehalfOfTokenExchange: "on_behalf_of_token_exchange",
 } as const;
 export type ClientTokenExchangeTypeEnum =
     (typeof ClientTokenExchangeTypeEnum)[keyof typeof ClientTokenExchangeTypeEnum];
@@ -2902,11 +2906,11 @@ export interface ConnectedAccount {
     strategy: string;
     access_type: Management.ConnectedAccountAccessTypeEnum;
     /** The scopes granted for this connected account. */
-    scopes?: string[];
+    scopes?: string[] | undefined;
     /** ISO 8601 timestamp when the connected account was created. */
     created_at: string;
     /** ISO 8601 timestamp when the connected account expires. */
-    expires_at?: string;
+    expires_at?: string | undefined;
 }
 
 /** The access type for the connected account. */
@@ -2915,6 +2919,11 @@ export const ConnectedAccountAccessTypeEnum = {
 } as const;
 export type ConnectedAccountAccessTypeEnum =
     (typeof ConnectedAccountAccessTypeEnum)[keyof typeof ConnectedAccountAccessTypeEnum];
+
+/**
+ * The URL of the OAuth 1.0a access-token endpoint. This endpoint is used to exchange the temporary request token obtained from the request-token endpoint for an access token during the OAuth 1.0a authentication flow.
+ */
+export type ConnectionAccessTokenUrloAuth1 = Management.ConnectionHttpsUrlWithHttpFallback255;
 
 /**
  * A list of the Authentication Context Class References that this OP supports
@@ -2977,8 +2986,8 @@ export type ConnectionAppDomainAzureAd = string;
 
 export interface ConnectionAttributeIdentifier {
     /** Determines if the attribute is used for identification */
-    active?: boolean;
-    default_method?: Management.DefaultMethodEmailIdentifierEnum;
+    active?: boolean | undefined;
+    default_method?: Management.DefaultMethodEmailIdentifierEnum | undefined;
 }
 
 /**
@@ -2990,18 +2999,18 @@ export type ConnectionAttributeMapAttributes = Record<string, unknown>;
  * Configuration for mapping claims from the identity provider to Auth0 user profile attributes. Allows customizing which IdP claims populate user fields and how they are transformed.
  */
 export interface ConnectionAttributeMapOidc {
-    attributes?: Management.ConnectionAttributeMapAttributes;
-    mapping_mode?: Management.ConnectionMappingModeEnumOidc;
-    userinfo_scope?: Management.ConnectionAttributeMapUserinfoScope;
+    attributes?: Management.ConnectionAttributeMapAttributes | undefined;
+    mapping_mode?: Management.ConnectionMappingModeEnumOidc | undefined;
+    userinfo_scope?: Management.ConnectionAttributeMapUserinfoScope | undefined;
 }
 
 /**
  * Mapping of claims received from the identity provider (IdP)
  */
 export interface ConnectionAttributeMapOkta {
-    attributes?: Management.ConnectionAttributeMapAttributes;
-    mapping_mode?: Management.ConnectionMappingModeEnumOkta;
-    userinfo_scope?: Management.ConnectionAttributeMapUserinfoScope;
+    attributes?: Management.ConnectionAttributeMapAttributes | undefined;
+    mapping_mode?: Management.ConnectionMappingModeEnumOkta | undefined;
+    userinfo_scope?: Management.ConnectionAttributeMapUserinfoScope | undefined;
 }
 
 /**
@@ -3013,9 +3022,9 @@ export type ConnectionAttributeMapUserinfoScope = string;
  * Attribute configuration
  */
 export interface ConnectionAttributes {
-    email?: Management.EmailAttribute;
-    phone_number?: Management.PhoneAttribute;
-    username?: Management.UsernameAttribute;
+    email?: Management.EmailAttribute | undefined;
+    phone_number?: Management.PhoneAttribute | undefined;
+    username?: Management.UsernameAttribute | undefined;
 }
 
 /**
@@ -3042,10 +3051,10 @@ export type ConnectionAuthParamsOAuth2 = Record<string, Management.ConnectionAut
  * Options for enabling authentication methods.
  */
 export interface ConnectionAuthenticationMethods {
-    password?: Management.ConnectionPasswordAuthenticationMethod;
-    passkey?: Management.ConnectionPasskeyAuthenticationMethod;
-    email_otp?: Management.ConnectionEmailOtpAuthenticationMethod;
-    phone_otp?: Management.ConnectionPhoneOtpAuthenticationMethod;
+    password?: Management.ConnectionPasswordAuthenticationMethod | undefined;
+    passkey?: Management.ConnectionPasskeyAuthenticationMethod | undefined;
+    email_otp?: Management.ConnectionEmailOtpAuthenticationMethod | undefined;
+    phone_otp?: Management.ConnectionPhoneOtpAuthenticationMethod | undefined;
 }
 
 /**
@@ -3138,6 +3147,16 @@ export type ConnectionClientIdGoogleOAuth2 = string;
  */
 export type ConnectionClientIdLine = string;
 
+/**
+ * LinkedIn application client identifier
+ */
+export type ConnectionClientIdLinkedin = string;
+
+/**
+ * OAuth 1.0a client ID (consumer key) that identifies the client to the provider and is used to sign OAuth 1.0a requests.
+ */
+export type ConnectionClientIdOAuth1 = Management.ConnectionClientId;
+
 export type ConnectionClientIdOAuth2 = Management.ConnectionClientId;
 
 export type ConnectionClientIdOidc = Management.ConnectionClientId;
@@ -3204,6 +3223,16 @@ export type ConnectionClientSecretGoogleOAuth2 = string;
  */
 export type ConnectionClientSecretLine = string;
 
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. This value is used to authenticate your Auth0 connection to the identity provider.
+ */
+export type ConnectionClientSecretLinkedin = string;
+
+/**
+ * OAuth 1.0a client secret paired with the consumer key to sign request-token and access-token requests for this connection. Treat as a sensitive credential and supply the exact secret issued by the upstream provider.
+ */
+export type ConnectionClientSecretOAuth1 = Management.ConnectionClientSecret;
+
 export type ConnectionClientSecretOAuth2 = Management.ConnectionClientSecret;
 
 export type ConnectionClientSecretOidc = Management.ConnectionClientSecret;
@@ -3221,10 +3250,10 @@ export type ConnectionClientSecretSalesforce = string;
 export type ConnectionClientSecretWindowsLive = Management.ConnectionClientSecret;
 
 export interface ConnectionCommon {
-    display_name?: Management.ConnectionDisplayName;
-    enabled_clients?: Management.ConnectionEnabledClients;
-    is_domain_connection?: Management.ConnectionIsDomainConnection;
-    metadata?: Management.ConnectionsMetadata;
+    display_name?: Management.ConnectionDisplayName | undefined;
+    enabled_clients?: Management.ConnectionEnabledClients | undefined;
+    is_domain_connection?: Management.ConnectionIsDomainConnection | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
 }
 
 /**
@@ -3242,14 +3271,14 @@ export type ConnectionConfiguration = Record<string, string>;
  */
 export interface ConnectionConnectedAccountsPurpose {
     active: boolean;
-    cross_app_access?: boolean;
+    cross_app_access?: boolean | undefined;
 }
 
 /**
  * Configure the purpose of a connection to be used for connected accounts and Token Vault.
  */
 export interface ConnectionConnectedAccountsPurposeXaa {
-    cross_app_access?: boolean;
+    cross_app_access?: boolean | undefined;
     active: boolean;
 }
 
@@ -3257,7 +3286,7 @@ export interface ConnectionConnectedAccountsPurposeXaa {
  * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
  */
 export interface ConnectionConnectionSettings {
-    pkce?: Management.ConnectionConnectionSettingsPkceEnum;
+    pkce?: Management.ConnectionConnectionSettingsPkceEnum | undefined;
 }
 
 /** PKCE configuration. */
@@ -3279,15 +3308,15 @@ export type ConnectionCustomHeadersOAuth2 = Record<string, string>;
  * A map of scripts used to integrate with a custom database.
  */
 export interface ConnectionCustomScripts {
-    login?: string;
-    get_user?: string;
-    delete?: string;
-    change_password?: string;
-    verify?: string;
-    create?: string;
-    change_username?: string;
-    change_email?: string;
-    change_phone_number?: string;
+    login?: string | undefined;
+    get_user?: string | undefined;
+    delete?: string | undefined;
+    change_password?: string | undefined;
+    verify?: string | undefined;
+    create?: string | undefined;
+    change_username?: string | undefined;
+    change_email?: string | undefined;
+    change_phone_number?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -3391,6 +3420,19 @@ export type ConnectionDomainGoogleApps = string;
  */
 export type ConnectionDomainOkta = string;
 
+/** Algorithm used for DPoP proof JWT signing. */
+export const ConnectionDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Ed25519: "Ed25519",
+} as const;
+export type ConnectionDpopSigningAlgEnum =
+    (typeof ConnectionDpopSigningAlgEnum)[keyof typeof ConnectionDpopSigningAlgEnum];
+
+/**
+ * JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing.
+ */
+export type ConnectionDpopSigningAlgValuesSupported = string[];
+
 /**
  * Email body content
  */
@@ -3400,11 +3442,11 @@ export type ConnectionEmailBodyEmail = string;
  * Email template configuration
  */
 export interface ConnectionEmailEmail {
-    body?: Management.ConnectionEmailBodyEmail;
-    from?: Management.ConnectionEmailFromEmail;
-    subject?: Management.ConnectionEmailSubjectEmail;
+    body?: Management.ConnectionEmailBodyEmail | undefined;
+    from?: Management.ConnectionEmailFromEmail | undefined;
+    subject?: Management.ConnectionEmailSubjectEmail | undefined;
     /** Email template syntax type */
-    syntax?: ConnectionEmailEmail.Syntax;
+    syntax?: ConnectionEmailEmail.Syntax | undefined;
 }
 
 export namespace ConnectionEmailEmail {
@@ -3425,7 +3467,7 @@ export type ConnectionEmailFromEmail = string;
  */
 export interface ConnectionEmailOtpAuthenticationMethod {
     /** Determines whether email OTP is enabled */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
 }
 
 /**
@@ -3524,7 +3566,7 @@ export type ConnectionExtProfile = boolean;
  */
 export interface ConnectionFederatedConnectionsAccessTokens {
     /** Enables refresh tokens and access tokens collection for federated connections */
-    active?: boolean;
+    active?: boolean | undefined;
 }
 
 /**
@@ -3543,23 +3585,23 @@ export namespace ConnectionFieldsMapSaml {
 
 export interface ConnectionForList {
     /** The name of the connection */
-    name?: string;
+    name?: string | undefined;
     /** Connection name used in login screen */
-    display_name?: string;
-    options?: Management.ConnectionOptions;
+    display_name?: string | undefined;
+    options?: Management.ConnectionOptions | undefined;
     /** The connection's identifier */
-    id?: string;
+    id?: string | undefined;
     /** The type of the connection, related to the identity provider */
-    strategy?: string;
+    strategy?: string | undefined;
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
-    realms?: string[];
+    realms?: string[] | undefined;
     /** True if the connection is domain level */
-    is_domain_connection?: boolean;
+    is_domain_connection?: boolean | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. */
-    show_as_button?: boolean;
-    metadata?: Management.ConnectionsMetadata;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    show_as_button?: boolean | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
 }
 
 /**
@@ -3569,11 +3611,11 @@ export interface ConnectionForOrganization {
     /** ID of the connection. */
     connection_id: string;
     /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
-    assign_membership_on_login?: boolean;
+    assign_membership_on_login?: boolean | undefined;
     /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
-    show_as_button?: boolean;
+    show_as_button?: boolean | undefined;
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
-    is_signup_enabled?: boolean;
+    is_signup_enabled?: boolean | undefined;
 }
 
 /**
@@ -3590,6 +3632,11 @@ export type ConnectionFreeformScopesAmazon = Management.ConnectionScopeArray;
  * Array of custom OAuth 2.0 scopes to request from Google during authentication. Use this to request scopes not covered by the predefined scope options.
  */
 export type ConnectionFreeformScopesGoogleOAuth2 = Management.ConnectionScopeArray;
+
+/**
+ * Array of custom OAuth 2.0 scopes to request from Linkedin during authentication. Use this to request scopes not covered by the predefined scope options.
+ */
+export type ConnectionFreeformScopesLinkedin = Management.ConnectionScopeArray;
 
 /**
  * Additional OAuth scopes to request from PayPal beyond the standard attribute scopes. Enter valid PayPal scopes from their documentation. Invalid scopes may cause authentication errors.
@@ -3618,13 +3665,13 @@ export interface ConnectionGatewayAuthentication {
     /** The Authorization header type. */
     method: string;
     /** The subject to be added to the JWT payload. */
-    subject?: string;
+    subject?: string | undefined;
     /** The audience to be added to the JWT payload. */
     audience: string;
     /** The secret to be used for signing tokens. */
     secret: string;
     /** Set to true if the provided secret is base64 encoded. */
-    secret_base64_encoded?: boolean;
+    secret_base64_encoded?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -3648,8 +3695,8 @@ export interface ConnectionGatewayAuthenticationSms {
     /** The secret used to sign the JSON Web Token sent to the SMS gateway */
     secret: string;
     /** Set to true if the secret is base64-url-encoded */
-    secret_base64_encoded?: boolean;
-    subject?: Management.ConnectionGatewayAuthenticationSubjectSms;
+    secret_base64_encoded?: boolean | undefined;
+    subject?: Management.ConnectionGatewayAuthenticationSubjectSms | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -3737,10 +3784,13 @@ export type ConnectionIdTokenEncryptionEncValuesSupported = string[];
 
 /** Algorithm allowed to verify the ID tokens. */
 export const ConnectionIdTokenSignedResponseAlgEnum = {
-    Rs256: "RS256",
-    Rs512: "RS512",
-    Ps256: "PS256",
     Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
 } as const;
 export type ConnectionIdTokenSignedResponseAlgEnum =
     (typeof ConnectionIdTokenSignedResponseAlgEnum)[keyof typeof ConnectionIdTokenSignedResponseAlgEnum];
@@ -3877,23 +3927,23 @@ export interface ConnectionKey {
     /** The public certificate of the signing key */
     cert: string;
     /** The public certificate of the signing key in pkcs7 format */
-    pkcs?: string;
+    pkcs?: string | undefined;
     /** True if the key is the the current key */
-    current?: boolean;
+    current?: boolean | undefined;
     /** True if the key is the the next key */
-    next?: boolean;
+    next?: boolean | undefined;
     /** True if the key is the the previous key */
-    previous?: boolean;
+    previous?: boolean | undefined;
     /** The date and time when the key became the current key */
-    current_since?: string;
+    current_since?: string | undefined;
     /** The cert fingerprint */
     fingerprint: string;
     /** The cert thumbprint */
     thumbprint: string;
     /** Signing key algorithm */
-    algorithm?: string;
-    key_use?: Management.ConnectionKeyUseEnum;
-    subject_dn?: string;
+    algorithm?: string | undefined;
+    key_use?: Management.ConnectionKeyUseEnum | undefined;
+    subject_dn?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -3956,9 +4006,9 @@ export type ConnectionMetadataXmlSaml = Management.ConnectionMetadataXml;
  */
 export interface ConnectionMfa {
     /** Indicates whether MFA is active for this connection */
-    active?: boolean;
+    active?: boolean | undefined;
     /** Indicates whether to return MFA enrollment settings */
-    return_enroll_settings?: boolean;
+    return_enroll_settings?: boolean | undefined;
 }
 
 /**
@@ -3989,27 +4039,27 @@ export type ConnectionOptions = Record<string, unknown>;
  * Options for the 'ad' connection
  */
 export interface ConnectionOptionsAd extends Management.ConnectionOptionsCommon {
-    agentIP?: Management.ConnectionAgentIpad;
-    agentMode?: Management.ConnectionAgentModeAd;
-    agentVersion?: Management.ConnectionAgentVersionAd;
-    brute_force_protection?: Management.ConnectionBruteForceProtection;
+    agentIP?: Management.ConnectionAgentIpad | undefined;
+    agentMode?: Management.ConnectionAgentModeAd | undefined;
+    agentVersion?: Management.ConnectionAgentVersionAd | undefined;
+    brute_force_protection?: Management.ConnectionBruteForceProtection | undefined;
     /** Enables client SSL certificate authentication for the AD connector, requiring HTTPS on the sign-in endpoint */
-    certAuth?: boolean;
-    certs?: Management.ConnectionCertsAd;
+    certAuth?: boolean | undefined;
+    certs?: Management.ConnectionCertsAd | undefined;
     /** When enabled, disables caching of AD connector authentication results to ensure real-time validation against the directory */
-    disable_cache?: boolean;
+    disable_cache?: boolean | undefined;
     /** When enabled, hides the 'Forgot Password' link on login pages to prevent users from initiating self-service password resets */
-    disable_self_service_change_password?: boolean;
-    domain_aliases?: Management.ConnectionDomainAliasesAd;
-    icon_url?: Management.ConnectionIconUrl;
-    ips?: Management.ConnectionIpsAd;
+    disable_self_service_change_password?: boolean | undefined;
+    domain_aliases?: Management.ConnectionDomainAliasesAd | undefined;
+    icon_url?: Management.ConnectionIconUrl | undefined;
+    ips?: Management.ConnectionIpsAd | undefined;
     /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
-    kerberos?: boolean;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    signInEndpoint?: Management.ConnectionSignInEndpointAd;
-    tenant_domain?: Management.ConnectionTenantDomainAd;
-    thumbprints?: Management.ConnectionThumbprintsAd;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    kerberos?: boolean | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    signInEndpoint?: Management.ConnectionSignInEndpointAd | undefined;
+    tenant_domain?: Management.ConnectionTenantDomainAd | undefined;
+    thumbprints?: Management.ConnectionThumbprintsAd | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4019,21 +4069,21 @@ export interface ConnectionOptionsAd extends Management.ConnectionOptionsCommon 
  */
 export interface ConnectionOptionsAdfs extends Management.ConnectionOptionsCommon {
     /** ADFS federation metadata host or XML URL used to discover WS-Fed endpoints and certificates. Errors if adfs_server and fedMetadataXml are both absent. */
-    adfs_server?: string;
-    domain_aliases?: Management.ConnectionDomainAliases;
+    adfs_server?: string | undefined;
+    domain_aliases?: Management.ConnectionDomainAliases | undefined;
     /** The entity identifier (Issuer) for the ADFS Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. */
-    entityId?: string;
-    fedMetadataXml?: Management.ConnectionMetadataXmlAdfs;
-    icon_url?: Management.ConnectionIconUrlAdfs;
-    prev_thumbprints?: Management.ConnectionThumbprints;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    should_trust_email_verified_connection?: Management.ConnectionShouldTrustEmailVerifiedConnectionEnum;
-    signInEndpoint?: Management.ConnectionSignInEndpointAdfs;
-    tenant_domain?: Management.ConnectionTenantDomain;
-    thumbprints?: Management.ConnectionThumbprints;
-    upstream_params?: (Management.ConnectionUpstreamParamsAdfs | undefined) | null;
+    entityId?: string | undefined;
+    fedMetadataXml?: Management.ConnectionMetadataXmlAdfs | undefined;
+    icon_url?: Management.ConnectionIconUrlAdfs | undefined;
+    prev_thumbprints?: Management.ConnectionThumbprints | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    should_trust_email_verified_connection?: Management.ConnectionShouldTrustEmailVerifiedConnectionEnum | undefined;
+    signInEndpoint?: Management.ConnectionSignInEndpointAdfs | undefined;
+    tenant_domain?: Management.ConnectionTenantDomain | undefined;
+    thumbprints?: Management.ConnectionThumbprints | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParamsAdfs | undefined) | null) | undefined;
     /** Custom ADFS claim to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single ADFS claim name). */
-    user_id_attribute?: string;
+    user_id_attribute?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4050,16 +4100,16 @@ export interface ConnectionOptionsAol extends Management.ConnectionOptionsOAuth2
  * Options for the 'amazon' connection
  */
 export interface ConnectionOptionsAmazon extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientIdAmazon;
-    client_secret?: Management.ConnectionClientSecretAmazon;
-    freeform_scopes?: Management.ConnectionFreeformScopesAmazon;
+    client_id?: Management.ConnectionClientIdAmazon | undefined;
+    client_secret?: Management.ConnectionClientSecretAmazon | undefined;
+    freeform_scopes?: Management.ConnectionFreeformScopesAmazon | undefined;
     /** When enabled, requests the user's postal code from Amazon during authentication. This adds the 'postal_code' scope to the authorization request. */
-    postal_code?: boolean;
+    postal_code?: boolean | undefined;
     /** When enabled, requests the user's basic profile information (name, email, user ID) from Amazon during authentication. This scope is always enabled for Amazon connections. */
-    profile?: boolean;
-    scope?: Management.ConnectionScopeAmazon;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    profile?: boolean | undefined;
+    scope?: Management.ConnectionScopeAmazon | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4069,23 +4119,23 @@ export interface ConnectionOptionsAmazon extends Management.ConnectionOptionsCom
  */
 export interface ConnectionOptionsApple extends Management.ConnectionOptionsCommon {
     /** Apple App Secret (must be a PEM) */
-    app_secret?: string | null;
+    app_secret?: (string | null) | undefined;
     /** Apple Services ID */
-    client_id?: string | null;
+    client_id?: (string | null) | undefined;
     /** User has the option to obfuscate the email with Apple's relay service */
-    email?: boolean;
+    email?: boolean | undefined;
     /** Array of freeform scopes */
-    freeform_scopes?: string[];
+    freeform_scopes?: string[] | undefined;
     /** Apple Key ID */
-    kid?: string | null;
+    kid?: (string | null) | undefined;
     /** Whether to request name from Apple */
-    name?: boolean;
+    name?: boolean | undefined;
     /** Space separated list of scopes */
-    scope?: string;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    scope?: string | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     /** Apple Team ID */
-    team_id?: string | null;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    team_id?: (string | null) | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4094,27 +4144,27 @@ export interface ConnectionOptionsApple extends Management.ConnectionOptionsComm
  * Options for the 'auth0' connection
  */
 export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsCommon {
-    attributes?: Management.ConnectionAttributes;
-    authentication_methods?: Management.ConnectionAuthenticationMethods | null;
-    brute_force_protection?: Management.ConnectionBruteForceProtection;
-    configuration?: Management.ConnectionConfiguration;
-    customScripts?: Management.ConnectionCustomScripts;
-    disable_self_service_change_password?: Management.ConnectionDisableSelfServiceChangePassword;
-    disable_signup?: Management.ConnectionDisableSignup;
-    enable_script_context?: Management.ConnectionEnableScriptContext;
-    enabledDatabaseCustomization?: Management.ConnectionEnabledDatabaseCustomization;
-    import_mode?: Management.ConnectionImportMode;
-    mfa?: Management.ConnectionMfa;
-    passkey_options?: Management.ConnectionPasskeyOptions | null;
-    passwordPolicy?: Management.ConnectionPasswordPolicyEnum | null;
-    password_complexity_options?: Management.ConnectionPasswordComplexityOptions | null;
-    password_dictionary?: Management.ConnectionPasswordDictionaryOptions | null;
-    password_history?: Management.ConnectionPasswordHistoryOptions | null;
-    password_no_personal_info?: Management.ConnectionPasswordNoPersonalInfoOptions | null;
-    precedence?: Management.ConnectionIdentifierPrecedence;
-    realm_fallback?: Management.ConnectionRealmFallback;
-    requires_username?: Management.ConnectionRequiresUsername;
-    validation?: Management.ConnectionValidationOptions | null;
+    attributes?: Management.ConnectionAttributes | undefined;
+    authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
+    brute_force_protection?: Management.ConnectionBruteForceProtection | undefined;
+    configuration?: Management.ConnectionConfiguration | undefined;
+    customScripts?: Management.ConnectionCustomScripts | undefined;
+    disable_self_service_change_password?: Management.ConnectionDisableSelfServiceChangePassword | undefined;
+    disable_signup?: Management.ConnectionDisableSignup | undefined;
+    enable_script_context?: Management.ConnectionEnableScriptContext | undefined;
+    enabledDatabaseCustomization?: Management.ConnectionEnabledDatabaseCustomization | undefined;
+    import_mode?: Management.ConnectionImportMode | undefined;
+    mfa?: Management.ConnectionMfa | undefined;
+    passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
+    passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
+    password_complexity_options?: (Management.ConnectionPasswordComplexityOptions | null) | undefined;
+    password_dictionary?: (Management.ConnectionPasswordDictionaryOptions | null) | undefined;
+    password_history?: (Management.ConnectionPasswordHistoryOptions | null) | undefined;
+    password_no_personal_info?: (Management.ConnectionPasswordNoPersonalInfoOptions | null) | undefined;
+    precedence?: Management.ConnectionIdentifierPrecedence | undefined;
+    realm_fallback?: Management.ConnectionRealmFallback | undefined;
+    requires_username?: Management.ConnectionRequiresUsername | undefined;
+    validation?: (Management.ConnectionValidationOptions | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4123,8 +4173,8 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
  * Options for the 'auth0-oidc' connection
  */
 export interface ConnectionOptionsAuth0Oidc {
-    client_id?: Management.ConnectionClientId;
-    client_secret?: Management.ConnectionClientSecret;
+    client_id?: Management.ConnectionClientId | undefined;
+    client_secret?: Management.ConnectionClientSecret | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4134,115 +4184,115 @@ export interface ConnectionOptionsAuth0Oidc {
  */
 export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCommon {
     /** Enable users API */
-    api_enable_users?: boolean;
-    app_domain?: Management.ConnectionAppDomainAzureAd;
+    api_enable_users?: boolean | undefined;
+    app_domain?: Management.ConnectionAppDomainAzureAd | undefined;
     /** The Application ID URI (App ID URI) for the Azure AD application. Required when using Azure AD v1 with the Resource Owner Password flow. Used to identify the resource being requested in OAuth token requests. */
-    app_id?: string;
+    app_id?: string | undefined;
     /** Includes basic user profile information from Azure AD (name, email, given_name, family_name). Always enabled and required - represents the minimum profile data retrieved during authentication. */
-    basic_profile?: boolean;
-    client_id?: Management.ConnectionClientIdAzureAd;
-    client_secret?: Management.ConnectionClientSecretAzureAd;
-    domain_aliases?: Management.ConnectionDomainAliasesAzureAd;
+    basic_profile?: boolean | undefined;
+    client_id?: Management.ConnectionClientIdAzureAd | undefined;
+    client_secret?: Management.ConnectionClientSecretAzureAd | undefined;
+    domain_aliases?: Management.ConnectionDomainAliasesAzureAd | undefined;
     /** When false, prevents storing the user's Azure AD access token in the Auth0 user profile. When true (default), the access token is persisted for API access. */
-    ext_access_token?: boolean;
+    ext_access_token?: boolean | undefined;
     /** When false, prevents storing whether the user's Azure AD account is enabled. When true (default), the account enabled status is persisted in the user profile. */
-    ext_account_enabled?: boolean;
-    ext_admin?: Management.ConnectionExtAdmin;
-    ext_agreed_terms?: Management.ConnectionExtAgreedTerms;
+    ext_account_enabled?: boolean | undefined;
+    ext_admin?: Management.ConnectionExtAdmin | undefined;
+    ext_agreed_terms?: Management.ConnectionExtAgreedTerms | undefined;
     /** When false, prevents storing the list of Microsoft 365/Office 365 licenses assigned to the user. When true (default), license information is persisted in the user profile. */
-    ext_assigned_licenses?: boolean;
-    ext_assigned_plans?: Management.ConnectionExtAssignedPlans;
+    ext_assigned_licenses?: boolean | undefined;
+    ext_assigned_plans?: Management.ConnectionExtAssignedPlans | undefined;
     /** When false, prevents storing the user's Azure ID identifier. When true (default), the Azure ID is persisted. Note: 'oid' (Object ID) is the recommended unique identifier for single-tenant connections. */
-    ext_azure_id?: boolean;
+    ext_azure_id?: boolean | undefined;
     /** When false, prevents storing the user's city from Azure AD. When true (default), city information is persisted in the user profile. */
-    ext_city?: boolean;
+    ext_city?: boolean | undefined;
     /** When false, prevents storing the user's country from Azure AD. When true (default), country information is persisted in the user profile. */
-    ext_country?: boolean;
+    ext_country?: boolean | undefined;
     /** When false, prevents storing the user's department from Azure AD. When true (default), department information is persisted in the user profile. */
-    ext_department?: boolean;
+    ext_department?: boolean | undefined;
     /** When false, prevents storing whether directory synchronization is enabled for the user. When true (default), directory sync status is persisted in the user profile. */
-    ext_dir_sync_enabled?: boolean;
+    ext_dir_sync_enabled?: boolean | undefined;
     /** When false, prevents storing the user's email address from Azure AD. When true (default), email is persisted in the user profile. */
-    ext_email?: boolean;
+    ext_email?: boolean | undefined;
     /** When false, prevents storing the token expiration time (in seconds). When true (default), expiration information is persisted in the user profile. */
-    ext_expires_in?: boolean;
+    ext_expires_in?: boolean | undefined;
     /** When false, prevents storing the user's family name (last name) from Azure AD. When true (default), family name is persisted in the user profile. */
-    ext_family_name?: boolean;
+    ext_family_name?: boolean | undefined;
     /** When false, prevents storing the user's fax number from Azure AD. When true (default), fax information is persisted in the user profile. */
-    ext_fax?: boolean;
+    ext_fax?: boolean | undefined;
     /** When false, prevents storing the user's given name (first name) from Azure AD. When true (default), given name is persisted in the user profile. */
-    ext_given_name?: boolean;
+    ext_given_name?: boolean | undefined;
     /** When false, prevents storing the list of Azure AD group IDs the user is a member of. When true (default), group membership IDs are persisted. See ext_groups for retrieving group details. */
-    ext_group_ids?: boolean;
-    ext_groups?: Management.ConnectionExtGroupsAzureAd;
-    ext_is_suspended?: Management.ConnectionExtIsSuspended;
+    ext_group_ids?: boolean | undefined;
+    ext_groups?: Management.ConnectionExtGroupsAzureAd | undefined;
+    ext_is_suspended?: Management.ConnectionExtIsSuspended | undefined;
     /** When false, prevents storing the user's job title from Azure AD. When true (default), job title information is persisted in the user profile. */
-    ext_job_title?: boolean;
+    ext_job_title?: boolean | undefined;
     /** When false, prevents storing the timestamp of the last directory synchronization. When true (default), the last sync date is persisted in the user profile. */
-    ext_last_sync?: boolean;
+    ext_last_sync?: boolean | undefined;
     /** When false, prevents storing the user's mobile phone number from Azure AD. When true (default), mobile number is persisted in the user profile. */
-    ext_mobile?: boolean;
+    ext_mobile?: boolean | undefined;
     /** When false, prevents storing the user's full name from Azure AD. When true (default), full name is persisted in the user profile. */
-    ext_name?: boolean;
+    ext_name?: boolean | undefined;
     /** When true, stores all groups the user is member of, including transitive group memberships (groups within groups). When false (default), only direct group memberships are included. */
-    ext_nested_groups?: boolean;
+    ext_nested_groups?: boolean | undefined;
     /** When false, prevents storing the user's nickname or display name from Azure AD. When true (default), nickname is persisted in the user profile. */
-    ext_nickname?: boolean;
+    ext_nickname?: boolean | undefined;
     /** When false, prevents storing the user's Object ID (oid) from Azure AD. When true (default), the oid is persisted. Note: 'oid' is the recommended unique identifier for single-tenant connections and required for SCIM. */
-    ext_oid?: boolean;
+    ext_oid?: boolean | undefined;
     /** When false, prevents storing the user's phone number from Azure AD. When true (default), phone number is persisted in the user profile. */
-    ext_phone?: boolean;
+    ext_phone?: boolean | undefined;
     /** When false, prevents storing the user's office location from Azure AD. When true (default), office location is persisted in the user profile. */
-    ext_physical_delivery_office_name?: boolean;
+    ext_physical_delivery_office_name?: boolean | undefined;
     /** When false, prevents storing the user's postal code from Azure AD. When true (default), postal code is persisted in the user profile. */
-    ext_postal_code?: boolean;
+    ext_postal_code?: boolean | undefined;
     /** When false, prevents storing the user's preferred language from Azure AD. When true (default), language preference is persisted in the user profile. */
-    ext_preferred_language?: boolean;
-    ext_profile?: Management.ConnectionExtProfile;
+    ext_preferred_language?: boolean | undefined;
+    ext_profile?: Management.ConnectionExtProfile | undefined;
     /** When false, prevents storing the list of service plans provisioned to the user. When true (default), provisioned plans are persisted in the user profile. */
-    ext_provisioned_plans?: boolean;
+    ext_provisioned_plans?: boolean | undefined;
     /** When false, prevents storing provisioning errors that occurred during synchronization. When true (default), error information is persisted. Useful for troubleshooting sync issues. */
-    ext_provisioning_errors?: boolean;
+    ext_provisioning_errors?: boolean | undefined;
     /** When false, prevents storing all proxy email addresses (email aliases) for the user. When true (default), proxy addresses are persisted in the user profile. */
-    ext_proxy_addresses?: boolean;
+    ext_proxy_addresses?: boolean | undefined;
     /** When false, prevents storing the user's Passport User ID (puid). When true (default), puid is persisted in the user profile. Legacy attribute. */
-    ext_puid?: boolean;
+    ext_puid?: boolean | undefined;
     /** When false, prevents storing the Azure AD refresh token. When true (default), the refresh token is persisted for offline access. Required for token refresh in long-lived applications. */
-    ext_refresh_token?: boolean;
+    ext_refresh_token?: boolean | undefined;
     /** When false, prevents storing Azure AD application roles assigned to the user. When true (default), role information is persisted. Useful for RBAC in applications. */
-    ext_roles?: boolean;
+    ext_roles?: boolean | undefined;
     /** When false, prevents storing the user's state (province/region) from Azure AD. When true (default), state information is persisted in the user profile. */
-    ext_state?: boolean;
+    ext_state?: boolean | undefined;
     /** When false, prevents storing the user's street address from Azure AD. When true (default), street address is persisted in the user profile. */
-    ext_street?: boolean;
+    ext_street?: boolean | undefined;
     /** When false, prevents storing the user's telephone number from Azure AD. When true (default), telephone number is persisted in the user profile. */
-    ext_telephoneNumber?: boolean;
+    ext_telephoneNumber?: boolean | undefined;
     /** When false, prevents storing the user's Azure AD tenant ID. When true (default), tenant ID is persisted. Useful for identifying which Azure AD organization the user belongs to. */
-    ext_tenantid?: boolean;
+    ext_tenantid?: boolean | undefined;
     /** When false, prevents storing the user's User Principal Name (UPN) from Azure AD. When true (default), UPN is persisted. UPN is the user's logon name (e.g., user@contoso.com). */
-    ext_upn?: boolean;
+    ext_upn?: boolean | undefined;
     /** When false, prevents storing the user's usage location for license assignment. When true (default), usage location is persisted in the user profile. */
-    ext_usage_location?: boolean;
+    ext_usage_location?: boolean | undefined;
     /** When false, prevents storing an alternative user ID. When true (default), this user ID is persisted in the user profile. */
-    ext_user_id?: boolean;
-    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
+    ext_user_id?: boolean | undefined;
+    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     /** Indicates whether admin consent has been granted for the required Azure AD permissions. Read-only status field managed by Auth0 during the OAuth authorization flow. */
-    granted?: boolean;
-    icon_url?: Management.ConnectionIconUrlAzureAd;
-    identity_api?: Management.ConnectionIdentityApiAzureAd;
-    max_groups_to_retrieve?: Management.ConnectionMaxGroupsToRetrieve;
-    scope?: Management.ConnectionScopeAzureAd;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    should_trust_email_verified_connection?: Management.ConnectionShouldTrustEmailVerifiedConnectionEnum;
-    tenant_domain?: Management.ConnectionTenantDomainAzureAdOne;
-    tenantId?: Management.ConnectionTenantIdAzureAd;
-    thumbprints?: Management.ConnectionThumbprints;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    granted?: boolean | undefined;
+    icon_url?: Management.ConnectionIconUrlAzureAd | undefined;
+    identity_api?: Management.ConnectionIdentityApiAzureAd | undefined;
+    max_groups_to_retrieve?: Management.ConnectionMaxGroupsToRetrieve | undefined;
+    scope?: Management.ConnectionScopeAzureAd | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    should_trust_email_verified_connection?: Management.ConnectionShouldTrustEmailVerifiedConnectionEnum | undefined;
+    tenant_domain?: Management.ConnectionTenantDomainAzureAdOne | undefined;
+    tenantId?: Management.ConnectionTenantIdAzureAd | undefined;
+    thumbprints?: Management.ConnectionThumbprints | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Indicates WS-Federation protocol usage. When true, uses WS-Federation; when false, uses OpenID Connect. */
-    use_wsfed?: boolean;
-    useCommonEndpoint?: Management.ConnectionUseCommonEndpointAzureAd;
-    userid_attribute?: Management.ConnectionUseridAttributeAzureAd;
-    waad_protocol?: Management.ConnectionWaadProtocol;
+    use_wsfed?: boolean | undefined;
+    useCommonEndpoint?: Management.ConnectionUseCommonEndpointAzureAd | undefined;
+    userid_attribute?: Management.ConnectionUseridAttributeAzureAd | undefined;
+    waad_protocol?: Management.ConnectionWaadProtocol | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4259,12 +4309,12 @@ export interface ConnectionOptionsBaidu extends Management.ConnectionOptionsOAut
  * Options for the 'bitbucket' connection
  */
 export interface ConnectionOptionsBitbucket extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientIdBitbucket;
-    client_secret?: Management.ConnectionClientSecretBitbucket;
-    freeform_scopes?: Management.ConnectionScopeArray;
-    profile?: Management.ConnectionProfileBitbucket;
-    scope?: Management.ConnectionScopeArray;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    client_id?: Management.ConnectionClientIdBitbucket | undefined;
+    client_secret?: Management.ConnectionClientSecretBitbucket | undefined;
+    freeform_scopes?: Management.ConnectionScopeArray | undefined;
+    profile?: Management.ConnectionProfileBitbucket | undefined;
+    scope?: Management.ConnectionScopeArray | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4309,33 +4359,34 @@ export type ConnectionOptionsClientSecretTwitter = string;
  * Common attributes for connection options including non-persistent attributes and Cross App Access
  */
 export interface ConnectionOptionsCommon {
-    non_persistent_attrs?: Management.ConnectionNonPersistentAttrs;
+    non_persistent_attrs?: Management.ConnectionNonPersistentAttrs | undefined;
 }
 
 /**
  * common options for OIDC connections
  */
 export interface ConnectionOptionsCommonOidc {
-    authorization_endpoint?: Management.ConnectionAuthorizationEndpoint;
+    authorization_endpoint?: Management.ConnectionAuthorizationEndpoint | undefined;
     client_id: Management.ConnectionClientIdOidc;
-    client_secret?: Management.ConnectionClientSecretOidc;
-    connection_settings?: Management.ConnectionConnectionSettings;
-    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
-    domain_aliases?: Management.ConnectionDomainAliases;
-    icon_url?: Management.ConnectionIconUrl;
-    id_token_signed_response_algs?: (Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null;
-    issuer?: Management.ConnectionIssuer;
-    jwks_uri?: Management.ConnectionJwksUri;
-    oidc_metadata?: Management.ConnectionOptionsOidcMetadata;
-    scope?: Management.ConnectionScopeOidc;
-    send_back_channel_nonce?: Management.ConnectionSendBackChannelNonce;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    tenant_domain?: Management.ConnectionTenantDomain;
-    token_endpoint?: Management.ConnectionTokenEndpointOidc;
-    token_endpoint_auth_method?: Management.ConnectionTokenEndpointAuthMethodEnum | null;
-    token_endpoint_auth_signing_alg?: Management.ConnectionTokenEndpointAuthSigningAlgEnum | null;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
-    userinfo_endpoint?: Management.ConnectionUserinfoEndpointOidc;
+    client_secret?: Management.ConnectionClientSecretOidc | undefined;
+    connection_settings?: Management.ConnectionConnectionSettings | undefined;
+    domain_aliases?: Management.ConnectionDomainAliases | undefined;
+    dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
+    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
+    icon_url?: Management.ConnectionIconUrl | undefined;
+    id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
+    issuer?: Management.ConnectionIssuer | undefined;
+    jwks_uri?: Management.ConnectionJwksUri | undefined;
+    oidc_metadata?: Management.ConnectionOptionsOidcMetadata | undefined;
+    scope?: Management.ConnectionScopeOidc | undefined;
+    send_back_channel_nonce?: Management.ConnectionSendBackChannelNonce | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    tenant_domain?: Management.ConnectionTenantDomain | undefined;
+    token_endpoint?: Management.ConnectionTokenEndpointOidc | undefined;
+    token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
+    token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+    userinfo_endpoint?: Management.ConnectionUserinfoEndpointOidc | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4344,21 +4395,21 @@ export interface ConnectionOptionsCommonOidc {
  * Common options for SAML-based enterprise connections (shared by samlp and pingfederate).
  */
 export interface ConnectionOptionsCommonSaml {
-    cert?: Management.ConnectionSigningCertificateDerSaml;
-    decryptionKey?: Management.ConnectionDecryptionKeySaml;
-    digestAlgorithm?: Management.ConnectionDigestAlgorithmSaml;
-    domain_aliases?: Management.ConnectionDomainAliasesSaml;
-    entityId?: Management.ConnectionEntityIdSaml;
-    icon_url?: Management.ConnectionIconUrlSaml;
-    idpinitiated?: Management.ConnectionOptionsIdpinitiatedSaml;
-    protocolBinding?: Management.ConnectionProtocolBindingSaml;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    signInEndpoint?: Management.ConnectionSignInEndpointSaml;
-    signSAMLRequest?: Management.ConnectionSignSamlRequestSaml;
-    signatureAlgorithm?: Management.ConnectionSignatureAlgorithmSaml;
-    tenant_domain?: Management.ConnectionTenantDomainSaml;
-    thumbprints?: Management.ConnectionThumbprintsSaml;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    cert?: Management.ConnectionSigningCertificateDerSaml | undefined;
+    decryptionKey?: Management.ConnectionDecryptionKeySaml | undefined;
+    digestAlgorithm?: Management.ConnectionDigestAlgorithmSaml | undefined;
+    domain_aliases?: Management.ConnectionDomainAliasesSaml | undefined;
+    entityId?: Management.ConnectionEntityIdSaml | undefined;
+    icon_url?: Management.ConnectionIconUrlSaml | undefined;
+    idpinitiated?: Management.ConnectionOptionsIdpinitiatedSaml | undefined;
+    protocolBinding?: Management.ConnectionProtocolBindingSaml | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    signInEndpoint?: Management.ConnectionSignInEndpointSaml | undefined;
+    signSAMLRequest?: Management.ConnectionSignSamlRequestSaml | undefined;
+    signatureAlgorithm?: Management.ConnectionSignatureAlgorithmSaml | undefined;
+    tenant_domain?: Management.ConnectionTenantDomainSaml | undefined;
+    thumbprints?: Management.ConnectionThumbprintsSaml | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
 }
 
 /**
@@ -4399,13 +4450,13 @@ export interface ConnectionOptionsDwolla extends Management.ConnectionOptionsOAu
  * Options for the 'email' connection
  */
 export interface ConnectionOptionsEmail extends Management.ConnectionOptionsCommon {
-    authParams?: Management.ConnectionAuthParamsEmail;
+    authParams?: Management.ConnectionAuthParamsEmail | undefined;
     brute_force_protection: Management.ConnectionBruteForceProtection;
-    disable_signup?: Management.ConnectionDisableSignup;
+    disable_signup?: Management.ConnectionDisableSignup | undefined;
     email: Management.ConnectionEmailEmail;
     /** Connection name */
     name: string;
-    totp?: Management.ConnectionTotpEmail;
+    totp?: Management.ConnectionTotpEmail | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4422,13 +4473,13 @@ export interface ConnectionOptionsEvernote extends Management.ConnectionOptionsO
  * Options for the 'exact' connection
  */
 export interface ConnectionOptionsExact extends Management.ConnectionOptionsCommon {
-    baseUrl?: Management.ConnectionBaseUrlExact;
-    client_id?: Management.ConnectionClientIdExact;
-    client_secret?: Management.ConnectionClientSecretExact;
+    baseUrl?: Management.ConnectionBaseUrlExact | undefined;
+    client_id?: Management.ConnectionClientIdExact | undefined;
+    client_secret?: Management.ConnectionClientSecretExact | undefined;
     /** Enables retrieval of basic profile attributes from Exact Online including name, username, picture, email, gender, and language. */
-    profile?: boolean;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    profile?: boolean | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4437,94 +4488,94 @@ export interface ConnectionOptionsExact extends Management.ConnectionOptionsComm
  * Options for the 'facebook' connection
  */
 export interface ConnectionOptionsFacebook extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientIdFacebook;
-    client_secret?: Management.ConnectionClientSecretFacebook;
-    freeform_scopes?: Management.ConnectionScopeArrayFacebook;
-    upstream_params?: Management.ConnectionUpstreamParamsFacebook;
-    scope?: Management.ConnectionScopeFacebook;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    client_id?: Management.ConnectionClientIdFacebook | undefined;
+    client_secret?: Management.ConnectionClientSecretFacebook | undefined;
+    freeform_scopes?: Management.ConnectionScopeArrayFacebook | undefined;
+    upstream_params?: Management.ConnectionUpstreamParamsFacebook | undefined;
+    scope?: Management.ConnectionScopeFacebook | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     /** Grants permission to both read and manage ads for ad accounts you own or have been granted access to by the owner. By default, your app may only access ad accounts owned by admins of the app when in developer mode. */
-    ads_management?: boolean;
+    ads_management?: boolean | undefined;
     /** Grants access to the Ads Insights API to pull ads report information for ad accounts you own or have been granted access to by the owner of other ad accounts. */
-    ads_read?: boolean;
+    ads_read?: boolean | undefined;
     /** Provides access to a social context. Deprecated on April 30th, 2019. */
-    allow_context_profile_field?: boolean;
+    allow_context_profile_field?: boolean | undefined;
     /** Grants permission to read and write with the Business Manager API. */
-    business_management?: boolean;
+    business_management?: boolean | undefined;
     /** Grants permission to access a person's primary email address. */
-    email?: boolean;
+    email?: boolean | undefined;
     /** Grants permission to publicly available group member information. */
-    groups_access_member_info?: boolean;
+    groups_access_member_info?: boolean | undefined;
     /** Grants permission to retrieve all the information captured within a lead. */
-    leads_retrieval?: boolean;
+    leads_retrieval?: boolean | undefined;
     /** Enables your app to read a person's notifications and mark them as read. This permission does not let you send notifications to a person. Deprecated in Graph API v2.3. */
-    manage_notifications?: boolean;
+    manage_notifications?: boolean | undefined;
     /** Grants permission to retrieve Page Access Tokens for the Pages and Apps that the person administers. Apps need both manage_pages and publish_pages to be able to publish as a Page. */
-    manage_pages?: boolean;
+    manage_pages?: boolean | undefined;
     /** Allows the app to perform POST and DELETE operations on endpoints used for managing a Page's Call To Action buttons. */
-    pages_manage_cta?: boolean;
+    pages_manage_cta?: boolean | undefined;
     /** Grants permission to manage Instant Articles on behalf of Facebook Pages administered by people using your app. */
-    pages_manage_instant_articles?: boolean;
+    pages_manage_instant_articles?: boolean | undefined;
     /** Grants permission to send and receive messages through a Facebook Page. */
-    pages_messaging?: boolean;
+    pages_messaging?: boolean | undefined;
     /** Grants permission to use the phone number messaging feature. */
-    pages_messaging_phone_number?: boolean;
+    pages_messaging_phone_number?: boolean | undefined;
     /** Grants permission to send messages using Facebook Pages at any time after the first user interaction. Your app may only send advertising or promotional content through sponsored messages or within 24 hours of user interaction. */
-    pages_messaging_subscriptions?: boolean;
+    pages_messaging_subscriptions?: boolean | undefined;
     /** Grants access to show the list of the Pages that a person manages. */
-    pages_show_list?: boolean;
+    pages_show_list?: boolean | undefined;
     /** Provides access to a user's public profile information including id, first_name, last_name, middle_name, name, name_format, picture, and short_name. This is the most basic permission and is required by Facebook. */
-    public_profile?: boolean;
+    public_profile?: boolean | undefined;
     /** Allows your app to publish to the Open Graph using Built-in Actions, Achievements, Scores, or Custom Actions. Deprecated on August 1st, 2018. */
-    publish_actions?: boolean;
+    publish_actions?: boolean | undefined;
     /** Grants permission to publish posts, comments, and like Pages managed by a person using your app. Your app must also have manage_pages to publish as a Page. */
-    publish_pages?: boolean;
+    publish_pages?: boolean | undefined;
     /** Grants permission to post content into a group on behalf of a user who has granted the app this permission. */
-    publish_to_groups?: boolean;
+    publish_to_groups?: boolean | undefined;
     /** Grants permission to publish live videos to the app User's timeline. */
-    publish_video?: boolean;
+    publish_video?: boolean | undefined;
     /** Grants read-only access to the Audience Network Insights data for Apps the person owns. */
-    read_audience_network_insights?: boolean;
+    read_audience_network_insights?: boolean | undefined;
     /** Grants read-only access to the Insights data for Pages, Apps, and web domains the person owns. */
-    read_insights?: boolean;
+    read_insights?: boolean | undefined;
     /** Provides the ability to read the messages in a person's Facebook Inbox through the inbox edge and the thread node. Deprecated in Graph API v2.3. */
-    read_mailbox?: boolean;
+    read_mailbox?: boolean | undefined;
     /** Grants permission to read from the Page Inboxes of the Pages managed by a person. This permission is often used alongside the manage_pages permission. */
-    read_page_mailboxes?: boolean;
+    read_page_mailboxes?: boolean | undefined;
     /** Provides access to read the posts in a person's News Feed, or the posts on their Profile. Deprecated in Graph API v2.3. */
-    read_stream?: boolean;
+    read_stream?: boolean | undefined;
     /** Grants permission to access a person's age range. */
-    user_age_range?: boolean;
+    user_age_range?: boolean | undefined;
     /** Grants permission to access a person's birthday. */
-    user_birthday?: boolean;
+    user_birthday?: boolean | undefined;
     /** Grants read-only access to the Events a person is a host of or has RSVPed to. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
-    user_events?: boolean;
+    user_events?: boolean | undefined;
     /** Grants permission to access a list of friends that also use said app. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
-    user_friends?: boolean;
+    user_friends?: boolean | undefined;
     /** Grants permission to access a person's gender. */
-    user_gender?: boolean;
+    user_gender?: boolean | undefined;
     /** Enables your app to read the Groups a person is a member of through the groups edge on the User object. Deprecated in Graph API v2.3. */
-    user_groups?: boolean;
+    user_groups?: boolean | undefined;
     /** Grants permission to access a person's hometown location set in their User Profile. */
-    user_hometown?: boolean;
+    user_hometown?: boolean | undefined;
     /** Grants permission to access the list of all Facebook Pages that a person has liked. */
-    user_likes?: boolean;
+    user_likes?: boolean | undefined;
     /** Grants permission to access the Facebook Profile URL of the user of your app. */
-    user_link?: boolean;
+    user_link?: boolean | undefined;
     /** Provides access to a person's current city through the location field on the User object. The current city is set by a person on their Profile. */
-    user_location?: boolean;
+    user_location?: boolean | undefined;
     /** Enables your app to read the Groups a person is an admin of through the groups edge on the User object. Deprecated in Graph API v3.0. */
-    user_managed_groups?: boolean;
+    user_managed_groups?: boolean | undefined;
     /** Provides access to the photos a person has uploaded or been tagged in. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
-    user_photos?: boolean;
+    user_photos?: boolean | undefined;
     /** Provides access to the posts on a person's Timeline including their own posts, posts they are tagged in, and posts other people make on their Timeline. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
-    user_posts?: boolean;
+    user_posts?: boolean | undefined;
     /** Provides access to a person's statuses. These are posts on Facebook which don't include links, videos or photos. Deprecated in Graph API v2.3. */
-    user_status?: boolean;
+    user_status?: boolean | undefined;
     /** Provides access to the Places a person has been tagged at in photos, videos, statuses and links. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
-    user_tagged_places?: boolean;
+    user_tagged_places?: boolean | undefined;
     /** Provides access to the videos a person has uploaded or been tagged in. This permission is restricted to a limited set of partners and usage requires prior approval by Facebook. */
-    user_videos?: boolean;
+    user_videos?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4554,52 +4605,52 @@ export type ConnectionOptionsFreeformScopesGithub = Management.ConnectionScopeAr
  * Options for the 'github' connection
  */
 export interface ConnectionOptionsGitHub extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionOptionsClientIdGithub;
-    client_secret?: Management.ConnectionOptionsClientSecretGithub;
-    freeform_scopes?: Management.ConnectionOptionsFreeformScopesGithub;
-    scope?: Management.ConnectionOptionsScopeGithub;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    client_id?: Management.ConnectionOptionsClientIdGithub | undefined;
+    client_secret?: Management.ConnectionOptionsClientSecretGithub | undefined;
+    freeform_scopes?: Management.ConnectionOptionsFreeformScopesGithub | undefined;
+    scope?: Management.ConnectionOptionsScopeGithub | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Requests the GitHub admin:org scope so Auth0 can fully manage organizations, teams, and memberships on behalf of the user. */
-    admin_org?: boolean;
+    admin_org?: boolean | undefined;
     /** Requests the admin:public_key scope to allow creating, updating, and deleting the user's SSH public keys. */
-    admin_public_key?: boolean;
+    admin_public_key?: boolean | undefined;
     /** Requests the admin:repo_hook scope so Auth0 can read, write, ping, and delete repository webhooks. */
-    admin_repo_hook?: boolean;
+    admin_repo_hook?: boolean | undefined;
     /** Requests the delete_repo scope so the user can remove repositories they administer while signing in through Auth0. */
-    delete_repo?: boolean;
+    delete_repo?: boolean | undefined;
     /** Requests the user:email scope so Auth0 pulls addresses from GitHub's /user/emails endpoint and populates the profile. */
-    email?: boolean;
+    email?: boolean | undefined;
     /** Requests the user:follow scope to allow following or unfollowing GitHub users for the signed-in account. */
-    follow?: boolean;
+    follow?: boolean | undefined;
     /** Requests the gist scope so the application can create or update gists on behalf of the user. */
-    gist?: boolean;
+    gist?: boolean | undefined;
     /** Requests the notifications scope to read GitHub inbox notifications; repo also implicitly grants this access. */
-    notifications?: boolean;
+    notifications?: boolean | undefined;
     /** Controls the GitHub read:user call that returns the user's basic profile (name, avatar, profile URL) and is on by default for successful logins. */
-    profile?: boolean;
+    profile?: boolean | undefined;
     /** Requests the public_repo scope for read and write operations on public repositories, deployments, and statuses. */
-    public_repo?: boolean;
+    public_repo?: boolean | undefined;
     /** Requests the read:org scope so Auth0 can view organizations, teams, and membership lists without making changes. */
-    read_org?: boolean;
+    read_org?: boolean | undefined;
     /** Requests the read:public_key scope so Auth0 can list and inspect the user's SSH public keys. */
-    read_public_key?: boolean;
+    read_public_key?: boolean | undefined;
     /** Requests the read:repo_hook scope to read and ping repository webhooks. */
-    read_repo_hook?: boolean;
+    read_repo_hook?: boolean | undefined;
     /** Requests the read:user scope to load extended profile information, implicitly covering user:email and user:follow. */
-    read_user?: boolean;
+    read_user?: boolean | undefined;
     /** Requests the repo scope for read and write access to both public and private repositories, deployments, and statuses. */
-    repo?: boolean;
+    repo?: boolean | undefined;
     /** Requests the repo_deployment scope in order to read and write deployment statuses for repositories. */
-    repo_deployment?: boolean;
+    repo_deployment?: boolean | undefined;
     /** Requests the repo:status scope to manage commit statuses on public and private repositories. */
-    repo_status?: boolean;
+    repo_status?: boolean | undefined;
     /** Requests the write:org scope so Auth0 can change whether organization memberships are publicized. */
-    write_org?: boolean;
+    write_org?: boolean | undefined;
     /** Requests the write:public_key scope to create or update SSH public keys for the user. */
-    write_public_key?: boolean;
+    write_public_key?: boolean | undefined;
     /** Requests the write:repo_hook scope so Auth0 can read, create, update, and ping repository webhooks. */
-    write_repo_hook?: boolean;
+    write_repo_hook?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4608,35 +4659,35 @@ export interface ConnectionOptionsGitHub extends Management.ConnectionOptionsCom
  * Options for the 'google-apps' connection
  */
 export interface ConnectionOptionsGoogleApps extends Management.ConnectionOptionsCommon {
-    admin_access_token?: Management.ConnectionAdminAccessTokenGoogleApps;
-    admin_access_token_expiresin?: Management.ConnectionAdminAccessTokenExpiresInGoogleApps;
-    admin_refresh_token?: Management.ConnectionAdminRefreshTokenGoogleApps;
+    admin_access_token?: Management.ConnectionAdminAccessTokenGoogleApps | undefined;
+    admin_access_token_expiresin?: Management.ConnectionAdminAccessTokenExpiresInGoogleApps | undefined;
+    admin_refresh_token?: Management.ConnectionAdminRefreshTokenGoogleApps | undefined;
     /** When true, allows customization of OAuth scopes requested during user login. Custom scopes are appended to the mandatory email and profile scopes. When false or omitted, only the default email and profile scopes are used. This property is automatically enabled when Token Vault or Connected Accounts features are activated. */
-    allow_setting_login_scopes?: boolean;
-    api_enable_users?: Management.ConnectionApiEnableUsersGoogleApps;
+    allow_setting_login_scopes?: boolean | undefined;
+    api_enable_users?: Management.ConnectionApiEnableUsersGoogleApps | undefined;
     client_id: Management.ConnectionClientIdGoogleApps;
-    client_secret?: Management.ConnectionClientSecretGoogleApps;
-    domain?: Management.ConnectionDomainGoogleApps;
-    domain_aliases?: Management.ConnectionDomainAliases;
+    client_secret?: Management.ConnectionClientSecretGoogleApps | undefined;
+    domain?: Management.ConnectionDomainGoogleApps | undefined;
+    domain_aliases?: Management.ConnectionDomainAliases | undefined;
     /** Whether the OAuth flow requests the `email` scope. */
-    email?: boolean;
-    ext_agreed_terms?: Management.ConnectionExtAgreedTermsGoogleApps;
-    ext_groups?: Management.ConnectionExtGroupsGoogleApps;
+    email?: boolean | undefined;
+    ext_agreed_terms?: Management.ConnectionExtAgreedTermsGoogleApps | undefined;
+    ext_groups?: Management.ConnectionExtGroupsGoogleApps | undefined;
     /** Controls whether enriched group entries include `id`, `email`, `name` (true) or only the group name (false); can only be set when `ext_groups` is true. */
-    ext_groups_extended?: boolean;
-    ext_is_admin?: Management.ConnectionExtIsAdminGoogleApps;
-    ext_is_suspended?: Management.ConnectionExtIsSuspendedGoogleApps;
-    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
-    handle_login_from_social?: Management.ConnectionHandleLoginFromSocialGoogleApps;
-    icon_url?: Management.ConnectionIconUrlGoogleApps;
+    ext_groups_extended?: boolean | undefined;
+    ext_is_admin?: Management.ConnectionExtIsAdminGoogleApps | undefined;
+    ext_is_suspended?: Management.ConnectionExtIsSuspendedGoogleApps | undefined;
+    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
+    handle_login_from_social?: Management.ConnectionHandleLoginFromSocialGoogleApps | undefined;
+    icon_url?: Management.ConnectionIconUrlGoogleApps | undefined;
     /** Determines how Auth0 generates the user_id for Google Workspace users. When false (default), the user's email address is used. When true, Google's stable numeric user ID is used instead, which persists even if the user's email changes. This setting can only be configured when creating the connection and cannot be changed afterward. */
-    map_user_id_to_id?: boolean;
+    map_user_id_to_id?: boolean | undefined;
     /** Whether the OAuth flow requests the `profile` scope. */
-    profile?: boolean;
-    scope?: Management.ConnectionScopeGoogleApps;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    tenant_domain?: Management.ConnectionTenantDomainGoogleApps;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    profile?: boolean | undefined;
+    scope?: Management.ConnectionScopeGoogleApps | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    tenant_domain?: Management.ConnectionTenantDomainGoogleApps | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4645,144 +4696,144 @@ export interface ConnectionOptionsGoogleApps extends Management.ConnectionOption
  * Options for the 'google-oauth2' connection
  */
 export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOptionsCommon {
-    allowed_audiences?: Management.ConnectionAllowedAudiencesGoogleOAuth2;
-    client_id?: Management.ConnectionClientIdGoogleOAuth2;
-    client_secret?: Management.ConnectionClientSecretGoogleOAuth2;
-    freeform_scopes?: Management.ConnectionFreeformScopesGoogleOAuth2;
-    icon_url?: Management.ConnectionIconUrlGoogleOAuth2;
-    scope?: Management.ConnectionScopeGoogleOAuth2;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    allowed_audiences?: Management.ConnectionAllowedAudiencesGoogleOAuth2 | undefined;
+    client_id?: Management.ConnectionClientIdGoogleOAuth2 | undefined;
+    client_secret?: Management.ConnectionClientSecretGoogleOAuth2 | undefined;
+    freeform_scopes?: Management.ConnectionFreeformScopesGoogleOAuth2 | undefined;
+    icon_url?: Management.ConnectionIconUrlGoogleOAuth2 | undefined;
+    scope?: Management.ConnectionScopeGoogleOAuth2 | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** View and manage user's ad applications, ad units, and channels in AdSense */
-    adsense_management?: boolean;
+    adsense_management?: boolean | undefined;
     /** View user's configuration information and reports */
-    analytics?: boolean;
+    analytics?: boolean | undefined;
     /** View and manage user's posts and blogs on Blogger and Blogger comments */
-    blogger?: boolean;
+    blogger?: boolean | undefined;
     /** See, edit, share, and permanently delete all the calendars you can access using Google Calendar */
-    calendar?: boolean;
+    calendar?: boolean | undefined;
     /** Run as a Calendar add-on */
-    calendar_addons_execute?: boolean;
+    calendar_addons_execute?: boolean | undefined;
     /** View and edit events on all your calendars */
-    calendar_events?: boolean;
+    calendar_events?: boolean | undefined;
     /** View events on all your calendars */
-    calendar_events_readonly?: boolean;
+    calendar_events_readonly?: boolean | undefined;
     /** View your Calendar settings */
-    calendar_settings_readonly?: boolean;
+    calendar_settings_readonly?: boolean | undefined;
     /** Read access to user's chrome web store */
-    chrome_web_store?: boolean;
+    chrome_web_store?: boolean | undefined;
     /** Full access to the authenticated user's contacts */
-    contacts?: boolean;
+    contacts?: boolean | undefined;
     /** Full access to the authenticated user's contacts */
-    contacts_new?: boolean;
+    contacts_new?: boolean | undefined;
     /** Read-only access to the authenticated user's 'Other contacts' */
-    contacts_other_readonly?: boolean;
+    contacts_other_readonly?: boolean | undefined;
     /** Read-only access to the authenticated user's contacts */
-    contacts_readonly?: boolean;
+    contacts_readonly?: boolean | undefined;
     /** View and manage user's products, feeds, and subaccounts */
-    content_api_for_shopping?: boolean;
+    content_api_for_shopping?: boolean | undefined;
     /** Grants read and write access to the Coordinate API */
-    coordinate?: boolean;
+    coordinate?: boolean | undefined;
     /** Grants read access to the Coordinate API */
-    coordinate_readonly?: boolean;
+    coordinate_readonly?: boolean | undefined;
     /** Read-only access to the authenticated user's corporate directory (if applicable) */
-    directory_readonly?: boolean;
+    directory_readonly?: boolean | undefined;
     /** Access to Google Docs document list feed */
-    document_list?: boolean;
+    document_list?: boolean | undefined;
     /** Full access to all files and folders in the user's Google Drive */
-    drive?: boolean;
+    drive?: boolean | undefined;
     /** View and add to the activity record of files in your Drive */
-    drive_activity?: boolean;
+    drive_activity?: boolean | undefined;
     /** View the activity record of files in your Drive */
-    drive_activity_readonly?: boolean;
+    drive_activity_readonly?: boolean | undefined;
     /** Access to the application's configuration data in the user's Google Drive */
-    drive_appdata?: boolean;
+    drive_appdata?: boolean | undefined;
     /** View apps authorized to access your Drive */
-    drive_apps_readonly?: boolean;
+    drive_apps_readonly?: boolean | undefined;
     /** Access to files created or opened by the app */
-    drive_file?: boolean;
+    drive_file?: boolean | undefined;
     /** Access to file metadata, including listing files and folders */
-    drive_metadata?: boolean;
+    drive_metadata?: boolean | undefined;
     /** Read-only access to file metadata */
-    drive_metadata_readonly?: boolean;
+    drive_metadata_readonly?: boolean | undefined;
     /** Read-only access to the user's Google Photos */
-    drive_photos_readonly?: boolean;
+    drive_photos_readonly?: boolean | undefined;
     /** Read-only access to all files and folders in the user's Google Drive */
-    drive_readonly?: boolean;
+    drive_readonly?: boolean | undefined;
     /** Modify the behavior of Google Apps Scripts */
-    drive_scripts?: boolean;
+    drive_scripts?: boolean | undefined;
     /** Email and verified email flag */
-    email?: boolean;
+    email?: boolean | undefined;
     /** Full access to the account's mailboxes, including permanent deletion of threads and messages */
-    gmail?: boolean;
+    gmail?: boolean | undefined;
     /** Read all resources and their metadata—no write operations */
-    gmail_compose?: boolean;
+    gmail_compose?: boolean | undefined;
     /** Insert and import messages only */
-    gmail_insert?: boolean;
+    gmail_insert?: boolean | undefined;
     /** Create, read, update, and delete labels only */
-    gmail_labels?: boolean;
+    gmail_labels?: boolean | undefined;
     /** Read resources metadata including labels, history records, and email message headers, but not the message body or attachments */
-    gmail_metadata?: boolean;
+    gmail_metadata?: boolean | undefined;
     /** All read/write operations except immediate, permanent deletion of threads and messages, bypassing Trash */
-    gmail_modify?: boolean;
+    gmail_modify?: boolean | undefined;
     /** Full access to the account's mailboxes, including permanent deletion of threads and messages */
-    gmail_new?: boolean;
+    gmail_new?: boolean | undefined;
     /** Read all resources and their metadata—no write operations */
-    gmail_readonly?: boolean;
+    gmail_readonly?: boolean | undefined;
     /** Send messages only. No read or modify privileges on mailbox */
-    gmail_send?: boolean;
+    gmail_send?: boolean | undefined;
     /** Manage basic mail settings */
-    gmail_settings_basic?: boolean;
+    gmail_settings_basic?: boolean | undefined;
     /** Manage sensitive mail settings, including forwarding rules and aliases. Note: Operations guarded by this scope are restricted to administrative use only */
-    gmail_settings_sharing?: boolean;
+    gmail_settings_sharing?: boolean | undefined;
     /** View and manage user's publisher data in the Google Affiliate Network */
-    google_affiliate_network?: boolean;
+    google_affiliate_network?: boolean | undefined;
     /** View and manage user's books and library in Google Books */
-    google_books?: boolean;
+    google_books?: boolean | undefined;
     /** View and manage user's data stored in Google Cloud Storage */
-    google_cloud_storage?: boolean;
+    google_cloud_storage?: boolean | undefined;
     /** Full access to all files and folders in the user's Google Drive */
-    google_drive?: boolean;
+    google_drive?: boolean | undefined;
     /** Access to files created or opened by the app */
-    google_drive_files?: boolean;
+    google_drive_files?: boolean | undefined;
     /** Associate user with its public Google profile */
-    google_plus?: boolean;
+    google_plus?: boolean | undefined;
     /** View and manage user's best-available current location and location history in Google Latitude */
-    latitude_best?: boolean;
+    latitude_best?: boolean | undefined;
     /** View and manage user's city-level current location and location history in Google Latitude */
-    latitude_city?: boolean;
+    latitude_city?: boolean | undefined;
     /** View and manage user's votes, topics, and submissions */
-    moderator?: boolean;
+    moderator?: boolean | undefined;
     /** Request a refresh token when the user authorizes your application */
-    offline_access?: boolean;
+    offline_access?: boolean | undefined;
     /** View and manage user's friends, applications and profile and status */
-    orkut?: boolean;
+    orkut?: boolean | undefined;
     /** View and manage user's Google photos, videos, photo and video tags and comments */
-    picasa_web?: boolean;
+    picasa_web?: boolean | undefined;
     /** Name, public profile URL, photo, country, language, and timezone */
-    profile?: boolean;
+    profile?: boolean | undefined;
     /** View and manage user's sites on Google Sites */
-    sites?: boolean;
+    sites?: boolean | undefined;
     /** Full access to create, edit, organize, and delete all your tasks */
-    tasks?: boolean;
+    tasks?: boolean | undefined;
     /** Read-only access to view your tasks and task lists */
-    tasks_readonly?: boolean;
+    tasks_readonly?: boolean | undefined;
     /** View, manage and view statistics user's short URLs */
-    url_shortener?: boolean;
+    url_shortener?: boolean | undefined;
     /** View and manage user's sites and messages, view keywords */
-    webmaster_tools?: boolean;
+    webmaster_tools?: boolean | undefined;
     /** Manage your YouTube account */
-    youtube?: boolean;
+    youtube?: boolean | undefined;
     /** See a list of your current active channel members, their current level, and when they became a member */
-    youtube_channelmemberships_creator?: boolean;
+    youtube_channelmemberships_creator?: boolean | undefined;
     /** Manage your YouTube account */
-    youtube_new?: boolean;
+    youtube_new?: boolean | undefined;
     /** View your YouTube account */
-    youtube_readonly?: boolean;
+    youtube_readonly?: boolean | undefined;
     /** Manage your YouTube videos */
-    youtube_upload?: boolean;
+    youtube_upload?: boolean | undefined;
     /** View and manage your assets and associated content on YouTube */
-    youtubepartner?: boolean;
+    youtubepartner?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4806,12 +4857,12 @@ export type ConnectionOptionsIdpInitiatedClientProtocolEnumSaml =
  */
 export interface ConnectionOptionsIdpinitiatedSaml {
     /** The query string sent to the default application */
-    client_authorizequery?: string;
+    client_authorizequery?: string | undefined;
     /** The client ID to use for IdP-initiated login requests. */
-    client_id?: string;
-    client_protocol?: Management.ConnectionClientProtocolSaml;
+    client_id?: string | undefined;
+    client_protocol?: Management.ConnectionClientProtocolSaml | undefined;
     /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
 }
 
 /**
@@ -4826,16 +4877,16 @@ export interface ConnectionOptionsInstagram extends Management.ConnectionOptions
  * Options for the 'line' connection
  */
 export interface ConnectionOptionsLine extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientIdLine;
-    client_secret?: Management.ConnectionClientSecretLine;
-    freeform_scopes?: Management.ConnectionScopeArray;
-    scope?: Management.ConnectionScopeArray;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    client_id?: Management.ConnectionClientIdLine | undefined;
+    client_secret?: Management.ConnectionClientSecretLine | undefined;
+    freeform_scopes?: Management.ConnectionScopeArray | undefined;
+    scope?: Management.ConnectionScopeArray | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Permission to request the user's email address from LINE. When enabled, adds the 'email' scope to OAuth requests. Note: LINE requires special approval to access user email addresses. */
-    email?: boolean;
+    email?: boolean | undefined;
     /** Permission to request the user's basic profile information from LINE. When enabled, adds the 'profile' scope to OAuth requests. LINE requires this scope to retrieve user display name, profile picture, and status message. */
-    profile?: boolean;
+    profile?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4843,14 +4894,27 @@ export interface ConnectionOptionsLine extends Management.ConnectionOptionsCommo
 /**
  * Options for the 'linkedin' connection
  */
-export interface ConnectionOptionsLinkedin extends Management.ConnectionOptionsOAuth2Common {
-    strategy_version?: Management.ConnectionStrategyVersionEnumLinkedin;
-    /** When enabled, requests the basic_profile scope from LinkedIn to access basic profile information. */
-    basic_profile?: boolean;
-    /** When enabled, requests the email scope from LinkedIn to access the user's email address. */
-    email?: boolean;
-    /** When enabled, requests the profile scope from LinkedIn to access profile information. */
-    profile?: boolean;
+export interface ConnectionOptionsLinkedin extends Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdLinkedin | undefined;
+    client_secret?: Management.ConnectionClientSecretLinkedin | undefined;
+    freeform_scopes?: Management.ConnectionFreeformScopesLinkedin | undefined;
+    scope?: Management.ConnectionScopeLinkedin | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    /** The strategy_version property determines which LinkedIn API version and OAuth scopes are used for authentication. Version 1 uses legacy scopes (r_basicprofile, r_fullprofile, r_network), Version 2 uses updated scopes (r_liteprofile, r_basicprofile), and Version 3 uses OpenID Connect scopes (profile, email, openid). If not specified, the connection defaults to Version 3. */
+    strategy_version?: Management.ConnectionStrategyVersionEnumLinkedin | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+    /** Request the LinkedIn lite profile scope (r_liteprofile) to retrieve member id, localized first/last name, and profile picture. Off by default. */
+    basic_profile?: boolean | undefined;
+    /** Request the email address scope (r_emailaddress) to return the member's primary email. Off by default. */
+    email?: boolean | undefined;
+    /** Request the legacy full profile scope (r_fullprofile) for extended attributes. Deprecated by LinkedIn; use only if enabled for your app. Off by default. */
+    full_profile?: boolean | undefined;
+    /** Request legacy network access (first-degree connections). Deprecated by LinkedIn and typically unavailable to new apps. Off by default. */
+    network?: boolean | undefined;
+    /** Request OpenID Connect authentication support (openid scope). When enabled, the connection will request the 'openid' scope from LinkedIn, allowing the use of OpenID Connect flows for authentication and enabling the issuance of ID tokens. This is off by default and should only be enabled if your LinkedIn application is configured for OpenID Connect. */
+    openid?: boolean | undefined;
+    /** Always-true flag that ensures the LinkedIn profile scope (r_basicprofile/r_liteprofile/profile) is requested. */
+    profile?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4866,65 +4930,70 @@ export interface ConnectionOptionsMiicard extends Management.ConnectionOptionsOA
 /**
  * Options for the 'oauth1' connection
  */
-export interface ConnectionOptionsOAuth1 {
-    client_id?: Management.ConnectionClientId;
-    client_secret?: Management.ConnectionClientSecret;
+export interface ConnectionOptionsOAuth1 extends Management.ConnectionOptionsCommon {
+    accessTokenURL?: Management.ConnectionAccessTokenUrloAuth1 | undefined;
+    client_id?: Management.ConnectionClientIdOAuth1 | undefined;
+    client_secret?: Management.ConnectionClientSecretOAuth1 | undefined;
+    requestTokenURL?: Management.ConnectionRequestTokenUrloAuth1 | undefined;
+    scripts?: Management.ConnectionScriptsOAuth1 | undefined;
+    signatureMethod?: Management.ConnectionSignatureMethodOAuth1 | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+    userAuthorizationURL?: Management.ConnectionUserAuthorizationUrloAuth1 | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ConnectionOptionsOAuth1Common extends Management.ConnectionOptionsCommon {
     /** OAuth 1.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** OAuth 1.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when signing requests and exchanging request tokens and verifiers for access tokens. May be null for public clients. */
-    client_secret?: string;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    client_secret?: string | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
 }
 
 /**
  * Options for the 'oauth2' connection
  */
 export interface ConnectionOptionsOAuth2 extends Management.ConnectionOptionsCommon {
-    authParams?: Management.ConnectionAuthParamsOAuth2;
-    authParamsMap?: Management.ConnectionAuthParamsMap;
-    authorizationURL?: Management.ConnectionAuthorizationEndpointOAuth2;
-    client_id?: Management.ConnectionClientIdOAuth2;
-    client_secret?: Management.ConnectionClientSecretOAuth2;
-    customHeaders?: Management.ConnectionCustomHeadersOAuth2;
-    fieldsMap?: Management.ConnectionFieldsMap;
-    icon_url?: Management.ConnectionIconUrl;
-    logoutUrl?: Management.ConnectionEndSessionEndpointOAuth2;
+    authParams?: Management.ConnectionAuthParamsOAuth2 | undefined;
+    authParamsMap?: Management.ConnectionAuthParamsMap | undefined;
+    authorizationURL?: Management.ConnectionAuthorizationEndpointOAuth2 | undefined;
+    client_id?: Management.ConnectionClientIdOAuth2 | undefined;
+    client_secret?: Management.ConnectionClientSecretOAuth2 | undefined;
+    customHeaders?: Management.ConnectionCustomHeadersOAuth2 | undefined;
+    fieldsMap?: Management.ConnectionFieldsMap | undefined;
+    icon_url?: Management.ConnectionIconUrl | undefined;
+    logoutUrl?: Management.ConnectionEndSessionEndpointOAuth2 | undefined;
     /** When true, enables Proof Key for Code Exchange (PKCE) for the authorization code flow. PKCE provides additional security by preventing authorization code interception attacks. */
-    pkce_enabled?: boolean;
-    scope?: Management.ConnectionScopeOAuth2;
-    scripts?: Management.ConnectionScriptsOAuth2;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    tokenURL?: Management.ConnectionTokenEndpointOAuth2;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    pkce_enabled?: boolean | undefined;
+    scope?: Management.ConnectionScopeOAuth2 | undefined;
+    scripts?: Management.ConnectionScriptsOAuth2 | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    tokenURL?: Management.ConnectionTokenEndpointOAuth2 | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
-    useOauthSpecScope?: boolean;
+    useOauthSpecScope?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ConnectionOptionsOAuth2Common extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientId;
-    client_secret?: Management.ConnectionClientSecret;
-    scope?: Management.ConnectionScopeOAuth2;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    client_id?: Management.ConnectionClientId | undefined;
+    client_secret?: Management.ConnectionClientSecret | undefined;
+    scope?: Management.ConnectionScopeOAuth2 | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
 }
 
 /**
  * Options for the 'oidc' connection
  */
 export interface ConnectionOptionsOidc
-    extends Management.ConnectionOptionsCommonOidc,
-        Management.ConnectionOptionsCommon {
-    attribute_map?: Management.ConnectionAttributeMapOidc;
-    discovery_url?: Management.ConnectionDiscoveryUrl;
-    type?: Management.ConnectionTypeEnumOidc;
+    extends Management.ConnectionOptionsCommonOidc, Management.ConnectionOptionsCommon {
+    attribute_map?: Management.ConnectionAttributeMapOidc | undefined;
+    discovery_url?: Management.ConnectionDiscoveryUrl | undefined;
+    type?: Management.ConnectionTypeEnumOidc | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4933,42 +5002,51 @@ export interface ConnectionOptionsOidc
  * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
  */
 export interface ConnectionOptionsOidcMetadata {
-    acr_values_supported?: Management.ConnectionAcrValuesSupported;
+    acr_values_supported?: Management.ConnectionAcrValuesSupported | undefined;
     authorization_endpoint: Management.ConnectionAuthorizationEndpoint;
-    claim_types_supported?: Management.ConnectionClaimTypesSupported;
-    claims_locales_supported?: Management.ConnectionClaimsLocalesSupported;
-    claims_parameter_supported?: Management.ConnectionClaimsParameterSupported;
-    claims_supported?: Management.ConnectionClaimsSupported;
-    display_values_supported?: Management.ConnectionDisplayValuesSupported;
-    end_session_endpoint?: Management.ConnectionEndSessionEndpoint;
-    grant_types_supported?: Management.ConnectionGrantTypesSupported;
-    id_token_encryption_alg_values_supported?: Management.ConnectionIdTokenEncryptionAlgValuesSupported;
-    id_token_encryption_enc_values_supported?: Management.ConnectionIdTokenEncryptionEncValuesSupported;
+    claim_types_supported?: Management.ConnectionClaimTypesSupported | undefined;
+    claims_locales_supported?: Management.ConnectionClaimsLocalesSupported | undefined;
+    claims_parameter_supported?: Management.ConnectionClaimsParameterSupported | undefined;
+    claims_supported?: Management.ConnectionClaimsSupported | undefined;
+    display_values_supported?: Management.ConnectionDisplayValuesSupported | undefined;
+    dpop_signing_alg_values_supported?: Management.ConnectionDpopSigningAlgValuesSupported | undefined;
+    end_session_endpoint?: Management.ConnectionEndSessionEndpoint | undefined;
+    grant_types_supported?: Management.ConnectionGrantTypesSupported | undefined;
+    id_token_encryption_alg_values_supported?: Management.ConnectionIdTokenEncryptionAlgValuesSupported | undefined;
+    id_token_encryption_enc_values_supported?: Management.ConnectionIdTokenEncryptionEncValuesSupported | undefined;
     id_token_signing_alg_values_supported: Management.ConnectionIdTokenSigningAlgValuesSupported;
     issuer: Management.ConnectionIssuer;
     jwks_uri: Management.ConnectionJwksUri;
-    op_policy_uri?: Management.ConnectionOpPolicyUri;
-    op_tos_uri?: Management.ConnectionOpTosUri;
-    registration_endpoint?: Management.ConnectionRegistrationEndpoint;
-    request_object_encryption_alg_values_supported?: Management.ConnectionRequestObjectEncryptionAlgValuesSupported;
-    request_object_encryption_enc_values_supported?: Management.ConnectionRequestObjectEncryptionEncValuesSupported;
-    request_object_signing_alg_values_supported?: Management.ConnectionRequestObjectSigningAlgValuesSupported;
-    request_parameter_supported?: Management.ConnectionRequestParameterSupported;
-    request_uri_parameter_supported?: Management.ConnectionRequestUriParameterSupported;
-    require_request_uri_registration?: Management.ConnectionRequireRequestUriRegistration;
-    response_modes_supported?: Management.ConnectionResponseModesSupported;
-    response_types_supported?: Management.ConnectionResponseTypesSupported;
-    scopes_supported?: (Management.ConnectionScopesSupported | undefined) | null;
-    service_documentation?: Management.ConnectionServiceDocumentation;
-    subject_types_supported?: Management.ConnectionSubjectTypesSupported;
-    token_endpoint?: Management.ConnectionTokenEndpoint;
-    token_endpoint_auth_methods_supported?: Management.ConnectionTokenEndpointAuthMethodsSupported;
-    token_endpoint_auth_signing_alg_values_supported?: Management.ConnectionTokenEndpointAuthSigningAlgValuesSupported;
-    ui_locales_supported?: Management.ConnectionUiLocalesSupported;
-    userinfo_encryption_alg_values_supported?: Management.ConnectionUserinfoEncryptionAlgValuesSupported;
-    userinfo_encryption_enc_values_supported?: Management.ConnectionUserinfoEncryptionEncValuesSupported;
-    userinfo_endpoint?: Management.ConnectionUserinfoEndpoint;
-    userinfo_signing_alg_values_supported?: Management.ConnectionUserinfoSigningAlgValuesSupported;
+    op_policy_uri?: Management.ConnectionOpPolicyUri | undefined;
+    op_tos_uri?: Management.ConnectionOpTosUri | undefined;
+    registration_endpoint?: Management.ConnectionRegistrationEndpoint | undefined;
+    request_object_encryption_alg_values_supported?:
+        | Management.ConnectionRequestObjectEncryptionAlgValuesSupported
+        | undefined;
+    request_object_encryption_enc_values_supported?:
+        | Management.ConnectionRequestObjectEncryptionEncValuesSupported
+        | undefined;
+    request_object_signing_alg_values_supported?:
+        | Management.ConnectionRequestObjectSigningAlgValuesSupported
+        | undefined;
+    request_parameter_supported?: Management.ConnectionRequestParameterSupported | undefined;
+    request_uri_parameter_supported?: Management.ConnectionRequestUriParameterSupported | undefined;
+    require_request_uri_registration?: Management.ConnectionRequireRequestUriRegistration | undefined;
+    response_modes_supported?: Management.ConnectionResponseModesSupported | undefined;
+    response_types_supported?: Management.ConnectionResponseTypesSupported | undefined;
+    scopes_supported?: ((Management.ConnectionScopesSupported | undefined) | null) | undefined;
+    service_documentation?: Management.ConnectionServiceDocumentation | undefined;
+    subject_types_supported?: Management.ConnectionSubjectTypesSupported | undefined;
+    token_endpoint?: Management.ConnectionTokenEndpoint | undefined;
+    token_endpoint_auth_methods_supported?: Management.ConnectionTokenEndpointAuthMethodsSupported | undefined;
+    token_endpoint_auth_signing_alg_values_supported?:
+        | Management.ConnectionTokenEndpointAuthSigningAlgValuesSupported
+        | undefined;
+    ui_locales_supported?: Management.ConnectionUiLocalesSupported | undefined;
+    userinfo_encryption_alg_values_supported?: Management.ConnectionUserinfoEncryptionAlgValuesSupported | undefined;
+    userinfo_encryption_enc_values_supported?: Management.ConnectionUserinfoEncryptionEncValuesSupported | undefined;
+    userinfo_endpoint?: Management.ConnectionUserinfoEndpoint | undefined;
+    userinfo_signing_alg_values_supported?: Management.ConnectionUserinfoSigningAlgValuesSupported | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4977,8 +5055,8 @@ export interface ConnectionOptionsOidcMetadata {
  * Options for the 'office365' connection
  */
 export interface ConnectionOptionsOffice365 {
-    client_id?: Management.ConnectionClientId;
-    client_secret?: Management.ConnectionClientSecret;
+    client_id?: Management.ConnectionClientId | undefined;
+    client_secret?: Management.ConnectionClientSecret | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4987,11 +5065,10 @@ export interface ConnectionOptionsOffice365 {
  * Options for the 'okta' connection
  */
 export interface ConnectionOptionsOkta
-    extends Management.ConnectionOptionsCommon,
-        Management.ConnectionOptionsCommonOidc {
-    attribute_map?: Management.ConnectionAttributeMapOkta;
-    domain?: Management.ConnectionDomainOkta;
-    type?: Management.ConnectionTypeEnumOkta;
+    extends Management.ConnectionOptionsCommon, Management.ConnectionOptionsCommonOidc {
+    attribute_map?: Management.ConnectionAttributeMapOkta | undefined;
+    domain?: Management.ConnectionDomainOkta | undefined;
+    type?: Management.ConnectionTypeEnumOkta | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5000,19 +5077,19 @@ export interface ConnectionOptionsOkta
  * Options for the 'paypal' and 'paypal-sandbox' connections
  */
 export interface ConnectionOptionsPaypal extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientIdPaypal;
-    client_secret?: Management.ConnectionClientSecretPaypal;
-    freeform_scopes?: Management.ConnectionFreeformScopesPaypal;
-    scope?: Management.ConnectionScopePaypal;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
+    client_id?: Management.ConnectionClientIdPaypal | undefined;
+    client_secret?: Management.ConnectionClientSecretPaypal | undefined;
+    freeform_scopes?: Management.ConnectionFreeformScopesPaypal | undefined;
+    scope?: Management.ConnectionScopePaypal | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     /** When enabled, requests the 'address' scope from PayPal to access the user's address information. */
-    address?: boolean;
+    address?: boolean | undefined;
     /** When enabled, requests the 'email' scope from PayPal to access the user's email address. */
-    email?: boolean;
+    email?: boolean | undefined;
     /** When enabled, requests the 'phone' scope from PayPal to access the user's phone number. */
-    phone?: boolean;
+    phone?: boolean | undefined;
     /** When enabled, requests the 'profile' scope from PayPal to access basic profile information including first name, last name, date of birth, time zone, locale, and language. This scope is always enabled by the system. */
-    profile?: boolean;
+    profile?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5021,10 +5098,9 @@ export interface ConnectionOptionsPaypal extends Management.ConnectionOptionsCom
  * Options for the 'pingfederate' connection
  */
 export interface ConnectionOptionsPingFederate
-    extends Management.ConnectionOptionsCommonSaml,
-        Management.ConnectionOptionsCommon {
+    extends Management.ConnectionOptionsCommonSaml, Management.ConnectionOptionsCommon {
     pingFederateBaseUrl: Management.ConnectionPingFederateBaseUrl;
-    signingCert?: Management.ConnectionSigningCertificatePemPingFederate;
+    signingCert?: Management.ConnectionSigningCertificatePemPingFederate | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5057,24 +5133,23 @@ export interface ConnectionOptionsRenren extends Management.ConnectionOptionsOAu
  * Options for the 'samlp' connection
  */
 export interface ConnectionOptionsSaml
-    extends Management.ConnectionOptionsCommonSaml,
-        Management.ConnectionOptionsCommon {
-    debug?: Management.ConnectionDebugSaml;
-    deflate?: Management.ConnectionOptionsDeflateSaml;
-    destinationUrl?: Management.ConnectionDestinationUrlSaml;
+    extends Management.ConnectionOptionsCommonSaml, Management.ConnectionOptionsCommon {
+    debug?: Management.ConnectionDebugSaml | undefined;
+    deflate?: Management.ConnectionOptionsDeflateSaml | undefined;
+    destinationUrl?: Management.ConnectionDestinationUrlSaml | undefined;
     /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
-    disableSignout?: boolean;
-    fieldsMap?: Management.ConnectionFieldsMapSaml;
-    global_token_revocation_jwt_iss?: Management.ConnectionGlobalTokenRevocationJwtIssSaml;
-    global_token_revocation_jwt_sub?: Management.ConnectionGlobalTokenRevocationJwtSubSaml;
-    metadataUrl?: Management.ConnectionMetadataUrlSaml;
-    metadataXml?: Management.ConnectionMetadataXmlSaml;
-    recipientUrl?: Management.ConnectionRecipientUrlSaml;
-    requestTemplate?: Management.ConnectionRequestTemplateSaml;
-    signingCert?: Management.ConnectionSigningCertSaml;
-    signing_key?: Management.ConnectionSigningKeySaml;
-    signOutEndpoint?: Management.ConnectionSignOutEndpointSaml;
-    user_id_attribute?: Management.ConnectionUserIdAttributeSaml;
+    disableSignout?: boolean | undefined;
+    fieldsMap?: Management.ConnectionFieldsMapSaml | undefined;
+    global_token_revocation_jwt_iss?: Management.ConnectionGlobalTokenRevocationJwtIssSaml | undefined;
+    global_token_revocation_jwt_sub?: Management.ConnectionGlobalTokenRevocationJwtSubSaml | undefined;
+    metadataUrl?: Management.ConnectionMetadataUrlSaml | undefined;
+    metadataXml?: Management.ConnectionMetadataXmlSaml | undefined;
+    recipientUrl?: Management.ConnectionRecipientUrlSaml | undefined;
+    requestTemplate?: Management.ConnectionRequestTemplateSaml | undefined;
+    signingCert?: Management.ConnectionSigningCertSaml | undefined;
+    signing_key?: Management.ConnectionSigningKeySaml | undefined;
+    signOutEndpoint?: Management.ConnectionSignOutEndpointSaml | undefined;
+    user_id_attribute?: Management.ConnectionUserIdAttributeSaml | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5084,21 +5159,21 @@ export interface ConnectionOptionsSaml
  */
 export interface ConnectionOptionsSms extends Management.ConnectionOptionsCommon {
     /** Whether brute force protection is enabled */
-    brute_force_protection?: boolean;
-    disable_signup?: Management.ConnectionDisableSignupSms;
-    forward_req_info?: Management.ConnectionForwardReqInfoSms;
-    from?: Management.ConnectionFromSms;
-    gateway_authentication?: Management.ConnectionGatewayAuthenticationSms | null;
-    gateway_url?: Management.ConnectionGatewayUrlSms;
-    messaging_service_sid?: Management.ConnectionMessagingServiceSidSms;
+    brute_force_protection?: boolean | undefined;
+    disable_signup?: Management.ConnectionDisableSignupSms | undefined;
+    forward_req_info?: Management.ConnectionForwardReqInfoSms | undefined;
+    from?: Management.ConnectionFromSms | undefined;
+    gateway_authentication?: (Management.ConnectionGatewayAuthenticationSms | null) | undefined;
+    gateway_url?: Management.ConnectionGatewayUrlSms | undefined;
+    messaging_service_sid?: Management.ConnectionMessagingServiceSidSms | undefined;
     /** Connection name */
-    name?: string;
-    provider?: Management.ConnectionProviderSms;
-    syntax?: Management.ConnectionTemplateSyntaxEnumSms;
-    template?: Management.ConnectionTemplateSms;
-    totp?: Management.ConnectionTotpSms;
-    twilio_sid?: Management.ConnectionTwilioSidSms;
-    twilio_token?: Management.ConnectionTwilioTokenSms;
+    name?: string | undefined;
+    provider?: Management.ConnectionProviderSms | undefined;
+    syntax?: Management.ConnectionTemplateSyntaxEnumSms | undefined;
+    template?: Management.ConnectionTemplateSms | undefined;
+    totp?: Management.ConnectionTotpSms | undefined;
+    twilio_sid?: Management.ConnectionTwilioSidSms | undefined;
+    twilio_token?: Management.ConnectionTwilioTokenSms | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5107,14 +5182,14 @@ export interface ConnectionOptionsSms extends Management.ConnectionOptionsCommon
  * Options for the salesforce family of connections (salesforce, salesforce-sandbox, salesforce-community)
  */
 export interface ConnectionOptionsSalesforce extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientIdSalesforce;
-    client_secret?: Management.ConnectionClientSecretSalesforce;
-    freeform_scopes?: Management.ConnectionFreeformScopesSalesforce;
+    client_id?: Management.ConnectionClientIdSalesforce | undefined;
+    client_secret?: Management.ConnectionClientSecretSalesforce | undefined;
+    freeform_scopes?: Management.ConnectionFreeformScopesSalesforce | undefined;
     /** When enabled, requests the Salesforce profile scope to retrieve basic user information including user_id, organization_id, username, display_name, email, status, photos, and URLs. */
-    profile?: boolean;
-    scope?: Management.ConnectionScopeSalesforce;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    profile?: boolean | undefined;
+    scope?: Management.ConnectionScopeSalesforce | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5123,7 +5198,7 @@ export interface ConnectionOptionsSalesforce extends Management.ConnectionOption
  * Options for the 'salesforce-community' connection
  */
 export interface ConnectionOptionsSalesforceCommunity extends Management.ConnectionOptionsSalesforce {
-    community_base_url?: Management.ConnectionCommunityBaseUrlSalesforce;
+    community_base_url?: Management.ConnectionCommunityBaseUrlSalesforce | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5182,21 +5257,21 @@ export interface ConnectionOptionsThirtySevenSignals extends Management.Connecti
  * Options for the 'twitter' connection
  */
 export interface ConnectionOptionsTwitter extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionOptionsClientIdTwitter;
-    client_secret?: Management.ConnectionOptionsClientSecretTwitter;
-    freeform_scopes?: Management.ConnectionScopeArray;
-    protocol?: Management.ConnectionOptionsProtocolEnumTwitter;
-    scope?: Management.ConnectionOptionsScopeTwitter;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    client_id?: Management.ConnectionOptionsClientIdTwitter | undefined;
+    client_secret?: Management.ConnectionOptionsClientSecretTwitter | undefined;
+    freeform_scopes?: Management.ConnectionScopeArray | undefined;
+    protocol?: Management.ConnectionOptionsProtocolEnumTwitter | undefined;
+    scope?: Management.ConnectionOptionsScopeTwitter | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Request long-lived refresh tokens so your app can act on behalf of users even when they’re not actively signed in. Typical Twitter use case: keeping a background service synced without forcing users to reauthorize every session. */
-    offline_access?: boolean;
+    offline_access?: boolean | undefined;
     /** Pull account profile metadata such as display name, bio, location, and URL so downstream apps can prefill or personalize user experiences. */
-    profile?: boolean;
+    profile?: boolean | undefined;
     /** Allow the application to read a user’s public and protected Tweets—required for timelines, analytics, or moderation workflows. */
-    tweet_read?: boolean;
+    tweet_read?: boolean | undefined;
     /** Read non-Tweet user information (e.g., followers/following, account settings) to power relationship graphs or audience insights. */
-    users_read?: boolean;
+    users_read?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5229,129 +5304,129 @@ export interface ConnectionOptionsWeibo extends Management.ConnectionOptionsOAut
  * Options for the 'windowslive' connection
  */
 export interface ConnectionOptionsWindowsLive extends Management.ConnectionOptionsCommon {
-    client_id?: Management.ConnectionClientIdWindowsLive;
-    client_secret?: Management.ConnectionClientSecretWindowsLive;
-    freeform_scopes?: Management.ConnectionFreeformScopesWindowsLive;
-    scope?: Management.ConnectionScopeArrayWindowsLive;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    strategy_version?: Management.ConnectionStrategyVersionEnumWindowsLive;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
+    client_id?: Management.ConnectionClientIdWindowsLive | undefined;
+    client_secret?: Management.ConnectionClientSecretWindowsLive | undefined;
+    freeform_scopes?: Management.ConnectionFreeformScopesWindowsLive | undefined;
+    scope?: Management.ConnectionScopeArrayWindowsLive | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    strategy_version?: Management.ConnectionStrategyVersionEnumWindowsLive | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** When enabled, requests access to user's applications. */
-    applications?: boolean;
+    applications?: boolean | undefined;
     /** When enabled, requests permission to create applications. */
-    applications_create?: boolean;
+    applications_create?: boolean | undefined;
     /** When enabled, requests read access to user's basic profile information and contacts list. */
-    basic?: boolean;
+    basic?: boolean | undefined;
     /** When enabled, requests read access to user's birth day, month, and year. */
-    birthday?: boolean;
+    birthday?: boolean | undefined;
     /** When enabled, requests read access to user's calendars and events. */
-    calendars?: boolean;
+    calendars?: boolean | undefined;
     /** When enabled, requests read and write access to user's calendars and events. */
-    calendars_update?: boolean;
+    calendars_update?: boolean | undefined;
     /** When enabled, requests read access to contacts' birth day and birth month. */
-    contacts_birthday?: boolean;
+    contacts_birthday?: boolean | undefined;
     /** When enabled, requests read access to user's calendars and shared calendars/events from others. */
-    contacts_calendars?: boolean;
+    contacts_calendars?: boolean | undefined;
     /** When enabled, requests permission to create new contacts in user's address book. */
-    contacts_create?: boolean;
+    contacts_create?: boolean | undefined;
     /** When enabled, requests read access to user's and shared albums, photos, videos, and audio. */
-    contacts_photos?: boolean;
+    contacts_photos?: boolean | undefined;
     /** When enabled, requests read access to OneDrive files shared by other users. */
-    contacts_skydrive?: boolean;
+    contacts_skydrive?: boolean | undefined;
     /** When enabled, allows the app to have the same access to information in the directory as the signed-in user. */
-    directory_accessasuser_all?: boolean;
+    directory_accessasuser_all?: boolean | undefined;
     /** When enabled, allows the app to read data in your organization's directory, such as users, groups, and apps. */
-    directory_read_all?: boolean;
+    directory_read_all?: boolean | undefined;
     /** When enabled, allows the app to read and write data in your organization's directory, such as users and groups. */
-    directory_readwrite_all?: boolean;
+    directory_readwrite_all?: boolean | undefined;
     /** When enabled, requests read access to personal, preferred, and business email addresses. */
-    emails?: boolean;
+    emails?: boolean | undefined;
     /** When enabled, requests permission to create events on user's default calendar. */
-    events_create?: boolean;
+    events_create?: boolean | undefined;
     /** When enabled, requests permission to read the user's calendars. */
-    graph_calendars?: boolean;
+    graph_calendars?: boolean | undefined;
     /** When enabled, requests permission to read and write the user's calendars. */
-    graph_calendars_update?: boolean;
+    graph_calendars_update?: boolean | undefined;
     /** When enabled, requests permission to read the user's contacts. */
-    graph_contacts?: boolean;
+    graph_contacts?: boolean | undefined;
     /** When enabled, requests permission to read and write the user's contacts. */
-    graph_contacts_update?: boolean;
+    graph_contacts_update?: boolean | undefined;
     /** When enabled, requests permission to read the user's device information. */
-    graph_device?: boolean;
+    graph_device?: boolean | undefined;
     /** When enabled, requests permission to send commands to the user's devices. */
-    graph_device_command?: boolean;
+    graph_device_command?: boolean | undefined;
     /** When enabled, requests permission to read the user's emails. */
-    graph_emails?: boolean;
+    graph_emails?: boolean | undefined;
     /** When enabled, requests permission to read and write the user's emails. */
-    graph_emails_update?: boolean;
+    graph_emails_update?: boolean | undefined;
     /** When enabled, requests permission to read the user's files. */
-    graph_files?: boolean;
+    graph_files?: boolean | undefined;
     /** When enabled, requests permission to read all files the user has access to. */
-    graph_files_all?: boolean;
+    graph_files_all?: boolean | undefined;
     /** When enabled, requests permission to read and write all files the user has access to. */
-    graph_files_all_update?: boolean;
+    graph_files_all_update?: boolean | undefined;
     /** When enabled, requests permission to read and write the user's files. */
-    graph_files_update?: boolean;
+    graph_files_update?: boolean | undefined;
     /** When enabled, requests permission to read the user's OneNote notebooks. */
-    graph_notes?: boolean;
+    graph_notes?: boolean | undefined;
     /** When enabled, requests permission to create new OneNote notebooks. */
-    graph_notes_create?: boolean;
+    graph_notes_create?: boolean | undefined;
     /** When enabled, requests permission to read and write the user's OneNote notebooks. */
-    graph_notes_update?: boolean;
+    graph_notes_update?: boolean | undefined;
     /** When enabled, requests permission to read the user's tasks. */
-    graph_tasks?: boolean;
+    graph_tasks?: boolean | undefined;
     /** When enabled, requests permission to read and write the user's tasks. */
-    graph_tasks_update?: boolean;
+    graph_tasks_update?: boolean | undefined;
     /** When enabled, requests permission to read the user's profile. */
-    graph_user?: boolean;
+    graph_user?: boolean | undefined;
     /** When enabled, requests permission to read the user's activity history. */
-    graph_user_activity?: boolean;
+    graph_user_activity?: boolean | undefined;
     /** When enabled, requests permission to read and write the user's profile. */
-    graph_user_update?: boolean;
+    graph_user_update?: boolean | undefined;
     /** When enabled, allows the app to read all group properties and memberships. */
-    group_read_all?: boolean;
+    group_read_all?: boolean | undefined;
     /** When enabled, allows the app to create groups, read all group properties and memberships, update group properties and memberships, and delete groups. */
-    group_readwrite_all?: boolean;
+    group_readwrite_all?: boolean | undefined;
     /** When enabled, allows the app to create, read, update, and delete all mail in all mailboxes. */
-    mail_readwrite_all?: boolean;
+    mail_readwrite_all?: boolean | undefined;
     /** When enabled, allows the app to send mail as users in the organization. */
-    mail_send?: boolean;
+    mail_send?: boolean | undefined;
     /** When enabled, requests access to user's Windows Live Messenger data. */
-    messenger?: boolean;
+    messenger?: boolean | undefined;
     /** When enabled, requests a refresh token for offline access. */
-    offline_access?: boolean;
+    offline_access?: boolean | undefined;
     /** When enabled, requests read access to personal, business, and mobile phone numbers. */
-    phone_numbers?: boolean;
+    phone_numbers?: boolean | undefined;
     /** When enabled, requests read access to user's photos, videos, audio, and albums. */
-    photos?: boolean;
+    photos?: boolean | undefined;
     /** When enabled, requests read access to personal and business postal addresses. */
-    postal_addresses?: boolean;
+    postal_addresses?: boolean | undefined;
     /** When enabled, allows the app to read the role-based access control (RBAC) settings for your company's directory. */
-    rolemanagement_read_all?: boolean;
+    rolemanagement_read_all?: boolean | undefined;
     /** When enabled, allows the app to read and write the role-based access control (RBAC) settings for your company's directory. */
-    rolemanagement_readwrite_directory?: boolean;
+    rolemanagement_readwrite_directory?: boolean | undefined;
     /** When enabled, requests permission to share content with other users. */
-    share?: boolean;
+    share?: boolean | undefined;
     /** When enabled, provides single sign-in behavior for users already signed into their Microsoft account. */
-    signin?: boolean;
+    signin?: boolean | undefined;
     /** When enabled, allows the app to read documents and list items in all SharePoint site collections. */
-    sites_read_all?: boolean;
+    sites_read_all?: boolean | undefined;
     /** When enabled, allows the app to create, read, update, and delete documents and list items in all SharePoint site collections. */
-    sites_readwrite_all?: boolean;
+    sites_readwrite_all?: boolean | undefined;
     /** When enabled, requests read access to user's files stored on OneDrive. */
-    skydrive?: boolean;
+    skydrive?: boolean | undefined;
     /** When enabled, requests read and write access to user's OneDrive files. */
-    skydrive_update?: boolean;
+    skydrive_update?: boolean | undefined;
     /** When enabled, allows the app to read the names and descriptions of all teams. */
-    team_readbasic_all?: boolean;
+    team_readbasic_all?: boolean | undefined;
     /** When enabled, allows the app to read and write all teams' information and change team membership. */
-    team_readwrite_all?: boolean;
+    team_readwrite_all?: boolean | undefined;
     /** When enabled, allows the app to read the full set of profile properties, reports, and managers of all users. */
-    user_read_all?: boolean;
+    user_read_all?: boolean | undefined;
     /** When enabled, allows the app to read a basic set of profile properties of all users in the directory. */
-    user_readbasic_all?: boolean;
+    user_readbasic_all?: boolean | undefined;
     /** When enabled, requests read access to employer and work position information. */
-    work_profile?: boolean;
+    work_profile?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5393,7 +5468,7 @@ export interface ConnectionOptionsYandex extends Management.ConnectionOptionsOAu
  */
 export interface ConnectionPasskeyAuthenticationMethod {
     /** Determines whether passkeys are enabled */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
 }
 
 /** Controls the UI used to challenge the user for their passkey. */
@@ -5409,11 +5484,11 @@ export type ConnectionPasskeyChallengeUiEnum =
  * Options for the passkey authentication method
  */
 export interface ConnectionPasskeyOptions {
-    challenge_ui?: Management.ConnectionPasskeyChallengeUiEnum;
+    challenge_ui?: Management.ConnectionPasskeyChallengeUiEnum | undefined;
     /** Enables or disables progressive enrollment of passkeys for the connection. */
-    progressive_enrollment_enabled?: boolean;
+    progressive_enrollment_enabled?: boolean | undefined;
     /** Enables or disables enrollment prompt for local passkey when user authenticates using a cross-device passkey for the connection. */
-    local_enrollment_enabled?: boolean;
+    local_enrollment_enabled?: boolean | undefined;
 }
 
 /**
@@ -5421,9 +5496,9 @@ export interface ConnectionPasskeyOptions {
  */
 export interface ConnectionPasswordAuthenticationMethod {
     /** Determines whether passwords are enabled */
-    enabled?: boolean;
-    api_behavior?: Management.ConnectionApiBehaviorEnum;
-    signup_behavior?: Management.ConnectionSignupBehaviorEnum;
+    enabled?: boolean | undefined;
+    api_behavior?: Management.ConnectionApiBehaviorEnum | undefined;
+    signup_behavior?: Management.ConnectionSignupBehaviorEnum | undefined;
 }
 
 /**
@@ -5431,7 +5506,7 @@ export interface ConnectionPasswordAuthenticationMethod {
  */
 export interface ConnectionPasswordComplexityOptions {
     /** Minimum password length */
-    min_length?: number;
+    min_length?: number | undefined;
 }
 
 /**
@@ -5440,7 +5515,7 @@ export interface ConnectionPasswordComplexityOptions {
 export interface ConnectionPasswordDictionaryOptions {
     enable: boolean;
     /** Custom Password Dictionary. An array of up to 200 entries. */
-    dictionary?: string[];
+    dictionary?: string[] | undefined;
 }
 
 /**
@@ -5448,7 +5523,7 @@ export interface ConnectionPasswordDictionaryOptions {
  */
 export interface ConnectionPasswordHistoryOptions {
     enable: boolean;
-    size?: number;
+    size?: number | undefined;
 }
 
 /**
@@ -5474,7 +5549,7 @@ export type ConnectionPasswordPolicyEnum =
  */
 export interface ConnectionPhoneOtpAuthenticationMethod {
     /** Determines whether phone OTP is enabled */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
 }
 
 /**
@@ -5488,13 +5563,13 @@ export type ConnectionPingFederateBaseUrl = Management.ConnectionPingFederateBas
 export type ConnectionPingFederateBaseUrlPingFederate = Management.ConnectionHttpsUrlWithHttpFallback;
 
 export interface ConnectionProfile {
-    id?: Management.ConnectionProfileId;
-    name?: Management.ConnectionProfileName;
-    organization?: Management.ConnectionProfileOrganization;
-    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
-    enabled_features?: Management.ConnectionProfileEnabledFeatures;
-    connection_config?: Management.ConnectionProfileConfig;
-    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    id?: Management.ConnectionProfileId | undefined;
+    name?: Management.ConnectionProfileName | undefined;
+    organization?: Management.ConnectionProfileOrganization | undefined;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate | undefined;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
+    connection_config?: Management.ConnectionProfileConfig | undefined;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
 }
 
 /**
@@ -5526,8 +5601,8 @@ export type ConnectionProfileName = string;
  * The organization of the connection profile.
  */
 export interface ConnectionProfileOrganization {
-    show_as_button?: Management.ConnectionProfileOrganizationShowAsButtonEnum;
-    assign_membership_on_login?: Management.ConnectionProfileOrganizationAssignMembershipOnLoginEnum;
+    show_as_button?: Management.ConnectionProfileOrganizationShowAsButtonEnum | undefined;
+    assign_membership_on_login?: Management.ConnectionProfileOrganizationAssignMembershipOnLoginEnum | undefined;
 }
 
 /** Indicates if membership should be assigned on login. */
@@ -5552,22 +5627,22 @@ export type ConnectionProfileOrganizationShowAsButtonEnum =
  * Connection Profile Strategy Override
  */
 export interface ConnectionProfileStrategyOverride {
-    enabled_features?: Management.ConnectionProfileStrategyOverridesEnabledFeatures;
-    connection_config?: Management.ConnectionProfileStrategyOverridesConnectionConfig;
+    enabled_features?: Management.ConnectionProfileStrategyOverridesEnabledFeatures | undefined;
+    connection_config?: Management.ConnectionProfileStrategyOverridesConnectionConfig | undefined;
 }
 
 /**
  * Strategy-specific overrides for this attribute
  */
 export interface ConnectionProfileStrategyOverrides {
-    pingfederate?: Management.ConnectionProfileStrategyOverride;
-    ad?: Management.ConnectionProfileStrategyOverride;
-    adfs?: Management.ConnectionProfileStrategyOverride;
-    waad?: Management.ConnectionProfileStrategyOverride;
-    "google-apps"?: Management.ConnectionProfileStrategyOverride;
-    okta?: Management.ConnectionProfileStrategyOverride;
-    oidc?: Management.ConnectionProfileStrategyOverride;
-    samlp?: Management.ConnectionProfileStrategyOverride;
+    pingfederate?: Management.ConnectionProfileStrategyOverride | undefined;
+    ad?: Management.ConnectionProfileStrategyOverride | undefined;
+    adfs?: Management.ConnectionProfileStrategyOverride | undefined;
+    waad?: Management.ConnectionProfileStrategyOverride | undefined;
+    "google-apps"?: Management.ConnectionProfileStrategyOverride | undefined;
+    okta?: Management.ConnectionProfileStrategyOverride | undefined;
+    oidc?: Management.ConnectionProfileStrategyOverride | undefined;
+    samlp?: Management.ConnectionProfileStrategyOverride | undefined;
 }
 
 /**
@@ -5584,59 +5659,59 @@ export type ConnectionProfileStrategyOverridesEnabledFeatures = Management.Enabl
  * The structure of the template, which can be used as the payload for creating or updating a Connection Profile.
  */
 export interface ConnectionProfileTemplate {
-    name?: Management.ConnectionProfileName;
-    organization?: Management.ConnectionProfileOrganization;
-    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
-    enabled_features?: Management.ConnectionProfileEnabledFeatures;
-    connection_config?: Management.ConnectionProfileConfig;
-    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    name?: Management.ConnectionProfileName | undefined;
+    organization?: Management.ConnectionProfileOrganization | undefined;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate | undefined;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
+    connection_config?: Management.ConnectionProfileConfig | undefined;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
 }
 
 export interface ConnectionProfileTemplateItem {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The user-friendly name of the template displayed in the UI. */
-    display_name?: string;
-    template?: Management.ConnectionProfileTemplate;
+    display_name?: string | undefined;
+    template?: Management.ConnectionProfileTemplate | undefined;
 }
 
 /**
  * The connection's options (depend on the connection strategy)
  */
 export interface ConnectionPropertiesOptions {
-    validation?: Management.ConnectionValidationOptions | null;
+    validation?: (Management.ConnectionValidationOptions | null) | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
-    non_persistent_attrs?: string[];
+    non_persistent_attrs?: string[] | undefined;
     /** Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used. */
-    precedence?: Management.ConnectionIdentifierPrecedenceEnum[];
-    attributes?: Management.ConnectionAttributes;
+    precedence?: Management.ConnectionIdentifierPrecedenceEnum[] | undefined;
+    attributes?: Management.ConnectionAttributes | undefined;
     /** Set to true to inject context into custom DB scripts (warning: cannot be disabled once enabled) */
-    enable_script_context?: boolean;
+    enable_script_context?: boolean | undefined;
     /** Set to true to use a legacy user store */
-    enabledDatabaseCustomization?: boolean;
+    enabledDatabaseCustomization?: boolean | undefined;
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
-    import_mode?: boolean;
-    customScripts?: Management.ConnectionCustomScripts;
-    authentication_methods?: Management.ConnectionAuthenticationMethods | null;
-    passkey_options?: Management.ConnectionPasskeyOptions | null;
-    passwordPolicy?: Management.ConnectionPasswordPolicyEnum | null;
-    password_complexity_options?: Management.ConnectionPasswordComplexityOptions | null;
-    password_history?: Management.ConnectionPasswordHistoryOptions | null;
-    password_no_personal_info?: Management.ConnectionPasswordNoPersonalInfoOptions | null;
-    password_dictionary?: Management.ConnectionPasswordDictionaryOptions | null;
-    api_enable_users?: boolean;
-    basic_profile?: boolean;
-    ext_admin?: boolean;
-    ext_is_suspended?: boolean;
-    ext_agreed_terms?: boolean;
-    ext_groups?: boolean;
-    ext_assigned_plans?: boolean;
-    ext_profile?: boolean;
-    disable_self_service_change_password?: boolean;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    gateway_authentication?: Management.ConnectionGatewayAuthentication | null;
-    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
+    import_mode?: boolean | undefined;
+    customScripts?: Management.ConnectionCustomScripts | undefined;
+    authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
+    passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
+    passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
+    password_complexity_options?: (Management.ConnectionPasswordComplexityOptions | null) | undefined;
+    password_history?: (Management.ConnectionPasswordHistoryOptions | null) | undefined;
+    password_no_personal_info?: (Management.ConnectionPasswordNoPersonalInfoOptions | null) | undefined;
+    password_dictionary?: (Management.ConnectionPasswordDictionaryOptions | null) | undefined;
+    api_enable_users?: boolean | undefined;
+    basic_profile?: boolean | undefined;
+    ext_admin?: boolean | undefined;
+    ext_is_suspended?: boolean | undefined;
+    ext_agreed_terms?: boolean | undefined;
+    ext_groups?: boolean | undefined;
+    ext_assigned_plans?: boolean | undefined;
+    ext_profile?: boolean | undefined;
+    disable_self_service_change_password?: boolean | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
+    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5675,8 +5750,8 @@ export type ConnectionProvisioningTicketUrl = string;
  * Purposes for a connection
  */
 export interface ConnectionPurposes {
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
 }
 
 /**
@@ -5722,6 +5797,11 @@ export type ConnectionRequestParameterSupported = boolean;
 export type ConnectionRequestTemplateSaml = string;
 
 /**
+ * The URL of the OAuth 1.0a request-token endpoint. This endpoint is used to obtain a temporary request token during the OAuth 1.0a authentication flow.
+ */
+export type ConnectionRequestTokenUrloAuth1 = Management.ConnectionHttpsUrlWithHttpFallback255;
+
+/**
  * Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false.
  */
 export type ConnectionRequestUriParameterSupported = boolean;
@@ -5737,19 +5817,18 @@ export type ConnectionRequireRequestUriRegistration = boolean;
 export type ConnectionRequiresUsername = boolean;
 
 export interface ConnectionResponseCommon extends Management.CreateConnectionCommon {
-    id?: Management.ConnectionId;
-    realms?: Management.ConnectionRealms;
+    id?: Management.ConnectionId | undefined;
+    realms?: Management.ConnectionRealms | undefined;
 }
 
 /**
  * Response for connections with strategy=ad
  */
 export interface ConnectionResponseContentAd
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAd.Strategy;
-    options?: Management.ConnectionOptionsAd;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
+    options?: Management.ConnectionOptionsAd | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
 }
 
 export namespace ConnectionResponseContentAd {
@@ -5763,12 +5842,11 @@ export namespace ConnectionResponseContentAd {
  * Response for connections with strategy=adfs
  */
 export interface ConnectionResponseContentAdfs
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAdfs.Strategy;
-    options?: Management.ConnectionOptionsAdfs;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsAdfs | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentAdfs {
@@ -5782,10 +5860,9 @@ export namespace ConnectionResponseContentAdfs {
  * Response for connections with strategy=aol
  */
 export interface ConnectionResponseContentAol
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAol.Strategy;
-    options?: Management.ConnectionOptionsAol;
+    options?: Management.ConnectionOptionsAol | undefined;
 }
 
 export namespace ConnectionResponseContentAol {
@@ -5799,10 +5876,9 @@ export namespace ConnectionResponseContentAol {
  * Response for connections with strategy=amazon
  */
 export interface ConnectionResponseContentAmazon
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAmazon.Strategy;
-    options?: Management.ConnectionOptionsAmazon;
+    options?: Management.ConnectionOptionsAmazon | undefined;
 }
 
 export namespace ConnectionResponseContentAmazon {
@@ -5816,10 +5892,9 @@ export namespace ConnectionResponseContentAmazon {
  * Response for connections with strategy=apple
  */
 export interface ConnectionResponseContentApple
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentApple.Strategy;
-    options?: Management.ConnectionOptionsApple;
+    options?: Management.ConnectionOptionsApple | undefined;
 }
 
 export namespace ConnectionResponseContentApple {
@@ -5833,10 +5908,9 @@ export namespace ConnectionResponseContentApple {
  * Response for connections with strategy=auth0
  */
 export interface ConnectionResponseContentAuth0
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAuth0.Strategy;
-    options?: Management.ConnectionOptionsAuth0;
+    options?: Management.ConnectionOptionsAuth0 | undefined;
 }
 
 export namespace ConnectionResponseContentAuth0 {
@@ -5850,10 +5924,9 @@ export namespace ConnectionResponseContentAuth0 {
  * Response for connections with strategy=auth0-oidc
  */
 export interface ConnectionResponseContentAuth0Oidc
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAuth0Oidc.Strategy;
-    options?: Management.ConnectionOptionsAuth0Oidc;
+    options?: Management.ConnectionOptionsAuth0Oidc | undefined;
 }
 
 export namespace ConnectionResponseContentAuth0Oidc {
@@ -5867,12 +5940,11 @@ export namespace ConnectionResponseContentAuth0Oidc {
  * Response for connections with strategy=waad
  */
 export interface ConnectionResponseContentAzureAd
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentAzureAd.Strategy;
-    options?: Management.ConnectionOptionsAzureAd;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsAzureAd | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentAzureAd {
@@ -5886,10 +5958,9 @@ export namespace ConnectionResponseContentAzureAd {
  * Response for connections with strategy=baidu
  */
 export interface ConnectionResponseContentBaidu
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBaidu.Strategy;
-    options?: Management.ConnectionOptionsBaidu;
+    options?: Management.ConnectionOptionsBaidu | undefined;
 }
 
 export namespace ConnectionResponseContentBaidu {
@@ -5903,10 +5974,9 @@ export namespace ConnectionResponseContentBaidu {
  * Response for connections with strategy=bitbucket
  */
 export interface ConnectionResponseContentBitbucket
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBitbucket.Strategy;
-    options?: Management.ConnectionOptionsBitbucket;
+    options?: Management.ConnectionOptionsBitbucket | undefined;
 }
 
 export namespace ConnectionResponseContentBitbucket {
@@ -5920,10 +5990,9 @@ export namespace ConnectionResponseContentBitbucket {
  * Response for connections with strategy=bitly
  */
 export interface ConnectionResponseContentBitly
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBitly.Strategy;
-    options?: Management.ConnectionOptionsBitly;
+    options?: Management.ConnectionOptionsBitly | undefined;
 }
 
 export namespace ConnectionResponseContentBitly {
@@ -5937,10 +6006,9 @@ export namespace ConnectionResponseContentBitly {
  * Response for connections with strategy=box
  */
 export interface ConnectionResponseContentBox
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentBox.Strategy;
-    options?: Management.ConnectionOptionsBox;
+    options?: Management.ConnectionOptionsBox | undefined;
 }
 
 export namespace ConnectionResponseContentBox {
@@ -5954,11 +6022,10 @@ export namespace ConnectionResponseContentBox {
  * Response for connections with strategy=custom
  */
 export interface ConnectionResponseContentCustom
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentCustom.Strategy;
-    options?: Management.ConnectionOptionsCustom;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
+    options?: Management.ConnectionOptionsCustom | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
 }
 
 export namespace ConnectionResponseContentCustom {
@@ -5972,10 +6039,9 @@ export namespace ConnectionResponseContentCustom {
  * Response for connections with strategy=daccount
  */
 export interface ConnectionResponseContentDaccount
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentDaccount.Strategy;
-    options?: Management.ConnectionOptionsDaccount;
+    options?: Management.ConnectionOptionsDaccount | undefined;
 }
 
 export namespace ConnectionResponseContentDaccount {
@@ -5989,10 +6055,9 @@ export namespace ConnectionResponseContentDaccount {
  * Response for connections with strategy=dropbox
  */
 export interface ConnectionResponseContentDropbox
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentDropbox.Strategy;
-    options?: Management.ConnectionOptionsDropbox;
+    options?: Management.ConnectionOptionsDropbox | undefined;
 }
 
 export namespace ConnectionResponseContentDropbox {
@@ -6006,10 +6071,9 @@ export namespace ConnectionResponseContentDropbox {
  * Response for connections with strategy=dwolla
  */
 export interface ConnectionResponseContentDwolla
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentDwolla.Strategy;
-    options?: Management.ConnectionOptionsDwolla;
+    options?: Management.ConnectionOptionsDwolla | undefined;
 }
 
 export namespace ConnectionResponseContentDwolla {
@@ -6023,10 +6087,9 @@ export namespace ConnectionResponseContentDwolla {
  * Response for connections with strategy=email
  */
 export interface ConnectionResponseContentEmail
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentEmail.Strategy;
-    options?: Management.ConnectionOptionsEmail;
+    options?: Management.ConnectionOptionsEmail | undefined;
 }
 
 export namespace ConnectionResponseContentEmail {
@@ -6040,10 +6103,9 @@ export namespace ConnectionResponseContentEmail {
  * Response for connections with strategy=evernote
  */
 export interface ConnectionResponseContentEvernote
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentEvernote.Strategy;
-    options?: Management.ConnectionOptionsEvernote;
+    options?: Management.ConnectionOptionsEvernote | undefined;
 }
 
 export namespace ConnectionResponseContentEvernote {
@@ -6057,10 +6119,9 @@ export namespace ConnectionResponseContentEvernote {
  * Response for connections with strategy=evernote-sandbox
  */
 export interface ConnectionResponseContentEvernoteSandbox
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentEvernoteSandbox.Strategy;
-    options?: Management.ConnectionOptionsEvernote;
+    options?: Management.ConnectionOptionsEvernote | undefined;
 }
 
 export namespace ConnectionResponseContentEvernoteSandbox {
@@ -6074,10 +6135,9 @@ export namespace ConnectionResponseContentEvernoteSandbox {
  * Response for connections with strategy=exact
  */
 export interface ConnectionResponseContentExact
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentExact.Strategy;
-    options?: Management.ConnectionOptionsExact;
+    options?: Management.ConnectionOptionsExact | undefined;
 }
 
 export namespace ConnectionResponseContentExact {
@@ -6091,10 +6151,9 @@ export namespace ConnectionResponseContentExact {
  * Response for connections with strategy=facebook
  */
 export interface ConnectionResponseContentFacebook
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentFacebook.Strategy;
-    options?: Management.ConnectionOptionsFacebook;
+    options?: Management.ConnectionOptionsFacebook | undefined;
 }
 
 export namespace ConnectionResponseContentFacebook {
@@ -6108,10 +6167,9 @@ export namespace ConnectionResponseContentFacebook {
  * Response for connections with strategy=fitbit
  */
 export interface ConnectionResponseContentFitbit
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentFitbit.Strategy;
-    options?: Management.ConnectionOptionsFitbit;
+    options?: Management.ConnectionOptionsFitbit | undefined;
 }
 
 export namespace ConnectionResponseContentFitbit {
@@ -6125,10 +6183,9 @@ export namespace ConnectionResponseContentFitbit {
  * Response for connections with strategy=flickr
  */
 export interface ConnectionResponseContentFlickr
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentFlickr.Strategy;
-    options?: Management.ConnectionOptionsFlickr;
+    options?: Management.ConnectionOptionsFlickr | undefined;
 }
 
 export namespace ConnectionResponseContentFlickr {
@@ -6142,10 +6199,9 @@ export namespace ConnectionResponseContentFlickr {
  * Response for connections with strategy=github
  */
 export interface ConnectionResponseContentGitHub
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentGitHub.Strategy;
-    options?: Management.ConnectionOptionsGitHub;
+    options?: Management.ConnectionOptionsGitHub | undefined;
 }
 
 export namespace ConnectionResponseContentGitHub {
@@ -6159,12 +6215,11 @@ export namespace ConnectionResponseContentGitHub {
  * Response for connections with strategy=google-apps
  */
 export interface ConnectionResponseContentGoogleApps
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentGoogleApps.Strategy;
-    options?: Management.ConnectionOptionsGoogleApps;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsGoogleApps | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentGoogleApps {
@@ -6178,10 +6233,9 @@ export namespace ConnectionResponseContentGoogleApps {
  * Response for connections with strategy=google-oauth2
  */
 export interface ConnectionResponseContentGoogleOAuth2
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentGoogleOAuth2.Strategy;
-    options?: Management.ConnectionOptionsGoogleOAuth2;
+    options?: Management.ConnectionOptionsGoogleOAuth2 | undefined;
 }
 
 export namespace ConnectionResponseContentGoogleOAuth2 {
@@ -6195,11 +6249,10 @@ export namespace ConnectionResponseContentGoogleOAuth2 {
  * Response for connections with strategy=ip
  */
 export interface ConnectionResponseContentIp
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentIp.Strategy;
-    options?: Management.ConnectionOptionsIp;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsIp | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentIp {
@@ -6213,10 +6266,9 @@ export namespace ConnectionResponseContentIp {
  * Response for connections with strategy=instagram
  */
 export interface ConnectionResponseContentInstagram
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentInstagram.Strategy;
-    options?: Management.ConnectionOptionsInstagram;
+    options?: Management.ConnectionOptionsInstagram | undefined;
 }
 
 export namespace ConnectionResponseContentInstagram {
@@ -6230,10 +6282,9 @@ export namespace ConnectionResponseContentInstagram {
  * Response for connections with strategy=line
  */
 export interface ConnectionResponseContentLine
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentLine.Strategy;
-    options?: Management.ConnectionOptionsLine;
+    options?: Management.ConnectionOptionsLine | undefined;
 }
 
 export namespace ConnectionResponseContentLine {
@@ -6247,10 +6298,9 @@ export namespace ConnectionResponseContentLine {
  * Response for connections with strategy=linkedin
  */
 export interface ConnectionResponseContentLinkedin
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentLinkedin.Strategy;
-    options?: Management.ConnectionOptionsLinkedin;
+    options?: Management.ConnectionOptionsLinkedin | undefined;
 }
 
 export namespace ConnectionResponseContentLinkedin {
@@ -6264,10 +6314,9 @@ export namespace ConnectionResponseContentLinkedin {
  * Response for connections with strategy=miicard
  */
 export interface ConnectionResponseContentMiicard
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentMiicard.Strategy;
-    options?: Management.ConnectionOptionsMiicard;
+    options?: Management.ConnectionOptionsMiicard | undefined;
 }
 
 export namespace ConnectionResponseContentMiicard {
@@ -6281,10 +6330,9 @@ export namespace ConnectionResponseContentMiicard {
  * Response for connections with strategy=oauth1
  */
 export interface ConnectionResponseContentOAuth1
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOAuth1.Strategy;
-    options?: Management.ConnectionOptionsOAuth1;
+    options?: Management.ConnectionOptionsOAuth1 | undefined;
 }
 
 export namespace ConnectionResponseContentOAuth1 {
@@ -6298,10 +6346,9 @@ export namespace ConnectionResponseContentOAuth1 {
  * Response for connections with strategy=oauth2
  */
 export interface ConnectionResponseContentOAuth2
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOAuth2.Strategy;
-    options?: Management.ConnectionOptionsOAuth2;
+    options?: Management.ConnectionOptionsOAuth2 | undefined;
 }
 
 export namespace ConnectionResponseContentOAuth2 {
@@ -6316,10 +6363,10 @@ export namespace ConnectionResponseContentOAuth2 {
  */
 export interface ConnectionResponseContentOidc extends Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOidc.Strategy;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa;
-    options?: Management.ConnectionOptionsOidc;
-    show_as_button?: Management.ConnectionShowAsButton;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
+    options?: Management.ConnectionOptionsOidc | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentOidc {
@@ -6333,12 +6380,11 @@ export namespace ConnectionResponseContentOidc {
  * Response for connections with strategy=office365
  */
 export interface ConnectionResponseContentOffice365
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOffice365.Strategy;
-    options?: Management.ConnectionOptionsOffice365;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsOffice365 | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentOffice365 {
@@ -6352,11 +6398,10 @@ export namespace ConnectionResponseContentOffice365 {
  * Response for connections with strategy=okta
  */
 export interface ConnectionResponseContentOkta
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOkta.Strategy;
-    options?: Management.ConnectionOptionsOkta;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsOkta | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentOkta {
@@ -6370,10 +6415,9 @@ export namespace ConnectionResponseContentOkta {
  * Response for connections with strategy=paypal
  */
 export interface ConnectionResponseContentPaypal
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPaypal.Strategy;
-    options?: Management.ConnectionOptionsPaypal;
+    options?: Management.ConnectionOptionsPaypal | undefined;
 }
 
 export namespace ConnectionResponseContentPaypal {
@@ -6387,10 +6431,9 @@ export namespace ConnectionResponseContentPaypal {
  * Response for connections with strategy=paypal-sandbox
  */
 export interface ConnectionResponseContentPaypalSandbox
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPaypalSandbox.Strategy;
-    options?: Management.ConnectionOptionsPaypal;
+    options?: Management.ConnectionOptionsPaypal | undefined;
 }
 
 export namespace ConnectionResponseContentPaypalSandbox {
@@ -6404,12 +6447,11 @@ export namespace ConnectionResponseContentPaypalSandbox {
  * Response for connections with strategy=pingfederate
  */
 export interface ConnectionResponseContentPingFederate
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPingFederate.Strategy;
-    options?: Management.ConnectionOptionsPingFederate;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsPingFederate | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentPingFederate {
@@ -6423,10 +6465,9 @@ export namespace ConnectionResponseContentPingFederate {
  * Response for connections with strategy=planningcenter
  */
 export interface ConnectionResponseContentPlanningCenter
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentPlanningCenter.Strategy;
-    options?: Management.ConnectionOptionsPlanningCenter;
+    options?: Management.ConnectionOptionsPlanningCenter | undefined;
 }
 
 export namespace ConnectionResponseContentPlanningCenter {
@@ -6440,10 +6481,9 @@ export namespace ConnectionResponseContentPlanningCenter {
  * Response for connections with strategy=renren
  */
 export interface ConnectionResponseContentRenren
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentRenren.Strategy;
-    options?: Management.ConnectionOptionsRenren;
+    options?: Management.ConnectionOptionsRenren | undefined;
 }
 
 export namespace ConnectionResponseContentRenren {
@@ -6457,12 +6497,11 @@ export namespace ConnectionResponseContentRenren {
  * Response for connections with strategy=samlp
  */
 export interface ConnectionResponseContentSaml
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSaml.Strategy;
-    options?: Management.ConnectionOptionsSaml;
-    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsSaml | undefined;
+    provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentSaml {
@@ -6476,10 +6515,9 @@ export namespace ConnectionResponseContentSaml {
  * Response for connections with strategy=sms
  */
 export interface ConnectionResponseContentSms
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSms.Strategy;
-    options?: Management.ConnectionOptionsSms;
+    options?: Management.ConnectionOptionsSms | undefined;
 }
 
 export namespace ConnectionResponseContentSms {
@@ -6493,10 +6531,9 @@ export namespace ConnectionResponseContentSms {
  * Response for connections with strategy=salesforce
  */
 export interface ConnectionResponseContentSalesforce
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSalesforce.Strategy;
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforce | undefined;
 }
 
 export namespace ConnectionResponseContentSalesforce {
@@ -6510,10 +6547,9 @@ export namespace ConnectionResponseContentSalesforce {
  * Response for connections with strategy=salesforce-community
  */
 export interface ConnectionResponseContentSalesforceCommunity
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSalesforceCommunity.Strategy;
-    options?: Management.ConnectionOptionsSalesforceCommunity;
+    options?: Management.ConnectionOptionsSalesforceCommunity | undefined;
 }
 
 export namespace ConnectionResponseContentSalesforceCommunity {
@@ -6527,10 +6563,9 @@ export namespace ConnectionResponseContentSalesforceCommunity {
  * Response for connections with strategy=salesforce-sandbox
  */
 export interface ConnectionResponseContentSalesforceSandbox
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSalesforceSandbox.Strategy;
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforce | undefined;
 }
 
 export namespace ConnectionResponseContentSalesforceSandbox {
@@ -6544,11 +6579,10 @@ export namespace ConnectionResponseContentSalesforceSandbox {
  * Response for connections with strategy=sharepoint
  */
 export interface ConnectionResponseContentSharepoint
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSharepoint.Strategy;
-    options?: Management.ConnectionOptionsSharepoint;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsSharepoint | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace ConnectionResponseContentSharepoint {
@@ -6562,10 +6596,9 @@ export namespace ConnectionResponseContentSharepoint {
  * Response for connections with strategy=shop
  */
 export interface ConnectionResponseContentShop
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentShop.Strategy;
-    options?: Management.ConnectionOptionsShop;
+    options?: Management.ConnectionOptionsShop | undefined;
 }
 
 export namespace ConnectionResponseContentShop {
@@ -6579,10 +6612,9 @@ export namespace ConnectionResponseContentShop {
  * Response for connections with strategy=shopify
  */
 export interface ConnectionResponseContentShopify
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentShopify.Strategy;
-    options?: Management.ConnectionOptionsShopify;
+    options?: Management.ConnectionOptionsShopify | undefined;
 }
 
 export namespace ConnectionResponseContentShopify {
@@ -6596,10 +6628,9 @@ export namespace ConnectionResponseContentShopify {
  * Response for connections with strategy=soundcloud
  */
 export interface ConnectionResponseContentSoundcloud
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSoundcloud.Strategy;
-    options?: Management.ConnectionOptionsSoundcloud;
+    options?: Management.ConnectionOptionsSoundcloud | undefined;
 }
 
 export namespace ConnectionResponseContentSoundcloud {
@@ -6613,10 +6644,9 @@ export namespace ConnectionResponseContentSoundcloud {
  * Response for connections with strategy=thirtysevensignals
  */
 export interface ConnectionResponseContentThirtySevenSignals
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentThirtySevenSignals.Strategy;
-    options?: Management.ConnectionOptionsThirtySevenSignals;
+    options?: Management.ConnectionOptionsThirtySevenSignals | undefined;
 }
 
 export namespace ConnectionResponseContentThirtySevenSignals {
@@ -6630,10 +6660,9 @@ export namespace ConnectionResponseContentThirtySevenSignals {
  * Response for connections with strategy=twitter
  */
 export interface ConnectionResponseContentTwitter
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentTwitter.Strategy;
-    options?: Management.ConnectionOptionsTwitter;
+    options?: Management.ConnectionOptionsTwitter | undefined;
 }
 
 export namespace ConnectionResponseContentTwitter {
@@ -6647,10 +6676,9 @@ export namespace ConnectionResponseContentTwitter {
  * Response for connections with strategy=untappd
  */
 export interface ConnectionResponseContentUntappd
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentUntappd.Strategy;
-    options?: Management.ConnectionOptionsUntappd;
+    options?: Management.ConnectionOptionsUntappd | undefined;
 }
 
 export namespace ConnectionResponseContentUntappd {
@@ -6664,10 +6692,9 @@ export namespace ConnectionResponseContentUntappd {
  * Response for connections with strategy=vkontakte
  */
 export interface ConnectionResponseContentVkontakte
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentVkontakte.Strategy;
-    options?: Management.ConnectionOptionsVkontakte;
+    options?: Management.ConnectionOptionsVkontakte | undefined;
 }
 
 export namespace ConnectionResponseContentVkontakte {
@@ -6681,10 +6708,9 @@ export namespace ConnectionResponseContentVkontakte {
  * Response for connections with strategy=weibo
  */
 export interface ConnectionResponseContentWeibo
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentWeibo.Strategy;
-    options?: Management.ConnectionOptionsWeibo;
+    options?: Management.ConnectionOptionsWeibo | undefined;
 }
 
 export namespace ConnectionResponseContentWeibo {
@@ -6698,10 +6724,9 @@ export namespace ConnectionResponseContentWeibo {
  * Response for connections with strategy=windowslive
  */
 export interface ConnectionResponseContentWindowsLive
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentWindowsLive.Strategy;
-    options?: Management.ConnectionOptionsWindowsLive;
+    options?: Management.ConnectionOptionsWindowsLive | undefined;
 }
 
 export namespace ConnectionResponseContentWindowsLive {
@@ -6715,10 +6740,9 @@ export namespace ConnectionResponseContentWindowsLive {
  * Response for connections with strategy=wordpress
  */
 export interface ConnectionResponseContentWordpress
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentWordpress.Strategy;
-    options?: Management.ConnectionOptionsWordpress;
+    options?: Management.ConnectionOptionsWordpress | undefined;
 }
 
 export namespace ConnectionResponseContentWordpress {
@@ -6732,10 +6756,9 @@ export namespace ConnectionResponseContentWordpress {
  * Response for connections with strategy=yahoo
  */
 export interface ConnectionResponseContentYahoo
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentYahoo.Strategy;
-    options?: Management.ConnectionOptionsYahoo;
+    options?: Management.ConnectionOptionsYahoo | undefined;
 }
 
 export namespace ConnectionResponseContentYahoo {
@@ -6749,10 +6772,9 @@ export namespace ConnectionResponseContentYahoo {
  * Response for connections with strategy=yammer
  */
 export interface ConnectionResponseContentYammer
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentYammer.Strategy;
-    options?: Management.ConnectionOptionsYammer;
+    options?: Management.ConnectionOptionsYammer | undefined;
 }
 
 export namespace ConnectionResponseContentYammer {
@@ -6766,10 +6788,9 @@ export namespace ConnectionResponseContentYammer {
  * Response for connections with strategy=yandex
  */
 export interface ConnectionResponseContentYandex
-    extends Management.ConnectionPurposes,
-        Management.ConnectionResponseCommon {
+    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentYandex.Strategy;
-    options?: Management.ConnectionOptionsYandex;
+    options?: Management.ConnectionOptionsYandex | undefined;
 }
 
 export namespace ConnectionResponseContentYandex {
@@ -6840,6 +6861,11 @@ export type ConnectionScopeItem = string;
 export type ConnectionScopeItemGoogleApps = string;
 
 /**
+ * Scopes to request from LinkedIn during OAuth. Use standard scopes such as r_liteprofile and r_emailaddress; legacy or partner scopes (e.g., r_basicprofile, r_fullprofile, rw_company_admin) may require LinkedIn approval and may not be available to new apps.
+ */
+export type ConnectionScopeLinkedin = Management.ConnectionScopeArray;
+
+/**
  * OAuth 2.0 scopes requested from the identity provider during authorization. Determines what user information and permissions Auth0 can access. Can be specified as a space-delimited string (e.g., 'openid profile email') or array of scope values. The 'useOauthSpecScope' setting controls delimiter behavior when using connection_scope parameter.
  */
 export type ConnectionScopeOAuth2 = string | string[];
@@ -6865,13 +6891,21 @@ export type ConnectionScopeSalesforce = Management.ConnectionScopeArray;
 export type ConnectionScopesSupported = (string[] | null) | undefined;
 
 /**
+ * Custom scripts to transform user profile data or modify OAuth1 flow behavior
+ */
+export interface ConnectionScriptsOAuth1 {
+    /** Custom JavaScript function to retrieve and transform user profile data from the identity provider. Called with the access token and token exchange response. Must return a user profile object. Executed in a sandboxed environment. If not provided, an empty profile object is used. */
+    fetchUserProfile?: string | undefined;
+}
+
+/**
  * Custom scripts to transform user profile data or modify OAuth2 flow behavior
  */
 export interface ConnectionScriptsOAuth2 {
     /** Custom JavaScript function to retrieve and transform user profile data from the identity provider. Called with the access token and token exchange response. Must return a user profile object. Executed in a sandboxed environment. If not provided, an empty profile object is used. */
-    fetchUserProfile?: string;
+    fetchUserProfile?: string | undefined;
     /** Custom JavaScript function to dynamically construct the logout URL for the identity provider. Called with the request query parameters and must invoke a callback with the logout URL. Only used if 'logoutUrl' is not configured. Executed in a sandboxed environment. */
-    getLogoutUrl?: string;
+    getLogoutUrl?: string | undefined;
 }
 
 /**
@@ -6946,6 +6980,13 @@ export type ConnectionSignatureAlgorithmEnumSaml =
  */
 export type ConnectionSignatureAlgorithmSaml = Management.ConnectionSignatureAlgorithmEnumSaml;
 
+/** OAuth 1.0a signature algorithm used when signing request-token and access-token calls for this connection (RSA-SHA1 only). */
+export const ConnectionSignatureMethodOAuth1 = {
+    RsaSha1: "RSA-SHA1",
+} as const;
+export type ConnectionSignatureMethodOAuth1 =
+    (typeof ConnectionSignatureMethodOAuth1)[keyof typeof ConnectionSignatureMethodOAuth1];
+
 /**
  * Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification.
  */
@@ -6971,9 +7012,9 @@ export type ConnectionSigningCertificatePemSaml = string;
  */
 export interface ConnectionSigningKeySaml {
     /** Base64-encoded X.509 certificate in PEM format used by Auth0 to sign SAML requests and logout messages. */
-    cert?: string;
+    cert?: string | undefined;
     /** Private key in PEM format used by Auth0 to sign SAML requests and logout messages. */
-    key?: string;
+    key?: string | undefined;
 }
 
 /** Specifies the signup behavior for password authentication */
@@ -7051,9 +7092,6 @@ export const ConnectionStrategyEnum = {
 } as const;
 export type ConnectionStrategyEnum = (typeof ConnectionStrategyEnum)[keyof typeof ConnectionStrategyEnum];
 
-/**
- * Version number of the linkedin strategy implementation.
- */
 export type ConnectionStrategyVersionEnumLinkedin = number;
 
 /**
@@ -7136,8 +7174,11 @@ export type ConnectionTokenEndpointAuthMethodsSupported = string[];
 /** Algorithm used to sign client_assertions. */
 export const ConnectionTokenEndpointAuthSigningAlgEnum = {
     Es256: "ES256",
+    Es384: "ES384",
     Ps256: "PS256",
+    Ps384: "PS384",
     Rs256: "RS256",
+    Rs384: "RS384",
     Rs512: "RS512",
 } as const;
 export type ConnectionTokenEndpointAuthSigningAlgEnum =
@@ -7153,8 +7194,8 @@ export type ConnectionTokenEndpointOAuth2 = Management.ConnectionTokenEndpoint;
 export type ConnectionTokenEndpointOidc = Management.ConnectionTokenEndpoint;
 
 export interface ConnectionTotpEmail {
-    length?: Management.ConnectionTotpLengthEmail;
-    time_step?: Management.ConnectionTotpTimeStepEmail;
+    length?: Management.ConnectionTotpLengthEmail | undefined;
+    time_step?: Management.ConnectionTotpTimeStepEmail | undefined;
 }
 
 /**
@@ -7176,8 +7217,8 @@ export type ConnectionTotpLengthSms = Management.ConnectionTotpLengthPasswordles
  * Time-based One-Time Password (TOTP) options
  */
 export interface ConnectionTotpSms {
-    length?: Management.ConnectionTotpLengthSms;
-    time_step?: Management.ConnectionTotpTimeStepSms;
+    length?: Management.ConnectionTotpLengthSms | undefined;
+    time_step?: Management.ConnectionTotpTimeStepSms | undefined;
 }
 
 /**
@@ -7228,7 +7269,7 @@ export type ConnectionUpstreamAdditionalProperties =
     | Management.ConnectionUpstreamValue;
 
 export interface ConnectionUpstreamAlias {
-    alias?: Management.ConnectionUpstreamAliasEnum;
+    alias?: Management.ConnectionUpstreamAliasEnum | undefined;
 }
 
 export const ConnectionUpstreamAliasEnum = {
@@ -7263,13 +7304,18 @@ export type ConnectionUpstreamParamsAdfs = ((Management.ConnectionUpstreamParams
 export type ConnectionUpstreamParamsFacebook = Record<string, Management.ConnectionUpstreamAdditionalProperties>;
 
 export interface ConnectionUpstreamValue {
-    value?: string;
+    value?: string | undefined;
 }
 
 /**
  * When enabled (true), uses the Azure AD common endpoint for multi-tenant authentication. Allows users from any Azure AD organization to sign in. Requires userid_attribute set to 'sub' (not 'oid'). Cannot be used with SCIM provisioning. Defaults to false.
  */
 export type ConnectionUseCommonEndpointAzureAd = boolean;
+
+/**
+ * The URL of the OAuth 1.0a user-authorization endpoint. This endpoint is used to redirect users to the provider's site to authorize the temporary request token obtained from the request-token endpoint during the OAuth 1.0a authentication flow.
+ */
+export type ConnectionUserAuthorizationUrloAuth1 = Management.ConnectionHttpsUrlWithHttpFallback255;
 
 /**
  * Custom SAML assertion attribute to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single SAML attribute name).
@@ -7317,7 +7363,7 @@ export interface ConnectionUsernameValidationOptions {
  * Options for validation
  */
 export interface ConnectionValidationOptions {
-    username?: Management.ConnectionUsernameValidationOptions | null;
+    username?: (Management.ConnectionUsernameValidationOptions | null) | undefined;
 }
 
 /**
@@ -7340,95 +7386,95 @@ export type ConnectionsMetadata = Record<string, (string | null) | undefined>;
 
 export interface CreateActionModuleResponseContent {
     /** The unique ID of the module. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the module. */
-    name?: string;
+    name?: string | undefined;
     /** The source code from the module's draft version. */
-    code?: string;
+    code?: string | undefined;
     /** The npm dependencies from the module's draft version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The secrets from the module's draft version (names and timestamps only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** The number of deployed actions using this module. */
-    actions_using_module_total?: number;
+    actions_using_module_total?: number | undefined;
     /** Whether all draft changes have been published as a version. */
-    all_changes_published?: boolean;
+    all_changes_published?: boolean | undefined;
     /** The version number of the latest published version. Omitted if no versions have been published. */
-    latest_version_number?: number;
+    latest_version_number?: number | undefined;
     /** Timestamp when the module was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the module was last updated. */
-    updated_at?: string;
-    latest_version?: Management.ActionModuleVersionReference;
+    updated_at?: string | undefined;
+    latest_version?: Management.ActionModuleVersionReference | undefined;
 }
 
 export interface CreateActionModuleVersionResponseContent {
     /** The unique ID for this version. */
-    id?: string;
+    id?: string | undefined;
     /** The ID of the parent module. */
-    module_id?: string;
+    module_id?: string | undefined;
     /** The sequential version number. */
-    version_number?: number;
+    version_number?: number | undefined;
     /** The exact source code that was published with this version. */
-    code?: string;
+    code?: string | undefined;
     /** Secrets available to this version (name and updated_at only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** Dependencies locked to this version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The timestamp when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
 }
 
 export interface CreateActionResponseContent {
     /** The unique ID of the action. */
-    id?: string;
+    id?: string | undefined;
     /** The name of an action. */
-    name?: string;
+    name?: string | undefined;
     /** The list of triggers that this action supports. At this time, an action can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** True if all of an Action's contents have been deployed. */
-    all_changes_deployed?: boolean;
+    all_changes_deployed?: boolean | undefined;
     /** The time when this action was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this action was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The source code of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this action depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** The Node runtime. For example: `node22`, defaults to `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    deployed_version?: Management.ActionDeployedVersion;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    deployed_version?: Management.ActionDeployedVersion | undefined;
     /** installed_integration_id is the fk reference to the InstalledIntegration entity. */
-    installed_integration_id?: string;
-    integration?: Management.Integration;
-    status?: Management.ActionBuildStatusEnum;
+    installed_integration_id?: string | undefined;
+    integration?: Management.Integration | undefined;
+    status?: Management.ActionBuildStatusEnum | undefined;
     /** The time when this action was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** True if the action should be deployed after creation. */
-    deploy?: boolean;
+    deploy?: boolean | undefined;
     /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 /**
  * Phone provider configuration schema
  */
 export interface CreateBrandingPhoneProviderResponseContent {
-    id?: string;
+    id?: string | undefined;
     /** The name of the tenant */
-    tenant?: string;
+    tenant?: string | undefined;
     name: Management.PhoneProviderNameEnum;
-    channel?: Management.PhoneProviderChannelEnum;
+    channel?: Management.PhoneProviderChannelEnum | undefined;
     /** Whether the provider is enabled (false) or disabled (true). */
-    disabled?: boolean;
-    configuration?: Management.PhoneProviderConfiguration;
+    disabled?: boolean | undefined;
+    configuration?: Management.PhoneProviderConfiguration | undefined;
     /** The provider's creation date and time in ISO 8601 format */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time of the last update to the provider in ISO 8601 format */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 export interface CreateBrandingThemeResponseContent {
@@ -7457,131 +7503,133 @@ export type CreateClientAuthenticationMethodSelfSignedTlsClientAuthCredentials =
 
 export interface CreateClientGrantResponseContent {
     /** ID of the client grant. */
-    id?: string;
+    id?: string | undefined;
     /** ID of the client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The audience (API identifier) of this client grant. */
-    audience?: string;
+    audience?: string | undefined;
     /** Scopes allowed for this client grant. */
-    scope?: string[];
-    organization_usage?: Management.ClientGrantOrganizationUsageEnum;
+    scope?: string[] | undefined;
+    organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
-    allow_any_organization?: boolean;
+    allow_any_organization?: boolean | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
-    is_system?: boolean;
-    subject_type?: Management.ClientGrantSubjectTypeEnum;
+    is_system?: boolean | undefined;
+    subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
     /** Types of authorization_details allowed for this client grant. */
-    authorization_details_types?: string[];
+    authorization_details_types?: string[] | undefined;
     /** If enabled, all scopes configured on the resource server are allowed for this grant. */
-    allow_all_scopes?: boolean;
+    allow_all_scopes?: boolean | undefined;
 }
 
 export interface CreateClientResponseContent {
     /** ID of this client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Name of the tenant this client belongs to. */
-    tenant?: string;
+    tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
-    name?: string;
+    name?: string | undefined;
     /** Free text description of this client (max length: 140 characters). */
-    description?: string;
+    description?: string | undefined;
     /** Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false). */
-    global?: boolean;
+    global?: boolean | undefined;
     /** Client secret (which you must not make public). */
-    client_secret?: string;
-    app_type?: Management.ClientAppTypeEnum;
+    client_secret?: string | undefined;
+    app_type?: Management.ClientAppTypeEnum | undefined;
     /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
-    logo_uri?: string;
+    logo_uri?: string | undefined;
     /** Whether this client a first party client (true) or not (false). */
-    is_first_party?: boolean;
+    is_first_party?: boolean | undefined;
     /** Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false). */
-    oidc_conformant?: boolean;
+    oidc_conformant?: boolean | undefined;
     /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
-    callbacks?: string[];
+    callbacks?: string[] | undefined;
     /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
-    allowed_origins?: string[];
+    allowed_origins?: string[] | undefined;
     /** Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>. */
-    web_origins?: string[];
+    web_origins?: string[] | undefined;
     /** List of audiences/realms for SAML protocol. Used by the wsfed addon. */
-    client_aliases?: string[];
+    client_aliases?: string[] | undefined;
     /** List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed. */
-    allowed_clients?: string[];
+    allowed_clients?: string[] | undefined;
     /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
-    allowed_logout_urls?: string[];
-    session_transfer?: Management.ClientSessionTransferConfiguration | null;
-    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    allowed_logout_urls?: string[] | undefined;
+    session_transfer?: (Management.ClientSessionTransferConfiguration | null) | undefined;
+    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings | undefined;
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
-    grant_types?: string[];
-    jwt_configuration?: Management.ClientJwtConfiguration;
-    signing_keys?: Management.ClientSigningKeys;
-    encryption_key?: Management.ClientEncryptionKey | null;
+    grant_types?: string[] | undefined;
+    jwt_configuration?: Management.ClientJwtConfiguration | undefined;
+    signing_keys?: Management.ClientSigningKeys | undefined;
+    encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
-    sso?: boolean;
+    sso?: boolean | undefined;
     /** Whether Single Sign On is disabled (true) or enabled (true). Defaults to true. */
-    sso_disabled?: boolean;
+    sso_disabled?: boolean | undefined;
     /** Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false). */
-    cross_origin_authentication?: boolean;
+    cross_origin_authentication?: boolean | undefined;
     /** URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page. */
-    cross_origin_loc?: string;
+    cross_origin_loc?: string | undefined;
     /** Whether a custom login page is to be used (true) or the default provided login page (false). */
-    custom_login_page_on?: boolean;
+    custom_login_page_on?: boolean | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. */
-    custom_login_page?: string;
+    custom_login_page?: string | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. (Used on Previews) */
-    custom_login_page_preview?: string;
+    custom_login_page_preview?: string | undefined;
     /** HTML form template to be used for WS-Federation. */
-    form_template?: string;
-    addons?: Management.ClientAddons;
-    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum;
+    form_template?: string | undefined;
+    addons?: Management.ClientAddons | undefined;
+    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum | undefined;
     /** If true, trust that the IP specified in the `auth0-forwarded-for` header is the end-user's IP for brute-force-protection on token endpoint. */
-    is_token_endpoint_ip_header_trusted?: boolean;
-    client_metadata?: Management.ClientMetadata;
-    mobile?: Management.ClientMobile;
+    is_token_endpoint_ip_header_trusted?: boolean | undefined;
+    client_metadata?: Management.ClientMetadata | undefined;
+    mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
-    initiate_login_uri?: string;
-    refresh_token?: Management.ClientRefreshTokenConfiguration | null;
-    default_organization?: Management.ClientDefaultOrganization | null;
-    organization_usage?: Management.ClientOrganizationUsageEnum;
-    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum;
+    initiate_login_uri?: string | undefined;
+    refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
+    default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
+    organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum | undefined;
     /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
-    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
-    client_authentication_methods?: Management.ClientAuthenticationMethod | null;
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | undefined;
+    client_authentication_methods?: (Management.ClientAuthenticationMethod | null) | undefined;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
-    require_pushed_authorization_requests?: boolean;
+    require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
-    require_proof_of_possession?: boolean;
-    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId;
-    compliance_level?: Management.ClientComplianceLevelEnum | null;
+    require_proof_of_possession?: boolean | undefined;
+    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
-    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
-    token_exchange?: Management.ClientTokenExchangeConfiguration;
+    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | undefined;
+    token_exchange?: Management.ClientTokenExchangeConfiguration | undefined;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
-    par_request_expiry?: number | null;
-    token_quota?: Management.TokenQuota;
-    express_configuration?: Management.ExpressConfiguration;
+    par_request_expiry?: (number | null) | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    express_configuration?: Management.ExpressConfiguration | undefined;
     /** The identifier of the resource server that this client is linked to. */
-    resource_server_identifier?: string;
-    async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+    resource_server_identifier?: string | undefined;
+    async_approval_notification_channels?:
+        | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
+        | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface CreateConnectionCommon extends Management.ConnectionCommon {
-    name?: Management.ConnectionName;
+    name?: Management.ConnectionName | undefined;
 }
 
 export interface CreateConnectionProfileResponseContent {
-    id?: Management.ConnectionProfileId;
-    name?: Management.ConnectionProfileName;
-    organization?: Management.ConnectionProfileOrganization;
-    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
-    enabled_features?: Management.ConnectionProfileEnabledFeatures;
-    connection_config?: Management.ConnectionProfileConfig;
-    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    id?: Management.ConnectionProfileId | undefined;
+    name?: Management.ConnectionProfileName | undefined;
+    organization?: Management.ConnectionProfileOrganization | undefined;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate | undefined;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
+    connection_config?: Management.ConnectionProfileConfig | undefined;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
 }
 
 /**
@@ -7589,7 +7637,7 @@ export interface CreateConnectionProfileResponseContent {
  */
 export interface CreateConnectionRequestContentAd extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentAd.Strategy;
-    options?: Management.ConnectionOptionsAd;
+    options?: Management.ConnectionOptionsAd | undefined;
 }
 
 export namespace CreateConnectionRequestContentAd {
@@ -7604,8 +7652,8 @@ export namespace CreateConnectionRequestContentAd {
  */
 export interface CreateConnectionRequestContentAdfs extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentAdfs.Strategy;
-    options?: Management.ConnectionOptionsAdfs;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsAdfs | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentAdfs {
@@ -7620,7 +7668,7 @@ export namespace CreateConnectionRequestContentAdfs {
  */
 export interface CreateConnectionRequestContentAol extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentAol.Strategy;
-    options?: Management.ConnectionOptionsAol;
+    options?: Management.ConnectionOptionsAol | undefined;
 }
 
 export namespace CreateConnectionRequestContentAol {
@@ -7635,7 +7683,7 @@ export namespace CreateConnectionRequestContentAol {
  */
 export interface CreateConnectionRequestContentAmazon extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentAmazon.Strategy;
-    options?: Management.ConnectionOptionsAmazon;
+    options?: Management.ConnectionOptionsAmazon | undefined;
 }
 
 export namespace CreateConnectionRequestContentAmazon {
@@ -7650,7 +7698,7 @@ export namespace CreateConnectionRequestContentAmazon {
  */
 export interface CreateConnectionRequestContentApple extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentApple.Strategy;
-    options?: Management.ConnectionOptionsApple;
+    options?: Management.ConnectionOptionsApple | undefined;
 }
 
 export namespace CreateConnectionRequestContentApple {
@@ -7665,8 +7713,8 @@ export namespace CreateConnectionRequestContentApple {
  */
 export interface CreateConnectionRequestContentAuth0 extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentAuth0.Strategy;
-    options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealms;
+    options?: Management.ConnectionOptionsAuth0 | undefined;
+    realms?: Management.ConnectionRealms | undefined;
 }
 
 export namespace CreateConnectionRequestContentAuth0 {
@@ -7681,7 +7729,7 @@ export namespace CreateConnectionRequestContentAuth0 {
  */
 export interface CreateConnectionRequestContentAuth0Oidc extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentAuth0Oidc.Strategy;
-    options?: Management.ConnectionOptionsAuth0Oidc;
+    options?: Management.ConnectionOptionsAuth0Oidc | undefined;
 }
 
 export namespace CreateConnectionRequestContentAuth0Oidc {
@@ -7696,8 +7744,8 @@ export namespace CreateConnectionRequestContentAuth0Oidc {
  */
 export interface CreateConnectionRequestContentAzureAd extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentAzureAd.Strategy;
-    options?: Management.ConnectionOptionsAzureAd;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsAzureAd | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentAzureAd {
@@ -7712,7 +7760,7 @@ export namespace CreateConnectionRequestContentAzureAd {
  */
 export interface CreateConnectionRequestContentBaidu extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentBaidu.Strategy;
-    options?: Management.ConnectionOptionsBaidu;
+    options?: Management.ConnectionOptionsBaidu | undefined;
 }
 
 export namespace CreateConnectionRequestContentBaidu {
@@ -7727,7 +7775,7 @@ export namespace CreateConnectionRequestContentBaidu {
  */
 export interface CreateConnectionRequestContentBitbucket extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentBitbucket.Strategy;
-    options?: Management.ConnectionOptionsBitbucket;
+    options?: Management.ConnectionOptionsBitbucket | undefined;
 }
 
 export namespace CreateConnectionRequestContentBitbucket {
@@ -7742,7 +7790,7 @@ export namespace CreateConnectionRequestContentBitbucket {
  */
 export interface CreateConnectionRequestContentBitly extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentBitly.Strategy;
-    options?: Management.ConnectionOptionsBitly;
+    options?: Management.ConnectionOptionsBitly | undefined;
 }
 
 export namespace CreateConnectionRequestContentBitly {
@@ -7756,10 +7804,9 @@ export namespace CreateConnectionRequestContentBitly {
  * Create a connection with strategy=box
  */
 export interface CreateConnectionRequestContentBox
-    extends Management.ConnectionPurposes,
-        Management.CreateConnectionCommon {
+    extends Management.ConnectionPurposes, Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentBox.Strategy;
-    options?: Management.ConnectionOptionsBox;
+    options?: Management.ConnectionOptionsBox | undefined;
 }
 
 export namespace CreateConnectionRequestContentBox {
@@ -7774,7 +7821,7 @@ export namespace CreateConnectionRequestContentBox {
  */
 export interface CreateConnectionRequestContentCustom extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentCustom.Strategy;
-    options?: Management.ConnectionOptionsCustom;
+    options?: Management.ConnectionOptionsCustom | undefined;
 }
 
 export namespace CreateConnectionRequestContentCustom {
@@ -7789,7 +7836,7 @@ export namespace CreateConnectionRequestContentCustom {
  */
 export interface CreateConnectionRequestContentDaccount extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentDaccount.Strategy;
-    options?: Management.ConnectionOptionsDaccount;
+    options?: Management.ConnectionOptionsDaccount | undefined;
 }
 
 export namespace CreateConnectionRequestContentDaccount {
@@ -7804,7 +7851,7 @@ export namespace CreateConnectionRequestContentDaccount {
  */
 export interface CreateConnectionRequestContentDropbox extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentDropbox.Strategy;
-    options?: Management.ConnectionOptionsDropbox;
+    options?: Management.ConnectionOptionsDropbox | undefined;
 }
 
 export namespace CreateConnectionRequestContentDropbox {
@@ -7819,7 +7866,7 @@ export namespace CreateConnectionRequestContentDropbox {
  */
 export interface CreateConnectionRequestContentDwolla extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentDwolla.Strategy;
-    options?: Management.ConnectionOptionsDwolla;
+    options?: Management.ConnectionOptionsDwolla | undefined;
 }
 
 export namespace CreateConnectionRequestContentDwolla {
@@ -7834,7 +7881,7 @@ export namespace CreateConnectionRequestContentDwolla {
  */
 export interface CreateConnectionRequestContentEmail extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentEmail.Strategy;
-    options?: Management.ConnectionOptionsEmail;
+    options?: Management.ConnectionOptionsEmail | undefined;
 }
 
 export namespace CreateConnectionRequestContentEmail {
@@ -7849,7 +7896,7 @@ export namespace CreateConnectionRequestContentEmail {
  */
 export interface CreateConnectionRequestContentEvernote extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentEvernote.Strategy;
-    options?: Management.ConnectionOptionsEvernote;
+    options?: Management.ConnectionOptionsEvernote | undefined;
 }
 
 export namespace CreateConnectionRequestContentEvernote {
@@ -7864,7 +7911,7 @@ export namespace CreateConnectionRequestContentEvernote {
  */
 export interface CreateConnectionRequestContentEvernoteSandbox extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentEvernoteSandbox.Strategy;
-    options?: Management.ConnectionOptionsEvernote;
+    options?: Management.ConnectionOptionsEvernote | undefined;
 }
 
 export namespace CreateConnectionRequestContentEvernoteSandbox {
@@ -7879,7 +7926,7 @@ export namespace CreateConnectionRequestContentEvernoteSandbox {
  */
 export interface CreateConnectionRequestContentExact extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentExact.Strategy;
-    options?: Management.ConnectionOptionsExact;
+    options?: Management.ConnectionOptionsExact | undefined;
 }
 
 export namespace CreateConnectionRequestContentExact {
@@ -7894,7 +7941,7 @@ export namespace CreateConnectionRequestContentExact {
  */
 export interface CreateConnectionRequestContentFacebook extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentFacebook.Strategy;
-    options?: Management.ConnectionOptionsFacebook;
+    options?: Management.ConnectionOptionsFacebook | undefined;
 }
 
 export namespace CreateConnectionRequestContentFacebook {
@@ -7909,7 +7956,7 @@ export namespace CreateConnectionRequestContentFacebook {
  */
 export interface CreateConnectionRequestContentFitbit extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentFitbit.Strategy;
-    options?: Management.ConnectionOptionsFitbit;
+    options?: Management.ConnectionOptionsFitbit | undefined;
 }
 
 export namespace CreateConnectionRequestContentFitbit {
@@ -7924,7 +7971,7 @@ export namespace CreateConnectionRequestContentFitbit {
  */
 export interface CreateConnectionRequestContentFlickr extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentFlickr.Strategy;
-    options?: Management.ConnectionOptionsFlickr;
+    options?: Management.ConnectionOptionsFlickr | undefined;
 }
 
 export namespace CreateConnectionRequestContentFlickr {
@@ -7938,10 +7985,9 @@ export namespace CreateConnectionRequestContentFlickr {
  * Create a connection with strategy=github
  */
 export interface CreateConnectionRequestContentGitHub
-    extends Management.ConnectionPurposes,
-        Management.CreateConnectionCommon {
+    extends Management.ConnectionPurposes, Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentGitHub.Strategy;
-    options?: Management.ConnectionOptionsGitHub;
+    options?: Management.ConnectionOptionsGitHub | undefined;
 }
 
 export namespace CreateConnectionRequestContentGitHub {
@@ -7956,8 +8002,8 @@ export namespace CreateConnectionRequestContentGitHub {
  */
 export interface CreateConnectionRequestContentGoogleApps extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentGoogleApps.Strategy;
-    options?: Management.ConnectionOptionsGoogleApps;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsGoogleApps | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentGoogleApps {
@@ -7971,10 +8017,9 @@ export namespace CreateConnectionRequestContentGoogleApps {
  * Create a connection with strategy=google-oauth2
  */
 export interface CreateConnectionRequestContentGoogleOAuth2
-    extends Management.ConnectionPurposes,
-        Management.CreateConnectionCommon {
+    extends Management.ConnectionPurposes, Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentGoogleOAuth2.Strategy;
-    options?: Management.ConnectionOptionsGoogleOAuth2;
+    options?: Management.ConnectionOptionsGoogleOAuth2 | undefined;
 }
 
 export namespace CreateConnectionRequestContentGoogleOAuth2 {
@@ -7989,8 +8034,8 @@ export namespace CreateConnectionRequestContentGoogleOAuth2 {
  */
 export interface CreateConnectionRequestContentIp extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentIp.Strategy;
-    options?: Management.ConnectionOptionsIp;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsIp | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentIp {
@@ -8005,7 +8050,7 @@ export namespace CreateConnectionRequestContentIp {
  */
 export interface CreateConnectionRequestContentInstagram extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentInstagram.Strategy;
-    options?: Management.ConnectionOptionsInstagram;
+    options?: Management.ConnectionOptionsInstagram | undefined;
 }
 
 export namespace CreateConnectionRequestContentInstagram {
@@ -8020,7 +8065,7 @@ export namespace CreateConnectionRequestContentInstagram {
  */
 export interface CreateConnectionRequestContentLine extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentLine.Strategy;
-    options?: Management.ConnectionOptionsLine;
+    options?: Management.ConnectionOptionsLine | undefined;
 }
 
 export namespace CreateConnectionRequestContentLine {
@@ -8035,7 +8080,7 @@ export namespace CreateConnectionRequestContentLine {
  */
 export interface CreateConnectionRequestContentLinkedin extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentLinkedin.Strategy;
-    options?: Management.ConnectionOptionsLinkedin;
+    options?: Management.ConnectionOptionsLinkedin | undefined;
 }
 
 export namespace CreateConnectionRequestContentLinkedin {
@@ -8050,7 +8095,7 @@ export namespace CreateConnectionRequestContentLinkedin {
  */
 export interface CreateConnectionRequestContentMiicard extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentMiicard.Strategy;
-    options?: Management.ConnectionOptionsMiicard;
+    options?: Management.ConnectionOptionsMiicard | undefined;
 }
 
 export namespace CreateConnectionRequestContentMiicard {
@@ -8065,7 +8110,7 @@ export namespace CreateConnectionRequestContentMiicard {
  */
 export interface CreateConnectionRequestContentOAuth1 extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOAuth1.Strategy;
-    options?: Management.ConnectionOptionsOAuth1;
+    options?: Management.ConnectionOptionsOAuth1 | undefined;
 }
 
 export namespace CreateConnectionRequestContentOAuth1 {
@@ -8079,10 +8124,9 @@ export namespace CreateConnectionRequestContentOAuth1 {
  * Create a connection with strategy=oauth2
  */
 export interface CreateConnectionRequestContentOAuth2
-    extends Management.ConnectionPurposes,
-        Management.CreateConnectionCommon {
+    extends Management.ConnectionPurposes, Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOAuth2.Strategy;
-    options?: Management.ConnectionOptionsOAuth2;
+    options?: Management.ConnectionOptionsOAuth2 | undefined;
 }
 
 export namespace CreateConnectionRequestContentOAuth2 {
@@ -8097,10 +8141,10 @@ export namespace CreateConnectionRequestContentOAuth2 {
  */
 export interface CreateConnectionRequestContentOidc extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOidc.Strategy;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa;
-    options?: Management.ConnectionOptionsOidc;
-    show_as_button?: Management.ConnectionShowAsButton;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
+    options?: Management.ConnectionOptionsOidc | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentOidc {
@@ -8115,8 +8159,8 @@ export namespace CreateConnectionRequestContentOidc {
  */
 export interface CreateConnectionRequestContentOffice365 extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOffice365.Strategy;
-    options?: Management.ConnectionOptionsOffice365;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsOffice365 | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentOffice365 {
@@ -8131,8 +8175,8 @@ export namespace CreateConnectionRequestContentOffice365 {
  */
 export interface CreateConnectionRequestContentOkta extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOkta.Strategy;
-    options?: Management.ConnectionOptionsOkta;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsOkta | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentOkta {
@@ -8147,7 +8191,7 @@ export namespace CreateConnectionRequestContentOkta {
  */
 export interface CreateConnectionRequestContentPaypal extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentPaypal.Strategy;
-    options?: Management.ConnectionOptionsPaypal;
+    options?: Management.ConnectionOptionsPaypal | undefined;
 }
 
 export namespace CreateConnectionRequestContentPaypal {
@@ -8162,7 +8206,7 @@ export namespace CreateConnectionRequestContentPaypal {
  */
 export interface CreateConnectionRequestContentPaypalSandbox extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentPaypalSandbox.Strategy;
-    options?: Management.ConnectionOptionsPaypal;
+    options?: Management.ConnectionOptionsPaypal | undefined;
 }
 
 export namespace CreateConnectionRequestContentPaypalSandbox {
@@ -8177,8 +8221,8 @@ export namespace CreateConnectionRequestContentPaypalSandbox {
  */
 export interface CreateConnectionRequestContentPingFederate extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentPingFederate.Strategy;
-    options?: Management.ConnectionOptionsPingFederate;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsPingFederate | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentPingFederate {
@@ -8193,7 +8237,7 @@ export namespace CreateConnectionRequestContentPingFederate {
  */
 export interface CreateConnectionRequestContentPlanningCenter extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentPlanningCenter.Strategy;
-    options?: Management.ConnectionOptionsPlanningCenter;
+    options?: Management.ConnectionOptionsPlanningCenter | undefined;
 }
 
 export namespace CreateConnectionRequestContentPlanningCenter {
@@ -8208,7 +8252,7 @@ export namespace CreateConnectionRequestContentPlanningCenter {
  */
 export interface CreateConnectionRequestContentRenren extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentRenren.Strategy;
-    options?: Management.ConnectionOptionsRenren;
+    options?: Management.ConnectionOptionsRenren | undefined;
 }
 
 export namespace CreateConnectionRequestContentRenren {
@@ -8223,8 +8267,8 @@ export namespace CreateConnectionRequestContentRenren {
  */
 export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSaml.Strategy;
-    options?: Management.ConnectionOptionsSaml;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsSaml | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentSaml {
@@ -8239,7 +8283,7 @@ export namespace CreateConnectionRequestContentSaml {
  */
 export interface CreateConnectionRequestContentSms extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSms.Strategy;
-    options?: Management.ConnectionOptionsSms;
+    options?: Management.ConnectionOptionsSms | undefined;
 }
 
 export namespace CreateConnectionRequestContentSms {
@@ -8254,7 +8298,7 @@ export namespace CreateConnectionRequestContentSms {
  */
 export interface CreateConnectionRequestContentSalesforce extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSalesforce.Strategy;
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforce | undefined;
 }
 
 export namespace CreateConnectionRequestContentSalesforce {
@@ -8269,7 +8313,7 @@ export namespace CreateConnectionRequestContentSalesforce {
  */
 export interface CreateConnectionRequestContentSalesforceCommunity extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSalesforceCommunity.Strategy;
-    options?: Management.ConnectionOptionsSalesforceCommunity;
+    options?: Management.ConnectionOptionsSalesforceCommunity | undefined;
 }
 
 export namespace CreateConnectionRequestContentSalesforceCommunity {
@@ -8284,7 +8328,7 @@ export namespace CreateConnectionRequestContentSalesforceCommunity {
  */
 export interface CreateConnectionRequestContentSalesforceSandbox extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSalesforceSandbox.Strategy;
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforce | undefined;
 }
 
 export namespace CreateConnectionRequestContentSalesforceSandbox {
@@ -8299,8 +8343,8 @@ export namespace CreateConnectionRequestContentSalesforceSandbox {
  */
 export interface CreateConnectionRequestContentSharepoint extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSharepoint.Strategy;
-    options?: Management.ConnectionOptionsSharepoint;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsSharepoint | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 export namespace CreateConnectionRequestContentSharepoint {
@@ -8315,7 +8359,7 @@ export namespace CreateConnectionRequestContentSharepoint {
  */
 export interface CreateConnectionRequestContentShop extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentShop.Strategy;
-    options?: Management.ConnectionOptionsShop;
+    options?: Management.ConnectionOptionsShop | undefined;
 }
 
 export namespace CreateConnectionRequestContentShop {
@@ -8330,7 +8374,7 @@ export namespace CreateConnectionRequestContentShop {
  */
 export interface CreateConnectionRequestContentShopify extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentShopify.Strategy;
-    options?: Management.ConnectionOptionsShopify;
+    options?: Management.ConnectionOptionsShopify | undefined;
 }
 
 export namespace CreateConnectionRequestContentShopify {
@@ -8345,7 +8389,7 @@ export namespace CreateConnectionRequestContentShopify {
  */
 export interface CreateConnectionRequestContentSoundcloud extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSoundcloud.Strategy;
-    options?: Management.ConnectionOptionsSoundcloud;
+    options?: Management.ConnectionOptionsSoundcloud | undefined;
 }
 
 export namespace CreateConnectionRequestContentSoundcloud {
@@ -8360,7 +8404,7 @@ export namespace CreateConnectionRequestContentSoundcloud {
  */
 export interface CreateConnectionRequestContentThirtySevenSignals extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentThirtySevenSignals.Strategy;
-    options?: Management.ConnectionOptionsThirtySevenSignals;
+    options?: Management.ConnectionOptionsThirtySevenSignals | undefined;
 }
 
 export namespace CreateConnectionRequestContentThirtySevenSignals {
@@ -8375,7 +8419,7 @@ export namespace CreateConnectionRequestContentThirtySevenSignals {
  */
 export interface CreateConnectionRequestContentTwitter extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentTwitter.Strategy;
-    options?: Management.ConnectionOptionsTwitter;
+    options?: Management.ConnectionOptionsTwitter | undefined;
 }
 
 export namespace CreateConnectionRequestContentTwitter {
@@ -8390,7 +8434,7 @@ export namespace CreateConnectionRequestContentTwitter {
  */
 export interface CreateConnectionRequestContentUntappd extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentUntappd.Strategy;
-    options?: Management.ConnectionOptionsUntappd;
+    options?: Management.ConnectionOptionsUntappd | undefined;
 }
 
 export namespace CreateConnectionRequestContentUntappd {
@@ -8405,7 +8449,7 @@ export namespace CreateConnectionRequestContentUntappd {
  */
 export interface CreateConnectionRequestContentVkontakte extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentVkontakte.Strategy;
-    options?: Management.ConnectionOptionsVkontakte;
+    options?: Management.ConnectionOptionsVkontakte | undefined;
 }
 
 export namespace CreateConnectionRequestContentVkontakte {
@@ -8420,7 +8464,7 @@ export namespace CreateConnectionRequestContentVkontakte {
  */
 export interface CreateConnectionRequestContentWeibo extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentWeibo.Strategy;
-    options?: Management.ConnectionOptionsWeibo;
+    options?: Management.ConnectionOptionsWeibo | undefined;
 }
 
 export namespace CreateConnectionRequestContentWeibo {
@@ -8434,10 +8478,9 @@ export namespace CreateConnectionRequestContentWeibo {
  * Create a connection with strategy=windowslive
  */
 export interface CreateConnectionRequestContentWindowsLive
-    extends Management.ConnectionPurposes,
-        Management.CreateConnectionCommon {
+    extends Management.ConnectionPurposes, Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentWindowsLive.Strategy;
-    options?: Management.ConnectionOptionsWindowsLive;
+    options?: Management.ConnectionOptionsWindowsLive | undefined;
 }
 
 export namespace CreateConnectionRequestContentWindowsLive {
@@ -8452,7 +8495,7 @@ export namespace CreateConnectionRequestContentWindowsLive {
  */
 export interface CreateConnectionRequestContentWordpress extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentWordpress.Strategy;
-    options?: Management.ConnectionOptionsWordpress;
+    options?: Management.ConnectionOptionsWordpress | undefined;
 }
 
 export namespace CreateConnectionRequestContentWordpress {
@@ -8467,7 +8510,7 @@ export namespace CreateConnectionRequestContentWordpress {
  */
 export interface CreateConnectionRequestContentYahoo extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentYahoo.Strategy;
-    options?: Management.ConnectionOptionsYahoo;
+    options?: Management.ConnectionOptionsYahoo | undefined;
 }
 
 export namespace CreateConnectionRequestContentYahoo {
@@ -8482,7 +8525,7 @@ export namespace CreateConnectionRequestContentYahoo {
  */
 export interface CreateConnectionRequestContentYammer extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentYammer.Strategy;
-    options?: Management.ConnectionOptionsYammer;
+    options?: Management.ConnectionOptionsYammer | undefined;
 }
 
 export namespace CreateConnectionRequestContentYammer {
@@ -8497,7 +8540,7 @@ export namespace CreateConnectionRequestContentYammer {
  */
 export interface CreateConnectionRequestContentYandex extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentYandex.Strategy;
-    options?: Management.ConnectionOptionsYandex;
+    options?: Management.ConnectionOptionsYandex | undefined;
 }
 
 export namespace CreateConnectionRequestContentYandex {
@@ -8509,25 +8552,25 @@ export namespace CreateConnectionRequestContentYandex {
 
 export interface CreateConnectionResponseContent {
     /** The name of the connection */
-    name?: string;
+    name?: string | undefined;
     /** Connection name used in login screen */
-    display_name?: string;
-    options?: Management.ConnectionOptions;
+    display_name?: string | undefined;
+    options?: Management.ConnectionOptions | undefined;
     /** The connection's identifier */
-    id?: string;
+    id?: string | undefined;
     /** The type of the connection, related to the identity provider */
-    strategy?: string;
+    strategy?: string | undefined;
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
-    realms?: string[];
+    realms?: string[] | undefined;
     /** DEPRECATED property. Use the GET /connections/:id/clients endpoint to get the ids of the clients for which the connection is enabled */
-    enabled_clients?: string[];
+    enabled_clients?: string[] | undefined;
     /** True if the connection is domain level */
-    is_domain_connection?: boolean;
+    is_domain_connection?: boolean | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. */
-    show_as_button?: boolean;
-    metadata?: Management.ConnectionsMetadata;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    show_as_button?: boolean | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
 }
 
 export interface CreateCustomDomainResponseContent {
@@ -8538,25 +8581,25 @@ export interface CreateCustomDomainResponseContent {
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
     /** Whether this is the default custom domain (true) or not (false). */
-    is_default?: boolean;
+    is_default?: boolean | undefined;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     verification: Management.DomainVerification;
     /** The HTTP header to fetch the client's IP address */
-    custom_client_ip_header?: string | null;
+    custom_client_ip_header?: (string | null) | undefined;
     /** The TLS version policy */
-    tls_policy?: string;
-    domain_metadata?: Management.DomainMetadata;
-    certificate?: Management.DomainCertificate;
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
     /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
 }
 
 export interface CreateDirectoryProvisioningRequestContent {
     /** The mapping between Auth0 and IDP user attributes */
-    mapping?: Management.DirectoryProvisioningMappingItem[];
+    mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
     /** Whether periodic automatic synchronization is enabled */
-    synchronize_automatically?: boolean;
+    synchronize_automatically?: boolean | undefined;
 }
 
 export interface CreateDirectoryProvisioningResponseContent {
@@ -8575,11 +8618,11 @@ export interface CreateDirectoryProvisioningResponseContent {
     /** The timestamp at which the directory provisioning configuration was last updated */
     updated_at: string;
     /** The timestamp at which the connection was last synchronized */
-    last_synchronization_at?: string;
+    last_synchronization_at?: string | undefined;
     /** The status of the last synchronization */
-    last_synchronization_status?: string;
+    last_synchronization_status?: string | undefined;
     /** The error message of the last synchronization, if any */
-    last_synchronization_error?: string;
+    last_synchronization_error?: string | undefined;
 }
 
 export interface CreateDirectorySynchronizationResponseContent {
@@ -8593,33 +8636,33 @@ export interface CreateDirectorySynchronizationResponseContent {
 
 export interface CreateEmailProviderResponseContent {
     /** Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`. */
-    name?: string;
+    name?: string | undefined;
     /** Whether the provider is enabled (true) or disabled (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Email address to use as "from" when no other address specified. */
-    default_from_address?: string;
-    credentials?: Management.EmailProviderCredentials;
-    settings?: Management.EmailProviderSettings;
+    default_from_address?: string | undefined;
+    credentials?: Management.EmailProviderCredentials | undefined;
+    settings?: Management.EmailProviderSettings | undefined;
 }
 
 export interface CreateEmailTemplateResponseContent {
     template: Management.EmailTemplateNameEnum;
     /** Body of the email template. */
-    body?: string | null;
+    body?: (string | null) | undefined;
     /** Senders `from` email address. */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** URL to redirect the user to after a successful action. */
-    resultUrl?: string | null;
+    resultUrl?: (string | null) | undefined;
     /** Subject line of the email. */
-    subject?: string | null;
+    subject?: (string | null) | undefined;
     /** Syntax of the template body. */
-    syntax?: string | null;
+    syntax?: (string | null) | undefined;
     /** Lifetime in seconds that the link within the email will be valid for. */
-    urlLifetimeInSeconds?: number | null;
+    urlLifetimeInSeconds?: (number | null) | undefined;
     /** Whether the `reset_email` and `verify_email` templates should include the user's email address as the `email` parameter in the returnUrl (true) or whether no email address should be included in the redirect (false). Defaults to true. */
-    includeEmailInRedirect?: boolean;
+    includeEmailInRedirect?: boolean | undefined;
     /** Whether the template is enabled (true) or disabled (false). */
-    enabled?: boolean | null;
+    enabled?: (boolean | null) | undefined;
 }
 
 export interface CreateEncryptionKeyPublicWrappingResponseContent {
@@ -8643,9 +8686,9 @@ export interface CreateEncryptionKeyResponseContent {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid?: string | null;
+    parent_kid?: (string | null) | undefined;
     /** Public key in PEM format */
-    public_key?: string | null;
+    public_key?: (string | null) | undefined;
 }
 
 /** Type of the encryption key to be created. */
@@ -8657,31 +8700,31 @@ export type CreateEncryptionKeyType = (typeof CreateEncryptionKeyType)[keyof typ
 
 export interface CreateEventStreamActionRequestContent {
     /** Name of the event stream. */
-    name?: string;
+    name?: string | undefined;
     /** List of event types subscribed to in this stream. */
-    subscriptions?: Management.EventStreamSubscription[];
+    subscriptions?: Management.EventStreamSubscription[] | undefined;
     destination: Management.EventStreamActionDestination;
-    status?: Management.EventStreamStatusEnum;
+    status?: Management.EventStreamStatusEnum | undefined;
 }
 
 export interface CreateEventStreamEventBridgeRequestContent {
     /** Name of the event stream. */
-    name?: string;
+    name?: string | undefined;
     /** List of event types subscribed to in this stream. */
-    subscriptions?: Management.EventStreamSubscription[];
+    subscriptions?: Management.EventStreamSubscription[] | undefined;
     destination: Management.EventStreamEventBridgeDestination;
-    status?: Management.EventStreamStatusEnum;
+    status?: Management.EventStreamStatusEnum | undefined;
 }
 
 export interface CreateEventStreamRedeliveryResponseContent {
     /** An RFC-3339 date-time for redelivery start, inclusive. Does not allow sub-second precision. */
-    date_from?: string;
+    date_from?: string | undefined;
     /** An RFC-3339 date-time for redelivery end, exclusive. Does not allow sub-second precision. */
-    date_to?: string;
+    date_to?: string | undefined;
     /** Filter by status */
-    statuses?: Management.EventStreamDeliveryStatusEnum[];
+    statuses?: Management.EventStreamDeliveryStatusEnum[] | undefined;
     /** Filter by event type */
-    event_types?: Management.EventStreamEventTypeEnum[];
+    event_types?: Management.EventStreamEventTypeEnum[] | undefined;
 }
 
 export type CreateEventStreamResponseContent =
@@ -8701,23 +8744,23 @@ export interface CreateEventStreamTestEventResponseContent {
     event_type: Management.EventStreamDeliveryEventTypeEnum;
     /** Results of delivery attempts */
     attempts: Management.EventStreamDeliveryAttempt[];
-    event?: Management.EventStreamCloudEvent;
+    event?: Management.EventStreamCloudEvent | undefined;
 }
 
 export interface CreateEventStreamWebHookRequestContent {
     /** Name of the event stream. */
-    name?: string;
+    name?: string | undefined;
     /** List of event types subscribed to in this stream. */
-    subscriptions?: Management.EventStreamSubscription[];
+    subscriptions?: Management.EventStreamSubscription[] | undefined;
     destination: Management.EventStreamWebhookDestination;
-    status?: Management.EventStreamStatusEnum;
+    status?: Management.EventStreamStatusEnum | undefined;
 }
 
 export interface CreateExportUsersFields {
     /** Name of the field in the profile. */
     name: string;
     /** Title of the column in the exported CSV. */
-    export_as?: string;
+    export_as?: string | undefined;
 }
 
 export interface CreateExportUsersResponseContent {
@@ -8726,16 +8769,16 @@ export interface CreateExportUsersResponseContent {
     /** Type of job this is. */
     type: string;
     /** When this job was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** ID of this job. */
     id: string;
     /** connection_id of the connection from which users will be exported. */
-    connection_id?: string;
-    format?: Management.JobFileFormatEnum;
+    connection_id?: string | undefined;
+    format?: Management.JobFileFormatEnum | undefined;
     /** Limit the number of records. */
-    limit?: number;
+    limit?: number | undefined;
     /** List of fields to be included in the CSV. Defaults to a predefined set of fields. */
-    fields?: Management.CreateExportUsersFields[];
+    fields?: Management.CreateExportUsersFields[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -8743,10 +8786,10 @@ export interface CreateExportUsersResponseContent {
 export interface CreateFlowResponseContent {
     id: string;
     name: string;
-    actions?: Management.FlowAction[];
+    actions?: Management.FlowAction[] | undefined;
     created_at: string;
     updated_at: string;
-    executed_at?: string;
+    executed_at?: string | undefined;
 }
 
 export type CreateFlowsVaultConnectionActivecampaign =
@@ -9047,11 +9090,11 @@ export interface CreateFlowsVaultConnectionResponseContent {
     /** Flows Vault Connection app identifier. */
     app_id: string;
     /** Flows Vault Connection environment. */
-    environment?: string;
+    environment?: string | undefined;
     /** Flows Vault Connection name. */
     name: string;
     /** Flows Vault Connection custom account name. */
-    account_name?: string;
+    account_name?: string | undefined;
     /** Whether the Flows Vault Connection is configured. */
     ready: boolean;
     /** The ISO 8601 formatted date when this Flows Vault Connection was created. */
@@ -9059,7 +9102,7 @@ export interface CreateFlowsVaultConnectionResponseContent {
     /** The ISO 8601 formatted date when this Flows Vault Connection was updated. */
     updated_at: string;
     /** The ISO 8601 formatted date when this Flows Vault Connection was refreshed. */
-    refreshed_at?: string;
+    refreshed_at?: string | undefined;
     fingerprint: string;
 }
 
@@ -9218,40 +9261,40 @@ export interface CreateFlowsVaultConnectionZapierWebhook {
 export interface CreateFormResponseContent {
     id: string;
     name: string;
-    messages?: Management.FormMessages;
-    languages?: Management.FormLanguages;
-    translations?: Management.FormTranslations;
-    nodes?: Management.FormNodeList;
-    start?: Management.FormStartNode;
-    ending?: Management.FormEndingNode;
-    style?: Management.FormStyle;
+    messages?: Management.FormMessages | undefined;
+    languages?: Management.FormLanguages | undefined;
+    translations?: Management.FormTranslations | undefined;
+    nodes?: Management.FormNodeList | undefined;
+    start?: Management.FormStartNode | undefined;
+    ending?: Management.FormEndingNode | undefined;
+    style?: Management.FormStyle | undefined;
     created_at: string;
     updated_at: string;
-    embedded_at?: string;
-    submitted_at?: string;
+    embedded_at?: string | undefined;
+    submitted_at?: string | undefined;
 }
 
 export interface CreateGuardianEnrollmentTicketResponseContent {
     /** The ticket_id used to identify the enrollment */
-    ticket_id?: string;
+    ticket_id?: string | undefined;
     /** The url you can use to start enrollment */
-    ticket_url?: string;
+    ticket_url?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface CreateHookResponseContent {
     /** Trigger ID */
-    triggerId?: string;
+    triggerId?: string | undefined;
     /** ID of this hook. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this hook. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this hook will be executed (true) or ignored (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this hook runs. */
-    script?: string;
-    dependencies?: Management.HookDependencies;
+    script?: string | undefined;
+    dependencies?: Management.HookDependencies | undefined;
 }
 
 /**
@@ -9271,79 +9314,79 @@ export interface CreateImportUsersResponseContent {
     /** connection_id of the connection to which users will be imported. */
     connection_id: string;
     /** Customer-defined ID. */
-    external_id?: string;
+    external_id?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface CreateLogStreamDatadogRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamDatadogEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamDatadogSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export interface CreateLogStreamEventBridgeRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamEventBridgeEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamEventBridgeSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export interface CreateLogStreamEventGridRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamEventGridEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamEventGridSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export interface CreateLogStreamHttpRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamHttpEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamHttpSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export interface CreateLogStreamMixpanelRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamMixpanelEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamMixpanelSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export type CreateLogStreamRequestContent =
@@ -9368,44 +9411,44 @@ export type CreateLogStreamResponseContent =
 
 export interface CreateLogStreamSegmentRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamSegmentEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamSegmentSinkWriteKey;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export interface CreateLogStreamSplunkRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamSplunkEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamSplunkSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export interface CreateLogStreamSumoRequestBody {
     /** log stream name */
-    name?: string;
+    name?: string | undefined;
     type: Management.LogStreamSumoEnum;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
     sink: Management.LogStreamSumoSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
-    startFrom?: string;
+    startFrom?: string | undefined;
 }
 
 export interface CreateOrganizationDiscoveryDomainResponseContent {
@@ -9415,7 +9458,7 @@ export interface CreateOrganizationDiscoveryDomainResponseContent {
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
     /** Indicates whether this domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
+    use_for_organization_discovery?: boolean | undefined;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -9424,56 +9467,56 @@ export interface CreateOrganizationDiscoveryDomainResponseContent {
 
 export interface CreateOrganizationInvitationResponseContent {
     /** The id of the user invitation. */
-    id?: string;
+    id?: string | undefined;
     /** Organization identifier. */
-    organization_id?: string;
-    inviter?: Management.OrganizationInvitationInviter;
-    invitee?: Management.OrganizationInvitationInvitee;
+    organization_id?: string | undefined;
+    inviter?: Management.OrganizationInvitationInviter | undefined;
+    invitee?: Management.OrganizationInvitationInvitee | undefined;
     /** The invitation url to be send to the invitee. */
-    invitation_url?: string;
+    invitation_url?: string | undefined;
     /** The ISO 8601 formatted timestamp representing the creation time of the invitation. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The ISO 8601 formatted timestamp representing the expiration time of the invitation. */
-    expires_at?: string;
+    expires_at?: string | undefined;
     /** Auth0 client ID. Used to resolve the application's login initiation endpoint. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The id of the connection to force invitee to authenticate with. */
-    connection_id?: string;
-    app_metadata?: Management.AppMetadata;
-    user_metadata?: Management.UserMetadata;
+    connection_id?: string | undefined;
+    app_metadata?: Management.AppMetadata | undefined;
+    user_metadata?: Management.UserMetadata | undefined;
     /** List of roles IDs to associated with the user. */
-    roles?: string[];
+    roles?: string[] | undefined;
     /** The id of the invitation ticket */
-    ticket_id?: string;
+    ticket_id?: string | undefined;
 }
 
 export interface CreateOrganizationResponseContent {
     /** Organization identifier. */
-    id?: string;
+    id?: string | undefined;
     /** The name of this organization. */
-    name?: string;
+    name?: string | undefined;
     /** Friendly name of this organization. */
-    display_name?: string;
-    branding?: Management.OrganizationBranding;
-    metadata?: Management.OrganizationMetadata;
-    token_quota?: Management.TokenQuota;
-    enabled_connections?: Management.OrganizationEnabledConnection[];
+    display_name?: string | undefined;
+    branding?: Management.OrganizationBranding | undefined;
+    metadata?: Management.OrganizationMetadata | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    enabled_connections?: Management.OrganizationEnabledConnection[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface CreatePhoneProviderSendTestResponseContent {
     /** The status code of the operation. */
-    code?: number;
+    code?: number | undefined;
     /** The description of the operation status. */
-    message?: string;
+    message?: string | undefined;
 }
 
 export interface CreatePhoneTemplateResponseContent {
     id: string;
-    channel?: string;
-    customizable?: boolean;
-    tenant?: string;
+    channel?: string | undefined;
+    customizable?: boolean | undefined;
+    tenant?: string | undefined;
     content: Management.PhoneTemplateContent;
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
@@ -9495,140 +9538,140 @@ export interface CreatePublicKeyDeviceCredentialResponseContent {
 
 export interface CreateResourceServerResponseContent {
     /** ID of the API (resource server). */
-    id?: string;
+    id?: string | undefined;
     /** Friendly name for this resource server. Can not contain `<` or `>` characters. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this is an Auth0 system API (true) or a custom API (false). */
-    is_system?: boolean;
+    is_system?: boolean | undefined;
     /** Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set. */
-    identifier?: string;
+    identifier?: string | undefined;
     /** List of permissions (scopes) that this API uses. */
-    scopes?: Management.ResourceServerScope[];
-    signing_alg?: Management.SigningAlgorithmEnum;
+    scopes?: Management.ResourceServerScope[] | undefined;
+    signing_alg?: Management.SigningAlgorithmEnum | undefined;
     /** Secret used to sign tokens when using symmetric algorithms (HS256). */
-    signing_secret?: string;
+    signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
-    allow_offline_access?: boolean;
+    allow_offline_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
-    skip_consent_for_verifiable_first_party_clients?: boolean;
+    skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
-    token_lifetime?: number;
+    token_lifetime?: number | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API via Implicit or Hybrid Flows. Cannot be greater than the `token_lifetime` value. */
-    token_lifetime_for_web?: number;
+    token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
-    enforce_policies?: boolean;
-    token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
-    token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
-    authorization_details?: unknown[];
-    proof_of_possession?: Management.ResourceServerProofOfPossession | null;
-    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    enforce_policies?: boolean | undefined;
+    token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
+    consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    authorization_details?: unknown[] | undefined;
+    proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
+    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
-    client_id?: string;
+    client_id?: string | undefined;
 }
 
 export interface CreateRoleResponseContent {
     /** ID for this role. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this role. */
-    name?: string;
+    name?: string | undefined;
     /** Description of this role. */
-    description?: string;
+    description?: string | undefined;
 }
 
 export interface CreateRuleResponseContent {
     /** Name of this rule. */
-    name?: string;
+    name?: string | undefined;
     /** ID of this rule. */
-    id?: string;
+    id?: string | undefined;
     /** Whether the rule is enabled (true), or disabled (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this rule runs. */
-    script?: string;
+    script?: string | undefined;
     /** Order that this rule should execute in relative to other rules. Lower-valued rules execute first. */
-    order?: number;
+    order?: number | undefined;
     /** Execution stage of this rule. Can be `login_success`, `login_failure`, or `pre_authorize`. */
-    stage?: string;
+    stage?: string | undefined;
 }
 
 export interface CreateScimConfigurationRequestContent {
     /** User ID attribute for generating unique user ids */
-    user_id_attribute?: string;
+    user_id_attribute?: string | undefined;
     /** The mapping between auth0 and SCIM */
-    mapping?: Management.ScimMappingItem[];
+    mapping?: Management.ScimMappingItem[] | undefined;
 }
 
 export interface CreateScimConfigurationResponseContent {
     /** The connection's identifier */
-    connection_id?: string;
-    /** The connection's identifier */
-    connection_name?: string;
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
     /** The connection's strategy */
-    strategy?: string;
+    strategy: string;
     /** The tenant's name */
-    tenant_name?: string;
+    tenant_name: string;
     /** User ID attribute for generating unique user ids */
-    user_id_attribute?: string;
+    user_id_attribute: string;
     /** The mapping between auth0 and SCIM */
-    mapping?: Management.ScimMappingItem[];
-    /** The Date Time Scim Configuration was created */
-    created_at?: string;
-    /** The Date Time Scim Configuration was last updated */
-    updated_on?: string;
+    mapping: Management.ScimMappingItem[];
+    /** The ISO 8601 date and time the SCIM configuration was created at */
+    created_at: string;
+    /** The ISO 8601 date and time the SCIM configuration was last updated on */
+    updated_on: string;
 }
 
 export interface CreateScimTokenResponseContent {
     /** The token's identifier */
-    token_id?: string;
+    token_id?: string | undefined;
     /** The scim client's token */
-    token?: string;
+    token?: string | undefined;
     /** The scopes of the scim token */
-    scopes?: string[];
+    scopes?: string[] | undefined;
     /** The token's created at timestamp */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The token's valid until at timestamp */
-    valid_until?: string;
+    valid_until?: string | undefined;
 }
 
 export interface CreateSelfServiceProfileResponseContent {
     /** The unique ID of the self-service Profile. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the self-service Profile. */
-    name?: string;
+    name?: string | undefined;
     /** The description of the self-service Profile. */
-    description?: string;
+    description?: string | undefined;
     /** List of attributes to be mapped that will be shown to the user during the SS-SSO flow. */
-    user_attributes?: Management.SelfServiceProfileUserAttribute[];
+    user_attributes?: Management.SelfServiceProfileUserAttribute[] | undefined;
     /** The time when this self-service Profile was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this self-service Profile was updated. */
-    updated_at?: string;
-    branding?: Management.SelfServiceProfileBrandingProperties;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
-    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
+    updated_at?: string | undefined;
+    branding?: Management.SelfServiceProfileBrandingProperties | undefined;
+    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
+    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[] | undefined;
     /** ID of the user-attribute-profile to associate with this self-service profile. */
-    user_attribute_profile_id?: string;
+    user_attribute_profile_id?: string | undefined;
 }
 
 export interface CreateSelfServiceProfileSsoTicketResponseContent {
     /** The URL for the created ticket. */
-    ticket?: string;
+    ticket?: string | undefined;
 }
 
 export interface CreateTokenExchangeProfileResponseContent {
     /** The unique ID of the token exchange profile. */
-    id?: string;
+    id?: string | undefined;
     /** Friendly name of this profile. */
-    name?: string;
+    name?: string | undefined;
     /** Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI. */
-    subject_token_type?: string;
+    subject_token_type?: string | undefined;
     /** The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger. */
-    action_id?: string;
-    type?: Management.TokenExchangeProfileTypeEnum;
+    action_id?: string | undefined;
+    type?: Management.TokenExchangeProfileTypeEnum | undefined;
     /** The time when this profile was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this profile was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -9638,10 +9681,10 @@ export interface CreateTokenQuota {
 }
 
 export interface CreateUserAttributeProfileResponseContent {
-    id?: Management.UserAttributeProfileId;
-    name?: Management.UserAttributeProfileName;
-    user_id?: Management.UserAttributeProfileUserId;
-    user_attributes?: Management.UserAttributeProfileUserAttributes;
+    id?: Management.UserAttributeProfileId | undefined;
+    name?: Management.UserAttributeProfileName | undefined;
+    user_id?: Management.UserAttributeProfileUserId | undefined;
+    user_attributes?: Management.UserAttributeProfileUserAttributes | undefined;
 }
 
 /**
@@ -9649,90 +9692,90 @@ export interface CreateUserAttributeProfileResponseContent {
  */
 export interface CreateUserAuthenticationMethodResponseContent {
     /** The ID of the newly created authentication method (automatically generated by the application) */
-    id?: string;
+    id?: string | undefined;
     type: Management.CreatedUserAuthenticationMethodTypeEnum;
     /** A human-readable label to identify the authentication method. */
-    name?: string;
+    name?: string | undefined;
     /** Base32 encoded secret for TOTP generation */
-    totp_secret?: string;
+    totp_secret?: string | undefined;
     /** Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Applies to email authentication methods only. The email address used to send verification messages. */
-    email?: string;
-    authentication_methods?: Management.UserAuthenticationMethodProperties[];
-    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
+    email?: string | undefined;
+    authentication_methods?: Management.UserAuthenticationMethodProperties[] | undefined;
+    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** Applies to webauthn authenticators only. The id of the credential. */
-    key_id?: string;
+    key_id?: string | undefined;
     /** Applies to webauthn authenticators only. The public key. */
-    public_key?: string;
+    public_key?: string | undefined;
     /** Applies to passkeys only. Authenticator Attestation Globally Unique Identifier. */
-    aaguid?: string;
+    aaguid?: string | undefined;
     /** Applies to webauthn authenticators only. The relying party identifier. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
     /** Authentication method creation date */
-    created_at?: string;
+    created_at?: string | undefined;
 }
 
 export interface CreateUserResponseContent {
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** Email address of this user. */
-    email?: string;
+    email?: string | undefined;
     /** Whether this email address is verified (true) or unverified (false). */
-    email_verified?: boolean;
+    email_verified?: boolean | undefined;
     /** Username of this user. */
-    username?: string;
+    username?: string | undefined;
     /** Phone number for this user. Follows the <a href="https://en.wikipedia.org/wiki/E.164">E.164 recommendation</a>. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
-    phone_verified?: boolean;
-    created_at?: Management.UserDateSchema;
-    updated_at?: Management.UserDateSchema;
+    phone_verified?: boolean | undefined;
+    created_at?: Management.UserDateSchema | undefined;
+    updated_at?: Management.UserDateSchema | undefined;
     /** Array of user identity objects when accounts are linked. */
-    identities?: Management.UserIdentitySchema[];
-    app_metadata?: Management.UserAppMetadataSchema;
-    user_metadata?: Management.UserMetadataSchema;
+    identities?: Management.UserIdentitySchema[] | undefined;
+    app_metadata?: Management.UserAppMetadataSchema | undefined;
+    user_metadata?: Management.UserMetadataSchema | undefined;
     /** URL to picture, photo, or avatar of this user. */
-    picture?: string;
+    picture?: string | undefined;
     /** Name of this user. */
-    name?: string;
+    name?: string | undefined;
     /** Preferred nickname or alias of this user. */
-    nickname?: string;
+    nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
-    multifactor?: string[];
+    multifactor?: string[] | undefined;
     /** Last IP address from which this user logged in. */
-    last_ip?: string;
-    last_login?: Management.UserDateSchema;
+    last_ip?: string | undefined;
+    last_login?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
-    logins_count?: number;
+    logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
-    blocked?: boolean;
+    blocked?: boolean | undefined;
     /** Given name/first name/forename of this user. */
-    given_name?: string;
+    given_name?: string | undefined;
     /** Family name/last name/surname of this user. */
-    family_name?: string;
+    family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface CreateVerifiableCredentialTemplateResponseContent {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the template. */
-    name?: string;
+    name?: string | undefined;
     /** The type of the template. */
-    type?: string;
+    type?: string | undefined;
     /** The dialect of the template. */
-    dialect?: string;
-    presentation?: Management.MdlPresentationRequest;
+    dialect?: string | undefined;
+    presentation?: Management.MdlPresentationRequest | undefined;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string | null;
+    custom_certificate_authority?: (string | null) | undefined;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string | null;
+    well_known_trusted_issuers?: (string | null) | undefined;
     /** The date and time the template was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time the template was created. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -9743,7 +9786,7 @@ export interface CreateVerificationEmailResponseContent {
     /** Type of job this is. */
     type: string;
     /** When this job was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** ID of this job. */
     id: string;
     /** Accepts any additional properties */
@@ -9782,20 +9825,20 @@ export interface CustomDomain {
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
     /** Whether this is the default custom domain (true) or not (false). */
-    is_default?: boolean;
+    is_default?: boolean | undefined;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     /** Intermediate address. */
-    origin_domain_name?: string;
-    verification?: Management.DomainVerification;
+    origin_domain_name?: string | undefined;
+    verification?: Management.DomainVerification | undefined;
     /** The HTTP header to fetch the client's IP address */
-    custom_client_ip_header?: string | null;
+    custom_client_ip_header?: (string | null) | undefined;
     /** The TLS version policy */
-    tls_policy?: string;
-    domain_metadata?: Management.DomainMetadata;
-    certificate?: Management.DomainCertificate;
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
     /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
 }
 
 export type CustomDomainCustomClientIpHeader = (Management.CustomDomainCustomClientIpHeaderEnum | null) | undefined;
@@ -9890,28 +9933,28 @@ export type CustomSigningKeyCurveEnum = (typeof CustomSigningKeyCurveEnum)[keyof
 export interface CustomSigningKeyJwk {
     kty: Management.CustomSigningKeyTypeEnum;
     /** Key identifier */
-    kid?: string;
-    use?: Management.CustomSigningKeyUseEnum;
+    kid?: string | undefined;
+    use?: Management.CustomSigningKeyUseEnum | undefined;
     /** Key operations */
-    key_ops?: Management.CustomSigningKeyOperationEnum[];
-    alg?: Management.CustomSigningKeyAlgorithmEnum;
+    key_ops?: Management.CustomSigningKeyOperationEnum[] | undefined;
+    alg?: Management.CustomSigningKeyAlgorithmEnum | undefined;
     /** Key modulus */
-    n?: string;
+    n?: string | undefined;
     /** Key exponent */
-    e?: string;
-    crv?: Management.CustomSigningKeyCurveEnum;
+    e?: string | undefined;
+    crv?: Management.CustomSigningKeyCurveEnum | undefined;
     /** X coordinate */
-    x?: string;
+    x?: string | undefined;
     /** Y coordinate */
-    y?: string;
+    y?: string | undefined;
     /** X.509 URL */
-    x5u?: string;
+    x5u?: string | undefined;
     /** X.509 certificate chain */
-    x5c?: string[];
+    x5c?: string[] | undefined;
     /** X.509 certificate SHA-1 thumbprint */
-    x5t?: string;
+    x5t?: string | undefined;
     /** X.509 certificate SHA-256 thumbprint */
-    "x5t#S256"?: string;
+    "x5t#S256"?: string | undefined;
 }
 
 export const CustomSigningKeyOperationEnum = {
@@ -9935,17 +9978,17 @@ export type CustomSigningKeyUseEnum = (typeof CustomSigningKeyUseEnum)[keyof typ
 
 export interface DailyStats {
     /** Date these events occurred in ISO 8601 format. */
-    date?: string;
+    date?: string | undefined;
     /** Number of logins on this date. */
-    logins?: number;
+    logins?: number | undefined;
     /** Number of signups on this date. */
-    signups?: number;
+    signups?: number | undefined;
     /** Number of breached-password detections on this date (subscription required). */
-    leaked_passwords?: number;
+    leaked_passwords?: number | undefined;
     /** Date and time this stats entry was last updated in ISO 8601 format. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Approximate date and time the first event occurred in ISO 8601 format. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -9962,8 +10005,8 @@ export type DefaultMethodEmailIdentifierEnum =
  * Token Quota configuration, to configure quotas for token issuance for clients and organizations. Applied to all clients and organizations unless overridden in individual client or organization settings.
  */
 export interface DefaultTokenQuota {
-    clients?: Management.TokenQuotaConfiguration;
-    organizations?: Management.TokenQuotaConfiguration;
+    clients?: Management.TokenQuotaConfiguration | undefined;
+    organizations?: Management.TokenQuotaConfiguration | undefined;
 }
 
 /**
@@ -9979,14 +10022,14 @@ export interface DeleteUserIdentityResponseContentItem {
     /** The type of identity provider. */
     provider: string;
     /** <code>true</code> if the identity provider is a social provider, <code>false</code>s otherwise */
-    isSocial?: boolean;
+    isSocial?: boolean | undefined;
     /** IDP access token returned only if scope read:user_idp_tokens is defined */
-    access_token?: string;
+    access_token?: string | undefined;
     /** IDP access token secret returned only if scope read:user_idp_tokens is defined. */
-    access_token_secret?: string;
+    access_token_secret?: string | undefined;
     /** IDP refresh token returned only if scope read:user_idp_tokens is defined. */
-    refresh_token?: string;
-    profileData?: Management.UserProfileData;
+    refresh_token?: string | undefined;
+    profileData?: Management.UserProfileData | undefined;
 }
 
 /**
@@ -9996,87 +10039,87 @@ export type DeleteUserIdentityResponseContent = Management.DeleteUserIdentityRes
 
 export interface DeployActionResponseContent {
     /** The unique id of an action version. */
-    id?: string;
+    id?: string | undefined;
     /** The id of the action to which this version belongs. */
-    action_id?: string;
+    action_id?: string | undefined;
     /** The source code of this specific version of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this specific version depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** Indicates if this specific version is the currently one deployed. */
-    deployed?: boolean;
+    deployed?: boolean | undefined;
     /** The Node runtime. For example: `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    status?: Management.ActionVersionBuildStatusEnum;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    status?: Management.ActionVersionBuildStatusEnum | undefined;
     /** The index of this version in list of versions for the action. */
-    number?: number;
+    number?: number | undefined;
     /** Any errors that occurred while the version was being built. */
-    errors?: Management.ActionError[];
-    action?: Management.ActionBase;
+    errors?: Management.ActionError[] | undefined;
+    action?: Management.ActionBase | undefined;
     /** The time when this version was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** The time when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is being built. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 export interface DeployActionVersionRequestContent {
     /** True if the draft of the action should be updated with the reverted version. */
-    update_draft?: boolean;
+    update_draft?: boolean | undefined;
 }
 
 export interface DeployActionVersionResponseContent {
     /** The unique id of an action version. */
-    id?: string;
+    id?: string | undefined;
     /** The id of the action to which this version belongs. */
-    action_id?: string;
+    action_id?: string | undefined;
     /** The source code of this specific version of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this specific version depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** Indicates if this specific version is the currently one deployed. */
-    deployed?: boolean;
+    deployed?: boolean | undefined;
     /** The Node runtime. For example: `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    status?: Management.ActionVersionBuildStatusEnum;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    status?: Management.ActionVersionBuildStatusEnum | undefined;
     /** The index of this version in list of versions for the action. */
-    number?: number;
+    number?: number | undefined;
     /** Any errors that occurred while the version was being built. */
-    errors?: Management.ActionError[];
-    action?: Management.ActionBase;
+    errors?: Management.ActionError[] | undefined;
+    action?: Management.ActionBase | undefined;
     /** The time when this version was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** The time when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is being built. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 export interface DeviceCredential {
     /** ID of this device. */
-    id?: string;
+    id?: string | undefined;
     /** User agent for this device */
-    device_name?: string;
+    device_name?: string | undefined;
     /** Unique identifier for the device. NOTE: This field is generally not populated for refresh_tokens and rotating_refresh_tokens */
-    device_id?: string;
-    type?: Management.DeviceCredentialTypeEnum;
+    device_id?: string | undefined;
+    type?: Management.DeviceCredentialTypeEnum | undefined;
     /** user_id this credential is associated with. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** client_id of the client (application) this credential is for. */
-    client_id?: string;
+    client_id?: string | undefined;
 }
 
 /** Type of credential. Must be `public_key`. */
@@ -10110,11 +10153,11 @@ export interface DirectoryProvisioning {
     /** The timestamp at which the directory provisioning configuration was last updated */
     updated_at: string;
     /** The timestamp at which the connection was last synchronized */
-    last_synchronization_at?: string;
+    last_synchronization_at?: string | undefined;
     /** The status of the last synchronization */
-    last_synchronization_status?: string;
+    last_synchronization_status?: string | undefined;
     /** The error message of the last synchronization, if any */
-    last_synchronization_error?: string;
+    last_synchronization_error?: string | undefined;
 }
 
 export interface DirectoryProvisioningMappingItem {
@@ -10128,12 +10171,12 @@ export interface DirectoryProvisioningMappingItem {
  * Certificate information. This object is relevant only for Custom Domains with Auth0-Managed Certificates.
  */
 export interface DomainCertificate {
-    status?: Management.DomainCertificateStatusEnum;
+    status?: Management.DomainCertificateStatusEnum | undefined;
     /** A user-friendly error message will be presented if the certificate status is provisioning_failed or renewing_failed. */
-    error_msg?: string;
-    certificate_authority?: Management.DomainCertificateAuthorityEnum;
+    error_msg?: string | undefined;
+    certificate_authority?: Management.DomainCertificateAuthorityEnum | undefined;
     /** The certificate will be renewed prior to this date. */
-    renews_before?: string;
+    renews_before?: string | undefined;
 }
 
 /** The Certificate Authority issued the certificate. */
@@ -10164,12 +10207,12 @@ export type DomainMetadata = Record<string, (string | null) | undefined>;
  */
 export interface DomainVerification {
     /** Domain verification methods. */
-    methods?: Management.DomainVerificationMethod[];
-    status?: Management.DomainVerificationStatusEnum;
+    methods?: Management.DomainVerificationMethod[] | undefined;
+    status?: Management.DomainVerificationStatusEnum | undefined;
     /** The user0-friendly error message in case of failed verification. This field is relevant only for Custom Domains with Auth0-Managed Certificates. */
-    error_msg?: string;
+    error_msg?: string | undefined;
     /** The date and time when the custom domain was last verified. This field is relevant only for Custom Domains with Auth0-Managed Certificates. */
-    last_verified_at?: string;
+    last_verified_at?: string | undefined;
 }
 
 export interface DomainVerificationMethod {
@@ -10177,7 +10220,7 @@ export interface DomainVerificationMethod {
     /** Value used to verify the domain. */
     record: string;
     /** The name of the txt record for verification */
-    domain?: string;
+    domain?: string | undefined;
 }
 
 /** Domain verification method. */
@@ -10201,13 +10244,13 @@ export type DomainVerificationStatusEnum =
  * Configuration for the email attribute for users.
  */
 export interface EmailAttribute {
-    identifier?: Management.ConnectionAttributeIdentifier;
+    identifier?: Management.ConnectionAttributeIdentifier | undefined;
     /** Determines if the attribute is unique in a given connection */
-    unique?: boolean;
+    unique?: boolean | undefined;
     /** Determines if property should be required for users */
-    profile_required?: boolean;
-    verification_method?: Management.VerificationMethodEnum;
-    signup?: Management.SignupVerified;
+    profile_required?: boolean | undefined;
+    verification_method?: Management.VerificationMethodEnum | undefined;
+    signup?: Management.SignupVerified | undefined;
 }
 
 /** Set to <code>eu</code> if your domain is provisioned to use Mailgun's EU region. Otherwise, set to <code>null</code>. */
@@ -10221,15 +10264,15 @@ export type EmailMailgunRegionEnum = (typeof EmailMailgunRegionEnum)[keyof typeo
  */
 export interface EmailProviderCredentials {
     /** API User. */
-    api_user?: string;
+    api_user?: string | undefined;
     /** AWS or SparkPost region. */
-    region?: string;
+    region?: string | undefined;
     /** SMTP host. */
-    smtp_host?: string;
+    smtp_host?: string | undefined;
     /** SMTP port. */
-    smtp_port?: number;
+    smtp_port?: number | undefined;
     /** SMTP username. */
-    smtp_user?: string;
+    smtp_user?: string | undefined;
 }
 
 /**
@@ -10342,9 +10385,9 @@ export interface EncryptionKey {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid?: string | null;
+    parent_kid?: (string | null) | undefined;
     /** Public key in PEM format */
-    public_key?: string | null;
+    public_key?: (string | null) | undefined;
 }
 
 /** Encryption algorithm that shall be used to wrap your key material */
@@ -10393,17 +10436,17 @@ export type EventStreamActionDestinationTypeEnum =
 
 export interface EventStreamActionResponseContent {
     /** Unique identifier for the event stream. */
-    id?: string;
+    id?: string | undefined;
     /** Name of the event stream. */
-    name?: string;
+    name?: string | undefined;
     /** List of event types subscribed to in this stream. */
-    subscriptions?: Management.EventStreamSubscription[];
-    destination?: Management.EventStreamActionDestination;
-    status?: Management.EventStreamStatusEnum;
+    subscriptions?: Management.EventStreamSubscription[] | undefined;
+    destination?: Management.EventStreamActionDestination | undefined;
+    status?: Management.EventStreamStatusEnum | undefined;
     /** Timestamp when the event stream was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the event stream was last updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 /**
@@ -10411,17 +10454,17 @@ export interface EventStreamActionResponseContent {
  */
 export interface EventStreamCloudEvent {
     /** Unique identifier for the event */
-    id?: string;
+    id?: string | undefined;
     /** Where the event originated */
-    source?: string;
+    source?: string | undefined;
     /** Version of CloudEvents spec */
-    specversion?: string;
+    specversion?: string | undefined;
     /** Type of the event (e.g., user.created) */
-    type?: string;
+    type?: string | undefined;
     /** Timestamp at which the event was generated */
-    time?: string;
+    time?: string | undefined;
     /** Event contents encoded as a string. */
-    data?: string;
+    data?: string | undefined;
 }
 
 /**
@@ -10436,7 +10479,7 @@ export interface EventStreamDelivery {
     event_type: Management.EventStreamDeliveryEventTypeEnum;
     /** Results of delivery attempts */
     attempts: Management.EventStreamDeliveryAttempt[];
-    event?: Management.EventStreamCloudEvent;
+    event?: Management.EventStreamCloudEvent | undefined;
 }
 
 export interface EventStreamDeliveryAttempt {
@@ -10444,7 +10487,7 @@ export interface EventStreamDeliveryAttempt {
     /** Timestamp of delivery attempt */
     timestamp: string;
     /** Delivery error message, if applicable */
-    error_message?: string;
+    error_message?: string | undefined;
 }
 
 /** Type of event */
@@ -10532,7 +10575,7 @@ export interface EventStreamEventBridgeConfiguration {
     aws_account_id: string;
     aws_region: Management.EventStreamEventBridgeAwsRegionEnum;
     /** AWS Partner Event Source for EventBridge destination. */
-    aws_partner_event_source?: string;
+    aws_partner_event_source?: string | undefined;
 }
 
 export interface EventStreamEventBridgeDestination {
@@ -10548,17 +10591,17 @@ export type EventStreamEventBridgeDestinationTypeEnum =
 
 export interface EventStreamEventBridgeResponseContent {
     /** Unique identifier for the event stream. */
-    id?: string;
+    id?: string | undefined;
     /** Name of the event stream. */
-    name?: string;
+    name?: string | undefined;
     /** List of event types subscribed to in this stream. */
-    subscriptions?: Management.EventStreamSubscription[];
-    destination?: Management.EventStreamEventBridgeDestination;
-    status?: Management.EventStreamStatusEnum;
+    subscriptions?: Management.EventStreamSubscription[] | undefined;
+    destination?: Management.EventStreamEventBridgeDestination | undefined;
+    status?: Management.EventStreamStatusEnum | undefined;
     /** Timestamp when the event stream was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the event stream was last updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 export const EventStreamEventTypeEnum = {
@@ -10599,7 +10642,7 @@ export type EventStreamStatusEnum = (typeof EventStreamStatusEnum)[keyof typeof 
  * Event types
  */
 export interface EventStreamSubscription {
-    event_type?: string;
+    event_type?: string | undefined;
 }
 
 /** The type of event this test event represents. */
@@ -10682,17 +10725,17 @@ export type EventStreamWebhookDestinationTypeEnum =
 
 export interface EventStreamWebhookResponseContent {
     /** Unique identifier for the event stream. */
-    id?: string;
+    id?: string | undefined;
     /** Name of the event stream. */
-    name?: string;
+    name?: string | undefined;
     /** List of event types subscribed to in this stream. */
-    subscriptions?: Management.EventStreamSubscription[];
-    destination?: Management.EventStreamWebhookDestination;
-    status?: Management.EventStreamStatusEnum;
+    subscriptions?: Management.EventStreamSubscription[] | undefined;
+    destination?: Management.EventStreamWebhookDestination | undefined;
+    status?: Management.EventStreamStatusEnum | undefined;
     /** Timestamp when the event stream was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the event stream was last updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 /**
@@ -10710,13 +10753,13 @@ export interface ExpressConfiguration {
     /** When true, all connections made via express configuration will have the associated organization enabled. */
     enable_organization: boolean;
     /** List of client IDs that are linked to this express configuration (e.g. web or mobile clients). */
-    linked_clients?: Management.LinkedClientConfiguration[];
+    linked_clients?: Management.LinkedClientConfiguration[] | undefined;
     /** This is the unique identifier for the Okta OIN Express Configuration Client, which Okta will use for this application. */
     okta_oin_client_id: string;
     /** This is the domain that admins are expected to log in via for authenticating for express configuration. It can be either the canonical domain or a registered custom domain. */
     admin_login_domain: string;
     /** The identifier of the published application in the OKTA OIN. */
-    oin_submission_id?: string;
+    oin_submission_id?: string | undefined;
 }
 
 /**
@@ -10734,24 +10777,24 @@ export interface ExpressConfigurationOrNull {
     /** When true, all connections made via express configuration will have the associated organization enabled. */
     enable_organization: boolean;
     /** List of client IDs that are linked to this express configuration (e.g. web or mobile clients). */
-    linked_clients?: Management.LinkedClientConfiguration[];
+    linked_clients?: Management.LinkedClientConfiguration[] | undefined;
     /** This is the unique identifier for the Okta OIN Express Configuration Client, which Okta will use for this application. */
     okta_oin_client_id: string;
     /** This is the domain that admins are expected to log in via for authenticating for express configuration. It can be either the canonical domain or a registered custom domain. */
     admin_login_domain: string;
     /** The identifier of the published application in the OKTA OIN. */
-    oin_submission_id?: string;
+    oin_submission_id?: string | undefined;
 }
 
 export interface ExtensibilityEmailProviderCredentials {}
 
 export interface FederatedConnectionTokenSet {
-    id?: string;
-    connection?: string;
-    scope?: string;
-    expires_at?: string | null;
-    issued_at?: string;
-    last_used_at?: string | null;
+    id?: string | undefined;
+    connection?: string | undefined;
+    scope?: string | undefined;
+    expires_at?: (string | null) | undefined;
+    issued_at?: string | undefined;
+    last_used_at?: (string | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -10789,11 +10832,11 @@ export type FlowActionActivecampaign =
 
 export interface FlowActionActivecampaignListContacts {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionActivecampaignListContacts.Type;
     action: FlowActionActivecampaignListContacts.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionActivecampaignListContactsParams;
 }
 
@@ -10815,11 +10858,11 @@ export interface FlowActionActivecampaignListContactsParams {
 
 export interface FlowActionActivecampaignUpsertContact {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionActivecampaignUpsertContact.Type;
     action: FlowActionActivecampaignUpsertContact.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionActivecampaignUpsertContactParams;
 }
 
@@ -10837,10 +10880,10 @@ export namespace FlowActionActivecampaignUpsertContact {
 export interface FlowActionActivecampaignUpsertContactParams {
     connection_id: string;
     email: string;
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    custom_fields?: Management.FlowActionActivecampaignUpsertContactParamsCustomFields;
+    first_name?: string | undefined;
+    last_name?: string | undefined;
+    phone?: string | undefined;
+    custom_fields?: Management.FlowActionActivecampaignUpsertContactParamsCustomFields | undefined;
 }
 
 export type FlowActionActivecampaignUpsertContactParamsCustomFields = Record<string, unknown>;
@@ -10852,11 +10895,11 @@ export type FlowActionAirtable =
 
 export interface FlowActionAirtableCreateRecord {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAirtableCreateRecord.Type;
     action: FlowActionAirtableCreateRecord.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAirtableCreateRecordParams;
 }
 
@@ -10875,18 +10918,18 @@ export interface FlowActionAirtableCreateRecordParams {
     connection_id: string;
     base_id: string;
     table_name: string;
-    fields?: Management.FlowActionAirtableCreateRecordParamsFields;
+    fields?: Management.FlowActionAirtableCreateRecordParamsFields | undefined;
 }
 
 export type FlowActionAirtableCreateRecordParamsFields = Record<string, unknown>;
 
 export interface FlowActionAirtableListRecords {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAirtableListRecords.Type;
     action: FlowActionAirtableListRecords.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAirtableListRecordsParams;
 }
 
@@ -10905,17 +10948,17 @@ export interface FlowActionAirtableListRecordsParams {
     connection_id: string;
     base_id: string;
     table_name: string;
-    query?: string;
-    view?: string;
+    query?: string | undefined;
+    view?: string | undefined;
 }
 
 export interface FlowActionAirtableUpdateRecord {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAirtableUpdateRecord.Type;
     action: FlowActionAirtableUpdateRecord.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAirtableUpdateRecordParams;
 }
 
@@ -10935,7 +10978,7 @@ export interface FlowActionAirtableUpdateRecordParams {
     base_id: string;
     table_name: string;
     record_id: string;
-    fields?: Management.FlowActionAirtableUpdateRecordParamsFields;
+    fields?: Management.FlowActionAirtableUpdateRecordParamsFields | undefined;
 }
 
 export type FlowActionAirtableUpdateRecordParamsFields = Record<string, unknown>;
@@ -10951,11 +10994,11 @@ export type FlowActionAuth0 =
 
 export interface FlowActionAuth0CreateUser {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAuth0CreateUser.Type;
     action: FlowActionAuth0CreateUser.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0CreateUserParams;
 }
 
@@ -10979,11 +11022,11 @@ export type FlowActionAuth0CreateUserParamsPayload = Record<string, unknown>;
 
 export interface FlowActionAuth0GetUser {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAuth0GetUser.Type;
     action: FlowActionAuth0GetUser.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0GetUserParams;
 }
 
@@ -11005,11 +11048,11 @@ export interface FlowActionAuth0GetUserParams {
 
 export interface FlowActionAuth0MakeCall {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAuth0MakeCall.Type;
     action: FlowActionAuth0MakeCall.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0MakeCallParams;
 }
 
@@ -11025,21 +11068,21 @@ export namespace FlowActionAuth0MakeCall {
 }
 
 export interface FlowActionAuth0MakeCallParams {
-    from?: string;
+    from?: string | undefined;
     to: string;
     message: string;
-    custom_vars?: Management.FlowActionAuth0MakeCallParamsCustomVars;
+    custom_vars?: Management.FlowActionAuth0MakeCallParamsCustomVars | undefined;
 }
 
 export type FlowActionAuth0MakeCallParamsCustomVars = Record<string, unknown>;
 
 export interface FlowActionAuth0SendEmail {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAuth0SendEmail.Type;
     action: FlowActionAuth0SendEmail.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0SendEmailParams;
 }
 
@@ -11055,15 +11098,15 @@ export namespace FlowActionAuth0SendEmail {
 }
 
 export interface FlowActionAuth0SendEmailParams {
-    from?: Management.FlowActionAuth0SendEmailParamsFrom;
+    from?: Management.FlowActionAuth0SendEmailParamsFrom | undefined;
     to: Management.FlowActionAuth0SendEmailParamsTo;
     subject: string;
     body: string;
-    custom_vars?: Management.FlowActionAuth0SendRequestParamsCustomVars;
+    custom_vars?: Management.FlowActionAuth0SendRequestParamsCustomVars | undefined;
 }
 
 export interface FlowActionAuth0SendEmailParamsFrom {
-    name?: string;
+    name?: string | undefined;
     email: Management.FlowActionAuth0SendEmailParamsFromEmail;
 }
 
@@ -11073,11 +11116,11 @@ export type FlowActionAuth0SendEmailParamsTo = string;
 
 export interface FlowActionAuth0SendRequest {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAuth0SendRequest.Type;
     action: FlowActionAuth0SendRequest.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0SendRequestParams;
 }
 
@@ -11095,10 +11138,10 @@ export namespace FlowActionAuth0SendRequest {
 export interface FlowActionAuth0SendRequestParams {
     connection_id: string;
     pathname: string;
-    method?: FlowActionAuth0SendRequestParams.Method;
-    headers?: Management.FlowActionAuth0SendRequestParamsHeaders;
-    params?: Management.FlowActionAuth0SendRequestParamsQueryParams;
-    payload?: Management.FlowActionAuth0SendRequestParamsPayload;
+    method?: FlowActionAuth0SendRequestParams.Method | undefined;
+    headers?: Management.FlowActionAuth0SendRequestParamsHeaders | undefined;
+    params?: Management.FlowActionAuth0SendRequestParamsQueryParams | undefined;
+    payload?: Management.FlowActionAuth0SendRequestParamsPayload | undefined;
 }
 
 export namespace FlowActionAuth0SendRequestParams {
@@ -11134,11 +11177,11 @@ export namespace FlowActionAuth0SendRequestParamsQueryParams {
 
 export interface FlowActionAuth0SendSms {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAuth0SendSms.Type;
     action: FlowActionAuth0SendSms.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0SendSmsParams;
 }
 
@@ -11154,21 +11197,21 @@ export namespace FlowActionAuth0SendSms {
 }
 
 export interface FlowActionAuth0SendSmsParams {
-    from?: string;
+    from?: string | undefined;
     to: string;
     message: string;
-    custom_vars?: Management.FlowActionAuth0SendSmsParamsCustomVars;
+    custom_vars?: Management.FlowActionAuth0SendSmsParamsCustomVars | undefined;
 }
 
 export type FlowActionAuth0SendSmsParamsCustomVars = Record<string, unknown>;
 
 export interface FlowActionAuth0UpdateUser {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionAuth0UpdateUser.Type;
     action: FlowActionAuth0UpdateUser.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0UpdateUserParams;
 }
 
@@ -11195,11 +11238,11 @@ export type FlowActionBigquery = Management.FlowActionBigqueryInsertRows;
 
 export interface FlowActionBigqueryInsertRows {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionBigqueryInsertRows.Type;
     action: FlowActionBigqueryInsertRows.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionBigqueryInsertRowsParams;
 }
 
@@ -11218,7 +11261,7 @@ export interface FlowActionBigqueryInsertRowsParams {
     connection_id: string;
     dataset_id: string;
     table_id: string;
-    data?: Management.FlowActionBigqueryInsertRowsParamsData;
+    data?: Management.FlowActionBigqueryInsertRowsParamsData | undefined;
 }
 
 export type FlowActionBigqueryInsertRowsParamsData = Record<string, unknown>;
@@ -11227,11 +11270,11 @@ export type FlowActionClearbit = Management.FlowActionClearbitFindPerson | Manag
 
 export interface FlowActionClearbitFindCompany {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionClearbitFindCompany.Type;
     action: FlowActionClearbitFindCompany.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionClearbitFindCompanyParams;
 }
 
@@ -11253,11 +11296,11 @@ export interface FlowActionClearbitFindCompanyParams {
 
 export interface FlowActionClearbitFindPerson {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionClearbitFindPerson.Type;
     action: FlowActionClearbitFindPerson.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionClearbitFindPersonParams;
 }
 
@@ -11281,11 +11324,11 @@ export type FlowActionEmail = Management.FlowActionEmailVerifyEmail;
 
 export interface FlowActionEmailVerifyEmail {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionEmailVerifyEmail.Type;
     action: FlowActionEmailVerifyEmail.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionEmailVerifyEmailParams;
 }
 
@@ -11302,16 +11345,16 @@ export namespace FlowActionEmailVerifyEmail {
 
 export interface FlowActionEmailVerifyEmailParams {
     email: string;
-    rules?: Management.FlowActionEmailVerifyEmailParamsRules;
+    rules?: Management.FlowActionEmailVerifyEmailParamsRules | undefined;
 }
 
 export interface FlowActionEmailVerifyEmailParamsRules {
-    require_mx_record?: boolean;
-    block_aliases?: boolean;
-    block_free_emails?: boolean;
-    block_disposable_emails?: boolean;
-    blocklist?: string[];
-    allowlist?: string[];
+    require_mx_record?: boolean | undefined;
+    block_aliases?: boolean | undefined;
+    block_free_emails?: boolean | undefined;
+    block_disposable_emails?: boolean | undefined;
+    blocklist?: string[] | undefined;
+    allowlist?: string[] | undefined;
 }
 
 export type FlowActionFlow =
@@ -11325,11 +11368,11 @@ export type FlowActionFlow =
 
 export interface FlowActionFlowBooleanCondition {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionFlowBooleanCondition.Type;
     action: FlowActionFlowBooleanCondition.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionFlowBooleanConditionParams;
 }
 
@@ -11345,17 +11388,17 @@ export namespace FlowActionFlowBooleanCondition {
 }
 
 export interface FlowActionFlowBooleanConditionParams {
-    then?: Management.FlowAction[];
-    else?: Management.FlowAction[];
+    then?: Management.FlowAction[] | undefined;
+    else?: Management.FlowAction[] | undefined;
 }
 
 export interface FlowActionFlowDelayFlow {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionFlowDelayFlow.Type;
     action: FlowActionFlowDelayFlow.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionFlowDelayFlowParams;
 }
 
@@ -11372,7 +11415,7 @@ export namespace FlowActionFlowDelayFlow {
 
 export interface FlowActionFlowDelayFlowParams {
     number: Management.FlowActionFlowDelayFlowParamsNumber;
-    units?: FlowActionFlowDelayFlowParams.Units;
+    units?: FlowActionFlowDelayFlowParams.Units | undefined;
 }
 
 export namespace FlowActionFlowDelayFlowParams {
@@ -11389,12 +11432,12 @@ export type FlowActionFlowDelayFlowParamsNumber = number | string;
 
 export interface FlowActionFlowDoNothing {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionFlowDoNothing.Type;
     action: FlowActionFlowDoNothing.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
-    params?: Management.FlowActionFlowDoNothingParams;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
+    params?: Management.FlowActionFlowDoNothingParams | undefined;
 }
 
 export namespace FlowActionFlowDoNothing {
@@ -11412,11 +11455,11 @@ export interface FlowActionFlowDoNothingParams {}
 
 export interface FlowActionFlowErrorMessage {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionFlowErrorMessage.Type;
     action: FlowActionFlowErrorMessage.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionFlowErrorMessageParams;
 }
 
@@ -11437,11 +11480,11 @@ export interface FlowActionFlowErrorMessageParams {
 
 export interface FlowActionFlowMapValue {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionFlowMapValue.Type;
     action: FlowActionFlowMapValue.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionFlowMapValueParams;
 }
 
@@ -11458,8 +11501,8 @@ export namespace FlowActionFlowMapValue {
 
 export interface FlowActionFlowMapValueParams {
     input: Management.FlowActionFlowMapValueParamsInput;
-    cases?: Management.FlowActionFlowMapValueParamsCases;
-    fallback?: Management.FlowActionFlowMapValueParamsFallback;
+    cases?: Management.FlowActionFlowMapValueParamsCases | undefined;
+    fallback?: Management.FlowActionFlowMapValueParamsFallback | undefined;
 }
 
 export type FlowActionFlowMapValueParamsCases = Record<string, unknown>;
@@ -11476,11 +11519,11 @@ export type FlowActionFlowMapValueParamsInput = string | number;
 
 export interface FlowActionFlowReturnJson {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionFlowReturnJson.Type;
     action: FlowActionFlowReturnJson.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionFlowReturnJsonParams;
 }
 
@@ -11505,11 +11548,11 @@ export type FlowActionFlowReturnJsonParamsPayloadObject = Record<string, unknown
 
 export interface FlowActionFlowStoreVars {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionFlowStoreVars.Type;
     action: FlowActionFlowStoreVars.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionFlowStoreVarsParams;
 }
 
@@ -11534,11 +11577,11 @@ export type FlowActionGoogleSheets = Management.FlowActionGoogleSheetsAddRow;
 
 export interface FlowActionGoogleSheetsAddRow {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionGoogleSheetsAddRow.Type;
     action: FlowActionGoogleSheetsAddRow.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionGoogleSheetsAddRowParams;
 }
 
@@ -11556,8 +11599,8 @@ export namespace FlowActionGoogleSheetsAddRow {
 export interface FlowActionGoogleSheetsAddRowParams {
     connection_id: string;
     spreadsheet_id: string;
-    sheet_id?: Management.FlowActionGoogleSheetsAddRowParamsSheetId;
-    values?: Management.FlowActionGoogleSheetsAddRowParamsValues;
+    sheet_id?: Management.FlowActionGoogleSheetsAddRowParamsSheetId | undefined;
+    values?: Management.FlowActionGoogleSheetsAddRowParamsValues | undefined;
 }
 
 export type FlowActionGoogleSheetsAddRowParamsSheetId = number | string;
@@ -11568,11 +11611,11 @@ export type FlowActionHttp = Management.FlowActionHttpSendRequest;
 
 export interface FlowActionHttpSendRequest {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionHttpSendRequest.Type;
     action: FlowActionHttpSendRequest.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionHttpSendRequestParams;
 }
 
@@ -11588,14 +11631,14 @@ export namespace FlowActionHttpSendRequest {
 }
 
 export interface FlowActionHttpSendRequestParams {
-    connection_id?: string;
+    connection_id?: string | undefined;
     url: string;
-    method?: FlowActionHttpSendRequestParams.Method;
-    headers?: Management.FlowActionHttpSendRequestParamsHeaders;
-    basic?: Management.FlowActionHttpSendRequestParamsBasicAuth;
-    params?: Management.FlowActionHttpSendRequestParamsQueryParams;
-    payload?: Management.FlowActionHttpSendRequestParamsPayload;
-    content_type?: FlowActionHttpSendRequestParams.ContentType;
+    method?: FlowActionHttpSendRequestParams.Method | undefined;
+    headers?: Management.FlowActionHttpSendRequestParamsHeaders | undefined;
+    basic?: Management.FlowActionHttpSendRequestParamsBasicAuth | undefined;
+    params?: Management.FlowActionHttpSendRequestParamsQueryParams | undefined;
+    payload?: Management.FlowActionHttpSendRequestParamsPayload | undefined;
+    content_type?: FlowActionHttpSendRequestParams.ContentType | undefined;
 }
 
 export namespace FlowActionHttpSendRequestParams {
@@ -11616,8 +11659,8 @@ export namespace FlowActionHttpSendRequestParams {
 }
 
 export interface FlowActionHttpSendRequestParamsBasicAuth {
-    username?: string;
-    password?: string;
+    username?: string | undefined;
+    password?: string | undefined;
 }
 
 export type FlowActionHttpSendRequestParamsHeaders = Record<string, unknown>;
@@ -11645,11 +11688,11 @@ export type FlowActionHubspot =
 
 export interface FlowActionHubspotEnrollContact {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionHubspotEnrollContact.Type;
     action: FlowActionHubspotEnrollContact.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionHubspotEnrollContactParams;
 }
 
@@ -11674,11 +11717,11 @@ export type FlowActionHubspotEnrollContactParamsWorkflowId = string | number;
 
 export interface FlowActionHubspotGetContact {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionHubspotGetContact.Type;
     action: FlowActionHubspotGetContact.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionHubspotGetContactParams;
 }
 
@@ -11700,11 +11743,11 @@ export interface FlowActionHubspotGetContactParams {
 
 export interface FlowActionHubspotUpsertContact {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionHubspotUpsertContact.Type;
     action: FlowActionHubspotUpsertContact.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionHubspotUpsertContactParams;
 }
 
@@ -11722,7 +11765,7 @@ export namespace FlowActionHubspotUpsertContact {
 export interface FlowActionHubspotUpsertContactParams {
     connection_id: string;
     email: string;
-    properties?: Management.FlowActionHubspotUpsertContactParamsProperty[];
+    properties?: Management.FlowActionHubspotUpsertContactParamsProperty[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -11738,11 +11781,11 @@ export type FlowActionJson =
 
 export interface FlowActionJsonCreateJson {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionJsonCreateJson.Type;
     action: FlowActionJsonCreateJson.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionJsonCreateJsonParams;
 }
 
@@ -11765,11 +11808,11 @@ export type FlowActionJsonCreateJsonParamsObject = Record<string, unknown>;
 
 export interface FlowActionJsonParseJson {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionJsonParseJson.Type;
     action: FlowActionJsonParseJson.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionJsonParseJsonParams;
 }
 
@@ -11790,11 +11833,11 @@ export interface FlowActionJsonParseJsonParams {
 
 export interface FlowActionJsonSerializeJson {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionJsonSerializeJson.Type;
     action: FlowActionJsonSerializeJson.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionJsonSerializeJsonParams;
 }
 
@@ -11824,11 +11867,11 @@ export type FlowActionJwt =
 
 export interface FlowActionJwtDecodeJwt {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionJwtDecodeJwt.Type;
     action: FlowActionJwtDecodeJwt.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionJwtDecodeJwtParams;
 }
 
@@ -11849,11 +11892,11 @@ export interface FlowActionJwtDecodeJwtParams {
 
 export interface FlowActionJwtSignJwt {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionJwtSignJwt.Type;
     action: FlowActionJwtSignJwt.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionJwtSignJwtParams;
 }
 
@@ -11870,22 +11913,22 @@ export namespace FlowActionJwtSignJwt {
 
 export interface FlowActionJwtSignJwtParams {
     connection_id: string;
-    payload?: Management.FlowActionJwtSignJwtParamsPayload;
-    subject?: string;
-    issuer?: string;
-    audience?: string;
-    expires_in?: string;
+    payload?: Management.FlowActionJwtSignJwtParamsPayload | undefined;
+    subject?: string | undefined;
+    issuer?: string | undefined;
+    audience?: string | undefined;
+    expires_in?: string | undefined;
 }
 
 export type FlowActionJwtSignJwtParamsPayload = Record<string, unknown>;
 
 export interface FlowActionJwtVerifyJwt {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionJwtVerifyJwt.Type;
     action: FlowActionJwtVerifyJwt.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionJwtVerifyJwtParams;
 }
 
@@ -11903,19 +11946,19 @@ export namespace FlowActionJwtVerifyJwt {
 export interface FlowActionJwtVerifyJwtParams {
     connection_id: string;
     token: string;
-    audience?: string;
-    issuer?: string;
+    audience?: string | undefined;
+    issuer?: string | undefined;
 }
 
 export type FlowActionMailchimp = Management.FlowActionMailchimpUpsertMember;
 
 export interface FlowActionMailchimpUpsertMember {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionMailchimpUpsertMember.Type;
     action: FlowActionMailchimpUpsertMember.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionMailchimpUpsertMemberParams;
 }
 
@@ -11939,7 +11982,7 @@ export interface FlowActionMailchimpUpsertMemberParams {
 export interface FlowActionMailchimpUpsertMemberParamsMember {
     email_address: string;
     status_if_new: string;
-    merge_fields?: Management.FlowActionMailchimpUpsertMemberParamsMemberMergeFields;
+    merge_fields?: Management.FlowActionMailchimpUpsertMemberParamsMemberMergeFields | undefined;
 }
 
 export type FlowActionMailchimpUpsertMemberParamsMemberMergeFields = Record<string, unknown>;
@@ -11948,11 +11991,11 @@ export type FlowActionMailjet = Management.FlowActionMailjetSendEmail;
 
 export interface FlowActionMailjetSendEmail {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionMailjetSendEmail.Type;
     action: FlowActionMailjetSendEmail.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionMailjetSendEmailParams;
 }
 
@@ -11982,11 +12025,11 @@ export type FlowActionOtp = Management.FlowActionOtpGenerateCode | Management.Fl
 
 export interface FlowActionOtpGenerateCode {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionOtpGenerateCode.Type;
     action: FlowActionOtpGenerateCode.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionOtpGenerateCodeParams;
 }
 
@@ -12008,11 +12051,11 @@ export interface FlowActionOtpGenerateCodeParams {
 
 export interface FlowActionOtpVerifyCode {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionOtpVerifyCode.Type;
     action: FlowActionOtpVerifyCode.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionOtpVerifyCodeParams;
 }
 
@@ -12041,11 +12084,11 @@ export type FlowActionPipedrive =
 
 export interface FlowActionPipedriveAddDeal {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionPipedriveAddDeal.Type;
     action: FlowActionPipedriveAddDeal.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionPipedriveAddDealParams;
 }
 
@@ -12063,12 +12106,12 @@ export namespace FlowActionPipedriveAddDeal {
 export interface FlowActionPipedriveAddDealParams {
     connection_id: string;
     title: string;
-    value?: string;
-    user_id?: Management.FlowActionPipedriveAddDealParamsUserId;
-    person_id?: Management.FlowActionPipedriveAddDealParamsPersonId;
-    organization_id?: Management.FlowActionPipedriveAddDealParamsOrganizationId;
-    stage_id?: Management.FlowActionPipedriveAddDealParamsStageId;
-    fields?: Management.FlowActionPipedriveAddDealParamsFields;
+    value?: string | undefined;
+    user_id?: Management.FlowActionPipedriveAddDealParamsUserId | undefined;
+    person_id?: Management.FlowActionPipedriveAddDealParamsPersonId | undefined;
+    organization_id?: Management.FlowActionPipedriveAddDealParamsOrganizationId | undefined;
+    stage_id?: Management.FlowActionPipedriveAddDealParamsStageId | undefined;
+    fields?: Management.FlowActionPipedriveAddDealParamsFields | undefined;
 }
 
 export type FlowActionPipedriveAddDealParamsFields = Record<string, unknown>;
@@ -12083,11 +12126,11 @@ export type FlowActionPipedriveAddDealParamsUserId = string | number;
 
 export interface FlowActionPipedriveAddOrganization {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionPipedriveAddOrganization.Type;
     action: FlowActionPipedriveAddOrganization.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionPipedriveAddOrganizationParams;
 }
 
@@ -12105,8 +12148,8 @@ export namespace FlowActionPipedriveAddOrganization {
 export interface FlowActionPipedriveAddOrganizationParams {
     connection_id: string;
     name: string;
-    owner_id?: Management.FlowActionPipedriveAddOrganizationParamsOwnerId;
-    fields?: Management.FlowActionPipedriveAddOrganizationParamsFields;
+    owner_id?: Management.FlowActionPipedriveAddOrganizationParamsOwnerId | undefined;
+    fields?: Management.FlowActionPipedriveAddOrganizationParamsFields | undefined;
 }
 
 export type FlowActionPipedriveAddOrganizationParamsFields = Record<string, unknown>;
@@ -12115,11 +12158,11 @@ export type FlowActionPipedriveAddOrganizationParamsOwnerId = string | number;
 
 export interface FlowActionPipedriveAddPerson {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionPipedriveAddPerson.Type;
     action: FlowActionPipedriveAddPerson.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionPipedriveAddPersonParams;
 }
 
@@ -12137,11 +12180,11 @@ export namespace FlowActionPipedriveAddPerson {
 export interface FlowActionPipedriveAddPersonParams {
     connection_id: string;
     name: string;
-    email?: string;
-    phone?: string;
-    owner_id?: Management.FlowActionPipedriveAddPersonParamsOwnerId;
-    organization_id?: Management.FlowActionPipedriveAddPersonParamsOrganizationId;
-    fields?: Management.FlowActionPipedriveAddPersonParamsFields;
+    email?: string | undefined;
+    phone?: string | undefined;
+    owner_id?: Management.FlowActionPipedriveAddPersonParamsOwnerId | undefined;
+    organization_id?: Management.FlowActionPipedriveAddPersonParamsOrganizationId | undefined;
+    fields?: Management.FlowActionPipedriveAddPersonParamsFields | undefined;
 }
 
 export type FlowActionPipedriveAddPersonParamsFields = Record<string, unknown>;
@@ -12158,11 +12201,11 @@ export type FlowActionSalesforce =
 
 export interface FlowActionSalesforceCreateLead {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionSalesforceCreateLead.Type;
     action: FlowActionSalesforceCreateLead.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceCreateLeadParams;
 }
 
@@ -12179,23 +12222,23 @@ export namespace FlowActionSalesforceCreateLead {
 
 export interface FlowActionSalesforceCreateLeadParams {
     connection_id: string;
-    first_name?: string;
+    first_name?: string | undefined;
     last_name: string;
     company: string;
-    email?: string;
-    phone?: string;
-    payload?: Management.FlowActionSalesforceCreateLeadParamsPayload;
+    email?: string | undefined;
+    phone?: string | undefined;
+    payload?: Management.FlowActionSalesforceCreateLeadParamsPayload | undefined;
 }
 
 export type FlowActionSalesforceCreateLeadParamsPayload = Record<string, unknown>;
 
 export interface FlowActionSalesforceGetLead {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionSalesforceGetLead.Type;
     action: FlowActionSalesforceGetLead.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceGetLeadParams;
 }
 
@@ -12217,11 +12260,11 @@ export interface FlowActionSalesforceGetLeadParams {
 
 export interface FlowActionSalesforceSearchLeads {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionSalesforceSearchLeads.Type;
     action: FlowActionSalesforceSearchLeads.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceSearchLeadsParams;
 }
 
@@ -12255,11 +12298,11 @@ export namespace FlowActionSalesforceSearchLeadsParams {
 
 export interface FlowActionSalesforceUpdateLead {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionSalesforceUpdateLead.Type;
     action: FlowActionSalesforceUpdateLead.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceUpdateLeadParams;
 }
 
@@ -12277,7 +12320,7 @@ export namespace FlowActionSalesforceUpdateLead {
 export interface FlowActionSalesforceUpdateLeadParams {
     connection_id: string;
     lead_id: string;
-    payload?: Management.FlowActionSalesforceUpdateLeadParamsPayload;
+    payload?: Management.FlowActionSalesforceUpdateLeadParamsPayload | undefined;
 }
 
 export type FlowActionSalesforceUpdateLeadParamsPayload = Record<string, unknown>;
@@ -12286,11 +12329,11 @@ export type FlowActionSendgrid = Management.FlowActionSendgridSendEmail;
 
 export interface FlowActionSendgridSendEmail {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionSendgridSendEmail.Type;
     action: FlowActionSendgridSendEmail.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionSendgridSendEmailParams;
 }
 
@@ -12314,7 +12357,7 @@ export interface FlowActionSendgridSendEmailParams {
 }
 
 export interface FlowActionSendgridSendEmailParamsPerson {
-    name?: string;
+    name?: string | undefined;
     email: string;
 }
 
@@ -12322,11 +12365,11 @@ export type FlowActionSlack = Management.FlowActionSlackPostMessage;
 
 export interface FlowActionSlackPostMessage {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionSlackPostMessage.Type;
     action: FlowActionSlackPostMessage.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionSlackPostMessageParams;
 }
 
@@ -12343,15 +12386,15 @@ export namespace FlowActionSlackPostMessage {
 
 export interface FlowActionSlackPostMessageParams {
     connection_id: string;
-    text?: string;
-    attachments?: Management.FlowActionSlackPostMessageParamsAttachment[];
+    text?: string | undefined;
+    attachments?: Management.FlowActionSlackPostMessageParamsAttachment[] | undefined;
 }
 
 export interface FlowActionSlackPostMessageParamsAttachment {
-    color?: FlowActionSlackPostMessageParamsAttachment.Color;
-    pretext?: string;
-    text?: string;
-    fields?: Management.FlowActionSlackPostMessageParamsAttachmentField[];
+    color?: FlowActionSlackPostMessageParamsAttachment.Color | undefined;
+    pretext?: string | undefined;
+    text?: string | undefined;
+    fields?: Management.FlowActionSlackPostMessageParamsAttachmentField[] | undefined;
 }
 
 export namespace FlowActionSlackPostMessageParamsAttachment {
@@ -12365,8 +12408,8 @@ export namespace FlowActionSlackPostMessageParamsAttachment {
 
 export interface FlowActionSlackPostMessageParamsAttachmentField {
     title: string;
-    value?: string;
-    short?: boolean;
+    value?: string | undefined;
+    short?: boolean | undefined;
 }
 
 export type FlowActionStripe =
@@ -12380,11 +12423,11 @@ export type FlowActionStripe =
 
 export interface FlowActionStripeAddTaxId {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionStripeAddTaxId.Type;
     action: FlowActionStripeAddTaxId.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionStripeAddTaxIdParams;
 }
 
@@ -12407,21 +12450,21 @@ export interface FlowActionStripeAddTaxIdParams {
 }
 
 export interface FlowActionStripeAddress {
-    line1?: string;
-    line2?: string;
-    postalCode?: string;
-    city?: string;
-    state?: string;
-    country?: string;
+    line1?: string | undefined;
+    line2?: string | undefined;
+    postalCode?: string | undefined;
+    city?: string | undefined;
+    state?: string | undefined;
+    country?: string | undefined;
 }
 
 export interface FlowActionStripeCreateCustomer {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionStripeCreateCustomer.Type;
     action: FlowActionStripeCreateCustomer.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionStripeCreateCustomerParams;
 }
 
@@ -12438,23 +12481,23 @@ export namespace FlowActionStripeCreateCustomer {
 
 export interface FlowActionStripeCreateCustomerParams {
     connection_id: string;
-    tax_id?: Management.FlowActionStripeTaxId;
-    name?: string;
-    description?: string;
-    email?: string;
-    phone?: string;
-    tax_exempt?: string;
-    address?: Management.FlowActionStripeAddress;
-    metadata?: Management.FlowActionStripeMetadata;
+    tax_id?: Management.FlowActionStripeTaxId | undefined;
+    name?: string | undefined;
+    description?: string | undefined;
+    email?: string | undefined;
+    phone?: string | undefined;
+    tax_exempt?: string | undefined;
+    address?: Management.FlowActionStripeAddress | undefined;
+    metadata?: Management.FlowActionStripeMetadata | undefined;
 }
 
 export interface FlowActionStripeCreatePortalSession {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionStripeCreatePortalSession.Type;
     action: FlowActionStripeCreatePortalSession.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionStripeCreatePortalSessionParams;
 }
 
@@ -12472,16 +12515,16 @@ export namespace FlowActionStripeCreatePortalSession {
 export interface FlowActionStripeCreatePortalSessionParams {
     connection_id: string;
     customer_id: string;
-    return_url?: string;
+    return_url?: string | undefined;
 }
 
 export interface FlowActionStripeDeleteTaxId {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionStripeDeleteTaxId.Type;
     action: FlowActionStripeDeleteTaxId.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionStripeDeleteTaxIdParams;
 }
 
@@ -12504,11 +12547,11 @@ export interface FlowActionStripeDeleteTaxIdParams {
 
 export interface FlowActionStripeFindCustomers {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionStripeFindCustomers.Type;
     action: FlowActionStripeFindCustomers.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionStripeFindCustomersParams;
 }
 
@@ -12530,11 +12573,11 @@ export interface FlowActionStripeFindCustomersParams {
 
 export interface FlowActionStripeGetCustomer {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionStripeGetCustomer.Type;
     action: FlowActionStripeGetCustomer.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionStripeGetCustomerParams;
 }
 
@@ -12563,11 +12606,11 @@ export interface FlowActionStripeTaxId {
 
 export interface FlowActionStripeUpdateCustomer {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionStripeUpdateCustomer.Type;
     action: FlowActionStripeUpdateCustomer.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionStripeUpdateCustomerParams;
 }
 
@@ -12585,24 +12628,24 @@ export namespace FlowActionStripeUpdateCustomer {
 export interface FlowActionStripeUpdateCustomerParams {
     connection_id: string;
     id: string;
-    name?: string;
-    description?: string;
-    email?: string;
-    phone?: string;
-    tax_exempt?: string;
-    address?: Management.FlowActionStripeAddress;
-    metadata?: Management.FlowActionStripeMetadata;
+    name?: string | undefined;
+    description?: string | undefined;
+    email?: string | undefined;
+    phone?: string | undefined;
+    tax_exempt?: string | undefined;
+    address?: Management.FlowActionStripeAddress | undefined;
+    metadata?: Management.FlowActionStripeMetadata | undefined;
 }
 
 export type FlowActionTelegram = Management.FlowActionTelegramSendMessage;
 
 export interface FlowActionTelegramSendMessage {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionTelegramSendMessage.Type;
     action: FlowActionTelegramSendMessage.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionTelegramSendMessageParams;
 }
 
@@ -12627,11 +12670,11 @@ export type FlowActionTwilio = Management.FlowActionTwilioMakeCall | Management.
 
 export interface FlowActionTwilioMakeCall {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionTwilioMakeCall.Type;
     action: FlowActionTwilioMakeCall.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionTwilioMakeCallParams;
 }
 
@@ -12655,11 +12698,11 @@ export interface FlowActionTwilioMakeCallParams {
 
 export interface FlowActionTwilioSendSms {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionTwilioSendSms.Type;
     action: FlowActionTwilioSendSms.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionTwilioSendSmsParams;
 }
 
@@ -12685,11 +12728,11 @@ export type FlowActionWhatsapp = Management.FlowActionWhatsappSendMessage;
 
 export interface FlowActionWhatsappSendMessage {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionWhatsappSendMessage.Type;
     action: FlowActionWhatsappSendMessage.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionWhatsappSendMessageParams;
 }
 
@@ -12737,11 +12780,11 @@ export type FlowActionXml = Management.FlowActionXmlParseXml | Management.FlowAc
 
 export interface FlowActionXmlParseXml {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionXmlParseXml.Type;
     action: FlowActionXmlParseXml.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionXmlParseXmlParams;
 }
 
@@ -12762,11 +12805,11 @@ export interface FlowActionXmlParseXmlParams {
 
 export interface FlowActionXmlSerializeXml {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionXmlSerializeXml.Type;
     action: FlowActionXmlSerializeXml.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionXmlSerializeXmlParams;
 }
 
@@ -12793,11 +12836,11 @@ export type FlowActionZapier = Management.FlowActionZapierTriggerWebhook;
 
 export interface FlowActionZapierTriggerWebhook {
     id: string;
-    alias?: string;
+    alias?: string | undefined;
     type: FlowActionZapierTriggerWebhook.Type;
     action: FlowActionZapierTriggerWebhook.Action;
-    allow_failure?: boolean;
-    mask_output?: boolean;
+    allow_failure?: boolean | undefined;
+    mask_output?: boolean | undefined;
     params: Management.FlowActionZapierTriggerWebhookParams;
 }
 
@@ -12814,7 +12857,7 @@ export namespace FlowActionZapierTriggerWebhook {
 
 export interface FlowActionZapierTriggerWebhookParams {
     connection_id: string;
-    method?: FlowActionZapierTriggerWebhookParams.Method;
+    method?: FlowActionZapierTriggerWebhookParams.Method | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -12839,7 +12882,7 @@ export interface FlowExecutionSummary {
     /** Trace id */
     trace_id: string;
     /** Journey id */
-    journey_id?: string;
+    journey_id?: string | undefined;
     /** Execution status */
     status: string;
     /** The ISO 8601 formatted date when this flow execution was created. */
@@ -12847,9 +12890,9 @@ export interface FlowExecutionSummary {
     /** The ISO 8601 formatted date when this flow execution was updated. */
     updated_at: string;
     /** The ISO 8601 formatted date when this flow execution started. */
-    started_at?: string;
+    started_at?: string | undefined;
     /** The ISO 8601 formatted date when this flow execution ended. */
-    ended_at?: string;
+    ended_at?: string | undefined;
 }
 
 export interface FlowSummary {
@@ -12857,7 +12900,7 @@ export interface FlowSummary {
     name: string;
     created_at: string;
     updated_at: string;
-    executed_at?: string;
+    executed_at?: string | undefined;
 }
 
 export interface FlowsVaultConnectioSetupApiKey {
@@ -12872,10 +12915,10 @@ export interface FlowsVaultConnectioSetupApiKeyWithBaseUrl {
 }
 
 export interface FlowsVaultConnectioSetupBigqueryOauthJwt {
-    type?: Management.FlowsVaultConnectioSetupTypeOauthJwtEnum;
-    project_id?: string;
-    private_key?: string;
-    client_email?: string;
+    type?: Management.FlowsVaultConnectioSetupTypeOauthJwtEnum | undefined;
+    project_id?: string | undefined;
+    private_key?: string | undefined;
+    client_email?: string | undefined;
 }
 
 export interface FlowsVaultConnectioSetupHttpBearer {
@@ -12918,12 +12961,12 @@ export interface FlowsVaultConnectioSetupOauthApp {
     client_id: string;
     client_secret: string;
     domain: string;
-    audience?: string;
+    audience?: string | undefined;
 }
 
 export interface FlowsVaultConnectioSetupOauthCode {
-    type?: Management.FlowsVaultConnectioSetupTypeOauthCodeEnum;
-    code?: string;
+    type?: Management.FlowsVaultConnectioSetupTypeOauthCodeEnum | undefined;
+    code?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -13173,7 +13216,7 @@ export type FlowsVaultConnectionHttpApiKeySetupInEnum =
 export interface FlowsVaultConnectionHttpBasicAuthSetup {
     type: Management.FlowsVaultConnectionSetupTypeBasicAuthEnum;
     username: string;
-    password?: string;
+    password?: string | undefined;
 }
 
 export interface FlowsVaultConnectionHttpOauthClientCredentialsSetup {
@@ -13181,9 +13224,9 @@ export interface FlowsVaultConnectionHttpOauthClientCredentialsSetup {
     client_id: string;
     client_secret: string;
     token_endpoint: string;
-    audience?: string;
-    resource?: string;
-    scope?: string;
+    audience?: string | undefined;
+    resource?: string | undefined;
+    scope?: string | undefined;
 }
 
 export const FlowsVaultConnectionSetupTypeApiKeyEnum = {
@@ -13212,7 +13255,7 @@ export interface FlowsVaultConnectionSummary {
     /** Flows Vault Connection name. */
     name: string;
     /** Flows Vault Connection custom account name. */
-    account_name?: string;
+    account_name?: string | undefined;
     /** Whether the Flows Vault Connection is configured. */
     ready: boolean;
     /** The ISO 8601 formatted date when this Flows Vault Connection was created. */
@@ -13220,7 +13263,7 @@ export interface FlowsVaultConnectionSummary {
     /** The ISO 8601 formatted date when this Flows Vault Connection was updated. */
     updated_at: string;
     /** The ISO 8601 formatted date when this Flows Vault Connection was refreshed. */
-    refreshed_at?: string;
+    refreshed_at?: string | undefined;
     fingerprint: string;
 }
 
@@ -13238,35 +13281,35 @@ export interface FormBlockDivider {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
     type: Management.FormBlockTypeDividerConst;
-    config?: Management.FormBlockDividerConfig;
+    config?: Management.FormBlockDividerConfig | undefined;
 }
 
 export interface FormBlockDividerConfig {
-    text?: string;
+    text?: string | undefined;
 }
 
 export interface FormBlockHtml {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
     type: Management.FormBlockTypeHtmlConst;
-    config?: Management.FormBlockHtmlConfig;
+    config?: Management.FormBlockHtmlConfig | undefined;
 }
 
 export interface FormBlockHtmlConfig {
-    content?: string;
+    content?: string | undefined;
 }
 
 export interface FormBlockImage {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
     type: Management.FormBlockTypeImageConst;
-    config?: Management.FormBlockImageConfig;
+    config?: Management.FormBlockImageConfig | undefined;
 }
 
 export interface FormBlockImageConfig {
     src: string;
-    position?: Management.FormBlockImageConfigPositionEnum;
-    height?: number;
+    position?: Management.FormBlockImageConfigPositionEnum | undefined;
+    height?: number | undefined;
 }
 
 export const FormBlockImageConfigPositionEnum = {
@@ -13287,11 +13330,11 @@ export interface FormBlockJumpButton {
 export interface FormBlockJumpButtonConfig {
     text: string;
     next_node: Management.FormNodePointer;
-    style?: Management.FormBlockJumpButtonConfigStyle;
+    style?: Management.FormBlockJumpButtonConfigStyle | undefined;
 }
 
 export interface FormBlockJumpButtonConfigStyle {
-    background_color?: string;
+    background_color?: string | undefined;
 }
 
 export interface FormBlockNextButton {
@@ -13327,10 +13370,10 @@ export interface FormBlockResendButtonConfig {
     active_text: string;
     button_text: string;
     waiting_text: string;
-    text_alignment?: Management.FormBlockResendButtonConfigTextAlignmentEnum;
+    text_alignment?: Management.FormBlockResendButtonConfigTextAlignmentEnum | undefined;
     flow_id: string;
-    max_attempts?: number;
-    waiting_time?: number;
+    max_attempts?: number | undefined;
+    waiting_time?: number | undefined;
 }
 
 export const FormBlockResendButtonConfigTextAlignmentEnum = {
@@ -13345,11 +13388,11 @@ export interface FormBlockRichText {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
     type: Management.FormBlockTypeRichTextConst;
-    config?: Management.FormBlockRichTextConfig;
+    config?: Management.FormBlockRichTextConfig | undefined;
 }
 
 export interface FormBlockRichTextConfig {
-    content?: string;
+    content?: string | undefined;
 }
 
 export const FormBlockTypeDividerConst = {
@@ -13417,14 +13460,14 @@ export type FormComponentCategoryWidgetConst =
     (typeof FormComponentCategoryWidgetConst)[keyof typeof FormComponentCategoryWidgetConst];
 
 export interface FormEndingNode {
-    redirection?: Management.FormEndingNodeRedirection;
-    after_submit?: Management.FormEndingNodeAfterSubmit;
-    coordinates?: Management.FormNodeCoordinates;
-    resume_flow?: Management.FormEndingNodeResumeFlowTrueConst;
+    redirection?: Management.FormEndingNodeRedirection | undefined;
+    after_submit?: Management.FormEndingNodeAfterSubmit | undefined;
+    coordinates?: Management.FormNodeCoordinates | undefined;
+    resume_flow?: Management.FormEndingNodeResumeFlowTrueConst | undefined;
 }
 
 export interface FormEndingNodeAfterSubmit {
-    flow_id?: string;
+    flow_id?: string | undefined;
 }
 
 export const FormEndingNodeId = {
@@ -13435,7 +13478,7 @@ export type FormEndingNodeId = (typeof FormEndingNodeId)[keyof typeof FormEnding
 export type FormEndingNodeNullable = (Management.FormEndingNode | null) | undefined;
 
 export interface FormEndingNodeRedirection {
-    delay?: number;
+    delay?: number | undefined;
     target: string;
 }
 
@@ -13464,37 +13507,37 @@ export interface FormFieldBoolean {
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeBooleanConst;
     config: Management.FormFieldBooleanConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldBooleanConfig {
-    default_value?: boolean;
-    options?: Management.FormFieldBooleanConfigOptions;
+    default_value?: boolean | undefined;
+    options?: Management.FormFieldBooleanConfigOptions | undefined;
 }
 
 export interface FormFieldBooleanConfigOptions {
-    true?: string;
-    false?: string;
+    true?: string | undefined;
+    false?: string | undefined;
 }
 
 export interface FormFieldCards {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeCardsConst;
-    config?: Management.FormFieldCardsConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldCardsConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldCardsConfig {
-    hide_labels?: boolean;
-    multiple?: boolean;
-    options?: Management.FormFieldCardsConfigOption[];
+    hide_labels?: boolean | undefined;
+    multiple?: boolean | undefined;
+    options?: Management.FormFieldCardsConfigOption[] | undefined;
 }
 
 export interface FormFieldCardsConfigOption {
@@ -13507,23 +13550,23 @@ export interface FormFieldChoice {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeChoiceConst;
-    config?: Management.FormFieldChoiceConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldChoiceConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldChoiceConfig {
-    multiple?: boolean;
-    options?: Management.FormFieldChoiceConfigOption[];
-    allow_other?: Management.FormFieldChoiceConfigAllowOther;
+    multiple?: boolean | undefined;
+    options?: Management.FormFieldChoiceConfigOption[] | undefined;
+    allow_other?: Management.FormFieldChoiceConfigAllowOther | undefined;
 }
 
 export interface FormFieldChoiceConfigAllowOther {
-    enabled?: Management.FormFieldChoiceConfigAllowOtherEnabledTrueEnum;
-    label?: string;
-    placeholder?: string;
+    enabled?: Management.FormFieldChoiceConfigAllowOtherEnabledTrueEnum | undefined;
+    label?: string | undefined;
+    placeholder?: string | undefined;
 }
 
 export type FormFieldChoiceConfigAllowOtherEnabledTrueEnum = boolean;
@@ -13538,17 +13581,17 @@ export interface FormFieldCustom {
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeCustomConst;
     config: Management.FormFieldCustomConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldCustomConfig {
     schema: Management.FormFieldCustomConfigSchema;
     code: string;
-    css?: string;
-    params?: Management.FormFieldCustomConfigParams;
+    css?: string | undefined;
+    params?: Management.FormFieldCustomConfigParams | undefined;
 }
 
 export type FormFieldCustomConfigParams = Record<string, string>;
@@ -13560,15 +13603,15 @@ export interface FormFieldDate {
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeDateConst;
     config: Management.FormFieldDateConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldDateConfig {
-    format?: Management.FormFieldDateConfigFormatEnum;
-    default_value?: string;
+    format?: Management.FormFieldDateConfigFormatEnum | undefined;
+    default_value?: string | undefined;
 }
 
 export const FormFieldDateConfigFormatEnum = {
@@ -13582,17 +13625,17 @@ export interface FormFieldDropdown {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeDropdownConst;
-    config?: Management.FormFieldDropdownConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldDropdownConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldDropdownConfig {
-    multiple?: boolean;
-    options?: Management.FormFieldDropdownConfigOption[];
-    placeholder?: string;
+    multiple?: boolean | undefined;
+    options?: Management.FormFieldDropdownConfigOption[] | undefined;
+    placeholder?: string | undefined;
 }
 
 export interface FormFieldDropdownConfigOption {
@@ -13604,36 +13647,36 @@ export interface FormFieldEmail {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeEmailConst;
-    config?: Management.FormFieldEmailConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldEmailConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldEmailConfig {
-    default_value?: string;
-    placeholder?: string;
+    default_value?: string | undefined;
+    placeholder?: string | undefined;
 }
 
 export interface FormFieldFile {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeFileConst;
-    config?: Management.FormFieldFileConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldFileConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldFileConfig {
-    multiple?: boolean;
-    storage?: Management.FormFieldFileConfigStorage;
-    categories?: Management.FormFieldFileConfigCategoryEnum[];
-    extensions?: string[];
-    maxSize?: number;
-    maxFiles?: number;
+    multiple?: boolean | undefined;
+    storage?: Management.FormFieldFileConfigStorage | undefined;
+    categories?: Management.FormFieldFileConfigCategoryEnum[] | undefined;
+    extensions?: string[] | undefined;
+    maxSize?: number | undefined;
+    maxFiles?: number | undefined;
 }
 
 export const FormFieldFileConfigCategoryEnum = {
@@ -13663,33 +13706,33 @@ export interface FormFieldLegal {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeLegalConst;
-    config?: Management.FormFieldLegalConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldLegalConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldLegalConfig {
-    text?: string;
+    text?: string | undefined;
 }
 
 export interface FormFieldNumber {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeNumberConst;
-    config?: Management.FormFieldNumberConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldNumberConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldNumberConfig {
-    default_value?: number;
-    placeholder?: string;
-    min_value?: number;
-    max_value?: number;
+    default_value?: number | undefined;
+    placeholder?: string | undefined;
+    min_value?: number | undefined;
+    max_value?: number | undefined;
 }
 
 export interface FormFieldPassword {
@@ -13697,20 +13740,20 @@ export interface FormFieldPassword {
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypePasswordConst;
     config: Management.FormFieldPasswordConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldPasswordConfig {
-    hash?: Management.FormFieldPasswordConfigHashEnum;
-    placeholder?: string;
-    min_length?: number;
-    max_length?: number;
-    complexity?: boolean;
-    nist?: boolean;
-    strength_meter?: boolean;
+    hash?: Management.FormFieldPasswordConfigHashEnum | undefined;
+    placeholder?: string | undefined;
+    min_length?: number | undefined;
+    max_length?: number | undefined;
+    complexity?: boolean | undefined;
+    nist?: boolean | undefined;
+    strength_meter?: boolean | undefined;
 }
 
 export const FormFieldPasswordConfigHashEnum = {
@@ -13728,18 +13771,18 @@ export interface FormFieldPayment {
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypePaymentConst;
     config: Management.FormFieldPaymentConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldPaymentConfig {
-    provider?: Management.FormFieldPaymentConfigProviderEnum;
+    provider?: Management.FormFieldPaymentConfigProviderEnum | undefined;
     charge: Management.FormFieldPaymentConfigCharge;
     credentials: Management.FormFieldPaymentConfigCredentials;
-    customer?: Management.FormFieldPaymentConfigCustomer;
-    fields?: Management.FormFieldPaymentConfigFields;
+    customer?: Management.FormFieldPaymentConfigCustomer | undefined;
+    fields?: Management.FormFieldPaymentConfigFields | undefined;
 }
 
 export type FormFieldPaymentConfigCharge =
@@ -13797,15 +13840,15 @@ export interface FormFieldPaymentConfigCredentials {
 export type FormFieldPaymentConfigCustomer = Record<string, unknown>;
 
 export interface FormFieldPaymentConfigFieldProperties {
-    label?: string;
-    placeholder?: string;
+    label?: string | undefined;
+    placeholder?: string | undefined;
 }
 
 export interface FormFieldPaymentConfigFields {
-    card_number?: Management.FormFieldPaymentConfigFieldProperties;
-    expiration_date?: Management.FormFieldPaymentConfigFieldProperties;
-    security_code?: Management.FormFieldPaymentConfigFieldProperties;
-    trustmarks?: boolean;
+    card_number?: Management.FormFieldPaymentConfigFieldProperties | undefined;
+    expiration_date?: Management.FormFieldPaymentConfigFieldProperties | undefined;
+    security_code?: Management.FormFieldPaymentConfigFieldProperties | undefined;
+    trustmarks?: boolean | undefined;
 }
 
 export const FormFieldPaymentConfigProviderEnum = {
@@ -13820,11 +13863,11 @@ export interface FormFieldSocial {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeSocialConst;
-    config?: Management.FormFieldSocialConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldSocialConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldSocialConfig {}
@@ -13833,43 +13876,43 @@ export interface FormFieldTel {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeTelConst;
-    config?: Management.FormFieldTelConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldTelConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldTelConfig {
-    default_value?: string;
-    placeholder?: string;
-    min_length?: number;
-    max_length?: number;
-    country_picker?: boolean;
-    strings?: Management.FormFieldTelConfigStrings;
+    default_value?: string | undefined;
+    placeholder?: string | undefined;
+    min_length?: number | undefined;
+    max_length?: number | undefined;
+    country_picker?: boolean | undefined;
+    strings?: Management.FormFieldTelConfigStrings | undefined;
 }
 
 export interface FormFieldTelConfigStrings {
-    filter_placeholder?: string;
+    filter_placeholder?: string | undefined;
 }
 
 export interface FormFieldText {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeTextConst;
-    config?: Management.FormFieldTextConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldTextConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldTextConfig {
-    multiline?: boolean;
-    default_value?: string;
-    placeholder?: string;
-    min_length?: number;
-    max_length?: number;
+    multiline?: boolean | undefined;
+    default_value?: string | undefined;
+    placeholder?: string | undefined;
+    min_length?: number | undefined;
+    max_length?: number | undefined;
 }
 
 export const FormFieldTypeBooleanConst = {
@@ -13956,46 +13999,46 @@ export interface FormFieldUrl {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
     type: Management.FormFieldTypeUrlConst;
-    config?: Management.FormFieldUrlConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    config?: Management.FormFieldUrlConfig | undefined;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormFieldUrlConfig {
-    default_value?: string;
-    placeholder?: string;
+    default_value?: string | undefined;
+    placeholder?: string | undefined;
 }
 
 export interface FormFlow {
     id: string;
     type: Management.FormNodeTypeFlowConst;
-    coordinates?: Management.FormNodeCoordinates;
-    alias?: string;
+    coordinates?: Management.FormNodeCoordinates | undefined;
+    alias?: string | undefined;
     config: Management.FormFlowConfig;
 }
 
 export interface FormFlowConfig {
     flow_id: string;
-    next_node?: Management.FormNodePointer;
+    next_node?: Management.FormNodePointer | undefined;
 }
 
 export interface FormHiddenField {
     key: string;
-    value?: string;
+    value?: string | undefined;
 }
 
 export interface FormLanguages {
-    primary?: string;
-    default?: string;
+    primary?: string | undefined;
+    default?: string | undefined;
 }
 
 export type FormLanguagesNullable = (Management.FormLanguages | null) | undefined;
 
 export interface FormMessages {
-    errors?: Management.FormMessagesError;
-    custom?: Management.FormMessagesCustom;
+    errors?: Management.FormMessagesError | undefined;
+    custom?: Management.FormMessagesCustom | undefined;
 }
 
 export type FormMessagesCustom = Record<string, string>;
@@ -14035,26 +14078,26 @@ export type FormNodeTypeStepConst = (typeof FormNodeTypeStepConst)[keyof typeof 
 export interface FormRouter {
     id: string;
     type: Management.FormNodeTypeRouterConst;
-    coordinates?: Management.FormNodeCoordinates;
-    alias?: string;
-    config?: Management.FormRouterConfig;
+    coordinates?: Management.FormNodeCoordinates | undefined;
+    alias?: string | undefined;
+    config?: Management.FormRouterConfig | undefined;
 }
 
 export interface FormRouterConfig {
-    rules?: Management.FormRouterRule[];
-    fallback?: Management.FormNodePointer;
+    rules?: Management.FormRouterRule[] | undefined;
+    fallback?: Management.FormNodePointer | undefined;
 }
 
 export interface FormRouterRule {
     id: string;
-    alias?: string;
-    next_node?: Management.FormNodePointer;
+    alias?: string | undefined;
+    next_node?: Management.FormNodePointer | undefined;
 }
 
 export interface FormStartNode {
-    hidden_fields?: Management.FormHiddenField[];
-    next_node?: Management.FormNodePointer;
-    coordinates?: Management.FormNodeCoordinates;
+    hidden_fields?: Management.FormHiddenField[] | undefined;
+    next_node?: Management.FormNodePointer | undefined;
+    coordinates?: Management.FormNodeCoordinates | undefined;
 }
 
 export type FormStartNodeNullable = (Management.FormStartNode | null) | undefined;
@@ -14062,20 +14105,20 @@ export type FormStartNodeNullable = (Management.FormStartNode | null) | undefine
 export interface FormStep {
     id: string;
     type: Management.FormNodeTypeStepConst;
-    coordinates?: Management.FormNodeCoordinates;
-    alias?: string;
-    config?: Management.FormStepConfig;
+    coordinates?: Management.FormNodeCoordinates | undefined;
+    alias?: string | undefined;
+    config?: Management.FormStepConfig | undefined;
 }
 
 export type FormStepComponentList = Management.FormComponent[];
 
 export interface FormStepConfig {
-    components?: Management.FormStepComponentList;
-    next_node?: Management.FormNodePointer;
+    components?: Management.FormStepComponentList | undefined;
+    next_node?: Management.FormNodePointer | undefined;
 }
 
 export interface FormStyle {
-    css?: string;
+    css?: string | undefined;
 }
 
 export type FormStyleNullable = (Management.FormStyle | null) | undefined;
@@ -14085,8 +14128,8 @@ export interface FormSummary {
     name: string;
     created_at: string;
     updated_at: string;
-    embedded_at?: string;
-    submitted_at?: string;
+    embedded_at?: string | undefined;
+    submitted_at?: string | undefined;
 }
 
 export type FormTranslations = Record<string, Record<string, unknown>>;
@@ -14103,19 +14146,19 @@ export interface FormWidgetAuth0VerifiableCredentials {
     category: Management.FormComponentCategoryWidgetConst;
     type: Management.FormWidgetTypeAuth0VerifiableCredentialsConst;
     config: Management.FormWidgetAuth0VerifiableCredentialsConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormWidgetAuth0VerifiableCredentialsConfig {
     url: string;
-    size?: number;
+    size?: number | undefined;
     alternate_text: string;
     access_token: string;
     verification_id: string;
-    max_wait?: number;
+    max_wait?: number | undefined;
 }
 
 export interface FormWidgetGMapsAddress {
@@ -14123,10 +14166,10 @@ export interface FormWidgetGMapsAddress {
     category: Management.FormComponentCategoryWidgetConst;
     type: Management.FormWidgetTypeGMapsAddressConst;
     config: Management.FormWidgetGMapsAddressConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormWidgetGMapsAddressConfig {
@@ -14138,10 +14181,10 @@ export interface FormWidgetRecaptcha {
     category: Management.FormComponentCategoryWidgetConst;
     type: Management.FormWidgetTypeRecaptchaConst;
     config: Management.FormWidgetRecaptchaConfig;
-    label?: string;
-    hint?: string;
-    required?: boolean;
-    sensitive?: boolean;
+    label?: string | undefined;
+    hint?: string | undefined;
+    required?: boolean | undefined;
+    sensitive?: boolean | undefined;
 }
 
 export interface FormWidgetRecaptchaConfig {
@@ -14179,155 +14222,155 @@ export type FormsRequestParametersHydrateEnum =
  */
 export interface GetActionExecutionResponseContent {
     /** ID identifies this specific execution simulation. These IDs would resemble real executions in production. */
-    id?: string;
-    trigger_id?: Management.ActionTriggerTypeEnum;
-    status?: Management.ActionExecutionStatusEnum;
-    results?: Management.ActionExecutionResult[];
+    id?: string | undefined;
+    trigger_id?: Management.ActionTriggerTypeEnum | undefined;
+    status?: Management.ActionExecutionStatusEnum | undefined;
+    results?: Management.ActionExecutionResult[] | undefined;
     /** The time that the execution was started. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time that the exeution finished executing. */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 export interface GetActionModuleActionsResponseContent {
     /** A list of action references. */
-    actions?: Management.ActionModuleAction[];
+    actions?: Management.ActionModuleAction[] | undefined;
     /** The total number of actions using this module. */
-    total?: number;
+    total?: number | undefined;
     /** The page index of the returned results. */
-    page?: number;
+    page?: number | undefined;
     /** The number of results requested per page. */
-    per_page?: number;
+    per_page?: number | undefined;
 }
 
 export interface GetActionModuleResponseContent {
     /** The unique ID of the module. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the module. */
-    name?: string;
+    name?: string | undefined;
     /** The source code from the module's draft version. */
-    code?: string;
+    code?: string | undefined;
     /** The npm dependencies from the module's draft version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The secrets from the module's draft version (names and timestamps only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** The number of deployed actions using this module. */
-    actions_using_module_total?: number;
+    actions_using_module_total?: number | undefined;
     /** Whether all draft changes have been published as a version. */
-    all_changes_published?: boolean;
+    all_changes_published?: boolean | undefined;
     /** The version number of the latest published version. Omitted if no versions have been published. */
-    latest_version_number?: number;
+    latest_version_number?: number | undefined;
     /** Timestamp when the module was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the module was last updated. */
-    updated_at?: string;
-    latest_version?: Management.ActionModuleVersionReference;
+    updated_at?: string | undefined;
+    latest_version?: Management.ActionModuleVersionReference | undefined;
 }
 
 export interface GetActionModuleVersionResponseContent {
     /** The unique ID for this version. */
-    id?: string;
+    id?: string | undefined;
     /** The ID of the parent module. */
-    module_id?: string;
+    module_id?: string | undefined;
     /** The sequential version number. */
-    version_number?: number;
+    version_number?: number | undefined;
     /** The exact source code that was published with this version. */
-    code?: string;
+    code?: string | undefined;
     /** Secrets available to this version (name and updated_at only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** Dependencies locked to this version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The timestamp when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
 }
 
 export interface GetActionModuleVersionsResponseContent {
     /** A list of ActionsModuleVersion objects. */
-    versions?: Management.ActionModuleVersion[];
+    versions?: Management.ActionModuleVersion[] | undefined;
     /** The total number of versions for this module. */
-    total?: number;
+    total?: number | undefined;
     /** The page index of the returned results. */
-    page?: number;
+    page?: number | undefined;
     /** The number of results requested per page. */
-    per_page?: number;
+    per_page?: number | undefined;
 }
 
 export interface GetActionModulesResponseContent {
     /** A list of ActionsModule objects. */
-    modules?: Management.ActionModuleListItem[];
+    modules?: Management.ActionModuleListItem[] | undefined;
     /** The total number of modules in the tenant. */
-    total?: number;
+    total?: number | undefined;
     /** The page index of the returned results. */
-    page?: number;
+    page?: number | undefined;
     /** The number of results requested per page. */
-    per_page?: number;
+    per_page?: number | undefined;
 }
 
 export interface GetActionResponseContent {
     /** The unique ID of the action. */
-    id?: string;
+    id?: string | undefined;
     /** The name of an action. */
-    name?: string;
+    name?: string | undefined;
     /** The list of triggers that this action supports. At this time, an action can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** True if all of an Action's contents have been deployed. */
-    all_changes_deployed?: boolean;
+    all_changes_deployed?: boolean | undefined;
     /** The time when this action was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this action was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The source code of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this action depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** The Node runtime. For example: `node22`, defaults to `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    deployed_version?: Management.ActionDeployedVersion;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    deployed_version?: Management.ActionDeployedVersion | undefined;
     /** installed_integration_id is the fk reference to the InstalledIntegration entity. */
-    installed_integration_id?: string;
-    integration?: Management.Integration;
-    status?: Management.ActionBuildStatusEnum;
+    installed_integration_id?: string | undefined;
+    integration?: Management.Integration | undefined;
+    status?: Management.ActionBuildStatusEnum | undefined;
     /** The time when this action was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** True if the action should be deployed after creation. */
-    deploy?: boolean;
+    deploy?: boolean | undefined;
     /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 export interface GetActionVersionResponseContent {
     /** The unique id of an action version. */
-    id?: string;
+    id?: string | undefined;
     /** The id of the action to which this version belongs. */
-    action_id?: string;
+    action_id?: string | undefined;
     /** The source code of this specific version of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this specific version depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** Indicates if this specific version is the currently one deployed. */
-    deployed?: boolean;
+    deployed?: boolean | undefined;
     /** The Node runtime. For example: `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    status?: Management.ActionVersionBuildStatusEnum;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    status?: Management.ActionVersionBuildStatusEnum | undefined;
     /** The index of this version in list of versions for the action. */
-    number?: number;
+    number?: number | undefined;
     /** Any errors that occurred while the version was being built. */
-    errors?: Management.ActionError[];
-    action?: Management.ActionBase;
+    errors?: Management.ActionError[] | undefined;
+    action?: Management.ActionBase | undefined;
     /** The time when this version was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** The time when this version was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when a version was updated. Versions are never updated externally. Only Auth0 will update an action version as it is being built. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The list of triggers that this version supports. At this time, a version can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** The list of action modules and their versions used by this action version. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 /**
@@ -14337,33 +14380,33 @@ export type GetActiveUsersCountStatsResponseContent = number;
 
 export interface GetAculResponseContent {
     /** Tenant ID */
-    tenant?: string;
+    tenant?: string | undefined;
     /** Name of the prompt */
-    prompt?: string;
+    prompt?: string | undefined;
     /** Name of the screen */
-    screen?: string;
-    rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    screen?: string | undefined;
+    rendering_mode?: Management.AculRenderingModeEnum | undefined;
+    context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
-    default_head_tags_disabled?: boolean | null;
+    default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
-    use_page_template?: boolean | null;
+    use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
-    filters?: Management.AculFilters | null;
+    head_tags?: Management.AculHeadTag[] | undefined;
+    filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetAttackProtectionCaptchaResponseContent {
-    active_provider_id?: string;
-    arkose?: Management.AttackProtectionCaptchaArkoseResponseContent;
-    auth_challenge?: Management.AttackProtectionCaptchaAuthChallengeResponseContent;
-    hcaptcha?: Management.AttackProtectionCaptchaHcaptchaResponseContent;
-    friendly_captcha?: Management.AttackProtectionCaptchaFriendlyCaptchaResponseContent;
-    recaptcha_enterprise?: Management.AttackProtectionCaptchaRecaptchaEnterpriseResponseContent;
-    recaptcha_v2?: Management.AttackProtectionCaptchaRecaptchaV2ResponseContent;
-    simple_captcha?: Management.AttackProtectionCaptchaSimpleCaptchaResponseContent;
+    active_provider_id?: string | undefined;
+    arkose?: Management.AttackProtectionCaptchaArkoseResponseContent | undefined;
+    auth_challenge?: Management.AttackProtectionCaptchaAuthChallengeResponseContent | undefined;
+    hcaptcha?: Management.AttackProtectionCaptchaHcaptchaResponseContent | undefined;
+    friendly_captcha?: Management.AttackProtectionCaptchaFriendlyCaptchaResponseContent | undefined;
+    recaptcha_enterprise?: Management.AttackProtectionCaptchaRecaptchaEnterpriseResponseContent | undefined;
+    recaptcha_v2?: Management.AttackProtectionCaptchaRecaptchaV2ResponseContent | undefined;
+    simple_captcha?: Management.AttackProtectionCaptchaSimpleCaptchaResponseContent | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -14393,27 +14436,27 @@ export interface GetBrandingDefaultThemeResponseContent {
  * Phone provider configuration schema
  */
 export interface GetBrandingPhoneProviderResponseContent {
-    id?: string;
+    id?: string | undefined;
     /** The name of the tenant */
-    tenant?: string;
+    tenant?: string | undefined;
     name: Management.PhoneProviderNameEnum;
-    channel?: Management.PhoneProviderChannelEnum;
+    channel?: Management.PhoneProviderChannelEnum | undefined;
     /** Whether the provider is enabled (false) or disabled (true). */
-    disabled?: boolean;
-    configuration?: Management.PhoneProviderConfiguration;
+    disabled?: boolean | undefined;
+    configuration?: Management.PhoneProviderConfiguration | undefined;
     /** The provider's creation date and time in ISO 8601 format */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time of the last update to the provider in ISO 8601 format */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 export interface GetBrandingResponseContent {
-    colors?: Management.BrandingColors;
+    colors?: Management.BrandingColors | undefined;
     /** URL for the favicon. Must use HTTPS. */
-    favicon_url?: string;
+    favicon_url?: string | undefined;
     /** URL for the logo. Must use HTTPS. */
-    logo_url?: string;
-    font?: Management.BrandingFont;
+    logo_url?: string | undefined;
+    font?: Management.BrandingFont | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -14432,170 +14475,172 @@ export interface GetBrandingThemeResponseContent {
 
 export interface GetBreachedPasswordDetectionSettingsResponseContent {
     /** Whether or not breached password detection is active. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /**
      * Action to take when a breached password is detected during a login.
      *       Possible values: <code>block</code>, <code>user_notification</code>, <code>admin_notification</code>.
      */
-    shields?: Management.BreachedPasswordDetectionShieldsEnum[];
+    shields?: Management.BreachedPasswordDetectionShieldsEnum[] | undefined;
     /**
      * When "admin_notification" is enabled, determines how often email notifications are sent.
      *         Possible values: <code>immediately</code>, <code>daily</code>, <code>weekly</code>, <code>monthly</code>.
      */
-    admin_notification_frequency?: Management.BreachedPasswordDetectionAdminNotificationFrequencyEnum[];
-    method?: Management.BreachedPasswordDetectionMethodEnum;
-    stage?: Management.BreachedPasswordDetectionStage;
+    admin_notification_frequency?: Management.BreachedPasswordDetectionAdminNotificationFrequencyEnum[] | undefined;
+    method?: Management.BreachedPasswordDetectionMethodEnum | undefined;
+    stage?: Management.BreachedPasswordDetectionStage | undefined;
 }
 
 export interface GetBruteForceSettingsResponseContent {
     /** Whether or not brute force attack protections are active. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /**
      * Action to take when a brute force protection threshold is violated.
      *         Possible values: <code>block</code>, <code>user_notification</code>.
      */
-    shields?: Management.BruteForceProtectionShieldsEnum[];
+    shields?: Management.BruteForceProtectionShieldsEnum[] | undefined;
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
-    allowlist?: string[];
-    mode?: Management.BruteForceProtectionModeEnum;
+    allowlist?: string[] | undefined;
+    mode?: Management.BruteForceProtectionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
-    max_attempts?: number;
+    max_attempts?: number | undefined;
 }
 
 export interface GetClientCredentialResponseContent {
     /** ID of the credential. Generated on creation. */
-    id?: string;
+    id?: string | undefined;
     /** The name given to the credential by the user. */
-    name?: string;
+    name?: string | undefined;
     /** The key identifier of the credential, generated on creation. */
-    kid?: string;
-    alg?: Management.ClientCredentialAlgorithmEnum;
-    credential_type?: Management.ClientCredentialTypeEnum;
+    kid?: string | undefined;
+    alg?: Management.ClientCredentialAlgorithmEnum | undefined;
+    credential_type?: Management.ClientCredentialTypeEnum | undefined;
     /** The X509 certificate's Subject Distinguished Name */
-    subject_dn?: string;
+    subject_dn?: string | undefined;
     /** The X509 certificate's SHA256 thumbprint */
-    thumbprint_sha256?: string;
+    thumbprint_sha256?: string | undefined;
     /** The ISO 8601 formatted date the credential was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The ISO 8601 formatted date the credential was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The ISO 8601 formatted date representing the expiration of the credential. */
-    expires_at?: string;
+    expires_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetClientGrantResponseContent {
     /** ID of the client grant. */
-    id?: string;
+    id?: string | undefined;
     /** ID of the client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The audience (API identifier) of this client grant. */
-    audience?: string;
+    audience?: string | undefined;
     /** Scopes allowed for this client grant. */
-    scope?: string[];
-    organization_usage?: Management.ClientGrantOrganizationUsageEnum;
+    scope?: string[] | undefined;
+    organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
-    allow_any_organization?: boolean;
+    allow_any_organization?: boolean | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
-    is_system?: boolean;
-    subject_type?: Management.ClientGrantSubjectTypeEnum;
+    is_system?: boolean | undefined;
+    subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
     /** Types of authorization_details allowed for this client grant. */
-    authorization_details_types?: string[];
+    authorization_details_types?: string[] | undefined;
     /** If enabled, all scopes configured on the resource server are allowed for this grant. */
-    allow_all_scopes?: boolean;
+    allow_all_scopes?: boolean | undefined;
 }
 
 export interface GetClientResponseContent {
     /** ID of this client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Name of the tenant this client belongs to. */
-    tenant?: string;
+    tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
-    name?: string;
+    name?: string | undefined;
     /** Free text description of this client (max length: 140 characters). */
-    description?: string;
+    description?: string | undefined;
     /** Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false). */
-    global?: boolean;
+    global?: boolean | undefined;
     /** Client secret (which you must not make public). */
-    client_secret?: string;
-    app_type?: Management.ClientAppTypeEnum;
+    client_secret?: string | undefined;
+    app_type?: Management.ClientAppTypeEnum | undefined;
     /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
-    logo_uri?: string;
+    logo_uri?: string | undefined;
     /** Whether this client a first party client (true) or not (false). */
-    is_first_party?: boolean;
+    is_first_party?: boolean | undefined;
     /** Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false). */
-    oidc_conformant?: boolean;
+    oidc_conformant?: boolean | undefined;
     /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
-    callbacks?: string[];
+    callbacks?: string[] | undefined;
     /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
-    allowed_origins?: string[];
+    allowed_origins?: string[] | undefined;
     /** Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>. */
-    web_origins?: string[];
+    web_origins?: string[] | undefined;
     /** List of audiences/realms for SAML protocol. Used by the wsfed addon. */
-    client_aliases?: string[];
+    client_aliases?: string[] | undefined;
     /** List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed. */
-    allowed_clients?: string[];
+    allowed_clients?: string[] | undefined;
     /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
-    allowed_logout_urls?: string[];
-    session_transfer?: Management.ClientSessionTransferConfiguration | null;
-    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    allowed_logout_urls?: string[] | undefined;
+    session_transfer?: (Management.ClientSessionTransferConfiguration | null) | undefined;
+    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings | undefined;
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
-    grant_types?: string[];
-    jwt_configuration?: Management.ClientJwtConfiguration;
-    signing_keys?: Management.ClientSigningKeys;
-    encryption_key?: Management.ClientEncryptionKey | null;
+    grant_types?: string[] | undefined;
+    jwt_configuration?: Management.ClientJwtConfiguration | undefined;
+    signing_keys?: Management.ClientSigningKeys | undefined;
+    encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
-    sso?: boolean;
+    sso?: boolean | undefined;
     /** Whether Single Sign On is disabled (true) or enabled (true). Defaults to true. */
-    sso_disabled?: boolean;
+    sso_disabled?: boolean | undefined;
     /** Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false). */
-    cross_origin_authentication?: boolean;
+    cross_origin_authentication?: boolean | undefined;
     /** URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page. */
-    cross_origin_loc?: string;
+    cross_origin_loc?: string | undefined;
     /** Whether a custom login page is to be used (true) or the default provided login page (false). */
-    custom_login_page_on?: boolean;
+    custom_login_page_on?: boolean | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. */
-    custom_login_page?: string;
+    custom_login_page?: string | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. (Used on Previews) */
-    custom_login_page_preview?: string;
+    custom_login_page_preview?: string | undefined;
     /** HTML form template to be used for WS-Federation. */
-    form_template?: string;
-    addons?: Management.ClientAddons;
-    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum;
+    form_template?: string | undefined;
+    addons?: Management.ClientAddons | undefined;
+    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum | undefined;
     /** If true, trust that the IP specified in the `auth0-forwarded-for` header is the end-user's IP for brute-force-protection on token endpoint. */
-    is_token_endpoint_ip_header_trusted?: boolean;
-    client_metadata?: Management.ClientMetadata;
-    mobile?: Management.ClientMobile;
+    is_token_endpoint_ip_header_trusted?: boolean | undefined;
+    client_metadata?: Management.ClientMetadata | undefined;
+    mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
-    initiate_login_uri?: string;
-    refresh_token?: Management.ClientRefreshTokenConfiguration | null;
-    default_organization?: Management.ClientDefaultOrganization | null;
-    organization_usage?: Management.ClientOrganizationUsageEnum;
-    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum;
+    initiate_login_uri?: string | undefined;
+    refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
+    default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
+    organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum | undefined;
     /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
-    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
-    client_authentication_methods?: Management.ClientAuthenticationMethod | null;
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | undefined;
+    client_authentication_methods?: (Management.ClientAuthenticationMethod | null) | undefined;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
-    require_pushed_authorization_requests?: boolean;
+    require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
-    require_proof_of_possession?: boolean;
-    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId;
-    compliance_level?: Management.ClientComplianceLevelEnum | null;
+    require_proof_of_possession?: boolean | undefined;
+    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
-    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
-    token_exchange?: Management.ClientTokenExchangeConfiguration;
+    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | undefined;
+    token_exchange?: Management.ClientTokenExchangeConfiguration | undefined;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
-    par_request_expiry?: number | null;
-    token_quota?: Management.TokenQuota;
-    express_configuration?: Management.ExpressConfiguration;
+    par_request_expiry?: (number | null) | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    express_configuration?: Management.ExpressConfiguration | undefined;
     /** The identifier of the resource server that this client is linked to. */
-    resource_server_identifier?: string;
-    async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+    resource_server_identifier?: string | undefined;
+    async_approval_notification_channels?:
+        | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
+        | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -14604,50 +14649,50 @@ export interface GetConnectionEnabledClientsResponseContent {
     /** Clients for which the connection is enabled */
     clients: Management.ConnectionEnabledClient[];
     /** Encoded next token */
-    next?: string;
+    next?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetConnectionProfileResponseContent {
-    id?: Management.ConnectionProfileId;
-    name?: Management.ConnectionProfileName;
-    organization?: Management.ConnectionProfileOrganization;
-    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
-    enabled_features?: Management.ConnectionProfileEnabledFeatures;
-    connection_config?: Management.ConnectionProfileConfig;
-    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    id?: Management.ConnectionProfileId | undefined;
+    name?: Management.ConnectionProfileName | undefined;
+    organization?: Management.ConnectionProfileOrganization | undefined;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate | undefined;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
+    connection_config?: Management.ConnectionProfileConfig | undefined;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
 }
 
 export interface GetConnectionProfileTemplateResponseContent {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The user-friendly name of the template displayed in the UI. */
-    display_name?: string;
-    template?: Management.ConnectionProfileTemplate;
+    display_name?: string | undefined;
+    template?: Management.ConnectionProfileTemplate | undefined;
 }
 
 export interface GetConnectionResponseContent {
     /** The name of the connection */
-    name?: string;
+    name?: string | undefined;
     /** Connection name used in login screen */
-    display_name?: string;
-    options?: Management.ConnectionOptions;
+    display_name?: string | undefined;
+    options?: Management.ConnectionOptions | undefined;
     /** The connection's identifier */
-    id?: string;
+    id?: string | undefined;
     /** The type of the connection, related to the identity provider */
-    strategy?: string;
+    strategy?: string | undefined;
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
-    realms?: string[];
+    realms?: string[] | undefined;
     /** DEPRECATED property. Use the GET /connections/:id/clients endpoint to get the ids of the clients for which the connection is enabled */
-    enabled_clients?: string[];
+    enabled_clients?: string[] | undefined;
     /** True if the connection is domain level */
-    is_domain_connection?: boolean;
+    is_domain_connection?: boolean | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. */
-    show_as_button?: boolean;
-    metadata?: Management.ConnectionsMetadata;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    show_as_button?: boolean | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
 }
 
 export interface GetCustomDomainResponseContent {
@@ -14658,20 +14703,20 @@ export interface GetCustomDomainResponseContent {
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
     /** Whether this is the default custom domain (true) or not (false). */
-    is_default?: boolean;
+    is_default?: boolean | undefined;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     /** Intermediate address. */
-    origin_domain_name?: string;
-    verification?: Management.DomainVerification;
+    origin_domain_name?: string | undefined;
+    verification?: Management.DomainVerification | undefined;
     /** The HTTP header to fetch the client's IP address */
-    custom_client_ip_header?: string | null;
+    custom_client_ip_header?: (string | null) | undefined;
     /** The TLS version policy */
-    tls_policy?: string;
-    domain_metadata?: Management.DomainMetadata;
-    certificate?: Management.DomainCertificate;
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
     /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
 }
 
 /**
@@ -14679,7 +14724,7 @@ export interface GetCustomDomainResponseContent {
  */
 export interface GetCustomSigningKeysResponseContent {
     /** An array of custom public signing keys. */
-    keys?: Management.CustomSigningKeyJwk[];
+    keys?: Management.CustomSigningKeyJwk[] | undefined;
 }
 
 /**
@@ -14689,7 +14734,7 @@ export type GetCustomTextsByLanguageResponseContent = Record<string, unknown>;
 
 export interface GetDirectoryProvisioningDefaultMappingResponseContent {
     /** The mapping between Auth0 and IDP user attributes */
-    mapping?: Management.DirectoryProvisioningMappingItem[];
+    mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
 }
 
 export interface GetDirectoryProvisioningResponseContent {
@@ -14708,42 +14753,42 @@ export interface GetDirectoryProvisioningResponseContent {
     /** The timestamp at which the directory provisioning configuration was last updated */
     updated_at: string;
     /** The timestamp at which the connection was last synchronized */
-    last_synchronization_at?: string;
+    last_synchronization_at?: string | undefined;
     /** The status of the last synchronization */
-    last_synchronization_status?: string;
+    last_synchronization_status?: string | undefined;
     /** The error message of the last synchronization, if any */
-    last_synchronization_error?: string;
+    last_synchronization_error?: string | undefined;
 }
 
 export interface GetEmailProviderResponseContent {
     /** Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`. */
-    name?: string;
+    name?: string | undefined;
     /** Whether the provider is enabled (true) or disabled (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Email address to use as "from" when no other address specified. */
-    default_from_address?: string;
-    credentials?: Management.EmailProviderCredentials;
-    settings?: Management.EmailProviderSettings;
+    default_from_address?: string | undefined;
+    credentials?: Management.EmailProviderCredentials | undefined;
+    settings?: Management.EmailProviderSettings | undefined;
 }
 
 export interface GetEmailTemplateResponseContent {
-    template?: Management.EmailTemplateNameEnum;
+    template?: Management.EmailTemplateNameEnum | undefined;
     /** Body of the email template. */
-    body?: string | null;
+    body?: (string | null) | undefined;
     /** Senders `from` email address. */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** URL to redirect the user to after a successful action. */
-    resultUrl?: string | null;
+    resultUrl?: (string | null) | undefined;
     /** Subject line of the email. */
-    subject?: string | null;
+    subject?: (string | null) | undefined;
     /** Syntax of the template body. */
-    syntax?: string | null;
+    syntax?: (string | null) | undefined;
     /** Lifetime in seconds that the link within the email will be valid for. */
-    urlLifetimeInSeconds?: number | null;
+    urlLifetimeInSeconds?: (number | null) | undefined;
     /** Whether the `reset_email` and `verify_email` templates should include the user's email address as the `email` parameter in the returnUrl (true) or whether no email address should be included in the redirect (false). Defaults to true. */
-    includeEmailInRedirect?: boolean;
+    includeEmailInRedirect?: boolean | undefined;
     /** Whether the template is enabled (true) or disabled (false). */
-    enabled?: boolean | null;
+    enabled?: (boolean | null) | undefined;
 }
 
 /**
@@ -14759,9 +14804,9 @@ export interface GetEncryptionKeyResponseContent {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid?: string | null;
+    parent_kid?: (string | null) | undefined;
     /** Public key in PEM format */
-    public_key?: string | null;
+    public_key?: (string | null) | undefined;
 }
 
 /**
@@ -14776,7 +14821,7 @@ export interface GetEventStreamDeliveryHistoryResponseContent {
     event_type: Management.EventStreamDeliveryEventTypeEnum;
     /** Results of delivery attempts */
     attempts: Management.EventStreamDeliveryAttempt[];
-    event?: Management.EventStreamCloudEvent;
+    event?: Management.EventStreamCloudEvent | undefined;
 }
 
 export type GetEventStreamResponseContent =
@@ -14796,18 +14841,18 @@ export interface GetFlowExecutionResponseContent {
     /** Trace id */
     trace_id: string;
     /** Journey id */
-    journey_id?: string;
+    journey_id?: string | undefined;
     /** Execution status */
     status: string;
-    debug?: Management.FlowExecutionDebug;
+    debug?: Management.FlowExecutionDebug | undefined;
     /** The ISO 8601 formatted date when this flow execution was created. */
     created_at: string;
     /** The ISO 8601 formatted date when this flow execution was updated. */
     updated_at: string;
     /** The ISO 8601 formatted date when this flow execution started. */
-    started_at?: string;
+    started_at?: string | undefined;
     /** The ISO 8601 formatted date when this flow execution ended. */
-    ended_at?: string;
+    ended_at?: string | undefined;
 }
 
 export const GetFlowRequestParametersHydrateEnum = {
@@ -14820,10 +14865,10 @@ export type GetFlowRequestParametersHydrateEnum =
 export interface GetFlowResponseContent {
     id: string;
     name: string;
-    actions?: Management.FlowAction[];
+    actions?: Management.FlowAction[] | undefined;
     created_at: string;
     updated_at: string;
-    executed_at?: string;
+    executed_at?: string | undefined;
 }
 
 export interface GetFlowsVaultConnectionResponseContent {
@@ -14832,11 +14877,11 @@ export interface GetFlowsVaultConnectionResponseContent {
     /** Flows Vault Connection app identifier. */
     app_id: string;
     /** Flows Vault Connection environment. */
-    environment?: string;
+    environment?: string | undefined;
     /** Flows Vault Connection name. */
     name: string;
     /** Flows Vault Connection custom account name. */
-    account_name?: string;
+    account_name?: string | undefined;
     /** Whether the Flows Vault Connection is configured. */
     ready: boolean;
     /** The ISO 8601 formatted date when this Flows Vault Connection was created. */
@@ -14844,30 +14889,30 @@ export interface GetFlowsVaultConnectionResponseContent {
     /** The ISO 8601 formatted date when this Flows Vault Connection was updated. */
     updated_at: string;
     /** The ISO 8601 formatted date when this Flows Vault Connection was refreshed. */
-    refreshed_at?: string;
+    refreshed_at?: string | undefined;
     fingerprint: string;
 }
 
 export interface GetFormResponseContent {
     id: string;
     name: string;
-    messages?: Management.FormMessages;
-    languages?: Management.FormLanguages;
-    translations?: Management.FormTranslations;
-    nodes?: Management.FormNodeList;
-    start?: Management.FormStartNode;
-    ending?: Management.FormEndingNode;
-    style?: Management.FormStyle;
+    messages?: Management.FormMessages | undefined;
+    languages?: Management.FormLanguages | undefined;
+    translations?: Management.FormTranslations | undefined;
+    nodes?: Management.FormNodeList | undefined;
+    start?: Management.FormStartNode | undefined;
+    ending?: Management.FormEndingNode | undefined;
+    style?: Management.FormStyle | undefined;
     created_at: string;
     updated_at: string;
-    embedded_at?: string;
-    submitted_at?: string;
+    embedded_at?: string | undefined;
+    submitted_at?: string | undefined;
 }
 
 export interface GetGroupMembersResponseContent {
     members: Management.GroupMember[];
     /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
+    next?: string | undefined;
 }
 
 /**
@@ -14879,14 +14924,14 @@ export interface GetGroupResponseContent {
     /** Name of the group. Must be unique within its scope (connection, organization, or tenant). Must contain between 1 and 128 printable ASCII characters. */
     name: string;
     /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
-    external_id?: string;
+    external_id?: string | undefined;
     /** Identifier for the connection this group belongs to (if a connection group). */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** Identifier for the organization this group belongs to (if an organization group). */
-    organization_id?: string | null;
+    organization_id?: (string | null) | undefined;
     /** Identifier for the tenant this group belongs to. */
     tenant_name: string;
-    description?: string | null;
+    description?: (string | null) | undefined;
     /** Timestamp of when the group was created. */
     created_at: string;
     /** Timestamp of when the group was last updated. */
@@ -14898,26 +14943,26 @@ export interface GetGroupResponseContent {
 export interface GetGuardianEnrollmentResponseContent {
     /** ID for this enrollment. */
     id: string;
-    status?: Management.GuardianEnrollmentStatus;
+    status?: Management.GuardianEnrollmentStatus | undefined;
     /** Device name (only for push notification). */
-    name?: string;
+    name?: string | undefined;
     /** Device identifier. This is usually the phone identifier. */
-    identifier?: string;
+    identifier?: string | undefined;
     /** Phone number. */
-    phone_number?: string;
-    enrolled_at?: Management.GuardianEnrollmentDate;
-    last_auth?: Management.GuardianEnrollmentDate;
+    phone_number?: string | undefined;
+    enrolled_at?: Management.GuardianEnrollmentDate | undefined;
+    last_auth?: Management.GuardianEnrollmentDate | undefined;
 }
 
 export interface GetGuardianFactorDuoSettingsResponseContent {
-    ikey?: string;
-    skey?: string;
-    host?: string;
+    ikey?: string | undefined;
+    skey?: string | undefined;
+    host?: string | undefined;
 }
 
 export interface GetGuardianFactorPhoneMessageTypesResponseContent {
     /** The list of phone factors to enable on the tenant. Can include `sms` and `voice`. */
-    message_types?: Management.GuardianFactorPhoneFactorMessageTypeEnum[];
+    message_types?: Management.GuardianFactorPhoneFactorMessageTypeEnum[] | undefined;
 }
 
 export interface GetGuardianFactorPhoneTemplatesResponseContent {
@@ -14935,65 +14980,65 @@ export interface GetGuardianFactorSmsTemplatesResponseContent {
 }
 
 export interface GetGuardianFactorsProviderApnsResponseContent {
-    bundle_id?: string | null;
-    sandbox?: boolean;
-    enabled?: boolean;
+    bundle_id?: (string | null) | undefined;
+    sandbox?: boolean | undefined;
+    enabled?: boolean | undefined;
 }
 
 export interface GetGuardianFactorsProviderPhoneResponseContent {
-    provider?: Management.GuardianFactorsProviderSmsProviderEnum;
+    provider?: Management.GuardianFactorsProviderSmsProviderEnum | undefined;
 }
 
 export interface GetGuardianFactorsProviderPhoneTwilioResponseContent {
     /** From number */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** Copilot SID */
-    messaging_service_sid?: string | null;
+    messaging_service_sid?: (string | null) | undefined;
     /** Twilio Authentication token */
-    auth_token?: string | null;
+    auth_token?: (string | null) | undefined;
     /** Twilio SID */
-    sid?: string | null;
+    sid?: (string | null) | undefined;
 }
 
 export interface GetGuardianFactorsProviderPushNotificationResponseContent {
-    provider?: Management.GuardianFactorsProviderPushNotificationProviderDataEnum;
+    provider?: Management.GuardianFactorsProviderPushNotificationProviderDataEnum | undefined;
 }
 
 export interface GetGuardianFactorsProviderSmsResponseContent {
-    provider?: Management.GuardianFactorsProviderSmsProviderEnum;
+    provider?: Management.GuardianFactorsProviderSmsProviderEnum | undefined;
 }
 
 export interface GetGuardianFactorsProviderSmsTwilioResponseContent {
     /** From number */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** Copilot SID */
-    messaging_service_sid?: string | null;
+    messaging_service_sid?: (string | null) | undefined;
     /** Twilio Authentication token */
-    auth_token?: string | null;
+    auth_token?: (string | null) | undefined;
     /** Twilio SID */
-    sid?: string | null;
+    sid?: (string | null) | undefined;
 }
 
 export interface GetGuardianFactorsProviderSnsResponseContent {
-    aws_access_key_id?: string | null;
-    aws_secret_access_key?: string | null;
-    aws_region?: string | null;
-    sns_apns_platform_application_arn?: string | null;
-    sns_gcm_platform_application_arn?: string | null;
+    aws_access_key_id?: (string | null) | undefined;
+    aws_secret_access_key?: (string | null) | undefined;
+    aws_region?: (string | null) | undefined;
+    sns_apns_platform_application_arn?: (string | null) | undefined;
+    sns_gcm_platform_application_arn?: (string | null) | undefined;
 }
 
 export interface GetHookResponseContent {
     /** Trigger ID */
-    triggerId?: string;
+    triggerId?: string | undefined;
     /** ID of this hook. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this hook. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this hook will be executed (true) or ignored (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this hook runs. */
-    script?: string;
-    dependencies?: Management.HookDependencies;
+    script?: string | undefined;
+    dependencies?: Management.HookDependencies | undefined;
 }
 
 /**
@@ -15002,9 +15047,9 @@ export interface GetHookResponseContent {
 export type GetHookSecretResponseContent = Record<string, string>;
 
 export interface GetJobErrorResponseContent {
-    user?: Management.GetJobUserError;
+    user?: Management.GetJobUserError | undefined;
     /** Errors importing the user. */
-    errors?: Management.GetJobImportUserError[];
+    errors?: Management.GetJobImportUserError[] | undefined;
 }
 
 export interface GetJobGenericErrorResponseContent {
@@ -15013,24 +15058,24 @@ export interface GetJobGenericErrorResponseContent {
     /** Type of job this is. */
     type: string;
     /** When this job was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** ID of this job. */
     id: string;
     /** connection_id of the connection this job uses. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** Status details. */
-    status_details?: string;
+    status_details?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetJobImportUserError {
     /** Error code. */
-    code?: string;
+    code?: string | undefined;
     /** Error message. */
-    message?: string;
+    message?: string | undefined;
     /** Error field. */
-    path?: string;
+    path?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15041,21 +15086,21 @@ export interface GetJobResponseContent {
     /** Type of job this is. */
     type: string;
     /** When this job was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** ID of this job. */
     id: string;
     /** connection_id of the connection this job uses. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** URL to download the result of this job. */
-    location?: string;
+    location?: string | undefined;
     /** Completion percentage of this job. */
-    percentage_done?: number;
+    percentage_done?: number | undefined;
     /** Estimated time remaining before job completes. */
-    time_left_seconds?: number;
-    format?: Management.JobFileFormatEnum;
+    time_left_seconds?: number | undefined;
+    format?: Management.JobFileFormatEnum | undefined;
     /** Status details. */
-    status_details?: string;
-    summary?: Management.GetJobSummary;
+    status_details?: string | undefined;
+    summary?: Management.GetJobSummary | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15065,13 +15110,13 @@ export interface GetJobResponseContent {
  */
 export interface GetJobSummary {
     /** Number of failed operations. */
-    failed?: number;
+    failed?: number | undefined;
     /** Number of updated records. */
-    updated?: number;
+    updated?: number | undefined;
     /** Number of inserted records. */
-    inserted?: number;
+    inserted?: number | undefined;
     /** Total number of operations. */
-    total?: number;
+    total?: number | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15082,44 +15127,44 @@ export interface GetJobSummary {
 export type GetJobUserError = Record<string, unknown>;
 
 export interface GetLogResponseContent {
-    date?: Management.LogDate;
+    date?: Management.LogDate | undefined;
     /** Type of event. */
-    type?: string;
+    type?: string | undefined;
     /** Description of this event. */
-    description?: string | null;
+    description?: (string | null) | undefined;
     /** Name of the connection the event relates to. */
-    connection?: string;
+    connection?: string | undefined;
     /** ID of the connection the event relates to. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** ID of the client (application). */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Name of the client (application). */
-    client_name?: string;
+    client_name?: string | undefined;
     /** IP address of the log event source. */
-    ip?: string;
+    ip?: string | undefined;
     /** Hostname the event applies to. */
-    hostname?: string;
+    hostname?: string | undefined;
     /** ID of the user involved in the event. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** Name of the user involved in the event. */
-    user_name?: string;
+    user_name?: string | undefined;
     /** API audience the event applies to. */
-    audience?: string;
+    audience?: string | undefined;
     /** Scope permissions applied to the event. */
-    scope?: string;
+    scope?: string | undefined;
     /** Name of the strategy involved in the event. */
-    strategy?: string;
+    strategy?: string | undefined;
     /** Type of strategy involved in the event. */
-    strategy_type?: string;
+    strategy_type?: string | undefined;
     /** Unique ID of the event. */
-    log_id?: string;
+    log_id?: string | undefined;
     /** Whether the client was a mobile device (true) or desktop/laptop/server (false). */
-    isMobile?: boolean;
-    details?: Management.LogDetails;
+    isMobile?: boolean | undefined;
+    details?: Management.LogDetails | undefined;
     /** User agent string from the client device that caused the event. */
-    user_agent?: string;
-    security_context?: Management.LogSecurityContext;
-    location_info?: Management.LogLocationInfo;
+    user_agent?: string | undefined;
+    security_context?: Management.LogSecurityContext | undefined;
+    location_info?: Management.LogLocationInfo | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15135,43 +15180,43 @@ export type GetLogStreamResponseContent =
     | Management.LogStreamMixpanelResponseSchema;
 
 export interface GetNetworkAclsResponseContent {
-    id?: string;
-    description?: string;
-    active?: boolean;
-    priority?: number;
-    rule?: Management.NetworkAclRule;
+    id?: string | undefined;
+    description?: string | undefined;
+    active?: boolean | undefined;
+    priority?: number | undefined;
+    rule?: Management.NetworkAclRule | undefined;
     /** The timestamp when the Network ACL Configuration was created */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The timestamp when the Network ACL Configuration was last updated */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetOrganizationByNameResponseContent {
     /** Organization identifier. */
-    id?: string;
+    id?: string | undefined;
     /** The name of this organization. */
-    name?: string;
+    name?: string | undefined;
     /** Friendly name of this organization. */
-    display_name?: string;
-    branding?: Management.OrganizationBranding;
-    metadata?: Management.OrganizationMetadata;
-    token_quota?: Management.TokenQuota;
+    display_name?: string | undefined;
+    branding?: Management.OrganizationBranding | undefined;
+    metadata?: Management.OrganizationMetadata | undefined;
+    token_quota?: Management.TokenQuota | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetOrganizationConnectionResponseContent {
     /** ID of the connection. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
-    assign_membership_on_login?: boolean;
+    assign_membership_on_login?: boolean | undefined;
     /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
-    show_as_button?: boolean;
+    show_as_button?: boolean | undefined;
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
-    is_signup_enabled?: boolean;
-    connection?: Management.OrganizationConnectionInformation;
+    is_signup_enabled?: boolean | undefined;
+    connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
 export interface GetOrganizationDiscoveryDomainByNameResponseContent {
@@ -15181,7 +15226,7 @@ export interface GetOrganizationDiscoveryDomainByNameResponseContent {
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
     /** Indicates whether this domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
+    use_for_organization_discovery?: boolean | undefined;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -15195,7 +15240,7 @@ export interface GetOrganizationDiscoveryDomainResponseContent {
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
     /** Indicates whether this domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
+    use_for_organization_discovery?: boolean | undefined;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -15204,39 +15249,39 @@ export interface GetOrganizationDiscoveryDomainResponseContent {
 
 export interface GetOrganizationInvitationResponseContent {
     /** The id of the user invitation. */
-    id?: string;
+    id?: string | undefined;
     /** Organization identifier. */
-    organization_id?: string;
-    inviter?: Management.OrganizationInvitationInviter;
-    invitee?: Management.OrganizationInvitationInvitee;
+    organization_id?: string | undefined;
+    inviter?: Management.OrganizationInvitationInviter | undefined;
+    invitee?: Management.OrganizationInvitationInvitee | undefined;
     /** The invitation url to be send to the invitee. */
-    invitation_url?: string;
+    invitation_url?: string | undefined;
     /** The ISO 8601 formatted timestamp representing the creation time of the invitation. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The ISO 8601 formatted timestamp representing the expiration time of the invitation. */
-    expires_at?: string;
+    expires_at?: string | undefined;
     /** Auth0 client ID. Used to resolve the application's login initiation endpoint. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The id of the connection to force invitee to authenticate with. */
-    connection_id?: string;
-    app_metadata?: Management.AppMetadata;
-    user_metadata?: Management.UserMetadata;
+    connection_id?: string | undefined;
+    app_metadata?: Management.AppMetadata | undefined;
+    user_metadata?: Management.UserMetadata | undefined;
     /** List of roles IDs to associated with the user. */
-    roles?: string[];
+    roles?: string[] | undefined;
     /** The id of the invitation ticket */
-    ticket_id?: string;
+    ticket_id?: string | undefined;
 }
 
 export interface GetOrganizationResponseContent {
     /** Organization identifier. */
-    id?: string;
+    id?: string | undefined;
     /** The name of this organization. */
-    name?: string;
+    name?: string | undefined;
     /** Friendly name of this organization. */
-    display_name?: string;
-    branding?: Management.OrganizationBranding;
-    metadata?: Management.OrganizationMetadata;
-    token_quota?: Management.TokenQuota;
+    display_name?: string | undefined;
+    branding?: Management.OrganizationBranding | undefined;
+    metadata?: Management.OrganizationMetadata | undefined;
+    token_quota?: Management.TokenQuota | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15248,9 +15293,9 @@ export type GetPartialsResponseContent = Record<string, unknown>;
 
 export interface GetPhoneTemplateResponseContent {
     id: string;
-    channel?: string;
-    customizable?: boolean;
-    tenant?: string;
+    channel?: string | undefined;
+    customizable?: boolean | undefined;
+    tenant?: string | undefined;
     content: Management.PhoneTemplateContent;
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
@@ -15259,58 +15304,58 @@ export interface GetPhoneTemplateResponseContent {
 
 export interface GetRefreshTokenResponseContent {
     /** The ID of the refresh token */
-    id?: string;
+    id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.RefreshTokenDate;
-    idle_expires_at?: Management.RefreshTokenDate;
-    expires_at?: Management.RefreshTokenDate;
-    device?: Management.RefreshTokenDevice;
+    user_id?: string | undefined;
+    created_at?: Management.RefreshTokenDate | undefined;
+    idle_expires_at?: Management.RefreshTokenDate | undefined;
+    expires_at?: Management.RefreshTokenDate | undefined;
+    device?: Management.RefreshTokenDevice | undefined;
     /** ID of the client application granted with this refresh token */
-    client_id?: string;
-    session_id?: (Management.RefreshTokenSessionId | undefined) | null;
+    client_id?: string | undefined;
+    session_id?: ((Management.RefreshTokenSessionId | undefined) | null) | undefined;
     /** True if the token is a rotating refresh token */
-    rotating?: boolean;
+    rotating?: boolean | undefined;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
-    resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
-    last_exchanged_at?: Management.RefreshTokenDate;
+    resource_servers?: Management.RefreshTokenResourceServer[] | undefined;
+    refresh_token_metadata?: ((Management.RefreshTokenMetadata | undefined) | null) | undefined;
+    last_exchanged_at?: Management.RefreshTokenDate | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetResourceServerResponseContent {
     /** ID of the API (resource server). */
-    id?: string;
+    id?: string | undefined;
     /** Friendly name for this resource server. Can not contain `<` or `>` characters. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this is an Auth0 system API (true) or a custom API (false). */
-    is_system?: boolean;
+    is_system?: boolean | undefined;
     /** Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set. */
-    identifier?: string;
+    identifier?: string | undefined;
     /** List of permissions (scopes) that this API uses. */
-    scopes?: Management.ResourceServerScope[];
-    signing_alg?: Management.SigningAlgorithmEnum;
+    scopes?: Management.ResourceServerScope[] | undefined;
+    signing_alg?: Management.SigningAlgorithmEnum | undefined;
     /** Secret used to sign tokens when using symmetric algorithms (HS256). */
-    signing_secret?: string;
+    signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
-    allow_offline_access?: boolean;
+    allow_offline_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
-    skip_consent_for_verifiable_first_party_clients?: boolean;
+    skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
-    token_lifetime?: number;
+    token_lifetime?: number | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API via Implicit or Hybrid Flows. Cannot be greater than the `token_lifetime` value. */
-    token_lifetime_for_web?: number;
+    token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
-    enforce_policies?: boolean;
-    token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
-    token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
-    authorization_details?: unknown[];
-    proof_of_possession?: Management.ResourceServerProofOfPossession | null;
-    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    enforce_policies?: boolean | undefined;
+    token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
+    consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    authorization_details?: unknown[] | undefined;
+    proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
+    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
-    client_id?: string;
+    client_id?: string | undefined;
 }
 
 export interface GetRiskAssessmentsSettingsNewDeviceResponseContent {
@@ -15325,50 +15370,50 @@ export interface GetRiskAssessmentsSettingsResponseContent {
 
 export interface GetRoleResponseContent {
     /** ID for this role. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this role. */
-    name?: string;
+    name?: string | undefined;
     /** Description of this role. */
-    description?: string;
+    description?: string | undefined;
 }
 
 export interface GetRuleResponseContent {
     /** Name of this rule. */
-    name?: string;
+    name?: string | undefined;
     /** ID of this rule. */
-    id?: string;
+    id?: string | undefined;
     /** Whether the rule is enabled (true), or disabled (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this rule runs. */
-    script?: string;
+    script?: string | undefined;
     /** Order that this rule should execute in relative to other rules. Lower-valued rules execute first. */
-    order?: number;
+    order?: number | undefined;
     /** Execution stage of this rule. Can be `login_success`, `login_failure`, or `pre_authorize`. */
-    stage?: string;
+    stage?: string | undefined;
 }
 
 export interface GetScimConfigurationDefaultMappingResponseContent {
     /** The mapping between auth0 and SCIM */
-    mapping?: Management.ScimMappingItem[];
+    mapping?: Management.ScimMappingItem[] | undefined;
 }
 
 export interface GetScimConfigurationResponseContent {
     /** The connection's identifier */
-    connection_id?: string;
-    /** The connection's identifier */
-    connection_name?: string;
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
     /** The connection's strategy */
-    strategy?: string;
+    strategy: string;
     /** The tenant's name */
-    tenant_name?: string;
+    tenant_name: string;
     /** User ID attribute for generating unique user ids */
-    user_id_attribute?: string;
+    user_id_attribute: string;
     /** The mapping between auth0 and SCIM */
-    mapping?: Management.ScimMappingItem[];
-    /** The Date Time Scim Configuration was created */
-    created_at?: string;
-    /** The Date Time Scim Configuration was last updated */
-    updated_on?: string;
+    mapping: Management.ScimMappingItem[];
+    /** The ISO 8601 date and time the SCIM configuration was created at */
+    created_at: string;
+    /** The ISO 8601 date and time the SCIM configuration was last updated on */
+    updated_on: string;
 }
 
 /**
@@ -15378,51 +15423,51 @@ export type GetScimTokensResponseContent = Management.ScimTokenItem[];
 
 export interface GetSelfServiceProfileResponseContent {
     /** The unique ID of the self-service Profile. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the self-service Profile. */
-    name?: string;
+    name?: string | undefined;
     /** The description of the self-service Profile. */
-    description?: string;
+    description?: string | undefined;
     /** List of attributes to be mapped that will be shown to the user during the SS-SSO flow. */
-    user_attributes?: Management.SelfServiceProfileUserAttribute[];
+    user_attributes?: Management.SelfServiceProfileUserAttribute[] | undefined;
     /** The time when this self-service Profile was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this self-service Profile was updated. */
-    updated_at?: string;
-    branding?: Management.SelfServiceProfileBrandingProperties;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
-    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
+    updated_at?: string | undefined;
+    branding?: Management.SelfServiceProfileBrandingProperties | undefined;
+    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
+    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[] | undefined;
     /** ID of the user-attribute-profile to associate with this self-service profile. */
-    user_attribute_profile_id?: string;
+    user_attribute_profile_id?: string | undefined;
 }
 
 export interface GetSessionResponseContent {
     /** The ID of the session */
-    id?: string;
+    id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.SessionDate;
-    updated_at?: Management.SessionDate;
-    authenticated_at?: Management.SessionDate;
-    idle_expires_at?: Management.SessionDate;
-    expires_at?: Management.SessionDate;
-    last_interacted_at?: Management.SessionDate;
-    device?: Management.SessionDeviceMetadata;
+    user_id?: string | undefined;
+    created_at?: Management.SessionDate | undefined;
+    updated_at?: Management.SessionDate | undefined;
+    authenticated_at?: Management.SessionDate | undefined;
+    idle_expires_at?: Management.SessionDate | undefined;
+    expires_at?: Management.SessionDate | undefined;
+    last_interacted_at?: Management.SessionDate | undefined;
+    device?: Management.SessionDeviceMetadata | undefined;
     /** List of client details for the session */
-    clients?: Management.SessionClientMetadata[];
-    authentication?: Management.SessionAuthenticationSignals;
-    cookie?: Management.SessionCookieMetadata;
-    session_metadata?: (Management.SessionMetadata | undefined) | null;
+    clients?: Management.SessionClientMetadata[] | undefined;
+    authentication?: Management.SessionAuthenticationSignals | undefined;
+    cookie?: Management.SessionCookieMetadata | undefined;
+    session_metadata?: ((Management.SessionMetadata | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetSettingsResponseContent {
-    universal_login_experience?: Management.UniversalLoginExperienceEnum;
+    universal_login_experience?: Management.UniversalLoginExperienceEnum | undefined;
     /** Whether identifier first is enabled or not */
-    identifier_first?: boolean;
+    identifier_first?: boolean | undefined;
     /** Use WebAuthn with Device Biometrics as the first authentication factor */
-    webauthn_platform_first_factor?: boolean;
+    webauthn_platform_first_factor?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15433,130 +15478,130 @@ export interface GetSigningKeysResponseContent {
     /** The public certificate of the signing key */
     cert: string;
     /** The public certificate of the signing key in pkcs7 format */
-    pkcs7?: string;
+    pkcs7?: string | undefined;
     /** True if the key is the the current key */
-    current?: boolean;
+    current?: boolean | undefined;
     /** True if the key is the the next key */
-    next?: boolean;
+    next?: boolean | undefined;
     /** True if the key is the the previous key */
-    previous?: boolean;
-    current_since?: Management.SigningKeysDate;
-    current_until?: Management.SigningKeysDate;
+    previous?: boolean | undefined;
+    current_since?: Management.SigningKeysDate | undefined;
+    current_until?: Management.SigningKeysDate | undefined;
     /** The cert fingerprint */
     fingerprint: string;
     /** The cert thumbprint */
     thumbprint: string;
     /** True if the key is revoked */
-    revoked?: boolean;
-    revoked_at?: Management.SigningKeysDate;
+    revoked?: boolean | undefined;
+    revoked_at?: Management.SigningKeysDate | undefined;
 }
 
 export interface GetSupplementalSignalsResponseContent {
     /** Indicates if incoming Akamai Headers should be processed */
-    akamai_enabled?: boolean;
+    akamai_enabled?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetSuspiciousIpThrottlingSettingsResponseContent {
     /** Whether or not suspicious IP throttling attack protections are active. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /**
      * Action to take when a suspicious IP throttling threshold is violated.
      *           Possible values: <code>block</code>, <code>admin_notification</code>.
      */
-    shields?: Management.SuspiciousIpThrottlingShieldsEnum[];
-    allowlist?: Management.SuspiciousIpThrottlingAllowlist;
-    stage?: Management.SuspiciousIpThrottlingStage;
+    shields?: Management.SuspiciousIpThrottlingShieldsEnum[] | undefined;
+    allowlist?: Management.SuspiciousIpThrottlingAllowlist | undefined;
+    stage?: Management.SuspiciousIpThrottlingStage | undefined;
 }
 
 export interface GetTenantSettingsResponseContent {
-    change_password?: Management.TenantSettingsPasswordPage | null;
-    guardian_mfa_page?: Management.TenantSettingsGuardianPage | null;
+    change_password?: (Management.TenantSettingsPasswordPage | null) | undefined;
+    guardian_mfa_page?: (Management.TenantSettingsGuardianPage | null) | undefined;
     /** Default audience for API authorization. */
-    default_audience?: string;
+    default_audience?: string | undefined;
     /** Name of connection used for password grants at the `/token`endpoint. The following connection types are supported: LDAP, AD, Database Connections, Passwordless, Windows Azure Active Directory, ADFS. */
-    default_directory?: string;
-    error_page?: Management.TenantSettingsErrorPage | null;
-    device_flow?: Management.TenantSettingsDeviceFlow | null;
-    default_token_quota?: Management.DefaultTokenQuota | null;
-    flags?: Management.TenantSettingsFlags;
+    default_directory?: string | undefined;
+    error_page?: (Management.TenantSettingsErrorPage | null) | undefined;
+    device_flow?: (Management.TenantSettingsDeviceFlow | null) | undefined;
+    default_token_quota?: (Management.DefaultTokenQuota | null) | undefined;
+    flags?: Management.TenantSettingsFlags | undefined;
     /** Friendly name for this tenant. */
-    friendly_name?: string;
+    friendly_name?: string | undefined;
     /** URL of logo to be shown for this tenant (recommended size: 150x150) */
-    picture_url?: string;
+    picture_url?: string | undefined;
     /** End-user support email address. */
-    support_email?: string;
+    support_email?: string | undefined;
     /** End-user support URL. */
-    support_url?: string;
+    support_url?: string | undefined;
     /** URLs that are valid to redirect to after logout from Auth0. */
-    allowed_logout_urls?: string[];
+    allowed_logout_urls?: string[] | undefined;
     /** Number of hours a session will stay valid. */
-    session_lifetime?: number;
+    session_lifetime?: number | undefined;
     /** Number of hours for which a session can be inactive before the user must log in again. */
-    idle_session_lifetime?: number;
+    idle_session_lifetime?: number | undefined;
     /** Number of hours an ephemeral (non-persistent) session will stay valid. */
-    ephemeral_session_lifetime?: number;
+    ephemeral_session_lifetime?: number | undefined;
     /** Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again. */
-    idle_ephemeral_session_lifetime?: number;
+    idle_ephemeral_session_lifetime?: number | undefined;
     /** Selected sandbox version for the extensibility environment. */
-    sandbox_version?: string;
+    sandbox_version?: string | undefined;
     /** Selected sandbox version for rules and hooks extensibility. */
-    legacy_sandbox_version?: string;
+    legacy_sandbox_version?: string | undefined;
     /** Available sandbox versions for the extensibility environment. */
-    sandbox_versions_available?: string[];
+    sandbox_versions_available?: string[] | undefined;
     /** The default absolute redirection uri, must be https */
-    default_redirection_uri?: string;
+    default_redirection_uri?: string | undefined;
     /** Supported locales for the user interface. */
-    enabled_locales?: Management.SupportedLocales[];
-    session_cookie?: Management.SessionCookieSchema | null;
-    sessions?: Management.TenantSettingsSessions | null;
-    oidc_logout?: Management.TenantOidcLogoutSettings;
+    enabled_locales?: Management.SupportedLocales[] | undefined;
+    session_cookie?: (Management.SessionCookieSchema | null) | undefined;
+    sessions?: (Management.TenantSettingsSessions | null) | undefined;
+    oidc_logout?: Management.TenantOidcLogoutSettings | undefined;
     /** Whether to accept an organization name instead of an ID on auth endpoints */
-    allow_organization_name_in_authentication_api?: boolean;
+    allow_organization_name_in_authentication_api?: boolean | undefined;
     /** Whether to enable flexible factors for MFA in the PostLogin action */
-    customize_mfa_in_postlogin_action?: boolean;
+    customize_mfa_in_postlogin_action?: boolean | undefined;
     /** Supported ACR values */
-    acr_values_supported?: string[];
-    mtls?: Management.TenantSettingsMtls | null;
+    acr_values_supported?: string[] | undefined;
+    mtls?: (Management.TenantSettingsMtls | null) | undefined;
     /** Enables the use of Pushed Authorization Requests */
-    pushed_authorization_requests_supported?: boolean;
+    pushed_authorization_requests_supported?: boolean | undefined;
     /** Supports iss parameter in authorization responses */
-    authorization_response_iss_parameter_supported?: boolean | null;
+    authorization_response_iss_parameter_supported?: (boolean | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
-    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
-    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
+    skip_non_verifiable_callback_uri_confirmation_prompt?: (boolean | null) | undefined;
+    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
-    phone_consolidated_experience?: boolean;
+    phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
-    enable_ai_guide?: boolean;
+    enable_ai_guide?: boolean | undefined;
 }
 
 export interface GetTokenExchangeProfileResponseContent {
     /** The unique ID of the token exchange profile. */
-    id?: string;
+    id?: string | undefined;
     /** Friendly name of this profile. */
-    name?: string;
+    name?: string | undefined;
     /** Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI. */
-    subject_token_type?: string;
+    subject_token_type?: string | undefined;
     /** The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger. */
-    action_id?: string;
-    type?: Management.TokenExchangeProfileTypeEnum;
+    action_id?: string | undefined;
+    type?: Management.TokenExchangeProfileTypeEnum | undefined;
     /** The time when this profile was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this profile was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetUniversalLoginTemplate {
     /** The custom page template for the New Universal Login Experience */
-    body?: string;
+    body?: string | undefined;
 }
 
 export type GetUniversalLoginTemplateResponseContent =
@@ -15566,18 +15611,18 @@ export type GetUniversalLoginTemplateResponseContent =
     | string;
 
 export interface GetUserAttributeProfileResponseContent {
-    id?: Management.UserAttributeProfileId;
-    name?: Management.UserAttributeProfileName;
-    user_id?: Management.UserAttributeProfileUserId;
-    user_attributes?: Management.UserAttributeProfileUserAttributes;
+    id?: Management.UserAttributeProfileId | undefined;
+    name?: Management.UserAttributeProfileName | undefined;
+    user_id?: Management.UserAttributeProfileUserId | undefined;
+    user_attributes?: Management.UserAttributeProfileUserAttributes | undefined;
 }
 
 export interface GetUserAttributeProfileTemplateResponseContent {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The user-friendly name of the template displayed in the UI. */
-    display_name?: string;
-    template?: Management.UserAttributeProfileTemplate;
+    display_name?: string | undefined;
+    template?: Management.UserAttributeProfileTemplate | undefined;
 }
 
 export interface GetUserAuthenticationMethodResponseContent {
@@ -15585,110 +15630,110 @@ export interface GetUserAuthenticationMethodResponseContent {
     id: string;
     type: Management.AuthenticationMethodTypeEnum;
     /** The authentication method status */
-    confirmed?: boolean;
+    confirmed?: boolean | undefined;
     /** A human-readable label to identify the authentication method */
-    name?: string;
-    authentication_methods?: Management.UserAuthenticationMethodProperties[];
-    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
+    name?: string | undefined;
+    authentication_methods?: Management.UserAuthenticationMethodProperties[] | undefined;
+    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** The ID of a linked authentication method. Linked authentication methods will be deleted together. */
-    link_id?: string;
+    link_id?: string | undefined;
     /** Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Applies to email and email-verification authentication methods only. The email address used to send verification messages. */
-    email?: string;
+    email?: string | undefined;
     /** Applies to webauthn authentication methods only. The ID of the generated credential. */
-    key_id?: string;
+    key_id?: string | undefined;
     /** Applies to webauthn authentication methods only. The public key. */
-    public_key?: string;
+    public_key?: string | undefined;
     /** Authenticator creation date */
     created_at: string;
     /** Enrollment date */
-    enrolled_at?: string;
+    enrolled_at?: string | undefined;
     /** Last authentication */
-    last_auth_at?: string;
+    last_auth_at?: string | undefined;
     /** Applies to passkeys only. The kind of device the credential is stored on as defined by backup eligibility. "single_device" credentials cannot be backed up and synced to another device, "multi_device" credentials can be backed up if enabled by the end-user. */
-    credential_device_type?: string;
+    credential_device_type?: string | undefined;
     /** Applies to passkeys only. Whether the credential was backed up. */
-    credential_backed_up?: boolean;
+    credential_backed_up?: boolean | undefined;
     /** Applies to passkeys only. The ID of the user identity linked with the authentication method. */
-    identity_user_id?: string;
+    identity_user_id?: string | undefined;
     /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
-    user_agent?: string;
+    user_agent?: string | undefined;
     /** Applies to passkey authentication methods only. Authenticator Attestation Globally Unique Identifier. */
-    aaguid?: string;
+    aaguid?: string | undefined;
     /** Applies to webauthn/passkey authentication methods only. The credential's relying party identifier. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
 }
 
 export interface GetUserGroupsPaginatedResponseContent {
     groups: Management.UserGroupsResponseSchema[];
     /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-    start?: number;
-    limit?: number;
-    total?: number;
+    next?: string | undefined;
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
 }
 
 export interface GetUserResponseContent {
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** Email address of this user. */
-    email?: string;
+    email?: string | undefined;
     /** Whether this email address is verified (true) or unverified (false). */
-    email_verified?: boolean;
+    email_verified?: boolean | undefined;
     /** Username of this user. */
-    username?: string;
+    username?: string | undefined;
     /** Phone number for this user. Follows the <a href="https://en.wikipedia.org/wiki/E.164">E.164 recommendation</a>. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
-    phone_verified?: boolean;
-    created_at?: Management.UserDateSchema;
-    updated_at?: Management.UserDateSchema;
+    phone_verified?: boolean | undefined;
+    created_at?: Management.UserDateSchema | undefined;
+    updated_at?: Management.UserDateSchema | undefined;
     /** Array of user identity objects when accounts are linked. */
-    identities?: Management.UserIdentitySchema[];
-    app_metadata?: Management.UserAppMetadataSchema;
-    user_metadata?: Management.UserMetadataSchema;
+    identities?: Management.UserIdentitySchema[] | undefined;
+    app_metadata?: Management.UserAppMetadataSchema | undefined;
+    user_metadata?: Management.UserMetadataSchema | undefined;
     /** URL to picture, photo, or avatar of this user. */
-    picture?: string;
+    picture?: string | undefined;
     /** Name of this user. */
-    name?: string;
+    name?: string | undefined;
     /** Preferred nickname or alias of this user. */
-    nickname?: string;
+    nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
-    multifactor?: string[];
+    multifactor?: string[] | undefined;
     /** Last IP address from which this user logged in. */
-    last_ip?: string;
-    last_login?: Management.UserDateSchema;
+    last_ip?: string | undefined;
+    last_login?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
-    logins_count?: number;
+    logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
-    blocked?: boolean;
+    blocked?: boolean | undefined;
     /** Given name/first name/forename of this user. */
-    given_name?: string;
+    given_name?: string | undefined;
     /** Family name/last name/surname of this user. */
-    family_name?: string;
+    family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface GetVerifiableCredentialTemplateResponseContent {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the template. */
-    name?: string;
+    name?: string | undefined;
     /** The type of the template. */
-    type?: string;
+    type?: string | undefined;
     /** The dialect of the template. */
-    dialect?: string;
-    presentation?: Management.MdlPresentationRequest;
+    dialect?: string | undefined;
+    presentation?: Management.MdlPresentationRequest | undefined;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string | null;
+    custom_certificate_authority?: (string | null) | undefined;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string | null;
+    well_known_trusted_issuers?: (string | null) | undefined;
     /** The date and time the template was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time the template was created. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15698,22 +15743,22 @@ export interface GetVerifiableCredentialTemplateResponseContent {
  */
 export interface Group {
     /** Unique identifier for the group (service-generated). */
-    id?: string;
+    id?: string | undefined;
     /** Name of the group. Must be unique within its scope (connection, organization, or tenant). Must contain between 1 and 128 printable ASCII characters. */
-    name?: string;
+    name?: string | undefined;
     /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
-    external_id?: string;
+    external_id?: string | undefined;
     /** Identifier for the connection this group belongs to (if a connection group). */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** Identifier for the organization this group belongs to (if an organization group). */
-    organization_id?: string | null;
+    organization_id?: (string | null) | undefined;
     /** Identifier for the tenant this group belongs to. */
-    tenant_name?: string;
-    description?: string | null;
+    tenant_name?: string | undefined;
+    description?: (string | null) | undefined;
     /** Timestamp of when the group was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp of when the group was last updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15723,13 +15768,13 @@ export interface Group {
  */
 export interface GroupMember {
     /** Unique identifier for the member. */
-    id?: string;
-    member_type?: Management.GroupMemberTypeEnum;
-    type?: Management.GroupTypeEnum;
+    id?: string | undefined;
+    member_type?: Management.GroupMemberTypeEnum | undefined;
+    type?: Management.GroupTypeEnum | undefined;
     /** Identifier for the connection this group belongs to (if a connection group). */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** Timestamp of when the membership was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15777,8 +15822,8 @@ export interface GuardianFactor {
     /** Whether this factor is enabled (true) or disabled (false). */
     enabled: boolean;
     /** Whether trial limits have been exceeded. */
-    trial_expired?: boolean;
-    name?: Management.GuardianFactorNameEnum;
+    trial_expired?: boolean | undefined;
+    name?: Management.GuardianFactorNameEnum | undefined;
 }
 
 /** Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`. */
@@ -15819,16 +15864,16 @@ export type GuardianFactorsProviderSmsProviderEnum =
 
 export interface Hook {
     /** Trigger ID */
-    triggerId?: string;
+    triggerId?: string | undefined;
     /** ID of this hook. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this hook. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this hook will be executed (true) or ignored (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this hook runs. */
-    script?: string;
-    dependencies?: Management.HookDependencies;
+    script?: string | undefined;
+    dependencies?: Management.HookDependencies | undefined;
 }
 
 /**
@@ -15848,9 +15893,9 @@ export type HookTriggerIdEnum = (typeof HookTriggerIdEnum)[keyof typeof HookTrig
 
 export interface HttpCustomHeader {
     /** HTTP header name */
-    header?: string;
+    header?: string | undefined;
     /** HTTP header value */
-    value?: string;
+    value?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -15863,7 +15908,7 @@ export interface Identity {
     user_id: string;
     provider: Management.IdentityProviderEnum;
     /** connection_id of the identity. */
-    connection_id?: string;
+    connection_id?: string | undefined;
 }
 
 /** Identity provider name of the identity (e.g. `google-oauth2`). */
@@ -15953,9 +15998,9 @@ export interface ImportEncryptionKeyResponseContent {
     /** Key update timestamp */
     updated_at: string;
     /** ID of parent wrapping key */
-    parent_kid?: string | null;
+    parent_kid?: (string | null) | undefined;
     /** Public key in PEM format */
-    public_key?: string | null;
+    public_key?: (string | null) | undefined;
 }
 
 /**
@@ -15967,16 +16012,16 @@ export interface Integration {
      * id is a system generated GUID. This same ID is designed to be federated in
      * all the applicable localities.
      */
-    id?: string;
+    id?: string | undefined;
     /** catalog_id refers to the ID in the marketplace catalog */
-    catalog_id?: string;
+    catalog_id?: string | undefined;
     /** url_slug refers to the url_slug in the marketplace catalog */
-    url_slug?: string;
+    url_slug?: string | undefined;
     /**
      * partner_id is the foreign key reference to the partner account this
      * integration belongs to.
      */
-    partner_id?: string;
+    partner_id?: string | undefined;
     /**
      * name is the integration name, which will be used for display purposes in
      * the marketplace.
@@ -15984,22 +16029,22 @@ export interface Integration {
      * To start we're going to make sure the display name is at least 3
      * characters. Can adjust this easily later.
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * description adds more text for the integration name -- also relevant for
      * the marketplace listing.
      */
-    description?: string;
+    description?: string | undefined;
     /** short_description is the brief description of the integration, which is used for display purposes in cards */
-    short_description?: string;
-    logo?: string;
-    feature_type?: Management.IntegrationFeatureTypeEnum;
-    terms_of_use_url?: string;
-    privacy_policy_url?: string;
-    public_support_link?: string;
-    current_release?: Management.IntegrationRelease;
-    created_at?: string;
-    updated_at?: string;
+    short_description?: string | undefined;
+    logo?: string | undefined;
+    feature_type?: Management.IntegrationFeatureTypeEnum | undefined;
+    terms_of_use_url?: string | undefined;
+    privacy_policy_url?: string | undefined;
+    public_support_link?: string | undefined;
+    current_release?: Management.IntegrationRelease | undefined;
+    created_at?: string | undefined;
+    updated_at?: string | undefined;
 }
 
 /** feature_type is the type of the integration. */
@@ -16015,16 +16060,16 @@ export type IntegrationFeatureTypeEnum = (typeof IntegrationFeatureTypeEnum)[key
 
 export interface IntegrationRelease {
     /** The id of the associated IntegrationRelease */
-    id?: string;
-    trigger?: Management.ActionTrigger;
-    semver?: Management.IntegrationSemVer;
+    id?: string | undefined;
+    trigger?: Management.ActionTrigger | undefined;
+    semver?: Management.IntegrationSemVer | undefined;
     /**
      * required_secrets declares all the necessary secrets for an integration to
      * work.
      */
-    required_secrets?: Management.IntegrationRequiredParam[];
+    required_secrets?: Management.IntegrationRequiredParam[] | undefined;
     /** required_configuration declares all the necessary configuration fields for an integration to work. */
-    required_configuration?: Management.IntegrationRequiredParam[];
+    required_configuration?: Management.IntegrationRequiredParam[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16038,30 +16083,30 @@ export interface IntegrationRelease {
  * actions.
  */
 export interface IntegrationRequiredParam {
-    type?: Management.IntegrationRequiredParamTypeEnum;
+    type?: Management.IntegrationRequiredParamTypeEnum | undefined;
     /** The name of the parameter. */
-    name?: string;
+    name?: string | undefined;
     /** The flag for if this parameter is required. */
-    required?: boolean;
+    required?: boolean | undefined;
     /** The temp flag for if this parameter is required (experimental; for Labs use only). */
-    optional?: boolean;
+    optional?: boolean | undefined;
     /** The short label for this parameter. */
-    label?: string;
+    label?: string | undefined;
     /** The lengthier description for this parameter. */
-    description?: string;
+    description?: string | undefined;
     /** The default value for this parameter. */
-    default_value?: string;
+    default_value?: string | undefined;
     /** Placeholder text for this parameter. */
-    placeholder?: string;
+    placeholder?: string | undefined;
     /** The allowable options for this param. */
-    options?: Management.IntegrationRequiredParamOption[];
+    options?: Management.IntegrationRequiredParamOption[] | undefined;
 }
 
 export interface IntegrationRequiredParamOption {
     /** The value of an option that will be used within the application. */
-    value?: string;
+    value?: string | undefined;
     /** The display value of an option suitable for displaying in a UI. */
-    label?: string;
+    label?: string | undefined;
 }
 
 export const IntegrationRequiredParamTypeEnum = {
@@ -16076,9 +16121,9 @@ export type IntegrationRequiredParamTypeEnum =
  */
 export interface IntegrationSemVer {
     /** Major is the major number of a semver */
-    major?: number;
+    major?: number | undefined;
     /** Minior is the minior number of a semver */
-    minor?: number;
+    minor?: number | undefined;
 }
 
 /** Format of the file. Must be `json` or `csv`. */
@@ -16098,163 +16143,163 @@ export interface LinkedClientConfiguration {
 
 export interface ListActionBindingsPaginatedResponseContent {
     /** The total result count. */
-    total?: number;
+    total?: number | undefined;
     /** Page index of the results being returned. First page is 0. */
-    page?: number;
+    page?: number | undefined;
     /** Number of results per page. */
-    per_page?: number;
+    per_page?: number | undefined;
     /** The list of actions that are bound to this trigger in the order in which they will be executed. */
-    bindings?: Management.ActionBinding[];
+    bindings?: Management.ActionBinding[] | undefined;
 }
 
 export interface ListActionTriggersResponseContent {
-    triggers?: Management.ActionTrigger[];
+    triggers?: Management.ActionTrigger[] | undefined;
 }
 
 export interface ListActionVersionsPaginatedResponseContent {
     /** The total result count. */
-    total?: number;
+    total?: number | undefined;
     /** Page index of the results being returned. First page is 0. */
-    page?: number;
+    page?: number | undefined;
     /** Number of results per page. */
-    per_page?: number;
-    versions?: Management.ActionVersion[];
+    per_page?: number | undefined;
+    versions?: Management.ActionVersion[] | undefined;
 }
 
 export interface ListActionsPaginatedResponseContent {
     /** The total result count. */
-    total?: number;
+    total?: number | undefined;
     /** Page index of the results being returned. First page is 0. */
-    page?: number;
+    page?: number | undefined;
     /** Number of results per page. */
-    per_page?: number;
+    per_page?: number | undefined;
     /** The list of actions. */
-    actions?: Management.Action[];
+    actions?: Management.Action[] | undefined;
 }
 
 export interface ListAculsOffsetPaginatedResponseContent {
-    configs?: Management.ListAculsResponseContentItem[];
+    configs?: Management.ListAculsResponseContentItem[] | undefined;
     /** the index of the first configuration in the response (before filtering) */
-    start?: number;
+    start?: number | undefined;
     /** the maximum number of configurations shown per page (before filtering) */
-    limit?: number;
+    limit?: number | undefined;
     /** the total number of configurations on this tenant */
-    total?: number;
+    total?: number | undefined;
 }
 
 export interface ListAculsResponseContentItem {
     /** Tenant ID */
-    tenant?: string;
+    tenant?: string | undefined;
     /** Name of the prompt */
-    prompt?: string;
+    prompt?: string | undefined;
     /** Name of the screen */
-    screen?: string;
-    rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    screen?: string | undefined;
+    rendering_mode?: Management.AculRenderingModeEnum | undefined;
+    context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
-    default_head_tags_disabled?: boolean | null;
+    default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
-    use_page_template?: boolean | null;
+    use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
-    filters?: Management.AculFilters | null;
+    head_tags?: Management.AculHeadTag[] | undefined;
+    filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ListBrandingPhoneProvidersResponseContent {
-    providers?: Management.PhoneProviderSchemaMasked[];
+    providers?: Management.PhoneProviderSchemaMasked[] | undefined;
 }
 
 export interface ListClientConnectionsResponseContent {
     connections: Management.ConnectionForList[];
     /** Encoded next token */
-    next?: string;
+    next?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ListClientGrantOrganizationsPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
-    next?: string;
-    organizations?: Management.Organization[];
+    next?: string | undefined;
+    organizations?: Management.Organization[] | undefined;
 }
 
 export interface ListClientGrantPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
-    next?: string;
-    client_grants?: Management.ClientGrantResponseContent[];
+    next?: string | undefined;
+    client_grants?: Management.ClientGrantResponseContent[] | undefined;
 }
 
 export interface ListClientsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    clients?: Management.Client[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    clients?: Management.Client[] | undefined;
 }
 
 export interface ListConnectionProfileTemplateResponseContent {
-    connection_profile_templates?: Management.ConnectionProfileTemplateItem[];
+    connection_profile_templates?: Management.ConnectionProfileTemplateItem[] | undefined;
 }
 
 export interface ListConnectionProfilesPaginatedResponseContent {
     /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-    connection_profiles?: Management.ConnectionProfile[];
+    next?: string | undefined;
+    connection_profiles?: Management.ConnectionProfile[] | undefined;
 }
 
 export interface ListConnectionsCheckpointPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results. */
-    next?: string;
-    connections?: Management.ConnectionForList[];
+    next?: string | undefined;
+    connections?: Management.ConnectionForList[] | undefined;
 }
 
 export type ListCustomDomainsResponseContent = Management.CustomDomain[];
 
 export interface ListDeviceCredentialsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    device_credentials?: Management.DeviceCredential[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    device_credentials?: Management.DeviceCredential[] | undefined;
 }
 
 export interface ListDirectoryProvisioningsResponseContent {
     /** List of directory provisioning configurations */
     directory_provisionings: Management.DirectoryProvisioning[];
     /** The cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
+    next?: string | undefined;
 }
 
 export interface ListEncryptionKeyOffsetPaginatedResponseContent {
     /** Page index of the results to return. First page is 0. */
-    start?: number;
+    start?: number | undefined;
     /** Number of results per page. */
-    limit?: number;
+    limit?: number | undefined;
     /** Total amount of encryption keys. */
-    total?: number;
+    total?: number | undefined;
     /** Encryption keys. */
-    keys?: Management.EncryptionKey[];
+    keys?: Management.EncryptionKey[] | undefined;
 }
 
 export interface ListEventStreamsResponseContent {
-    eventStreams?: Management.EventStreamResponseContent[];
+    eventStreams?: Management.EventStreamResponseContent[] | undefined;
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results. */
-    next?: string;
+    next?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ListFlowExecutionsPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
-    next?: string;
-    executions?: Management.FlowExecutionSummary[];
+    next?: string | undefined;
+    executions?: Management.FlowExecutionSummary[] | undefined;
 }
 
 export interface ListFlowsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    flows?: Management.FlowSummary[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    flows?: Management.FlowSummary[] | undefined;
 }
 
 export const ListFlowsRequestParametersHydrateEnum = {
@@ -16264,139 +16309,146 @@ export type ListFlowsRequestParametersHydrateEnum =
     (typeof ListFlowsRequestParametersHydrateEnum)[keyof typeof ListFlowsRequestParametersHydrateEnum];
 
 export interface ListFlowsVaultConnectionsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    connections?: Management.FlowsVaultConnectionSummary[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    connections?: Management.FlowsVaultConnectionSummary[] | undefined;
 }
 
 export interface ListFormsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    forms?: Management.FormSummary[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    forms?: Management.FormSummary[] | undefined;
 }
 
 export interface ListGroupsPaginatedResponseContent {
     groups: Management.Group[];
     /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-    start?: number;
-    limit?: number;
-    total?: number;
+    next?: string | undefined;
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
 }
 
 export type ListGuardianPoliciesResponseContent = Management.MfaPolicyEnum[];
 
 export interface ListHooksOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    hooks?: Management.Hook[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    hooks?: Management.Hook[] | undefined;
 }
 
 export interface ListLogOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    length?: number;
-    total?: number;
-    logs?: Management.Log[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    length?: number | undefined;
+    total?: number | undefined;
+    logs?: Management.Log[] | undefined;
 }
 
 export interface ListNetworkAclsOffsetPaginatedResponseContent {
-    network_acls?: Management.NetworkAclsResponseContent[];
-    start?: number;
-    limit?: number;
-    total?: number;
+    network_acls?: Management.NetworkAclsResponseContent[] | undefined;
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
 }
 
 export interface ListOrganizationClientGrantsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    client_grants?: Management.OrganizationClientGrant[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    client_grants?: Management.OrganizationClientGrant[] | undefined;
 }
 
 export interface ListOrganizationConnectionsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    enabled_connections?: Management.OrganizationConnection[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    enabled_connections?: Management.OrganizationConnection[] | undefined;
 }
 
 export interface ListOrganizationDiscoveryDomainsResponseContent {
-    next?: string;
+    next?: string | undefined;
     domains: Management.OrganizationDiscoveryDomain[];
 }
 
 export interface ListOrganizationInvitationsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    invitations?: Management.OrganizationInvitation[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    invitations?: Management.OrganizationInvitation[] | undefined;
 }
 
 export interface ListOrganizationMemberRolesOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    roles?: Management.Role[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    roles?: Management.Role[] | undefined;
 }
 
 export interface ListOrganizationMembersPaginatedResponseContent {
-    next?: string;
-    members?: Management.OrganizationMember[];
+    next?: string | undefined;
+    members?: Management.OrganizationMember[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ListOrganizationsPaginatedResponseContent {
-    next?: string;
-    organizations?: Management.Organization[];
+    next?: string | undefined;
+    organizations?: Management.Organization[] | undefined;
 }
 
 export interface ListPhoneTemplatesResponseContent {
-    templates?: Management.PhoneTemplate[];
+    templates?: Management.PhoneTemplate[] | undefined;
 }
 
 export interface ListRefreshTokensPaginatedResponseContent {
-    tokens?: Management.RefreshTokenResponseContent[];
+    tokens?: Management.RefreshTokenResponseContent[] | undefined;
     /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
+    next?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ListResourceServerOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    resource_servers?: Management.ResourceServer[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    resource_servers?: Management.ResourceServer[] | undefined;
 }
 
 export interface ListRolePermissionsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    permissions?: Management.PermissionsResponsePayload[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    permissions?: Management.PermissionsResponsePayload[] | undefined;
 }
 
 export interface ListRoleUsersPaginatedResponseContent {
-    next?: string;
-    users?: Management.RoleUser[];
+    next?: string | undefined;
+    users?: Management.RoleUser[] | undefined;
 }
 
 export interface ListRolesOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    roles?: Management.Role[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    roles?: Management.Role[] | undefined;
 }
 
 export interface ListRulesOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    rules?: Management.Rule[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    rules?: Management.Rule[] | undefined;
+}
+
+export interface ListScimConfigurationsResponseContent {
+    /** List of SCIM configurations */
+    scim_configurations: Management.ScimConfiguration[];
+    /** The cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
 }
 
 /**
@@ -16405,144 +16457,144 @@ export interface ListRulesOffsetPaginatedResponseContent {
 export type ListSelfServiceProfileCustomTextResponseContent = Record<string, string>;
 
 export interface ListSelfServiceProfilesPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    self_service_profiles?: Management.SelfServiceProfile[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    self_service_profiles?: Management.SelfServiceProfile[] | undefined;
 }
 
 export interface ListTokenExchangeProfileResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
-    next?: string;
-    token_exchange_profiles?: Management.TokenExchangeProfileResponseContent[];
+    next?: string | undefined;
+    token_exchange_profiles?: Management.TokenExchangeProfileResponseContent[] | undefined;
 }
 
 export interface ListUserAttributeProfileTemplateResponseContent {
-    user_attribute_profile_templates?: Management.UserAttributeProfileTemplateItem[];
+    user_attribute_profile_templates?: Management.UserAttributeProfileTemplateItem[] | undefined;
 }
 
 export interface ListUserAttributeProfilesPaginatedResponseContent {
     /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
-    user_attribute_profiles?: Management.UserAttributeProfile[];
+    next?: string | undefined;
+    user_attribute_profiles?: Management.UserAttributeProfile[] | undefined;
 }
 
 export interface ListUserAuthenticationMethodsOffsetPaginatedResponseContent {
     /** Index of the starting record. Derived from the page and per_page parameters. */
-    start?: number;
+    start?: number | undefined;
     /** Maximum amount of records to return. */
-    limit?: number;
+    limit?: number | undefined;
     /** Total number of pageable records. */
-    total?: number;
+    total?: number | undefined;
     /** The paginated authentication methods. Returned in this structure when include_totals is true. */
-    authenticators?: Management.UserAuthenticationMethod[];
+    authenticators?: Management.UserAuthenticationMethod[] | undefined;
 }
 
 export interface ListUserBlocksByIdentifierResponseContent {
     /** Array of identifier + IP address pairs.  IP address is optional, and may be omitted in certain circumstances (such as Account Lockout mode). */
-    blocked_for?: Management.UserBlockIdentifier[];
+    blocked_for?: Management.UserBlockIdentifier[] | undefined;
 }
 
 export interface ListUserBlocksResponseContent {
     /** Array of identifier + IP address pairs.  IP address is optional, and may be omitted in certain circumstances (such as Account Lockout mode). */
-    blocked_for?: Management.UserBlockIdentifier[];
+    blocked_for?: Management.UserBlockIdentifier[] | undefined;
 }
 
 export interface ListUserConnectedAccountsResponseContent {
     connected_accounts: Management.ConnectedAccount[];
     /** The token to retrieve the next page of connected accounts (if there is one) */
-    next?: string;
+    next?: string | undefined;
 }
 
 export interface ListUserGrantsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    grants?: Management.UserGrant[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    grants?: Management.UserGrant[] | undefined;
 }
 
 export interface ListUserOrganizationsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    organizations?: Management.Organization[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    organizations?: Management.Organization[] | undefined;
 }
 
 export interface ListUserPermissionsOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    permissions?: Management.UserPermissionSchema[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    permissions?: Management.UserPermissionSchema[] | undefined;
 }
 
 export interface ListUserRolesOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    total?: number;
-    roles?: Management.Role[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    roles?: Management.Role[] | undefined;
 }
 
 export interface ListUserSessionsPaginatedResponseContent {
-    sessions?: Management.SessionResponseContent[];
+    sessions?: Management.SessionResponseContent[] | undefined;
     /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string;
+    next?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ListUsersOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    length?: number;
-    total?: number;
-    users?: Management.UserResponseSchema[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    length?: number | undefined;
+    total?: number | undefined;
+    users?: Management.UserResponseSchema[] | undefined;
 }
 
 export interface ListVerifiableCredentialTemplatesPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
-    next?: string | null;
-    templates?: Management.VerifiableCredentialTemplateResponse[];
+    next?: (string | null) | undefined;
+    templates?: Management.VerifiableCredentialTemplateResponse[] | undefined;
 }
 
 export interface Log {
-    date?: Management.LogDate;
+    date?: Management.LogDate | undefined;
     /** Type of event. */
-    type?: string;
+    type?: string | undefined;
     /** Description of this event. */
-    description?: string | null;
+    description?: (string | null) | undefined;
     /** Name of the connection the event relates to. */
-    connection?: string;
+    connection?: string | undefined;
     /** ID of the connection the event relates to. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** ID of the client (application). */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Name of the client (application). */
-    client_name?: string;
+    client_name?: string | undefined;
     /** IP address of the log event source. */
-    ip?: string;
+    ip?: string | undefined;
     /** Hostname the event applies to. */
-    hostname?: string;
+    hostname?: string | undefined;
     /** ID of the user involved in the event. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** Name of the user involved in the event. */
-    user_name?: string;
+    user_name?: string | undefined;
     /** API audience the event applies to. */
-    audience?: string;
+    audience?: string | undefined;
     /** Scope permissions applied to the event. */
-    scope?: string;
+    scope?: string | undefined;
     /** Name of the strategy involved in the event. */
-    strategy?: string;
+    strategy?: string | undefined;
     /** Type of strategy involved in the event. */
-    strategy_type?: string;
+    strategy_type?: string | undefined;
     /** Unique ID of the event. */
-    log_id?: string;
+    log_id?: string | undefined;
     /** Whether the client was a mobile device (true) or desktop/laptop/server (false). */
-    isMobile?: boolean;
-    details?: Management.LogDetails;
+    isMobile?: boolean | undefined;
+    details?: Management.LogDetails | undefined;
     /** User agent string from the client device that caused the event. */
-    user_agent?: string;
-    security_context?: Management.LogSecurityContext;
-    location_info?: Management.LogLocationInfo;
+    user_agent?: string | undefined;
+    security_context?: Management.LogSecurityContext | undefined;
+    location_info?: Management.LogLocationInfo | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16567,21 +16619,21 @@ export type LogDetails = Record<string, unknown>;
  */
 export interface LogLocationInfo {
     /** Two-letter <a href="https://www.iso.org/iso-3166-country-codes.html">Alpha-2 ISO 3166-1</a> country code. */
-    country_code?: string;
+    country_code?: string | undefined;
     /** Three-letter <a href="https://www.iso.org/iso-3166-country-codes.html">Alpha-3 ISO 3166-1</a> country code. */
-    country_code3?: string;
+    country_code3?: string | undefined;
     /** Full country name in English. */
-    country_name?: string;
+    country_name?: string | undefined;
     /** Full city name in English. */
-    city_name?: string;
+    city_name?: string | undefined;
     /** Global latitude (horizontal) position. */
-    latitude?: number;
+    latitude?: number | undefined;
     /** Global longitude (vertical) position. */
-    longitude?: number;
+    longitude?: number | undefined;
     /** Time zone name as found in the <a href="https://www.iana.org/time-zones">tz database</a>. */
-    time_zone?: string;
+    time_zone?: string | undefined;
     /** Continent the country is located within. Can be `AF` (Africa), `AN` (Antarctica), `AS` (Asia), `EU` (Europe), `NA` (North America), `OC` (Oceania) or `SA` (South America). */
-    continent_code?: string;
+    continent_code?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16591,9 +16643,9 @@ export interface LogLocationInfo {
  */
 export interface LogSecurityContext {
     /** JA3 fingerprint value. */
-    ja3?: string;
+    ja3?: string | undefined;
     /** JA4 fingerprint value. */
-    ja4?: string;
+    ja4?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16614,17 +16666,17 @@ export type LogStreamDatadogRegionEnum = (typeof LogStreamDatadogRegionEnum)[key
 
 export interface LogStreamDatadogResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamDatadogEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamDatadogEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamDatadogSink;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamDatadogSink | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16642,17 +16694,17 @@ export type LogStreamEventBridgeEnum = (typeof LogStreamEventBridgeEnum)[keyof t
 
 export interface LogStreamEventBridgeResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamEventBridgeEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamEventBridgeEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamEventBridgeSink;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamEventBridgeSink | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16662,7 +16714,7 @@ export interface LogStreamEventBridgeSink {
     awsAccountId: string;
     awsRegion: Management.LogStreamEventBridgeSinkRegionEnum;
     /** AWS EventBridge partner event source */
-    awsPartnerEventSource?: string;
+    awsPartnerEventSource?: string | undefined;
 }
 
 /** The region in which the EventBridge event source will be created */
@@ -16754,17 +16806,17 @@ export type LogStreamEventGridRegionEnum =
 
 export interface LogStreamEventGridResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamEventGridEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamEventGridEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamEventGridSink;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamEventGridSink | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16776,12 +16828,12 @@ export interface LogStreamEventGridSink {
     /** Resource Group */
     azureResourceGroup: string;
     /** Partner Topic */
-    azurePartnerTopic?: string;
+    azurePartnerTopic?: string | undefined;
 }
 
 export interface LogStreamFilter {
-    type?: Management.LogStreamFilterTypeEnum;
-    name?: Management.LogStreamFilterGroupNameEnum;
+    type?: Management.LogStreamFilterTypeEnum | undefined;
+    name?: Management.LogStreamFilterGroupNameEnum | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16834,31 +16886,31 @@ export type LogStreamHttpEnum = (typeof LogStreamHttpEnum)[keyof typeof LogStrea
 
 export interface LogStreamHttpResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamHttpEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamHttpEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamHttpSink;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamHttpSink | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface LogStreamHttpSink {
     /** HTTP Authorization header */
-    httpAuthorization?: string;
-    httpContentFormat?: Management.LogStreamHttpContentFormatEnum;
+    httpAuthorization?: string | undefined;
+    httpContentFormat?: Management.LogStreamHttpContentFormatEnum | undefined;
     /** HTTP Content-Type header */
-    httpContentType?: string;
+    httpContentType?: string | undefined;
     /** HTTP endpoint */
     httpEndpoint: string;
     /** custom HTTP headers */
-    httpCustomHeaders?: Management.HttpCustomHeader[];
+    httpCustomHeaders?: Management.HttpCustomHeader[] | undefined;
 }
 
 export const LogStreamMixpanelEnum = {
@@ -16876,17 +16928,17 @@ export type LogStreamMixpanelRegionEnum =
 
 export interface LogStreamMixpanelResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamMixpanelEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamMixpanelEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamMixpanelSink;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamMixpanelSink | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -16908,7 +16960,7 @@ export interface LogStreamMixpanelSinkPatch {
     /** Mixpanel Service Account Username */
     mixpanelServiceAccountUsername: string;
     /** Mixpanel Service Account Password */
-    mixpanelServiceAccountPassword?: string;
+    mixpanelServiceAccountPassword?: string | undefined;
 }
 
 export const LogStreamPiiAlgorithmEnum = {
@@ -16918,8 +16970,8 @@ export type LogStreamPiiAlgorithmEnum = (typeof LogStreamPiiAlgorithmEnum)[keyof
 
 export interface LogStreamPiiConfig {
     log_fields: Management.LogStreamPiiLogFieldsEnum[];
-    method?: Management.LogStreamPiiMethodEnum;
-    algorithm?: Management.LogStreamPiiAlgorithmEnum;
+    method?: Management.LogStreamPiiMethodEnum | undefined;
+    algorithm?: Management.LogStreamPiiAlgorithmEnum | undefined;
 }
 
 export const LogStreamPiiLogFieldsEnum = {
@@ -16955,24 +17007,24 @@ export type LogStreamSegmentEnum = (typeof LogStreamSegmentEnum)[keyof typeof Lo
 
 export interface LogStreamSegmentResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamSegmentEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamSegmentEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamSegmentSinkWriteKey;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamSegmentSinkWriteKey | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface LogStreamSegmentSink {
     /** Segment write key */
-    segmentWriteKey?: string;
+    segmentWriteKey?: string | undefined;
 }
 
 export interface LogStreamSegmentSinkWriteKey {
@@ -16995,17 +17047,17 @@ export type LogStreamSplunkEnum = (typeof LogStreamSplunkEnum)[keyof typeof LogS
 
 export interface LogStreamSplunkResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamSplunkEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamSplunkEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamSplunkSink;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamSplunkSink | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17036,17 +17088,17 @@ export type LogStreamSumoEnum = (typeof LogStreamSumoEnum)[keyof typeof LogStrea
 
 export interface LogStreamSumoResponseSchema {
     /** The id of the log stream */
-    id?: string;
+    id?: string | undefined;
     /** log stream name */
-    name?: string;
-    status?: Management.LogStreamStatusEnum;
-    type?: Management.LogStreamSumoEnum;
+    name?: string | undefined;
+    status?: Management.LogStreamStatusEnum | undefined;
+    type?: Management.LogStreamSumoEnum | undefined;
     /** True for priority log streams, false for non-priority */
-    isPriority?: boolean;
+    isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
-    filters?: Management.LogStreamFilter[];
-    pii_config?: Management.LogStreamPiiConfig;
-    sink?: Management.LogStreamSumoSink;
+    filters?: Management.LogStreamFilter[] | undefined;
+    pii_config?: Management.LogStreamPiiConfig | undefined;
+    sink?: Management.LogStreamSumoSink | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17065,47 +17117,47 @@ export type MfaPolicyEnum = (typeof MfaPolicyEnum)[keyof typeof MfaPolicyEnum];
 
 export interface MdlPresentationProperties {
     /** Family Name */
-    family_name?: boolean;
+    family_name?: boolean | undefined;
     /** Given Name */
-    given_name?: boolean;
+    given_name?: boolean | undefined;
     /** Birth Date */
-    birth_date?: boolean;
+    birth_date?: boolean | undefined;
     /** Issue Date */
-    issue_date?: boolean;
+    issue_date?: boolean | undefined;
     /** Expiry Date */
-    expiry_date?: boolean;
+    expiry_date?: boolean | undefined;
     /** Issuing Country */
-    issuing_country?: boolean;
+    issuing_country?: boolean | undefined;
     /** Issuing Authority */
-    issuing_authority?: boolean;
+    issuing_authority?: boolean | undefined;
     /** Portrait */
-    portrait?: boolean;
+    portrait?: boolean | undefined;
     /** Driving Privileges */
-    driving_privileges?: boolean;
+    driving_privileges?: boolean | undefined;
     /** Resident Address */
-    resident_address?: boolean;
+    resident_address?: boolean | undefined;
     /** Portrait Capture Date */
-    portrait_capture_date?: boolean;
+    portrait_capture_date?: boolean | undefined;
     /** Age in Years */
-    age_in_years?: boolean;
+    age_in_years?: boolean | undefined;
     /** Age Birth Year */
-    age_birth_year?: boolean;
+    age_birth_year?: boolean | undefined;
     /** Issuing Jurisdiction */
-    issuing_jurisdiction?: boolean;
+    issuing_jurisdiction?: boolean | undefined;
     /** Nationality */
-    nationality?: boolean;
+    nationality?: boolean | undefined;
     /** Resident City */
-    resident_city?: boolean;
+    resident_city?: boolean | undefined;
     /** Resident State */
-    resident_state?: boolean;
+    resident_state?: boolean | undefined;
     /** Resident Postal Code */
-    resident_postal_code?: boolean;
+    resident_postal_code?: boolean | undefined;
     /** Resident Country */
-    resident_country?: boolean;
+    resident_country?: boolean | undefined;
     /** Family Name National Character */
-    family_name_national_character?: boolean;
+    family_name_national_character?: boolean | undefined;
     /** Given Name National Character */
-    given_name_national_character?: boolean;
+    given_name_national_character?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17125,9 +17177,9 @@ export interface MdlPresentationRequestProperties {
  * Configure native social settings
  */
 export interface NativeSocialLogin {
-    apple?: Management.NativeSocialLoginApple;
-    facebook?: Management.NativeSocialLoginFacebook;
-    google?: Management.NativeSocialLoginGoogle;
+    apple?: Management.NativeSocialLoginApple | undefined;
+    facebook?: Management.NativeSocialLoginFacebook | undefined;
+    google?: Management.NativeSocialLoginGoogle | undefined;
 }
 
 /**
@@ -17135,7 +17187,7 @@ export interface NativeSocialLogin {
  */
 export interface NativeSocialLoginApple {
     /** Determine whether or not to allow signing in natively using an Apple authorization code */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
 }
 
 /**
@@ -17143,7 +17195,7 @@ export interface NativeSocialLoginApple {
  */
 export interface NativeSocialLoginFacebook {
     /** Determine whether or not to allow signing in natively using Facebook */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
 }
 
 /**
@@ -17151,7 +17203,7 @@ export interface NativeSocialLoginFacebook {
  */
 export interface NativeSocialLoginGoogle {
     /** Determine whether or not to allow signing in natively using a Google ID token */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
 }
 
 export type NetworkAclMatchIpv4Cidr = string;
@@ -17159,12 +17211,12 @@ export type NetworkAclMatchIpv4Cidr = string;
 export type NetworkAclMatchIpv6Cidr = string;
 
 export interface NetworkAclAction {
-    block?: Management.NetworkAclActionBlockEnum;
-    allow?: Management.NetworkAclActionAllowEnum;
-    log?: Management.NetworkAclActionLogEnum;
-    redirect?: Management.NetworkAclActionRedirectEnum;
+    block?: Management.NetworkAclActionBlockEnum | undefined;
+    allow?: Management.NetworkAclActionAllowEnum | undefined;
+    log?: Management.NetworkAclActionLogEnum | undefined;
+    redirect?: Management.NetworkAclActionRedirectEnum | undefined;
     /** The URI to which the match or not_match requests will be routed */
-    redirect_uri?: string;
+    redirect_uri?: string | undefined;
 }
 
 /**
@@ -17188,20 +17240,20 @@ export type NetworkAclActionLogEnum = boolean;
 export type NetworkAclActionRedirectEnum = boolean;
 
 export interface NetworkAclMatch {
-    asns?: number[];
-    geo_country_codes?: string[];
-    geo_subdivision_codes?: string[];
-    ipv4_cidrs?: Management.NetworkAclMatchIpv4Cidr[];
-    ipv6_cidrs?: Management.NetworkAclMatchIpv6Cidr[];
-    ja3_fingerprints?: string[];
-    ja4_fingerprints?: string[];
-    user_agents?: string[];
+    asns?: number[] | undefined;
+    geo_country_codes?: string[] | undefined;
+    geo_subdivision_codes?: string[] | undefined;
+    ipv4_cidrs?: Management.NetworkAclMatchIpv4Cidr[] | undefined;
+    ipv6_cidrs?: Management.NetworkAclMatchIpv6Cidr[] | undefined;
+    ja3_fingerprints?: string[] | undefined;
+    ja4_fingerprints?: string[] | undefined;
+    user_agents?: string[] | undefined;
 }
 
 export interface NetworkAclRule {
     action: Management.NetworkAclAction;
-    match?: Management.NetworkAclMatch;
-    not_match?: Management.NetworkAclMatch;
+    match?: Management.NetworkAclMatch | undefined;
+    not_match?: Management.NetworkAclMatch | undefined;
     scope: Management.NetworkAclRuleScopeEnum;
 }
 
@@ -17215,29 +17267,29 @@ export const NetworkAclRuleScopeEnum = {
 export type NetworkAclRuleScopeEnum = (typeof NetworkAclRuleScopeEnum)[keyof typeof NetworkAclRuleScopeEnum];
 
 export interface NetworkAclsResponseContent {
-    id?: string;
-    description?: string;
-    active?: boolean;
-    priority?: number;
-    rule?: Management.NetworkAclRule;
+    id?: string | undefined;
+    description?: string | undefined;
+    active?: boolean | undefined;
+    priority?: number | undefined;
+    rule?: Management.NetworkAclRule | undefined;
     /** The timestamp when the Network ACL Configuration was created */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The timestamp when the Network ACL Configuration was last updated */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface Organization {
     /** Organization identifier. */
-    id?: string;
+    id?: string | undefined;
     /** The name of this organization. */
-    name?: string;
+    name?: string | undefined;
     /** Friendly name of this organization. */
-    display_name?: string;
-    branding?: Management.OrganizationBranding;
-    metadata?: Management.OrganizationMetadata;
-    token_quota?: Management.TokenQuota;
+    display_name?: string | undefined;
+    branding?: Management.OrganizationBranding | undefined;
+    metadata?: Management.OrganizationMetadata | undefined;
+    token_quota?: Management.TokenQuota | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17247,8 +17299,8 @@ export interface Organization {
  */
 export interface OrganizationBranding {
     /** URL of logo to display on login page. */
-    logo_url?: string;
-    colors?: Management.OrganizationBrandingColors;
+    logo_url?: string | undefined;
+    colors?: Management.OrganizationBrandingColors | undefined;
 }
 
 /**
@@ -17263,35 +17315,35 @@ export interface OrganizationBrandingColors {
 
 export interface OrganizationClientGrant {
     /** ID of the client grant. */
-    id?: string;
+    id?: string | undefined;
     /** ID of the client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The audience (API identifier) of this client grant */
-    audience?: string;
+    audience?: string | undefined;
     /** Scopes allowed for this client grant. */
-    scope?: string[];
-    organization_usage?: Management.OrganizationUsageEnum;
+    scope?: string[] | undefined;
+    organization_usage?: Management.OrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
-    allow_any_organization?: boolean;
+    allow_any_organization?: boolean | undefined;
 }
 
 export interface OrganizationConnection {
     /** ID of the connection. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
-    assign_membership_on_login?: boolean;
+    assign_membership_on_login?: boolean | undefined;
     /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
-    show_as_button?: boolean;
+    show_as_button?: boolean | undefined;
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
-    is_signup_enabled?: boolean;
-    connection?: Management.OrganizationConnectionInformation;
+    is_signup_enabled?: boolean | undefined;
+    connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
 export interface OrganizationConnectionInformation {
     /** The name of the enabled connection. */
-    name?: string;
+    name?: string | undefined;
     /** The strategy of the enabled connection. */
-    strategy?: string;
+    strategy?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17303,7 +17355,7 @@ export interface OrganizationDiscoveryDomain {
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
     /** Indicates whether this domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
+    use_for_organization_discovery?: boolean | undefined;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -17320,41 +17372,41 @@ export type OrganizationDiscoveryDomainStatus =
 
 export interface OrganizationEnabledConnection {
     /** ID of the connection. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
-    assign_membership_on_login?: boolean;
+    assign_membership_on_login?: boolean | undefined;
     /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
-    show_as_button?: boolean;
+    show_as_button?: boolean | undefined;
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
-    is_signup_enabled?: boolean;
-    connection?: Management.OrganizationConnectionInformation;
+    is_signup_enabled?: boolean | undefined;
+    connection?: Management.OrganizationConnectionInformation | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface OrganizationInvitation {
     /** The id of the user invitation. */
-    id?: string;
+    id?: string | undefined;
     /** Organization identifier. */
-    organization_id?: string;
-    inviter?: Management.OrganizationInvitationInviter;
-    invitee?: Management.OrganizationInvitationInvitee;
+    organization_id?: string | undefined;
+    inviter?: Management.OrganizationInvitationInviter | undefined;
+    invitee?: Management.OrganizationInvitationInvitee | undefined;
     /** The invitation url to be send to the invitee. */
-    invitation_url?: string;
+    invitation_url?: string | undefined;
     /** The ISO 8601 formatted timestamp representing the creation time of the invitation. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The ISO 8601 formatted timestamp representing the expiration time of the invitation. */
-    expires_at?: string;
+    expires_at?: string | undefined;
     /** Auth0 client ID. Used to resolve the application's login initiation endpoint. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The id of the connection to force invitee to authenticate with. */
-    connection_id?: string;
-    app_metadata?: Management.AppMetadata;
-    user_metadata?: Management.UserMetadata;
+    connection_id?: string | undefined;
+    app_metadata?: Management.AppMetadata | undefined;
+    user_metadata?: Management.UserMetadata | undefined;
     /** List of roles IDs to associated with the user. */
-    roles?: string[];
+    roles?: string[] | undefined;
     /** The id of the invitation ticket */
-    ticket_id?: string;
+    ticket_id?: string | undefined;
 }
 
 export interface OrganizationInvitationInvitee {
@@ -17369,21 +17421,21 @@ export interface OrganizationInvitationInviter {
 
 export interface OrganizationMember {
     /** ID of this user. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** URL to a picture for this user. */
-    picture?: string;
+    picture?: string | undefined;
     /** Name of this user. */
-    name?: string;
+    name?: string | undefined;
     /** Email address of this user. */
-    email?: string;
-    roles?: Management.OrganizationMemberRole[];
+    email?: string | undefined;
+    roles?: Management.OrganizationMemberRole[] | undefined;
 }
 
 export interface OrganizationMemberRole {
     /** ID for this role. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this role. */
-    name?: string;
+    name?: string | undefined;
 }
 
 /**
@@ -17415,36 +17467,36 @@ export type PartialGroupsEnum = (typeof PartialGroupsEnum)[keyof typeof PartialG
 
 export interface PartialPhoneTemplateContent {
     /** Default phone number to be used as 'from' when sending a phone notification */
-    from?: string;
-    body?: Management.PhoneTemplateBody;
+    from?: string | undefined;
+    body?: Management.PhoneTemplateBody | undefined;
 }
 
 export interface PatchClientCredentialResponseContent {
     /** ID of the credential. Generated on creation. */
-    id?: string;
+    id?: string | undefined;
     /** The name given to the credential by the user. */
-    name?: string;
+    name?: string | undefined;
     /** The key identifier of the credential, generated on creation. */
-    kid?: string;
-    alg?: Management.ClientCredentialAlgorithmEnum;
-    credential_type?: Management.ClientCredentialTypeEnum;
+    kid?: string | undefined;
+    alg?: Management.ClientCredentialAlgorithmEnum | undefined;
+    credential_type?: Management.ClientCredentialTypeEnum | undefined;
     /** The X509 certificate's Subject Distinguished Name */
-    subject_dn?: string;
+    subject_dn?: string | undefined;
     /** The X509 certificate's SHA256 thumbprint */
-    thumbprint_sha256?: string;
+    thumbprint_sha256?: string | undefined;
     /** The ISO 8601 formatted date the credential was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The ISO 8601 formatted date the credential was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The ISO 8601 formatted date representing the expiration of the credential. */
-    expires_at?: string;
+    expires_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface PatchSupplementalSignalsResponseContent {
     /** Indicates if incoming Akamai Headers should be processed */
-    akamai_enabled?: boolean;
+    akamai_enabled?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17458,23 +17510,23 @@ export interface PermissionRequestPayload {
 
 export interface PermissionsResponsePayload {
     /** Resource server (API) identifier that this permission is for. */
-    resource_server_identifier?: string;
+    resource_server_identifier?: string | undefined;
     /** Name of this permission. */
-    permission_name?: string;
+    permission_name?: string | undefined;
     /** Resource server (API) name this permission is for. */
-    resource_server_name?: string;
+    resource_server_name?: string | undefined;
     /** Description of this permission. */
-    description?: string;
+    description?: string | undefined;
 }
 
 /**
  * Configuration for the phone number attribute for users.
  */
 export interface PhoneAttribute {
-    identifier?: Management.ConnectionAttributeIdentifier;
+    identifier?: Management.ConnectionAttributeIdentifier | undefined;
     /** Determines if property should be required for users */
-    profile_required?: boolean;
-    signup?: Management.SignupVerified;
+    profile_required?: boolean | undefined;
+    signup?: Management.SignupVerified | undefined;
 }
 
 /** This depicts the type of notifications this provider can receive. */
@@ -17511,25 +17563,25 @@ export type PhoneProviderNameEnum = (typeof PhoneProviderNameEnum)[keyof typeof 
  * Phone provider configuration schema
  */
 export interface PhoneProviderSchemaMasked {
-    id?: string;
+    id?: string | undefined;
     /** The name of the tenant */
-    tenant?: string;
+    tenant?: string | undefined;
     name: Management.PhoneProviderNameEnum;
-    channel?: Management.PhoneProviderChannelEnum;
+    channel?: Management.PhoneProviderChannelEnum | undefined;
     /** Whether the provider is enabled (false) or disabled (true). */
-    disabled?: boolean;
-    configuration?: Management.PhoneProviderConfiguration;
+    disabled?: boolean | undefined;
+    configuration?: Management.PhoneProviderConfiguration | undefined;
     /** The provider's creation date and time in ISO 8601 format */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time of the last update to the provider in ISO 8601 format */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 export interface PhoneTemplate {
     id: string;
-    channel?: string;
-    customizable?: boolean;
-    tenant?: string;
+    channel?: string | undefined;
+    customizable?: boolean | undefined;
+    tenant?: string | undefined;
     content: Management.PhoneTemplateContent;
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
@@ -17538,16 +17590,16 @@ export interface PhoneTemplate {
 
 export interface PhoneTemplateBody {
     /** Content of the phone template for text notifications */
-    text?: string;
+    text?: string | undefined;
     /** Content of the phone template for voice notifications */
-    voice?: string;
+    voice?: string | undefined;
 }
 
 export interface PhoneTemplateContent {
-    syntax?: string;
+    syntax?: string | undefined;
     /** Default phone number to be used as 'from' when sending a phone notification */
-    from?: string;
-    body?: Management.PhoneTemplateBody;
+    from?: string | undefined;
+    body?: Management.PhoneTemplateBody | undefined;
 }
 
 export const PhoneTemplateNotificationTypeEnum = {
@@ -17562,26 +17614,69 @@ export type PhoneTemplateNotificationTypeEnum =
 
 export interface PostClientCredentialResponseContent {
     /** ID of the credential. Generated on creation. */
-    id?: string;
+    id?: string | undefined;
     /** The name given to the credential by the user. */
-    name?: string;
+    name?: string | undefined;
     /** The key identifier of the credential, generated on creation. */
-    kid?: string;
-    alg?: Management.ClientCredentialAlgorithmEnum;
-    credential_type?: Management.ClientCredentialTypeEnum;
+    kid?: string | undefined;
+    alg?: Management.ClientCredentialAlgorithmEnum | undefined;
+    credential_type?: Management.ClientCredentialTypeEnum | undefined;
     /** The X509 certificate's Subject Distinguished Name */
-    subject_dn?: string;
+    subject_dn?: string | undefined;
     /** The X509 certificate's SHA256 thumbprint */
-    thumbprint_sha256?: string;
+    thumbprint_sha256?: string | undefined;
     /** The ISO 8601 formatted date the credential was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The ISO 8601 formatted date the credential was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The ISO 8601 formatted date representing the expiration of the credential. */
-    expires_at?: string;
+    expires_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/** Selected Signing Algorithm */
+export const PostConnectionKeysAlgEnum = {
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Es256: "ES256",
+    Es384: "ES384",
+} as const;
+export type PostConnectionKeysAlgEnum = (typeof PostConnectionKeysAlgEnum)[keyof typeof PostConnectionKeysAlgEnum];
+
+export interface PostConnectionKeysRequestContent {
+    signing_alg?: Management.PostConnectionKeysAlgEnum | undefined;
+}
+
+export interface PostConnectionsKeysResponseContentItem {
+    /** The key id of the signing key */
+    kid: string;
+    /** The public certificate of the signing key */
+    cert: string;
+    /** The public certificate of the signing key in pkcs7 format */
+    pkcs?: string | undefined;
+    /** True if the key is the current key */
+    current?: boolean | undefined;
+    /** True if the key is the next key */
+    next?: boolean | undefined;
+    /** The date and time when the key became the current key */
+    current_since?: string | undefined;
+    /** The cert fingerprint */
+    fingerprint: string;
+    /** The cert thumbprint */
+    thumbprint: string;
+    /** Signing key algorithm */
+    algorithm?: string | undefined;
+    key_use?: Management.ConnectionKeyUseEnum | undefined;
+    subject_dn?: string | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+export type PostConnectionsKeysResponseContent = Management.PostConnectionsKeysResponseContentItem[];
 
 /** Applies to phone authentication methods only. The preferred communication method. */
 export const PreferredAuthenticationMethodEnum = {
@@ -17721,14 +17816,14 @@ export type PromptLanguageEnum = (typeof PromptLanguageEnum)[keyof typeof Prompt
 export interface PublicKeyCredential {
     credential_type: Management.PublicKeyCredentialTypeEnum;
     /** Friendly name for a credential. */
-    name?: string;
+    name?: string | undefined;
     /** PEM-formatted public key (SPKI and PKCS1) or X509 certificate. Must be JSON escaped. */
     pem: string;
-    alg?: Management.PublicKeyCredentialAlgorithmEnum;
+    alg?: Management.PublicKeyCredentialAlgorithmEnum | undefined;
     /** Parse expiry from x509 certificate. If true, attempts to parse the expiry date from the provided PEM. Applies to `public_key` credential type. */
-    parse_expiry_from_cert?: boolean;
+    parse_expiry_from_cert?: boolean | undefined;
     /** The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires. Applies to `public_key` credential type. */
-    expires_at?: string;
+    expires_at?: string | undefined;
 }
 
 /** Algorithm which will be used with the credential. Can be one of RS256, RS384, PS256. If not specified, RS256 will be used. Applies to `public_key` credential type. */
@@ -17762,17 +17857,17 @@ export type RefreshTokenDateObject = Record<string, unknown>;
  */
 export interface RefreshTokenDevice {
     /** First IP address associated with the refresh token */
-    initial_ip?: string;
+    initial_ip?: string | undefined;
     /** First autonomous system number associated with the refresh token */
-    initial_asn?: string;
+    initial_asn?: string | undefined;
     /** First user agent associated with the refresh token */
-    initial_user_agent?: string;
+    initial_user_agent?: string | undefined;
     /** Last IP address associated with the refresh token */
-    last_ip?: string;
+    last_ip?: string | undefined;
     /** Last autonomous system number associated with the refresh token */
-    last_asn?: string;
+    last_asn?: string | undefined;
     /** Last user agent associated with the refresh token */
-    last_user_agent?: string;
+    last_user_agent?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17792,31 +17887,31 @@ export type RefreshTokenMetadata = (Record<string, unknown> | null) | undefined;
 
 export interface RefreshTokenResourceServer {
     /** Resource server ID */
-    audience?: string;
+    audience?: string | undefined;
     /** List of scopes for the refresh token */
-    scopes?: string;
+    scopes?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface RefreshTokenResponseContent {
     /** The ID of the refresh token */
-    id?: string;
+    id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.RefreshTokenDate;
-    idle_expires_at?: Management.RefreshTokenDate;
-    expires_at?: Management.RefreshTokenDate;
-    device?: Management.RefreshTokenDevice;
+    user_id?: string | undefined;
+    created_at?: Management.RefreshTokenDate | undefined;
+    idle_expires_at?: Management.RefreshTokenDate | undefined;
+    expires_at?: Management.RefreshTokenDate | undefined;
+    device?: Management.RefreshTokenDevice | undefined;
     /** ID of the client application granted with this refresh token */
-    client_id?: string;
-    session_id?: (Management.RefreshTokenSessionId | undefined) | null;
+    client_id?: string | undefined;
+    session_id?: ((Management.RefreshTokenSessionId | undefined) | null) | undefined;
     /** True if the token is a rotating refresh token */
-    rotating?: boolean;
+    rotating?: boolean | undefined;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
-    resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
-    last_exchanged_at?: Management.RefreshTokenDate;
+    resource_servers?: Management.RefreshTokenResourceServer[] | undefined;
+    refresh_token_metadata?: ((Management.RefreshTokenMetadata | undefined) | null) | undefined;
+    last_exchanged_at?: Management.RefreshTokenDate | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17836,7 +17931,105 @@ export type RefreshTokenSessionId = (string | null) | undefined;
 
 export interface RegenerateUsersRecoveryCodeResponseContent {
     /** New account recovery code. */
-    recovery_code?: string;
+    recovery_code?: string | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+export type RegisterCimdClientRequestContent = Record<string, unknown>;
+
+export interface RegisterCimdClientResponseContent {
+    /** ID of this client. */
+    client_id?: string | undefined;
+    /** Name of the tenant this client belongs to. */
+    tenant?: string | undefined;
+    /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
+    name?: string | undefined;
+    /** Free text description of this client (max length: 140 characters). */
+    description?: string | undefined;
+    /** Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false). */
+    global?: boolean | undefined;
+    /** Client secret (which you must not make public). */
+    client_secret?: string | undefined;
+    app_type?: Management.ClientAppTypeEnum | undefined;
+    /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
+    logo_uri?: string | undefined;
+    /** Whether this client a first party client (true) or not (false). */
+    is_first_party?: boolean | undefined;
+    /** Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false). */
+    oidc_conformant?: boolean | undefined;
+    /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
+    callbacks?: string[] | undefined;
+    /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
+    allowed_origins?: string[] | undefined;
+    /** Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>. */
+    web_origins?: string[] | undefined;
+    /** List of audiences/realms for SAML protocol. Used by the wsfed addon. */
+    client_aliases?: string[] | undefined;
+    /** List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed. */
+    allowed_clients?: string[] | undefined;
+    /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
+    allowed_logout_urls?: string[] | undefined;
+    session_transfer?: (Management.ClientSessionTransferConfiguration | null) | undefined;
+    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings | undefined;
+    /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
+    grant_types?: string[] | undefined;
+    jwt_configuration?: Management.ClientJwtConfiguration | undefined;
+    signing_keys?: Management.ClientSigningKeys | undefined;
+    encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
+    /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
+    sso?: boolean | undefined;
+    /** Whether Single Sign On is disabled (true) or enabled (true). Defaults to true. */
+    sso_disabled?: boolean | undefined;
+    /** Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false). */
+    cross_origin_authentication?: boolean | undefined;
+    /** URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page. */
+    cross_origin_loc?: string | undefined;
+    /** Whether a custom login page is to be used (true) or the default provided login page (false). */
+    custom_login_page_on?: boolean | undefined;
+    /** The content (HTML, CSS, JS) of the custom login page. */
+    custom_login_page?: string | undefined;
+    /** The content (HTML, CSS, JS) of the custom login page. (Used on Previews) */
+    custom_login_page_preview?: string | undefined;
+    /** HTML form template to be used for WS-Federation. */
+    form_template?: string | undefined;
+    addons?: Management.ClientAddons | undefined;
+    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum | undefined;
+    /** If true, trust that the IP specified in the `auth0-forwarded-for` header is the end-user's IP for brute-force-protection on token endpoint. */
+    is_token_endpoint_ip_header_trusted?: boolean | undefined;
+    client_metadata?: Management.ClientMetadata | undefined;
+    mobile?: Management.ClientMobile | undefined;
+    /** Initiate login uri, must be https */
+    initiate_login_uri?: string | undefined;
+    refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
+    default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
+    organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum | undefined;
+    /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | undefined;
+    client_authentication_methods?: (Management.ClientAuthenticationMethod | null) | undefined;
+    /** Makes the use of Pushed Authorization Requests mandatory for this client */
+    require_pushed_authorization_requests?: boolean | undefined;
+    /** Makes the use of Proof-of-Possession mandatory for this client */
+    require_proof_of_possession?: boolean | undefined;
+    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
+    /**
+     * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
+     * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
+     * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
+     */
+    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | undefined;
+    token_exchange?: Management.ClientTokenExchangeConfiguration | undefined;
+    /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
+    par_request_expiry?: (number | null) | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    express_configuration?: Management.ExpressConfiguration | undefined;
+    /** The identifier of the resource server that this client is linked to. */
+    resource_server_identifier?: string | undefined;
+    async_approval_notification_channels?:
+        | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
+        | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17845,9 +18038,9 @@ export type ResetPhoneTemplateRequestContent = unknown;
 
 export interface ResetPhoneTemplateResponseContent {
     id: string;
-    channel?: string;
-    customizable?: boolean;
-    tenant?: string;
+    channel?: string | undefined;
+    customizable?: boolean | undefined;
+    tenant?: string | undefined;
     content: Management.PhoneTemplateContent;
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
@@ -17856,36 +18049,36 @@ export interface ResetPhoneTemplateResponseContent {
 
 export interface ResourceServer {
     /** ID of the API (resource server). */
-    id?: string;
+    id?: string | undefined;
     /** Friendly name for this resource server. Can not contain `<` or `>` characters. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this is an Auth0 system API (true) or a custom API (false). */
-    is_system?: boolean;
+    is_system?: boolean | undefined;
     /** Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set. */
-    identifier?: string;
+    identifier?: string | undefined;
     /** List of permissions (scopes) that this API uses. */
-    scopes?: Management.ResourceServerScope[];
-    signing_alg?: Management.SigningAlgorithmEnum;
+    scopes?: Management.ResourceServerScope[] | undefined;
+    signing_alg?: Management.SigningAlgorithmEnum | undefined;
     /** Secret used to sign tokens when using symmetric algorithms (HS256). */
-    signing_secret?: string;
+    signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
-    allow_offline_access?: boolean;
+    allow_offline_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
-    skip_consent_for_verifiable_first_party_clients?: boolean;
+    skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
-    token_lifetime?: number;
+    token_lifetime?: number | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API via Implicit or Hybrid Flows. Cannot be greater than the `token_lifetime` value. */
-    token_lifetime_for_web?: number;
+    token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
-    enforce_policies?: boolean;
-    token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
-    token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
-    authorization_details?: unknown[];
-    proof_of_possession?: Management.ResourceServerProofOfPossession | null;
-    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    enforce_policies?: boolean | undefined;
+    token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
+    consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    authorization_details?: unknown[] | undefined;
+    proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
+    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
-    client_id?: string;
+    client_id?: string | undefined;
 }
 
 export const ResourceServerConsentPolicyEnum = {
@@ -17901,7 +18094,7 @@ export interface ResourceServerProofOfPossession {
     mechanism: Management.ResourceServerProofOfPossessionMechanismEnum;
     /** Whether the use of Proof-of-Possession is required for the resource server */
     required: boolean;
-    required_for?: Management.ResourceServerProofOfPossessionRequiredForEnum;
+    required_for?: Management.ResourceServerProofOfPossessionRequiredForEnum | undefined;
 }
 
 /** Intended mechanism for Proof-of-Possession */
@@ -17915,7 +18108,6 @@ export type ResourceServerProofOfPossessionMechanismEnum =
 /** Specifies which client types require Proof-of-Possession */
 export const ResourceServerProofOfPossessionRequiredForEnum = {
     PublicClients: "public_clients",
-    ConfidentialClients: "confidential_clients",
     AllClients: "all_clients",
 } as const;
 export type ResourceServerProofOfPossessionRequiredForEnum =
@@ -17925,22 +18117,22 @@ export interface ResourceServerScope {
     /** Value of this scope. */
     value: string;
     /** User-friendly description of this scope. */
-    description?: string;
+    description?: string | undefined;
 }
 
 /**
  * Defines application access permission for a resource server
  */
 export interface ResourceServerSubjectTypeAuthorization {
-    user?: Management.ResourceServerSubjectTypeAuthorizationUser;
-    client?: Management.ResourceServerSubjectTypeAuthorizationClient;
+    user?: Management.ResourceServerSubjectTypeAuthorizationUser | undefined;
+    client?: Management.ResourceServerSubjectTypeAuthorizationClient | undefined;
 }
 
 /**
  * Access Permissions for client flows
  */
 export interface ResourceServerSubjectTypeAuthorizationClient {
-    policy?: Management.ResourceServerSubjectTypeAuthorizationClientPolicyEnum;
+    policy?: Management.ResourceServerSubjectTypeAuthorizationClientPolicyEnum | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -17957,7 +18149,7 @@ export type ResourceServerSubjectTypeAuthorizationClientPolicyEnum =
  * Access Permissions for user flows
  */
 export interface ResourceServerSubjectTypeAuthorizationUser {
-    policy?: Management.ResourceServerSubjectTypeAuthorizationUserPolicyEnum;
+    policy?: Management.ResourceServerSubjectTypeAuthorizationUserPolicyEnum | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18014,10 +18206,10 @@ export type ResourceServerTokenEncryptionFormatEnum =
 
 export interface ResourceServerTokenEncryptionKey {
     /** Name of the encryption key. */
-    name?: string;
+    name?: string | undefined;
     alg: Management.ResourceServerTokenEncryptionAlgorithmEnum;
     /** Key ID. */
-    kid?: string;
+    kid?: string | undefined;
     /** PEM-formatted public key. Must be JSON escaped. */
     pem: string;
 }
@@ -18038,152 +18230,157 @@ export interface RevokedSigningKeysResponseContent {
 
 export interface Role {
     /** ID for this role. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this role. */
-    name?: string;
+    name?: string | undefined;
     /** Description of this role. */
-    description?: string;
+    description?: string | undefined;
 }
 
 export interface RoleUser {
     /** ID of this user. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** URL to a picture for this user. */
-    picture?: string;
+    picture?: string | undefined;
     /** Name of this user. */
-    name?: string;
+    name?: string | undefined;
     /** Email address of this user. */
-    email?: string;
+    email?: string | undefined;
 }
 
 export interface RollbackActionModuleResponseContent {
     /** The unique ID of the module. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the module. */
-    name?: string;
+    name?: string | undefined;
     /** The source code from the module's draft version. */
-    code?: string;
+    code?: string | undefined;
     /** The npm dependencies from the module's draft version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The secrets from the module's draft version (names and timestamps only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** The number of deployed actions using this module. */
-    actions_using_module_total?: number;
+    actions_using_module_total?: number | undefined;
     /** Whether all draft changes have been published as a version. */
-    all_changes_published?: boolean;
+    all_changes_published?: boolean | undefined;
     /** The version number of the latest published version. Omitted if no versions have been published. */
-    latest_version_number?: number;
+    latest_version_number?: number | undefined;
     /** Timestamp when the module was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the module was last updated. */
-    updated_at?: string;
-    latest_version?: Management.ActionModuleVersionReference;
+    updated_at?: string | undefined;
+    latest_version?: Management.ActionModuleVersionReference | undefined;
 }
 
 export interface RotateClientSecretResponseContent {
     /** ID of this client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Name of the tenant this client belongs to. */
-    tenant?: string;
+    tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
-    name?: string;
+    name?: string | undefined;
     /** Free text description of this client (max length: 140 characters). */
-    description?: string;
+    description?: string | undefined;
     /** Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false). */
-    global?: boolean;
+    global?: boolean | undefined;
     /** Client secret (which you must not make public). */
-    client_secret?: string;
-    app_type?: Management.ClientAppTypeEnum;
+    client_secret?: string | undefined;
+    app_type?: Management.ClientAppTypeEnum | undefined;
     /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
-    logo_uri?: string;
+    logo_uri?: string | undefined;
     /** Whether this client a first party client (true) or not (false). */
-    is_first_party?: boolean;
+    is_first_party?: boolean | undefined;
     /** Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false). */
-    oidc_conformant?: boolean;
+    oidc_conformant?: boolean | undefined;
     /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
-    callbacks?: string[];
+    callbacks?: string[] | undefined;
     /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
-    allowed_origins?: string[];
+    allowed_origins?: string[] | undefined;
     /** Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>. */
-    web_origins?: string[];
+    web_origins?: string[] | undefined;
     /** List of audiences/realms for SAML protocol. Used by the wsfed addon. */
-    client_aliases?: string[];
+    client_aliases?: string[] | undefined;
     /** List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed. */
-    allowed_clients?: string[];
+    allowed_clients?: string[] | undefined;
     /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
-    allowed_logout_urls?: string[];
-    session_transfer?: Management.ClientSessionTransferConfiguration | null;
-    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    allowed_logout_urls?: string[] | undefined;
+    session_transfer?: (Management.ClientSessionTransferConfiguration | null) | undefined;
+    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings | undefined;
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
-    grant_types?: string[];
-    jwt_configuration?: Management.ClientJwtConfiguration;
-    signing_keys?: Management.ClientSigningKeys;
-    encryption_key?: Management.ClientEncryptionKey | null;
+    grant_types?: string[] | undefined;
+    jwt_configuration?: Management.ClientJwtConfiguration | undefined;
+    signing_keys?: Management.ClientSigningKeys | undefined;
+    encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
-    sso?: boolean;
+    sso?: boolean | undefined;
     /** Whether Single Sign On is disabled (true) or enabled (true). Defaults to true. */
-    sso_disabled?: boolean;
+    sso_disabled?: boolean | undefined;
     /** Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false). */
-    cross_origin_authentication?: boolean;
+    cross_origin_authentication?: boolean | undefined;
     /** URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page. */
-    cross_origin_loc?: string;
+    cross_origin_loc?: string | undefined;
     /** Whether a custom login page is to be used (true) or the default provided login page (false). */
-    custom_login_page_on?: boolean;
+    custom_login_page_on?: boolean | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. */
-    custom_login_page?: string;
+    custom_login_page?: string | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. (Used on Previews) */
-    custom_login_page_preview?: string;
+    custom_login_page_preview?: string | undefined;
     /** HTML form template to be used for WS-Federation. */
-    form_template?: string;
-    addons?: Management.ClientAddons;
-    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum;
+    form_template?: string | undefined;
+    addons?: Management.ClientAddons | undefined;
+    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum | undefined;
     /** If true, trust that the IP specified in the `auth0-forwarded-for` header is the end-user's IP for brute-force-protection on token endpoint. */
-    is_token_endpoint_ip_header_trusted?: boolean;
-    client_metadata?: Management.ClientMetadata;
-    mobile?: Management.ClientMobile;
+    is_token_endpoint_ip_header_trusted?: boolean | undefined;
+    client_metadata?: Management.ClientMetadata | undefined;
+    mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
-    initiate_login_uri?: string;
-    refresh_token?: Management.ClientRefreshTokenConfiguration | null;
-    default_organization?: Management.ClientDefaultOrganization | null;
-    organization_usage?: Management.ClientOrganizationUsageEnum;
-    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum;
+    initiate_login_uri?: string | undefined;
+    refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
+    default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
+    organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum | undefined;
     /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
-    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
-    client_authentication_methods?: Management.ClientAuthenticationMethod | null;
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | undefined;
+    client_authentication_methods?: (Management.ClientAuthenticationMethod | null) | undefined;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
-    require_pushed_authorization_requests?: boolean;
+    require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
-    require_proof_of_possession?: boolean;
-    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId;
-    compliance_level?: Management.ClientComplianceLevelEnum | null;
+    require_proof_of_possession?: boolean | undefined;
+    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
-    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
-    token_exchange?: Management.ClientTokenExchangeConfiguration;
+    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | undefined;
+    token_exchange?: Management.ClientTokenExchangeConfiguration | undefined;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
-    par_request_expiry?: number | null;
-    token_quota?: Management.TokenQuota;
-    express_configuration?: Management.ExpressConfiguration;
+    par_request_expiry?: (number | null) | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    express_configuration?: Management.ExpressConfiguration | undefined;
     /** The identifier of the resource server that this client is linked to. */
-    resource_server_identifier?: string;
-    async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+    resource_server_identifier?: string | undefined;
+    async_approval_notification_channels?:
+        | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
+        | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface RotateConnectionKeysRequestContent {
-    signing_alg?: Management.RotateConnectionKeysSigningAlgEnum;
+    signing_alg?: Management.RotateConnectionKeysSigningAlgEnum | undefined;
 }
 
 /** Selected Signing Algorithm */
 export const RotateConnectionKeysSigningAlgEnum = {
     Rs256: "RS256",
+    Rs384: "RS384",
     Rs512: "RS512",
     Ps256: "PS256",
+    Ps384: "PS384",
     Es256: "ES256",
+    Es384: "ES384",
 } as const;
 export type RotateConnectionKeysSigningAlgEnum =
     (typeof RotateConnectionKeysSigningAlgEnum)[keyof typeof RotateConnectionKeysSigningAlgEnum];
@@ -18194,17 +18391,17 @@ export interface RotateConnectionsKeysResponseContent {
     /** The public certificate of the signing key */
     cert: string;
     /** The public certificate of the signing key in pkcs7 format */
-    pkcs?: string;
+    pkcs?: string | undefined;
     /** True if the key is the the next key */
-    next?: boolean;
+    next?: boolean | undefined;
     /** The cert fingerprint */
     fingerprint: string;
     /** The cert thumbprint */
     thumbprint: string;
     /** Signing key algorithm */
-    algorithm?: string;
-    key_use?: Management.ConnectionKeyUseEnum;
-    subject_dn?: string;
+    algorithm?: string | undefined;
+    key_use?: Management.ConnectionKeyUseEnum | undefined;
+    subject_dn?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18220,46 +18417,65 @@ export interface RotateSigningKeysResponseContent {
 
 export interface Rule {
     /** Name of this rule. */
-    name?: string;
+    name?: string | undefined;
     /** ID of this rule. */
-    id?: string;
+    id?: string | undefined;
     /** Whether the rule is enabled (true), or disabled (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this rule runs. */
-    script?: string;
+    script?: string | undefined;
     /** Order that this rule should execute in relative to other rules. Lower-valued rules execute first. */
-    order?: number;
+    order?: number | undefined;
     /** Execution stage of this rule. Can be `login_success`, `login_failure`, or `pre_authorize`. */
-    stage?: string;
+    stage?: string | undefined;
 }
 
 export interface RulesConfig {
     /** Key for a rules config variable. */
-    key?: string;
+    key?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
+export interface ScimConfiguration {
+    /** The connection's identifier */
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
+    /** The connection's strategy */
+    strategy: string;
+    /** The tenant's name */
+    tenant_name: string;
+    /** User ID attribute for generating unique user ids */
+    user_id_attribute: string;
+    /** The mapping between auth0 and SCIM */
+    mapping: Management.ScimMappingItem[];
+    /** The ISO 8601 date and time the SCIM configuration was created at */
+    created_at: string;
+    /** The ISO 8601 date and time the SCIM configuration was last updated on */
+    updated_on: string;
+}
+
 export interface ScimMappingItem {
     /** The field location in the auth0 schema */
-    auth0?: string;
+    auth0?: string | undefined;
     /** The field location in the SCIM schema */
-    scim?: string;
+    scim?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface ScimTokenItem {
     /** The token's identifier */
-    token_id?: string;
+    token_id?: string | undefined;
     /** The scopes of the scim token */
-    scopes?: string[];
+    scopes?: string[] | undefined;
     /** The token's created at timestamp */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The token's valid until timestamp */
-    valid_until?: string;
+    valid_until?: string | undefined;
     /** The token's last used at timestamp */
-    last_used_at?: string;
+    last_used_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18368,22 +18584,22 @@ export type SearchEngineVersionsEnum = (typeof SearchEngineVersionsEnum)[keyof t
 
 export interface SelfServiceProfile {
     /** The unique ID of the self-service Profile. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the self-service Profile. */
-    name?: string;
+    name?: string | undefined;
     /** The description of the self-service Profile. */
-    description?: string;
+    description?: string | undefined;
     /** List of attributes to be mapped that will be shown to the user during the SS-SSO flow. */
-    user_attributes?: Management.SelfServiceProfileUserAttribute[];
+    user_attributes?: Management.SelfServiceProfileUserAttribute[] | undefined;
     /** The time when this self-service Profile was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this self-service Profile was updated. */
-    updated_at?: string;
-    branding?: Management.SelfServiceProfileBrandingProperties;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
-    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
+    updated_at?: string | undefined;
+    branding?: Management.SelfServiceProfileBrandingProperties | undefined;
+    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
+    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[] | undefined;
     /** ID of the user-attribute-profile to associate with this self-service profile. */
-    user_attribute_profile_id?: string;
+    user_attribute_profile_id?: string | undefined;
 }
 
 export const SelfServiceProfileAllowedStrategyEnum = {
@@ -18410,8 +18626,8 @@ export interface SelfServiceProfileBrandingColors {
 }
 
 export interface SelfServiceProfileBrandingProperties {
-    logo_url?: string;
-    colors?: Management.SelfServiceProfileBrandingColors;
+    logo_url?: string | undefined;
+    colors?: Management.SelfServiceProfileBrandingColors | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18442,13 +18658,13 @@ export interface SelfServiceProfileSsoTicketConnectionConfig {
     /** The name of the connection that will be created as a part of the SSO flow. */
     name: string;
     /** Connection name used in the new universal login experience */
-    display_name?: string;
+    display_name?: string | undefined;
     /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
-    is_domain_connection?: boolean;
+    is_domain_connection?: boolean | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.) */
-    show_as_button?: boolean;
-    metadata?: Management.ConnectionsMetadata;
-    options?: Management.SelfServiceProfileSsoTicketConnectionOptions | null;
+    show_as_button?: boolean | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
+    options?: (Management.SelfServiceProfileSsoTicketConnectionOptions | null) | undefined;
 }
 
 /**
@@ -18456,10 +18672,10 @@ export interface SelfServiceProfileSsoTicketConnectionConfig {
  */
 export interface SelfServiceProfileSsoTicketConnectionOptions {
     /** URL for the icon. Must use HTTPS. */
-    icon_url?: string | null;
+    icon_url?: (string | null) | undefined;
     /** List of domain_aliases that can be authenticated in the Identity Provider */
-    domain_aliases?: string[];
-    idpinitiated?: Management.SelfServiceProfileSsoTicketIdpInitiatedOptions | null;
+    domain_aliases?: string[] | undefined;
+    idpinitiated?: (Management.SelfServiceProfileSsoTicketIdpInitiatedOptions | null) | undefined;
 }
 
 /**
@@ -18482,9 +18698,9 @@ export interface SelfServiceProfileSsoTicketEnabledOrganization {
     /** Organization identifier. */
     organization_id: string;
     /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
-    assign_membership_on_login?: boolean;
+    assign_membership_on_login?: boolean | undefined;
     /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
-    show_as_button?: boolean;
+    show_as_button?: boolean | undefined;
 }
 
 /**
@@ -18509,12 +18725,12 @@ export type SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum =
  */
 export interface SelfServiceProfileSsoTicketIdpInitiatedOptions {
     /** Enables IdP-initiated login for this connection */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Default application <code>client_id</code> user is redirected to after validated SAML response */
-    client_id?: string;
-    client_protocol?: Management.SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum;
+    client_id?: string | undefined;
+    client_protocol?: Management.SelfServiceProfileSsoTicketIdpInitiatedClientProtocolEnum | undefined;
     /** Query string options to customize the behaviour for OpenID Connect when <code>idpinitiated.client_protocol</code> is <code>oauth2</code>. Allowed parameters: <code>redirect_uri</code>, <code>scope</code>, <code>response_type</code>. For example, <code>redirect_uri=https://jwt.io&scope=openid email&response_type=token</code> */
-    client_authorizequery?: string;
+    client_authorizequery?: string | undefined;
 }
 
 /**
@@ -18522,10 +18738,10 @@ export interface SelfServiceProfileSsoTicketIdpInitiatedOptions {
  */
 export interface SelfServiceProfileSsoTicketProvisioningConfig {
     /** The scopes of the SCIM tokens generated during the self-service flow. */
-    scopes?: Management.SelfServiceProfileSsoTicketProvisioningScopeEnum[];
-    google_workspace?: Management.SelfServiceProfileSsoTicketGoogleWorkspaceConfig;
+    scopes?: Management.SelfServiceProfileSsoTicketProvisioningScopeEnum[] | undefined;
+    google_workspace?: Management.SelfServiceProfileSsoTicketGoogleWorkspaceConfig | undefined;
     /** Lifetime of the tokens in seconds. Must be greater than 900. If not provided, the tokens don't expire. */
-    token_lifetime?: number | null;
+    token_lifetime?: (number | null) | undefined;
 }
 
 export const SelfServiceProfileSsoTicketProvisioningScopeEnum = {
@@ -18557,10 +18773,10 @@ export type SelfServiceProfileUserAttributes = (Management.SelfServiceProfileUse
  */
 export interface SessionAuthenticationSignal {
     /** One of: "federated", "passkey", "pwd", "sms", "email", "mfa", "mock" or a custom method denoted by a URL */
-    name?: string;
-    timestamp?: Management.SessionDate;
+    name?: string | undefined;
+    timestamp?: Management.SessionDate | undefined;
     /** A specific MFA factor. Only present when "name" is set to "mfa" */
-    type?: string;
+    type?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18570,7 +18786,7 @@ export interface SessionAuthenticationSignal {
  */
 export interface SessionAuthenticationSignals {
     /** Contains the authentication methods a user has completed during their session */
-    methods?: Management.SessionAuthenticationSignal[];
+    methods?: Management.SessionAuthenticationSignal[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18580,7 +18796,7 @@ export interface SessionAuthenticationSignals {
  */
 export interface SessionClientMetadata {
     /** ID of client for the session */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18589,7 +18805,7 @@ export interface SessionClientMetadata {
  * [Private Early Access] Session cookie configuration.
  */
 export interface SessionCookieMetadata {
-    mode?: Management.SessionCookieMetadataModeEnum;
+    mode?: Management.SessionCookieMetadataModeEnum | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18629,15 +18845,15 @@ export type SessionDate =
  */
 export interface SessionDeviceMetadata {
     /** First user agent of the device from which this user logged in */
-    initial_user_agent?: string;
-    initial_ip?: (Management.SessionIp | undefined) | null;
+    initial_user_agent?: string | undefined;
+    initial_ip?: ((Management.SessionIp | undefined) | null) | undefined;
     /** First autonomous system number associated with this session */
-    initial_asn?: string;
+    initial_asn?: string | undefined;
     /** Last user agent of the device from which this user logged in */
-    last_user_agent?: string;
-    last_ip?: (Management.SessionIp | undefined) | null;
+    last_user_agent?: string | undefined;
+    last_ip?: ((Management.SessionIp | undefined) | null) | undefined;
     /** Last autonomous system number from which this user logged in */
-    last_asn?: string;
+    last_asn?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18654,21 +18870,21 @@ export type SessionMetadata = (Record<string, unknown> | null) | undefined;
 
 export interface SessionResponseContent {
     /** The ID of the session */
-    id?: string;
+    id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.SessionDate;
-    updated_at?: Management.SessionDate;
-    authenticated_at?: Management.SessionDate;
-    idle_expires_at?: Management.SessionDate;
-    expires_at?: Management.SessionDate;
-    last_interacted_at?: Management.SessionDate;
-    device?: Management.SessionDeviceMetadata;
+    user_id?: string | undefined;
+    created_at?: Management.SessionDate | undefined;
+    updated_at?: Management.SessionDate | undefined;
+    authenticated_at?: Management.SessionDate | undefined;
+    idle_expires_at?: Management.SessionDate | undefined;
+    expires_at?: Management.SessionDate | undefined;
+    last_interacted_at?: Management.SessionDate | undefined;
+    device?: Management.SessionDeviceMetadata | undefined;
     /** List of client details for the session */
-    clients?: Management.SessionClientMetadata[];
-    authentication?: Management.SessionAuthenticationSignals;
-    cookie?: Management.SessionCookieMetadata;
-    session_metadata?: (Management.SessionMetadata | undefined) | null;
+    clients?: Management.SessionClientMetadata[] | undefined;
+    authentication?: Management.SessionAuthenticationSignals | undefined;
+    cookie?: Management.SessionCookieMetadata | undefined;
+    session_metadata?: ((Management.SessionMetadata | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18678,38 +18894,38 @@ export interface SessionResponseContent {
  */
 export interface SetCustomSigningKeysResponseContent {
     /** An array of custom public signing keys. */
-    keys?: Management.CustomSigningKeyJwk[];
+    keys?: Management.CustomSigningKeyJwk[] | undefined;
 }
 
 export interface SetEmailTemplateResponseContent {
     template: Management.EmailTemplateNameEnum;
     /** Body of the email template. */
-    body?: string | null;
+    body?: (string | null) | undefined;
     /** Senders `from` email address. */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** URL to redirect the user to after a successful action. */
-    resultUrl?: string | null;
+    resultUrl?: (string | null) | undefined;
     /** Subject line of the email. */
-    subject?: string | null;
+    subject?: (string | null) | undefined;
     /** Syntax of the template body. */
-    syntax?: string | null;
+    syntax?: (string | null) | undefined;
     /** Lifetime in seconds that the link within the email will be valid for. */
-    urlLifetimeInSeconds?: number | null;
+    urlLifetimeInSeconds?: (number | null) | undefined;
     /** Whether the `reset_email` and `verify_email` templates should include the user's email address as the `email` parameter in the returnUrl (true) or whether no email address should be included in the redirect (false). Defaults to true. */
-    includeEmailInRedirect?: boolean;
+    includeEmailInRedirect?: boolean | undefined;
     /** Whether the template is enabled (true) or disabled (false). */
-    enabled?: boolean | null;
+    enabled?: (boolean | null) | undefined;
 }
 
 export interface SetGuardianFactorDuoSettingsResponseContent {
-    ikey?: string;
-    skey?: string;
-    host?: string;
+    ikey?: string | undefined;
+    skey?: string | undefined;
+    host?: string | undefined;
 }
 
 export interface SetGuardianFactorPhoneMessageTypesResponseContent {
     /** The list of phone factors to enable on the tenant. Can include `sms` and `voice`. */
-    message_types?: Management.GuardianFactorPhoneFactorMessageTypeEnum[];
+    message_types?: Management.GuardianFactorPhoneFactorMessageTypeEnum[] | undefined;
 }
 
 export interface SetGuardianFactorPhoneTemplatesResponseContent {
@@ -18732,23 +18948,23 @@ export interface SetGuardianFactorSmsTemplatesResponseContent {
 }
 
 export interface SetGuardianFactorsProviderPhoneResponseContent {
-    provider?: Management.GuardianFactorsProviderSmsProviderEnum;
+    provider?: Management.GuardianFactorsProviderSmsProviderEnum | undefined;
 }
 
 export interface SetGuardianFactorsProviderPhoneTwilioResponseContent {
     /** From number */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** Copilot SID */
-    messaging_service_sid?: string | null;
+    messaging_service_sid?: (string | null) | undefined;
     /** Twilio Authentication token */
-    auth_token?: string | null;
+    auth_token?: (string | null) | undefined;
     /** Twilio SID */
-    sid?: string | null;
+    sid?: (string | null) | undefined;
 }
 
 export interface SetGuardianFactorsProviderPushNotificationApnsResponseContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
+    sandbox?: boolean | undefined;
+    bundle_id?: (string | null) | undefined;
 }
 
 export type SetGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
@@ -18756,30 +18972,30 @@ export type SetGuardianFactorsProviderPushNotificationFcmResponseContent = Recor
 export type SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
 
 export interface SetGuardianFactorsProviderPushNotificationResponseContent {
-    provider?: Management.GuardianFactorsProviderPushNotificationProviderDataEnum;
+    provider?: Management.GuardianFactorsProviderPushNotificationProviderDataEnum | undefined;
 }
 
 export interface SetGuardianFactorsProviderPushNotificationSnsResponseContent {
-    aws_access_key_id?: string | null;
-    aws_secret_access_key?: string | null;
-    aws_region?: string | null;
-    sns_apns_platform_application_arn?: string | null;
-    sns_gcm_platform_application_arn?: string | null;
+    aws_access_key_id?: (string | null) | undefined;
+    aws_secret_access_key?: (string | null) | undefined;
+    aws_region?: (string | null) | undefined;
+    sns_apns_platform_application_arn?: (string | null) | undefined;
+    sns_gcm_platform_application_arn?: (string | null) | undefined;
 }
 
 export interface SetGuardianFactorsProviderSmsResponseContent {
-    provider?: Management.GuardianFactorsProviderSmsProviderEnum;
+    provider?: Management.GuardianFactorsProviderSmsProviderEnum | undefined;
 }
 
 export interface SetGuardianFactorsProviderSmsTwilioResponseContent {
     /** From number */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** Copilot SID */
-    messaging_service_sid?: string | null;
+    messaging_service_sid?: (string | null) | undefined;
     /** Twilio Authentication token */
-    auth_token?: string | null;
+    auth_token?: (string | null) | undefined;
     /** Twilio SID */
-    sid?: string | null;
+    sid?: (string | null) | undefined;
 }
 
 export type SetGuardianPoliciesRequestContent = Management.MfaPolicyEnum[];
@@ -18787,15 +19003,15 @@ export type SetGuardianPoliciesRequestContent = Management.MfaPolicyEnum[];
 export type SetGuardianPoliciesResponseContent = Management.MfaPolicyEnum[];
 
 export interface SetNetworkAclsResponseContent {
-    id?: string;
-    description?: string;
-    active?: boolean;
-    priority?: number;
-    rule?: Management.NetworkAclRule;
+    id?: string | undefined;
+    description?: string | undefined;
+    active?: boolean | undefined;
+    priority?: number | undefined;
+    rule?: Management.NetworkAclRule | undefined;
     /** The timestamp when the Network ACL Configuration was created */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The timestamp when the Network ACL Configuration was last updated */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18829,41 +19045,41 @@ export type SetSelfServiceProfileCustomTextResponseContent = Record<string, stri
  */
 export interface SetUserAuthenticationMethodResponseContent {
     /** The ID of the newly created authentication method (automatically generated by the application) */
-    id?: string;
+    id?: string | undefined;
     type: Management.CreatedAuthenticationMethodTypeEnum;
     /** A human-readable label to identify the authentication method. */
-    name?: string;
+    name?: string | undefined;
     /** Base32 encoded secret for TOTP generation */
-    totp_secret?: string;
+    totp_secret?: string | undefined;
     /** Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Applies to email authentication methods only. The email address used to send verification messages. */
-    email?: string;
-    authentication_methods?: Management.UserAuthenticationMethodProperties[];
-    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
+    email?: string | undefined;
+    authentication_methods?: Management.UserAuthenticationMethodProperties[] | undefined;
+    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** Applies to webauthn authenticators only. The id of the credential. */
-    key_id?: string;
+    key_id?: string | undefined;
     /** Applies to webauthn authenticators only. The public key. */
-    public_key?: string;
+    public_key?: string | undefined;
     /** Applies to passkeys only. Authenticator Attestation Globally Unique Identifier. */
-    aaguid?: string;
+    aaguid?: string | undefined;
     /** Applies to webauthn authenticators only. The relying party identifier. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
     /** Authentication method creation date */
-    created_at?: string;
+    created_at?: string | undefined;
 }
 
 export interface SetUserAuthenticationMethods {
     type: Management.AuthenticationTypeEnum;
-    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
+    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** AA human-readable label to identify the authentication method. */
-    name?: string;
+    name?: string | undefined;
     /** Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Applies to email authentication methods only. The email address used to send verification messages. */
-    email?: string;
+    email?: string | undefined;
     /** Applies to totp authentication methods only. The base32 encoded secret for TOTP generation. */
-    totp_secret?: string;
+    totp_secret?: string | undefined;
 }
 
 export type SetUserAuthenticationMethodsRequestContent = Management.SetUserAuthenticationMethods[];
@@ -18888,22 +19104,22 @@ export interface SigningKeys {
     /** The public certificate of the signing key */
     cert: string;
     /** The public certificate of the signing key in pkcs7 format */
-    pkcs7?: string;
+    pkcs7?: string | undefined;
     /** True if the key is the the current key */
-    current?: boolean;
+    current?: boolean | undefined;
     /** True if the key is the the next key */
-    next?: boolean;
+    next?: boolean | undefined;
     /** True if the key is the the previous key */
-    previous?: boolean;
-    current_since?: Management.SigningKeysDate;
-    current_until?: Management.SigningKeysDate;
+    previous?: boolean | undefined;
+    current_since?: Management.SigningKeysDate | undefined;
+    current_until?: Management.SigningKeysDate | undefined;
     /** The cert fingerprint */
     fingerprint: string;
     /** The cert thumbprint */
     thumbprint: string;
     /** True if the key is revoked */
-    revoked?: boolean;
-    revoked_at?: Management.SigningKeysDate;
+    revoked?: boolean | undefined;
+    revoked_at?: Management.SigningKeysDate | undefined;
 }
 
 export type SigningKeysDate =
@@ -18915,7 +19131,7 @@ export type SigningKeysDate =
     | Record<string, unknown>;
 
 export interface SignupSchema {
-    status?: Management.SignupStatusEnum;
+    status?: Management.SignupStatusEnum | undefined;
 }
 
 export const SignupStatusEnum = {
@@ -18926,12 +19142,12 @@ export const SignupStatusEnum = {
 export type SignupStatusEnum = (typeof SignupStatusEnum)[keyof typeof SignupStatusEnum];
 
 export interface SignupVerification {
-    active?: boolean;
+    active?: boolean | undefined;
 }
 
 export interface SignupVerified {
-    status?: Management.SignupStatusEnum;
-    verification?: Management.SignupVerification;
+    status?: Management.SignupStatusEnum | undefined;
+    verification?: Management.SignupVerification | undefined;
 }
 
 export const SupportedLocales = {
@@ -19031,9 +19247,9 @@ export type SuspiciousIpThrottlingAllowlistItem = string;
  */
 export interface SuspiciousIpThrottlingPreLoginStage {
     /** Total number of attempts allowed per day. */
-    max_attempts?: number;
+    max_attempts?: number | undefined;
     /** Interval of time, given in milliseconds, at which new attempts are granted. */
-    rate?: number;
+    rate?: number | undefined;
 }
 
 /**
@@ -19041,9 +19257,9 @@ export interface SuspiciousIpThrottlingPreLoginStage {
  */
 export interface SuspiciousIpThrottlingPreUserRegistrationStage {
     /** Total number of attempts allowed. */
-    max_attempts?: number;
+    max_attempts?: number | undefined;
     /** Interval of time, given in milliseconds, at which new attempts are granted. */
-    rate?: number;
+    rate?: number | undefined;
 }
 
 export const SuspiciousIpThrottlingShieldsEnum = {
@@ -19057,8 +19273,8 @@ export type SuspiciousIpThrottlingShieldsEnum =
  * Holds per-stage configuration options (max_attempts and rate).
  */
 export interface SuspiciousIpThrottlingStage {
-    "pre-login"?: Management.SuspiciousIpThrottlingPreLoginStage;
-    "pre-user-registration"?: Management.SuspiciousIpThrottlingPreUserRegistrationStage;
+    "pre-login"?: Management.SuspiciousIpThrottlingPreLoginStage | undefined;
+    "pre-user-registration"?: Management.SuspiciousIpThrottlingPreUserRegistrationStage | undefined;
 }
 
 /**
@@ -19066,16 +19282,16 @@ export interface SuspiciousIpThrottlingStage {
  */
 export interface TenantOidcLogoutSettings {
     /** Enable the end_session_endpoint URL in the .well-known discovery configuration */
-    rp_logout_end_session_endpoint_discovery?: boolean;
+    rp_logout_end_session_endpoint_discovery?: boolean | undefined;
 }
 
 /**
  * Device Flow configuration
  */
 export interface TenantSettingsDeviceFlow {
-    charset?: Management.TenantSettingsDeviceFlowCharset;
+    charset?: Management.TenantSettingsDeviceFlowCharset | undefined;
     /** Mask used to format a generated User Code into a friendly, readable format. */
-    mask?: string;
+    mask?: string | undefined;
 }
 
 /** Character set used to generate a User Code. Can be `base20` or `digits`. */
@@ -19091,11 +19307,11 @@ export type TenantSettingsDeviceFlowCharset =
  */
 export interface TenantSettingsErrorPage {
     /** Custom Error HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> is supported). */
-    html?: string;
+    html?: string | undefined;
     /** Whether to show the link to log as part of the default error page (true, default) or not to show the link (false). */
-    show_log_link?: boolean;
+    show_log_link?: boolean | undefined;
     /** URL to redirect to when an error occurs instead of showing the default error page. */
-    url?: string;
+    url?: string | undefined;
 }
 
 /**
@@ -19103,63 +19319,63 @@ export interface TenantSettingsErrorPage {
  */
 export interface TenantSettingsFlags {
     /** Whether to use the older v1 change password flow (true, not recommended except for backward compatibility) or the newer safer flow (false, recommended). */
-    change_pwd_flow_v1?: boolean;
+    change_pwd_flow_v1?: boolean | undefined;
     /** Whether the APIs section is enabled (true) or disabled (false). */
-    enable_apis_section?: boolean;
+    enable_apis_section?: boolean | undefined;
     /** Whether the impersonation functionality has been disabled (true) or not (false). Read-only. */
-    disable_impersonation?: boolean;
+    disable_impersonation?: boolean | undefined;
     /** Whether all current connections should be enabled when a new client (application) is created (true, default) or not (false). */
-    enable_client_connections?: boolean;
+    enable_client_connections?: boolean | undefined;
     /** Whether advanced API Authorization scenarios are enabled (true) or disabled (false). */
-    enable_pipeline2?: boolean;
+    enable_pipeline2?: boolean | undefined;
     /** If enabled, clients are able to add legacy delegation grants. */
-    allow_legacy_delegation_grant_types?: boolean;
+    allow_legacy_delegation_grant_types?: boolean | undefined;
     /** If enabled, clients are able to add legacy RO grants. */
-    allow_legacy_ro_grant_types?: boolean;
+    allow_legacy_ro_grant_types?: boolean | undefined;
     /** Whether the legacy `/tokeninfo` endpoint is enabled for your account (true) or unavailable (false). */
-    allow_legacy_tokeninfo_endpoint?: boolean;
+    allow_legacy_tokeninfo_endpoint?: boolean | undefined;
     /** Whether ID tokens and the userinfo endpoint includes a complete user profile (true) or only OpenID Connect claims (false). */
-    enable_legacy_profile?: boolean;
+    enable_legacy_profile?: boolean | undefined;
     /** Whether ID tokens can be used to authorize some types of requests to API v2 (true) not not (false). */
-    enable_idtoken_api2?: boolean;
+    enable_idtoken_api2?: boolean | undefined;
     /** Whether the public sign up process shows a user_exists error (true) or a generic error (false) if the user already exists. */
-    enable_public_signup_user_exists_error?: boolean;
+    enable_public_signup_user_exists_error?: boolean | undefined;
     /** Whether users are prompted to confirm log in before SSO redirection (false) or are not prompted (true). */
-    enable_sso?: boolean;
+    enable_sso?: boolean | undefined;
     /** Whether the `enable_sso` setting can be changed (true) or not (false). */
-    allow_changing_enable_sso?: boolean;
+    allow_changing_enable_sso?: boolean | undefined;
     /** Whether classic Universal Login prompts include additional security headers to prevent clickjacking (true) or no safeguard (false). */
-    disable_clickjack_protection_headers?: boolean;
+    disable_clickjack_protection_headers?: boolean | undefined;
     /** Do not Publish Enterprise Connections Information with IdP domains on the lock configuration file. */
-    no_disclose_enterprise_connections?: boolean;
+    no_disclose_enterprise_connections?: boolean | undefined;
     /** Enforce client authentication for passwordless start. */
-    enforce_client_authentication_on_passwordless_start?: boolean;
+    enforce_client_authentication_on_passwordless_start?: boolean | undefined;
     /** Enables the email verification flow during login for Azure AD and ADFS connections */
-    enable_adfs_waad_email_verification?: boolean;
+    enable_adfs_waad_email_verification?: boolean | undefined;
     /** Delete underlying grant when a Refresh Token is revoked via the Authentication API. */
-    revoke_refresh_token_grant?: boolean;
+    revoke_refresh_token_grant?: boolean | undefined;
     /** Enables beta access to log streaming changes */
-    dashboard_log_streams_next?: boolean;
+    dashboard_log_streams_next?: boolean | undefined;
     /** Enables new insights activity page view */
-    dashboard_insights_view?: boolean;
+    dashboard_insights_view?: boolean | undefined;
     /** Disables SAML fields map fix for bad mappings with repeated attributes */
-    disable_fields_map_fix?: boolean;
+    disable_fields_map_fix?: boolean | undefined;
     /** Used to allow users to pick what factor to enroll of the available MFA factors. */
-    mfa_show_factor_list_on_enrollment?: boolean;
+    mfa_show_factor_list_on_enrollment?: boolean | undefined;
     /** Removes alg property from jwks .well-known endpoint */
-    remove_alg_from_jwks?: boolean;
+    remove_alg_from_jwks?: boolean | undefined;
     /** Improves bot detection during signup in classic universal login */
-    improved_signup_bot_detection_in_classic?: boolean;
+    improved_signup_bot_detection_in_classic?: boolean | undefined;
     /** This tenant signed up for the Auth4GenAI trail */
-    genai_trial?: boolean;
+    genai_trial?: boolean | undefined;
     /** Whether third-party developers can <a href="https://auth0.com/docs/api-auth/dynamic-client-registration">dynamically register</a> applications for your APIs (true) or not (false). This flag enables dynamic client registration. */
-    enable_dynamic_client_registration?: boolean;
+    enable_dynamic_client_registration?: boolean | undefined;
     /** If true, SMS phone numbers will not be obfuscated in Management API GET calls. */
-    disable_management_api_sms_obfuscation?: boolean;
+    disable_management_api_sms_obfuscation?: boolean | undefined;
     /** Changes email_verified behavior for Azure AD/ADFS connections when enabled. Sets email_verified to false otherwise. */
-    trust_azure_adfs_email_verified_connection_property?: boolean;
+    trust_azure_adfs_email_verified_connection_property?: boolean | undefined;
     /** If true, custom domains feature will be enabled for tenant. */
-    custom_domains_provisioning?: boolean;
+    custom_domains_provisioning?: boolean | undefined;
 }
 
 /**
@@ -19167,9 +19383,9 @@ export interface TenantSettingsFlags {
  */
 export interface TenantSettingsGuardianPage {
     /** Whether to use the custom Guardian HTML (true) or the default Auth0 page (false, default) */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /**  Custom Guardian HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> is supported). */
-    html?: string;
+    html?: string | undefined;
 }
 
 /**
@@ -19177,7 +19393,7 @@ export interface TenantSettingsGuardianPage {
  */
 export interface TenantSettingsMtls {
     /** If true, enables mTLS endpoint aliases */
-    enable_endpoint_aliases?: boolean;
+    enable_endpoint_aliases?: boolean | undefined;
 }
 
 /**
@@ -19185,9 +19401,9 @@ export interface TenantSettingsMtls {
  */
 export interface TenantSettingsPasswordPage {
     /** Whether to use the custom change password HTML (true) or the default Auth0 page (false). Default is to use the Auth0 page. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Custom change password HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> supported). */
-    html?: string;
+    html?: string | undefined;
 }
 
 /** Profile that determines how the identity of the protected resource (i.e., API) can be specified in the OAuth endpoints when access is being requested. When set to audience (default), the audience parameter is used to specify the resource server. When set to compatibility, the audience parameter is still checked first, but if it not provided, then the resource parameter can be used to specify the resource server. */
@@ -19203,7 +19419,7 @@ export type TenantSettingsResourceParameterProfile =
  */
 export interface TenantSettingsSessions {
     /** Whether to bypass prompting logic (false) when performing OIDC Logout */
-    oidc_logout_prompt_enabled?: boolean;
+    oidc_logout_prompt_enabled?: boolean | undefined;
 }
 
 export const TenantSettingsSupportedLocalesEnum = {
@@ -19298,7 +19514,7 @@ export type TenantSettingsSupportedLocalesEnum =
 export type TestActionPayload = Record<string, unknown>;
 
 export interface TestActionResponseContent {
-    payload?: Management.TestActionResultPayload;
+    payload?: Management.TestActionResultPayload | undefined;
 }
 
 /**
@@ -19310,7 +19526,7 @@ export interface TestCustomDomainResponseContent {
     /** Result of the operation. */
     success: boolean;
     /** Message describing the operation status. */
-    message?: string;
+    message?: string | undefined;
 }
 
 /**
@@ -19320,18 +19536,18 @@ export type TestEventDataContent = Record<string, unknown>;
 
 export interface TokenExchangeProfileResponseContent {
     /** The unique ID of the token exchange profile. */
-    id?: string;
+    id?: string | undefined;
     /** Friendly name of this profile. */
-    name?: string;
+    name?: string | undefined;
     /** Subject token type for this profile. When receiving a token exchange request on the Authentication API, the corresponding token exchange profile with a matching subject_token_type will be executed. This must be a URI. */
-    subject_token_type?: string;
+    subject_token_type?: string | undefined;
     /** The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger. */
-    action_id?: string;
-    type?: Management.TokenExchangeProfileTypeEnum;
+    action_id?: string | undefined;
+    type?: Management.TokenExchangeProfileTypeEnum | undefined;
     /** The time when this profile was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this profile was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -19352,11 +19568,11 @@ export interface TokenQuota {
  */
 export interface TokenQuotaClientCredentials {
     /** If enabled, the quota will be enforced and requests in excess of the quota will fail. If disabled, the quota will not be enforced, but notifications for requests exceeding the quota will be available in logs. */
-    enforce?: boolean;
+    enforce?: boolean | undefined;
     /** Maximum number of issued tokens per day */
-    per_day?: number;
+    per_day?: number | undefined;
     /** Maximum number of issued tokens per hour */
-    per_hour?: number;
+    per_hour?: number | undefined;
 }
 
 export interface TokenQuotaConfiguration {
@@ -19366,8 +19582,8 @@ export interface TokenQuotaConfiguration {
 }
 
 export interface TwilioProviderConfiguration {
-    default_from?: string;
-    mssid?: string;
+    default_from?: string | undefined;
+    mssid?: string | undefined;
     sid: string;
     delivery_methods: Management.TwilioProviderDeliveryMethodEnum[];
 }
@@ -19392,101 +19608,101 @@ export type UniversalLoginExperienceEnum =
     (typeof UniversalLoginExperienceEnum)[keyof typeof UniversalLoginExperienceEnum];
 
 export interface UpdateActionBindingsResponseContent {
-    bindings?: Management.ActionBinding[];
+    bindings?: Management.ActionBinding[] | undefined;
 }
 
 export interface UpdateActionModuleResponseContent {
     /** The unique ID of the module. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the module. */
-    name?: string;
+    name?: string | undefined;
     /** The source code from the module's draft version. */
-    code?: string;
+    code?: string | undefined;
     /** The npm dependencies from the module's draft version. */
-    dependencies?: Management.ActionModuleDependency[];
+    dependencies?: Management.ActionModuleDependency[] | undefined;
     /** The secrets from the module's draft version (names and timestamps only, values never returned). */
-    secrets?: Management.ActionModuleSecret[];
+    secrets?: Management.ActionModuleSecret[] | undefined;
     /** The number of deployed actions using this module. */
-    actions_using_module_total?: number;
+    actions_using_module_total?: number | undefined;
     /** Whether all draft changes have been published as a version. */
-    all_changes_published?: boolean;
+    all_changes_published?: boolean | undefined;
     /** The version number of the latest published version. Omitted if no versions have been published. */
-    latest_version_number?: number;
+    latest_version_number?: number | undefined;
     /** Timestamp when the module was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** Timestamp when the module was last updated. */
-    updated_at?: string;
-    latest_version?: Management.ActionModuleVersionReference;
+    updated_at?: string | undefined;
+    latest_version?: Management.ActionModuleVersionReference | undefined;
 }
 
 export interface UpdateActionResponseContent {
     /** The unique ID of the action. */
-    id?: string;
+    id?: string | undefined;
     /** The name of an action. */
-    name?: string;
+    name?: string | undefined;
     /** The list of triggers that this action supports. At this time, an action can only target a single trigger at a time. */
-    supported_triggers?: Management.ActionTrigger[];
+    supported_triggers?: Management.ActionTrigger[] | undefined;
     /** True if all of an Action's contents have been deployed. */
-    all_changes_deployed?: boolean;
+    all_changes_deployed?: boolean | undefined;
     /** The time when this action was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this action was updated. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** The source code of the action. */
-    code?: string;
+    code?: string | undefined;
     /** The list of third party npm modules, and their versions, that this action depends on. */
-    dependencies?: Management.ActionVersionDependency[];
+    dependencies?: Management.ActionVersionDependency[] | undefined;
     /** The Node runtime. For example: `node22`, defaults to `node22` */
-    runtime?: string;
+    runtime?: string | undefined;
     /** The list of secrets that are included in an action or a version of an action. */
-    secrets?: Management.ActionSecretResponse[];
-    deployed_version?: Management.ActionDeployedVersion;
+    secrets?: Management.ActionSecretResponse[] | undefined;
+    deployed_version?: Management.ActionDeployedVersion | undefined;
     /** installed_integration_id is the fk reference to the InstalledIntegration entity. */
-    installed_integration_id?: string;
-    integration?: Management.Integration;
-    status?: Management.ActionBuildStatusEnum;
+    installed_integration_id?: string | undefined;
+    integration?: Management.Integration | undefined;
+    status?: Management.ActionBuildStatusEnum | undefined;
     /** The time when this action was built successfully. */
-    built_at?: string;
+    built_at?: string | undefined;
     /** True if the action should be deployed after creation. */
-    deploy?: boolean;
+    deploy?: boolean | undefined;
     /** The list of action modules and their versions used by this action. */
-    modules?: Management.ActionModuleReference[];
+    modules?: Management.ActionModuleReference[] | undefined;
 }
 
 export interface UpdateAculResponseContent {
-    rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    rendering_mode?: Management.AculRenderingModeEnum | undefined;
+    context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
-    default_head_tags_disabled?: boolean | null;
+    default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
-    use_page_template?: boolean | null;
+    use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
-    filters?: Management.AculFilters | null;
+    head_tags?: Management.AculHeadTag[] | undefined;
+    filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateAttackProtectionCaptchaResponseContent {
-    active_provider_id?: string;
-    arkose?: Management.AttackProtectionCaptchaArkoseResponseContent;
-    auth_challenge?: Management.AttackProtectionCaptchaAuthChallengeResponseContent;
-    hcaptcha?: Management.AttackProtectionCaptchaHcaptchaResponseContent;
-    friendly_captcha?: Management.AttackProtectionCaptchaFriendlyCaptchaResponseContent;
-    recaptcha_enterprise?: Management.AttackProtectionCaptchaRecaptchaEnterpriseResponseContent;
-    recaptcha_v2?: Management.AttackProtectionCaptchaRecaptchaV2ResponseContent;
-    simple_captcha?: Management.AttackProtectionCaptchaSimpleCaptchaResponseContent;
+    active_provider_id?: string | undefined;
+    arkose?: Management.AttackProtectionCaptchaArkoseResponseContent | undefined;
+    auth_challenge?: Management.AttackProtectionCaptchaAuthChallengeResponseContent | undefined;
+    hcaptcha?: Management.AttackProtectionCaptchaHcaptchaResponseContent | undefined;
+    friendly_captcha?: Management.AttackProtectionCaptchaFriendlyCaptchaResponseContent | undefined;
+    recaptcha_enterprise?: Management.AttackProtectionCaptchaRecaptchaEnterpriseResponseContent | undefined;
+    recaptcha_v2?: Management.AttackProtectionCaptchaRecaptchaV2ResponseContent | undefined;
+    simple_captcha?: Management.AttackProtectionCaptchaSimpleCaptchaResponseContent | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateBotDetectionSettingsResponseContent {
-    bot_detection_level?: Management.BotDetectionLevelEnum;
-    challenge_password_policy?: Management.BotDetectionChallengePolicyPasswordFlowEnum;
-    challenge_passwordless_policy?: Management.BotDetectionChallengePolicyPasswordlessFlowEnum;
-    challenge_password_reset_policy?: Management.BotDetectionChallengePolicyPasswordResetFlowEnum;
-    allowlist?: Management.BotDetectionAllowlist;
-    monitoring_mode_enabled?: Management.BotDetectionMonitoringModeEnabled;
+    bot_detection_level?: Management.BotDetectionLevelEnum | undefined;
+    challenge_password_policy?: Management.BotDetectionChallengePolicyPasswordFlowEnum | undefined;
+    challenge_passwordless_policy?: Management.BotDetectionChallengePolicyPasswordlessFlowEnum | undefined;
+    challenge_password_reset_policy?: Management.BotDetectionChallengePolicyPasswordResetFlowEnum | undefined;
+    allowlist?: Management.BotDetectionAllowlist | undefined;
+    monitoring_mode_enabled?: Management.BotDetectionMonitoringModeEnabled | undefined;
 }
 
 /**
@@ -19494,8 +19710,8 @@ export interface UpdateBotDetectionSettingsResponseContent {
  */
 export interface UpdateBrandingColors {
     /** Accent color. */
-    primary?: string | null;
-    page_background?: Management.UpdateBrandingPageBackground;
+    primary?: (string | null) | undefined;
+    page_background?: Management.UpdateBrandingPageBackground | undefined;
 }
 
 /**
@@ -19503,7 +19719,7 @@ export interface UpdateBrandingColors {
  */
 export interface UpdateBrandingFont {
     /** URL for the custom font. The URL must point to a font file and not a stylesheet. Must use HTTPS. */
-    url?: string | null;
+    url?: (string | null) | undefined;
 }
 
 /**
@@ -19525,27 +19741,27 @@ export type UpdateBrandingPageBackground = (string | null) | undefined | (Record
  * Phone provider configuration schema
  */
 export interface UpdateBrandingPhoneProviderResponseContent {
-    id?: string;
+    id?: string | undefined;
     /** The name of the tenant */
-    tenant?: string;
+    tenant?: string | undefined;
     name: Management.PhoneProviderNameEnum;
-    channel?: Management.PhoneProviderChannelEnum;
+    channel?: Management.PhoneProviderChannelEnum | undefined;
     /** Whether the provider is enabled (false) or disabled (true). */
-    disabled?: boolean;
-    configuration?: Management.PhoneProviderConfiguration;
+    disabled?: boolean | undefined;
+    configuration?: Management.PhoneProviderConfiguration | undefined;
     /** The provider's creation date and time in ISO 8601 format */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time of the last update to the provider in ISO 8601 format */
-    updated_at?: string;
+    updated_at?: string | undefined;
 }
 
 export interface UpdateBrandingResponseContent {
-    colors?: Management.BrandingColors;
+    colors?: Management.BrandingColors | undefined;
     /** URL for the favicon. Must use HTTPS. */
-    favicon_url?: string;
+    favicon_url?: string | undefined;
     /** URL for the logo. Must use HTTPS. */
-    logo_url?: string;
-    font?: Management.BrandingFont;
+    logo_url?: string | undefined;
+    font?: Management.BrandingFont | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -19564,147 +19780,149 @@ export interface UpdateBrandingThemeResponseContent {
 
 export interface UpdateBreachedPasswordDetectionSettingsResponseContent {
     /** Whether or not breached password detection is active. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /**
      * Action to take when a breached password is detected during a login.
      *       Possible values: <code>block</code>, <code>user_notification</code>, <code>admin_notification</code>.
      */
-    shields?: Management.BreachedPasswordDetectionShieldsEnum[];
+    shields?: Management.BreachedPasswordDetectionShieldsEnum[] | undefined;
     /**
      * When "admin_notification" is enabled, determines how often email notifications are sent.
      *         Possible values: <code>immediately</code>, <code>daily</code>, <code>weekly</code>, <code>monthly</code>.
      */
-    admin_notification_frequency?: Management.BreachedPasswordDetectionAdminNotificationFrequencyEnum[];
-    method?: Management.BreachedPasswordDetectionMethodEnum;
-    stage?: Management.BreachedPasswordDetectionStage;
+    admin_notification_frequency?: Management.BreachedPasswordDetectionAdminNotificationFrequencyEnum[] | undefined;
+    method?: Management.BreachedPasswordDetectionMethodEnum | undefined;
+    stage?: Management.BreachedPasswordDetectionStage | undefined;
 }
 
 export interface UpdateBruteForceSettingsResponseContent {
     /** Whether or not brute force attack protections are active. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /**
      * Action to take when a brute force protection threshold is violated.
      *         Possible values: <code>block</code>, <code>user_notification</code>.
      */
-    shields?: Management.BruteForceProtectionShieldsEnum[];
+    shields?: Management.BruteForceProtectionShieldsEnum[] | undefined;
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
-    allowlist?: string[];
-    mode?: Management.BruteForceProtectionModeEnum;
+    allowlist?: string[] | undefined;
+    mode?: Management.BruteForceProtectionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
-    max_attempts?: number;
+    max_attempts?: number | undefined;
 }
 
 export interface UpdateClientGrantResponseContent {
     /** ID of the client grant. */
-    id?: string;
+    id?: string | undefined;
     /** ID of the client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** The audience (API identifier) of this client grant. */
-    audience?: string;
+    audience?: string | undefined;
     /** Scopes allowed for this client grant. */
-    scope?: string[];
-    organization_usage?: Management.ClientGrantOrganizationUsageEnum;
+    scope?: string[] | undefined;
+    organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
-    allow_any_organization?: boolean;
+    allow_any_organization?: boolean | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
-    is_system?: boolean;
-    subject_type?: Management.ClientGrantSubjectTypeEnum;
+    is_system?: boolean | undefined;
+    subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
     /** Types of authorization_details allowed for this client grant. */
-    authorization_details_types?: string[];
+    authorization_details_types?: string[] | undefined;
     /** If enabled, all scopes configured on the resource server are allowed for this grant. */
-    allow_all_scopes?: boolean;
+    allow_all_scopes?: boolean | undefined;
 }
 
 export interface UpdateClientResponseContent {
     /** ID of this client. */
-    client_id?: string;
+    client_id?: string | undefined;
     /** Name of the tenant this client belongs to. */
-    tenant?: string;
+    tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
-    name?: string;
+    name?: string | undefined;
     /** Free text description of this client (max length: 140 characters). */
-    description?: string;
+    description?: string | undefined;
     /** Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false). */
-    global?: boolean;
+    global?: boolean | undefined;
     /** Client secret (which you must not make public). */
-    client_secret?: string;
-    app_type?: Management.ClientAppTypeEnum;
+    client_secret?: string | undefined;
+    app_type?: Management.ClientAppTypeEnum | undefined;
     /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
-    logo_uri?: string;
+    logo_uri?: string | undefined;
     /** Whether this client a first party client (true) or not (false). */
-    is_first_party?: boolean;
+    is_first_party?: boolean | undefined;
     /** Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false). */
-    oidc_conformant?: boolean;
+    oidc_conformant?: boolean | undefined;
     /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
-    callbacks?: string[];
+    callbacks?: string[] | undefined;
     /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
-    allowed_origins?: string[];
+    allowed_origins?: string[] | undefined;
     /** Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>. */
-    web_origins?: string[];
+    web_origins?: string[] | undefined;
     /** List of audiences/realms for SAML protocol. Used by the wsfed addon. */
-    client_aliases?: string[];
+    client_aliases?: string[] | undefined;
     /** List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed. */
-    allowed_clients?: string[];
+    allowed_clients?: string[] | undefined;
     /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
-    allowed_logout_urls?: string[];
-    session_transfer?: Management.ClientSessionTransferConfiguration | null;
-    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    allowed_logout_urls?: string[] | undefined;
+    session_transfer?: (Management.ClientSessionTransferConfiguration | null) | undefined;
+    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings | undefined;
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
-    grant_types?: string[];
-    jwt_configuration?: Management.ClientJwtConfiguration;
-    signing_keys?: Management.ClientSigningKeys;
-    encryption_key?: Management.ClientEncryptionKey | null;
+    grant_types?: string[] | undefined;
+    jwt_configuration?: Management.ClientJwtConfiguration | undefined;
+    signing_keys?: Management.ClientSigningKeys | undefined;
+    encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
-    sso?: boolean;
+    sso?: boolean | undefined;
     /** Whether Single Sign On is disabled (true) or enabled (true). Defaults to true. */
-    sso_disabled?: boolean;
+    sso_disabled?: boolean | undefined;
     /** Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false). */
-    cross_origin_authentication?: boolean;
+    cross_origin_authentication?: boolean | undefined;
     /** URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page. */
-    cross_origin_loc?: string;
+    cross_origin_loc?: string | undefined;
     /** Whether a custom login page is to be used (true) or the default provided login page (false). */
-    custom_login_page_on?: boolean;
+    custom_login_page_on?: boolean | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. */
-    custom_login_page?: string;
+    custom_login_page?: string | undefined;
     /** The content (HTML, CSS, JS) of the custom login page. (Used on Previews) */
-    custom_login_page_preview?: string;
+    custom_login_page_preview?: string | undefined;
     /** HTML form template to be used for WS-Federation. */
-    form_template?: string;
-    addons?: Management.ClientAddons;
-    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum;
+    form_template?: string | undefined;
+    addons?: Management.ClientAddons | undefined;
+    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum | undefined;
     /** If true, trust that the IP specified in the `auth0-forwarded-for` header is the end-user's IP for brute-force-protection on token endpoint. */
-    is_token_endpoint_ip_header_trusted?: boolean;
-    client_metadata?: Management.ClientMetadata;
-    mobile?: Management.ClientMobile;
+    is_token_endpoint_ip_header_trusted?: boolean | undefined;
+    client_metadata?: Management.ClientMetadata | undefined;
+    mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
-    initiate_login_uri?: string;
-    refresh_token?: Management.ClientRefreshTokenConfiguration | null;
-    default_organization?: Management.ClientDefaultOrganization | null;
-    organization_usage?: Management.ClientOrganizationUsageEnum;
-    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum;
+    initiate_login_uri?: string | undefined;
+    refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
+    default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
+    organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum | undefined;
     /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
-    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
-    client_authentication_methods?: Management.ClientAuthenticationMethod | null;
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | undefined;
+    client_authentication_methods?: (Management.ClientAuthenticationMethod | null) | undefined;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
-    require_pushed_authorization_requests?: boolean;
+    require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
-    require_proof_of_possession?: boolean;
-    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId;
-    compliance_level?: Management.ClientComplianceLevelEnum | null;
+    require_proof_of_possession?: boolean | undefined;
+    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
-    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean;
-    token_exchange?: Management.ClientTokenExchangeConfiguration;
+    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | undefined;
+    token_exchange?: Management.ClientTokenExchangeConfiguration | undefined;
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
-    par_request_expiry?: number | null;
-    token_quota?: Management.TokenQuota;
-    express_configuration?: Management.ExpressConfiguration;
+    par_request_expiry?: (number | null) | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    express_configuration?: Management.ExpressConfiguration | undefined;
     /** The identifier of the resource server that this client is linked to. */
-    resource_server_identifier?: string;
-    async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+    resource_server_identifier?: string | undefined;
+    async_approval_notification_channels?:
+        | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
+        | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -19713,515 +19931,511 @@ export interface UpdateClientResponseContent {
  * The connection's options (depend on the connection strategy). To update these options, the `update:connections_options` scope must be present. To verify your changes, also include the `read:connections_options` scope. If this scope is not specified, you will not be able to review the updated object.
  */
 export interface UpdateConnectionOptions {
-    validation?: Management.ConnectionValidationOptions | null;
+    validation?: (Management.ConnectionValidationOptions | null) | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
-    non_persistent_attrs?: string[];
+    non_persistent_attrs?: string[] | undefined;
     /** Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used. */
-    precedence?: Management.ConnectionIdentifierPrecedenceEnum[];
-    attributes?: Management.ConnectionAttributes;
+    precedence?: Management.ConnectionIdentifierPrecedenceEnum[] | undefined;
+    attributes?: Management.ConnectionAttributes | undefined;
     /** Set to true to inject context into custom DB scripts (warning: cannot be disabled once enabled) */
-    enable_script_context?: boolean;
+    enable_script_context?: boolean | undefined;
     /** Set to true to use a legacy user store */
-    enabledDatabaseCustomization?: boolean;
+    enabledDatabaseCustomization?: boolean | undefined;
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
-    import_mode?: boolean;
-    customScripts?: Management.ConnectionCustomScripts;
-    authentication_methods?: Management.ConnectionAuthenticationMethods | null;
-    passkey_options?: Management.ConnectionPasskeyOptions | null;
-    passwordPolicy?: Management.ConnectionPasswordPolicyEnum | null;
-    password_complexity_options?: Management.ConnectionPasswordComplexityOptions | null;
-    password_history?: Management.ConnectionPasswordHistoryOptions | null;
-    password_no_personal_info?: Management.ConnectionPasswordNoPersonalInfoOptions | null;
-    password_dictionary?: Management.ConnectionPasswordDictionaryOptions | null;
-    api_enable_users?: boolean;
-    basic_profile?: boolean;
-    ext_admin?: boolean;
-    ext_is_suspended?: boolean;
-    ext_agreed_terms?: boolean;
-    ext_groups?: boolean;
-    ext_assigned_plans?: boolean;
-    ext_profile?: boolean;
-    disable_self_service_change_password?: boolean;
-    upstream_params?: (Management.ConnectionUpstreamParams | undefined) | null;
-    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum;
-    gateway_authentication?: Management.ConnectionGatewayAuthentication | null;
-    federated_connections_access_tokens?: Management.ConnectionFederatedConnectionsAccessTokens | null;
+    import_mode?: boolean | undefined;
+    customScripts?: Management.ConnectionCustomScripts | undefined;
+    authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
+    passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
+    passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
+    password_complexity_options?: (Management.ConnectionPasswordComplexityOptions | null) | undefined;
+    password_history?: (Management.ConnectionPasswordHistoryOptions | null) | undefined;
+    password_no_personal_info?: (Management.ConnectionPasswordNoPersonalInfoOptions | null) | undefined;
+    password_dictionary?: (Management.ConnectionPasswordDictionaryOptions | null) | undefined;
+    api_enable_users?: boolean | undefined;
+    basic_profile?: boolean | undefined;
+    ext_admin?: boolean | undefined;
+    ext_is_suspended?: boolean | undefined;
+    ext_agreed_terms?: boolean | undefined;
+    ext_groups?: boolean | undefined;
+    ext_assigned_plans?: boolean | undefined;
+    ext_profile?: boolean | undefined;
+    disable_self_service_change_password?: boolean | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
+    set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
+    gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
+    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateConnectionProfileResponseContent {
-    id?: Management.ConnectionProfileId;
-    name?: Management.ConnectionProfileName;
-    organization?: Management.ConnectionProfileOrganization;
-    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate;
-    enabled_features?: Management.ConnectionProfileEnabledFeatures;
-    connection_config?: Management.ConnectionProfileConfig;
-    strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    id?: Management.ConnectionProfileId | undefined;
+    name?: Management.ConnectionProfileName | undefined;
+    organization?: Management.ConnectionProfileOrganization | undefined;
+    connection_name_prefix_template?: Management.ConnectionNamePrefixTemplate | undefined;
+    enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
+    connection_config?: Management.ConnectionProfileConfig | undefined;
+    strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
 }
 
 /**
  * Update a connection with strategy=ad
  */
 export interface UpdateConnectionRequestContentAd extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAd;
+    options?: Management.ConnectionOptionsAd | undefined;
 }
 
 /**
  * Update a connection with strategy=adfs
  */
 export interface UpdateConnectionRequestContentAdfs extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAdfs;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsAdfs | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=aol
  */
 export interface UpdateConnectionRequestContentAol extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAol;
+    options?: Management.ConnectionOptionsAol | undefined;
 }
 
 /**
  * Update a connection with strategy=amazon
  */
 export interface UpdateConnectionRequestContentAmazon extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAmazon;
+    options?: Management.ConnectionOptionsAmazon | undefined;
 }
 
 /**
  * Update a connection with strategy=apple
  */
 export interface UpdateConnectionRequestContentApple extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsApple;
+    options?: Management.ConnectionOptionsApple | undefined;
 }
 
 /**
  * Update a connection with strategy=auth0
  */
 export interface UpdateConnectionRequestContentAuth0 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAuth0;
-    realms?: Management.ConnectionRealms;
+    options?: Management.ConnectionOptionsAuth0 | undefined;
+    realms?: Management.ConnectionRealms | undefined;
 }
 
 /**
  * Update a connection with strategy=auth0-oidc
  */
 export interface UpdateConnectionRequestContentAuth0Oidc extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAuth0Oidc;
+    options?: Management.ConnectionOptionsAuth0Oidc | undefined;
 }
 
 /**
  * Update a connection with strategy=waad
  */
 export interface UpdateConnectionRequestContentAzureAd extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAzureAd;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsAzureAd | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=baidu
  */
 export interface UpdateConnectionRequestContentBaidu extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsBaidu;
+    options?: Management.ConnectionOptionsBaidu | undefined;
 }
 
 /**
  * Update a connection with strategy=bitbucket
  */
 export interface UpdateConnectionRequestContentBitbucket extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsBitbucket;
+    options?: Management.ConnectionOptionsBitbucket | undefined;
 }
 
 /**
  * Update a connection with strategy=bitly
  */
 export interface UpdateConnectionRequestContentBitly extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsBitly;
+    options?: Management.ConnectionOptionsBitly | undefined;
 }
 
 /**
  * Update a connection with strategy=box
  */
 export interface UpdateConnectionRequestContentBox extends Management.ConnectionCommon, Management.ConnectionPurposes {
-    options?: Management.ConnectionOptionsBox;
+    options?: Management.ConnectionOptionsBox | undefined;
 }
 
 /**
  * Update a connection with strategy=custom
  */
 export interface UpdateConnectionRequestContentCustom extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsCustom;
+    options?: Management.ConnectionOptionsCustom | undefined;
 }
 
 /**
  * Update a connection with strategy=daccount
  */
 export interface UpdateConnectionRequestContentDaccount extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsDaccount;
+    options?: Management.ConnectionOptionsDaccount | undefined;
 }
 
 /**
  * Update a connection with strategy=dropbox
  */
 export interface UpdateConnectionRequestContentDropbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsDropbox;
+    options?: Management.ConnectionOptionsDropbox | undefined;
 }
 
 /**
  * Update a connection with strategy=dwolla
  */
 export interface UpdateConnectionRequestContentDwolla extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsDwolla;
+    options?: Management.ConnectionOptionsDwolla | undefined;
 }
 
 /**
  * Update a connection with strategy=email
  */
 export interface UpdateConnectionRequestContentEmail extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsEmail;
+    options?: Management.ConnectionOptionsEmail | undefined;
 }
 
 /**
  * Update a connection with strategy=evernote
  */
 export interface UpdateConnectionRequestContentEvernote extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsEvernote;
+    options?: Management.ConnectionOptionsEvernote | undefined;
 }
 
 /**
  * Update a connection with strategy=evernote-sandbox
  */
 export interface UpdateConnectionRequestContentEvernoteSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsEvernote;
+    options?: Management.ConnectionOptionsEvernote | undefined;
 }
 
 /**
  * Update a connection with strategy=exact
  */
 export interface UpdateConnectionRequestContentExact extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsExact;
+    options?: Management.ConnectionOptionsExact | undefined;
 }
 
 /**
  * Update a connection with strategy=facebook
  */
 export interface UpdateConnectionRequestContentFacebook extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsFacebook;
+    options?: Management.ConnectionOptionsFacebook | undefined;
 }
 
 /**
  * Update a connection with strategy=fitbit
  */
 export interface UpdateConnectionRequestContentFitbit extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsFitbit;
+    options?: Management.ConnectionOptionsFitbit | undefined;
 }
 
 /**
  * Update a connection with strategy=flickr
  */
 export interface UpdateConnectionRequestContentFlickr extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsFlickr;
+    options?: Management.ConnectionOptionsFlickr | undefined;
 }
 
 /**
  * Update a connection with strategy=github
  */
 export interface UpdateConnectionRequestContentGitHub
-    extends Management.ConnectionCommon,
-        Management.ConnectionPurposes {
-    options?: Management.ConnectionOptionsGitHub;
+    extends Management.ConnectionCommon, Management.ConnectionPurposes {
+    options?: Management.ConnectionOptionsGitHub | undefined;
 }
 
 /**
  * Update a connection with strategy=google-apps
  */
 export interface UpdateConnectionRequestContentGoogleApps extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsGoogleApps;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsGoogleApps | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=google-oauth2
  */
 export interface UpdateConnectionRequestContentGoogleOAuth2
-    extends Management.ConnectionCommon,
-        Management.ConnectionPurposes {
-    options?: Management.ConnectionOptionsGoogleOAuth2;
+    extends Management.ConnectionCommon, Management.ConnectionPurposes {
+    options?: Management.ConnectionOptionsGoogleOAuth2 | undefined;
 }
 
 /**
  * Update a connection with strategy=ip
  */
 export interface UpdateConnectionRequestContentIp extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsIp;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsIp | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=instagram
  */
 export interface UpdateConnectionRequestContentInstagram extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsInstagram;
+    options?: Management.ConnectionOptionsInstagram | undefined;
 }
 
 /**
  * Update a connection with strategy=line
  */
 export interface UpdateConnectionRequestContentLine extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsLine;
+    options?: Management.ConnectionOptionsLine | undefined;
 }
 
 /**
  * Update a connection with strategy=linkedin
  */
 export interface UpdateConnectionRequestContentLinkedin extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsLinkedin;
+    options?: Management.ConnectionOptionsLinkedin | undefined;
 }
 
 /**
  * Update a connection with strategy=miicard
  */
 export interface UpdateConnectionRequestContentMiicard extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsMiicard;
+    options?: Management.ConnectionOptionsMiicard | undefined;
 }
 
 /**
  * Update a connection with strategy=oauth1
  */
 export interface UpdateConnectionRequestContentOAuth1 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOAuth1;
+    options?: Management.ConnectionOptionsOAuth1 | undefined;
 }
 
 /**
  * Update a connection with strategy=oauth2
  */
 export interface UpdateConnectionRequestContentOAuth2
-    extends Management.ConnectionCommon,
-        Management.ConnectionPurposes {
-    options?: Management.ConnectionOptionsOAuth2;
+    extends Management.ConnectionCommon, Management.ConnectionPurposes {
+    options?: Management.ConnectionOptionsOAuth2 | undefined;
 }
 
 /**
  * Update a connection with strategy=oidc
  */
 export interface UpdateConnectionRequestContentOidc extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOidc;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsOidc | undefined;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=office365
  */
 export interface UpdateConnectionRequestContentOffice365 extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOffice365;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsOffice365 | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=okta
  */
 export interface UpdateConnectionRequestContentOkta extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsOkta;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsOkta | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=paypal
  */
 export interface UpdateConnectionRequestContentPaypal extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPaypal;
+    options?: Management.ConnectionOptionsPaypal | undefined;
 }
 
 /**
  * Update a connection with strategy=paypal-sandbox
  */
 export interface UpdateConnectionRequestContentPaypalSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPaypal;
+    options?: Management.ConnectionOptionsPaypal | undefined;
 }
 
 /**
  * Update a connection with strategy=pingfederate
  */
 export interface UpdateConnectionRequestContentPingFederate extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPingFederate;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsPingFederate | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=planningcenter
  */
 export interface UpdateConnectionRequestContentPlanningCenter extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsPlanningCenter;
+    options?: Management.ConnectionOptionsPlanningCenter | undefined;
 }
 
 /**
  * Update a connection with strategy=renren
  */
 export interface UpdateConnectionRequestContentRenren extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsRenren;
+    options?: Management.ConnectionOptionsRenren | undefined;
 }
 
 /**
  * Update a connection with strategy=samlp
  */
 export interface UpdateConnectionRequestContentSaml extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSaml;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsSaml | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=sms
  */
 export interface UpdateConnectionRequestContentSms extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSms;
+    options?: Management.ConnectionOptionsSms | undefined;
 }
 
 /**
  * Update a connection with strategy=salesforce
  */
 export interface UpdateConnectionRequestContentSalesforce extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforce | undefined;
 }
 
 /**
  * Update a connection with strategy=salesforce-community
  */
 export interface UpdateConnectionRequestContentSalesforceCommunity extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforceCommunity;
+    options?: Management.ConnectionOptionsSalesforceCommunity | undefined;
 }
 
 /**
  * Update a connection with strategy=salesforce-sandbox
  */
 export interface UpdateConnectionRequestContentSalesforceSandbox extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSalesforce;
+    options?: Management.ConnectionOptionsSalesforce | undefined;
 }
 
 /**
  * Update a connection with strategy=sharepoint
  */
 export interface UpdateConnectionRequestContentSharepoint extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSharepoint;
-    show_as_button?: Management.ConnectionShowAsButton;
+    options?: Management.ConnectionOptionsSharepoint | undefined;
+    show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
 /**
  * Update a connection with strategy=shop
  */
 export interface UpdateConnectionRequestContentShop extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsShop;
+    options?: Management.ConnectionOptionsShop | undefined;
 }
 
 /**
  * Update a connection with strategy=shopify
  */
 export interface UpdateConnectionRequestContentShopify extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsShopify;
+    options?: Management.ConnectionOptionsShopify | undefined;
 }
 
 /**
  * Update a connection with strategy=soundcloud
  */
 export interface UpdateConnectionRequestContentSoundcloud extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsSoundcloud;
+    options?: Management.ConnectionOptionsSoundcloud | undefined;
 }
 
 /**
  * Update a connection with strategy=thirtysevensignals
  */
 export interface UpdateConnectionRequestContentThirtySevenSignals extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsThirtySevenSignals;
+    options?: Management.ConnectionOptionsThirtySevenSignals | undefined;
 }
 
 /**
  * Update a connection with strategy=twitter
  */
 export interface UpdateConnectionRequestContentTwitter extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsTwitter;
+    options?: Management.ConnectionOptionsTwitter | undefined;
 }
 
 /**
  * Update a connection with strategy=untappd
  */
 export interface UpdateConnectionRequestContentUntappd extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsUntappd;
+    options?: Management.ConnectionOptionsUntappd | undefined;
 }
 
 /**
  * Update a connection with strategy=vkontakte
  */
 export interface UpdateConnectionRequestContentVkontakte extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsVkontakte;
+    options?: Management.ConnectionOptionsVkontakte | undefined;
 }
 
 /**
  * Update a connection with strategy=weibo
  */
 export interface UpdateConnectionRequestContentWeibo extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsWeibo;
+    options?: Management.ConnectionOptionsWeibo | undefined;
 }
 
 /**
  * Update a connection with strategy=windowslive
  */
 export interface UpdateConnectionRequestContentWindowsLive
-    extends Management.ConnectionCommon,
-        Management.ConnectionPurposes {
-    options?: Management.ConnectionOptionsWindowsLive;
+    extends Management.ConnectionCommon, Management.ConnectionPurposes {
+    options?: Management.ConnectionOptionsWindowsLive | undefined;
 }
 
 /**
  * Update a connection with strategy=wordpress
  */
 export interface UpdateConnectionRequestContentWordpress extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsWordpress;
+    options?: Management.ConnectionOptionsWordpress | undefined;
 }
 
 /**
  * Update a connection with strategy=yahoo
  */
 export interface UpdateConnectionRequestContentYahoo extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsYahoo;
+    options?: Management.ConnectionOptionsYahoo | undefined;
 }
 
 /**
  * Update a connection with strategy=yammer
  */
 export interface UpdateConnectionRequestContentYammer extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsYammer;
+    options?: Management.ConnectionOptionsYammer | undefined;
 }
 
 /**
  * Update a connection with strategy=yandex
  */
 export interface UpdateConnectionRequestContentYandex extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsYandex;
+    options?: Management.ConnectionOptionsYandex | undefined;
 }
 
 export interface UpdateConnectionResponseContent {
     /** The name of the connection */
-    name?: string;
+    name?: string | undefined;
     /** Connection name used in login screen */
-    display_name?: string;
-    options?: Management.ConnectionOptions;
+    display_name?: string | undefined;
+    options?: Management.ConnectionOptions | undefined;
     /** The connection's identifier */
-    id?: string;
+    id?: string | undefined;
     /** The type of the connection, related to the identity provider */
-    strategy?: string;
+    strategy?: string | undefined;
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
-    realms?: string[];
+    realms?: string[] | undefined;
     /** DEPRECATED property. Use the GET /connections/:id/clients endpoint to get the ids of the clients for which the connection is enabled */
-    enabled_clients?: string[];
+    enabled_clients?: string[] | undefined;
     /** True if the connection is domain level */
-    is_domain_connection?: boolean;
+    is_domain_connection?: boolean | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. */
-    show_as_button?: boolean;
-    metadata?: Management.ConnectionsMetadata;
-    authentication?: Management.ConnectionAuthenticationPurpose;
-    connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    show_as_button?: boolean | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
+    authentication?: Management.ConnectionAuthenticationPurpose | undefined;
+    connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
 }
 
 export interface UpdateCustomDomainResponseContent {
@@ -20232,25 +20446,25 @@ export interface UpdateCustomDomainResponseContent {
     /** Whether this is a primary domain (true) or not (false). */
     primary: boolean;
     /** Whether this is the default custom domain (true) or not (false). */
-    is_default?: boolean;
+    is_default?: boolean | undefined;
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     verification: Management.DomainVerification;
     /** The HTTP header to fetch the client's IP address */
-    custom_client_ip_header?: string | null;
+    custom_client_ip_header?: (string | null) | undefined;
     /** The TLS version policy */
-    tls_policy?: string;
-    domain_metadata?: Management.DomainMetadata;
-    certificate?: Management.DomainCertificate;
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
     /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
 }
 
 export interface UpdateDirectoryProvisioningRequestContent {
     /** The mapping between Auth0 and IDP user attributes */
-    mapping?: Management.DirectoryProvisioningMappingItem[];
+    mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
     /** Whether periodic automatic synchronization is enabled */
-    synchronize_automatically?: boolean;
+    synchronize_automatically?: boolean | undefined;
 }
 
 export interface UpdateDirectoryProvisioningResponseContent {
@@ -20269,42 +20483,42 @@ export interface UpdateDirectoryProvisioningResponseContent {
     /** The timestamp at which the directory provisioning configuration was last updated */
     updated_at: string;
     /** The timestamp at which the connection was last synchronized */
-    last_synchronization_at?: string;
+    last_synchronization_at?: string | undefined;
     /** The status of the last synchronization */
-    last_synchronization_status?: string;
+    last_synchronization_status?: string | undefined;
     /** The error message of the last synchronization, if any */
-    last_synchronization_error?: string;
+    last_synchronization_error?: string | undefined;
 }
 
 export interface UpdateEmailProviderResponseContent {
     /** Name of the email provider. Can be `mailgun`, `mandrill`, `sendgrid`, `ses`, `sparkpost`, `smtp`, `azure_cs`, `ms365`, or `custom`. */
-    name?: string;
+    name?: string | undefined;
     /** Whether the provider is enabled (true) or disabled (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Email address to use as "from" when no other address specified. */
-    default_from_address?: string;
-    credentials?: Management.EmailProviderCredentials;
-    settings?: Management.EmailProviderSettings;
+    default_from_address?: string | undefined;
+    credentials?: Management.EmailProviderCredentials | undefined;
+    settings?: Management.EmailProviderSettings | undefined;
 }
 
 export interface UpdateEmailTemplateResponseContent {
-    template?: Management.EmailTemplateNameEnum;
+    template?: Management.EmailTemplateNameEnum | undefined;
     /** Body of the email template. */
-    body?: string | null;
+    body?: (string | null) | undefined;
     /** Senders `from` email address. */
-    from?: string | null;
+    from?: (string | null) | undefined;
     /** URL to redirect the user to after a successful action. */
-    resultUrl?: string | null;
+    resultUrl?: (string | null) | undefined;
     /** Subject line of the email. */
-    subject?: string | null;
+    subject?: (string | null) | undefined;
     /** Syntax of the template body. */
-    syntax?: string | null;
+    syntax?: (string | null) | undefined;
     /** Lifetime in seconds that the link within the email will be valid for. */
-    urlLifetimeInSeconds?: number | null;
+    urlLifetimeInSeconds?: (number | null) | undefined;
     /** Whether the `reset_email` and `verify_email` templates should include the user's email address as the `email` parameter in the returnUrl (true) or whether no email address should be included in the redirect (false). Defaults to true. */
-    includeEmailInRedirect?: boolean;
+    includeEmailInRedirect?: boolean | undefined;
     /** Whether the template is enabled (true) or disabled (false). */
-    enabled?: boolean | null;
+    enabled?: (boolean | null) | undefined;
 }
 
 export interface UpdateEnabledClientConnectionsRequestContentItem {
@@ -20325,10 +20539,10 @@ export type UpdateEventStreamResponseContent =
 export interface UpdateFlowResponseContent {
     id: string;
     name: string;
-    actions?: Management.FlowAction[];
+    actions?: Management.FlowAction[] | undefined;
     created_at: string;
     updated_at: string;
-    executed_at?: string;
+    executed_at?: string | undefined;
 }
 
 export interface UpdateFlowsVaultConnectionResponseContent {
@@ -20337,11 +20551,11 @@ export interface UpdateFlowsVaultConnectionResponseContent {
     /** Flows Vault Connection app identifier. */
     app_id: string;
     /** Flows Vault Connection environment. */
-    environment?: string;
+    environment?: string | undefined;
     /** Flows Vault Connection name. */
     name: string;
     /** Flows Vault Connection custom account name. */
-    account_name?: string;
+    account_name?: string | undefined;
     /** Whether the Flows Vault Connection is configured. */
     ready: boolean;
     /** The ISO 8601 formatted date when this Flows Vault Connection was created. */
@@ -20349,7 +20563,7 @@ export interface UpdateFlowsVaultConnectionResponseContent {
     /** The ISO 8601 formatted date when this Flows Vault Connection was updated. */
     updated_at: string;
     /** The ISO 8601 formatted date when this Flows Vault Connection was refreshed. */
-    refreshed_at?: string;
+    refreshed_at?: string | undefined;
     fingerprint: string;
 }
 
@@ -20377,28 +20591,28 @@ export type UpdateFlowsVaultConnectionSetup =
 export interface UpdateFormResponseContent {
     id: string;
     name: string;
-    messages?: Management.FormMessages;
-    languages?: Management.FormLanguages;
-    translations?: Management.FormTranslations;
-    nodes?: Management.FormNodeList;
-    start?: Management.FormStartNode;
-    ending?: Management.FormEndingNode;
-    style?: Management.FormStyle;
+    messages?: Management.FormMessages | undefined;
+    languages?: Management.FormLanguages | undefined;
+    translations?: Management.FormTranslations | undefined;
+    nodes?: Management.FormNodeList | undefined;
+    start?: Management.FormStartNode | undefined;
+    ending?: Management.FormEndingNode | undefined;
+    style?: Management.FormStyle | undefined;
     created_at: string;
     updated_at: string;
-    embedded_at?: string;
-    submitted_at?: string;
+    embedded_at?: string | undefined;
+    submitted_at?: string | undefined;
 }
 
 export interface UpdateGuardianFactorDuoSettingsResponseContent {
-    ikey?: string;
-    skey?: string;
-    host?: string;
+    ikey?: string | undefined;
+    skey?: string | undefined;
+    host?: string | undefined;
 }
 
 export interface UpdateGuardianFactorsProviderPushNotificationApnsResponseContent {
-    sandbox?: boolean;
-    bundle_id?: string | null;
+    sandbox?: boolean | undefined;
+    bundle_id?: (string | null) | undefined;
 }
 
 export type UpdateGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
@@ -20406,25 +20620,25 @@ export type UpdateGuardianFactorsProviderPushNotificationFcmResponseContent = Re
 export type UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
 
 export interface UpdateGuardianFactorsProviderPushNotificationSnsResponseContent {
-    aws_access_key_id?: string | null;
-    aws_secret_access_key?: string | null;
-    aws_region?: string | null;
-    sns_apns_platform_application_arn?: string | null;
-    sns_gcm_platform_application_arn?: string | null;
+    aws_access_key_id?: (string | null) | undefined;
+    aws_secret_access_key?: (string | null) | undefined;
+    aws_region?: (string | null) | undefined;
+    sns_apns_platform_application_arn?: (string | null) | undefined;
+    sns_gcm_platform_application_arn?: (string | null) | undefined;
 }
 
 export interface UpdateHookResponseContent {
     /** Trigger ID */
-    triggerId?: string;
+    triggerId?: string | undefined;
     /** ID of this hook. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this hook. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this hook will be executed (true) or ignored (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this hook runs. */
-    script?: string;
-    dependencies?: Management.HookDependencies;
+    script?: string | undefined;
+    dependencies?: Management.HookDependencies | undefined;
 }
 
 /**
@@ -20443,29 +20657,29 @@ export type UpdateLogStreamResponseContent =
     | Management.LogStreamMixpanelResponseSchema;
 
 export interface UpdateNetworkAclResponseContent {
-    id?: string;
-    description?: string;
-    active?: boolean;
-    priority?: number;
-    rule?: Management.NetworkAclRule;
+    id?: string | undefined;
+    description?: string | undefined;
+    active?: boolean | undefined;
+    priority?: number | undefined;
+    rule?: Management.NetworkAclRule | undefined;
     /** The timestamp when the Network ACL Configuration was created */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The timestamp when the Network ACL Configuration was last updated */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateOrganizationConnectionResponseContent {
     /** ID of the connection. */
-    connection_id?: string;
+    connection_id?: string | undefined;
     /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
-    assign_membership_on_login?: boolean;
+    assign_membership_on_login?: boolean | undefined;
     /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
-    show_as_button?: boolean;
+    show_as_button?: boolean | undefined;
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
-    is_signup_enabled?: boolean;
-    connection?: Management.OrganizationConnectionInformation;
+    is_signup_enabled?: boolean | undefined;
+    connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
 export interface UpdateOrganizationDiscoveryDomainResponseContent {
@@ -20475,7 +20689,7 @@ export interface UpdateOrganizationDiscoveryDomainResponseContent {
     domain: string;
     status: Management.OrganizationDiscoveryDomainStatus;
     /** Indicates whether this domain should be used for organization discovery. */
-    use_for_organization_discovery?: boolean;
+    use_for_organization_discovery?: boolean | undefined;
     /** A unique token generated for the discovery domain. This must be placed in a DNS TXT record at the location specified by the verification_host field to prove domain ownership. */
     verification_txt: string;
     /** The full domain where the TXT record should be added. */
@@ -20484,23 +20698,23 @@ export interface UpdateOrganizationDiscoveryDomainResponseContent {
 
 export interface UpdateOrganizationResponseContent {
     /** Organization identifier. */
-    id?: string;
+    id?: string | undefined;
     /** The name of this organization. */
-    name?: string;
+    name?: string | undefined;
     /** Friendly name of this organization. */
-    display_name?: string;
-    branding?: Management.OrganizationBranding;
-    metadata?: Management.OrganizationMetadata;
-    token_quota?: Management.TokenQuota;
+    display_name?: string | undefined;
+    branding?: Management.OrganizationBranding | undefined;
+    metadata?: Management.OrganizationMetadata | undefined;
+    token_quota?: Management.TokenQuota | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdatePhoneTemplateResponseContent {
     id: string;
-    channel?: string;
-    customizable?: boolean;
-    tenant?: string;
+    channel?: string | undefined;
+    customizable?: boolean | undefined;
+    tenant?: string | undefined;
     content: Management.PhoneTemplateContent;
     type: Management.PhoneTemplateNotificationTypeEnum;
     /** Whether the template is enabled (false) or disabled (true). */
@@ -20509,58 +20723,58 @@ export interface UpdatePhoneTemplateResponseContent {
 
 export interface UpdateRefreshTokenResponseContent {
     /** The ID of the refresh token */
-    id?: string;
+    id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.RefreshTokenDate;
-    idle_expires_at?: Management.RefreshTokenDate;
-    expires_at?: Management.RefreshTokenDate;
-    device?: Management.RefreshTokenDevice;
+    user_id?: string | undefined;
+    created_at?: Management.RefreshTokenDate | undefined;
+    idle_expires_at?: Management.RefreshTokenDate | undefined;
+    expires_at?: Management.RefreshTokenDate | undefined;
+    device?: Management.RefreshTokenDevice | undefined;
     /** ID of the client application granted with this refresh token */
-    client_id?: string;
-    session_id?: (Management.RefreshTokenSessionId | undefined) | null;
+    client_id?: string | undefined;
+    session_id?: ((Management.RefreshTokenSessionId | undefined) | null) | undefined;
     /** True if the token is a rotating refresh token */
-    rotating?: boolean;
+    rotating?: boolean | undefined;
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
-    resource_servers?: Management.RefreshTokenResourceServer[];
-    refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
-    last_exchanged_at?: Management.RefreshTokenDate;
+    resource_servers?: Management.RefreshTokenResourceServer[] | undefined;
+    refresh_token_metadata?: ((Management.RefreshTokenMetadata | undefined) | null) | undefined;
+    last_exchanged_at?: Management.RefreshTokenDate | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateResourceServerResponseContent {
     /** ID of the API (resource server). */
-    id?: string;
+    id?: string | undefined;
     /** Friendly name for this resource server. Can not contain `<` or `>` characters. */
-    name?: string;
+    name?: string | undefined;
     /** Whether this is an Auth0 system API (true) or a custom API (false). */
-    is_system?: boolean;
+    is_system?: boolean | undefined;
     /** Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set. */
-    identifier?: string;
+    identifier?: string | undefined;
     /** List of permissions (scopes) that this API uses. */
-    scopes?: Management.ResourceServerScope[];
-    signing_alg?: Management.SigningAlgorithmEnum;
+    scopes?: Management.ResourceServerScope[] | undefined;
+    signing_alg?: Management.SigningAlgorithmEnum | undefined;
     /** Secret used to sign tokens when using symmetric algorithms (HS256). */
-    signing_secret?: string;
+    signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
-    allow_offline_access?: boolean;
+    allow_offline_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
-    skip_consent_for_verifiable_first_party_clients?: boolean;
+    skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
-    token_lifetime?: number;
+    token_lifetime?: number | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API via Implicit or Hybrid Flows. Cannot be greater than the `token_lifetime` value. */
-    token_lifetime_for_web?: number;
+    token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
-    enforce_policies?: boolean;
-    token_dialect?: Management.ResourceServerTokenDialectResponseEnum;
-    token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
-    authorization_details?: unknown[];
-    proof_of_possession?: Management.ResourceServerProofOfPossession | null;
-    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    enforce_policies?: boolean | undefined;
+    token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
+    consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    authorization_details?: unknown[] | undefined;
+    proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
+    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
-    client_id?: string;
+    client_id?: string | undefined;
 }
 
 export interface UpdateRiskAssessmentsSettingsNewDeviceResponseContent {
@@ -20575,174 +20789,174 @@ export interface UpdateRiskAssessmentsSettingsResponseContent {
 
 export interface UpdateRoleResponseContent {
     /** ID for this role. */
-    id?: string;
+    id?: string | undefined;
     /** Name of this role. */
-    name?: string;
+    name?: string | undefined;
     /** Description of this role. */
-    description?: string;
+    description?: string | undefined;
 }
 
 export interface UpdateRuleResponseContent {
     /** Name of this rule. */
-    name?: string;
+    name?: string | undefined;
     /** ID of this rule. */
-    id?: string;
+    id?: string | undefined;
     /** Whether the rule is enabled (true), or disabled (false). */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /** Code to be executed when this rule runs. */
-    script?: string;
+    script?: string | undefined;
     /** Order that this rule should execute in relative to other rules. Lower-valued rules execute first. */
-    order?: number;
+    order?: number | undefined;
     /** Execution stage of this rule. Can be `login_success`, `login_failure`, or `pre_authorize`. */
-    stage?: string;
+    stage?: string | undefined;
 }
 
 export interface UpdateScimConfigurationResponseContent {
     /** The connection's identifier */
-    connection_id?: string;
-    /** The connection's identifier */
-    connection_name?: string;
+    connection_id: string;
+    /** The connection's name */
+    connection_name: string;
     /** The connection's strategy */
-    strategy?: string;
+    strategy: string;
     /** The tenant's name */
-    tenant_name?: string;
+    tenant_name: string;
     /** User ID attribute for generating unique user ids */
-    user_id_attribute?: string;
+    user_id_attribute: string;
     /** The mapping between auth0 and SCIM */
-    mapping?: Management.ScimMappingItem[];
-    /** The Date Time Scim Configuration was created */
-    created_at?: string;
-    /** The Date Time Scim Configuration was last updated */
-    updated_on?: string;
+    mapping: Management.ScimMappingItem[];
+    /** The ISO 8601 date and time the SCIM configuration was created at */
+    created_at: string;
+    /** The ISO 8601 date and time the SCIM configuration was last updated on */
+    updated_on: string;
 }
 
 export interface UpdateSelfServiceProfileResponseContent {
     /** The unique ID of the self-service Profile. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the self-service Profile. */
-    name?: string;
+    name?: string | undefined;
     /** The description of the self-service Profile. */
-    description?: string;
+    description?: string | undefined;
     /** List of attributes to be mapped that will be shown to the user during the SS-SSO flow. */
-    user_attributes?: Management.SelfServiceProfileUserAttribute[];
+    user_attributes?: Management.SelfServiceProfileUserAttribute[] | undefined;
     /** The time when this self-service Profile was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The time when this self-service Profile was updated. */
-    updated_at?: string;
-    branding?: Management.SelfServiceProfileBrandingProperties;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
-    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
+    updated_at?: string | undefined;
+    branding?: Management.SelfServiceProfileBrandingProperties | undefined;
+    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
+    allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[] | undefined;
     /** ID of the user-attribute-profile to associate with this self-service profile. */
-    user_attribute_profile_id?: string;
+    user_attribute_profile_id?: string | undefined;
 }
 
 export interface UpdateSessionResponseContent {
     /** The ID of the session */
-    id?: string;
+    id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
-    created_at?: Management.SessionDate;
-    updated_at?: Management.SessionDate;
-    authenticated_at?: Management.SessionDate;
-    idle_expires_at?: Management.SessionDate;
-    expires_at?: Management.SessionDate;
-    last_interacted_at?: Management.SessionDate;
-    device?: Management.SessionDeviceMetadata;
+    user_id?: string | undefined;
+    created_at?: Management.SessionDate | undefined;
+    updated_at?: Management.SessionDate | undefined;
+    authenticated_at?: Management.SessionDate | undefined;
+    idle_expires_at?: Management.SessionDate | undefined;
+    expires_at?: Management.SessionDate | undefined;
+    last_interacted_at?: Management.SessionDate | undefined;
+    device?: Management.SessionDeviceMetadata | undefined;
     /** List of client details for the session */
-    clients?: Management.SessionClientMetadata[];
-    authentication?: Management.SessionAuthenticationSignals;
-    cookie?: Management.SessionCookieMetadata;
-    session_metadata?: (Management.SessionMetadata | undefined) | null;
+    clients?: Management.SessionClientMetadata[] | undefined;
+    authentication?: Management.SessionAuthenticationSignals | undefined;
+    cookie?: Management.SessionCookieMetadata | undefined;
+    session_metadata?: ((Management.SessionMetadata | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateSettingsResponseContent {
-    universal_login_experience?: Management.UniversalLoginExperienceEnum;
+    universal_login_experience?: Management.UniversalLoginExperienceEnum | undefined;
     /** Whether identifier first is enabled or not */
-    identifier_first?: boolean;
+    identifier_first?: boolean | undefined;
     /** Use WebAuthn with Device Biometrics as the first authentication factor */
-    webauthn_platform_first_factor?: boolean;
+    webauthn_platform_first_factor?: boolean | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateSuspiciousIpThrottlingSettingsResponseContent {
     /** Whether or not suspicious IP throttling attack protections are active. */
-    enabled?: boolean;
+    enabled?: boolean | undefined;
     /**
      * Action to take when a suspicious IP throttling threshold is violated.
      *           Possible values: <code>block</code>, <code>admin_notification</code>.
      */
-    shields?: Management.SuspiciousIpThrottlingShieldsEnum[];
-    allowlist?: Management.SuspiciousIpThrottlingAllowlist;
-    stage?: Management.SuspiciousIpThrottlingStage;
+    shields?: Management.SuspiciousIpThrottlingShieldsEnum[] | undefined;
+    allowlist?: Management.SuspiciousIpThrottlingAllowlist | undefined;
+    stage?: Management.SuspiciousIpThrottlingStage | undefined;
 }
 
 export interface UpdateTenantSettingsResponseContent {
-    change_password?: Management.TenantSettingsPasswordPage | null;
-    guardian_mfa_page?: Management.TenantSettingsGuardianPage | null;
+    change_password?: (Management.TenantSettingsPasswordPage | null) | undefined;
+    guardian_mfa_page?: (Management.TenantSettingsGuardianPage | null) | undefined;
     /** Default audience for API authorization. */
-    default_audience?: string;
+    default_audience?: string | undefined;
     /** Name of connection used for password grants at the `/token`endpoint. The following connection types are supported: LDAP, AD, Database Connections, Passwordless, Windows Azure Active Directory, ADFS. */
-    default_directory?: string;
-    error_page?: Management.TenantSettingsErrorPage | null;
-    device_flow?: Management.TenantSettingsDeviceFlow | null;
-    default_token_quota?: Management.DefaultTokenQuota | null;
-    flags?: Management.TenantSettingsFlags;
+    default_directory?: string | undefined;
+    error_page?: (Management.TenantSettingsErrorPage | null) | undefined;
+    device_flow?: (Management.TenantSettingsDeviceFlow | null) | undefined;
+    default_token_quota?: (Management.DefaultTokenQuota | null) | undefined;
+    flags?: Management.TenantSettingsFlags | undefined;
     /** Friendly name for this tenant. */
-    friendly_name?: string;
+    friendly_name?: string | undefined;
     /** URL of logo to be shown for this tenant (recommended size: 150x150) */
-    picture_url?: string;
+    picture_url?: string | undefined;
     /** End-user support email address. */
-    support_email?: string;
+    support_email?: string | undefined;
     /** End-user support URL. */
-    support_url?: string;
+    support_url?: string | undefined;
     /** URLs that are valid to redirect to after logout from Auth0. */
-    allowed_logout_urls?: string[];
+    allowed_logout_urls?: string[] | undefined;
     /** Number of hours a session will stay valid. */
-    session_lifetime?: number;
+    session_lifetime?: number | undefined;
     /** Number of hours for which a session can be inactive before the user must log in again. */
-    idle_session_lifetime?: number;
+    idle_session_lifetime?: number | undefined;
     /** Number of hours an ephemeral (non-persistent) session will stay valid. */
-    ephemeral_session_lifetime?: number;
+    ephemeral_session_lifetime?: number | undefined;
     /** Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again. */
-    idle_ephemeral_session_lifetime?: number;
+    idle_ephemeral_session_lifetime?: number | undefined;
     /** Selected sandbox version for the extensibility environment. */
-    sandbox_version?: string;
+    sandbox_version?: string | undefined;
     /** Selected sandbox version for rules and hooks extensibility. */
-    legacy_sandbox_version?: string;
+    legacy_sandbox_version?: string | undefined;
     /** Available sandbox versions for the extensibility environment. */
-    sandbox_versions_available?: string[];
+    sandbox_versions_available?: string[] | undefined;
     /** The default absolute redirection uri, must be https */
-    default_redirection_uri?: string;
+    default_redirection_uri?: string | undefined;
     /** Supported locales for the user interface. */
-    enabled_locales?: Management.SupportedLocales[];
-    session_cookie?: Management.SessionCookieSchema | null;
-    sessions?: Management.TenantSettingsSessions | null;
-    oidc_logout?: Management.TenantOidcLogoutSettings;
+    enabled_locales?: Management.SupportedLocales[] | undefined;
+    session_cookie?: (Management.SessionCookieSchema | null) | undefined;
+    sessions?: (Management.TenantSettingsSessions | null) | undefined;
+    oidc_logout?: Management.TenantOidcLogoutSettings | undefined;
     /** Whether to accept an organization name instead of an ID on auth endpoints */
-    allow_organization_name_in_authentication_api?: boolean;
+    allow_organization_name_in_authentication_api?: boolean | undefined;
     /** Whether to enable flexible factors for MFA in the PostLogin action */
-    customize_mfa_in_postlogin_action?: boolean;
+    customize_mfa_in_postlogin_action?: boolean | undefined;
     /** Supported ACR values */
-    acr_values_supported?: string[];
-    mtls?: Management.TenantSettingsMtls | null;
+    acr_values_supported?: string[] | undefined;
+    mtls?: (Management.TenantSettingsMtls | null) | undefined;
     /** Enables the use of Pushed Authorization Requests */
-    pushed_authorization_requests_supported?: boolean;
+    pushed_authorization_requests_supported?: boolean | undefined;
     /** Supports iss parameter in authorization responses */
-    authorization_response_iss_parameter_supported?: boolean | null;
+    authorization_response_iss_parameter_supported?: (boolean | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
      * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
      */
-    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
-    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
+    skip_non_verifiable_callback_uri_confirmation_prompt?: (boolean | null) | undefined;
+    resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
-    phone_consolidated_experience?: boolean;
+    phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
-    enable_ai_guide?: boolean;
+    enable_ai_guide?: boolean | undefined;
 }
 
 export interface UpdateTokenQuota {
@@ -20756,10 +20970,10 @@ export type UpdateUniversalLoginTemplateRequestContent =
       };
 
 export interface UpdateUserAttributeProfileResponseContent {
-    id?: Management.UserAttributeProfileId;
-    name?: Management.UserAttributeProfileName;
-    user_id?: Management.UserAttributeProfileUserId;
-    user_attributes?: Management.UserAttributeProfileUserAttributes;
+    id?: Management.UserAttributeProfileId | undefined;
+    name?: Management.UserAttributeProfileName | undefined;
+    user_id?: Management.UserAttributeProfileUserId | undefined;
+    user_attributes?: Management.UserAttributeProfileUserAttributes | undefined;
 }
 
 /**
@@ -20767,90 +20981,90 @@ export interface UpdateUserAttributeProfileResponseContent {
  */
 export interface UpdateUserAuthenticationMethodResponseContent {
     /** The ID of the newly created authentication method (automatically generated by the application) */
-    id?: string;
+    id?: string | undefined;
     type: Management.CreatedAuthenticationMethodTypeEnum;
     /** A human-readable label to identify the authentication method. */
-    name?: string;
+    name?: string | undefined;
     /** Base32 encoded secret for TOTP generation */
-    totp_secret?: string;
+    totp_secret?: string | undefined;
     /** Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Applies to email authentication methods only. The email address used to send verification messages. */
-    email?: string;
-    authentication_methods?: Management.UserAuthenticationMethodProperties[];
-    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
+    email?: string | undefined;
+    authentication_methods?: Management.UserAuthenticationMethodProperties[] | undefined;
+    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** Applies to webauthn authentication methods only. The id of the credential. */
-    key_id?: string;
+    key_id?: string | undefined;
     /** Applies to webauthn authentication methods only. The public key. */
-    public_key?: string;
+    public_key?: string | undefined;
     /** Applies to passkey authentication methods only. Authenticator Attestation Globally Unique Identifier. */
-    aaguid?: string;
+    aaguid?: string | undefined;
     /** Applies to webauthn authentication methods only. The relying party identifier. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
     /** Authentication method creation date */
-    created_at?: string;
+    created_at?: string | undefined;
 }
 
 export interface UpdateUserResponseContent {
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** Email address of this user. */
-    email?: string;
+    email?: string | undefined;
     /** Whether this email address is verified (true) or unverified (false). */
-    email_verified?: boolean;
+    email_verified?: boolean | undefined;
     /** Username of this user. */
-    username?: string;
+    username?: string | undefined;
     /** Phone number for this user. Follows the <a href="https://en.wikipedia.org/wiki/E.164">E.164 recommendation</a>. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
-    phone_verified?: boolean;
-    created_at?: Management.UserDateSchema;
-    updated_at?: Management.UserDateSchema;
+    phone_verified?: boolean | undefined;
+    created_at?: Management.UserDateSchema | undefined;
+    updated_at?: Management.UserDateSchema | undefined;
     /** Array of user identity objects when accounts are linked. */
-    identities?: Management.UserIdentitySchema[];
-    app_metadata?: Management.UserAppMetadataSchema;
-    user_metadata?: Management.UserMetadataSchema;
+    identities?: Management.UserIdentitySchema[] | undefined;
+    app_metadata?: Management.UserAppMetadataSchema | undefined;
+    user_metadata?: Management.UserMetadataSchema | undefined;
     /** URL to picture, photo, or avatar of this user. */
-    picture?: string;
+    picture?: string | undefined;
     /** Name of this user. */
-    name?: string;
+    name?: string | undefined;
     /** Preferred nickname or alias of this user. */
-    nickname?: string;
+    nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
-    multifactor?: string[];
+    multifactor?: string[] | undefined;
     /** Last IP address from which this user logged in. */
-    last_ip?: string;
-    last_login?: Management.UserDateSchema;
+    last_ip?: string | undefined;
+    last_login?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
-    logins_count?: number;
+    logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
-    blocked?: boolean;
+    blocked?: boolean | undefined;
     /** Given name/first name/forename of this user. */
-    given_name?: string;
+    given_name?: string | undefined;
     /** Family name/last name/surname of this user. */
-    family_name?: string;
+    family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UpdateVerifiableCredentialTemplateResponseContent {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the template. */
-    name?: string;
+    name?: string | undefined;
     /** The type of the template. */
-    type?: string;
+    type?: string | undefined;
     /** The dialect of the template. */
-    dialect?: string;
-    presentation?: Management.MdlPresentationRequest;
+    dialect?: string | undefined;
+    presentation?: Management.MdlPresentationRequest | undefined;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string | null;
+    custom_certificate_authority?: (string | null) | undefined;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string | null;
+    well_known_trusted_issuers?: (string | null) | undefined;
     /** The date and time the template was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time the template was created. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -20861,10 +21075,10 @@ export interface UpdateVerifiableCredentialTemplateResponseContent {
 export type UserAppMetadataSchema = Record<string, unknown>;
 
 export interface UserAttributeProfile {
-    id?: Management.UserAttributeProfileId;
-    name?: Management.UserAttributeProfileName;
-    user_id?: Management.UserAttributeProfileUserId;
-    user_attributes?: Management.UserAttributeProfileUserAttributes;
+    id?: Management.UserAttributeProfileId | undefined;
+    name?: Management.UserAttributeProfileName | undefined;
+    user_id?: Management.UserAttributeProfileUserId | undefined;
+    user_attributes?: Management.UserAttributeProfileUserAttributes | undefined;
 }
 
 /**
@@ -20884,7 +21098,7 @@ export interface UserAttributeProfileOidcMapping {
     /** OIDC mapping field */
     mapping: string;
     /** Display name for the OIDC mapping */
-    display_name?: string;
+    display_name?: string | undefined;
 }
 
 export type UserAttributeProfilePatchUserId = (Management.UserAttributeProfileUserId | null) | undefined;
@@ -20898,59 +21112,59 @@ export type UserAttributeProfileSamlMapping = string[];
  * Strategy-specific overrides for this attribute
  */
 export interface UserAttributeProfileStrategyOverrides {
-    pingfederate?: Management.UserAttributeProfileStrategyOverridesMapping;
-    ad?: Management.UserAttributeProfileStrategyOverridesMapping;
-    adfs?: Management.UserAttributeProfileStrategyOverridesMapping;
-    waad?: Management.UserAttributeProfileStrategyOverridesMapping;
-    "google-apps"?: Management.UserAttributeProfileStrategyOverridesMapping;
-    okta?: Management.UserAttributeProfileStrategyOverridesMapping;
-    oidc?: Management.UserAttributeProfileStrategyOverridesMapping;
-    samlp?: Management.UserAttributeProfileStrategyOverridesMapping;
+    pingfederate?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
+    ad?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
+    adfs?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
+    waad?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
+    "google-apps"?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
+    okta?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
+    oidc?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
+    samlp?: Management.UserAttributeProfileStrategyOverridesMapping | undefined;
 }
 
 export interface UserAttributeProfileStrategyOverridesMapping {
-    oidc_mapping?: Management.UserAttributeProfileOidcMapping;
-    saml_mapping?: Management.UserAttributeProfileSamlMapping;
+    oidc_mapping?: Management.UserAttributeProfileOidcMapping | undefined;
+    saml_mapping?: Management.UserAttributeProfileSamlMapping | undefined;
     /** SCIM mapping override for this strategy */
-    scim_mapping?: string;
+    scim_mapping?: string | undefined;
 }
 
 /**
  * Strategy-specific overrides for user ID
  */
 export interface UserAttributeProfileStrategyOverridesUserId {
-    pingfederate?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
-    ad?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
-    adfs?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
-    waad?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
-    "google-apps"?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
-    okta?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
-    oidc?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
-    samlp?: Management.UserAttributeProfileStrategyOverridesUserIdMapping;
+    pingfederate?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
+    ad?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
+    adfs?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
+    waad?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
+    "google-apps"?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
+    okta?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
+    oidc?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
+    samlp?: Management.UserAttributeProfileStrategyOverridesUserIdMapping | undefined;
 }
 
 export interface UserAttributeProfileStrategyOverridesUserIdMapping {
-    oidc_mapping?: Management.UserAttributeProfileUserIdOidcStrategyOverrideMapping;
-    saml_mapping?: Management.UserAttributeProfileSamlMapping;
+    oidc_mapping?: Management.UserAttributeProfileUserIdOidcStrategyOverrideMapping | undefined;
+    saml_mapping?: Management.UserAttributeProfileSamlMapping | undefined;
     /** SCIM mapping override for this strategy */
-    scim_mapping?: string;
+    scim_mapping?: string | undefined;
 }
 
 /**
  * The structure of the template, which can be used as the payload for creating or updating a User Attribute Profile.
  */
 export interface UserAttributeProfileTemplate {
-    name?: Management.UserAttributeProfileName;
-    user_id?: Management.UserAttributeProfileUserId;
-    user_attributes?: Management.UserAttributeProfileUserAttributes;
+    name?: Management.UserAttributeProfileName | undefined;
+    user_id?: Management.UserAttributeProfileUserId | undefined;
+    user_attributes?: Management.UserAttributeProfileUserAttributes | undefined;
 }
 
 export interface UserAttributeProfileTemplateItem {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The user-friendly name of the template displayed in the UI. */
-    display_name?: string;
-    template?: Management.UserAttributeProfileTemplate;
+    display_name?: string | undefined;
+    template?: Management.UserAttributeProfileTemplate | undefined;
 }
 
 export interface UserAttributeProfileUserAttributeAdditionalProperties {
@@ -20962,11 +21176,11 @@ export interface UserAttributeProfileUserAttributeAdditionalProperties {
     profile_required: boolean;
     /** Auth0 mapping for this attribute */
     auth0_mapping: string;
-    oidc_mapping?: Management.UserAttributeProfileOidcMapping;
-    saml_mapping?: Management.UserAttributeProfileSamlMapping;
+    oidc_mapping?: Management.UserAttributeProfileOidcMapping | undefined;
+    saml_mapping?: Management.UserAttributeProfileSamlMapping | undefined;
     /** SCIM mapping for this attribute */
-    scim_mapping?: string;
-    strategy_overrides?: Management.UserAttributeProfileStrategyOverrides;
+    scim_mapping?: string | undefined;
+    strategy_overrides?: Management.UserAttributeProfileStrategyOverrides | undefined;
 }
 
 /**
@@ -20981,11 +21195,11 @@ export type UserAttributeProfileUserAttributes = Record<
  * User ID mapping configuration
  */
 export interface UserAttributeProfileUserId {
-    oidc_mapping?: Management.UserAttributeProfileUserIdOidcMappingEnum;
-    saml_mapping?: Management.UserAttributeProfileUserIdSamlMapping;
+    oidc_mapping?: Management.UserAttributeProfileUserIdOidcMappingEnum | undefined;
+    saml_mapping?: Management.UserAttributeProfileUserIdSamlMapping | undefined;
     /** SCIM mapping for user ID */
-    scim_mapping?: string;
-    strategy_overrides?: Management.UserAttributeProfileStrategyOverridesUserId;
+    scim_mapping?: string | undefined;
+    strategy_overrides?: Management.UserAttributeProfileStrategyOverridesUserId | undefined;
 }
 
 /** OIDC mapping for user ID */
@@ -21014,44 +21228,44 @@ export interface UserAuthenticationMethod {
     id: string;
     type: Management.AuthenticationMethodTypeEnum;
     /** The authentication method status */
-    confirmed?: boolean;
+    confirmed?: boolean | undefined;
     /** A human-readable label to identify the authentication method */
-    name?: string;
-    authentication_methods?: Management.UserAuthenticationMethodProperties[];
-    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
+    name?: string | undefined;
+    authentication_methods?: Management.UserAuthenticationMethodProperties[] | undefined;
+    preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** The ID of a linked authentication method. Linked authentication methods will be deleted together. */
-    link_id?: string;
+    link_id?: string | undefined;
     /** Applies to phone authentication methods only. The destination phone number used to send verification codes via text and voice. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Applies to email and email-verification authentication methods only. The email address used to send verification messages. */
-    email?: string;
+    email?: string | undefined;
     /** Applies to webauthn authentication methods only. The ID of the generated credential. */
-    key_id?: string;
+    key_id?: string | undefined;
     /** Applies to webauthn authentication methods only. The public key. */
-    public_key?: string;
+    public_key?: string | undefined;
     /** Authenticator creation date */
     created_at: string;
     /** Enrollment date */
-    enrolled_at?: string;
+    enrolled_at?: string | undefined;
     /** Last authentication */
-    last_auth_at?: string;
+    last_auth_at?: string | undefined;
     /** Applies to passkeys only. The kind of device the credential is stored on as defined by backup eligibility. "single_device" credentials cannot be backed up and synced to another device, "multi_device" credentials can be backed up if enabled by the end-user. */
-    credential_device_type?: string;
+    credential_device_type?: string | undefined;
     /** Applies to passkeys only. Whether the credential was backed up. */
-    credential_backed_up?: boolean;
+    credential_backed_up?: boolean | undefined;
     /** Applies to passkeys only. The ID of the user identity linked with the authentication method. */
-    identity_user_id?: string;
+    identity_user_id?: string | undefined;
     /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
-    user_agent?: string;
+    user_agent?: string | undefined;
     /** Applies to passkey authentication methods only. Authenticator Attestation Globally Unique Identifier. */
-    aaguid?: string;
+    aaguid?: string | undefined;
     /** Applies to webauthn/passkey authentication methods only. The credential's relying party identifier. */
-    relying_party_identifier?: string;
+    relying_party_identifier?: string | undefined;
 }
 
 export interface UserAuthenticationMethodProperties {
-    type?: Management.UserAuthenticationMethodPropertiesEnum;
-    id?: string;
+    type?: Management.UserAuthenticationMethodPropertiesEnum | undefined;
+    id?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -21067,11 +21281,11 @@ export type UserAuthenticationMethodPropertiesEnum =
 
 export interface UserBlockIdentifier {
     /** Identifier (should be any of an `email`, `username`, or `phone_number`) */
-    identifier?: string;
+    identifier?: string | undefined;
     /** IP Address */
-    ip?: string;
+    ip?: string | undefined;
     /** Connection identifier */
-    connection?: string;
+    connection?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -21104,20 +21318,20 @@ export type UserEnrollmentStatusEnum = (typeof UserEnrollmentStatusEnum)[keyof t
 
 export interface UserGrant {
     /** ID of the grant. */
-    id?: string;
+    id?: string | undefined;
     /** ID of the client. */
-    clientID?: string;
+    clientID?: string | undefined;
     /** ID of the user. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** Audience of the grant. */
-    audience?: string;
+    audience?: string | undefined;
     /** Scopes included in this grant. */
-    scope?: string[];
+    scope?: string[] | undefined;
 }
 
 export interface UserGroupsResponseSchema extends Management.Group {
     /** Timestamp of when the group membership was added. */
-    membership_created_at?: string;
+    membership_created_at?: string | undefined;
 }
 
 /**
@@ -21131,15 +21345,15 @@ export interface UserIdentity {
     user_id: Management.UserId;
     /** Type of identity provider. */
     provider: string;
-    profileData?: Management.UserProfileData;
+    profileData?: Management.UserProfileData | undefined;
     /** Whether the identity provider is a social provider (true) or not (false). */
-    isSocial?: boolean;
+    isSocial?: boolean | undefined;
     /** IDP access token returned if scope `read:user_idp_tokens` is defined. */
-    access_token?: string;
+    access_token?: string | undefined;
     /** IDP access token secret returned only if `scope read:user_idp_tokens` is defined. */
-    access_token_secret?: string;
+    access_token_secret?: string | undefined;
     /** IDP refresh token returned only if scope `read:user_idp_tokens` is defined. */
-    refresh_token?: string;
+    refresh_token?: string | undefined;
 }
 
 /** The type of identity provider */
@@ -21211,27 +21425,27 @@ export type UserIdentityProviderEnum = (typeof UserIdentityProviderEnum)[keyof t
 
 export interface UserIdentitySchema {
     /** Name of the connection containing this identity. */
-    connection?: string;
+    connection?: string | undefined;
     /** Unique identifier of the user user for this identity. */
-    user_id?: string;
-    provider?: Management.UserIdentityProviderEnum;
+    user_id?: string | undefined;
+    provider?: Management.UserIdentityProviderEnum | undefined;
     /** Whether this identity is from a social provider (true) or not (false). */
-    isSocial?: boolean;
+    isSocial?: boolean | undefined;
     /** IDP access token returned only if scope read:user_idp_tokens is defined. */
-    access_token?: string;
+    access_token?: string | undefined;
     /** IDP access token secret returned only if scope read:user_idp_tokens is defined. */
-    access_token_secret?: string;
+    access_token_secret?: string | undefined;
     /** IDP refresh token returned only if scope read:user_idp_tokens is defined. */
-    refresh_token?: string;
-    profileData?: Management.UserProfileData;
+    refresh_token?: string | undefined;
+    profileData?: Management.UserProfileData | undefined;
 }
 
 export interface UserListLogOffsetPaginatedResponseContent {
-    start?: number;
-    limit?: number;
-    length?: number;
-    total?: number;
-    logs?: Management.Log[];
+    start?: number | undefined;
+    limit?: number | undefined;
+    length?: number | undefined;
+    total?: number | undefined;
+    logs?: Management.Log[] | undefined;
 }
 
 /**
@@ -21254,141 +21468,141 @@ export type UserMultifactorProviderEnum =
 
 export interface UserPermissionSchema {
     /** Resource server (API) identifier that this permission is for. */
-    resource_server_identifier?: string;
+    resource_server_identifier?: string | undefined;
     /** Name of this permission. */
-    permission_name?: string;
+    permission_name?: string | undefined;
     /** Resource server (API) name this permission is for. */
-    resource_server_name?: string;
+    resource_server_name?: string | undefined;
     /** Description of this permission. */
-    description?: string;
+    description?: string | undefined;
 }
 
 export interface UserProfileData {
     /** Email address of this user. */
-    email?: string;
+    email?: string | undefined;
     /** Whether this email address is verified (true) or unverified (false). */
-    email_verified?: boolean;
+    email_verified?: boolean | undefined;
     /** Name of this user. */
-    name?: string;
+    name?: string | undefined;
     /** Username of this user. */
-    username?: string;
+    username?: string | undefined;
     /** Given name/first name/forename of this user. */
-    given_name?: string;
+    given_name?: string | undefined;
     /** Phone number for this user. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Whether this phone number is verified (true) or unverified (false). */
-    phone_verified?: boolean;
+    phone_verified?: boolean | undefined;
     /** Family name/last name/surname of this user. */
-    family_name?: string;
+    family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UserResponseSchema {
     /** ID of the user which can be used when interacting with other APIs. */
-    user_id?: string;
+    user_id?: string | undefined;
     /** Email address of this user. */
-    email?: string;
+    email?: string | undefined;
     /** Whether this email address is verified (true) or unverified (false). */
-    email_verified?: boolean;
+    email_verified?: boolean | undefined;
     /** Username of this user. */
-    username?: string;
+    username?: string | undefined;
     /** Phone number for this user. Follows the <a href="https://en.wikipedia.org/wiki/E.164">E.164 recommendation</a>. */
-    phone_number?: string;
+    phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
-    phone_verified?: boolean;
-    created_at?: Management.UserDateSchema;
-    updated_at?: Management.UserDateSchema;
+    phone_verified?: boolean | undefined;
+    created_at?: Management.UserDateSchema | undefined;
+    updated_at?: Management.UserDateSchema | undefined;
     /** Array of user identity objects when accounts are linked. */
-    identities?: Management.UserIdentitySchema[];
-    app_metadata?: Management.UserAppMetadataSchema;
-    user_metadata?: Management.UserMetadataSchema;
+    identities?: Management.UserIdentitySchema[] | undefined;
+    app_metadata?: Management.UserAppMetadataSchema | undefined;
+    user_metadata?: Management.UserMetadataSchema | undefined;
     /** URL to picture, photo, or avatar of this user. */
-    picture?: string;
+    picture?: string | undefined;
     /** Name of this user. */
-    name?: string;
+    name?: string | undefined;
     /** Preferred nickname or alias of this user. */
-    nickname?: string;
+    nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
-    multifactor?: string[];
+    multifactor?: string[] | undefined;
     /** Last IP address from which this user logged in. */
-    last_ip?: string;
-    last_login?: Management.UserDateSchema;
+    last_ip?: string | undefined;
+    last_login?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
-    logins_count?: number;
+    logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
-    blocked?: boolean;
+    blocked?: boolean | undefined;
     /** Given name/first name/forename of this user. */
-    given_name?: string;
+    given_name?: string | undefined;
     /** Family name/last name/surname of this user. */
-    family_name?: string;
+    family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface UsernameAllowedTypes {
-    email?: boolean;
-    phone_number?: boolean;
+    email?: boolean | undefined;
+    phone_number?: boolean | undefined;
 }
 
 /**
  * Configuration for the username attribute for users.
  */
 export interface UsernameAttribute {
-    identifier?: Management.ConnectionAttributeIdentifier;
+    identifier?: Management.ConnectionAttributeIdentifier | undefined;
     /** Determines if property should be required for users */
-    profile_required?: boolean;
-    signup?: Management.SignupSchema;
-    validation?: Management.UsernameValidation;
+    profile_required?: boolean | undefined;
+    signup?: Management.SignupSchema | undefined;
+    validation?: Management.UsernameValidation | undefined;
 }
 
 export interface UsernameValidation {
     /** Minimum allowed length */
-    min_length?: number;
+    min_length?: number | undefined;
     /** Maximum allowed length */
-    max_length?: number;
-    allowed_types?: Management.UsernameAllowedTypes;
+    max_length?: number | undefined;
+    allowed_types?: Management.UsernameAllowedTypes | undefined;
 }
 
 export interface UsersEnrollment {
     /** ID of this enrollment. */
-    id?: string;
-    status?: Management.UserEnrollmentStatusEnum;
+    id?: string | undefined;
+    status?: Management.UserEnrollmentStatusEnum | undefined;
     /** Type of enrollment. */
-    type?: string;
+    type?: string | undefined;
     /** Name of enrollment (usually phone number). */
-    name?: string;
+    name?: string | undefined;
     /** Device identifier (usually phone identifier) of this enrollment. */
-    identifier?: string;
+    identifier?: string | undefined;
     /** Phone number for this enrollment. */
-    phone_number?: string;
-    auth_method?: Management.UserEnrollmentAuthMethodEnum;
+    phone_number?: string | undefined;
+    auth_method?: Management.UserEnrollmentAuthMethodEnum | undefined;
     /** Start date and time of this enrollment. */
-    enrolled_at?: string;
+    enrolled_at?: string | undefined;
     /** Last authentication date and time of this enrollment. */
-    last_auth?: string;
+    last_auth?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
 export interface VerifiableCredentialTemplateResponse {
     /** The id of the template. */
-    id?: string;
+    id?: string | undefined;
     /** The name of the template. */
-    name?: string;
+    name?: string | undefined;
     /** The type of the template. */
-    type?: string;
+    type?: string | undefined;
     /** The dialect of the template. */
-    dialect?: string;
-    presentation?: Management.MdlPresentationRequest;
+    dialect?: string | undefined;
+    presentation?: Management.MdlPresentationRequest | undefined;
     /** The custom certificate authority. */
-    custom_certificate_authority?: string | null;
+    custom_certificate_authority?: (string | null) | undefined;
     /** The well-known trusted issuers, comma separated. */
-    well_known_trusted_issuers?: string | null;
+    well_known_trusted_issuers?: (string | null) | undefined;
     /** The date and time the template was created. */
-    created_at?: string;
+    created_at?: string | undefined;
     /** The date and time the template was created. */
-    updated_at?: string;
+    updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -21409,16 +21623,16 @@ export interface VerifyCustomDomainResponseContent {
     status: Management.CustomDomainStatusFilterEnum;
     type: Management.CustomDomainTypeEnum;
     /** CNAME API key header. */
-    cname_api_key?: string;
+    cname_api_key?: string | undefined;
     /** Intermediate address. */
-    origin_domain_name?: string;
-    verification?: Management.DomainVerification;
+    origin_domain_name?: string | undefined;
+    verification?: Management.DomainVerification | undefined;
     /** The HTTP header to fetch the client's IP address */
-    custom_client_ip_header?: string | null;
+    custom_client_ip_header?: (string | null) | undefined;
     /** The TLS version policy */
-    tls_policy?: string;
-    domain_metadata?: Management.DomainMetadata;
-    certificate?: Management.DomainCertificate;
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
 }
 
 export interface VerifyEmailTicketResponseContent {
@@ -21431,7 +21645,7 @@ export interface VerifyEmailTicketResponseContent {
 export interface X509CertificateCredential {
     credential_type: Management.X509CertificateCredentialTypeEnum;
     /** Friendly name for a credential. */
-    name?: string;
+    name?: string | undefined;
     /** PEM-formatted X509 certificate. Must be JSON escaped. */
     pem: string;
 }

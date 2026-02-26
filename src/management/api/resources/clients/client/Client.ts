@@ -109,34 +109,17 @@ export class ClientsClient {
                     app_type: appType,
                     q,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (isGlobal !== undefined) {
-                    _queryParams["is_global"] = isGlobal?.toString() ?? null;
-                }
-                if (isFirstParty !== undefined) {
-                    _queryParams["is_first_party"] = isFirstParty?.toString() ?? null;
-                }
-                if (appType !== undefined) {
-                    _queryParams["app_type"] = appType;
-                }
-                if (q !== undefined) {
-                    _queryParams["q"] = q;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    fields,
+                    include_fields: includeFields,
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    is_global: isGlobal,
+                    is_first_party: isFirstParty,
+                    app_type: appType,
+                    q,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -307,6 +290,99 @@ export class ClientsClient {
     }
 
     /**
+     *
+     *       Idempotent registration for Client ID Metadata Document (CIMD) clients.
+     *       Uses client_id_alias as the unique identifier for upsert operations.
+     *       **Create:** Returns 201 when a new client is created (requires \
+     *
+     * @param {Management.RegisterCimdClientRequestContent} request
+     * @param {ClientsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link Management.BadGatewayError}
+     * @throws {@link Management.ServiceUnavailableError}
+     *
+     * @example
+     *     await client.clients.registerCimdClient({
+     *         "key": "value"
+     *     })
+     */
+    public registerCimdClient(
+        request: Management.RegisterCimdClientRequestContent,
+        requestOptions?: ClientsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.RegisterCimdClientResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__registerCimdClient(request, requestOptions));
+    }
+
+    private async __registerCimdClient(
+        request: Management.RegisterCimdClientRequestContent,
+        requestOptions?: ClientsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.RegisterCimdClientResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "clients/cimd/register",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.RegisterCimdClientResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                case 502:
+                    throw new Management.BadGatewayError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new Management.ServiceUnavailableError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/clients/cimd/register");
+    }
+
+    /**
      * Retrieve client details by ID. Clients are SSO connections or Applications linked with your Auth0 tenant. A list of fields to include or exclude may also be specified.
      * For more information, read <a href="https://www.auth0.com/docs/get-started/applications"> Applications in Auth0</a> and <a href="https://www.auth0.com/docs/authenticate/single-sign-on"> Single Sign-On</a>.
      * <ul>
@@ -369,15 +445,10 @@ export class ClientsClient {
         requestOptions?: ClientsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetClientResponseContent>> {
         const { fields, include_fields: includeFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            fields,
+            include_fields: includeFields,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

@@ -349,7 +349,7 @@ export interface UpdateClientRequestContent {
     client_aliases?: string[];
     /** Ids of clients that will be allowed to perform delegation requests. Clients that will be allowed to make delegation request. By default, all your clients will be allowed. This field allows you to specify specific clients */
     allowed_clients?: string[];
-    /** URLs that are valid to redirect to after logout from Auth0. */
+    /** URLs that are valid to redirect to after logout from Auth0 */
     allowed_logout_urls?: string[];
     jwt_configuration?: Management.ClientJwtConfiguration;
     encryption_key?: Management.ClientEncryptionKey | null;
@@ -1451,7 +1451,7 @@ export interface CreateSelfServiceProfileRequestContent {
     /** The description of the self-service Profile. */
     description?: string;
     branding?: Management.SelfServiceProfileBrandingProperties;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
+    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
     allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
     /** List of attributes to be mapped that will be shown to the user during the SS-SSO flow. */
     user_attributes?: Management.SelfServiceProfileUserAttribute[];
@@ -1468,7 +1468,7 @@ export interface UpdateSelfServiceProfileRequestContent {
     name?: string;
     description?: (Management.SelfServiceProfileDescription | undefined) | null;
     branding?: Management.SelfServiceProfileBranding | undefined;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
+    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
     allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
     user_attributes?: (Management.SelfServiceProfileUserAttributes | undefined) | null;
     /** ID of the user-attribute-profile to associate with this self-service profile. */
@@ -2408,15 +2408,15 @@ export interface ListDirectoryProvisioningsRequestParameters {
 /**
  * @example
  *     {
- *         take: 1,
- *         from: "from"
+ *         from: "from",
+ *         take: 1
  *     }
  */
-export interface GetConnectionEnabledClientsRequestParameters {
-    /** Number of results per page. Defaults to 50. */
-    take?: number | null;
+export interface ListScimConfigurationsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
 }
 
 /**
@@ -2431,6 +2431,20 @@ export interface UpdateScimConfigurationRequestContent {
     user_id_attribute: string;
     /** The mapping between auth0 and SCIM */
     mapping: Management.ScimMappingItem[];
+}
+
+/**
+ * @example
+ *     {
+ *         take: 1,
+ *         from: "from"
+ *     }
+ */
+export interface GetConnectionEnabledClientsRequestParameters {
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
 }
 
 /**

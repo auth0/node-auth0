@@ -63,31 +63,16 @@ export class DeviceCredentialsClient {
                     client_id: clientId,
                     type: type_,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (userId !== undefined) {
-                    _queryParams["user_id"] = userId;
-                }
-                if (clientId !== undefined) {
-                    _queryParams["client_id"] = clientId;
-                }
-                if (type_ !== undefined) {
-                    _queryParams["type"] = type_;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    fields,
+                    include_fields: includeFields,
+                    user_id: userId,
+                    client_id: clientId,
+                    type: type_ !== undefined ? type_ : undefined,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
