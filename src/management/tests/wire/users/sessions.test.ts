@@ -70,7 +70,7 @@ describe("SessionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/sessions")
             .respondWith()
             .statusCode(401)
@@ -88,7 +88,7 @@ describe("SessionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/sessions")
             .respondWith()
             .statusCode(403)
@@ -106,7 +106,7 @@ describe("SessionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/sessions")
             .respondWith()
             .statusCode(404)
@@ -124,7 +124,7 @@ describe("SessionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/user_id/sessions")
             .respondWith()
             .statusCode(429)

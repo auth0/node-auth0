@@ -75,13 +75,7 @@ describe("GroupsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/groups")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/groups").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.groups.get("id");
@@ -93,13 +87,7 @@ describe("GroupsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/groups")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/groups").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.groups.get("id");
@@ -111,13 +99,7 @@ describe("GroupsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/groups")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/groups").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.groups.get("id");
@@ -129,13 +111,7 @@ describe("GroupsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/groups")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/groups").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.groups.get("id");

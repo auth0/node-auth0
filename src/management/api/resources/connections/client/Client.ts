@@ -23,9 +23,9 @@ export declare namespace ConnectionsClient {
 export class ConnectionsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ConnectionsClient.Options>;
     protected _directoryProvisioning: DirectoryProvisioningClient | undefined;
+    protected _scimConfiguration: ScimConfigurationClient | undefined;
     protected _clients: ClientsClient | undefined;
     protected _keys: KeysClient | undefined;
-    protected _scimConfiguration: ScimConfigurationClient | undefined;
     protected _users: UsersClient | undefined;
 
     constructor(options: ConnectionsClient.Options) {
@@ -36,16 +36,16 @@ export class ConnectionsClient {
         return (this._directoryProvisioning ??= new DirectoryProvisioningClient(this._options));
     }
 
+    public get scimConfiguration(): ScimConfigurationClient {
+        return (this._scimConfiguration ??= new ScimConfigurationClient(this._options));
+    }
+
     public get clients(): ClientsClient {
         return (this._clients ??= new ClientsClient(this._options));
     }
 
     public get keys(): KeysClient {
         return (this._keys ??= new KeysClient(this._options));
-    }
-
-    public get scimConfiguration(): ScimConfigurationClient {
-        return (this._scimConfiguration ??= new ScimConfigurationClient(this._options));
     }
 
     public get users(): UsersClient {
@@ -99,29 +99,18 @@ export class ConnectionsClient {
                 request: Management.ListConnectionsQueryParameters,
             ): Promise<core.WithRawResponse<Management.ListConnectionsCheckpointPaginatedResponseContent>> => {
                 const { from: from_, take = 50, strategy, name, fields, include_fields: includeFields } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (strategy !== undefined) {
-                    if (Array.isArray(strategy)) {
-                        _queryParams["strategy"] = strategy.map((item) => item);
-                    } else {
-                        _queryParams["strategy"] = strategy;
-                    }
-                }
-                if (name !== undefined) {
-                    _queryParams["name"] = name;
-                }
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                    strategy: Array.isArray(strategy)
+                        ? strategy.map((item) => item)
+                        : strategy !== undefined
+                          ? strategy
+                          : undefined,
+                    name,
+                    fields,
+                    include_fields: includeFields,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -316,15 +305,10 @@ export class ConnectionsClient {
         requestOptions?: ConnectionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetConnectionResponseContent>> {
         const { fields, include_fields: includeFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            fields,
+            include_fields: includeFields,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

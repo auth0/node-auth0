@@ -56,13 +56,10 @@ export class TemplatesClient {
                 request: Management.ListVerifiableCredentialTemplatesRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListVerifiableCredentialTemplatesPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

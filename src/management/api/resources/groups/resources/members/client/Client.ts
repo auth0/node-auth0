@@ -52,19 +52,12 @@ export class MembersClient {
                 request: Management.GetGroupMembersRequestParameters,
             ): Promise<core.WithRawResponse<Management.GetGroupMembersResponseContent>> => {
                 const { fields, include_fields: includeFields, from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    fields,
+                    include_fields: includeFields,
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

@@ -171,37 +171,18 @@ export class UsersClient {
                     search_engine: searchEngine,
                     primary_order: primaryOrder,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (sort !== undefined) {
-                    _queryParams["sort"] = sort;
-                }
-                if (connection !== undefined) {
-                    _queryParams["connection"] = connection;
-                }
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (q !== undefined) {
-                    _queryParams["q"] = q;
-                }
-                if (searchEngine !== undefined) {
-                    _queryParams["search_engine"] = searchEngine;
-                }
-                if (primaryOrder !== undefined) {
-                    _queryParams["primary_order"] = primaryOrder?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    sort,
+                    connection,
+                    fields,
+                    include_fields: includeFields,
+                    q,
+                    search_engine: searchEngine !== undefined ? searchEngine : undefined,
+                    primary_order: primaryOrder,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -396,16 +377,11 @@ export class UsersClient {
         requestOptions?: UsersClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.UserResponseSchema[]>> {
         const { fields, include_fields: includeFields, email } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
-        _queryParams["email"] = email;
+        const _queryParams: Record<string, unknown> = {
+            fields,
+            include_fields: includeFields,
+            email,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -487,15 +463,10 @@ export class UsersClient {
         requestOptions?: UsersClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetUserResponseContent>> {
         const { fields, include_fields: includeFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            fields,
+            include_fields: includeFields,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

@@ -53,13 +53,10 @@ export class ClientsClient {
                 request: Management.GetConnectionEnabledClientsRequestParameters,
             ): Promise<core.WithRawResponse<Management.GetConnectionEnabledClientsResponseContent>> => {
                 const { take = 50, from: from_ } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    take,
+                    from: from_,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

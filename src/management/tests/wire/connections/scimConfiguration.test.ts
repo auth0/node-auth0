@@ -5,6 +5,131 @@ import { ManagementClient } from "../../../Client";
 import { mockServerPool } from "../../mock-server/MockServerPool";
 
 describe("ScimConfigurationClient", () => {
+    test("list (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            scim_configurations: [
+                {
+                    connection_id: "connection_id",
+                    connection_name: "connection_name",
+                    strategy: "strategy",
+                    tenant_name: "tenant_name",
+                    user_id_attribute: "user_id_attribute",
+                    mapping: [{}],
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_on: "2024-01-15T09:30:00Z",
+                },
+            ],
+            next: "next",
+        };
+        server
+            .mockEndpoint({ once: false })
+            .get("/connections-scim-configurations")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            scim_configurations: [
+                {
+                    connection_id: "connection_id",
+                    connection_name: "connection_name",
+                    strategy: "strategy",
+                    tenant_name: "tenant_name",
+                    user_id_attribute: "user_id_attribute",
+                    mapping: [{}],
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_on: "2024-01-15T09:30:00Z",
+                },
+            ],
+            next: "next",
+        };
+        const page = await client.connections.scimConfiguration.list({
+            from: "from",
+            take: 1,
+        });
+
+        expect(expected.scim_configurations).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.scim_configurations).toEqual(nextPage.data);
+    });
+
+    test("list (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections-scim-configurations")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.scimConfiguration.list();
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections-scim-configurations")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.scimConfiguration.list();
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("list (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections-scim-configurations")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.scimConfiguration.list();
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("list (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/connections-scim-configurations")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.scimConfiguration.list();
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
@@ -16,8 +141,8 @@ describe("ScimConfigurationClient", () => {
             tenant_name: "tenant_name",
             user_id_attribute: "user_id_attribute",
             mapping: [{ auth0: "auth0", scim: "scim" }],
-            created_at: "created_at",
-            updated_on: "updated_on",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_on: "2024-01-15T09:30:00Z",
         };
         server
             .mockEndpoint()
@@ -40,8 +165,8 @@ describe("ScimConfigurationClient", () => {
                     scim: "scim",
                 },
             ],
-            created_at: "created_at",
-            updated_on: "updated_on",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_on: "2024-01-15T09:30:00Z",
         });
     });
 
@@ -92,8 +217,8 @@ describe("ScimConfigurationClient", () => {
             tenant_name: "tenant_name",
             user_id_attribute: "user_id_attribute",
             mapping: [{ auth0: "auth0", scim: "scim" }],
-            created_at: "created_at",
-            updated_on: "updated_on",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_on: "2024-01-15T09:30:00Z",
         };
         server
             .mockEndpoint()
@@ -116,8 +241,8 @@ describe("ScimConfigurationClient", () => {
                     scim: "scim",
                 },
             ],
-            created_at: "created_at",
-            updated_on: "updated_on",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_on: "2024-01-15T09:30:00Z",
         });
     });
 
@@ -214,8 +339,8 @@ describe("ScimConfigurationClient", () => {
             tenant_name: "tenant_name",
             user_id_attribute: "user_id_attribute",
             mapping: [{ auth0: "auth0", scim: "scim" }],
-            created_at: "created_at",
-            updated_on: "updated_on",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_on: "2024-01-15T09:30:00Z",
         };
         server
             .mockEndpoint()
@@ -242,8 +367,8 @@ describe("ScimConfigurationClient", () => {
                     scim: "scim",
                 },
             ],
-            created_at: "created_at",
-            updated_on: "updated_on",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_on: "2024-01-15T09:30:00Z",
         });
     });
 

@@ -109,34 +109,17 @@ export class ClientsClient {
                     app_type: appType,
                     q,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (isGlobal !== undefined) {
-                    _queryParams["is_global"] = isGlobal?.toString() ?? null;
-                }
-                if (isFirstParty !== undefined) {
-                    _queryParams["is_first_party"] = isFirstParty?.toString() ?? null;
-                }
-                if (appType !== undefined) {
-                    _queryParams["app_type"] = appType;
-                }
-                if (q !== undefined) {
-                    _queryParams["q"] = q;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    fields,
+                    include_fields: includeFields,
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    is_global: isGlobal,
+                    is_first_party: isFirstParty,
+                    app_type: appType,
+                    q,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -369,15 +352,10 @@ export class ClientsClient {
         requestOptions?: ClientsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetClientResponseContent>> {
         const { fields, include_fields: includeFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            fields,
+            include_fields: includeFields,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

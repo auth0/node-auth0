@@ -73,7 +73,7 @@ describe("DirectoryProvisioningClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections-directory-provisionings")
             .respondWith()
             .statusCode(400)
@@ -91,7 +91,7 @@ describe("DirectoryProvisioningClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections-directory-provisionings")
             .respondWith()
             .statusCode(401)
@@ -109,7 +109,7 @@ describe("DirectoryProvisioningClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections-directory-provisionings")
             .respondWith()
             .statusCode(403)
@@ -127,7 +127,7 @@ describe("DirectoryProvisioningClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connections-directory-provisionings")
             .respondWith()
             .statusCode(429)
