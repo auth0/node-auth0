@@ -20,7 +20,7 @@ export declare namespace Fetcher {
         url: string;
         method: string;
         contentType?: string;
-        headers?: Record<string, string | EndpointSupplier<string | null | undefined> | null | undefined>;
+        headers?: Record<string, unknown>;
         queryParameters?: Record<string, unknown>;
         body?: unknown;
         timeoutMs?: number;
@@ -218,7 +218,13 @@ async function getHeaders(args: Fetcher.Args): Promise<Headers> {
 
     newHeaders.set(
         "Accept",
-        args.responseType === "json" ? "application/json" : args.responseType === "text" ? "text/plain" : "*/*",
+        args.responseType === "json"
+            ? "application/json"
+            : args.responseType === "text"
+              ? "text/plain"
+              : args.responseType === "sse"
+                ? "text/event-stream"
+                : "*/*",
     );
     if (args.body !== undefined && args.contentType != null) {
         newHeaders.set("Content-Type", args.contentType);

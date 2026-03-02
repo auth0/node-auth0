@@ -67,28 +67,15 @@ export class GroupsClient {
                     from: from_,
                     take = 50,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (connectionId !== undefined) {
-                    _queryParams["connection_id"] = connectionId;
-                }
-                if (name !== undefined) {
-                    _queryParams["name"] = name;
-                }
-                if (externalId !== undefined) {
-                    _queryParams["external_id"] = externalId;
-                }
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    connection_id: connectionId,
+                    name,
+                    external_id: externalId,
+                    fields,
+                    include_fields: includeFields,
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

@@ -60,7 +60,7 @@ describe("DiscoveryDomainsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/discovery-domains")
             .respondWith()
             .statusCode(400)
@@ -78,7 +78,7 @@ describe("DiscoveryDomainsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/discovery-domains")
             .respondWith()
             .statusCode(401)
@@ -96,7 +96,7 @@ describe("DiscoveryDomainsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/discovery-domains")
             .respondWith()
             .statusCode(403)
@@ -114,7 +114,7 @@ describe("DiscoveryDomainsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/discovery-domains")
             .respondWith()
             .statusCode(404)
@@ -132,7 +132,7 @@ describe("DiscoveryDomainsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/discovery-domains")
             .respondWith()
             .statusCode(429)

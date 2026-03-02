@@ -64,7 +64,7 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/flows/flow_id/executions")
             .respondWith()
             .statusCode(400)
@@ -82,7 +82,7 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/flows/flow_id/executions")
             .respondWith()
             .statusCode(401)
@@ -100,7 +100,7 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/flows/flow_id/executions")
             .respondWith()
             .statusCode(403)
@@ -118,7 +118,7 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/flows/flow_id/executions")
             .respondWith()
             .statusCode(429)

@@ -53,13 +53,10 @@ export class BindingsClient {
                 request: Management.ListActionTriggerBindingsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListActionBindingsPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,

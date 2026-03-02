@@ -54,22 +54,22 @@ export class UsersImportsClient {
         request: Management.CreateImportUsersRequestContent,
         requestOptions?: UsersImportsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.CreateImportUsersResponseContent>> {
-        const _request = await core.newFormData();
-        await _request.appendFile("users", request.users);
-        _request.append("connection_id", request.connection_id);
+        const _body = await core.newFormData();
+        await _body.appendFile("users", request.users);
+        _body.append("connection_id", request.connection_id);
         if (request.upsert != null) {
-            _request.append("upsert", request.upsert.toString());
+            _body.append("upsert", request.upsert?.toString());
         }
 
         if (request.external_id != null) {
-            _request.append("external_id", request.external_id);
+            _body.append("external_id", request.external_id);
         }
 
         if (request.send_completion_email != null) {
-            _request.append("send_completion_email", request.send_completion_email.toString());
+            _body.append("send_completion_email", request.send_completion_email?.toString());
         }
 
-        const _maybeEncodedRequest = await _request.getRequest();
+        const _maybeEncodedRequest = await _body.getRequest();
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

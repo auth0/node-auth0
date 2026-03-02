@@ -53,8 +53,9 @@ export class UsersClient {
         requestOptions?: UsersClient.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { email } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        _queryParams["email"] = email;
+        const _queryParams: Record<string, unknown> = {
+            email,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,

@@ -68,7 +68,7 @@ describe("UserAttributeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/user-attribute-profiles")
             .respondWith()
             .statusCode(400)
@@ -86,7 +86,7 @@ describe("UserAttributeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/user-attribute-profiles")
             .respondWith()
             .statusCode(401)
@@ -104,7 +104,7 @@ describe("UserAttributeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/user-attribute-profiles")
             .respondWith()
             .statusCode(403)
@@ -122,7 +122,7 @@ describe("UserAttributeProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/user-attribute-profiles")
             .respondWith()
             .statusCode(429)

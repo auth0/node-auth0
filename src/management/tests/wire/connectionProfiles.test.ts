@@ -56,7 +56,7 @@ describe("ConnectionProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connection-profiles")
             .respondWith()
             .statusCode(400)
@@ -74,7 +74,7 @@ describe("ConnectionProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connection-profiles")
             .respondWith()
             .statusCode(401)
@@ -92,7 +92,7 @@ describe("ConnectionProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connection-profiles")
             .respondWith()
             .statusCode(403)
@@ -110,7 +110,7 @@ describe("ConnectionProfilesClient", () => {
 
         const rawResponseBody = { key: "value" };
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/connection-profiles")
             .respondWith()
             .statusCode(429)

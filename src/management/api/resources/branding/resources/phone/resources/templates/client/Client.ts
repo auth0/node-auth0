@@ -51,11 +51,9 @@ export class TemplatesClient {
         requestOptions?: TemplatesClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListPhoneTemplatesResponseContent>> {
         const { disabled } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (disabled !== undefined) {
-            _queryParams["disabled"] = disabled?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            disabled,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
