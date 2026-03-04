@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.3.2](https://github.com/auth0/node-auth0/tree/v5.3.2) (2026-03-04)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.3.1...v5.3.2)
+
+**Added**
+
+- Feat: Added new connection options, type consolidation, and core improvements [\#1301](https://github.com/auth0/node-auth0/pull/1301) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.3.1](https://github.com/auth0/node-auth0/tree/v5.3.1) (2026-02-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.3.0...v5.3.1)
