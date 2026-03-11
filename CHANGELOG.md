@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.5.0](https://github.com/auth0/node-auth0/tree/v5.5.0) (2026-03-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.4.0...v5.5.0)
+
+**Added**
+
+- feat: add group management scopes and network ACL enhancements [\#1305](https://github.com/auth0/node-auth0/pull/1305) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.4.0](https://github.com/auth0/node-auth0/tree/v5.4.0) (2026-03-04)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.3.1...v5.4.0)
