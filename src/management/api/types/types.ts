@@ -1083,6 +1083,7 @@ export type AculClientMetadata = Record<string, unknown>;
 export interface AculConfigsItem {
     prompt: Management.PromptGroupNameEnum;
     screen: Management.ScreenGroupNameEnum;
+    /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
     context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
@@ -9703,6 +9704,7 @@ export interface CreateUserAuthenticationMethodResponseContent {
     /** Applies to email authentication methods only. The email address used to send verification messages. */
     email?: string | undefined;
     authentication_methods?: Management.UserAuthenticationMethodProperties[] | undefined;
+    /** Preferred phone authentication method */
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** Applies to webauthn authenticators only. The id of the credential. */
     key_id?: string | undefined;
@@ -10115,6 +10117,7 @@ export interface DeviceCredential {
     device_name?: string | undefined;
     /** Unique identifier for the device. NOTE: This field is generally not populated for refresh_tokens and rotating_refresh_tokens */
     device_id?: string | undefined;
+    /** Type of credential. Can be `public_key`, `refresh_token`, or `rotating_refresh_token`. */
     type?: Management.DeviceCredentialTypeEnum | undefined;
     /** user_id this credential is associated with. */
     user_id?: string | undefined;
@@ -14385,6 +14388,7 @@ export interface GetAculResponseContent {
     prompt?: string | undefined;
     /** Name of the screen */
     screen?: string | undefined;
+    /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
     context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
@@ -16194,6 +16198,7 @@ export interface ListAculsResponseContentItem {
     prompt?: string | undefined;
     /** Name of the screen */
     screen?: string | undefined;
+    /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
     context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
@@ -17241,6 +17246,7 @@ export type NetworkAclActionRedirectEnum = boolean;
 
 export interface NetworkAclMatch {
     asns?: number[] | undefined;
+    auth0_managed?: string[] | undefined;
     geo_country_codes?: string[] | undefined;
     geo_subdivision_codes?: string[] | undefined;
     ipv4_cidrs?: Management.NetworkAclMatchIpv4Cidr[] | undefined;
@@ -18652,6 +18658,11 @@ export const SelfServiceProfileSsoTicketProvisioningScopeEnum = {
     PutUsers: "put:users",
     PatchUsers: "patch:users",
     DeleteUsers: "delete:users",
+    GetGroups: "get:groups",
+    PostGroups: "post:groups",
+    PutGroups: "put:groups",
+    PatchGroups: "patch:groups",
+    DeleteGroups: "delete:groups",
 } as const;
 export type SelfServiceProfileSsoTicketProvisioningScopeEnum =
     (typeof SelfServiceProfileSsoTicketProvisioningScopeEnum)[keyof typeof SelfServiceProfileSsoTicketProvisioningScopeEnum];
@@ -18958,6 +18969,7 @@ export interface SetUserAuthenticationMethodResponseContent {
     /** Applies to email authentication methods only. The email address used to send verification messages. */
     email?: string | undefined;
     authentication_methods?: Management.UserAuthenticationMethodProperties[] | undefined;
+    /** Preferred phone authentication method */
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum | undefined;
     /** Applies to webauthn authenticators only. The id of the credential. */
     key_id?: string | undefined;
@@ -19572,6 +19584,7 @@ export interface UpdateActionResponseContent {
 }
 
 export interface UpdateAculResponseContent {
+    /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
     context_configuration?: Management.AculContextConfiguration | undefined;
     /** Override Universal Login default head tags */
@@ -21025,6 +21038,7 @@ export interface UserAttributeProfileStrategyOverrides {
 }
 
 export interface UserAttributeProfileStrategyOverridesMapping {
+    /** OIDC mapping override for this strategy */
     oidc_mapping?: Management.UserAttributeProfileOidcMapping | undefined;
     saml_mapping?: Management.UserAttributeProfileSamlMapping | undefined;
     /** SCIM mapping override for this strategy */
@@ -21079,6 +21093,7 @@ export interface UserAttributeProfileUserAttributeAdditionalProperties {
     /** Auth0 mapping for this attribute */
     auth0_mapping: string;
     oidc_mapping?: Management.UserAttributeProfileOidcMapping | undefined;
+    /** SAML mapping for this attribute */
     saml_mapping?: Management.UserAttributeProfileSamlMapping | undefined;
     /** SCIM mapping for this attribute */
     scim_mapping?: string | undefined;
@@ -21244,6 +21259,7 @@ export type UserId = string | number;
 export interface UserIdentity {
     /** Connection name of this identity. */
     connection: string;
+    /** user_id of this identity. */
     user_id: Management.UserId;
     /** Type of identity provider. */
     provider: string;

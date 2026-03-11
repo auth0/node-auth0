@@ -288,15 +288,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -317,15 +317,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -334,7 +334,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -353,15 +353,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.create({
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -384,30 +384,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -417,7 +417,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -431,15 +431,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -460,15 +460,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -477,7 +477,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -496,15 +496,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.create({
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -527,30 +527,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -560,7 +560,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -574,15 +574,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -603,15 +603,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -620,7 +620,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -639,15 +639,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.create({
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -670,30 +670,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -703,7 +703,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -717,15 +717,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -746,15 +746,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -763,7 +763,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -782,15 +782,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.create({
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -813,30 +813,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -846,7 +846,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -860,15 +860,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -889,15 +889,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -906,7 +906,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -925,15 +925,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.create({
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -956,30 +956,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -989,7 +989,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -1813,15 +1813,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -1842,15 +1842,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -1859,7 +1859,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -1878,15 +1878,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.update("themeId", {
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -1909,30 +1909,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -1942,7 +1942,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -1956,15 +1956,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -1985,15 +1985,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -2002,7 +2002,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -2021,15 +2021,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.update("themeId", {
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -2052,30 +2052,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -2085,7 +2085,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -2099,15 +2099,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -2128,15 +2128,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -2145,7 +2145,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -2164,15 +2164,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.update("themeId", {
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -2195,30 +2195,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -2228,7 +2228,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -2242,15 +2242,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -2271,15 +2271,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -2288,7 +2288,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -2307,15 +2307,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.update("themeId", {
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -2338,30 +2338,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -2371,7 +2371,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
@@ -2385,15 +2385,15 @@ describe("ThemesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {
             borders: {
-                button_border_radius: 1.1,
-                button_border_weight: 1.1,
+                button_border_radius: 10,
+                button_border_weight: 10,
                 buttons_style: "pill",
-                input_border_radius: 1.1,
-                input_border_weight: 1.1,
+                input_border_radius: 10,
+                input_border_weight: 3,
                 inputs_style: "pill",
                 show_widget_shadow: true,
-                widget_border_weight: 1.1,
-                widget_corner_radius: 1.1,
+                widget_border_weight: 10,
+                widget_corner_radius: 50,
             },
             colors: {
                 body_text: "body_text",
@@ -2414,15 +2414,15 @@ describe("ThemesClient", () => {
                 widget_border: "widget_border",
             },
             fonts: {
-                body_text: { bold: true, size: 1.1 },
-                buttons_text: { bold: true, size: 1.1 },
+                body_text: { bold: true, size: 150 },
+                buttons_text: { bold: true, size: 150 },
                 font_url: "font_url",
-                input_labels: { bold: true, size: 1.1 },
-                links: { bold: true, size: 1.1 },
+                input_labels: { bold: true, size: 150 },
+                links: { bold: true, size: 150 },
                 links_style: "normal",
-                reference_text_size: 1.1,
-                subtitle: { bold: true, size: 1.1 },
-                title: { bold: true, size: 1.1 },
+                reference_text_size: 24,
+                subtitle: { bold: true, size: 150 },
+                title: { bold: true, size: 150 },
             },
             page_background: {
                 background_color: "background_color",
@@ -2431,7 +2431,7 @@ describe("ThemesClient", () => {
             },
             widget: {
                 header_text_alignment: "center",
-                logo_height: 1.1,
+                logo_height: 100,
                 logo_position: "center",
                 logo_url: "logo_url",
                 social_buttons_layout: "bottom",
@@ -2450,15 +2450,15 @@ describe("ThemesClient", () => {
         await expect(async () => {
             return await client.branding.themes.update("themeId", {
                 borders: {
-                    button_border_radius: 1.1,
-                    button_border_weight: 1.1,
+                    button_border_radius: 10,
+                    button_border_weight: 10,
                     buttons_style: "pill",
-                    input_border_radius: 1.1,
-                    input_border_weight: 1.1,
+                    input_border_radius: 10,
+                    input_border_weight: 3,
                     inputs_style: "pill",
                     show_widget_shadow: true,
-                    widget_border_weight: 1.1,
-                    widget_corner_radius: 1.1,
+                    widget_border_weight: 10,
+                    widget_corner_radius: 50,
                 },
                 colors: {
                     body_text: "body_text",
@@ -2481,30 +2481,30 @@ describe("ThemesClient", () => {
                 fonts: {
                     body_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     buttons_text: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     font_url: "font_url",
                     input_labels: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     links_style: "normal",
-                    reference_text_size: 1.1,
+                    reference_text_size: 24,
                     subtitle: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                     title: {
                         bold: true,
-                        size: 1.1,
+                        size: 150,
                     },
                 },
                 page_background: {
@@ -2514,7 +2514,7 @@ describe("ThemesClient", () => {
                 },
                 widget: {
                     header_text_alignment: "center",
-                    logo_height: 1.1,
+                    logo_height: 100,
                     logo_position: "center",
                     logo_url: "logo_url",
                     social_buttons_layout: "bottom",
