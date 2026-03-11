@@ -3421,14 +3421,6 @@ export type ConnectionDomainGoogleApps = string;
  */
 export type ConnectionDomainOkta = string;
 
-/** Algorithm used for DPoP proof JWT signing. */
-export const ConnectionDpopSigningAlgEnum = {
-    Es256: "ES256",
-    Ed25519: "Ed25519",
-} as const;
-export type ConnectionDpopSigningAlgEnum =
-    (typeof ConnectionDpopSigningAlgEnum)[keyof typeof ConnectionDpopSigningAlgEnum];
-
 /**
  * JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing.
  */
@@ -4372,7 +4364,6 @@ export interface ConnectionOptionsCommonOidc {
     client_secret?: Management.ConnectionClientSecretOidc | undefined;
     connection_settings?: Management.ConnectionConnectionSettings | undefined;
     domain_aliases?: Management.ConnectionDomainAliases | undefined;
-    dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
