@@ -232,6 +232,7 @@ export interface CreateClientRequestContent {
     /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
     callbacks?: string[];
     oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    /** Configuration for OIDC backchannel logout (deprecated, in favor of oidc_logout) */
     oidc_backchannel_logout?: Management.ClientOidcBackchannelLogoutSettings;
     session_transfer?: Management.ClientSessionTransferConfiguration | null;
     /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
@@ -337,6 +338,7 @@ export interface UpdateClientRequestContent {
     /** A set of URLs that are valid to call back from Auth0 when authenticating users */
     callbacks?: string[];
     oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    /** Configuration for OIDC backchannel logout (deprecated, in favor of oidc_logout) */
     oidc_backchannel_logout?: Management.ClientOidcBackchannelLogoutSettings;
     session_transfer?: Management.ClientSessionTransferConfiguration | null;
     /** A set of URLs that represents valid origins for CORS */
@@ -351,7 +353,9 @@ export interface UpdateClientRequestContent {
     allowed_clients?: string[];
     /** URLs that are valid to redirect to after logout from Auth0 */
     allowed_logout_urls?: string[];
+    /** An object that holds settings related to how JWTs are created */
     jwt_configuration?: Management.ClientJwtConfiguration;
+    /** The client's encryption key */
     encryption_key?: Management.ClientEncryptionKey | null;
     /** <code>true</code> to use Auth0 instead of the IdP to do Single Sign On, <code>false</code> otherwise (default: <code>false</code>) */
     sso?: boolean;
@@ -379,6 +383,7 @@ export interface UpdateClientRequestContent {
     form_template?: string;
     addons?: Management.ClientAddons;
     client_metadata?: Management.ClientMetadata;
+    /** Configuration related to native mobile apps */
     mobile?: Management.ClientMobile;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
@@ -582,6 +587,7 @@ export interface CreateCustomDomainRequestContent {
  *     {}
  */
 export interface UpdateCustomDomainRequestContent {
+    /** recommended includes TLS 1.2 */
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
     domain_metadata?: Management.DomainMetadata;
@@ -983,6 +989,7 @@ export interface CreateHookRequestContent {
     /** Whether this hook will be executed (true) or ignored (false). */
     enabled?: boolean;
     dependencies?: Management.HookDependencies;
+    /** Execution stage of this rule. Can be `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, or `send-phone-message`. */
     triggerId: Management.HookTriggerIdEnum;
 }
 
@@ -1198,6 +1205,7 @@ export interface UpdateSettingsRequestContent {
  *     {}
  */
 export interface UpdateRefreshTokenRequestContent {
+    /** Metadata associated with the refresh token. Pass null or {} to remove all metadata. */
     refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
 }
 
@@ -1480,6 +1488,7 @@ export interface UpdateSelfServiceProfileRequestContent {
  *     {}
  */
 export interface UpdateSessionRequestContent {
+    /** Metadata associated with the session. Pass null or {} to remove all session_metadata. */
     session_metadata?: (Management.SessionMetadata | undefined) | null;
 }
 
@@ -1813,7 +1822,9 @@ export interface UpdateUserRequestContent {
     phone_number?: string | null;
     /** Whether this phone number has been verified (true) or not (false). */
     phone_verified?: boolean;
+    /** User metadata to which this user has read/write access. */
     user_metadata?: Management.UserMetadata;
+    /** User metadata to which this user has read-only access. */
     app_metadata?: Management.AppMetadata;
     /** Given name/first name/forename of this user. */
     given_name?: string | null;
@@ -2322,6 +2333,7 @@ export interface UpdatePhoneTemplateRequestContent {
 export interface CreatePhoneTemplateTestNotificationRequestContent {
     /** Destination of the testing phone notification */
     to: string;
+    /** Medium to use to send the notification */
     delivery_method?: Management.PhoneProviderDeliveryMethodEnum;
 }
 
@@ -3276,6 +3288,7 @@ export interface BulkUpdateAculRequestContent {
  *     {}
  */
 export interface UpdateAculRequestContent {
+    /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum;
     context_configuration?: Management.AculContextConfiguration;
     /** Override Universal Login default head tags */
@@ -3419,6 +3432,7 @@ export interface GetTenantSettingsRequestParameters {
  */
 export interface UpdateTenantSettingsRequestContent {
     change_password?: Management.TenantSettingsPasswordPage | null;
+    /** Device Flow configuration. */
     device_flow?: Management.TenantSettingsDeviceFlow | null;
     guardian_mfa_page?: Management.TenantSettingsGuardianPage | null;
     /** Default audience for API Authorization. */
@@ -3530,6 +3544,7 @@ export interface CreateUserAuthenticationMethodRequestContent {
 export interface UpdateUserAuthenticationMethodRequestContent {
     /** A human-readable label to identify the authentication method. */
     name?: string;
+    /** Preferred phone authentication method */
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
 }
 
@@ -3572,6 +3587,7 @@ export interface GetUserGroupsRequestParameters {
  *     {}
  */
 export interface LinkUserIdentityRequestContent {
+    /** Identity provider of the secondary user account being linked. */
     provider?: Management.UserIdentityProviderEnum;
     /** connection_id of the secondary user account being linked when more than one `auth0` database provider exists. */
     connection_id?: string;

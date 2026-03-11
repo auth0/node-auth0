@@ -121,7 +121,7 @@ describe("NewDeviceClient", () => {
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { remember_for: 1 };
+        const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -134,7 +134,7 @@ describe("NewDeviceClient", () => {
 
         await expect(async () => {
             return await client.riskAssessments.settings.newDevice.update({
-                remember_for: 1,
+                remember_for: 365,
             });
         }).rejects.toThrow(Management.BadRequestError);
     });
@@ -142,7 +142,7 @@ describe("NewDeviceClient", () => {
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { remember_for: 1 };
+        const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -155,7 +155,7 @@ describe("NewDeviceClient", () => {
 
         await expect(async () => {
             return await client.riskAssessments.settings.newDevice.update({
-                remember_for: 1,
+                remember_for: 365,
             });
         }).rejects.toThrow(Management.UnauthorizedError);
     });
@@ -163,7 +163,7 @@ describe("NewDeviceClient", () => {
     test("update (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { remember_for: 1 };
+        const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -176,7 +176,7 @@ describe("NewDeviceClient", () => {
 
         await expect(async () => {
             return await client.riskAssessments.settings.newDevice.update({
-                remember_for: 1,
+                remember_for: 365,
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });
@@ -184,7 +184,7 @@ describe("NewDeviceClient", () => {
     test("update (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { remember_for: 1 };
+        const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -197,7 +197,7 @@ describe("NewDeviceClient", () => {
 
         await expect(async () => {
             return await client.riskAssessments.settings.newDevice.update({
-                remember_for: 1,
+                remember_for: 365,
             });
         }).rejects.toThrow(Management.NotFoundError);
     });
@@ -205,7 +205,7 @@ describe("NewDeviceClient", () => {
     test("update (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { remember_for: 1 };
+        const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -218,7 +218,7 @@ describe("NewDeviceClient", () => {
 
         await expect(async () => {
             return await client.riskAssessments.settings.newDevice.update({
-                remember_for: 1,
+                remember_for: 365,
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
