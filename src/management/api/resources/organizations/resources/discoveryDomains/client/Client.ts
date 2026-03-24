@@ -24,6 +24,7 @@ export class DiscoveryDomainsClient {
 
     /**
      * Retrieve list of all organization discovery domains associated with the specified organization.
+     * This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
      *
      * @param {string} id - ID of the organization.
      * @param {Management.ListOrganizationDiscoveryDomainsRequestParameters} request
@@ -235,7 +236,7 @@ export class DiscoveryDomainsClient {
 
     /**
      * Retrieve details about a single organization discovery domain specified by domain name.
-     *
+     * This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
      *
      * @param {string} id - ID of the organization.
      * @param {string} discovery_domain - Domain name of the discovery domain.
@@ -323,6 +324,7 @@ export class DiscoveryDomainsClient {
 
     /**
      * Retrieve details about a single organization discovery domain specified by ID.
+     * This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
      *
      * @param {string} id - ID of the organization.
      * @param {string} discovery_domain_id - ID of the discovery domain.

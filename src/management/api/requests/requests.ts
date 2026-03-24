@@ -144,13 +144,12 @@ export interface ListClientGrantsRequestParameters {
 /**
  * @example
  *     {
- *         client_id: "client_id",
  *         audience: "audience"
  *     }
  */
 export interface CreateClientGrantRequestContent {
     /** ID of the client. */
-    client_id: string;
+    client_id?: string;
     /** The audience (API identifier) of this client grant */
     audience: string;
     organization_usage?: Management.ClientGrantOrganizationUsageEnum;
@@ -171,7 +170,7 @@ export interface CreateClientGrantRequestContent {
  */
 export interface UpdateClientGrantRequestContent {
     /** Scopes allowed for this client grant. */
-    scope?: string[];
+    scope?: string[] | null;
     organization_usage?: Management.ClientGrantOrganizationNullableUsageEnum | null;
     /** Controls allowing any organization to be used with this grant */
     allow_any_organization?: boolean | null;
@@ -212,7 +211,7 @@ export interface ListClientsRequestParameters {
     is_first_party?: boolean | null;
     /** Optional filter by a comma-separated list of application types. */
     app_type?: string | null;
-    /** Advanced Query in <a href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i> */
+    /** Advanced Query in <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i> */
     q?: string | null;
 }
 
@@ -393,7 +392,7 @@ export interface UpdateClientRequestContent {
     organization_usage?: Management.ClientOrganizationUsagePatchEnum | null;
     organization_require_behavior?: Management.ClientOrganizationRequireBehaviorPatchEnum | null;
     /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
-    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | null;
     client_authentication_methods?: Management.ClientAuthenticationMethod | null;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
     require_pushed_authorization_requests?: boolean;
@@ -411,7 +410,9 @@ export interface UpdateClientRequestContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     express_configuration?: Management.ExpressConfigurationOrNull | null;
-    async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration;
+    async_approval_notification_channels?:
+        | (Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration | undefined)
+        | null;
 }
 
 /**
@@ -531,7 +532,7 @@ export interface UpdateConnectionRequestContent {
     display_name?: string;
     options?: Management.UpdateConnectionOptions | null;
     /** DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable or disable the connection for any clients. */
-    enabled_clients?: string[];
+    enabled_clients?: string[] | null;
     /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
     is_domain_connection?: boolean;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.) */
@@ -553,7 +554,7 @@ export interface UpdateConnectionRequestContent {
  *     }
  */
 export interface ListCustomDomainsRequestParameters {
-    /** Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>. */
+    /** Query in <a href ="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene query string syntax</a>. */
     q?: string | null;
     /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
     fields?: string | null;
@@ -580,6 +581,17 @@ export interface CreateCustomDomainRequestContent {
     domain_metadata?: Management.DomainMetadata;
     /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided, the full domain will be used. */
     relying_party_identifier?: string;
+}
+
+/**
+ * @example
+ *     {
+ *         domain: "domain"
+ *     }
+ */
+export interface SetDefaultCustomDomainRequestContent {
+    /** The domain to set as the default custom domain. Must be a verified custom domain or the canonical domain. */
+    domain: string;
 }
 
 /**
@@ -814,7 +826,7 @@ export interface GetFlowRequestParameters {
  */
 export interface UpdateFlowRequestContent {
     name?: string;
-    actions?: Management.FlowAction[];
+    actions?: Management.FlowAction[] | null;
 }
 
 /**
@@ -1258,7 +1270,7 @@ export interface CreateResourceServerRequestContent {
     enforce_policies?: boolean;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
     consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
-    authorization_details?: unknown[];
+    authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
 }
@@ -1297,7 +1309,7 @@ export interface UpdateResourceServerRequestContent {
     enforce_policies?: boolean;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
     consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
-    authorization_details?: unknown[];
+    authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
 }
@@ -1727,7 +1739,7 @@ export interface ListUsersRequestParameters {
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean | null;
-    /** Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>. Some query types cannot be used on metadata fields, for details see <a href='https://auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable Fields</a>. */
+    /** Query in <a target='_new' href ='https://lucene.apache.org/core/2_9_4/queryparsersyntax.html'>Lucene query string syntax</a>. Some query types cannot be used on metadata fields, for details see <a href='https://auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable Fields</a>. */
     q?: string | null;
     /** The version of the search engine */
     search_engine?: Management.SearchEngineVersionsEnum | null;
@@ -2370,6 +2382,8 @@ export interface PostClientCredentialRequestContent {
     parse_expiry_from_cert?: boolean;
     /** The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires. Applies to `public_key` credential type. */
     expires_at?: string;
+    /** Optional kid (Key ID), used to uniquely identify the credential. If not specified, a kid value will be auto-generated. The kid header parameter in JWTs sent by your client should match this value. Valid format is [0-9a-zA-Z-_]{10,64} */
+    kid?: string;
 }
 
 /**
@@ -3290,13 +3304,13 @@ export interface BulkUpdateAculRequestContent {
 export interface UpdateAculRequestContent {
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    context_configuration?: (Management.AculContextConfiguration | undefined) | null;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
     /** Use page template with ACUL */
     use_page_template?: boolean | null;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
+    head_tags?: Management.AculHeadTag[] | null;
     filters?: Management.AculFilters | null;
 }
 
@@ -3476,7 +3490,7 @@ export interface UpdateTenantSettingsRequestContent {
     /** Whether to accept an organization name instead of an ID on auth endpoints */
     allow_organization_name_in_authentication_api?: boolean | null;
     /** Supported ACR values */
-    acr_values_supported?: string[];
+    acr_values_supported?: string[] | null;
     mtls?: Management.TenantSettingsMtls | null;
     /** Enables the use of Pushed Authorization Requests */
     pushed_authorization_requests_supported?: boolean | null;
