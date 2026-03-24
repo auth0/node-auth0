@@ -105,7 +105,7 @@ describe("ClientGrantsClient", () => {
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { client_id: "client_id", audience: "audience" };
+        const rawRequestBody = { audience: "audience" };
         const rawResponseBody = {
             id: "id",
             client_id: "client_id",
@@ -128,7 +128,6 @@ describe("ClientGrantsClient", () => {
             .build();
 
         const response = await client.clientGrants.create({
-            client_id: "client_id",
             audience: "audience",
         });
         expect(response).toEqual({
@@ -148,7 +147,7 @@ describe("ClientGrantsClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { client_id: "client_id", audience: "x" };
+        const rawRequestBody = { audience: "x" };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -161,7 +160,6 @@ describe("ClientGrantsClient", () => {
 
         await expect(async () => {
             return await client.clientGrants.create({
-                client_id: "client_id",
                 audience: "x",
             });
         }).rejects.toThrow(Management.BadRequestError);
@@ -170,7 +168,7 @@ describe("ClientGrantsClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { client_id: "client_id", audience: "x" };
+        const rawRequestBody = { audience: "x" };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -183,7 +181,6 @@ describe("ClientGrantsClient", () => {
 
         await expect(async () => {
             return await client.clientGrants.create({
-                client_id: "client_id",
                 audience: "x",
             });
         }).rejects.toThrow(Management.UnauthorizedError);
@@ -192,7 +189,7 @@ describe("ClientGrantsClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { client_id: "client_id", audience: "x" };
+        const rawRequestBody = { audience: "x" };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -205,7 +202,6 @@ describe("ClientGrantsClient", () => {
 
         await expect(async () => {
             return await client.clientGrants.create({
-                client_id: "client_id",
                 audience: "x",
             });
         }).rejects.toThrow(Management.ForbiddenError);
@@ -214,7 +210,7 @@ describe("ClientGrantsClient", () => {
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { client_id: "client_id", audience: "x" };
+        const rawRequestBody = { audience: "x" };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -227,7 +223,6 @@ describe("ClientGrantsClient", () => {
 
         await expect(async () => {
             return await client.clientGrants.create({
-                client_id: "client_id",
                 audience: "x",
             });
         }).rejects.toThrow(Management.NotFoundError);
@@ -236,7 +231,7 @@ describe("ClientGrantsClient", () => {
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { client_id: "client_id", audience: "x" };
+        const rawRequestBody = { audience: "x" };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -249,7 +244,6 @@ describe("ClientGrantsClient", () => {
 
         await expect(async () => {
             return await client.clientGrants.create({
-                client_id: "client_id",
                 audience: "x",
             });
         }).rejects.toThrow(Management.ConflictError);
@@ -258,7 +252,7 @@ describe("ClientGrantsClient", () => {
     test("create (7)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { client_id: "client_id", audience: "x" };
+        const rawRequestBody = { audience: "x" };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -271,7 +265,6 @@ describe("ClientGrantsClient", () => {
 
         await expect(async () => {
             return await client.clientGrants.create({
-                client_id: "client_id",
                 audience: "x",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);

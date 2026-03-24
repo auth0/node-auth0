@@ -1085,13 +1085,13 @@ export interface AculConfigsItem {
     screen: Management.ScreenGroupNameEnum;
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
 }
 
@@ -1103,7 +1103,7 @@ export type AculConfigs = Management.AculConfigsItem[];
 /**
  * Context values to make available
  */
-export type AculContextConfiguration = Management.AculContextConfigurationItem[];
+export type AculContextConfiguration = (Management.AculContextConfigurationItem[] | null) | undefined;
 
 export type AculContextConfigurationItem =
     | Management.AculContextEnum
@@ -1889,7 +1889,7 @@ export interface Client {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -2387,7 +2387,8 @@ export type ClientAppTypeEnum = (typeof ClientAppTypeEnum)[keyof typeof ClientAp
  * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
  */
 export type ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration =
-    Management.AsyncApprovalNotificationsChannelsEnum[];
+    | (Management.AsyncApprovalNotificationsChannelsEnum[] | null)
+    | undefined;
 
 /**
  * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
@@ -2778,7 +2779,7 @@ export interface ClientRefreshTokenConfiguration {
     /** Prevents tokens from expiring without use when `true` (takes precedence over `idle_token_lifetime` values) */
     infinite_idle_token_lifetime?: boolean | undefined;
     /** A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers */
-    policies?: Management.ClientRefreshTokenPolicy[] | undefined;
+    policies?: (Management.ClientRefreshTokenPolicy[] | null) | undefined;
 }
 
 export interface ClientRefreshTokenPolicy {
@@ -2804,7 +2805,9 @@ export interface ClientSessionTransferConfiguration {
     /** Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application. Default value is `true`, applicable only in Native to Web SSO context. */
     enforce_cascade_revocation?: boolean | undefined;
     /** Indicates whether an app can create a session from a Session Transfer Token received via indicated methods. Can include `cookie` and/or `query`. Usually configured in the web application. Default value is an empty array []. */
-    allowed_authentication_methods?: Management.ClientSessionTransferAllowedAuthenticationMethodsEnum[] | undefined;
+    allowed_authentication_methods?:
+        | (Management.ClientSessionTransferAllowedAuthenticationMethodsEnum[] | null)
+        | undefined;
     enforce_device_binding?: Management.ClientSessionTransferDeviceBindingEnum | undefined;
     /** Indicates whether Refresh Tokens are allowed to be issued when authenticating with a Session Transfer Token. Usually configured in the web application. Default value is `false`. */
     allow_refresh_token?: boolean | undefined;
@@ -2853,7 +2856,7 @@ export interface ClientSigningKey {
 /**
  * Signing certificates associated with this client.
  */
-export type ClientSigningKeys = Management.ClientSigningKey[];
+export type ClientSigningKeys = (Management.ClientSigningKey[] | null) | undefined;
 
 /** Defines the requested authentication method for the token endpoint. Can be `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), or `client_secret_basic` (client uses HTTP Basic). */
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -2972,6 +2975,13 @@ export const ConnectionApiBehaviorEnum = {
     Optional: "optional",
 } as const;
 export type ConnectionApiBehaviorEnum = (typeof ConnectionApiBehaviorEnum)[keyof typeof ConnectionApiBehaviorEnum];
+
+export type ConnectionApiEnableGroups = boolean;
+
+/**
+ * Enables integration with the Google Workspace Admin SDK Directory API for groups. When true, Auth0 can synchronize groups & group memberships and supports inbound directory provisioning for groups. Defaults to false.
+ */
+export type ConnectionApiEnableGroupsGoogleApps = Management.ConnectionApiEnableGroups;
 
 export type ConnectionApiEnableUsers = boolean;
 
@@ -3420,14 +3430,6 @@ export type ConnectionDomainGoogleApps = string;
  * Domain of the Okta organization (e.g., dev-123456.okta.com). Should be just the domain of the okta server with no scheme or trailing backslash. Discovery runs only when connection.options.oidc_metadata is empty and a domain is provided
  */
 export type ConnectionDomainOkta = string;
-
-/** Algorithm used for DPoP proof JWT signing. */
-export const ConnectionDpopSigningAlgEnum = {
-    Es256: "ES256",
-    Ed25519: "Ed25519",
-} as const;
-export type ConnectionDpopSigningAlgEnum =
-    (typeof ConnectionDpopSigningAlgEnum)[keyof typeof ConnectionDpopSigningAlgEnum];
 
 /**
  * JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing.
@@ -4372,7 +4374,6 @@ export interface ConnectionOptionsCommonOidc {
     client_secret?: Management.ConnectionClientSecretOidc | undefined;
     connection_settings?: Management.ConnectionConnectionSettings | undefined;
     domain_aliases?: Management.ConnectionDomainAliases | undefined;
-    dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
@@ -4665,6 +4666,7 @@ export interface ConnectionOptionsGoogleApps extends Management.ConnectionOption
     admin_refresh_token?: Management.ConnectionAdminRefreshTokenGoogleApps | undefined;
     /** When true, allows customization of OAuth scopes requested during user login. Custom scopes are appended to the mandatory email and profile scopes. When false or omitted, only the default email and profile scopes are used. This property is automatically enabled when Token Vault or Connected Accounts features are activated. */
     allow_setting_login_scopes?: boolean | undefined;
+    api_enable_groups?: Management.ConnectionApiEnableGroupsGoogleApps | undefined;
     api_enable_users?: Management.ConnectionApiEnableUsersGoogleApps | undefined;
     client_id: Management.ConnectionClientIdGoogleApps;
     client_secret?: Management.ConnectionClientSecretGoogleApps | undefined;
@@ -4921,14 +4923,6 @@ export interface ConnectionOptionsLinkedin extends Management.ConnectionOptionsC
 }
 
 /**
- * Options for the 'miicard' connection
- */
-export interface ConnectionOptionsMiicard extends Management.ConnectionOptionsOAuth2Common {
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
-/**
  * Options for the 'oauth1' connection
  */
 export interface ConnectionOptionsOAuth1 extends Management.ConnectionOptionsCommon {
@@ -5121,14 +5115,6 @@ export const ConnectionOptionsProtocolEnumTwitter = {
 } as const;
 export type ConnectionOptionsProtocolEnumTwitter =
     (typeof ConnectionOptionsProtocolEnumTwitter)[keyof typeof ConnectionOptionsProtocolEnumTwitter];
-
-/**
- * Options for the 'renren' connection
- */
-export interface ConnectionOptionsRenren extends Management.ConnectionOptionsOAuth2Common {
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
 
 /**
  * Options for the 'samlp' connection
@@ -5682,7 +5668,7 @@ export interface ConnectionProfileTemplateItem {
 export interface ConnectionPropertiesOptions {
     validation?: (Management.ConnectionValidationOptions | null) | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
-    non_persistent_attrs?: string[] | undefined;
+    non_persistent_attrs?: (string[] | null) | undefined;
     /** Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used. */
     precedence?: Management.ConnectionIdentifierPrecedenceEnum[] | undefined;
     attributes?: Management.ConnectionAttributes | undefined;
@@ -5692,6 +5678,8 @@ export interface ConnectionPropertiesOptions {
     enabledDatabaseCustomization?: boolean | undefined;
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
+    /** Stores encrypted string only configurations for connections */
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
@@ -6312,22 +6300,6 @@ export namespace ConnectionResponseContentLinkedin {
 }
 
 /**
- * Response for connections with strategy=miicard
- */
-export interface ConnectionResponseContentMiicard
-    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
-    strategy: ConnectionResponseContentMiicard.Strategy;
-    options?: Management.ConnectionOptionsMiicard | undefined;
-}
-
-export namespace ConnectionResponseContentMiicard {
-    export const Strategy = {
-        Miicard: "miicard",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
  * Response for connections with strategy=oauth1
  */
 export interface ConnectionResponseContentOAuth1
@@ -6474,22 +6446,6 @@ export interface ConnectionResponseContentPlanningCenter
 export namespace ConnectionResponseContentPlanningCenter {
     export const Strategy = {
         Planningcenter: "planningcenter",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
- * Response for connections with strategy=renren
- */
-export interface ConnectionResponseContentRenren
-    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
-    strategy: ConnectionResponseContentRenren.Strategy;
-    options?: Management.ConnectionOptionsRenren | undefined;
-}
-
-export namespace ConnectionResponseContentRenren {
-    export const Strategy = {
-        Renren: "renren",
     } as const;
     export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
@@ -7560,7 +7516,7 @@ export interface CreateClientResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -8092,21 +8048,6 @@ export namespace CreateConnectionRequestContentLinkedin {
 }
 
 /**
- * Create a connection with strategy=miicard
- */
-export interface CreateConnectionRequestContentMiicard extends Management.CreateConnectionCommon {
-    strategy: CreateConnectionRequestContentMiicard.Strategy;
-    options?: Management.ConnectionOptionsMiicard | undefined;
-}
-
-export namespace CreateConnectionRequestContentMiicard {
-    export const Strategy = {
-        Miicard: "miicard",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
  * Create a connection with strategy=oauth1
  */
 export interface CreateConnectionRequestContentOAuth1 extends Management.CreateConnectionCommon {
@@ -8244,21 +8185,6 @@ export interface CreateConnectionRequestContentPlanningCenter extends Management
 export namespace CreateConnectionRequestContentPlanningCenter {
     export const Strategy = {
         Planningcenter: "planningcenter",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
- * Create a connection with strategy=renren
- */
-export interface CreateConnectionRequestContentRenren extends Management.CreateConnectionCommon {
-    strategy: CreateConnectionRequestContentRenren.Strategy;
-    options?: Management.ConnectionOptionsRenren | undefined;
-}
-
-export namespace CreateConnectionRequestContentRenren {
-    export const Strategy = {
-        Renren: "renren",
     } as const;
     export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
@@ -8601,6 +8527,7 @@ export interface CreateDirectoryProvisioningRequestContent {
     mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically?: boolean | undefined;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
 }
 
 export interface CreateDirectoryProvisioningResponseContent {
@@ -8614,6 +8541,7 @@ export interface CreateDirectoryProvisioningResponseContent {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -9564,7 +9492,7 @@ export interface CreateResourceServerResponseContent {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -10151,6 +10079,7 @@ export interface DirectoryProvisioning {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -14390,13 +14319,13 @@ export interface GetAculResponseContent {
     screen?: string | undefined;
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -14590,7 +14519,7 @@ export interface GetClientResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -14736,6 +14665,39 @@ export interface GetCustomSigningKeysResponseContent {
  */
 export type GetCustomTextsByLanguageResponseContent = Record<string, unknown>;
 
+export interface GetDefaultCanonicalDomainResponseContent {
+    /** Domain name. */
+    domain: string;
+}
+
+export interface GetDefaultCustomDomainResponseContent {
+    /** ID of the custom domain. */
+    custom_domain_id: string;
+    /** Domain name. */
+    domain: string;
+    /** Whether this is a primary domain (true) or not (false). */
+    primary: boolean;
+    /** Whether this is the default custom domain (true) or not (false). */
+    is_default?: boolean | undefined;
+    status: Management.CustomDomainStatusFilterEnum;
+    type: Management.CustomDomainTypeEnum;
+    /** Intermediate address. */
+    origin_domain_name?: string | undefined;
+    verification?: Management.DomainVerification | undefined;
+    /** The HTTP header to fetch the client's IP address */
+    custom_client_ip_header?: (string | null) | undefined;
+    /** The TLS version policy */
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string | undefined;
+}
+
+export type GetDefaultDomainResponseContent =
+    | Management.GetDefaultCustomDomainResponseContent
+    | Management.GetDefaultCanonicalDomainResponseContent;
+
 export interface GetDirectoryProvisioningDefaultMappingResponseContent {
     /** The mapping between Auth0 and IDP user attributes */
     mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
@@ -14752,6 +14714,7 @@ export interface GetDirectoryProvisioningResponseContent {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -14925,17 +14888,14 @@ export interface GetGroupMembersResponseContent {
 export interface GetGroupResponseContent {
     /** Unique identifier for the group (service-generated). */
     id: string;
-    /** Name of the group. Must be unique within its scope (connection, organization, or tenant). Must contain between 1 and 128 printable ASCII characters. */
+    /** Name of the group. Must be unique within its connection. Must contain between 1 and 128 printable ASCII characters. */
     name: string;
     /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
     external_id?: string | undefined;
     /** Identifier for the connection this group belongs to (if a connection group). */
     connection_id?: string | undefined;
-    /** Identifier for the organization this group belongs to (if an organization group). */
-    organization_id?: (string | null) | undefined;
     /** Identifier for the tenant this group belongs to. */
     tenant_name: string;
-    description?: (string | null) | undefined;
     /** Timestamp of when the group was created. */
     created_at: string;
     /** Timestamp of when the group was last updated. */
@@ -15355,7 +15315,7 @@ export interface GetResourceServerResponseContent {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -15566,7 +15526,7 @@ export interface GetTenantSettingsResponseContent {
     /** Whether to enable flexible factors for MFA in the PostLogin action */
     customize_mfa_in_postlogin_action?: boolean | undefined;
     /** Supported ACR values */
-    acr_values_supported?: string[] | undefined;
+    acr_values_supported?: (string[] | null) | undefined;
     mtls?: (Management.TenantSettingsMtls | null) | undefined;
     /** Enables the use of Pushed Authorization Requests */
     pushed_authorization_requests_supported?: boolean | undefined;
@@ -15748,17 +15708,14 @@ export interface GetVerifiableCredentialTemplateResponseContent {
 export interface Group {
     /** Unique identifier for the group (service-generated). */
     id?: string | undefined;
-    /** Name of the group. Must be unique within its scope (connection, organization, or tenant). Must contain between 1 and 128 printable ASCII characters. */
+    /** Name of the group. Must be unique within its connection. Must contain between 1 and 128 printable ASCII characters. */
     name?: string | undefined;
     /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
     external_id?: string | undefined;
     /** Identifier for the connection this group belongs to (if a connection group). */
     connection_id?: string | undefined;
-    /** Identifier for the organization this group belongs to (if an organization group). */
-    organization_id?: (string | null) | undefined;
     /** Identifier for the tenant this group belongs to. */
     tenant_name?: string | undefined;
-    description?: (string | null) | undefined;
     /** Timestamp of when the group was created. */
     created_at?: string | undefined;
     /** Timestamp of when the group was last updated. */
@@ -16200,13 +16157,13 @@ export interface ListAculsResponseContentItem {
     screen?: string | undefined;
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -17815,6 +17772,7 @@ export const PromptLanguageEnum = {
     Zgh: "zgh",
     ZhCn: "zh-CN",
     ZhHk: "zh-HK",
+    ZhMo: "zh-MO",
     ZhTw: "zh-TW",
 } as const;
 export type PromptLanguageEnum = (typeof PromptLanguageEnum)[keyof typeof PromptLanguageEnum];
@@ -17830,6 +17788,8 @@ export interface PublicKeyCredential {
     parse_expiry_from_cert?: boolean | undefined;
     /** The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires. Applies to `public_key` credential type. */
     expires_at?: string | undefined;
+    /** Optional kid (Key ID), used to uniquely identify the credential. If not specified, a kid value will be auto-generated. The kid header parameter in JWTs sent by your client should match this value. Valid format is [0-9a-zA-Z-_]{10,64} */
+    kid?: string | undefined;
 }
 
 /** Algorithm which will be used with the credential. Can be one of RS256, RS384, PS256. If not specified, RS256 will be used. Applies to `public_key` credential type. */
@@ -17982,7 +17942,7 @@ export interface ResourceServer {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -18217,7 +18177,7 @@ export interface RotateClientSecretResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -18582,7 +18542,7 @@ export interface SelfServiceProfileSsoTicketConnectionOptions {
     /** URL for the icon. Must use HTTPS. */
     icon_url?: (string | null) | undefined;
     /** List of domain_aliases that can be authenticated in the Identity Provider */
-    domain_aliases?: string[] | undefined;
+    domain_aliases?: (string[] | null) | undefined;
     idpinitiated?: (Management.SelfServiceProfileSsoTicketIdpInitiatedOptions | null) | undefined;
 }
 
@@ -19145,6 +19105,7 @@ export const SupportedLocales = {
     Zgh: "zgh",
     ZhCn: "zh-CN",
     ZhHk: "zh-HK",
+    ZhMo: "zh-MO",
     ZhTw: "zh-TW",
 } as const;
 export type SupportedLocales = (typeof SupportedLocales)[keyof typeof SupportedLocales];
@@ -19190,6 +19151,17 @@ export interface SuspiciousIpThrottlingStage {
     "pre-login"?: Management.SuspiciousIpThrottlingPreLoginStage | undefined;
     "pre-user-registration"?: Management.SuspiciousIpThrottlingPreUserRegistrationStage | undefined;
 }
+
+export const SynchronizeGroupsEaEnum = {
+    All: "all",
+    Off: "off",
+} as const;
+export type SynchronizeGroupsEaEnum = (typeof SynchronizeGroupsEaEnum)[keyof typeof SynchronizeGroupsEaEnum];
+
+/**
+ * Group synchronization configuration
+ */
+export type SynchronizeGroupsEnum = string;
 
 /**
  * Settings related to OIDC RP-initiated Logout
@@ -19417,6 +19389,7 @@ export const TenantSettingsSupportedLocalesEnum = {
     Zgh: "zgh",
     ZhCn: "zh-CN",
     ZhHk: "zh-HK",
+    ZhMo: "zh-MO",
     ZhTw: "zh-TW",
 } as const;
 export type TenantSettingsSupportedLocalesEnum =
@@ -19586,13 +19559,13 @@ export interface UpdateActionResponseContent {
 export interface UpdateAculResponseContent {
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -19783,7 +19756,7 @@ export interface UpdateClientResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -19848,7 +19821,7 @@ export interface UpdateClientResponseContent {
 export interface UpdateConnectionOptions {
     validation?: (Management.ConnectionValidationOptions | null) | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
-    non_persistent_attrs?: string[] | undefined;
+    non_persistent_attrs?: (string[] | null) | undefined;
     /** Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used. */
     precedence?: Management.ConnectionIdentifierPrecedenceEnum[] | undefined;
     attributes?: Management.ConnectionAttributes | undefined;
@@ -19858,6 +19831,8 @@ export interface UpdateConnectionOptions {
     enabledDatabaseCustomization?: boolean | undefined;
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
+    /** Stores encrypted string only configurations for connections */
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
@@ -20111,13 +20086,6 @@ export interface UpdateConnectionRequestContentLinkedin extends Management.Conne
 }
 
 /**
- * Update a connection with strategy=miicard
- */
-export interface UpdateConnectionRequestContentMiicard extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsMiicard | undefined;
-}
-
-/**
  * Update a connection with strategy=oauth1
  */
 export interface UpdateConnectionRequestContentOAuth1 extends Management.ConnectionCommon {
@@ -20185,13 +20153,6 @@ export interface UpdateConnectionRequestContentPingFederate extends Management.C
  */
 export interface UpdateConnectionRequestContentPlanningCenter extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsPlanningCenter | undefined;
-}
-
-/**
- * Update a connection with strategy=renren
- */
-export interface UpdateConnectionRequestContentRenren extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsRenren | undefined;
 }
 
 /**
@@ -20375,11 +20336,45 @@ export interface UpdateCustomDomainResponseContent {
     relying_party_identifier?: string | undefined;
 }
 
+export interface UpdateDefaultCanonicalDomainResponseContent {
+    /** Domain name. */
+    domain: string;
+}
+
+export interface UpdateDefaultCustomDomainResponseContent {
+    /** ID of the custom domain. */
+    custom_domain_id: string;
+    /** Domain name. */
+    domain: string;
+    /** Whether this is a primary domain (true) or not (false). */
+    primary: boolean;
+    /** Whether this is the default custom domain (true) or not (false). */
+    is_default?: boolean | undefined;
+    status: Management.CustomDomainStatusFilterEnum;
+    type: Management.CustomDomainTypeEnum;
+    /** Intermediate address. */
+    origin_domain_name?: string | undefined;
+    verification?: Management.DomainVerification | undefined;
+    /** The HTTP header to fetch the client's IP address */
+    custom_client_ip_header?: (string | null) | undefined;
+    /** The TLS version policy */
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string | undefined;
+}
+
+export type UpdateDefaultDomainResponseContent =
+    | Management.UpdateDefaultCustomDomainResponseContent
+    | Management.UpdateDefaultCanonicalDomainResponseContent;
+
 export interface UpdateDirectoryProvisioningRequestContent {
     /** The mapping between Auth0 and IDP user attributes */
     mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically?: boolean | undefined;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
 }
 
 export interface UpdateDirectoryProvisioningResponseContent {
@@ -20393,6 +20388,7 @@ export interface UpdateDirectoryProvisioningResponseContent {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -20685,7 +20681,7 @@ export interface UpdateResourceServerResponseContent {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -20855,7 +20851,7 @@ export interface UpdateTenantSettingsResponseContent {
     /** Whether to enable flexible factors for MFA in the PostLogin action */
     customize_mfa_in_postlogin_action?: boolean | undefined;
     /** Supported ACR values */
-    acr_values_supported?: string[] | undefined;
+    acr_values_supported?: (string[] | null) | undefined;
     mtls?: (Management.TenantSettingsMtls | null) | undefined;
     /** Enables the use of Pushed Authorization Requests */
     pushed_authorization_requests_supported?: boolean | undefined;

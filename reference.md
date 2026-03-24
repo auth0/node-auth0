@@ -746,7 +746,6 @@ Create a client grant for a machine-to-machine login flow. To learn more, read <
 
 ```typescript
 await client.clientGrants.create({
-    client_id: "client_id",
     audience: "audience",
 });
 ```
@@ -2544,6 +2543,126 @@ await client.customDomains.create({
 <dd>
 
 **request:** `Management.CreateCustomDomainRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CustomDomainsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">getDefault</a>() -> Management.GetDefaultDomainResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the tenant's default domain.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customDomains.getDefault();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `CustomDomainsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">setDefault</a>({ ...params }) -> Management.UpdateDefaultDomainResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Set the default custom domain for the tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customDomains.setDefault({
+    domain: "domain",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetDefaultCustomDomainRequestContent`
 
 </dd>
 </dl>
@@ -21640,6 +21759,7 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 <dd>
 
 Retrieve list of all organization discovery domains associated with the specified organization.
+This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
 
 </dd>
 </dl>
@@ -21802,6 +21922,7 @@ await client.organizations.discoveryDomains.create("id", {
 <dd>
 
 Retrieve details about a single organization discovery domain specified by domain name.
+This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
 
 </dd>
 </dl>
@@ -21873,6 +21994,7 @@ await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
 <dd>
 
 Retrieve details about a single organization discovery domain specified by ID.
+This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
 
 </dd>
 </dl>
