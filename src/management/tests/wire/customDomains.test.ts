@@ -300,6 +300,249 @@ describe("CustomDomainsClient", () => {
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
+    test("getDefault (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            custom_domain_id: "custom_domain_id",
+            domain: "domain",
+            primary: true,
+            is_default: true,
+            status: "pending_verification",
+            type: "auth0_managed_certs",
+            origin_domain_name: "origin_domain_name",
+            verification: {
+                methods: [{ name: "cname", record: "record" }],
+                status: "verified",
+                error_msg: "error_msg",
+                last_verified_at: "last_verified_at",
+            },
+            custom_client_ip_header: "custom_client_ip_header",
+            tls_policy: "tls_policy",
+            domain_metadata: { key: "value" },
+            certificate: {
+                status: "provisioning",
+                error_msg: "error_msg",
+                certificate_authority: "letsencrypt",
+                renews_before: "renews_before",
+            },
+            relying_party_identifier: "relying_party_identifier",
+        };
+        server
+            .mockEndpoint()
+            .get("/custom-domains/default")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customDomains.getDefault();
+        expect(response).toEqual({
+            custom_domain_id: "custom_domain_id",
+            domain: "domain",
+            primary: true,
+            is_default: true,
+            status: "pending_verification",
+            type: "auth0_managed_certs",
+            origin_domain_name: "origin_domain_name",
+            verification: {
+                methods: [
+                    {
+                        name: "cname",
+                        record: "record",
+                    },
+                ],
+                status: "verified",
+                error_msg: "error_msg",
+                last_verified_at: "last_verified_at",
+            },
+            custom_client_ip_header: "custom_client_ip_header",
+            tls_policy: "tls_policy",
+            domain_metadata: {
+                key: "value",
+            },
+            certificate: {
+                status: "provisioning",
+                error_msg: "error_msg",
+                certificate_authority: "letsencrypt",
+                renews_before: "renews_before",
+            },
+            relying_party_identifier: "relying_party_identifier",
+        });
+    });
+
+    test("getDefault (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/custom-domains/default")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customDomains.getDefault();
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("getDefault (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/custom-domains/default")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customDomains.getDefault();
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("getDefault (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/custom-domains/default")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customDomains.getDefault();
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("setDefault (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { domain: "domain" };
+        const rawResponseBody = {
+            custom_domain_id: "custom_domain_id",
+            domain: "domain",
+            primary: true,
+            is_default: true,
+            status: "pending_verification",
+            type: "auth0_managed_certs",
+            origin_domain_name: "origin_domain_name",
+            verification: {
+                methods: [{ name: "cname", record: "record" }],
+                status: "verified",
+                error_msg: "error_msg",
+                last_verified_at: "last_verified_at",
+            },
+            custom_client_ip_header: "custom_client_ip_header",
+            tls_policy: "tls_policy",
+            domain_metadata: { key: "value" },
+            certificate: {
+                status: "provisioning",
+                error_msg: "error_msg",
+                certificate_authority: "letsencrypt",
+                renews_before: "renews_before",
+            },
+            relying_party_identifier: "relying_party_identifier",
+        };
+        server
+            .mockEndpoint()
+            .patch("/custom-domains/default")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customDomains.setDefault({
+            domain: "domain",
+        });
+        expect(response).toEqual({
+            custom_domain_id: "custom_domain_id",
+            domain: "domain",
+            primary: true,
+            is_default: true,
+            status: "pending_verification",
+            type: "auth0_managed_certs",
+            origin_domain_name: "origin_domain_name",
+            verification: {
+                methods: [
+                    {
+                        name: "cname",
+                        record: "record",
+                    },
+                ],
+                status: "verified",
+                error_msg: "error_msg",
+                last_verified_at: "last_verified_at",
+            },
+            custom_client_ip_header: "custom_client_ip_header",
+            tls_policy: "tls_policy",
+            domain_metadata: {
+                key: "value",
+            },
+            certificate: {
+                status: "provisioning",
+                error_msg: "error_msg",
+                certificate_authority: "letsencrypt",
+                renews_before: "renews_before",
+            },
+            relying_party_identifier: "relying_party_identifier",
+        });
+    });
+
+    test("setDefault (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { domain: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/custom-domains/default")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customDomains.setDefault({
+                domain: "x",
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("setDefault (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { domain: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/custom-domains/default")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customDomains.setDefault({
+                domain: "x",
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });

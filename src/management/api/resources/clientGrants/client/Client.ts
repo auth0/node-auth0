@@ -155,7 +155,6 @@ export class ClientGrantsClient {
      *
      * @example
      *     await client.clientGrants.create({
-     *         client_id: "client_id",
      *         audience: "audience"
      *     })
      */
