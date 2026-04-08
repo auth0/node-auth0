@@ -301,6 +301,9 @@ export const OauthScope = {
      * Read Groups */
     ReadGroups: "read:groups",
     /**
+     * Delete Groups */
+    DeleteGroups: "delete:groups",
+    /**
      * Create Guardian Enrollment Tickets */
     CreateGuardianEnrollmentTickets: "create:guardian_enrollment_tickets",
     /**
@@ -999,10 +1002,24 @@ export interface ActionTriggerCompatibleTrigger {
     [key: string]: any;
 }
 
-/**
- * An actions extensibility point.
- */
-export type ActionTriggerTypeEnum = string;
+/** An actions extensibility point. */
+export const ActionTriggerTypeEnum = {
+    PostLogin: "post-login",
+    CredentialsExchange: "credentials-exchange",
+    PreUserRegistration: "pre-user-registration",
+    PostUserRegistration: "post-user-registration",
+    PostChangePassword: "post-change-password",
+    SendPhoneMessage: "send-phone-message",
+    CustomPhoneProvider: "custom-phone-provider",
+    CustomEmailProvider: "custom-email-provider",
+    PasswordResetPostChallenge: "password-reset-post-challenge",
+    CustomTokenExchange: "custom-token-exchange",
+    EventStream: "event-stream",
+    PasswordHashMigration: "password-hash-migration",
+    LoginPostIdentifier: "login-post-identifier",
+    SignupPostIdentifier: "signup-post-identifier",
+} as const;
+export type ActionTriggerTypeEnum = (typeof ActionTriggerTypeEnum)[keyof typeof ActionTriggerTypeEnum];
 
 export interface ActionVersion {
     /** The unique id of an action version. */
@@ -1085,13 +1102,13 @@ export interface AculConfigsItem {
     screen: Management.ScreenGroupNameEnum;
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
 }
 
@@ -1103,7 +1120,7 @@ export type AculConfigs = Management.AculConfigsItem[];
 /**
  * Context values to make available
  */
-export type AculContextConfiguration = Management.AculContextConfigurationItem[];
+export type AculContextConfiguration = (Management.AculContextConfigurationItem[] | null) | undefined;
 
 export type AculContextConfigurationItem =
     | Management.AculContextEnum
@@ -1852,6 +1869,77 @@ export interface ChangePasswordTicketResponseContent {
     [key: string]: any;
 }
 
+/**
+ * Client authentication methods derived from the JWKS document
+ */
+export interface CimdMappedClientAuthenticationMethods {
+    private_key_jwt?: Management.CimdMappedClientAuthenticationMethodsPrivateKeyJwt | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Private Key JWT authentication configuration
+ */
+export interface CimdMappedClientAuthenticationMethodsPrivateKeyJwt {
+    /** Credentials derived from the JWKS document */
+    credentials: Management.CimdMappedPrivateKeyJwtCredential[];
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Auth0 client fields mapped from the Client ID Metadata Document
+ */
+export interface CimdMappedClientFields {
+    /** The URL of the Client ID Metadata Document */
+    external_client_id?: string | undefined;
+    /** Client name */
+    name?: string | undefined;
+    /** Application type (e.g., web, native) */
+    app_type?: string | undefined;
+    /** Callback URLs */
+    callbacks?: string[] | undefined;
+    /** Logo URI */
+    logo_uri?: string | undefined;
+    /** Human-readable brief description of this client presentable to the end-user */
+    description?: string | undefined;
+    /** List of grant types */
+    grant_types?: string[] | undefined;
+    /** Token endpoint authentication method */
+    token_endpoint_auth_method?: string | undefined;
+    /** URL for the JSON Web Key Set containing the public keys for private_key_jwt authentication */
+    jwks_uri?: string | undefined;
+    client_authentication_methods?: Management.CimdMappedClientAuthenticationMethods | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+export interface CimdMappedPrivateKeyJwtCredential {
+    /** Type of credential (e.g., public_key) */
+    credential_type: string;
+    /** Key identifier from JWKS or calculated thumbprint */
+    kid: string;
+    /** Algorithm (e.g., RS256, RS384, PS256) */
+    alg: string;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Validation result for the Client ID Metadata Document
+ */
+export interface CimdValidationResult {
+    /** Whether the metadata document passed validation */
+    valid: boolean;
+    /** Array of validation violation messages (if any) */
+    violations: string[];
+    /** Array of warning messages (if any) */
+    warnings: string[];
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export interface Client {
     /** ID of this client. */
     client_id?: string | undefined;
@@ -1889,7 +1977,7 @@ export interface Client {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -1944,6 +2032,12 @@ export interface Client {
     async_approval_notification_channels?:
         | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
         | undefined;
+    external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
+    external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
+    external_client_id?: string | undefined;
+    /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
+    jwks_uri?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -2387,7 +2481,8 @@ export type ClientAppTypeEnum = (typeof ClientAppTypeEnum)[keyof typeof ClientAp
  * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
  */
 export type ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration =
-    Management.AsyncApprovalNotificationsChannelsEnum[];
+    | (Management.AsyncApprovalNotificationsChannelsEnum[] | null)
+    | undefined;
 
 /**
  * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
@@ -2552,6 +2647,21 @@ export interface ClientEncryptionKey {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/** Indicates who created the external metadata client. The value <code>admin</code> indicates the client was registered via the Management API. The value <code>client</code> indicates the client was registered dynamically. This field is only present when external_metadata_type is set. */
+export const ClientExternalMetadataCreatedByEnum = {
+    Admin: "admin",
+    Client: "client",
+} as const;
+export type ClientExternalMetadataCreatedByEnum =
+    (typeof ClientExternalMetadataCreatedByEnum)[keyof typeof ClientExternalMetadataCreatedByEnum];
+
+/** Indicates the type of external metadata used to register the client. This field is omitted for regular clients. The value <code>cimd</code> identifies clients registered via a Client ID Metadata Document. */
+export const ClientExternalMetadataTypeEnum = {
+    Cimd: "cimd",
+} as const;
+export type ClientExternalMetadataTypeEnum =
+    (typeof ClientExternalMetadataTypeEnum)[keyof typeof ClientExternalMetadataTypeEnum];
 
 /**
  * Optional filter on allow_any_organization.
@@ -2778,7 +2888,7 @@ export interface ClientRefreshTokenConfiguration {
     /** Prevents tokens from expiring without use when `true` (takes precedence over `idle_token_lifetime` values) */
     infinite_idle_token_lifetime?: boolean | undefined;
     /** A collection of policies governing multi-resource refresh token exchange (MRRT), defining how refresh tokens can be used across different resource servers */
-    policies?: Management.ClientRefreshTokenPolicy[] | undefined;
+    policies?: (Management.ClientRefreshTokenPolicy[] | null) | undefined;
 }
 
 export interface ClientRefreshTokenPolicy {
@@ -2804,7 +2914,9 @@ export interface ClientSessionTransferConfiguration {
     /** Indicates whether revoking the parent Refresh Token that initiated a Native to Web flow and was used to issue a Session Transfer Token should trigger a cascade revocation affecting its dependent child entities. Usually configured in the native application. Default value is `true`, applicable only in Native to Web SSO context. */
     enforce_cascade_revocation?: boolean | undefined;
     /** Indicates whether an app can create a session from a Session Transfer Token received via indicated methods. Can include `cookie` and/or `query`. Usually configured in the web application. Default value is an empty array []. */
-    allowed_authentication_methods?: Management.ClientSessionTransferAllowedAuthenticationMethodsEnum[] | undefined;
+    allowed_authentication_methods?:
+        | (Management.ClientSessionTransferAllowedAuthenticationMethodsEnum[] | null)
+        | undefined;
     enforce_device_binding?: Management.ClientSessionTransferDeviceBindingEnum | undefined;
     /** Indicates whether Refresh Tokens are allowed to be issued when authenticating with a Session Transfer Token. Usually configured in the web application. Default value is `false`. */
     allow_refresh_token?: boolean | undefined;
@@ -2853,7 +2965,7 @@ export interface ClientSigningKey {
 /**
  * Signing certificates associated with this client.
  */
-export type ClientSigningKeys = Management.ClientSigningKey[];
+export type ClientSigningKeys = (Management.ClientSigningKey[] | null) | undefined;
 
 /** Defines the requested authentication method for the token endpoint. Can be `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), or `client_secret_basic` (client uses HTTP Basic). */
 export const ClientTokenEndpointAuthMethodEnum = {
@@ -2973,6 +3085,13 @@ export const ConnectionApiBehaviorEnum = {
 } as const;
 export type ConnectionApiBehaviorEnum = (typeof ConnectionApiBehaviorEnum)[keyof typeof ConnectionApiBehaviorEnum];
 
+export type ConnectionApiEnableGroups = boolean;
+
+/**
+ * Enables integration with the Google Workspace Admin SDK Directory API for groups. When true, Auth0 can synchronize groups & group memberships and supports inbound directory provisioning for groups. Defaults to false.
+ */
+export type ConnectionApiEnableGroupsGoogleApps = Management.ConnectionApiEnableGroups;
+
 export type ConnectionApiEnableUsers = boolean;
 
 /**
@@ -3066,8 +3185,6 @@ export interface ConnectionAuthenticationPurpose {
 }
 
 export type ConnectionAuthorizationEndpoint = string;
-
-export type ConnectionAuthorizationEndpointOAuth2 = Management.ConnectionAuthorizationEndpoint;
 
 /**
  * Base URL override for the Exact Online API endpoint used for OAuth2 authorization and API requests. Defaults to https://start.exactonline.nl.
@@ -3421,14 +3538,6 @@ export type ConnectionDomainGoogleApps = string;
  */
 export type ConnectionDomainOkta = string;
 
-/** Algorithm used for DPoP proof JWT signing. */
-export const ConnectionDpopSigningAlgEnum = {
-    Es256: "ES256",
-    Ed25519: "Ed25519",
-} as const;
-export type ConnectionDpopSigningAlgEnum =
-    (typeof ConnectionDpopSigningAlgEnum)[keyof typeof ConnectionDpopSigningAlgEnum];
-
 /**
  * JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing.
  */
@@ -3502,8 +3611,6 @@ export type ConnectionEnabledDatabaseCustomization = boolean;
  * URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme.
  */
 export type ConnectionEndSessionEndpoint = string;
-
-export type ConnectionEndSessionEndpointOAuth2 = Management.ConnectionEndSessionEndpoint;
 
 /**
  * The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider.
@@ -3843,7 +3950,6 @@ export const ConnectionIdentityProviderEnum = {
     Apple: "apple",
     Dropbox: "dropbox",
     Bitbucket: "bitbucket",
-    Aol: "aol",
     Auth0Oidc: "auth0-oidc",
     Auth0: "auth0",
     Baidu: "baidu",
@@ -3866,7 +3972,6 @@ export const ConnectionIdentityProviderEnum = {
     Ip: "ip",
     Line: "line",
     Linkedin: "linkedin",
-    Miicard: "miicard",
     Oauth1: "oauth1",
     Oauth2: "oauth2",
     Office365: "office365",
@@ -3876,7 +3981,6 @@ export const ConnectionIdentityProviderEnum = {
     PaypalSandbox: "paypal-sandbox",
     Pingfederate: "pingfederate",
     Planningcenter: "planningcenter",
-    Renren: "renren",
     SalesforceCommunity: "salesforce-community",
     SalesforceSandbox: "salesforce-sandbox",
     Salesforce: "salesforce",
@@ -3886,8 +3990,6 @@ export const ConnectionIdentityProviderEnum = {
     Shop: "shop",
     Sms: "sms",
     Soundcloud: "soundcloud",
-    ThecitySandbox: "thecity-sandbox",
-    Thecity: "thecity",
     Thirtysevensignals: "thirtysevensignals",
     Twitter: "twitter",
     Untappd: "untappd",
@@ -3897,7 +3999,6 @@ export const ConnectionIdentityProviderEnum = {
     Windowslive: "windowslive",
     Wordpress: "wordpress",
     Yahoo: "yahoo",
-    Yammer: "yammer",
     Yandex: "yandex",
 } as const;
 export type ConnectionIdentityProviderEnum =
@@ -4082,17 +4183,9 @@ export interface ConnectionOptionsAdfs extends Management.ConnectionOptionsCommo
     signInEndpoint?: Management.ConnectionSignInEndpointAdfs | undefined;
     tenant_domain?: Management.ConnectionTenantDomain | undefined;
     thumbprints?: Management.ConnectionThumbprints | undefined;
-    upstream_params?: ((Management.ConnectionUpstreamParamsAdfs | undefined) | null) | undefined;
+    upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Custom ADFS claim to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single ADFS claim name). */
     user_id_attribute?: string | undefined;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
-/**
- * Options for the 'aol' connection
- */
-export interface ConnectionOptionsAol extends Management.ConnectionOptionsOAuth2Common {
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4162,6 +4255,7 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
     password_dictionary?: (Management.ConnectionPasswordDictionaryOptions | null) | undefined;
     password_history?: (Management.ConnectionPasswordHistoryOptions | null) | undefined;
     password_no_personal_info?: (Management.ConnectionPasswordNoPersonalInfoOptions | null) | undefined;
+    password_options?: Management.ConnectionPasswordOptions | undefined;
     precedence?: Management.ConnectionIdentifierPrecedence | undefined;
     realm_fallback?: Management.ConnectionRealmFallback | undefined;
     requires_username?: Management.ConnectionRequiresUsername | undefined;
@@ -4191,7 +4285,7 @@ export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCo
     app_id?: string | undefined;
     /** Includes basic user profile information from Azure AD (name, email, given_name, family_name). Always enabled and required - represents the minimum profile data retrieved during authentication. */
     basic_profile?: boolean | undefined;
-    client_id?: Management.ConnectionClientIdAzureAd | undefined;
+    client_id: Management.ConnectionClientIdAzureAd;
     client_secret?: Management.ConnectionClientSecretAzureAd | undefined;
     domain_aliases?: Management.ConnectionDomainAliasesAzureAd | undefined;
     /** When false, prevents storing the user's Azure AD access token in the Auth0 user profile. When true (default), the access token is persisted for API access. */
@@ -4372,7 +4466,6 @@ export interface ConnectionOptionsCommonOidc {
     client_secret?: Management.ConnectionClientSecretOidc | undefined;
     connection_settings?: Management.ConnectionConnectionSettings | undefined;
     domain_aliases?: Management.ConnectionDomainAliases | undefined;
-    dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
@@ -4383,11 +4476,11 @@ export interface ConnectionOptionsCommonOidc {
     send_back_channel_nonce?: Management.ConnectionSendBackChannelNonce | undefined;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     tenant_domain?: Management.ConnectionTenantDomain | undefined;
-    token_endpoint?: Management.ConnectionTokenEndpointOidc | undefined;
+    token_endpoint?: Management.ConnectionTokenEndpoint | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
-    userinfo_endpoint?: Management.ConnectionUserinfoEndpointOidc | undefined;
+    userinfo_endpoint?: Management.ConnectionUserinfoEndpoint | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -4665,6 +4758,7 @@ export interface ConnectionOptionsGoogleApps extends Management.ConnectionOption
     admin_refresh_token?: Management.ConnectionAdminRefreshTokenGoogleApps | undefined;
     /** When true, allows customization of OAuth scopes requested during user login. Custom scopes are appended to the mandatory email and profile scopes. When false or omitted, only the default email and profile scopes are used. This property is automatically enabled when Token Vault or Connected Accounts features are activated. */
     allow_setting_login_scopes?: boolean | undefined;
+    api_enable_groups?: Management.ConnectionApiEnableGroupsGoogleApps | undefined;
     api_enable_users?: Management.ConnectionApiEnableUsersGoogleApps | undefined;
     client_id: Management.ConnectionClientIdGoogleApps;
     client_secret?: Management.ConnectionClientSecretGoogleApps | undefined;
@@ -4921,14 +5015,6 @@ export interface ConnectionOptionsLinkedin extends Management.ConnectionOptionsC
 }
 
 /**
- * Options for the 'miicard' connection
- */
-export interface ConnectionOptionsMiicard extends Management.ConnectionOptionsOAuth2Common {
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
-/**
  * Options for the 'oauth1' connection
  */
 export interface ConnectionOptionsOAuth1 extends Management.ConnectionOptionsCommon {
@@ -4959,19 +5045,19 @@ export interface ConnectionOptionsOAuth1Common extends Management.ConnectionOpti
 export interface ConnectionOptionsOAuth2 extends Management.ConnectionOptionsCommon {
     authParams?: Management.ConnectionAuthParamsOAuth2 | undefined;
     authParamsMap?: Management.ConnectionAuthParamsMap | undefined;
-    authorizationURL?: Management.ConnectionAuthorizationEndpointOAuth2 | undefined;
+    authorizationURL?: Management.ConnectionAuthorizationEndpoint | undefined;
     client_id?: Management.ConnectionClientIdOAuth2 | undefined;
     client_secret?: Management.ConnectionClientSecretOAuth2 | undefined;
     customHeaders?: Management.ConnectionCustomHeadersOAuth2 | undefined;
     fieldsMap?: Management.ConnectionFieldsMap | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
-    logoutUrl?: Management.ConnectionEndSessionEndpointOAuth2 | undefined;
+    logoutUrl?: Management.ConnectionEndSessionEndpoint | undefined;
     /** When true, enables Proof Key for Code Exchange (PKCE) for the authorization code flow. PKCE provides additional security by preventing authorization code interception attacks. */
     pkce_enabled?: boolean | undefined;
     scope?: Management.ConnectionScopeOAuth2 | undefined;
     scripts?: Management.ConnectionScriptsOAuth2 | undefined;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
-    tokenURL?: Management.ConnectionTokenEndpointOAuth2 | undefined;
+    tokenURL?: Management.ConnectionTokenEndpoint | undefined;
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
     useOauthSpecScope?: boolean | undefined;
@@ -5121,14 +5207,6 @@ export const ConnectionOptionsProtocolEnumTwitter = {
 } as const;
 export type ConnectionOptionsProtocolEnumTwitter =
     (typeof ConnectionOptionsProtocolEnumTwitter)[keyof typeof ConnectionOptionsProtocolEnumTwitter];
-
-/**
- * Options for the 'renren' connection
- */
-export interface ConnectionOptionsRenren extends Management.ConnectionOptionsOAuth2Common {
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
 
 /**
  * Options for the 'samlp' connection
@@ -5449,14 +5527,6 @@ export interface ConnectionOptionsYahoo extends Management.ConnectionOptionsOAut
 }
 
 /**
- * Options for the 'yammer' connection
- */
-export interface ConnectionOptionsYammer extends Management.ConnectionOptionsOAuth2Common {
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
-/**
  * Options for the 'yandex' connection
  */
 export interface ConnectionOptionsYandex extends Management.ConnectionOptionsOAuth2Common {
@@ -5532,6 +5602,61 @@ export interface ConnectionPasswordHistoryOptions {
  */
 export interface ConnectionPasswordNoPersonalInfoOptions {
     enable: boolean;
+}
+
+/**
+ * Password policy options for flexible password policy configuration
+ */
+export interface ConnectionPasswordOptions {
+    complexity?: Management.ConnectionPasswordOptionsComplexity | undefined;
+    dictionary?: Management.ConnectionPasswordOptionsDictionary | undefined;
+    history?: Management.ConnectionPasswordOptionsHistory | undefined;
+    profile_data?: Management.ConnectionPasswordOptionsProfileData | undefined;
+}
+
+/**
+ * Password complexity requirements configuration
+ */
+export interface ConnectionPasswordOptionsComplexity {
+    /** Minimum password length required (1-72 characters) */
+    min_length?: number | undefined;
+    /** Required character types that must be present in passwords. Valid options: uppercase, lowercase, number, special */
+    character_types?: Management.PasswordCharacterTypeEnum[] | undefined;
+    character_type_rule?: Management.PasswordCharacterTypeRulePolicyEnum | undefined;
+    identical_characters?: Management.PasswordIdenticalCharactersPolicyEnum | undefined;
+    sequential_characters?: Management.PasswordSequentialCharactersPolicyEnum | undefined;
+    max_length_exceeded?: Management.PasswordMaxLengthExceededPolicyEnum | undefined;
+}
+
+/**
+ * Dictionary-based password restriction policy to prevent common passwords
+ */
+export interface ConnectionPasswordOptionsDictionary {
+    /** Enables dictionary checking to prevent use of common passwords and custom blocked words */
+    active?: boolean | undefined;
+    /** Array of custom words to block in passwords. Maximum 200 items, each up to 50 characters */
+    custom?: string[] | undefined;
+    default?: Management.PasswordDefaultDictionariesEnum | undefined;
+}
+
+/**
+ * Password history policy configuration to prevent password reuse
+ */
+export interface ConnectionPasswordOptionsHistory {
+    /** Enables password history checking to prevent users from reusing recent passwords */
+    active?: boolean | undefined;
+    /** Number of previous passwords to remember and prevent reuse (1-24) */
+    size?: number | undefined;
+}
+
+/**
+ * Personal information restriction policy to prevent use of profile data in passwords
+ */
+export interface ConnectionPasswordOptionsProfileData {
+    /** Prevents users from including profile data (like name, email) in their passwords */
+    active?: boolean | undefined;
+    /** Blocked profile fields. An array of up to 12 entries. */
+    blocked_fields?: string[] | undefined;
 }
 
 /** Password strength level */
@@ -5682,7 +5807,7 @@ export interface ConnectionProfileTemplateItem {
 export interface ConnectionPropertiesOptions {
     validation?: (Management.ConnectionValidationOptions | null) | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
-    non_persistent_attrs?: string[] | undefined;
+    non_persistent_attrs?: (string[] | null) | undefined;
     /** Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used. */
     precedence?: Management.ConnectionIdentifierPrecedenceEnum[] | undefined;
     attributes?: Management.ConnectionAttributes | undefined;
@@ -5692,6 +5817,8 @@ export interface ConnectionPropertiesOptions {
     enabledDatabaseCustomization?: boolean | undefined;
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
+    /** Stores encrypted string only configurations for connections */
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
@@ -5713,6 +5840,7 @@ export interface ConnectionPropertiesOptions {
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
+    password_options?: Management.ConnectionPasswordOptions | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -5818,7 +5946,7 @@ export type ConnectionRequireRequestUriRegistration = boolean;
 export type ConnectionRequiresUsername = boolean;
 
 export interface ConnectionResponseCommon extends Management.CreateConnectionCommon {
-    id?: Management.ConnectionId | undefined;
+    id: Management.ConnectionId;
     realms?: Management.ConnectionRealms | undefined;
 }
 
@@ -5853,22 +5981,6 @@ export interface ConnectionResponseContentAdfs
 export namespace ConnectionResponseContentAdfs {
     export const Strategy = {
         Adfs: "adfs",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
- * Response for connections with strategy=aol
- */
-export interface ConnectionResponseContentAol
-    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
-    strategy: ConnectionResponseContentAol.Strategy;
-    options?: Management.ConnectionOptionsAol | undefined;
-}
-
-export namespace ConnectionResponseContentAol {
-    export const Strategy = {
-        Aol: "aol",
     } as const;
     export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
@@ -6312,22 +6424,6 @@ export namespace ConnectionResponseContentLinkedin {
 }
 
 /**
- * Response for connections with strategy=miicard
- */
-export interface ConnectionResponseContentMiicard
-    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
-    strategy: ConnectionResponseContentMiicard.Strategy;
-    options?: Management.ConnectionOptionsMiicard | undefined;
-}
-
-export namespace ConnectionResponseContentMiicard {
-    export const Strategy = {
-        Miicard: "miicard",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
  * Response for connections with strategy=oauth1
  */
 export interface ConnectionResponseContentOAuth1
@@ -6474,22 +6570,6 @@ export interface ConnectionResponseContentPlanningCenter
 export namespace ConnectionResponseContentPlanningCenter {
     export const Strategy = {
         Planningcenter: "planningcenter",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
- * Response for connections with strategy=renren
- */
-export interface ConnectionResponseContentRenren
-    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
-    strategy: ConnectionResponseContentRenren.Strategy;
-    options?: Management.ConnectionOptionsRenren | undefined;
-}
-
-export namespace ConnectionResponseContentRenren {
-    export const Strategy = {
-        Renren: "renren",
     } as const;
     export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
@@ -6770,22 +6850,6 @@ export namespace ConnectionResponseContentYahoo {
 }
 
 /**
- * Response for connections with strategy=yammer
- */
-export interface ConnectionResponseContentYammer
-    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
-    strategy: ConnectionResponseContentYammer.Strategy;
-    options?: Management.ConnectionOptionsYammer | undefined;
-}
-
-export namespace ConnectionResponseContentYammer {
-    export const Strategy = {
-        Yammer: "yammer",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
  * Response for connections with strategy=yandex
  */
 export interface ConnectionResponseContentYandex
@@ -7033,7 +7097,6 @@ export const ConnectionStrategyEnum = {
     Apple: "apple",
     Dropbox: "dropbox",
     Bitbucket: "bitbucket",
-    Aol: "aol",
     Auth0Oidc: "auth0-oidc",
     Auth0: "auth0",
     Baidu: "baidu",
@@ -7056,7 +7119,6 @@ export const ConnectionStrategyEnum = {
     Ip: "ip",
     Line: "line",
     Linkedin: "linkedin",
-    Miicard: "miicard",
     Oauth1: "oauth1",
     Oauth2: "oauth2",
     Office365: "office365",
@@ -7066,7 +7128,6 @@ export const ConnectionStrategyEnum = {
     PaypalSandbox: "paypal-sandbox",
     Pingfederate: "pingfederate",
     Planningcenter: "planningcenter",
-    Renren: "renren",
     SalesforceCommunity: "salesforce-community",
     SalesforceSandbox: "salesforce-sandbox",
     Salesforce: "salesforce",
@@ -7076,8 +7137,6 @@ export const ConnectionStrategyEnum = {
     Shop: "shop",
     Sms: "sms",
     Soundcloud: "soundcloud",
-    ThecitySandbox: "thecity-sandbox",
-    Thecity: "thecity",
     Thirtysevensignals: "thirtysevensignals",
     Twitter: "twitter",
     Untappd: "untappd",
@@ -7087,7 +7146,6 @@ export const ConnectionStrategyEnum = {
     Windowslive: "windowslive",
     Wordpress: "wordpress",
     Yahoo: "yahoo",
-    Yammer: "yammer",
     Yandex: "yandex",
     Auth0Adldap: "auth0-adldap",
 } as const;
@@ -7189,10 +7247,6 @@ export type ConnectionTokenEndpointAuthSigningAlgEnum =
  * JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used.
  */
 export type ConnectionTokenEndpointAuthSigningAlgValuesSupported = string[];
-
-export type ConnectionTokenEndpointOAuth2 = Management.ConnectionTokenEndpoint;
-
-export type ConnectionTokenEndpointOidc = Management.ConnectionTokenEndpoint;
 
 export interface ConnectionTotpEmail {
     length?: Management.ConnectionTotpLengthEmail | undefined;
@@ -7297,8 +7351,6 @@ export type ConnectionUpstreamParams =
     | (Record<string, (Management.ConnectionUpstreamAdditionalProperties | null) | undefined> | null)
     | undefined;
 
-export type ConnectionUpstreamParamsAdfs = ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
-
 /**
  * Options for adding parameters in the request to the upstream IdP. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
@@ -7347,8 +7399,6 @@ export type ConnectionUserinfoEncryptionAlgValuesSupported = string[];
 export type ConnectionUserinfoEncryptionEncValuesSupported = string[];
 
 export type ConnectionUserinfoEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
-
-export type ConnectionUserinfoEndpointOidc = Management.ConnectionUserinfoEndpoint;
 
 /**
  * JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included.
@@ -7560,7 +7610,7 @@ export interface CreateClientResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -7615,12 +7665,23 @@ export interface CreateClientResponseContent {
     async_approval_notification_channels?:
         | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
         | undefined;
+    external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
+    external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
+    external_client_id?: string | undefined;
+    /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
+    jwks_uri?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
 
-export interface CreateConnectionCommon extends Management.ConnectionCommon {
-    name?: Management.ConnectionName | undefined;
+export interface CreateConnectionCommon {
+    name: Management.ConnectionName;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    display_name?: Management.ConnectionDisplayName | undefined;
+    is_domain_connection?: Management.ConnectionIsDomainConnection | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
 }
 
 export interface CreateConnectionProfileResponseContent {
@@ -7660,21 +7721,6 @@ export interface CreateConnectionRequestContentAdfs extends Management.CreateCon
 export namespace CreateConnectionRequestContentAdfs {
     export const Strategy = {
         Adfs: "adfs",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
- * Create a connection with strategy=aol
- */
-export interface CreateConnectionRequestContentAol extends Management.CreateConnectionCommon {
-    strategy: CreateConnectionRequestContentAol.Strategy;
-    options?: Management.ConnectionOptionsAol | undefined;
-}
-
-export namespace CreateConnectionRequestContentAol {
-    export const Strategy = {
-        Aol: "aol",
     } as const;
     export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
@@ -8092,21 +8138,6 @@ export namespace CreateConnectionRequestContentLinkedin {
 }
 
 /**
- * Create a connection with strategy=miicard
- */
-export interface CreateConnectionRequestContentMiicard extends Management.CreateConnectionCommon {
-    strategy: CreateConnectionRequestContentMiicard.Strategy;
-    options?: Management.ConnectionOptionsMiicard | undefined;
-}
-
-export namespace CreateConnectionRequestContentMiicard {
-    export const Strategy = {
-        Miicard: "miicard",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
  * Create a connection with strategy=oauth1
  */
 export interface CreateConnectionRequestContentOAuth1 extends Management.CreateConnectionCommon {
@@ -8244,21 +8275,6 @@ export interface CreateConnectionRequestContentPlanningCenter extends Management
 export namespace CreateConnectionRequestContentPlanningCenter {
     export const Strategy = {
         Planningcenter: "planningcenter",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
- * Create a connection with strategy=renren
- */
-export interface CreateConnectionRequestContentRenren extends Management.CreateConnectionCommon {
-    strategy: CreateConnectionRequestContentRenren.Strategy;
-    options?: Management.ConnectionOptionsRenren | undefined;
-}
-
-export namespace CreateConnectionRequestContentRenren {
-    export const Strategy = {
-        Renren: "renren",
     } as const;
     export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
@@ -8522,21 +8538,6 @@ export namespace CreateConnectionRequestContentYahoo {
 }
 
 /**
- * Create a connection with strategy=yammer
- */
-export interface CreateConnectionRequestContentYammer extends Management.CreateConnectionCommon {
-    strategy: CreateConnectionRequestContentYammer.Strategy;
-    options?: Management.ConnectionOptionsYammer | undefined;
-}
-
-export namespace CreateConnectionRequestContentYammer {
-    export const Strategy = {
-        Yammer: "yammer",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
  * Create a connection with strategy=yandex
  */
 export interface CreateConnectionRequestContentYandex extends Management.CreateConnectionCommon {
@@ -8601,6 +8602,7 @@ export interface CreateDirectoryProvisioningRequestContent {
     mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically?: boolean | undefined;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
 }
 
 export interface CreateDirectoryProvisioningResponseContent {
@@ -8614,6 +8616,7 @@ export interface CreateDirectoryProvisioningResponseContent {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -9553,6 +9556,8 @@ export interface CreateResourceServerResponseContent {
     signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
     allow_offline_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
+    allow_online_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -9564,7 +9569,7 @@ export interface CreateResourceServerResponseContent {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -10151,6 +10156,7 @@ export interface DirectoryProvisioning {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -10674,7 +10680,8 @@ export type EventStreamTestEventTypeEnum =
 
 export type EventStreamWebhookAuthorizationResponse =
     | Management.EventStreamWebhookBasicAuth
-    | Management.EventStreamWebhookBearerAuth;
+    | Management.EventStreamWebhookBearerAuth
+    | Management.EventStreamWebhookCustomHeaderAuth;
 
 /**
  * Basic Authorization for HTTP requests (e.g., 'Basic credentials').
@@ -10714,6 +10721,22 @@ export interface EventStreamWebhookConfiguration {
     webhook_endpoint: string;
     webhook_authorization: Management.EventStreamWebhookAuthorizationResponse;
 }
+
+/**
+ * Custom header authorization for HTTP requests.
+ */
+export interface EventStreamWebhookCustomHeaderAuth {
+    method: Management.EventStreamWebhookCustomHeaderAuthMethodEnum;
+    /** HTTP header name. */
+    header_key: string;
+}
+
+/** Type of authorization. */
+export const EventStreamWebhookCustomHeaderAuthMethodEnum = {
+    CustomHeader: "custom_header",
+} as const;
+export type EventStreamWebhookCustomHeaderAuthMethodEnum =
+    (typeof EventStreamWebhookCustomHeaderAuthMethodEnum)[keyof typeof EventStreamWebhookCustomHeaderAuthMethodEnum];
 
 export interface EventStreamWebhookDestination {
     type: Management.EventStreamWebhookDestinationTypeEnum;
@@ -14390,13 +14413,13 @@ export interface GetAculResponseContent {
     screen?: string | undefined;
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -14590,7 +14613,7 @@ export interface GetClientResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -14645,6 +14668,12 @@ export interface GetClientResponseContent {
     async_approval_notification_channels?:
         | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
         | undefined;
+    external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
+    external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
+    external_client_id?: string | undefined;
+    /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
+    jwks_uri?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -14736,6 +14765,39 @@ export interface GetCustomSigningKeysResponseContent {
  */
 export type GetCustomTextsByLanguageResponseContent = Record<string, unknown>;
 
+export interface GetDefaultCanonicalDomainResponseContent {
+    /** Domain name. */
+    domain: string;
+}
+
+export interface GetDefaultCustomDomainResponseContent {
+    /** ID of the custom domain. */
+    custom_domain_id: string;
+    /** Domain name. */
+    domain: string;
+    /** Whether this is a primary domain (true) or not (false). */
+    primary: boolean;
+    /** Whether this is the default custom domain (true) or not (false). */
+    is_default?: boolean | undefined;
+    status: Management.CustomDomainStatusFilterEnum;
+    type: Management.CustomDomainTypeEnum;
+    /** Intermediate address. */
+    origin_domain_name?: string | undefined;
+    verification?: Management.DomainVerification | undefined;
+    /** The HTTP header to fetch the client's IP address */
+    custom_client_ip_header?: (string | null) | undefined;
+    /** The TLS version policy */
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string | undefined;
+}
+
+export type GetDefaultDomainResponseContent =
+    | Management.GetDefaultCustomDomainResponseContent
+    | Management.GetDefaultCanonicalDomainResponseContent;
+
 export interface GetDirectoryProvisioningDefaultMappingResponseContent {
     /** The mapping between Auth0 and IDP user attributes */
     mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
@@ -14752,6 +14814,7 @@ export interface GetDirectoryProvisioningResponseContent {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -14925,17 +14988,14 @@ export interface GetGroupMembersResponseContent {
 export interface GetGroupResponseContent {
     /** Unique identifier for the group (service-generated). */
     id: string;
-    /** Name of the group. Must be unique within its scope (connection, organization, or tenant). Must contain between 1 and 128 printable ASCII characters. */
+    /** Name of the group. Must be unique within its connection. Must contain between 1 and 128 printable ASCII characters. */
     name: string;
     /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
     external_id?: string | undefined;
     /** Identifier for the connection this group belongs to (if a connection group). */
     connection_id?: string | undefined;
-    /** Identifier for the organization this group belongs to (if an organization group). */
-    organization_id?: (string | null) | undefined;
     /** Identifier for the tenant this group belongs to. */
     tenant_name: string;
-    description?: (string | null) | undefined;
     /** Timestamp of when the group was created. */
     created_at: string;
     /** Timestamp of when the group was last updated. */
@@ -15328,6 +15388,14 @@ export interface GetRefreshTokenResponseContent {
     [key: string]: any;
 }
 
+export interface GetRefreshTokensPaginatedResponseContent {
+    refresh_tokens?: Management.RefreshTokenResponseContent[] | undefined;
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export interface GetResourceServerResponseContent {
     /** ID of the API (resource server). */
     id?: string | undefined;
@@ -15344,6 +15412,8 @@ export interface GetResourceServerResponseContent {
     signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
     allow_offline_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
+    allow_online_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -15355,7 +15425,7 @@ export interface GetResourceServerResponseContent {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -15566,7 +15636,7 @@ export interface GetTenantSettingsResponseContent {
     /** Whether to enable flexible factors for MFA in the PostLogin action */
     customize_mfa_in_postlogin_action?: boolean | undefined;
     /** Supported ACR values */
-    acr_values_supported?: string[] | undefined;
+    acr_values_supported?: (string[] | null) | undefined;
     mtls?: (Management.TenantSettingsMtls | null) | undefined;
     /** Enables the use of Pushed Authorization Requests */
     pushed_authorization_requests_supported?: boolean | undefined;
@@ -15748,17 +15818,14 @@ export interface GetVerifiableCredentialTemplateResponseContent {
 export interface Group {
     /** Unique identifier for the group (service-generated). */
     id?: string | undefined;
-    /** Name of the group. Must be unique within its scope (connection, organization, or tenant). Must contain between 1 and 128 printable ASCII characters. */
+    /** Name of the group. Must be unique within its connection. Must contain between 1 and 128 printable ASCII characters. */
     name?: string | undefined;
     /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
     external_id?: string | undefined;
     /** Identifier for the connection this group belongs to (if a connection group). */
     connection_id?: string | undefined;
-    /** Identifier for the organization this group belongs to (if an organization group). */
-    organization_id?: (string | null) | undefined;
     /** Identifier for the tenant this group belongs to. */
     tenant_name?: string | undefined;
-    description?: (string | null) | undefined;
     /** Timestamp of when the group was created. */
     created_at?: string | undefined;
     /** Timestamp of when the group was last updated. */
@@ -15923,7 +15990,6 @@ export const IdentityProviderEnum = {
     Apple: "apple",
     Dropbox: "dropbox",
     Bitbucket: "bitbucket",
-    Aol: "aol",
     Auth0Oidc: "auth0-oidc",
     Auth0: "auth0",
     Baidu: "baidu",
@@ -15946,7 +16012,6 @@ export const IdentityProviderEnum = {
     Ip: "ip",
     Line: "line",
     Linkedin: "linkedin",
-    Miicard: "miicard",
     Oauth1: "oauth1",
     Oauth2: "oauth2",
     Office365: "office365",
@@ -15956,7 +16021,6 @@ export const IdentityProviderEnum = {
     PaypalSandbox: "paypal-sandbox",
     Pingfederate: "pingfederate",
     Planningcenter: "planningcenter",
-    Renren: "renren",
     SalesforceCommunity: "salesforce-community",
     SalesforceSandbox: "salesforce-sandbox",
     Salesforce: "salesforce",
@@ -15966,8 +16030,6 @@ export const IdentityProviderEnum = {
     Shop: "shop",
     Sms: "sms",
     Soundcloud: "soundcloud",
-    ThecitySandbox: "thecity-sandbox",
-    Thecity: "thecity",
     Thirtysevensignals: "thirtysevensignals",
     Twitter: "twitter",
     Untappd: "untappd",
@@ -15977,7 +16039,6 @@ export const IdentityProviderEnum = {
     Windowslive: "windowslive",
     Wordpress: "wordpress",
     Yahoo: "yahoo",
-    Yammer: "yammer",
     Yandex: "yandex",
 } as const;
 export type IdentityProviderEnum = (typeof IdentityProviderEnum)[keyof typeof IdentityProviderEnum];
@@ -16200,13 +16261,13 @@ export interface ListAculsResponseContentItem {
     screen?: string | undefined;
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -17211,6 +17272,10 @@ export interface NativeSocialLoginGoogle {
     enabled?: boolean | undefined;
 }
 
+export type NetworkAclMatchConnectingIpv4Cidr = string;
+
+export type NetworkAclMatchConnectingIpv6Cidr = string;
+
 export type NetworkAclMatchIpv4Cidr = string;
 
 export type NetworkAclMatchIpv6Cidr = string;
@@ -17254,6 +17319,9 @@ export interface NetworkAclMatch {
     ja3_fingerprints?: string[] | undefined;
     ja4_fingerprints?: string[] | undefined;
     user_agents?: string[] | undefined;
+    hostnames?: string[] | undefined;
+    connecting_ipv4_cidrs?: Management.NetworkAclMatchConnectingIpv4Cidr[] | undefined;
+    connecting_ipv6_cidrs?: Management.NetworkAclMatchConnectingIpv6Cidr[] | undefined;
 }
 
 export interface NetworkAclRule {
@@ -17477,6 +17545,54 @@ export interface PartialPhoneTemplateContent {
     body?: Management.PhoneTemplateBody | undefined;
 }
 
+export const PasswordCharacterTypeEnum = {
+    Uppercase: "uppercase",
+    Lowercase: "lowercase",
+    Number: "number",
+    Special: "special",
+} as const;
+export type PasswordCharacterTypeEnum = (typeof PasswordCharacterTypeEnum)[keyof typeof PasswordCharacterTypeEnum];
+
+/** When enabled, passwords must contain at least 3 out of 4 character types. Can only be enabled when all 4 character types are specified */
+export const PasswordCharacterTypeRulePolicyEnum = {
+    All: "all",
+    ThreeOfFour: "three_of_four",
+} as const;
+export type PasswordCharacterTypeRulePolicyEnum =
+    (typeof PasswordCharacterTypeRulePolicyEnum)[keyof typeof PasswordCharacterTypeRulePolicyEnum];
+
+/** Default dictionary to use for password validation. Options: "en_10k" (10,000 common words) or "en_100k" (100,000 common words) */
+export const PasswordDefaultDictionariesEnum = {
+    En10K: "en_10k",
+    En100K: "en_100k",
+} as const;
+export type PasswordDefaultDictionariesEnum =
+    (typeof PasswordDefaultDictionariesEnum)[keyof typeof PasswordDefaultDictionariesEnum];
+
+/** Controls whether identical consecutive characters are allowed in passwords */
+export const PasswordIdenticalCharactersPolicyEnum = {
+    Allow: "allow",
+    Block: "block",
+} as const;
+export type PasswordIdenticalCharactersPolicyEnum =
+    (typeof PasswordIdenticalCharactersPolicyEnum)[keyof typeof PasswordIdenticalCharactersPolicyEnum];
+
+/** Controls whether passwords that exceed the maximum length are truncated or rejected */
+export const PasswordMaxLengthExceededPolicyEnum = {
+    Truncate: "truncate",
+    Error: "error",
+} as const;
+export type PasswordMaxLengthExceededPolicyEnum =
+    (typeof PasswordMaxLengthExceededPolicyEnum)[keyof typeof PasswordMaxLengthExceededPolicyEnum];
+
+/** Controls whether sequential characters are allowed in passwords */
+export const PasswordSequentialCharactersPolicyEnum = {
+    Allow: "allow",
+    Block: "block",
+} as const;
+export type PasswordSequentialCharactersPolicyEnum =
+    (typeof PasswordSequentialCharactersPolicyEnum)[keyof typeof PasswordSequentialCharactersPolicyEnum];
+
 export interface PatchClientCredentialResponseContent {
     /** ID of the credential. Generated on creation. */
     id?: string | undefined;
@@ -17692,6 +17808,17 @@ export const PreferredAuthenticationMethodEnum = {
 export type PreferredAuthenticationMethodEnum =
     (typeof PreferredAuthenticationMethodEnum)[keyof typeof PreferredAuthenticationMethodEnum];
 
+export interface PreviewCimdMetadataResponseContent {
+    /** The client_id of an existing client registered with this external_client_id, if one exists. */
+    client_id?: string | undefined;
+    /** Array of retrieval errors (populated when the metadata document could not be fetched). When present, validation is omitted. */
+    errors?: string[] | undefined;
+    validation?: Management.CimdValidationResult | undefined;
+    mapped_fields?: Management.CimdMappedClientFields | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 /** Name of the prompt */
 export const PromptGroupNameEnum = {
     Login: "login",
@@ -17815,6 +17942,7 @@ export const PromptLanguageEnum = {
     Zgh: "zgh",
     ZhCn: "zh-CN",
     ZhHk: "zh-HK",
+    ZhMo: "zh-MO",
     ZhTw: "zh-TW",
 } as const;
 export type PromptLanguageEnum = (typeof PromptLanguageEnum)[keyof typeof PromptLanguageEnum];
@@ -17830,6 +17958,8 @@ export interface PublicKeyCredential {
     parse_expiry_from_cert?: boolean | undefined;
     /** The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires. Applies to `public_key` credential type. */
     expires_at?: string | undefined;
+    /** Optional kid (Key ID), used to uniquely identify the credential. If not specified, a kid value will be auto-generated. The kid header parameter in JWTs sent by your client should match this value. Valid format is [0-9a-zA-Z-_]{10,64} */
+    kid?: string | undefined;
 }
 
 /** Algorithm which will be used with the credential. Can be one of RS256, RS384, PS256. If not specified, RS256 will be used. Applies to `public_key` credential type. */
@@ -17942,6 +18072,18 @@ export interface RegenerateUsersRecoveryCodeResponseContent {
     [key: string]: any;
 }
 
+/**
+ * Response after successfully registering or updating a CIMD client
+ */
+export interface RegisterCimdClientResponseContent {
+    /** The Auth0 client_id of the created or updated client */
+    client_id: string;
+    mapped_fields: Management.CimdMappedClientFields;
+    validation: Management.CimdValidationResult;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export type ResetPhoneTemplateRequestContent = unknown;
 
 export interface ResetPhoneTemplateResponseContent {
@@ -17971,6 +18113,8 @@ export interface ResourceServer {
     signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
     allow_offline_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
+    allow_online_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -17982,7 +18126,7 @@ export interface ResourceServer {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -18217,7 +18361,7 @@ export interface RotateClientSecretResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -18272,6 +18416,12 @@ export interface RotateClientSecretResponseContent {
     async_approval_notification_channels?:
         | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
         | undefined;
+    external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
+    external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
+    external_client_id?: string | undefined;
+    /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
+    jwks_uri?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -18582,7 +18732,7 @@ export interface SelfServiceProfileSsoTicketConnectionOptions {
     /** URL for the icon. Must use HTTPS. */
     icon_url?: (string | null) | undefined;
     /** List of domain_aliases that can be authenticated in the Identity Provider */
-    domain_aliases?: string[] | undefined;
+    domain_aliases?: (string[] | null) | undefined;
     idpinitiated?: (Management.SelfServiceProfileSsoTicketIdpInitiatedOptions | null) | undefined;
 }
 
@@ -19145,6 +19295,7 @@ export const SupportedLocales = {
     Zgh: "zgh",
     ZhCn: "zh-CN",
     ZhHk: "zh-HK",
+    ZhMo: "zh-MO",
     ZhTw: "zh-TW",
 } as const;
 export type SupportedLocales = (typeof SupportedLocales)[keyof typeof SupportedLocales];
@@ -19190,6 +19341,17 @@ export interface SuspiciousIpThrottlingStage {
     "pre-login"?: Management.SuspiciousIpThrottlingPreLoginStage | undefined;
     "pre-user-registration"?: Management.SuspiciousIpThrottlingPreUserRegistrationStage | undefined;
 }
+
+export const SynchronizeGroupsEaEnum = {
+    All: "all",
+    Off: "off",
+} as const;
+export type SynchronizeGroupsEaEnum = (typeof SynchronizeGroupsEaEnum)[keyof typeof SynchronizeGroupsEaEnum];
+
+/**
+ * Group synchronization configuration
+ */
+export type SynchronizeGroupsEnum = string;
 
 /**
  * Settings related to OIDC RP-initiated Logout
@@ -19417,6 +19579,7 @@ export const TenantSettingsSupportedLocalesEnum = {
     Zgh: "zgh",
     ZhCn: "zh-CN",
     ZhHk: "zh-HK",
+    ZhMo: "zh-MO",
     ZhTw: "zh-TW",
 } as const;
 export type TenantSettingsSupportedLocalesEnum =
@@ -19586,13 +19749,13 @@ export interface UpdateActionResponseContent {
 export interface UpdateAculResponseContent {
     /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum | undefined;
-    context_configuration?: Management.AculContextConfiguration | undefined;
+    context_configuration?: ((Management.AculContextConfiguration | undefined) | null) | undefined;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: (boolean | null) | undefined;
     /** Use page template with ACUL */
     use_page_template?: (boolean | null) | undefined;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[] | undefined;
+    head_tags?: (Management.AculHeadTag[] | null) | undefined;
     filters?: (Management.AculFilters | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -19783,7 +19946,7 @@ export interface UpdateClientResponseContent {
     /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
     grant_types?: string[] | undefined;
     jwt_configuration?: Management.ClientJwtConfiguration | undefined;
-    signing_keys?: Management.ClientSigningKeys | undefined;
+    signing_keys?: ((Management.ClientSigningKeys | undefined) | null) | undefined;
     encryption_key?: (Management.ClientEncryptionKey | null) | undefined;
     /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
     sso?: boolean | undefined;
@@ -19838,6 +20001,12 @@ export interface UpdateClientResponseContent {
     async_approval_notification_channels?:
         | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
         | undefined;
+    external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
+    external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
+    external_client_id?: string | undefined;
+    /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
+    jwks_uri?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -19848,7 +20017,7 @@ export interface UpdateClientResponseContent {
 export interface UpdateConnectionOptions {
     validation?: (Management.ConnectionValidationOptions | null) | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
-    non_persistent_attrs?: string[] | undefined;
+    non_persistent_attrs?: (string[] | null) | undefined;
     /** Order of precedence for attribute types. If the property is not specified, the default precedence of attributes will be used. */
     precedence?: Management.ConnectionIdentifierPrecedenceEnum[] | undefined;
     attributes?: Management.ConnectionAttributes | undefined;
@@ -19858,6 +20027,8 @@ export interface UpdateConnectionOptions {
     enabledDatabaseCustomization?: boolean | undefined;
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
+    /** Stores encrypted string only configurations for connections */
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
@@ -19879,6 +20050,7 @@ export interface UpdateConnectionOptions {
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
+    password_options?: Management.ConnectionPasswordOptions | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -19906,13 +20078,6 @@ export interface UpdateConnectionRequestContentAd extends Management.ConnectionC
 export interface UpdateConnectionRequestContentAdfs extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsAdfs | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
-}
-
-/**
- * Update a connection with strategy=aol
- */
-export interface UpdateConnectionRequestContentAol extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsAol | undefined;
 }
 
 /**
@@ -20111,13 +20276,6 @@ export interface UpdateConnectionRequestContentLinkedin extends Management.Conne
 }
 
 /**
- * Update a connection with strategy=miicard
- */
-export interface UpdateConnectionRequestContentMiicard extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsMiicard | undefined;
-}
-
-/**
  * Update a connection with strategy=oauth1
  */
 export interface UpdateConnectionRequestContentOAuth1 extends Management.ConnectionCommon {
@@ -20185,13 +20343,6 @@ export interface UpdateConnectionRequestContentPingFederate extends Management.C
  */
 export interface UpdateConnectionRequestContentPlanningCenter extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsPlanningCenter | undefined;
-}
-
-/**
- * Update a connection with strategy=renren
- */
-export interface UpdateConnectionRequestContentRenren extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsRenren | undefined;
 }
 
 /**
@@ -20317,13 +20468,6 @@ export interface UpdateConnectionRequestContentYahoo extends Management.Connecti
 }
 
 /**
- * Update a connection with strategy=yammer
- */
-export interface UpdateConnectionRequestContentYammer extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsYammer | undefined;
-}
-
-/**
  * Update a connection with strategy=yandex
  */
 export interface UpdateConnectionRequestContentYandex extends Management.ConnectionCommon {
@@ -20375,11 +20519,45 @@ export interface UpdateCustomDomainResponseContent {
     relying_party_identifier?: string | undefined;
 }
 
+export interface UpdateDefaultCanonicalDomainResponseContent {
+    /** Domain name. */
+    domain: string;
+}
+
+export interface UpdateDefaultCustomDomainResponseContent {
+    /** ID of the custom domain. */
+    custom_domain_id: string;
+    /** Domain name. */
+    domain: string;
+    /** Whether this is a primary domain (true) or not (false). */
+    primary: boolean;
+    /** Whether this is the default custom domain (true) or not (false). */
+    is_default?: boolean | undefined;
+    status: Management.CustomDomainStatusFilterEnum;
+    type: Management.CustomDomainTypeEnum;
+    /** Intermediate address. */
+    origin_domain_name?: string | undefined;
+    verification?: Management.DomainVerification | undefined;
+    /** The HTTP header to fetch the client's IP address */
+    custom_client_ip_header?: (string | null) | undefined;
+    /** The TLS version policy */
+    tls_policy?: string | undefined;
+    domain_metadata?: Management.DomainMetadata | undefined;
+    certificate?: Management.DomainCertificate | undefined;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not present, the full domain will be used. */
+    relying_party_identifier?: string | undefined;
+}
+
+export type UpdateDefaultDomainResponseContent =
+    | Management.UpdateDefaultCustomDomainResponseContent
+    | Management.UpdateDefaultCanonicalDomainResponseContent;
+
 export interface UpdateDirectoryProvisioningRequestContent {
     /** The mapping between Auth0 and IDP user attributes */
     mapping?: Management.DirectoryProvisioningMappingItem[] | undefined;
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically?: boolean | undefined;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
 }
 
 export interface UpdateDirectoryProvisioningResponseContent {
@@ -20393,6 +20571,7 @@ export interface UpdateDirectoryProvisioningResponseContent {
     mapping: Management.DirectoryProvisioningMappingItem[];
     /** Whether periodic automatic synchronization is enabled */
     synchronize_automatically: boolean;
+    synchronize_groups?: Management.SynchronizeGroupsEnum | undefined;
     /** The timestamp at which the directory provisioning configuration was created */
     created_at: string;
     /** The timestamp at which the directory provisioning configuration was last updated */
@@ -20674,6 +20853,8 @@ export interface UpdateResourceServerResponseContent {
     signing_secret?: string | undefined;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
     allow_offline_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
+    allow_online_access?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -20685,7 +20866,7 @@ export interface UpdateResourceServerResponseContent {
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
-    authorization_details?: unknown[] | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
     /** The client ID of the client that this resource server is linked to */
@@ -20855,7 +21036,7 @@ export interface UpdateTenantSettingsResponseContent {
     /** Whether to enable flexible factors for MFA in the PostLogin action */
     customize_mfa_in_postlogin_action?: boolean | undefined;
     /** Supported ACR values */
-    acr_values_supported?: string[] | undefined;
+    acr_values_supported?: (string[] | null) | undefined;
     mtls?: (Management.TenantSettingsMtls | null) | undefined;
     /** Enables the use of Pushed Authorization Requests */
     pushed_authorization_requests_supported?: boolean | undefined;
@@ -21282,7 +21463,6 @@ export const UserIdentityProviderEnum = {
     Apple: "apple",
     Dropbox: "dropbox",
     Bitbucket: "bitbucket",
-    Aol: "aol",
     Auth0Oidc: "auth0-oidc",
     Auth0: "auth0",
     Baidu: "baidu",
@@ -21305,7 +21485,6 @@ export const UserIdentityProviderEnum = {
     Ip: "ip",
     Line: "line",
     Linkedin: "linkedin",
-    Miicard: "miicard",
     Oauth1: "oauth1",
     Oauth2: "oauth2",
     Office365: "office365",
@@ -21315,7 +21494,6 @@ export const UserIdentityProviderEnum = {
     PaypalSandbox: "paypal-sandbox",
     Pingfederate: "pingfederate",
     Planningcenter: "planningcenter",
-    Renren: "renren",
     SalesforceCommunity: "salesforce-community",
     SalesforceSandbox: "salesforce-sandbox",
     Salesforce: "salesforce",
@@ -21325,8 +21503,6 @@ export const UserIdentityProviderEnum = {
     Shop: "shop",
     Sms: "sms",
     Soundcloud: "soundcloud",
-    ThecitySandbox: "thecity-sandbox",
-    Thecity: "thecity",
     Thirtysevensignals: "thirtysevensignals",
     Twitter: "twitter",
     Untappd: "untappd",
@@ -21336,7 +21512,6 @@ export const UserIdentityProviderEnum = {
     Windowslive: "windowslive",
     Wordpress: "wordpress",
     Yahoo: "yahoo",
-    Yammer: "yammer",
     Yandex: "yandex",
 } as const;
 export type UserIdentityProviderEnum = (typeof UserIdentityProviderEnum)[keyof typeof UserIdentityProviderEnum];

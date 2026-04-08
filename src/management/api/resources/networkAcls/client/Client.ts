@@ -145,7 +145,6 @@ export class NetworkAclsClient {
      *     await client.networkAcls.create({
      *         description: "description",
      *         active: true,
-     *         priority: 1.1,
      *         rule: {
      *             action: {},
      *             scope: "management"
@@ -311,7 +310,6 @@ export class NetworkAclsClient {
      *     await client.networkAcls.set("id", {
      *         description: "description",
      *         active: true,
-     *         priority: 1.1,
      *         rule: {
      *             action: {},
      *             scope: "management"

@@ -781,7 +781,7 @@ describe("ModulesClient", () => {
                     action_name: "action_name",
                     module_version_id: "module_version_id",
                     module_version_number: 1,
-                    supported_triggers: [{ id: "id" }],
+                    supported_triggers: [{ id: "post-login" }],
                 },
             ],
             total: 1,
@@ -805,7 +805,7 @@ describe("ModulesClient", () => {
                     module_version_number: 1,
                     supported_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                         },
                     ],
                 },

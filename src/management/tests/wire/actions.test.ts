@@ -17,7 +17,7 @@ describe("ActionsClient", () => {
                 {
                     id: "id",
                     name: "name",
-                    supported_triggers: [{ id: "id" }],
+                    supported_triggers: [{ id: "post-login" }],
                     all_changes_deployed: true,
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
@@ -51,7 +51,7 @@ describe("ActionsClient", () => {
                     name: "name",
                     supported_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                         },
                     ],
                     all_changes_deployed: true,
@@ -70,7 +70,7 @@ describe("ActionsClient", () => {
             ],
         };
         const page = await client.actions.list({
-            triggerId: "triggerId",
+            triggerId: "post-login",
             actionName: "actionName",
             deployed: true,
             page: 1,
@@ -159,18 +159,18 @@ describe("ActionsClient", () => {
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name", supported_triggers: [{ id: "id" }] };
+        const rawRequestBody = { name: "name", supported_triggers: [{ id: "post-login" }] };
         const rawResponseBody = {
             id: "id",
             name: "name",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
+                    compatible_triggers: [{ id: "post-login", version: "version" }],
                     binding_policy: "trigger-bound",
                 },
             ],
@@ -195,7 +195,7 @@ describe("ActionsClient", () => {
                 action: {
                     id: "id",
                     name: "name",
-                    supported_triggers: [{ id: "id" }],
+                    supported_triggers: [{ id: "post-login" }],
                     all_changes_deployed: true,
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
@@ -203,7 +203,7 @@ describe("ActionsClient", () => {
                 built_at: "2024-01-15T09:30:00Z",
                 created_at: "2024-01-15T09:30:00Z",
                 updated_at: "2024-01-15T09:30:00Z",
-                supported_triggers: [{ id: "id" }],
+                supported_triggers: [{ id: "post-login" }],
                 modules: [{}],
             },
             installed_integration_id: "installed_integration_id",
@@ -222,7 +222,7 @@ describe("ActionsClient", () => {
                 public_support_link: "public_support_link",
                 current_release: {
                     id: "id",
-                    trigger: { id: "id" },
+                    trigger: { id: "post-login" },
                     required_secrets: [{}],
                     required_configuration: [{}],
                 },
@@ -254,7 +254,7 @@ describe("ActionsClient", () => {
             name: "name",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                 },
             ],
         });
@@ -263,14 +263,14 @@ describe("ActionsClient", () => {
             name: "name",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                             version: "version",
                         },
                     ],
@@ -311,7 +311,7 @@ describe("ActionsClient", () => {
                     name: "name",
                     supported_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                         },
                     ],
                     all_changes_deployed: true,
@@ -323,7 +323,7 @@ describe("ActionsClient", () => {
                 updated_at: "2024-01-15T09:30:00Z",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
                 modules: [{}],
@@ -345,7 +345,7 @@ describe("ActionsClient", () => {
                 current_release: {
                     id: "id",
                     trigger: {
-                        id: "id",
+                        id: "post-login",
                     },
                     required_secrets: [{}],
                     required_configuration: [{}],
@@ -370,7 +370,7 @@ describe("ActionsClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "id" }, { id: "id" }] };
+        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "post-login" }, { id: "post-login" }] };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -386,10 +386,10 @@ describe("ActionsClient", () => {
                 name: "my-action",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
             });
@@ -399,7 +399,7 @@ describe("ActionsClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "id" }, { id: "id" }] };
+        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "post-login" }, { id: "post-login" }] };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -415,10 +415,10 @@ describe("ActionsClient", () => {
                 name: "my-action",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
             });
@@ -428,7 +428,7 @@ describe("ActionsClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "id" }, { id: "id" }] };
+        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "post-login" }, { id: "post-login" }] };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -444,10 +444,10 @@ describe("ActionsClient", () => {
                 name: "my-action",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
             });
@@ -457,7 +457,7 @@ describe("ActionsClient", () => {
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "id" }, { id: "id" }] };
+        const rawRequestBody = { name: "my-action", supported_triggers: [{ id: "post-login" }, { id: "post-login" }] };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -473,10 +473,10 @@ describe("ActionsClient", () => {
                 name: "my-action",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
             });
@@ -492,12 +492,12 @@ describe("ActionsClient", () => {
             name: "name",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
+                    compatible_triggers: [{ id: "post-login", version: "version" }],
                     binding_policy: "trigger-bound",
                 },
             ],
@@ -522,7 +522,7 @@ describe("ActionsClient", () => {
                 action: {
                     id: "id",
                     name: "name",
-                    supported_triggers: [{ id: "id" }],
+                    supported_triggers: [{ id: "post-login" }],
                     all_changes_deployed: true,
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
@@ -530,7 +530,7 @@ describe("ActionsClient", () => {
                 built_at: "2024-01-15T09:30:00Z",
                 created_at: "2024-01-15T09:30:00Z",
                 updated_at: "2024-01-15T09:30:00Z",
-                supported_triggers: [{ id: "id" }],
+                supported_triggers: [{ id: "post-login" }],
                 modules: [{}],
             },
             installed_integration_id: "installed_integration_id",
@@ -549,7 +549,7 @@ describe("ActionsClient", () => {
                 public_support_link: "public_support_link",
                 current_release: {
                     id: "id",
-                    trigger: { id: "id" },
+                    trigger: { id: "post-login" },
                     required_secrets: [{}],
                     required_configuration: [{}],
                 },
@@ -582,14 +582,14 @@ describe("ActionsClient", () => {
             name: "name",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                             version: "version",
                         },
                     ],
@@ -630,7 +630,7 @@ describe("ActionsClient", () => {
                     name: "name",
                     supported_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                         },
                     ],
                     all_changes_deployed: true,
@@ -642,7 +642,7 @@ describe("ActionsClient", () => {
                 updated_at: "2024-01-15T09:30:00Z",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
                 modules: [{}],
@@ -664,7 +664,7 @@ describe("ActionsClient", () => {
                 current_release: {
                     id: "id",
                     trigger: {
-                        id: "id",
+                        id: "post-login",
                     },
                     required_secrets: [{}],
                     required_configuration: [{}],
@@ -887,12 +887,12 @@ describe("ActionsClient", () => {
             name: "name",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
+                    compatible_triggers: [{ id: "post-login", version: "version" }],
                     binding_policy: "trigger-bound",
                 },
             ],
@@ -917,7 +917,7 @@ describe("ActionsClient", () => {
                 action: {
                     id: "id",
                     name: "name",
-                    supported_triggers: [{ id: "id" }],
+                    supported_triggers: [{ id: "post-login" }],
                     all_changes_deployed: true,
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
@@ -925,7 +925,7 @@ describe("ActionsClient", () => {
                 built_at: "2024-01-15T09:30:00Z",
                 created_at: "2024-01-15T09:30:00Z",
                 updated_at: "2024-01-15T09:30:00Z",
-                supported_triggers: [{ id: "id" }],
+                supported_triggers: [{ id: "post-login" }],
                 modules: [{}],
             },
             installed_integration_id: "installed_integration_id",
@@ -944,7 +944,7 @@ describe("ActionsClient", () => {
                 public_support_link: "public_support_link",
                 current_release: {
                     id: "id",
-                    trigger: { id: "id" },
+                    trigger: { id: "post-login" },
                     required_secrets: [{}],
                     required_configuration: [{}],
                 },
@@ -978,14 +978,14 @@ describe("ActionsClient", () => {
             name: "name",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                             version: "version",
                         },
                     ],
@@ -1026,7 +1026,7 @@ describe("ActionsClient", () => {
                     name: "name",
                     supported_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                         },
                     ],
                     all_changes_deployed: true,
@@ -1038,7 +1038,7 @@ describe("ActionsClient", () => {
                 updated_at: "2024-01-15T09:30:00Z",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
                 modules: [{}],
@@ -1060,7 +1060,7 @@ describe("ActionsClient", () => {
                 current_release: {
                     id: "id",
                     trigger: {
-                        id: "id",
+                        id: "post-login",
                     },
                     required_secrets: [{}],
                     required_configuration: [{}],
@@ -1195,7 +1195,7 @@ describe("ActionsClient", () => {
             action: {
                 id: "id",
                 name: "name",
-                supported_triggers: [{ id: "id" }],
+                supported_triggers: [{ id: "post-login" }],
                 all_changes_deployed: true,
                 created_at: "2024-01-15T09:30:00Z",
                 updated_at: "2024-01-15T09:30:00Z",
@@ -1205,12 +1205,12 @@ describe("ActionsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
+                    compatible_triggers: [{ id: "post-login", version: "version" }],
                     binding_policy: "trigger-bound",
                 },
             ],
@@ -1265,7 +1265,7 @@ describe("ActionsClient", () => {
                 name: "name",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
                 all_changes_deployed: true,
@@ -1277,14 +1277,14 @@ describe("ActionsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                             version: "version",
                         },
                     ],

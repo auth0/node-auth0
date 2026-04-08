@@ -38,7 +38,7 @@ export class BindingsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.actions.triggers.bindings.list("triggerId", {
+     *     await client.actions.triggers.bindings.list("post-login", {
      *         page: 1,
      *         per_page: 1
      *     })
@@ -147,7 +147,7 @@ export class BindingsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.actions.triggers.bindings.updateMany("triggerId")
+     *     await client.actions.triggers.bindings.updateMany("post-login")
      */
     public updateMany(
         triggerId: Management.ActionTriggerTypeEnum,
