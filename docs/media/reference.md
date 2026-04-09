@@ -31,7 +31,7 @@ Retrieve all actions.
 
 ```typescript
 const pageableResponse = await client.actions.list({
-    triggerId: "triggerId",
+    triggerId: "post-login",
     actionName: "actionName",
     deployed: true,
     page: 1,
@@ -44,7 +44,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.actions.list({
-    triggerId: "triggerId",
+    triggerId: "post-login",
     actionName: "actionName",
     deployed: true,
     page: 1,
@@ -123,7 +123,7 @@ await client.actions.create({
     name: "name",
     supported_triggers: [
         {
-            id: "id",
+            id: "post-login",
         },
     ],
 });
@@ -746,7 +746,6 @@ Create a client grant for a machine-to-machine login flow. To learn more, read <
 
 ```typescript
 await client.clientGrants.create({
-    client_id: "client_id",
     audience: "audience",
 });
 ```
@@ -1051,6 +1050,7 @@ const pageableResponse = await client.clients.list({
     is_global: true,
     is_first_party: true,
     app_type: "app_type",
+    external_client_id: "external_client_id",
     q: "q",
 });
 for await (const item of pageableResponse) {
@@ -1067,6 +1067,7 @@ let page = await client.clients.list({
     is_global: true,
     is_first_party: true,
     app_type: "app_type",
+    external_client_id: "external_client_id",
     q: "q",
 });
 while (page.hasNextPage()) {
@@ -1169,6 +1170,140 @@ await client.clients.create({
 <dd>
 
 **request:** `Management.CreateClientRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">previewCimdMetadata</a>({ ...params }) -> Management.PreviewCimdMetadataResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+      Fetches and validates a Client ID Metadata Document without creating a client.
+      Returns the raw metadata and how it would be mapped to Auth0 client fields.
+      This endpoint is useful for testing metadata URIs before creating CIMD clients.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.clients.previewCimdMetadata({
+    external_client_id: "external_client_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.PreviewCimdMetadataRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">registerCimdClient</a>({ ...params }) -> Management.RegisterCimdClientResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+      Idempotent registration for Client ID Metadata Document (CIMD) clients.
+      Uses external_client_id as the unique identifier for upsert operations.
+      **Create:** Returns 201 when a new client is created (requires \
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.clients.registerCimdClient({
+    external_client_id: "external_client_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.RegisterCimdClientRequestContent`
 
 </dd>
 </dl>
@@ -2544,6 +2679,126 @@ await client.customDomains.create({
 <dd>
 
 **request:** `Management.CreateCustomDomainRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CustomDomainsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">getDefault</a>() -> Management.GetDefaultDomainResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the tenant's default domain.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customDomains.getDefault();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `CustomDomainsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customDomains.<a href="/src/management/api/resources/customDomains/client/Client.ts">setDefault</a>({ ...params }) -> Management.UpdateDefaultDomainResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Set the default custom domain for the tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customDomains.setDefault({
+    domain: "domain",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetDefaultCustomDomainRequestContent`
 
 </dd>
 </dl>
@@ -4688,6 +4943,69 @@ await client.groups.get("id");
 </dl>
 </details>
 
+<details><summary><code>client.groups.<a href="/src/management/api/resources/groups/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a group by its ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.groups.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for the group (service-generated).
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Hooks
 
 <details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Hook, Management.ListHooksOffsetPaginatedResponseContent&gt;</code></summary>
@@ -6062,7 +6380,6 @@ Create a new access control list for your client.
 await client.networkAcls.create({
     description: "description",
     active: true,
-    priority: 1.1,
     rule: {
         action: {},
         scope: "management",
@@ -6196,7 +6513,6 @@ Update existing access control list for your client.
 await client.networkAcls.set("id", {
     description: "description",
     active: true,
-    priority: 1.1,
     rule: {
         action: {},
         scope: "management",
@@ -6931,6 +7247,95 @@ await client.prompts.updateSettings();
 </details>
 
 ## RefreshTokens
+
+<details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.RefreshTokenResponseContent, Management.GetRefreshTokensPaginatedResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a paginated list of refresh tokens for a specific user, with optional filtering by client ID. Results are sorted by credential_id ascending.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.refreshTokens.list({
+    user_id: "user_id",
+    client_id: "client_id",
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.refreshTokens.list({
+    user_id: "user_id",
+    client_id: "client_id",
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.GetRefreshTokensRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RefreshTokensClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
 
 <details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">get</a>(id) -> Management.GetRefreshTokenResponseContent</code></summary>
 <dl>
@@ -12289,7 +12694,7 @@ Retrieve the actions that are bound to a trigger. Once an action is created and 
 <dd>
 
 ```typescript
-const pageableResponse = await client.actions.triggers.bindings.list("triggerId", {
+const pageableResponse = await client.actions.triggers.bindings.list("post-login", {
     page: 1,
     per_page: 1,
 });
@@ -12298,7 +12703,7 @@ for await (const item of pageableResponse) {
 }
 
 // Or you can manually iterate page-by-page
-let page = await client.actions.triggers.bindings.list("triggerId", {
+let page = await client.actions.triggers.bindings.list("post-login", {
     page: 1,
     per_page: 1,
 });
@@ -12378,7 +12783,7 @@ Update the actions that are bound (i.e. attached) to a trigger. Once an action i
 <dd>
 
 ```typescript
-await client.actions.triggers.bindings.updateMany("triggerId");
+await client.actions.triggers.bindings.updateMany("post-login");
 ```
 
 </dd>
@@ -21625,6 +22030,320 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 </dl>
 </details>
 
+## Organizations Connections
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationAllConnectionPost, Management.ListOrganizationAllConnectionsOffsetPaginatedResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.connections.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    is_enabled: true,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.connections.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    is_enabled: true,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationAllConnectionsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">create</a>(id, { ...params }) -> Management.CreateOrganizationAllConnectionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.create("id", {
+    connection_id: "connection_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateOrganizationAllConnectionRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">get</a>(id, connection_id) -> Management.GetOrganizationAllConnectionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.get("id", "connection_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**connection_id:** `string` — Connection identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">delete</a>(id, connection_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.delete("id", "connection_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**connection_id:** `string` — Connection identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">update</a>(id, connection_id, { ...params }) -> Management.UpdateOrganizationAllConnectionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.update("id", "connection_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**connection_id:** `string` — Connection identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateOrganizationConnectionRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Organizations DiscoveryDomains
 
 <details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationDiscoveryDomain, Management.ListOrganizationDiscoveryDomainsResponseContent&gt;</code></summary>
@@ -21640,6 +22359,7 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 <dd>
 
 Retrieve list of all organization discovery domains associated with the specified organization.
+This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
 
 </dd>
 </dl>
@@ -21802,6 +22522,7 @@ await client.organizations.discoveryDomains.create("id", {
 <dd>
 
 Retrieve details about a single organization discovery domain specified by domain name.
+This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
 
 </dd>
 </dl>
@@ -21873,6 +22594,7 @@ await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
 <dd>
 
 Retrieve details about a single organization discovery domain specified by ID.
+This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
 
 </dd>
 </dl>
