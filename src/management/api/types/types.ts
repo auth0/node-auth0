@@ -3964,7 +3964,6 @@ export const ConnectionIdentityProviderEnum = {
     Exact: "exact",
     Facebook: "facebook",
     Fitbit: "fitbit",
-    Flickr: "flickr",
     Github: "github",
     GoogleApps: "google-apps",
     GoogleOauth2: "google-oauth2",
@@ -4678,14 +4677,6 @@ export interface ConnectionOptionsFacebook extends Management.ConnectionOptionsC
  * Options for the 'fitbit' connection
  */
 export interface ConnectionOptionsFitbit extends Management.ConnectionOptionsOAuth2Common {
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
-/**
- * Options for the 'flickr' connection
- */
-export interface ConnectionOptionsFlickr extends Management.ConnectionOptionsOAuth1Common {
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -6293,22 +6284,6 @@ export namespace ConnectionResponseContentFitbit {
 }
 
 /**
- * Response for connections with strategy=flickr
- */
-export interface ConnectionResponseContentFlickr
-    extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
-    strategy: ConnectionResponseContentFlickr.Strategy;
-    options?: Management.ConnectionOptionsFlickr | undefined;
-}
-
-export namespace ConnectionResponseContentFlickr {
-    export const Strategy = {
-        Flickr: "flickr",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
  * Response for connections with strategy=github
  */
 export interface ConnectionResponseContentGitHub
@@ -7111,7 +7086,6 @@ export const ConnectionStrategyEnum = {
     Exact: "exact",
     Facebook: "facebook",
     Fitbit: "fitbit",
-    Flickr: "flickr",
     Github: "github",
     GoogleApps: "google-apps",
     GoogleOauth2: "google-oauth2",
@@ -8009,21 +7983,6 @@ export interface CreateConnectionRequestContentFitbit extends Management.CreateC
 export namespace CreateConnectionRequestContentFitbit {
     export const Strategy = {
         Fitbit: "fitbit",
-    } as const;
-    export type Strategy = (typeof Strategy)[keyof typeof Strategy];
-}
-
-/**
- * Create a connection with strategy=flickr
- */
-export interface CreateConnectionRequestContentFlickr extends Management.CreateConnectionCommon {
-    strategy: CreateConnectionRequestContentFlickr.Strategy;
-    options?: Management.ConnectionOptionsFlickr | undefined;
-}
-
-export namespace CreateConnectionRequestContentFlickr {
-    export const Strategy = {
-        Flickr: "flickr",
     } as const;
     export type Strategy = (typeof Strategy)[keyof typeof Strategy];
 }
@@ -9453,6 +9412,23 @@ export interface CreateLogStreamSumoRequestBody {
     sink: Management.LogStreamSumoSink;
     /** The optional datetime (ISO 8601) to start streaming logs from */
     startFrom?: string | undefined;
+}
+
+export interface CreateOrganizationAllConnectionResponseContent {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string | undefined;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean | undefined;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean | undefined;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean | undefined;
+    organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    /** Connection identifier. */
+    connection_id: string;
+    connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
 export interface CreateOrganizationDiscoveryDomainResponseContent {
@@ -15257,6 +15233,23 @@ export interface GetNetworkAclsResponseContent {
     [key: string]: any;
 }
 
+export interface GetOrganizationAllConnectionResponseContent {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string | undefined;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean | undefined;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean | undefined;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean | undefined;
+    organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    /** Connection identifier. */
+    connection_id: string;
+    connection?: Management.OrganizationConnectionInformation | undefined;
+}
+
 export interface GetOrganizationByNameResponseContent {
     /** Organization identifier. */
     id?: string | undefined;
@@ -16004,7 +15997,6 @@ export const IdentityProviderEnum = {
     Exact: "exact",
     Facebook: "facebook",
     Fitbit: "fitbit",
-    Flickr: "flickr",
     Github: "github",
     GoogleApps: "google-apps",
     GoogleOauth2: "google-oauth2",
@@ -16419,6 +16411,13 @@ export interface ListNetworkAclsOffsetPaginatedResponseContent {
     start?: number | undefined;
     limit?: number | undefined;
     total?: number | undefined;
+}
+
+export interface ListOrganizationAllConnectionsOffsetPaginatedResponseContent {
+    start?: number | undefined;
+    limit?: number | undefined;
+    total?: number | undefined;
+    connections?: Management.OrganizationAllConnectionPost[] | undefined;
 }
 
 export interface ListOrganizationClientGrantsOffsetPaginatedResponseContent {
@@ -17366,6 +17365,43 @@ export interface Organization {
     token_quota?: Management.TokenQuota | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+/** Access level for the organization (e.g., "none", "full"). */
+export const OrganizationAccessLevelEnum = {
+    None: "none",
+    Readonly: "readonly",
+    Limited: "limited",
+    Full: "full",
+} as const;
+export type OrganizationAccessLevelEnum =
+    (typeof OrganizationAccessLevelEnum)[keyof typeof OrganizationAccessLevelEnum];
+
+/** Access level for the organization (e.g., "none", "full"). */
+export const OrganizationAccessLevelEnumWithNull = {
+    None: "none",
+    Readonly: "readonly",
+    Limited: "limited",
+    Full: "full",
+} as const;
+export type OrganizationAccessLevelEnumWithNull =
+    (typeof OrganizationAccessLevelEnumWithNull)[keyof typeof OrganizationAccessLevelEnumWithNull];
+
+export interface OrganizationAllConnectionPost {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string | undefined;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean | undefined;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean | undefined;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean | undefined;
+    organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    /** Connection identifier. */
+    connection_id: string;
+    connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
 /**
@@ -19342,16 +19378,12 @@ export interface SuspiciousIpThrottlingStage {
     "pre-user-registration"?: Management.SuspiciousIpThrottlingPreUserRegistrationStage | undefined;
 }
 
-export const SynchronizeGroupsEaEnum = {
+/** Group synchronization configuration */
+export const SynchronizeGroupsEnum = {
     All: "all",
     Off: "off",
 } as const;
-export type SynchronizeGroupsEaEnum = (typeof SynchronizeGroupsEaEnum)[keyof typeof SynchronizeGroupsEaEnum];
-
-/**
- * Group synchronization configuration
- */
-export type SynchronizeGroupsEnum = string;
+export type SynchronizeGroupsEnum = (typeof SynchronizeGroupsEnum)[keyof typeof SynchronizeGroupsEnum];
 
 /**
  * Settings related to OIDC RP-initiated Logout
@@ -20216,13 +20248,6 @@ export interface UpdateConnectionRequestContentFitbit extends Management.Connect
 }
 
 /**
- * Update a connection with strategy=flickr
- */
-export interface UpdateConnectionRequestContentFlickr extends Management.ConnectionCommon {
-    options?: Management.ConnectionOptionsFlickr | undefined;
-}
-
-/**
  * Update a connection with strategy=github
  */
 export interface UpdateConnectionRequestContentGitHub
@@ -20762,6 +20787,23 @@ export interface UpdateNetworkAclResponseContent {
     updated_at?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface UpdateOrganizationAllConnectionResponseContent {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string | undefined;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean | undefined;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean | undefined;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean | undefined;
+    organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    /** Connection identifier. */
+    connection_id: string;
+    connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
 export interface UpdateOrganizationConnectionResponseContent {
@@ -21477,7 +21519,6 @@ export const UserIdentityProviderEnum = {
     Exact: "exact",
     Facebook: "facebook",
     Fitbit: "fitbit",
-    Flickr: "flickr",
     Github: "github",
     GoogleApps: "google-apps",
     GoogleOauth2: "google-oauth2",
