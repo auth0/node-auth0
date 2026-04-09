@@ -25,6 +25,7 @@ describe("NetworkAclsClient", () => {
             limit: 1.1,
             total: 1.1,
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/network-acls")
@@ -33,25 +34,7 @@ describe("NetworkAclsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            network_acls: [
-                {
-                    id: "id",
-                    description: "description",
-                    active: true,
-                    priority: 1.1,
-                    rule: {
-                        action: {},
-                        scope: "management",
-                    },
-                    created_at: "created_at",
-                    updated_at: "updated_at",
-                },
-            ],
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-        };
+        const expected = rawResponseBody;
         const page = await client.networkAcls.list({
             page: 1,
             per_page: 1,
@@ -69,6 +52,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/network-acls")
@@ -87,6 +71,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/network-acls")
@@ -105,6 +90,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/network-acls")
@@ -123,6 +109,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/network-acls")
@@ -159,6 +146,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/network-acls")
@@ -185,6 +173,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/network-acls")
@@ -211,6 +200,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/network-acls")
@@ -237,6 +227,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/network-acls")
@@ -263,6 +254,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/network-acls")
@@ -289,6 +281,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/network-acls")
@@ -354,55 +347,11 @@ describe("NetworkAclsClient", () => {
             created_at: "created_at",
             updated_at: "updated_at",
         };
+
         server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.networkAcls.get("id");
-        expect(response).toEqual({
-            id: "id",
-            description: "description",
-            active: true,
-            priority: 1.1,
-            rule: {
-                action: {
-                    block: true,
-                    allow: true,
-                    log: true,
-                    redirect: true,
-                    redirect_uri: "redirect_uri",
-                },
-                match: {
-                    asns: [1],
-                    auth0_managed: ["auth0_managed"],
-                    geo_country_codes: ["geo_country_codes"],
-                    geo_subdivision_codes: ["geo_subdivision_codes"],
-                    ipv4_cidrs: ["ipv4_cidrs"],
-                    ipv6_cidrs: ["ipv6_cidrs"],
-                    ja3_fingerprints: ["ja3_fingerprints"],
-                    ja4_fingerprints: ["ja4_fingerprints"],
-                    user_agents: ["user_agents"],
-                    hostnames: ["hostnames"],
-                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
-                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
-                },
-                not_match: {
-                    asns: [1],
-                    auth0_managed: ["auth0_managed"],
-                    geo_country_codes: ["geo_country_codes"],
-                    geo_subdivision_codes: ["geo_subdivision_codes"],
-                    ipv4_cidrs: ["ipv4_cidrs"],
-                    ipv6_cidrs: ["ipv6_cidrs"],
-                    ja3_fingerprints: ["ja3_fingerprints"],
-                    ja4_fingerprints: ["ja4_fingerprints"],
-                    user_agents: ["user_agents"],
-                    hostnames: ["hostnames"],
-                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
-                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
-                },
-                scope: "management",
-            },
-            created_at: "created_at",
-            updated_at: "updated_at",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -410,6 +359,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -422,6 +372,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -434,6 +385,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -446,6 +398,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/network-acls/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -497,6 +450,7 @@ describe("NetworkAclsClient", () => {
             created_at: "created_at",
             updated_at: "updated_at",
         };
+
         server
             .mockEndpoint()
             .put("/network-acls/id")
@@ -514,52 +468,7 @@ describe("NetworkAclsClient", () => {
                 scope: "management",
             },
         });
-        expect(response).toEqual({
-            id: "id",
-            description: "description",
-            active: true,
-            priority: 1.1,
-            rule: {
-                action: {
-                    block: true,
-                    allow: true,
-                    log: true,
-                    redirect: true,
-                    redirect_uri: "redirect_uri",
-                },
-                match: {
-                    asns: [1],
-                    auth0_managed: ["auth0_managed"],
-                    geo_country_codes: ["geo_country_codes"],
-                    geo_subdivision_codes: ["geo_subdivision_codes"],
-                    ipv4_cidrs: ["ipv4_cidrs"],
-                    ipv6_cidrs: ["ipv6_cidrs"],
-                    ja3_fingerprints: ["ja3_fingerprints"],
-                    ja4_fingerprints: ["ja4_fingerprints"],
-                    user_agents: ["user_agents"],
-                    hostnames: ["hostnames"],
-                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
-                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
-                },
-                not_match: {
-                    asns: [1],
-                    auth0_managed: ["auth0_managed"],
-                    geo_country_codes: ["geo_country_codes"],
-                    geo_subdivision_codes: ["geo_subdivision_codes"],
-                    ipv4_cidrs: ["ipv4_cidrs"],
-                    ipv6_cidrs: ["ipv6_cidrs"],
-                    ja3_fingerprints: ["ja3_fingerprints"],
-                    ja4_fingerprints: ["ja4_fingerprints"],
-                    user_agents: ["user_agents"],
-                    hostnames: ["hostnames"],
-                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
-                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
-                },
-                scope: "management",
-            },
-            created_at: "created_at",
-            updated_at: "updated_at",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("set (2)", async () => {
@@ -567,6 +476,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/network-acls/id")
@@ -593,6 +503,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/network-acls/id")
@@ -619,6 +530,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/network-acls/id")
@@ -645,6 +557,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/network-acls/id")
@@ -671,6 +584,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/network-acls/id")
@@ -707,6 +621,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/network-acls/id")
@@ -725,6 +640,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/network-acls/id")
@@ -743,6 +659,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/network-acls/id")
@@ -761,6 +678,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/network-acls/id")
@@ -779,6 +697,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/network-acls/id")
@@ -836,6 +755,7 @@ describe("NetworkAclsClient", () => {
             created_at: "created_at",
             updated_at: "updated_at",
         };
+
         server
             .mockEndpoint()
             .patch("/network-acls/id")
@@ -846,52 +766,7 @@ describe("NetworkAclsClient", () => {
             .build();
 
         const response = await client.networkAcls.update("id");
-        expect(response).toEqual({
-            id: "id",
-            description: "description",
-            active: true,
-            priority: 1.1,
-            rule: {
-                action: {
-                    block: true,
-                    allow: true,
-                    log: true,
-                    redirect: true,
-                    redirect_uri: "redirect_uri",
-                },
-                match: {
-                    asns: [1],
-                    auth0_managed: ["auth0_managed"],
-                    geo_country_codes: ["geo_country_codes"],
-                    geo_subdivision_codes: ["geo_subdivision_codes"],
-                    ipv4_cidrs: ["ipv4_cidrs"],
-                    ipv6_cidrs: ["ipv6_cidrs"],
-                    ja3_fingerprints: ["ja3_fingerprints"],
-                    ja4_fingerprints: ["ja4_fingerprints"],
-                    user_agents: ["user_agents"],
-                    hostnames: ["hostnames"],
-                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
-                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
-                },
-                not_match: {
-                    asns: [1],
-                    auth0_managed: ["auth0_managed"],
-                    geo_country_codes: ["geo_country_codes"],
-                    geo_subdivision_codes: ["geo_subdivision_codes"],
-                    ipv4_cidrs: ["ipv4_cidrs"],
-                    ipv6_cidrs: ["ipv6_cidrs"],
-                    ja3_fingerprints: ["ja3_fingerprints"],
-                    ja4_fingerprints: ["ja4_fingerprints"],
-                    user_agents: ["user_agents"],
-                    hostnames: ["hostnames"],
-                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
-                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
-                },
-                scope: "management",
-            },
-            created_at: "created_at",
-            updated_at: "updated_at",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -899,6 +774,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/network-acls/id")
@@ -918,6 +794,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/network-acls/id")
@@ -937,6 +814,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/network-acls/id")
@@ -956,6 +834,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/network-acls/id")
@@ -975,6 +854,7 @@ describe("NetworkAclsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/network-acls/id")

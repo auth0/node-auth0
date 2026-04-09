@@ -20,6 +20,7 @@ describe("EmailTemplatesClient", () => {
             includeEmailInRedirect: true,
             enabled: true,
         };
+
         server
             .mockEndpoint()
             .post("/email-templates")
@@ -32,17 +33,7 @@ describe("EmailTemplatesClient", () => {
         const response = await client.emailTemplates.create({
             template: "verify_email",
         });
-        expect(response).toEqual({
-            template: "verify_email",
-            body: "body",
-            from: "from",
-            resultUrl: "resultUrl",
-            subject: "subject",
-            syntax: "syntax",
-            urlLifetimeInSeconds: 1.1,
-            includeEmailInRedirect: true,
-            enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -50,6 +41,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/email-templates")
@@ -71,6 +63,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/email-templates")
@@ -92,6 +85,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/email-templates")
@@ -113,6 +107,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/email-templates")
@@ -134,6 +129,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/email-templates")
@@ -165,6 +161,7 @@ describe("EmailTemplatesClient", () => {
             includeEmailInRedirect: true,
             enabled: true,
         };
+
         server
             .mockEndpoint()
             .get("/email-templates/verify_email")
@@ -174,17 +171,7 @@ describe("EmailTemplatesClient", () => {
             .build();
 
         const response = await client.emailTemplates.get("verify_email");
-        expect(response).toEqual({
-            template: "verify_email",
-            body: "body",
-            from: "from",
-            resultUrl: "resultUrl",
-            subject: "subject",
-            syntax: "syntax",
-            urlLifetimeInSeconds: 1.1,
-            includeEmailInRedirect: true,
-            enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -192,6 +179,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/email-templates/verify_email")
@@ -210,6 +198,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/email-templates/verify_email")
@@ -228,6 +217,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/email-templates/verify_email")
@@ -246,6 +236,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/email-templates/verify_email")
@@ -274,6 +265,7 @@ describe("EmailTemplatesClient", () => {
             includeEmailInRedirect: true,
             enabled: true,
         };
+
         server
             .mockEndpoint()
             .put("/email-templates/verify_email")
@@ -286,17 +278,7 @@ describe("EmailTemplatesClient", () => {
         const response = await client.emailTemplates.set("verify_email", {
             template: "verify_email",
         });
-        expect(response).toEqual({
-            template: "verify_email",
-            body: "body",
-            from: "from",
-            resultUrl: "resultUrl",
-            subject: "subject",
-            syntax: "syntax",
-            urlLifetimeInSeconds: 1.1,
-            includeEmailInRedirect: true,
-            enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("set (2)", async () => {
@@ -304,6 +286,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/email-templates/verify_email")
@@ -325,6 +308,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/email-templates/verify_email")
@@ -346,6 +330,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/email-templates/verify_email")
@@ -367,6 +352,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/email-templates/verify_email")
@@ -388,6 +374,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { template: "verify_email" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/email-templates/verify_email")
@@ -419,6 +406,7 @@ describe("EmailTemplatesClient", () => {
             includeEmailInRedirect: true,
             enabled: true,
         };
+
         server
             .mockEndpoint()
             .patch("/email-templates/verify_email")
@@ -429,17 +417,7 @@ describe("EmailTemplatesClient", () => {
             .build();
 
         const response = await client.emailTemplates.update("verify_email");
-        expect(response).toEqual({
-            template: "verify_email",
-            body: "body",
-            from: "from",
-            resultUrl: "resultUrl",
-            subject: "subject",
-            syntax: "syntax",
-            urlLifetimeInSeconds: 1.1,
-            includeEmailInRedirect: true,
-            enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -447,6 +425,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/email-templates/verify_email")
@@ -466,6 +445,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/email-templates/verify_email")
@@ -485,6 +465,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/email-templates/verify_email")
@@ -504,6 +485,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/email-templates/verify_email")
@@ -523,6 +505,7 @@ describe("EmailTemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/email-templates/verify_email")

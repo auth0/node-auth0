@@ -1,4 +1,4 @@
-import { setObjectProperty } from "../../../../../src/management/core/utils/setObjectProperty";
+import { setObjectProperty } from "../../../core/utils/setObjectProperty";
 
 interface TestCase {
     description: string;

@@ -16,6 +16,7 @@ describe("BreachedPasswordDetectionClient", () => {
             method: "standard",
             stage: { "pre-user-registration": { shields: ["block"] }, "pre-change-password": { shields: ["block"] } },
         };
+
         server
             .mockEndpoint()
             .get("/attack-protection/breached-password-detection")
@@ -25,20 +26,7 @@ describe("BreachedPasswordDetectionClient", () => {
             .build();
 
         const response = await client.attackProtection.breachedPasswordDetection.get();
-        expect(response).toEqual({
-            enabled: true,
-            shields: ["block"],
-            admin_notification_frequency: ["immediately"],
-            method: "standard",
-            stage: {
-                "pre-user-registration": {
-                    shields: ["block"],
-                },
-                "pre-change-password": {
-                    shields: ["block"],
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -46,6 +34,7 @@ describe("BreachedPasswordDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/attack-protection/breached-password-detection")
@@ -64,6 +53,7 @@ describe("BreachedPasswordDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/attack-protection/breached-password-detection")
@@ -82,6 +72,7 @@ describe("BreachedPasswordDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/attack-protection/breached-password-detection")
@@ -106,6 +97,7 @@ describe("BreachedPasswordDetectionClient", () => {
             method: "standard",
             stage: { "pre-user-registration": { shields: ["block"] }, "pre-change-password": { shields: ["block"] } },
         };
+
         server
             .mockEndpoint()
             .patch("/attack-protection/breached-password-detection")
@@ -116,20 +108,7 @@ describe("BreachedPasswordDetectionClient", () => {
             .build();
 
         const response = await client.attackProtection.breachedPasswordDetection.update();
-        expect(response).toEqual({
-            enabled: true,
-            shields: ["block"],
-            admin_notification_frequency: ["immediately"],
-            method: "standard",
-            stage: {
-                "pre-user-registration": {
-                    shields: ["block"],
-                },
-                "pre-change-password": {
-                    shields: ["block"],
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -137,6 +116,7 @@ describe("BreachedPasswordDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/attack-protection/breached-password-detection")
@@ -156,6 +136,7 @@ describe("BreachedPasswordDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/attack-protection/breached-password-detection")
@@ -175,6 +156,7 @@ describe("BreachedPasswordDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/attack-protection/breached-password-detection")
@@ -194,6 +176,7 @@ describe("BreachedPasswordDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/attack-protection/breached-password-detection")

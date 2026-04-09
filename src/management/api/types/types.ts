@@ -5809,7 +5809,7 @@ export interface ConnectionPropertiesOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
+    configuration?: (Record<string, string | null> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
@@ -7322,7 +7322,7 @@ export type ConnectionUpstreamAliasEnum =
  * Options for adding parameters in the request to the upstream IdP
  */
 export type ConnectionUpstreamParams =
-    | (Record<string, (Management.ConnectionUpstreamAdditionalProperties | null) | undefined> | null)
+    | (Record<string, Management.ConnectionUpstreamAdditionalProperties | null> | null)
     | undefined;
 
 /**
@@ -7407,7 +7407,7 @@ export type ConnectionWaadProtocolEnumAzureAd =
 /**
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
  */
-export type ConnectionsMetadata = Record<string, (string | null) | undefined>;
+export type ConnectionsMetadata = Record<string, string | null>;
 
 export interface CreateActionModuleResponseContent {
     /** The unique ID of the module. */
@@ -10185,7 +10185,7 @@ export type DomainCertificateStatusEnum =
 /**
  * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
  */
-export type DomainMetadata = Record<string, (string | null) | undefined>;
+export type DomainMetadata = Record<string, string | null>;
 
 /**
  * Domain verification settings.
@@ -11170,7 +11170,7 @@ export type FlowActionAuth0SendRequestParamsPayloadObject = Record<string, unkno
 
 export type FlowActionAuth0SendRequestParamsQueryParams = Record<
     string,
-    (FlowActionAuth0SendRequestParamsQueryParams.Value | null) | undefined
+    FlowActionAuth0SendRequestParamsQueryParams.Value | null
 >;
 
 export namespace FlowActionAuth0SendRequestParamsQueryParams {
@@ -11676,7 +11676,7 @@ export type FlowActionHttpSendRequestParamsPayloadObject = Record<string, unknow
 
 export type FlowActionHttpSendRequestParamsQueryParams = Record<
     string,
-    (FlowActionHttpSendRequestParamsQueryParams.Value | null) | undefined
+    FlowActionHttpSendRequestParamsQueryParams.Value | null
 >;
 
 export namespace FlowActionHttpSendRequestParamsQueryParams {
@@ -17551,7 +17551,7 @@ export interface OrganizationMemberRole {
 /**
  * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
  */
-export type OrganizationMetadata = Record<string, (string | null) | undefined>;
+export type OrganizationMetadata = Record<string, string | null>;
 
 /** Defines whether organizations can be used with client credentials exchanges for this grant. */
 export const OrganizationUsageEnum = {
@@ -20060,7 +20060,7 @@ export interface UpdateConnectionOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
+    configuration?: (Record<string, string | null> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;

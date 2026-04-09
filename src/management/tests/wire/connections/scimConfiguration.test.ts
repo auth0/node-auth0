@@ -24,6 +24,7 @@ describe("ScimConfigurationClient", () => {
             ],
             next: "next",
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/connections-scim-configurations")
@@ -32,21 +33,7 @@ describe("ScimConfigurationClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            scim_configurations: [
-                {
-                    connection_id: "connection_id",
-                    connection_name: "connection_name",
-                    strategy: "strategy",
-                    tenant_name: "tenant_name",
-                    user_id_attribute: "user_id_attribute",
-                    mapping: [{}],
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_on: "2024-01-15T09:30:00Z",
-                },
-            ],
-            next: "next",
-        };
+        const expected = rawResponseBody;
         const page = await client.connections.scimConfiguration.list({
             from: "from",
             take: 1,
@@ -63,6 +50,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-scim-configurations")
@@ -81,6 +69,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-scim-configurations")
@@ -99,6 +88,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-scim-configurations")
@@ -117,6 +107,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-scim-configurations")
@@ -144,6 +135,7 @@ describe("ScimConfigurationClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_on: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration")
@@ -153,21 +145,7 @@ describe("ScimConfigurationClient", () => {
             .build();
 
         const response = await client.connections.scimConfiguration.get("id");
-        expect(response).toEqual({
-            connection_id: "connection_id",
-            connection_name: "connection_name",
-            strategy: "strategy",
-            tenant_name: "tenant_name",
-            user_id_attribute: "user_id_attribute",
-            mapping: [
-                {
-                    auth0: "auth0",
-                    scim: "scim",
-                },
-            ],
-            created_at: "2024-01-15T09:30:00Z",
-            updated_on: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -175,6 +153,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration")
@@ -193,6 +172,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration")
@@ -220,6 +200,7 @@ describe("ScimConfigurationClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_on: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .post("/connections/id/scim-configuration")
@@ -229,21 +210,7 @@ describe("ScimConfigurationClient", () => {
             .build();
 
         const response = await client.connections.scimConfiguration.create("id");
-        expect(response).toEqual({
-            connection_id: "connection_id",
-            connection_name: "connection_name",
-            strategy: "strategy",
-            tenant_name: "tenant_name",
-            user_id_attribute: "user_id_attribute",
-            mapping: [
-                {
-                    auth0: "auth0",
-                    scim: "scim",
-                },
-            ],
-            created_at: "2024-01-15T09:30:00Z",
-            updated_on: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -251,6 +218,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/scim-configuration")
@@ -269,6 +237,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/scim-configuration")
@@ -297,6 +266,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connections/id/scim-configuration")
@@ -315,6 +285,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connections/id/scim-configuration")
@@ -342,6 +313,7 @@ describe("ScimConfigurationClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_on: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .patch("/connections/id/scim-configuration")
@@ -355,21 +327,7 @@ describe("ScimConfigurationClient", () => {
             user_id_attribute: "user_id_attribute",
             mapping: [{}],
         });
-        expect(response).toEqual({
-            connection_id: "connection_id",
-            connection_name: "connection_name",
-            strategy: "strategy",
-            tenant_name: "tenant_name",
-            user_id_attribute: "user_id_attribute",
-            mapping: [
-                {
-                    auth0: "auth0",
-                    scim: "scim",
-                },
-            ],
-            created_at: "2024-01-15T09:30:00Z",
-            updated_on: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -377,6 +335,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id_attribute: "user_id_attribute", mapping: [{}, {}] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id/scim-configuration")
@@ -399,6 +358,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id_attribute: "user_id_attribute", mapping: [{}, {}] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id/scim-configuration")
@@ -421,6 +381,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { mapping: [{ auth0: "auth0", scim: "scim" }] };
+
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration/default-mapping")
@@ -430,14 +391,7 @@ describe("ScimConfigurationClient", () => {
             .build();
 
         const response = await client.connections.scimConfiguration.getDefaultMapping("id");
-        expect(response).toEqual({
-            mapping: [
-                {
-                    auth0: "auth0",
-                    scim: "scim",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getDefaultMapping (2)", async () => {
@@ -445,6 +399,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration/default-mapping")
@@ -463,6 +418,7 @@ describe("ScimConfigurationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration/default-mapping")

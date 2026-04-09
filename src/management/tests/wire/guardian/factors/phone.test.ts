@@ -10,6 +10,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message_types: ["sms"] };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/message-types")
@@ -19,9 +20,7 @@ describe("PhoneClient", () => {
             .build();
 
         const response = await client.guardian.factors.phone.getMessageTypes();
-        expect(response).toEqual({
-            message_types: ["sms"],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getMessageTypes (2)", async () => {
@@ -29,6 +28,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/message-types")
@@ -47,6 +47,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/message-types")
@@ -65,6 +66,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/message-types")
@@ -83,6 +85,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { message_types: ["sms"] };
         const rawResponseBody = { message_types: ["sms"] };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/message-types")
@@ -95,9 +98,7 @@ describe("PhoneClient", () => {
         const response = await client.guardian.factors.phone.setMessageTypes({
             message_types: ["sms"],
         });
-        expect(response).toEqual({
-            message_types: ["sms"],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setMessageTypes (2)", async () => {
@@ -105,6 +106,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { message_types: ["sms", "sms"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/message-types")
@@ -126,6 +128,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { message_types: ["sms", "sms"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/message-types")
@@ -147,6 +150,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { message_types: ["sms", "sms"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/message-types")
@@ -168,6 +172,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { message_types: ["sms", "sms"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/message-types")
@@ -194,6 +199,7 @@ describe("PhoneClient", () => {
             auth_token: "auth_token",
             sid: "sid",
         };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/providers/twilio")
@@ -203,12 +209,7 @@ describe("PhoneClient", () => {
             .build();
 
         const response = await client.guardian.factors.phone.getTwilioProvider();
-        expect(response).toEqual({
-            from: "from",
-            messaging_service_sid: "messaging_service_sid",
-            auth_token: "auth_token",
-            sid: "sid",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getTwilioProvider (2)", async () => {
@@ -216,6 +217,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/providers/twilio")
@@ -234,6 +236,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/providers/twilio")
@@ -252,6 +255,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/providers/twilio")
@@ -275,6 +279,7 @@ describe("PhoneClient", () => {
             auth_token: "auth_token",
             sid: "sid",
         };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/providers/twilio")
@@ -285,12 +290,7 @@ describe("PhoneClient", () => {
             .build();
 
         const response = await client.guardian.factors.phone.setTwilioProvider();
-        expect(response).toEqual({
-            from: "from",
-            messaging_service_sid: "messaging_service_sid",
-            auth_token: "auth_token",
-            sid: "sid",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setTwilioProvider (2)", async () => {
@@ -298,6 +298,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/providers/twilio")
@@ -317,6 +318,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/providers/twilio")
@@ -336,6 +338,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/providers/twilio")
@@ -355,6 +358,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { provider: "auth0" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/selected-provider")
@@ -364,9 +368,7 @@ describe("PhoneClient", () => {
             .build();
 
         const response = await client.guardian.factors.phone.getSelectedProvider();
-        expect(response).toEqual({
-            provider: "auth0",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getSelectedProvider (2)", async () => {
@@ -374,6 +376,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/selected-provider")
@@ -392,6 +395,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/selected-provider")
@@ -410,6 +414,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/selected-provider")
@@ -428,6 +433,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { provider: "auth0" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/selected-provider")
@@ -440,9 +446,7 @@ describe("PhoneClient", () => {
         const response = await client.guardian.factors.phone.setProvider({
             provider: "auth0",
         });
-        expect(response).toEqual({
-            provider: "auth0",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setProvider (2)", async () => {
@@ -450,6 +454,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/selected-provider")
@@ -471,6 +476,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/selected-provider")
@@ -492,6 +498,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/selected-provider")
@@ -516,6 +523,7 @@ describe("PhoneClient", () => {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
         };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/templates")
@@ -525,10 +533,7 @@ describe("PhoneClient", () => {
             .build();
 
         const response = await client.guardian.factors.phone.getTemplates();
-        expect(response).toEqual({
-            enrollment_message: "enrollment_message",
-            verification_message: "verification_message",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getTemplates (2)", async () => {
@@ -536,6 +541,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/templates")
@@ -554,6 +560,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/templates")
@@ -572,6 +579,7 @@ describe("PhoneClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/phone/templates")
@@ -596,6 +604,7 @@ describe("PhoneClient", () => {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
         };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/templates")
@@ -609,10 +618,7 @@ describe("PhoneClient", () => {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
         });
-        expect(response).toEqual({
-            enrollment_message: "enrollment_message",
-            verification_message: "verification_message",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setTemplates (2)", async () => {
@@ -624,6 +630,7 @@ describe("PhoneClient", () => {
             verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/templates")
@@ -651,6 +658,7 @@ describe("PhoneClient", () => {
             verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/templates")
@@ -678,6 +686,7 @@ describe("PhoneClient", () => {
             verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/phone/templates")

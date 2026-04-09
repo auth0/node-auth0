@@ -23,6 +23,7 @@ describe("CredentialsClient", () => {
                 expires_at: "2024-01-15T09:30:00Z",
             },
         ];
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials")
@@ -32,20 +33,7 @@ describe("CredentialsClient", () => {
             .build();
 
         const response = await client.clients.credentials.list("client_id");
-        expect(response).toEqual([
-            {
-                id: "id",
-                name: "name",
-                kid: "kid",
-                alg: "RS256",
-                credential_type: "public_key",
-                subject_dn: "subject_dn",
-                thumbprint_sha256: "thumbprint_sha256",
-                created_at: "2024-01-15T09:30:00Z",
-                updated_at: "2024-01-15T09:30:00Z",
-                expires_at: "2024-01-15T09:30:00Z",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -53,6 +41,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials")
@@ -71,6 +60,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials")
@@ -89,6 +79,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials")
@@ -107,6 +98,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials")
@@ -136,6 +128,7 @@ describe("CredentialsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             expires_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .post("/clients/client_id/credentials")
@@ -148,18 +141,7 @@ describe("CredentialsClient", () => {
         const response = await client.clients.credentials.create("client_id", {
             credential_type: "public_key",
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            kid: "kid",
-            alg: "RS256",
-            credential_type: "public_key",
-            subject_dn: "subject_dn",
-            thumbprint_sha256: "thumbprint_sha256",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            expires_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -167,6 +149,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { credential_type: "public_key" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/client_id/credentials")
@@ -188,6 +171,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { credential_type: "public_key" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/client_id/credentials")
@@ -209,6 +193,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { credential_type: "public_key" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/client_id/credentials")
@@ -230,6 +215,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { credential_type: "public_key" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/client_id/credentials")
@@ -251,6 +237,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { credential_type: "public_key" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/client_id/credentials")
@@ -283,6 +270,7 @@ describe("CredentialsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             expires_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials/credential_id")
@@ -292,18 +280,7 @@ describe("CredentialsClient", () => {
             .build();
 
         const response = await client.clients.credentials.get("client_id", "credential_id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            kid: "kid",
-            alg: "RS256",
-            credential_type: "public_key",
-            subject_dn: "subject_dn",
-            thumbprint_sha256: "thumbprint_sha256",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            expires_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -311,6 +288,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials/credential_id")
@@ -329,6 +307,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials/credential_id")
@@ -347,6 +326,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials/credential_id")
@@ -365,6 +345,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/clients/client_id/credentials/credential_id")
@@ -398,6 +379,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/clients/client_id/credentials/credential_id")
@@ -416,6 +398,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/clients/client_id/credentials/credential_id")
@@ -434,6 +417,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/clients/client_id/credentials/credential_id")
@@ -452,6 +436,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/clients/client_id/credentials/credential_id")
@@ -481,6 +466,7 @@ describe("CredentialsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             expires_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .patch("/clients/client_id/credentials/credential_id")
@@ -491,18 +477,7 @@ describe("CredentialsClient", () => {
             .build();
 
         const response = await client.clients.credentials.update("client_id", "credential_id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            kid: "kid",
-            alg: "RS256",
-            credential_type: "public_key",
-            subject_dn: "subject_dn",
-            thumbprint_sha256: "thumbprint_sha256",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            expires_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -510,6 +485,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/client_id/credentials/credential_id")
@@ -529,6 +505,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/client_id/credentials/credential_id")
@@ -548,6 +525,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/client_id/credentials/credential_id")
@@ -567,6 +545,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/client_id/credentials/credential_id")
@@ -586,6 +565,7 @@ describe("CredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/client_id/credentials/credential_id")

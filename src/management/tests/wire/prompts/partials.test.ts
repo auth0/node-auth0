@@ -10,6 +10,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/prompts/login/partials")
@@ -19,9 +20,7 @@ describe("PartialsClient", () => {
             .build();
 
         const response = await client.prompts.partials.get("login");
-        expect(response).toEqual({
-            key: "value",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -29,6 +28,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/prompts/login/partials")
@@ -47,6 +47,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/prompts/login/partials")
@@ -65,6 +66,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/prompts/login/partials")
@@ -83,6 +85,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/prompts/login/partials")
@@ -101,6 +104,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/prompts/login/partials")
@@ -138,6 +142,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/prompts/login/partials")
@@ -161,6 +166,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/prompts/login/partials")
@@ -184,6 +190,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/prompts/login/partials")
@@ -207,6 +214,7 @@ describe("PartialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/prompts/login/partials")

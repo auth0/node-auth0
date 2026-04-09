@@ -20,6 +20,7 @@ describe("ConnectionProfilesClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/connection-profiles")
@@ -28,17 +29,7 @@ describe("ConnectionProfilesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            connection_profiles: [
-                {
-                    id: "id",
-                    name: "name",
-                    connection_name_prefix_template: "connection_name_prefix_template",
-                    enabled_features: ["scim"],
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.connectionProfiles.list({
             from: "from",
             take: 1,
@@ -55,6 +46,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles")
@@ -73,6 +65,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles")
@@ -91,6 +84,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles")
@@ -109,6 +103,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles")
@@ -143,6 +138,7 @@ describe("ConnectionProfilesClient", () => {
                 samlp: { enabled_features: ["scim"] },
             },
         };
+
         server
             .mockEndpoint()
             .post("/connection-profiles")
@@ -155,42 +151,7 @@ describe("ConnectionProfilesClient", () => {
         const response = await client.connectionProfiles.create({
             name: "name",
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            organization: {
-                show_as_button: "none",
-                assign_membership_on_login: "none",
-            },
-            connection_name_prefix_template: "connection_name_prefix_template",
-            enabled_features: ["scim"],
-            strategy_overrides: {
-                pingfederate: {
-                    enabled_features: ["scim"],
-                },
-                ad: {
-                    enabled_features: ["scim"],
-                },
-                adfs: {
-                    enabled_features: ["scim"],
-                },
-                waad: {
-                    enabled_features: ["scim"],
-                },
-                "google-apps": {
-                    enabled_features: ["scim"],
-                },
-                okta: {
-                    enabled_features: ["scim"],
-                },
-                oidc: {
-                    enabled_features: ["scim"],
-                },
-                samlp: {
-                    enabled_features: ["scim"],
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -198,6 +159,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connection-profiles")
@@ -219,6 +181,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connection-profiles")
@@ -240,6 +203,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connection-profiles")
@@ -261,6 +225,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connection-profiles")
@@ -282,6 +247,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connection-profiles")
@@ -303,6 +269,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { connection_profile_templates: [{ id: "id", display_name: "display_name" }] };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates")
@@ -312,14 +279,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         const response = await client.connectionProfiles.listTemplates();
-        expect(response).toEqual({
-            connection_profile_templates: [
-                {
-                    id: "id",
-                    display_name: "display_name",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("listTemplates (2)", async () => {
@@ -327,6 +287,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates")
@@ -345,6 +306,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates")
@@ -363,6 +325,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates")
@@ -390,6 +353,7 @@ describe("ConnectionProfilesClient", () => {
                 enabled_features: ["scim"],
             },
         };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates/id")
@@ -399,19 +363,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         const response = await client.connectionProfiles.getTemplate("id");
-        expect(response).toEqual({
-            id: "id",
-            display_name: "display_name",
-            template: {
-                name: "name",
-                organization: {
-                    show_as_button: "none",
-                    assign_membership_on_login: "none",
-                },
-                connection_name_prefix_template: "connection_name_prefix_template",
-                enabled_features: ["scim"],
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getTemplate (2)", async () => {
@@ -419,6 +371,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates/id")
@@ -437,6 +390,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates/id")
@@ -455,6 +409,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates/id")
@@ -473,6 +428,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/templates/id")
@@ -507,6 +463,7 @@ describe("ConnectionProfilesClient", () => {
                 samlp: { enabled_features: ["scim"] },
             },
         };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/id")
@@ -516,42 +473,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         const response = await client.connectionProfiles.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            organization: {
-                show_as_button: "none",
-                assign_membership_on_login: "none",
-            },
-            connection_name_prefix_template: "connection_name_prefix_template",
-            enabled_features: ["scim"],
-            strategy_overrides: {
-                pingfederate: {
-                    enabled_features: ["scim"],
-                },
-                ad: {
-                    enabled_features: ["scim"],
-                },
-                adfs: {
-                    enabled_features: ["scim"],
-                },
-                waad: {
-                    enabled_features: ["scim"],
-                },
-                "google-apps": {
-                    enabled_features: ["scim"],
-                },
-                okta: {
-                    enabled_features: ["scim"],
-                },
-                oidc: {
-                    enabled_features: ["scim"],
-                },
-                samlp: {
-                    enabled_features: ["scim"],
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -559,6 +481,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/id")
@@ -577,6 +500,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/id")
@@ -595,6 +519,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/id")
@@ -613,6 +538,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connection-profiles/id")
@@ -641,6 +567,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connection-profiles/id")
@@ -659,6 +586,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connection-profiles/id")
@@ -677,6 +605,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connection-profiles/id")
@@ -711,6 +640,7 @@ describe("ConnectionProfilesClient", () => {
                 samlp: { enabled_features: ["scim"] },
             },
         };
+
         server
             .mockEndpoint()
             .patch("/connection-profiles/id")
@@ -721,42 +651,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         const response = await client.connectionProfiles.update("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            organization: {
-                show_as_button: "none",
-                assign_membership_on_login: "none",
-            },
-            connection_name_prefix_template: "connection_name_prefix_template",
-            enabled_features: ["scim"],
-            strategy_overrides: {
-                pingfederate: {
-                    enabled_features: ["scim"],
-                },
-                ad: {
-                    enabled_features: ["scim"],
-                },
-                adfs: {
-                    enabled_features: ["scim"],
-                },
-                waad: {
-                    enabled_features: ["scim"],
-                },
-                "google-apps": {
-                    enabled_features: ["scim"],
-                },
-                okta: {
-                    enabled_features: ["scim"],
-                },
-                oidc: {
-                    enabled_features: ["scim"],
-                },
-                samlp: {
-                    enabled_features: ["scim"],
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -764,6 +659,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connection-profiles/id")
@@ -783,6 +679,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connection-profiles/id")
@@ -802,6 +699,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connection-profiles/id")
@@ -821,6 +719,7 @@ describe("ConnectionProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connection-profiles/id")

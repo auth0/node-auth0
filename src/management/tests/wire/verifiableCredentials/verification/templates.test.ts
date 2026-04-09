@@ -25,6 +25,7 @@ describe("TemplatesClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/verifiable-credentials/verification/templates")
@@ -33,26 +34,7 @@ describe("TemplatesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            templates: [
-                {
-                    id: "id",
-                    name: "name",
-                    type: "type",
-                    dialect: "dialect",
-                    presentation: {
-                        "org.iso.18013.5.1.mDL": {
-                            "org.iso.18013.5.1": {},
-                        },
-                    },
-                    custom_certificate_authority: "custom_certificate_authority",
-                    well_known_trusted_issuers: "well_known_trusted_issuers",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.verifiableCredentials.verification.templates.list({
             from: "from",
             take: 1,
@@ -69,6 +51,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
@@ -87,6 +70,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
@@ -105,6 +89,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
@@ -123,6 +108,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates")
@@ -157,6 +143,7 @@ describe("TemplatesClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .post("/verifiable-credentials/verification/templates")
@@ -177,21 +164,7 @@ describe("TemplatesClient", () => {
             },
             well_known_trusted_issuers: "well_known_trusted_issuers",
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            type: "type",
-            dialect: "dialect",
-            presentation: {
-                "org.iso.18013.5.1.mDL": {
-                    "org.iso.18013.5.1": {},
-                },
-            },
-            custom_certificate_authority: "custom_certificate_authority",
-            well_known_trusted_issuers: "well_known_trusted_issuers",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -205,6 +178,7 @@ describe("TemplatesClient", () => {
             well_known_trusted_issuers: "x",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/verifiable-credentials/verification/templates")
@@ -240,6 +214,7 @@ describe("TemplatesClient", () => {
             well_known_trusted_issuers: "x",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/verifiable-credentials/verification/templates")
@@ -275,6 +250,7 @@ describe("TemplatesClient", () => {
             well_known_trusted_issuers: "x",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/verifiable-credentials/verification/templates")
@@ -310,6 +286,7 @@ describe("TemplatesClient", () => {
             well_known_trusted_issuers: "x",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/verifiable-credentials/verification/templates")
@@ -345,6 +322,7 @@ describe("TemplatesClient", () => {
             well_known_trusted_issuers: "x",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/verifiable-credentials/verification/templates")
@@ -384,6 +362,7 @@ describe("TemplatesClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates/id")
@@ -393,21 +372,7 @@ describe("TemplatesClient", () => {
             .build();
 
         const response = await client.verifiableCredentials.verification.templates.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            type: "type",
-            dialect: "dialect",
-            presentation: {
-                "org.iso.18013.5.1.mDL": {
-                    "org.iso.18013.5.1": {},
-                },
-            },
-            custom_certificate_authority: "custom_certificate_authority",
-            well_known_trusted_issuers: "well_known_trusted_issuers",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -415,6 +380,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates/id")
@@ -433,6 +399,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates/id")
@@ -451,6 +418,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates/id")
@@ -469,6 +437,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates/id")
@@ -487,6 +456,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/verifiable-credentials/verification/templates/id")
@@ -520,6 +490,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/verifiable-credentials/verification/templates/id")
@@ -538,6 +509,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/verifiable-credentials/verification/templates/id")
@@ -556,6 +528,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/verifiable-credentials/verification/templates/id")
@@ -574,6 +547,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/verifiable-credentials/verification/templates/id")
@@ -602,6 +576,7 @@ describe("TemplatesClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .patch("/verifiable-credentials/verification/templates/id")
@@ -612,21 +587,7 @@ describe("TemplatesClient", () => {
             .build();
 
         const response = await client.verifiableCredentials.verification.templates.update("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            type: "type",
-            dialect: "dialect",
-            presentation: {
-                "org.iso.18013.5.1.mDL": {
-                    "org.iso.18013.5.1": {},
-                },
-            },
-            custom_certificate_authority: "custom_certificate_authority",
-            well_known_trusted_issuers: "well_known_trusted_issuers",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -634,6 +595,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/verifiable-credentials/verification/templates/id")
@@ -653,6 +615,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/verifiable-credentials/verification/templates/id")
@@ -672,6 +635,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/verifiable-credentials/verification/templates/id")
@@ -691,6 +655,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/verifiable-credentials/verification/templates/id")
@@ -710,6 +675,7 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/verifiable-credentials/verification/templates/id")

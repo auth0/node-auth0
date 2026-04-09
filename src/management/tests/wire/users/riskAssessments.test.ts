@@ -30,6 +30,7 @@ describe("RiskAssessmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/risk-assessments/clear")
@@ -52,6 +53,7 @@ describe("RiskAssessmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/risk-assessments/clear")
@@ -74,6 +76,7 @@ describe("RiskAssessmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/risk-assessments/clear")
@@ -96,6 +99,7 @@ describe("RiskAssessmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "x", assessors: ["new-device", "new-device"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/risk-assessments/clear")

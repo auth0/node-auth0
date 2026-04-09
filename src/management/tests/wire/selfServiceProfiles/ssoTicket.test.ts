@@ -10,6 +10,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { ticket: "ticket" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/id/sso-ticket")
@@ -20,9 +21,7 @@ describe("SsoTicketClient", () => {
             .build();
 
         const response = await client.selfServiceProfiles.ssoTicket.create("id");
-        expect(response).toEqual({
-            ticket: "ticket",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -30,6 +29,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/id/sso-ticket")
@@ -49,6 +49,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/id/sso-ticket")
@@ -68,6 +69,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/id/sso-ticket")
@@ -87,6 +89,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/id/sso-ticket")
@@ -121,6 +124,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/profileId/sso-ticket/id/revoke")
@@ -139,6 +143,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/profileId/sso-ticket/id/revoke")
@@ -157,6 +162,7 @@ describe("SsoTicketClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/self-service-profiles/profileId/sso-ticket/id/revoke")
