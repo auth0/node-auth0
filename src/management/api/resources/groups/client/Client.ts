@@ -222,4 +222,74 @@ export class GroupsClient {
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/groups/{id}");
     }
+
+    /**
+     * Delete a group by its ID.
+     *
+     * @param {string} id - Unique identifier for the group (service-generated).
+     * @param {GroupsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.groups.delete("id")
+     */
+    public delete(id: string, requestOptions?: GroupsClient.RequestOptions): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(id, requestOptions));
+    }
+
+    private async __delete(
+        id: string,
+        requestOptions?: GroupsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<void>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `groups/${core.url.encodePathParam(id)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/groups/{id}");
+    }
 }

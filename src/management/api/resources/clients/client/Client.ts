@@ -87,6 +87,7 @@ export class ClientsClient {
      *         is_global: true,
      *         is_first_party: true,
      *         app_type: "app_type",
+     *         external_client_id: "external_client_id",
      *         q: "q"
      *     })
      */
@@ -107,6 +108,7 @@ export class ClientsClient {
                     is_global: isGlobal,
                     is_first_party: isFirstParty,
                     app_type: appType,
+                    external_client_id: externalClientId,
                     q,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
@@ -118,6 +120,7 @@ export class ClientsClient {
                     is_global: isGlobal,
                     is_first_party: isFirstParty,
                     app_type: appType,
+                    external_client_id: externalClientId,
                     q,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -287,6 +290,181 @@ export class ClientsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/clients");
+    }
+
+    /**
+     *
+     *       Fetches and validates a Client ID Metadata Document without creating a client.
+     *       Returns the raw metadata and how it would be mapped to Auth0 client fields.
+     *       This endpoint is useful for testing metadata URIs before creating CIMD clients.
+     *
+     *
+     * @param {Management.PreviewCimdMetadataRequestContent} request
+     * @param {ClientsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link Management.InternalServerError}
+     *
+     * @example
+     *     await client.clients.previewCimdMetadata({
+     *         external_client_id: "external_client_id"
+     *     })
+     */
+    public previewCimdMetadata(
+        request: Management.PreviewCimdMetadataRequestContent,
+        requestOptions?: ClientsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.PreviewCimdMetadataResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__previewCimdMetadata(request, requestOptions));
+    }
+
+    private async __previewCimdMetadata(
+        request: Management.PreviewCimdMetadataRequestContent,
+        requestOptions?: ClientsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.PreviewCimdMetadataResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "clients/cimd/preview",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.PreviewCimdMetadataResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                case 500:
+                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/clients/cimd/preview");
+    }
+
+    /**
+     *
+     *       Idempotent registration for Client ID Metadata Document (CIMD) clients.
+     *       Uses external_client_id as the unique identifier for upsert operations.
+     *       **Create:** Returns 201 when a new client is created (requires \
+     *
+     * @param {Management.RegisterCimdClientRequestContent} request
+     * @param {ClientsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link Management.InternalServerError}
+     *
+     * @example
+     *     await client.clients.registerCimdClient({
+     *         external_client_id: "external_client_id"
+     *     })
+     */
+    public registerCimdClient(
+        request: Management.RegisterCimdClientRequestContent,
+        requestOptions?: ClientsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.RegisterCimdClientResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__registerCimdClient(request, requestOptions));
+    }
+
+    private async __registerCimdClient(
+        request: Management.RegisterCimdClientRequestContent,
+        requestOptions?: ClientsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.RegisterCimdClientResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "clients/cimd/register",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.RegisterCimdClientResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                case 500:
+                    throw new Management.InternalServerError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/clients/cimd/register");
     }
 
     /**

@@ -11,7 +11,7 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = {
             id: "id",
-            trigger_id: "trigger_id",
+            trigger_id: "post-login",
             status: "unspecified",
             results: [
                 { action_name: "action_name", started_at: "2024-01-15T09:30:00Z", ended_at: "2024-01-15T09:30:00Z" },
@@ -30,7 +30,7 @@ describe("ExecutionsClient", () => {
         const response = await client.actions.executions.get("id");
         expect(response).toEqual({
             id: "id",
-            trigger_id: "trigger_id",
+            trigger_id: "post-login",
             status: "unspecified",
             results: [
                 {

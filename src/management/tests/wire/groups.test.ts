@@ -16,9 +16,7 @@ describe("GroupsClient", () => {
                     name: "name",
                     external_id: "external_id",
                     connection_id: "connection_id",
-                    organization_id: "organization_id",
                     tenant_name: "tenant_name",
-                    description: "description",
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
                 },
@@ -43,9 +41,7 @@ describe("GroupsClient", () => {
                     name: "name",
                     external_id: "external_id",
                     connection_id: "connection_id",
-                    organization_id: "organization_id",
                     tenant_name: "tenant_name",
-                    description: "description",
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
                 },
@@ -128,9 +124,7 @@ describe("GroupsClient", () => {
             name: "name",
             external_id: "external_id",
             connection_id: "connection_id",
-            organization_id: "organization_id",
             tenant_name: "tenant_name",
-            description: "description",
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
@@ -142,9 +136,7 @@ describe("GroupsClient", () => {
             name: "name",
             external_id: "external_id",
             connection_id: "connection_id",
-            organization_id: "organization_id",
             tenant_name: "tenant_name",
-            description: "description",
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         });
@@ -207,6 +199,64 @@ describe("GroupsClient", () => {
 
         await expect(async () => {
             return await client.groups.get("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("delete (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        server.mockEndpoint().delete("/groups/id").respondWith().statusCode(200).build();
+
+        const response = await client.groups.delete("id");
+        expect(response).toEqual(undefined);
+    });
+
+    test("delete (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/groups/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.groups.delete("id");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("delete (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/groups/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.groups.delete("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("delete (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/groups/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.groups.delete("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("delete (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().delete("/groups/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.groups.delete("id");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 });

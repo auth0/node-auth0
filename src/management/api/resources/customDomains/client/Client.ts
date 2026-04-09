@@ -206,6 +206,151 @@ export class CustomDomainsClient {
     }
 
     /**
+     * Retrieve the tenant's default domain.
+     *
+     * @param {CustomDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.customDomains.getDefault()
+     */
+    public getDefault(
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetDefaultDomainResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__getDefault(requestOptions));
+    }
+
+    private async __getDefault(
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetDefaultDomainResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "custom-domains/default",
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.GetDefaultDomainResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/custom-domains/default");
+    }
+
+    /**
+     * Set the default custom domain for the tenant.
+     *
+     * @param {Management.SetDefaultCustomDomainRequestContent} request
+     * @param {CustomDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.ForbiddenError}
+     *
+     * @example
+     *     await client.customDomains.setDefault({
+     *         domain: "domain"
+     *     })
+     */
+    public setDefault(
+        request: Management.SetDefaultCustomDomainRequestContent,
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.UpdateDefaultDomainResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__setDefault(request, requestOptions));
+    }
+
+    private async __setDefault(
+        request: Management.SetDefaultCustomDomainRequestContent,
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.UpdateDefaultDomainResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "custom-domains/default",
+            ),
+            method: "PATCH",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.UpdateDefaultDomainResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/custom-domains/default");
+    }
+
+    /**
      * Retrieve a custom domain configuration and status.
      *
      * @param {string} id - ID of the custom domain to retrieve.

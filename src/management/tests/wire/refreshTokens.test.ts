@@ -5,6 +5,141 @@ import { ManagementClient } from "../../Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
 describe("RefreshTokensClient", () => {
+    test("list (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            refresh_tokens: [
+                {
+                    id: "id",
+                    user_id: "user_id",
+                    created_at: "2024-01-15T09:30:00Z",
+                    idle_expires_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                    client_id: "client_id",
+                    session_id: "session_id",
+                    rotating: true,
+                    resource_servers: [{}],
+                    refresh_token_metadata: { key: "value" },
+                    last_exchanged_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            next: "next",
+        };
+        server
+            .mockEndpoint({ once: false })
+            .get("/refresh-tokens")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = {
+            refresh_tokens: [
+                {
+                    id: "id",
+                    user_id: "user_id",
+                    created_at: "2024-01-15T09:30:00Z",
+                    idle_expires_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                    client_id: "client_id",
+                    session_id: "session_id",
+                    rotating: true,
+                    resource_servers: [{}],
+                    refresh_token_metadata: {
+                        key: "value",
+                    },
+                    last_exchanged_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            next: "next",
+        };
+        const page = await client.refreshTokens.list({
+            user_id: "user_id",
+            client_id: "client_id",
+            from: "from",
+            take: 1,
+            fields: "fields",
+            include_fields: true,
+        });
+
+        expect(expected.refresh_tokens).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.refresh_tokens).toEqual(nextPage.data);
+    });
+
+    test("list (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.refreshTokens.list({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.refreshTokens.list({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("list (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.refreshTokens.list({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("list (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.refreshTokens.list({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.refreshTokens.list({
+                user_id: "user_id",
+            });
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });

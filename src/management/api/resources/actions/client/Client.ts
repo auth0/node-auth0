@@ -59,7 +59,7 @@ export class ActionsClient {
      *
      * @example
      *     await client.actions.list({
-     *         triggerId: "triggerId",
+     *         triggerId: "post-login",
      *         actionName: "actionName",
      *         deployed: true,
      *         page: 1,
@@ -77,7 +77,7 @@ export class ActionsClient {
             ): Promise<core.WithRawResponse<Management.ListActionsPaginatedResponseContent>> => {
                 const { triggerId, actionName, deployed, page = 0, per_page: perPage = 50, installed } = request;
                 const _queryParams: Record<string, unknown> = {
-                    triggerId,
+                    triggerId: triggerId !== undefined ? triggerId : undefined,
                     actionName,
                     deployed,
                     page,
@@ -171,7 +171,7 @@ export class ActionsClient {
      *     await client.actions.create({
      *         name: "name",
      *         supported_triggers: [{
-     *                 id: "id"
+     *                 id: "post-login"
      *             }]
      *     })
      */

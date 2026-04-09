@@ -67,6 +67,10 @@ describe("ClientsClient", () => {
                     },
                     resource_server_identifier: "resource_server_identifier",
                     async_approval_notification_channels: ["guardian-push"],
+                    external_metadata_type: "cimd",
+                    external_metadata_created_by: "admin",
+                    external_client_id: "external_client_id",
+                    jwks_uri: "jwks_uri",
                 },
             ],
         };
@@ -146,6 +150,10 @@ describe("ClientsClient", () => {
                     },
                     resource_server_identifier: "resource_server_identifier",
                     async_approval_notification_channels: ["guardian-push"],
+                    external_metadata_type: "cimd",
+                    external_metadata_created_by: "admin",
+                    external_client_id: "external_client_id",
+                    jwks_uri: "jwks_uri",
                 },
             ],
         };
@@ -158,6 +166,7 @@ describe("ClientsClient", () => {
             is_global: true,
             is_first_party: true,
             app_type: "app_type",
+            external_client_id: "external_client_id",
             q: "q",
         });
 
@@ -433,6 +442,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         };
         server
             .mockEndpoint()
@@ -758,6 +771,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         });
     });
 
@@ -864,6 +881,350 @@ describe("ClientsClient", () => {
                 name: "name",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("previewCimdMetadata (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "external_client_id" };
+        const rawResponseBody = {
+            client_id: "client_id",
+            errors: ["errors"],
+            validation: { valid: true, violations: ["violations"], warnings: ["warnings"] },
+            mapped_fields: {
+                external_client_id: "external_client_id",
+                name: "name",
+                app_type: "app_type",
+                callbacks: ["callbacks"],
+                logo_uri: "logo_uri",
+                description: "description",
+                grant_types: ["grant_types"],
+                token_endpoint_auth_method: "token_endpoint_auth_method",
+                jwks_uri: "jwks_uri",
+                client_authentication_methods: {
+                    private_key_jwt: { credentials: [{ credential_type: "credential_type", kid: "kid", alg: "alg" }] },
+                },
+            },
+        };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/preview")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.clients.previewCimdMetadata({
+            external_client_id: "external_client_id",
+        });
+        expect(response).toEqual({
+            client_id: "client_id",
+            errors: ["errors"],
+            validation: {
+                valid: true,
+                violations: ["violations"],
+                warnings: ["warnings"],
+            },
+            mapped_fields: {
+                external_client_id: "external_client_id",
+                name: "name",
+                app_type: "app_type",
+                callbacks: ["callbacks"],
+                logo_uri: "logo_uri",
+                description: "description",
+                grant_types: ["grant_types"],
+                token_endpoint_auth_method: "token_endpoint_auth_method",
+                jwks_uri: "jwks_uri",
+                client_authentication_methods: {
+                    private_key_jwt: {
+                        credentials: [
+                            {
+                                credential_type: "credential_type",
+                                kid: "kid",
+                                alg: "alg",
+                            },
+                        ],
+                    },
+                },
+            },
+        });
+    });
+
+    test("previewCimdMetadata (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/preview")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.previewCimdMetadata({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("previewCimdMetadata (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/preview")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.previewCimdMetadata({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("previewCimdMetadata (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/preview")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.previewCimdMetadata({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("previewCimdMetadata (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/preview")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.previewCimdMetadata({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("previewCimdMetadata (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/preview")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.previewCimdMetadata({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.InternalServerError);
+    });
+
+    test("registerCimdClient (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "external_client_id" };
+        const rawResponseBody = {
+            client_id: "client_id",
+            mapped_fields: {
+                external_client_id: "external_client_id",
+                name: "name",
+                app_type: "app_type",
+                callbacks: ["callbacks"],
+                logo_uri: "logo_uri",
+                description: "description",
+                grant_types: ["grant_types"],
+                token_endpoint_auth_method: "token_endpoint_auth_method",
+                jwks_uri: "jwks_uri",
+                client_authentication_methods: {
+                    private_key_jwt: { credentials: [{ credential_type: "credential_type", kid: "kid", alg: "alg" }] },
+                },
+            },
+            validation: { valid: true, violations: ["violations"], warnings: ["warnings"] },
+        };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/register")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.clients.registerCimdClient({
+            external_client_id: "external_client_id",
+        });
+        expect(response).toEqual({
+            client_id: "client_id",
+            mapped_fields: {
+                external_client_id: "external_client_id",
+                name: "name",
+                app_type: "app_type",
+                callbacks: ["callbacks"],
+                logo_uri: "logo_uri",
+                description: "description",
+                grant_types: ["grant_types"],
+                token_endpoint_auth_method: "token_endpoint_auth_method",
+                jwks_uri: "jwks_uri",
+                client_authentication_methods: {
+                    private_key_jwt: {
+                        credentials: [
+                            {
+                                credential_type: "credential_type",
+                                kid: "kid",
+                                alg: "alg",
+                            },
+                        ],
+                    },
+                },
+            },
+            validation: {
+                valid: true,
+                violations: ["violations"],
+                warnings: ["warnings"],
+            },
+        });
+    });
+
+    test("registerCimdClient (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/register")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.registerCimdClient({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("registerCimdClient (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/register")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.registerCimdClient({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("registerCimdClient (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/register")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.registerCimdClient({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("registerCimdClient (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/register")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.registerCimdClient({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("registerCimdClient (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/register")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.registerCimdClient({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.InternalServerError);
     });
 
     test("get (1)", async () => {
@@ -1060,6 +1421,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         };
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -1379,6 +1744,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         });
     });
 
@@ -1694,6 +2063,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         };
         server
             .mockEndpoint()
@@ -2017,6 +2390,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         });
     });
 
@@ -2309,6 +2686,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         };
         server
             .mockEndpoint()
@@ -2631,6 +3012,10 @@ describe("ClientsClient", () => {
             },
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
+            external_metadata_type: "cimd",
+            external_metadata_created_by: "admin",
+            external_client_id: "external_client_id",
+            jwks_uri: "jwks_uri",
         });
     });
 

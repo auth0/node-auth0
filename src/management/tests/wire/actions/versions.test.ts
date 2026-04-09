@@ -28,7 +28,7 @@ describe("VersionsClient", () => {
                     built_at: "2024-01-15T09:30:00Z",
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
-                    supported_triggers: [{ id: "id" }],
+                    supported_triggers: [{ id: "post-login" }],
                     modules: [{}],
                 },
             ],
@@ -62,7 +62,7 @@ describe("VersionsClient", () => {
                     updated_at: "2024-01-15T09:30:00Z",
                     supported_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                         },
                     ],
                     modules: [{}],
@@ -170,7 +170,7 @@ describe("VersionsClient", () => {
             action: {
                 id: "id",
                 name: "name",
-                supported_triggers: [{ id: "id" }],
+                supported_triggers: [{ id: "post-login" }],
                 all_changes_deployed: true,
                 created_at: "2024-01-15T09:30:00Z",
                 updated_at: "2024-01-15T09:30:00Z",
@@ -180,12 +180,12 @@ describe("VersionsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
+                    compatible_triggers: [{ id: "post-login", version: "version" }],
                     binding_policy: "trigger-bound",
                 },
             ],
@@ -240,7 +240,7 @@ describe("VersionsClient", () => {
                 name: "name",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
                 all_changes_deployed: true,
@@ -252,14 +252,14 @@ describe("VersionsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                             version: "version",
                         },
                     ],
@@ -385,7 +385,7 @@ describe("VersionsClient", () => {
             action: {
                 id: "id",
                 name: "name",
-                supported_triggers: [{ id: "id" }],
+                supported_triggers: [{ id: "post-login" }],
                 all_changes_deployed: true,
                 created_at: "2024-01-15T09:30:00Z",
                 updated_at: "2024-01-15T09:30:00Z",
@@ -395,12 +395,12 @@ describe("VersionsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
+                    compatible_triggers: [{ id: "post-login", version: "version" }],
                     binding_policy: "trigger-bound",
                 },
             ],
@@ -455,7 +455,7 @@ describe("VersionsClient", () => {
                 name: "name",
                 supported_triggers: [
                     {
-                        id: "id",
+                        id: "post-login",
                     },
                 ],
                 all_changes_deployed: true,
@@ -467,14 +467,14 @@ describe("VersionsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             supported_triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                             version: "version",
                         },
                     ],

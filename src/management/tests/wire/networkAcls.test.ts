@@ -139,19 +139,13 @@ describe("NetworkAclsClient", () => {
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 1.1,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
 
         server.mockEndpoint().post("/network-acls").jsonBody(rawRequestBody).respondWith().statusCode(200).build();
 
         const response = await client.networkAcls.create({
             description: "description",
             active: true,
-            priority: 1.1,
             rule: {
                 action: {},
                 scope: "management",
@@ -163,12 +157,7 @@ describe("NetworkAclsClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -183,7 +172,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.create({
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -195,12 +183,7 @@ describe("NetworkAclsClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -215,7 +198,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.create({
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -227,12 +209,7 @@ describe("NetworkAclsClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -247,7 +224,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.create({
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -259,12 +235,7 @@ describe("NetworkAclsClient", () => {
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -279,7 +250,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.create({
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -291,12 +261,7 @@ describe("NetworkAclsClient", () => {
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -311,7 +276,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.create({
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -323,12 +287,7 @@ describe("NetworkAclsClient", () => {
     test("create (7)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -343,7 +302,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.create({
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -373,6 +331,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 not_match: {
                     asns: [1],
@@ -384,6 +345,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 scope: "management",
             },
@@ -416,6 +380,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 not_match: {
                     asns: [1],
@@ -427,6 +394,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 scope: "management",
             },
@@ -486,12 +456,7 @@ describe("NetworkAclsClient", () => {
     test("set (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 1.1,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = {
             id: "id",
             description: "description",
@@ -509,6 +474,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 not_match: {
                     asns: [1],
@@ -520,6 +488,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 scope: "management",
             },
@@ -538,7 +509,6 @@ describe("NetworkAclsClient", () => {
         const response = await client.networkAcls.set("id", {
             description: "description",
             active: true,
-            priority: 1.1,
             rule: {
                 action: {},
                 scope: "management",
@@ -567,6 +537,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 not_match: {
                     asns: [1],
@@ -578,6 +551,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 scope: "management",
             },
@@ -589,12 +565,7 @@ describe("NetworkAclsClient", () => {
     test("set (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -609,7 +580,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.set("id", {
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -621,12 +591,7 @@ describe("NetworkAclsClient", () => {
     test("set (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -641,7 +606,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.set("id", {
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -653,12 +617,7 @@ describe("NetworkAclsClient", () => {
     test("set (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -673,7 +632,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.set("id", {
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -685,12 +643,7 @@ describe("NetworkAclsClient", () => {
     test("set (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -705,7 +658,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.set("id", {
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -717,12 +669,7 @@ describe("NetworkAclsClient", () => {
     test("set (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            description: "description",
-            active: true,
-            priority: 100,
-            rule: { action: {}, scope: "management" },
-        };
+        const rawRequestBody = { description: "description", active: true, rule: { action: {}, scope: "management" } };
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
@@ -737,7 +684,6 @@ describe("NetworkAclsClient", () => {
             return await client.networkAcls.set("id", {
                 description: "description",
                 active: true,
-                priority: 100,
                 rule: {
                     action: {},
                     scope: "management",
@@ -867,6 +813,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 not_match: {
                     asns: [1],
@@ -878,6 +827,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 scope: "management",
             },
@@ -917,6 +869,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 not_match: {
                     asns: [1],
@@ -928,6 +883,9 @@ describe("NetworkAclsClient", () => {
                     ja3_fingerprints: ["ja3_fingerprints"],
                     ja4_fingerprints: ["ja4_fingerprints"],
                     user_agents: ["user_agents"],
+                    hostnames: ["hostnames"],
+                    connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
+                    connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
                 },
                 scope: "management",
             },

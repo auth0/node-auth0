@@ -12,12 +12,12 @@ describe("TriggersClient", () => {
         const rawResponseBody = {
             triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
-                    compatible_triggers: [{ id: "id", version: "version" }],
+                    compatible_triggers: [{ id: "post-login", version: "version" }],
                     binding_policy: "trigger-bound",
                 },
             ],
@@ -28,14 +28,14 @@ describe("TriggersClient", () => {
         expect(response).toEqual({
             triggers: [
                 {
-                    id: "id",
+                    id: "post-login",
                     version: "version",
                     status: "status",
                     runtimes: ["runtimes"],
                     default_runtime: "default_runtime",
                     compatible_triggers: [
                         {
-                            id: "id",
+                            id: "post-login",
                             version: "version",
                         },
                     ],
