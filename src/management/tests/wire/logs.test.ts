@@ -38,6 +38,7 @@ describe("LogsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/logs")
@@ -46,37 +47,7 @@ describe("LogsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            length: 1.1,
-            total: 1.1,
-            logs: [
-                {
-                    date: "date",
-                    type: "type",
-                    description: "description",
-                    connection: "connection",
-                    connection_id: "connection_id",
-                    client_id: "client_id",
-                    client_name: "client_name",
-                    ip: "ip",
-                    hostname: "hostname",
-                    user_id: "user_id",
-                    user_name: "user_name",
-                    audience: "audience",
-                    scope: "scope",
-                    strategy: "strategy",
-                    strategy_type: "strategy_type",
-                    log_id: "log_id",
-                    isMobile: true,
-                    details: {
-                        key: "value",
-                    },
-                    user_agent: "user_agent",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.logs.list({
             page: 1,
             per_page: 1,
@@ -98,6 +69,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/logs")
@@ -116,6 +88,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/logs")
@@ -134,6 +107,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/logs")
@@ -152,6 +126,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/logs")
@@ -201,46 +176,11 @@ describe("LogsClient", () => {
                 continent_code: "continent_code",
             },
         };
+
         server.mockEndpoint().get("/logs/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.logs.get("id");
-        expect(response).toEqual({
-            date: "date",
-            type: "type",
-            description: "description",
-            connection: "connection",
-            connection_id: "connection_id",
-            client_id: "client_id",
-            client_name: "client_name",
-            ip: "ip",
-            hostname: "hostname",
-            user_id: "user_id",
-            user_name: "user_name",
-            audience: "audience",
-            scope: "scope",
-            strategy: "strategy",
-            strategy_type: "strategy_type",
-            log_id: "log_id",
-            isMobile: true,
-            details: {
-                key: "value",
-            },
-            user_agent: "user_agent",
-            security_context: {
-                ja3: "ja3",
-                ja4: "ja4",
-            },
-            location_info: {
-                country_code: "country_code",
-                country_code3: "country_code3",
-                country_name: "country_name",
-                city_name: "city_name",
-                latitude: 1.1,
-                longitude: 1.1,
-                time_zone: "time_zone",
-                continent_code: "continent_code",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -248,6 +188,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/logs/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -260,6 +201,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/logs/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -272,6 +214,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/logs/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -284,6 +227,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/logs/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -296,6 +240,7 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/logs/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {

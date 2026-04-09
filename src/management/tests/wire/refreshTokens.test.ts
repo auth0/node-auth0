@@ -27,6 +27,7 @@ describe("RefreshTokensClient", () => {
             ],
             next: "next",
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/refresh-tokens")
@@ -35,26 +36,7 @@ describe("RefreshTokensClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            refresh_tokens: [
-                {
-                    id: "id",
-                    user_id: "user_id",
-                    created_at: "2024-01-15T09:30:00Z",
-                    idle_expires_at: "2024-01-15T09:30:00Z",
-                    expires_at: "2024-01-15T09:30:00Z",
-                    client_id: "client_id",
-                    session_id: "session_id",
-                    rotating: true,
-                    resource_servers: [{}],
-                    refresh_token_metadata: {
-                        key: "value",
-                    },
-                    last_exchanged_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-            next: "next",
-        };
+        const expected = rawResponseBody;
         const page = await client.refreshTokens.list({
             user_id: "user_id",
             client_id: "client_id",
@@ -75,6 +57,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -89,6 +72,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -103,6 +87,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -117,6 +102,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -131,6 +117,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -165,37 +152,11 @@ describe("RefreshTokensClient", () => {
             refresh_token_metadata: { key: "value" },
             last_exchanged_at: "2024-01-15T09:30:00Z",
         };
+
         server.mockEndpoint().get("/refresh-tokens/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.refreshTokens.get("id");
-        expect(response).toEqual({
-            id: "id",
-            user_id: "user_id",
-            created_at: "2024-01-15T09:30:00Z",
-            idle_expires_at: "2024-01-15T09:30:00Z",
-            expires_at: "2024-01-15T09:30:00Z",
-            device: {
-                initial_ip: "initial_ip",
-                initial_asn: "initial_asn",
-                initial_user_agent: "initial_user_agent",
-                last_ip: "last_ip",
-                last_asn: "last_asn",
-                last_user_agent: "last_user_agent",
-            },
-            client_id: "client_id",
-            session_id: "session_id",
-            rotating: true,
-            resource_servers: [
-                {
-                    audience: "audience",
-                    scopes: "scopes",
-                },
-            ],
-            refresh_token_metadata: {
-                key: "value",
-            },
-            last_exchanged_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -203,6 +164,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -215,6 +177,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -227,6 +190,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -239,6 +203,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/refresh-tokens/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -261,6 +226,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/refresh-tokens/id")
@@ -279,6 +245,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/refresh-tokens/id")
@@ -297,6 +264,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/refresh-tokens/id")
@@ -315,6 +283,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/refresh-tokens/id")
@@ -353,6 +322,7 @@ describe("RefreshTokensClient", () => {
             refresh_token_metadata: { key: "value" },
             last_exchanged_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .patch("/refresh-tokens/id")
@@ -363,34 +333,7 @@ describe("RefreshTokensClient", () => {
             .build();
 
         const response = await client.refreshTokens.update("id");
-        expect(response).toEqual({
-            id: "id",
-            user_id: "user_id",
-            created_at: "2024-01-15T09:30:00Z",
-            idle_expires_at: "2024-01-15T09:30:00Z",
-            expires_at: "2024-01-15T09:30:00Z",
-            device: {
-                initial_ip: "initial_ip",
-                initial_asn: "initial_asn",
-                initial_user_agent: "initial_user_agent",
-                last_ip: "last_ip",
-                last_asn: "last_asn",
-                last_user_agent: "last_user_agent",
-            },
-            client_id: "client_id",
-            session_id: "session_id",
-            rotating: true,
-            resource_servers: [
-                {
-                    audience: "audience",
-                    scopes: "scopes",
-                },
-            ],
-            refresh_token_metadata: {
-                key: "value",
-            },
-            last_exchanged_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -398,6 +341,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/refresh-tokens/id")
@@ -417,6 +361,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/refresh-tokens/id")
@@ -436,6 +381,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/refresh-tokens/id")
@@ -455,6 +401,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/refresh-tokens/id")
@@ -474,6 +421,7 @@ describe("RefreshTokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/refresh-tokens/id")

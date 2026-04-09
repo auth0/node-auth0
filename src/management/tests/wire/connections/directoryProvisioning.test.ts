@@ -27,6 +27,7 @@ describe("DirectoryProvisioningClient", () => {
             ],
             next: "next",
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/connections-directory-provisionings")
@@ -35,29 +36,7 @@ describe("DirectoryProvisioningClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            directory_provisionings: [
-                {
-                    connection_id: "connection_id",
-                    connection_name: "connection_name",
-                    strategy: "strategy",
-                    mapping: [
-                        {
-                            auth0: "auth0",
-                            idp: "idp",
-                        },
-                    ],
-                    synchronize_automatically: true,
-                    synchronize_groups: "all",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                    last_synchronization_at: "2024-01-15T09:30:00Z",
-                    last_synchronization_status: "last_synchronization_status",
-                    last_synchronization_error: "last_synchronization_error",
-                },
-            ],
-            next: "next",
-        };
+        const expected = rawResponseBody;
         const page = await client.connections.directoryProvisioning.list({
             from: "from",
             take: 1,
@@ -74,6 +53,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-directory-provisionings")
@@ -92,6 +72,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-directory-provisionings")
@@ -110,6 +91,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-directory-provisionings")
@@ -128,6 +110,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections-directory-provisionings")
@@ -158,6 +141,7 @@ describe("DirectoryProvisioningClient", () => {
             last_synchronization_status: "last_synchronization_status",
             last_synchronization_error: "last_synchronization_error",
         };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning")
@@ -167,24 +151,7 @@ describe("DirectoryProvisioningClient", () => {
             .build();
 
         const response = await client.connections.directoryProvisioning.get("id");
-        expect(response).toEqual({
-            connection_id: "connection_id",
-            connection_name: "connection_name",
-            strategy: "strategy",
-            mapping: [
-                {
-                    auth0: "auth0",
-                    idp: "idp",
-                },
-            ],
-            synchronize_automatically: true,
-            synchronize_groups: "all",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            last_synchronization_at: "2024-01-15T09:30:00Z",
-            last_synchronization_status: "last_synchronization_status",
-            last_synchronization_error: "last_synchronization_error",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -192,6 +159,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning")
@@ -210,6 +178,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning")
@@ -228,6 +197,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning")
@@ -246,6 +216,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning")
@@ -264,6 +235,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning")
@@ -294,6 +266,7 @@ describe("DirectoryProvisioningClient", () => {
             last_synchronization_status: "last_synchronization_status",
             last_synchronization_error: "last_synchronization_error",
         };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning")
@@ -303,24 +276,7 @@ describe("DirectoryProvisioningClient", () => {
             .build();
 
         const response = await client.connections.directoryProvisioning.create("id");
-        expect(response).toEqual({
-            connection_id: "connection_id",
-            connection_name: "connection_name",
-            strategy: "strategy",
-            mapping: [
-                {
-                    auth0: "auth0",
-                    idp: "idp",
-                },
-            ],
-            synchronize_automatically: true,
-            synchronize_groups: "all",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            last_synchronization_at: "2024-01-15T09:30:00Z",
-            last_synchronization_status: "last_synchronization_status",
-            last_synchronization_error: "last_synchronization_error",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -328,6 +284,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning")
@@ -346,6 +303,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning")
@@ -364,6 +322,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning")
@@ -382,6 +341,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning")
@@ -400,6 +360,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning")
@@ -418,6 +379,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning")
@@ -446,6 +408,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connections/id/directory-provisioning")
@@ -464,6 +427,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connections/id/directory-provisioning")
@@ -482,6 +446,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connections/id/directory-provisioning")
@@ -500,6 +465,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connections/id/directory-provisioning")
@@ -518,6 +484,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/connections/id/directory-provisioning")
@@ -548,6 +515,7 @@ describe("DirectoryProvisioningClient", () => {
             last_synchronization_status: "last_synchronization_status",
             last_synchronization_error: "last_synchronization_error",
         };
+
         server
             .mockEndpoint()
             .patch("/connections/id/directory-provisioning")
@@ -557,24 +525,7 @@ describe("DirectoryProvisioningClient", () => {
             .build();
 
         const response = await client.connections.directoryProvisioning.update("id");
-        expect(response).toEqual({
-            connection_id: "connection_id",
-            connection_name: "connection_name",
-            strategy: "strategy",
-            mapping: [
-                {
-                    auth0: "auth0",
-                    idp: "idp",
-                },
-            ],
-            synchronize_automatically: true,
-            synchronize_groups: "all",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            last_synchronization_at: "2024-01-15T09:30:00Z",
-            last_synchronization_status: "last_synchronization_status",
-            last_synchronization_error: "last_synchronization_error",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -582,6 +533,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id/directory-provisioning")
@@ -600,6 +552,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id/directory-provisioning")
@@ -618,6 +571,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id/directory-provisioning")
@@ -636,6 +590,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id/directory-provisioning")
@@ -654,6 +609,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id/directory-provisioning")
@@ -672,6 +628,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { mapping: [{ auth0: "auth0", idp: "idp" }] };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning/default-mapping")
@@ -681,14 +638,7 @@ describe("DirectoryProvisioningClient", () => {
             .build();
 
         const response = await client.connections.directoryProvisioning.getDefaultMapping("id");
-        expect(response).toEqual({
-            mapping: [
-                {
-                    auth0: "auth0",
-                    idp: "idp",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getDefaultMapping (2)", async () => {
@@ -696,6 +646,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning/default-mapping")
@@ -714,6 +665,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning/default-mapping")
@@ -732,6 +684,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning/default-mapping")
@@ -750,6 +703,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning/default-mapping")
@@ -768,6 +722,7 @@ describe("DirectoryProvisioningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/directory-provisioning/default-mapping")

@@ -13,7 +13,6 @@
     "types": "./dist/cjs/index.d.ts",
     "exports": {
         ".": {
-            "types": "./dist/cjs/index.d.ts",
             "import": {
                 "types": "./dist/esm/index.d.mts",
                 "default": "./dist/esm/index.mjs"
@@ -23,6 +22,1403 @@
                 "default": "./dist/cjs/index.js"
             },
             "default": "./dist/cjs/index.js"
+        },
+        "./actions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/actions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/actions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/actions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/actions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/actions/exports.js"
+        },
+        "./branding": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/branding/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/branding/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/branding/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/branding/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/branding/exports.js"
+        },
+        "./clientGrants": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/clientGrants/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/clientGrants/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/clientGrants/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/clientGrants/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/clientGrants/exports.js"
+        },
+        "./clients": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/clients/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/clients/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/clients/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/clients/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/clients/exports.js"
+        },
+        "./connectionProfiles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connectionProfiles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connectionProfiles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connectionProfiles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connectionProfiles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connectionProfiles/exports.js"
+        },
+        "./connections": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/exports.js"
+        },
+        "./customDomains": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/customDomains/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/customDomains/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/customDomains/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/customDomains/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/customDomains/exports.js"
+        },
+        "./deviceCredentials": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/deviceCredentials/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/deviceCredentials/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/deviceCredentials/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/deviceCredentials/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/deviceCredentials/exports.js"
+        },
+        "./emailTemplates": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/emailTemplates/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/emailTemplates/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/emailTemplates/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/emailTemplates/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/emailTemplates/exports.js"
+        },
+        "./eventStreams": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/eventStreams/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/eventStreams/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/eventStreams/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/eventStreams/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/eventStreams/exports.js"
+        },
+        "./flows": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/flows/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/flows/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/flows/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/flows/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/flows/exports.js"
+        },
+        "./forms": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/forms/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/forms/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/forms/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/forms/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/forms/exports.js"
+        },
+        "./userGrants": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/userGrants/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/userGrants/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/userGrants/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/userGrants/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/userGrants/exports.js"
+        },
+        "./groups": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/groups/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/groups/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/groups/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/groups/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/groups/exports.js"
+        },
+        "./hooks": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/hooks/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/hooks/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/hooks/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/hooks/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/hooks/exports.js"
+        },
+        "./jobs": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/jobs/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/jobs/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/jobs/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/jobs/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/jobs/exports.js"
+        },
+        "./logStreams": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/logStreams/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/logStreams/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/logStreams/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/logStreams/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/logStreams/exports.js"
+        },
+        "./logs": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/logs/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/logs/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/logs/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/logs/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/logs/exports.js"
+        },
+        "./networkAcls": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/networkAcls/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/networkAcls/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/networkAcls/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/networkAcls/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/networkAcls/exports.js"
+        },
+        "./organizations": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/exports.js"
+        },
+        "./prompts": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/prompts/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/prompts/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/prompts/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/prompts/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/prompts/exports.js"
+        },
+        "./refreshTokens": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/refreshTokens/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/refreshTokens/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/refreshTokens/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/refreshTokens/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/refreshTokens/exports.js"
+        },
+        "./resourceServers": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/resourceServers/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/resourceServers/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/resourceServers/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/resourceServers/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/resourceServers/exports.js"
+        },
+        "./roles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/roles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/roles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/roles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/roles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/roles/exports.js"
+        },
+        "./rules": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/rules/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/rules/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/rules/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/rules/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/rules/exports.js"
+        },
+        "./rulesConfigs": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/rulesConfigs/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/rulesConfigs/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/rulesConfigs/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/rulesConfigs/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/rulesConfigs/exports.js"
+        },
+        "./selfServiceProfiles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/selfServiceProfiles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/selfServiceProfiles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/selfServiceProfiles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/selfServiceProfiles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/selfServiceProfiles/exports.js"
+        },
+        "./sessions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/sessions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/sessions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/sessions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/sessions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/sessions/exports.js"
+        },
+        "./stats": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/stats/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/stats/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/stats/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/stats/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/stats/exports.js"
+        },
+        "./supplementalSignals": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/supplementalSignals/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/supplementalSignals/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/supplementalSignals/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/supplementalSignals/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/supplementalSignals/exports.js"
+        },
+        "./tickets": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/tickets/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/tickets/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/tickets/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/tickets/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/tickets/exports.js"
+        },
+        "./tokenExchangeProfiles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/tokenExchangeProfiles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/tokenExchangeProfiles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/tokenExchangeProfiles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/tokenExchangeProfiles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/tokenExchangeProfiles/exports.js"
+        },
+        "./userAttributeProfiles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/userAttributeProfiles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/userAttributeProfiles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/userAttributeProfiles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/userAttributeProfiles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/userAttributeProfiles/exports.js"
+        },
+        "./userBlocks": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/userBlocks/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/userBlocks/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/userBlocks/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/userBlocks/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/userBlocks/exports.js"
+        },
+        "./users": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/exports.js"
+        },
+        "./actions/versions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/actions/resources/versions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/actions/resources/versions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/actions/resources/versions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/actions/resources/versions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/actions/resources/versions/exports.js"
+        },
+        "./actions/executions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/actions/resources/executions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/actions/resources/executions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/actions/resources/executions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/actions/resources/executions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/actions/resources/executions/exports.js"
+        },
+        "./actions/modules": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/actions/resources/modules/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/actions/resources/modules/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/actions/resources/modules/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/actions/resources/modules/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/actions/resources/modules/exports.js"
+        },
+        "./actions/triggers": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/actions/resources/triggers/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/actions/resources/triggers/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/actions/resources/triggers/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/actions/resources/triggers/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/actions/resources/triggers/exports.js"
+        },
+        "./actions/modules/versions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/actions/resources/modules/resources/versions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/actions/resources/modules/resources/versions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/actions/resources/modules/resources/versions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/actions/resources/modules/resources/versions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/actions/resources/modules/resources/versions/exports.js"
+        },
+        "./actions/triggers/bindings": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/actions/resources/triggers/resources/bindings/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/actions/resources/triggers/resources/bindings/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/actions/resources/triggers/resources/bindings/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/actions/resources/triggers/resources/bindings/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/actions/resources/triggers/resources/bindings/exports.js"
+        },
+        "./anomaly": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/anomaly/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/anomaly/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/anomaly/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/anomaly/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/anomaly/exports.js"
+        },
+        "./anomaly/blocks": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/anomaly/resources/blocks/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/anomaly/resources/blocks/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/anomaly/resources/blocks/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/anomaly/resources/blocks/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/anomaly/resources/blocks/exports.js"
+        },
+        "./attackProtection": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/attackProtection/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/attackProtection/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/attackProtection/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/attackProtection/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/attackProtection/exports.js"
+        },
+        "./attackProtection/botDetection": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/attackProtection/resources/botDetection/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/attackProtection/resources/botDetection/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/attackProtection/resources/botDetection/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/attackProtection/resources/botDetection/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/attackProtection/resources/botDetection/exports.js"
+        },
+        "./attackProtection/breachedPasswordDetection": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.js"
+        },
+        "./attackProtection/bruteForceProtection": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/attackProtection/resources/bruteForceProtection/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/attackProtection/resources/bruteForceProtection/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/attackProtection/resources/bruteForceProtection/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/attackProtection/resources/bruteForceProtection/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/attackProtection/resources/bruteForceProtection/exports.js"
+        },
+        "./attackProtection/captcha": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/attackProtection/resources/captcha/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/attackProtection/resources/captcha/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
+        },
+        "./attackProtection/suspiciousIpThrottling": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.js"
+        },
+        "./branding/templates": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/branding/resources/templates/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/branding/resources/templates/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/branding/resources/templates/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/branding/resources/templates/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/branding/resources/templates/exports.js"
+        },
+        "./branding/themes": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/branding/resources/themes/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/branding/resources/themes/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/branding/resources/themes/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/branding/resources/themes/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/branding/resources/themes/exports.js"
+        },
+        "./branding/phone": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/branding/resources/phone/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/branding/resources/phone/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/branding/resources/phone/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/branding/resources/phone/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/branding/resources/phone/exports.js"
+        },
+        "./branding/phone/providers": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/branding/resources/phone/resources/providers/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/branding/resources/phone/resources/providers/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/branding/resources/phone/resources/providers/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/providers/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/providers/exports.js"
+        },
+        "./branding/phone/templates": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/branding/resources/phone/resources/templates/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/branding/resources/phone/resources/templates/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/branding/resources/phone/resources/templates/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/templates/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/templates/exports.js"
+        },
+        "./clientGrants/organizations": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/clientGrants/resources/organizations/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/clientGrants/resources/organizations/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/clientGrants/resources/organizations/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/clientGrants/resources/organizations/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/clientGrants/resources/organizations/exports.js"
+        },
+        "./clients/credentials": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/clients/resources/credentials/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/clients/resources/credentials/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/clients/resources/credentials/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/clients/resources/credentials/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/clients/resources/credentials/exports.js"
+        },
+        "./clients/connections": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/clients/resources/connections/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/clients/resources/connections/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/clients/resources/connections/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/clients/resources/connections/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/clients/resources/connections/exports.js"
+        },
+        "./connections/directoryProvisioning": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/exports.js"
+        },
+        "./connections/scimConfiguration": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/exports.js"
+        },
+        "./connections/clients": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/resources/clients/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/resources/clients/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/resources/clients/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/resources/clients/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/resources/clients/exports.js"
+        },
+        "./connections/keys": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/resources/keys/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/resources/keys/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/resources/keys/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/resources/keys/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/resources/keys/exports.js"
+        },
+        "./connections/users": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/resources/users/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/resources/users/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/resources/users/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/resources/users/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/resources/users/exports.js"
+        },
+        "./connections/directoryProvisioning/synchronizations": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.js"
+        },
+        "./connections/scimConfiguration/tokens": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.js"
+        },
+        "./emails": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/emails/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/emails/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/emails/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/emails/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/emails/exports.js"
+        },
+        "./emails/provider": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/emails/resources/provider/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/emails/resources/provider/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/emails/resources/provider/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/emails/resources/provider/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/emails/resources/provider/exports.js"
+        },
+        "./eventStreams/deliveries": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/eventStreams/resources/deliveries/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/eventStreams/resources/deliveries/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/eventStreams/resources/deliveries/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/eventStreams/resources/deliveries/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/eventStreams/resources/deliveries/exports.js"
+        },
+        "./eventStreams/redeliveries": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/eventStreams/resources/redeliveries/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/eventStreams/resources/redeliveries/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/eventStreams/resources/redeliveries/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/eventStreams/resources/redeliveries/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/eventStreams/resources/redeliveries/exports.js"
+        },
+        "./flows/executions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/flows/resources/executions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/flows/resources/executions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/flows/resources/executions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/flows/resources/executions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/flows/resources/executions/exports.js"
+        },
+        "./flows/vault": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/flows/resources/vault/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/flows/resources/vault/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/flows/resources/vault/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/flows/resources/vault/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/flows/resources/vault/exports.js"
+        },
+        "./flows/vault/connections": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/flows/resources/vault/resources/connections/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/flows/resources/vault/resources/connections/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/flows/resources/vault/resources/connections/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/flows/resources/vault/resources/connections/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/flows/resources/vault/resources/connections/exports.js"
+        },
+        "./groups/members": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/groups/resources/members/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/groups/resources/members/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/groups/resources/members/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/groups/resources/members/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/groups/resources/members/exports.js"
+        },
+        "./guardian": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/exports.js"
+        },
+        "./guardian/enrollments": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/enrollments/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/enrollments/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/enrollments/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/enrollments/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/enrollments/exports.js"
+        },
+        "./guardian/factors": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/factors/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/factors/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/exports.js"
+        },
+        "./guardian/policies": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/policies/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/policies/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.js"
+        },
+        "./guardian/factors/phone": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/phone/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/phone/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/phone/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/phone/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/phone/exports.js"
+        },
+        "./guardian/factors/pushNotification": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.js"
+        },
+        "./guardian/factors/sms": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/sms/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/sms/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/sms/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/sms/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/sms/exports.js"
+        },
+        "./guardian/factors/duo": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/exports.js"
+        },
+        "./guardian/factors/duo/settings": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.js"
+        },
+        "./hooks/secrets": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/hooks/resources/secrets/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/hooks/resources/secrets/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/hooks/resources/secrets/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/hooks/resources/secrets/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/hooks/resources/secrets/exports.js"
+        },
+        "./jobs/usersExports": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/jobs/resources/usersExports/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/jobs/resources/usersExports/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/jobs/resources/usersExports/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/jobs/resources/usersExports/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/jobs/resources/usersExports/exports.js"
+        },
+        "./jobs/usersImports": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/jobs/resources/usersImports/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/jobs/resources/usersImports/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/jobs/resources/usersImports/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/jobs/resources/usersImports/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/jobs/resources/usersImports/exports.js"
+        },
+        "./jobs/verificationEmail": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/jobs/resources/verificationEmail/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/jobs/resources/verificationEmail/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/jobs/resources/verificationEmail/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/jobs/resources/verificationEmail/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/jobs/resources/verificationEmail/exports.js"
+        },
+        "./jobs/errors": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/jobs/resources/errors/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/jobs/resources/errors/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/jobs/resources/errors/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/jobs/resources/errors/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/jobs/resources/errors/exports.js"
+        },
+        "./keys": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/keys/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/keys/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/keys/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/keys/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/keys/exports.js"
+        },
+        "./keys/customSigning": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/keys/resources/customSigning/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/keys/resources/customSigning/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/keys/resources/customSigning/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/keys/resources/customSigning/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/keys/resources/customSigning/exports.js"
+        },
+        "./keys/encryption": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/keys/resources/encryption/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/keys/resources/encryption/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.js"
+        },
+        "./keys/signing": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/keys/resources/signing/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/keys/resources/signing/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/keys/resources/signing/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/keys/resources/signing/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/keys/resources/signing/exports.js"
+        },
+        "./organizations/clientGrants": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/clientGrants/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/clientGrants/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.js"
+        },
+        "./organizations/connections": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/connections/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/connections/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/connections/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/connections/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/connections/exports.js"
+        },
+        "./organizations/discoveryDomains": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/discoveryDomains/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/discoveryDomains/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/discoveryDomains/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/discoveryDomains/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/discoveryDomains/exports.js"
+        },
+        "./organizations/enabledConnections": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/enabledConnections/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/enabledConnections/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/enabledConnections/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/enabledConnections/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/enabledConnections/exports.js"
+        },
+        "./organizations/invitations": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/invitations/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/invitations/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/invitations/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/invitations/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/invitations/exports.js"
+        },
+        "./organizations/members": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/members/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/members/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/members/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
+        },
+        "./organizations/members/roles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/members/resources/roles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/members/resources/roles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/members/resources/roles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/roles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/roles/exports.js"
+        },
+        "./prompts/rendering": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/prompts/resources/rendering/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/prompts/resources/rendering/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/prompts/resources/rendering/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/prompts/resources/rendering/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/prompts/resources/rendering/exports.js"
+        },
+        "./prompts/customText": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/prompts/resources/customText/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/prompts/resources/customText/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/prompts/resources/customText/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/prompts/resources/customText/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/prompts/resources/customText/exports.js"
+        },
+        "./prompts/partials": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/prompts/resources/partials/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/prompts/resources/partials/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/prompts/resources/partials/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/prompts/resources/partials/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/prompts/resources/partials/exports.js"
+        },
+        "./riskAssessments": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/riskAssessments/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/riskAssessments/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/riskAssessments/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/riskAssessments/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/riskAssessments/exports.js"
+        },
+        "./riskAssessments/settings": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/riskAssessments/resources/settings/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/riskAssessments/resources/settings/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/exports.js"
+        },
+        "./riskAssessments/settings/newDevice": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.js"
+        },
+        "./roles/permissions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/roles/resources/permissions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/roles/resources/permissions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/roles/resources/permissions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/roles/resources/permissions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/roles/resources/permissions/exports.js"
+        },
+        "./roles/users": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/roles/resources/users/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/roles/resources/users/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/roles/resources/users/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/roles/resources/users/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/roles/resources/users/exports.js"
+        },
+        "./selfServiceProfiles/customText": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/selfServiceProfiles/resources/customText/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/selfServiceProfiles/resources/customText/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/customText/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/customText/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/customText/exports.js"
+        },
+        "./selfServiceProfiles/ssoTicket": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.js"
+        },
+        "./tenants": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/tenants/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/tenants/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/tenants/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/tenants/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/tenants/exports.js"
+        },
+        "./tenants/settings": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/tenants/resources/settings/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/tenants/resources/settings/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/tenants/resources/settings/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/tenants/resources/settings/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/tenants/resources/settings/exports.js"
+        },
+        "./users/authenticationMethods": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/authenticationMethods/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/authenticationMethods/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/authenticationMethods/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/authenticationMethods/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/authenticationMethods/exports.js"
+        },
+        "./users/authenticators": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/authenticators/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/authenticators/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/authenticators/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/authenticators/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/authenticators/exports.js"
+        },
+        "./users/connectedAccounts": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/connectedAccounts/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/connectedAccounts/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/connectedAccounts/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/connectedAccounts/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/connectedAccounts/exports.js"
+        },
+        "./users/enrollments": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/enrollments/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/enrollments/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/enrollments/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/enrollments/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/enrollments/exports.js"
+        },
+        "./users/federatedConnectionsTokensets": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/federatedConnectionsTokensets/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/federatedConnectionsTokensets/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/federatedConnectionsTokensets/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/federatedConnectionsTokensets/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/federatedConnectionsTokensets/exports.js"
+        },
+        "./users/groups": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/groups/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/groups/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/groups/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/groups/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/groups/exports.js"
+        },
+        "./users/identities": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/identities/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/identities/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/identities/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/identities/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/identities/exports.js"
+        },
+        "./users/logs": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/logs/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/logs/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/logs/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/logs/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/logs/exports.js"
+        },
+        "./users/multifactor": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/multifactor/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/multifactor/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/multifactor/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/multifactor/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/multifactor/exports.js"
+        },
+        "./users/organizations": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/organizations/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/organizations/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/organizations/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/organizations/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/organizations/exports.js"
+        },
+        "./users/permissions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/permissions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/permissions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/permissions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/permissions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/permissions/exports.js"
+        },
+        "./users/riskAssessments": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/riskAssessments/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/riskAssessments/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/riskAssessments/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/riskAssessments/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/riskAssessments/exports.js"
+        },
+        "./users/roles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/roles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/roles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/roles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/roles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/roles/exports.js"
+        },
+        "./users/refreshToken": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/refreshToken/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/refreshToken/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/refreshToken/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/refreshToken/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/refreshToken/exports.js"
+        },
+        "./users/sessions": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/users/resources/sessions/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/users/resources/sessions/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/users/resources/sessions/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/users/resources/sessions/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/users/resources/sessions/exports.js"
+        },
+        "./verifiableCredentials": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/verifiableCredentials/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/verifiableCredentials/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/verifiableCredentials/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/verifiableCredentials/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/verifiableCredentials/exports.js"
+        },
+        "./verifiableCredentials/verification": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/exports.js"
+        },
+        "./verifiableCredentials/verification/templates": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.js"
         },
         "./package.json": "./package.json",
         "./legacy": {
@@ -77,8 +1473,8 @@
         "auth0-legacy": "npm:auth0@^4.27.0"
     },
     "devDependencies": {
-        "webpack": "^5.97.1",
-        "ts-loader": "^9.5.1",
+        "webpack": "^5.105.4",
+        "ts-loader": "^9.5.4",
         "jest": "^29.7.0",
         "@jest/globals": "^29.7.0",
         "@types/jest": "^29.5.14",
@@ -86,8 +1482,8 @@
         "jest-environment-jsdom": "^29.7.0",
         "msw": "2.11.2",
         "@types/node": "^18.19.70",
-        "typescript": "~5.7.2",
-        "prettier": "3.7.4",
+        "typescript": "~5.9.3",
+        "prettier": "3.8.1",
         "typedoc": "^0.28.7",
         "typedoc-plugin-missing-exports": "^4.0.0",
         "nock": "^14.0.6",

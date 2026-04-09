@@ -24,6 +24,7 @@ describe("FormsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/forms")
@@ -32,21 +33,7 @@ describe("FormsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            forms: [
-                {
-                    id: "id",
-                    name: "name",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                    embedded_at: "embedded_at",
-                    submitted_at: "submitted_at",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.forms.list({
             page: 1,
             per_page: 1,
@@ -64,6 +51,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/forms")
@@ -82,6 +70,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/forms")
@@ -100,6 +89,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/forms")
@@ -118,6 +108,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/forms")
@@ -157,6 +148,7 @@ describe("FormsClient", () => {
             embedded_at: "embedded_at",
             submitted_at: "submitted_at",
         };
+
         server
             .mockEndpoint()
             .post("/forms")
@@ -169,74 +161,7 @@ describe("FormsClient", () => {
         const response = await client.forms.create({
             name: "name",
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            messages: {
-                errors: {
-                    key: "value",
-                },
-                custom: {
-                    key: "value",
-                },
-            },
-            languages: {
-                primary: "primary",
-                default: "default",
-            },
-            translations: {
-                key: {
-                    key: "value",
-                },
-            },
-            nodes: [
-                {
-                    id: "id",
-                    type: "FLOW",
-                    coordinates: {
-                        x: 1,
-                        y: 1,
-                    },
-                    alias: "alias",
-                    config: {
-                        flow_id: "flow_id",
-                    },
-                },
-            ],
-            start: {
-                hidden_fields: [
-                    {
-                        key: "key",
-                    },
-                ],
-                next_node: "$ending",
-                coordinates: {
-                    x: 1,
-                    y: 1,
-                },
-            },
-            ending: {
-                redirection: {
-                    delay: 1,
-                    target: "target",
-                },
-                after_submit: {
-                    flow_id: "flow_id",
-                },
-                coordinates: {
-                    x: 1,
-                    y: 1,
-                },
-                resume_flow: true,
-            },
-            style: {
-                css: "css",
-            },
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            embedded_at: "embedded_at",
-            submitted_at: "submitted_at",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -244,6 +169,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/forms")
@@ -265,6 +191,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/forms")
@@ -286,6 +213,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/forms")
@@ -307,6 +235,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/forms")
@@ -349,77 +278,11 @@ describe("FormsClient", () => {
             embedded_at: "embedded_at",
             submitted_at: "submitted_at",
         };
+
         server.mockEndpoint().get("/forms/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.forms.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            messages: {
-                errors: {
-                    key: "value",
-                },
-                custom: {
-                    key: "value",
-                },
-            },
-            languages: {
-                primary: "primary",
-                default: "default",
-            },
-            translations: {
-                key: {
-                    key: "value",
-                },
-            },
-            nodes: [
-                {
-                    id: "id",
-                    type: "FLOW",
-                    coordinates: {
-                        x: 1,
-                        y: 1,
-                    },
-                    alias: "alias",
-                    config: {
-                        flow_id: "flow_id",
-                    },
-                },
-            ],
-            start: {
-                hidden_fields: [
-                    {
-                        key: "key",
-                    },
-                ],
-                next_node: "$ending",
-                coordinates: {
-                    x: 1,
-                    y: 1,
-                },
-            },
-            ending: {
-                redirection: {
-                    delay: 1,
-                    target: "target",
-                },
-                after_submit: {
-                    flow_id: "flow_id",
-                },
-                coordinates: {
-                    x: 1,
-                    y: 1,
-                },
-                resume_flow: true,
-            },
-            style: {
-                css: "css",
-            },
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            embedded_at: "embedded_at",
-            submitted_at: "submitted_at",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -427,6 +290,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/forms/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -439,6 +303,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/forms/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -451,6 +316,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/forms/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -463,6 +329,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/forms/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -475,6 +342,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/forms/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -497,6 +365,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/forms/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -509,6 +378,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/forms/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -521,6 +391,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/forms/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -533,6 +404,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/forms/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -566,6 +438,7 @@ describe("FormsClient", () => {
             embedded_at: "embedded_at",
             submitted_at: "submitted_at",
         };
+
         server
             .mockEndpoint()
             .patch("/forms/id")
@@ -576,74 +449,7 @@ describe("FormsClient", () => {
             .build();
 
         const response = await client.forms.update("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            messages: {
-                errors: {
-                    key: "value",
-                },
-                custom: {
-                    key: "value",
-                },
-            },
-            languages: {
-                primary: "primary",
-                default: "default",
-            },
-            translations: {
-                key: {
-                    key: "value",
-                },
-            },
-            nodes: [
-                {
-                    id: "id",
-                    type: "FLOW",
-                    coordinates: {
-                        x: 1,
-                        y: 1,
-                    },
-                    alias: "alias",
-                    config: {
-                        flow_id: "flow_id",
-                    },
-                },
-            ],
-            start: {
-                hidden_fields: [
-                    {
-                        key: "key",
-                    },
-                ],
-                next_node: "$ending",
-                coordinates: {
-                    x: 1,
-                    y: 1,
-                },
-            },
-            ending: {
-                redirection: {
-                    delay: 1,
-                    target: "target",
-                },
-                after_submit: {
-                    flow_id: "flow_id",
-                },
-                coordinates: {
-                    x: 1,
-                    y: 1,
-                },
-                resume_flow: true,
-            },
-            style: {
-                css: "css",
-            },
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            embedded_at: "embedded_at",
-            submitted_at: "submitted_at",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -651,6 +457,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/forms/id")
@@ -670,6 +477,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/forms/id")
@@ -689,6 +497,7 @@ describe("FormsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/forms/id")

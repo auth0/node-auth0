@@ -1,4 +1,4 @@
-import { requestWithRetries } from "../../../../../src/management/core/fetcher/requestWithRetries";
+import { requestWithRetries } from "../../../core/fetcher/requestWithRetries";
 
 describe("requestWithRetries", () => {
     let mockFetch: jest.Mock;

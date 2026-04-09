@@ -19,6 +19,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
                 last_used_at: "2024-01-15T09:30:00Z",
             },
         ];
+
         server
             .mockEndpoint()
             .get("/users/id/federated-connections-tokensets")
@@ -28,16 +29,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
             .build();
 
         const response = await client.users.federatedConnectionsTokensets.list("id");
-        expect(response).toEqual([
-            {
-                id: "id",
-                connection: "connection",
-                scope: "scope",
-                expires_at: "2024-01-15T09:30:00Z",
-                issued_at: "2024-01-15T09:30:00Z",
-                last_used_at: "2024-01-15T09:30:00Z",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -45,6 +37,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/federated-connections-tokensets")
@@ -63,6 +56,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/federated-connections-tokensets")
@@ -81,6 +75,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/federated-connections-tokensets")
@@ -99,6 +94,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/federated-connections-tokensets")
@@ -132,6 +128,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/federated-connections-tokensets/tokenset_id")
@@ -150,6 +147,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/federated-connections-tokensets/tokenset_id")
@@ -168,6 +166,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/federated-connections-tokensets/tokenset_id")
@@ -186,6 +185,7 @@ describe("FederatedConnectionsTokensetsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/federated-connections-tokensets/tokenset_id")

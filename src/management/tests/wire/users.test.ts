@@ -40,6 +40,7 @@ describe("UsersClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/users")
@@ -48,41 +49,7 @@ describe("UsersClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            length: 1.1,
-            total: 1.1,
-            users: [
-                {
-                    user_id: "user_id",
-                    email: "email",
-                    email_verified: true,
-                    username: "username",
-                    phone_number: "phone_number",
-                    phone_verified: true,
-                    created_at: "created_at",
-                    updated_at: "updated_at",
-                    identities: [{}],
-                    app_metadata: {
-                        key: "value",
-                    },
-                    user_metadata: {
-                        key: "value",
-                    },
-                    picture: "picture",
-                    name: "name",
-                    nickname: "nickname",
-                    multifactor: ["multifactor"],
-                    last_ip: "last_ip",
-                    last_login: "last_login",
-                    logins_count: 1,
-                    blocked: true,
-                    given_name: "given_name",
-                    family_name: "family_name",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.users.list({
             page: 1,
             per_page: 1,
@@ -107,6 +74,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users")
@@ -125,6 +93,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users")
@@ -143,6 +112,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users")
@@ -161,6 +131,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users")
@@ -179,6 +150,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users")
@@ -229,6 +201,7 @@ describe("UsersClient", () => {
             given_name: "given_name",
             family_name: "family_name",
         };
+
         server
             .mockEndpoint()
             .post("/users")
@@ -241,43 +214,7 @@ describe("UsersClient", () => {
         const response = await client.users.create({
             connection: "connection",
         });
-        expect(response).toEqual({
-            user_id: "user_id",
-            email: "email",
-            email_verified: true,
-            username: "username",
-            phone_number: "phone_number",
-            phone_verified: true,
-            created_at: "created_at",
-            updated_at: "updated_at",
-            identities: [
-                {
-                    connection: "connection",
-                    user_id: "user_id",
-                    provider: "ad",
-                    isSocial: true,
-                    access_token: "access_token",
-                    access_token_secret: "access_token_secret",
-                    refresh_token: "refresh_token",
-                },
-            ],
-            app_metadata: {
-                key: "value",
-            },
-            user_metadata: {
-                key: "value",
-            },
-            picture: "picture",
-            name: "name",
-            nickname: "nickname",
-            multifactor: ["multifactor"],
-            last_ip: "last_ip",
-            last_login: "last_login",
-            logins_count: 1,
-            blocked: true,
-            given_name: "given_name",
-            family_name: "family_name",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -285,6 +222,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "Initial-Connection" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users")
@@ -306,6 +244,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "Initial-Connection" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users")
@@ -327,6 +266,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "Initial-Connection" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users")
@@ -348,6 +288,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "Initial-Connection" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users")
@@ -369,6 +310,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection: "Initial-Connection" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users")
@@ -414,6 +356,7 @@ describe("UsersClient", () => {
                 family_name: "family_name",
             },
         ];
+
         server.mockEndpoint().get("/users-by-email").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.users.listUsersByEmail({
@@ -421,35 +364,7 @@ describe("UsersClient", () => {
             include_fields: true,
             email: "email",
         });
-        expect(response).toEqual([
-            {
-                user_id: "user_id",
-                email: "email",
-                email_verified: true,
-                username: "username",
-                phone_number: "phone_number",
-                phone_verified: true,
-                created_at: "created_at",
-                updated_at: "updated_at",
-                identities: [{}],
-                app_metadata: {
-                    key: "value",
-                },
-                user_metadata: {
-                    key: "value",
-                },
-                picture: "picture",
-                name: "name",
-                nickname: "nickname",
-                multifactor: ["multifactor"],
-                last_ip: "last_ip",
-                last_login: "last_login",
-                logins_count: 1,
-                blocked: true,
-                given_name: "given_name",
-                family_name: "family_name",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("listUsersByEmail (2)", async () => {
@@ -457,6 +372,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users-by-email").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -471,6 +387,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users-by-email").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -485,6 +402,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users-by-email").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -499,6 +417,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users-by-email").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -545,49 +464,14 @@ describe("UsersClient", () => {
             given_name: "given_name",
             family_name: "family_name",
         };
+
         server.mockEndpoint().get("/users/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.users.get("id", {
             fields: "fields",
             include_fields: true,
         });
-        expect(response).toEqual({
-            user_id: "user_id",
-            email: "email",
-            email_verified: true,
-            username: "username",
-            phone_number: "phone_number",
-            phone_verified: true,
-            created_at: "created_at",
-            updated_at: "updated_at",
-            identities: [
-                {
-                    connection: "connection",
-                    user_id: "user_id",
-                    provider: "ad",
-                    isSocial: true,
-                    access_token: "access_token",
-                    access_token_secret: "access_token_secret",
-                    refresh_token: "refresh_token",
-                },
-            ],
-            app_metadata: {
-                key: "value",
-            },
-            user_metadata: {
-                key: "value",
-            },
-            picture: "picture",
-            name: "name",
-            nickname: "nickname",
-            multifactor: ["multifactor"],
-            last_ip: "last_ip",
-            last_login: "last_login",
-            logins_count: 1,
-            blocked: true,
-            given_name: "given_name",
-            family_name: "family_name",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -595,6 +479,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -607,6 +492,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -619,6 +505,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -631,6 +518,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -643,6 +531,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/users/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -665,6 +554,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/users/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -677,6 +567,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/users/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -689,6 +580,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/users/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -701,6 +593,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/users/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -745,6 +638,7 @@ describe("UsersClient", () => {
             given_name: "given_name",
             family_name: "family_name",
         };
+
         server
             .mockEndpoint()
             .patch("/users/id")
@@ -755,43 +649,7 @@ describe("UsersClient", () => {
             .build();
 
         const response = await client.users.update("id");
-        expect(response).toEqual({
-            user_id: "user_id",
-            email: "email",
-            email_verified: true,
-            username: "username",
-            phone_number: "phone_number",
-            phone_verified: true,
-            created_at: "created_at",
-            updated_at: "updated_at",
-            identities: [
-                {
-                    connection: "connection",
-                    user_id: "user_id",
-                    provider: "ad",
-                    isSocial: true,
-                    access_token: "access_token",
-                    access_token_secret: "access_token_secret",
-                    refresh_token: "refresh_token",
-                },
-            ],
-            app_metadata: {
-                key: "value",
-            },
-            user_metadata: {
-                key: "value",
-            },
-            picture: "picture",
-            name: "name",
-            nickname: "nickname",
-            multifactor: ["multifactor"],
-            last_ip: "last_ip",
-            last_login: "last_login",
-            logins_count: 1,
-            blocked: true,
-            given_name: "given_name",
-            family_name: "family_name",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -799,6 +657,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id")
@@ -818,6 +677,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id")
@@ -837,6 +697,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id")
@@ -856,6 +717,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id")
@@ -875,6 +737,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id")
@@ -894,6 +757,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { recovery_code: "recovery_code" };
+
         server
             .mockEndpoint()
             .post("/users/id/recovery-code-regeneration")
@@ -903,9 +767,7 @@ describe("UsersClient", () => {
             .build();
 
         const response = await client.users.regenerateRecoveryCode("id");
-        expect(response).toEqual({
-            recovery_code: "recovery_code",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("regenerateRecoveryCode (2)", async () => {
@@ -913,6 +775,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/recovery-code-regeneration")
@@ -931,6 +794,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/recovery-code-regeneration")
@@ -949,6 +813,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/recovery-code-regeneration")
@@ -967,6 +832,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/recovery-code-regeneration")
@@ -1002,6 +868,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/revoke-access")
@@ -1021,6 +888,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/revoke-access")
@@ -1040,6 +908,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/revoke-access")
@@ -1059,6 +928,7 @@ describe("UsersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/revoke-access")

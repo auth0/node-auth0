@@ -19,6 +19,7 @@ describe("ExecutionsClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .get("/actions/executions/id")
@@ -28,20 +29,7 @@ describe("ExecutionsClient", () => {
             .build();
 
         const response = await client.actions.executions.get("id");
-        expect(response).toEqual({
-            id: "id",
-            trigger_id: "post-login",
-            status: "unspecified",
-            results: [
-                {
-                    action_name: "action_name",
-                    started_at: "2024-01-15T09:30:00Z",
-                    ended_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -49,6 +37,7 @@ describe("ExecutionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/executions/id")
@@ -67,6 +56,7 @@ describe("ExecutionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/executions/id")
@@ -85,6 +75,7 @@ describe("ExecutionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/executions/id")
@@ -103,6 +94,7 @@ describe("ExecutionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/executions/id")
@@ -121,6 +113,7 @@ describe("ExecutionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/executions/id")

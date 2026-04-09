@@ -25,6 +25,7 @@ describe("VersionsClient", () => {
             page: 1,
             per_page: 1,
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
@@ -33,22 +34,7 @@ describe("VersionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            versions: [
-                {
-                    id: "id",
-                    module_id: "module_id",
-                    version_number: 1,
-                    code: "code",
-                    secrets: [{}],
-                    dependencies: [{}],
-                    created_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-            total: 1,
-            page: 1,
-            per_page: 1,
-        };
+        const expected = rawResponseBody;
         const page = await client.actions.modules.versions.list("id", {
             page: 1,
             per_page: 1,
@@ -65,6 +51,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
@@ -83,6 +70,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
@@ -101,6 +89,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
@@ -119,6 +108,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
@@ -137,6 +127,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/versions")
@@ -163,6 +154,7 @@ describe("VersionsClient", () => {
             dependencies: [{ name: "name", version: "version" }],
             created_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .post("/actions/modules/id/versions")
@@ -172,25 +164,7 @@ describe("VersionsClient", () => {
             .build();
 
         const response = await client.actions.modules.versions.create("id");
-        expect(response).toEqual({
-            id: "id",
-            module_id: "module_id",
-            version_number: 1,
-            code: "code",
-            secrets: [
-                {
-                    name: "name",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-            dependencies: [
-                {
-                    name: "name",
-                    version: "version",
-                },
-            ],
-            created_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -198,6 +172,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/actions/modules/id/versions")
@@ -216,6 +191,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/actions/modules/id/versions")
@@ -234,6 +210,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/actions/modules/id/versions")
@@ -252,6 +229,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/actions/modules/id/versions")
@@ -270,6 +248,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/actions/modules/id/versions")
@@ -288,6 +267,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/actions/modules/id/versions")
@@ -314,6 +294,7 @@ describe("VersionsClient", () => {
             dependencies: [{ name: "name", version: "version" }],
             created_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .get("/actions/modules/id/versions/versionId")
@@ -323,25 +304,7 @@ describe("VersionsClient", () => {
             .build();
 
         const response = await client.actions.modules.versions.get("id", "versionId");
-        expect(response).toEqual({
-            id: "id",
-            module_id: "module_id",
-            version_number: 1,
-            code: "code",
-            secrets: [
-                {
-                    name: "name",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-            dependencies: [
-                {
-                    name: "name",
-                    version: "version",
-                },
-            ],
-            created_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -349,6 +312,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/modules/id/versions/versionId")
@@ -367,6 +331,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/modules/id/versions/versionId")
@@ -385,6 +350,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/modules/id/versions/versionId")
@@ -403,6 +369,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/modules/id/versions/versionId")
@@ -421,6 +388,7 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/actions/modules/id/versions/versionId")

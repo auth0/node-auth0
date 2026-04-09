@@ -26,6 +26,7 @@ describe("DeliveriesClient", () => {
                 },
             },
         ];
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries")
@@ -42,28 +43,7 @@ describe("DeliveriesClient", () => {
             from: "from",
             take: 1,
         });
-        expect(response).toEqual([
-            {
-                id: "id",
-                event_stream_id: "event_stream_id",
-                status: "failed",
-                event_type: "user.created",
-                attempts: [
-                    {
-                        status: "failed",
-                        timestamp: "2024-01-15T09:30:00Z",
-                    },
-                ],
-                event: {
-                    id: "id",
-                    source: "source",
-                    specversion: "specversion",
-                    type: "type",
-                    time: "2024-01-15T09:30:00Z",
-                    data: "data",
-                },
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -71,6 +51,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries")
@@ -89,6 +70,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries")
@@ -107,6 +89,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries")
@@ -125,6 +108,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries")
@@ -143,6 +127,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries")
@@ -175,6 +160,7 @@ describe("DeliveriesClient", () => {
                 data: "data",
             },
         };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries/event_id")
@@ -184,27 +170,7 @@ describe("DeliveriesClient", () => {
             .build();
 
         const response = await client.eventStreams.deliveries.getHistory("id", "event_id");
-        expect(response).toEqual({
-            id: "id",
-            event_stream_id: "event_stream_id",
-            status: "failed",
-            event_type: "user.created",
-            attempts: [
-                {
-                    status: "failed",
-                    timestamp: "2024-01-15T09:30:00Z",
-                    error_message: "error_message",
-                },
-            ],
-            event: {
-                id: "id",
-                source: "source",
-                specversion: "specversion",
-                type: "type",
-                time: "2024-01-15T09:30:00Z",
-                data: "data",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getHistory (2)", async () => {
@@ -212,6 +178,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries/event_id")
@@ -230,6 +197,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries/event_id")
@@ -248,6 +216,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries/event_id")
@@ -266,6 +235,7 @@ describe("DeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/event-streams/id/deliveries/event_id")
