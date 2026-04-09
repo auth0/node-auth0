@@ -10,6 +10,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { ticket: "ticket" };
+
         server
             .mockEndpoint()
             .post("/tickets/email-verification")
@@ -22,9 +23,7 @@ describe("TicketsClient", () => {
         const response = await client.tickets.verifyEmail({
             user_id: "user_id",
         });
-        expect(response).toEqual({
-            ticket: "ticket",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("verifyEmail (2)", async () => {
@@ -32,6 +31,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/email-verification")
@@ -53,6 +53,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/email-verification")
@@ -74,6 +75,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/email-verification")
@@ -95,6 +97,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/email-verification")
@@ -116,6 +119,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/email-verification")
@@ -137,6 +141,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { ticket: "ticket" };
+
         server
             .mockEndpoint()
             .post("/tickets/password-change")
@@ -147,9 +152,7 @@ describe("TicketsClient", () => {
             .build();
 
         const response = await client.tickets.changePassword();
-        expect(response).toEqual({
-            ticket: "ticket",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("changePassword (2)", async () => {
@@ -157,6 +160,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/password-change")
@@ -176,6 +180,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/password-change")
@@ -195,6 +200,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/password-change")
@@ -214,6 +220,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/password-change")
@@ -233,6 +240,7 @@ describe("TicketsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/tickets/password-change")

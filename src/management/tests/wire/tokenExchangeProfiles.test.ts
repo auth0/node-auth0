@@ -23,6 +23,7 @@ describe("TokenExchangeProfilesClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/token-exchange-profiles")
@@ -31,20 +32,7 @@ describe("TokenExchangeProfilesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            token_exchange_profiles: [
-                {
-                    id: "id",
-                    name: "name",
-                    subject_token_type: "subject_token_type",
-                    action_id: "action_id",
-                    type: "custom_authentication",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.tokenExchangeProfiles.list({
             from: "from",
             take: 1,
@@ -61,6 +49,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles")
@@ -79,6 +68,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles")
@@ -97,6 +87,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles")
@@ -115,6 +106,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles")
@@ -146,6 +138,7 @@ describe("TokenExchangeProfilesClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -161,15 +154,7 @@ describe("TokenExchangeProfilesClient", () => {
             action_id: "action_id",
             type: "custom_authentication",
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            subject_token_type: "subject_token_type",
-            action_id: "action_id",
-            type: "custom_authentication",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -182,6 +167,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -211,6 +197,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -240,6 +227,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -269,6 +257,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -298,6 +287,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -330,6 +320,7 @@ describe("TokenExchangeProfilesClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -339,15 +330,7 @@ describe("TokenExchangeProfilesClient", () => {
             .build();
 
         const response = await client.tokenExchangeProfiles.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            subject_token_type: "subject_token_type",
-            action_id: "action_id",
-            type: "custom_authentication",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -355,6 +338,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -373,6 +357,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -391,6 +376,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -409,6 +395,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -427,6 +414,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -455,6 +443,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/token-exchange-profiles/id")
@@ -473,6 +462,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/token-exchange-profiles/id")
@@ -491,6 +481,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/token-exchange-profiles/id")
@@ -526,6 +517,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -545,6 +537,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -564,6 +557,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -583,6 +577,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -602,6 +597,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")

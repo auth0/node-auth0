@@ -26,6 +26,7 @@ describe("ConnectionsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/connections")
@@ -34,29 +35,7 @@ describe("ConnectionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            connections: [
-                {
-                    name: "name",
-                    display_name: "display_name",
-                    options: {
-                        key: "value",
-                    },
-                    id: "id",
-                    strategy: "strategy",
-                    realms: ["realms"],
-                    is_domain_connection: true,
-                    show_as_button: true,
-                    authentication: {
-                        active: true,
-                    },
-                    connected_accounts: {
-                        active: true,
-                    },
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.connections.list({
             from: "from",
             take: 1,
@@ -76,6 +55,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -88,6 +68,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -100,6 +81,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -112,6 +94,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -137,6 +120,7 @@ describe("ConnectionsClient", () => {
             authentication: { active: true },
             connected_accounts: { active: true, cross_app_access: true },
         };
+
         server
             .mockEndpoint()
             .post("/connections")
@@ -150,29 +134,7 @@ describe("ConnectionsClient", () => {
             name: "name",
             strategy: "ad",
         });
-        expect(response).toEqual({
-            name: "name",
-            display_name: "display_name",
-            options: {
-                key: "value",
-            },
-            id: "id",
-            strategy: "strategy",
-            realms: ["realms"],
-            enabled_clients: ["enabled_clients"],
-            is_domain_connection: true,
-            show_as_button: true,
-            metadata: {
-                key: "value",
-            },
-            authentication: {
-                active: true,
-            },
-            connected_accounts: {
-                active: true,
-                cross_app_access: true,
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -180,6 +142,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", strategy: "ad" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections")
@@ -202,6 +165,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", strategy: "ad" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections")
@@ -224,6 +188,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", strategy: "ad" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections")
@@ -246,6 +211,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", strategy: "ad" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections")
@@ -268,6 +234,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", strategy: "ad" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections")
@@ -303,35 +270,14 @@ describe("ConnectionsClient", () => {
             authentication: { active: true },
             connected_accounts: { active: true, cross_app_access: true },
         };
+
         server.mockEndpoint().get("/connections/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.connections.get("id", {
             fields: "fields",
             include_fields: true,
         });
-        expect(response).toEqual({
-            name: "name",
-            display_name: "display_name",
-            options: {
-                key: "value",
-            },
-            id: "id",
-            strategy: "strategy",
-            realms: ["realms"],
-            enabled_clients: ["enabled_clients"],
-            is_domain_connection: true,
-            show_as_button: true,
-            metadata: {
-                key: "value",
-            },
-            authentication: {
-                active: true,
-            },
-            connected_accounts: {
-                active: true,
-                cross_app_access: true,
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -339,6 +285,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -351,6 +298,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -363,6 +311,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -375,6 +324,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -387,6 +337,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/connections/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -409,6 +360,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/connections/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -421,6 +373,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/connections/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -433,6 +386,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/connections/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -445,6 +399,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/connections/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -470,6 +425,7 @@ describe("ConnectionsClient", () => {
             authentication: { active: true },
             connected_accounts: { active: true, cross_app_access: true },
         };
+
         server
             .mockEndpoint()
             .patch("/connections/id")
@@ -480,29 +436,7 @@ describe("ConnectionsClient", () => {
             .build();
 
         const response = await client.connections.update("id");
-        expect(response).toEqual({
-            name: "name",
-            display_name: "display_name",
-            options: {
-                key: "value",
-            },
-            id: "id",
-            strategy: "strategy",
-            realms: ["realms"],
-            enabled_clients: ["enabled_clients"],
-            is_domain_connection: true,
-            show_as_button: true,
-            metadata: {
-                key: "value",
-            },
-            authentication: {
-                active: true,
-            },
-            connected_accounts: {
-                active: true,
-                cross_app_access: true,
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -510,6 +444,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id")
@@ -529,6 +464,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id")
@@ -548,6 +484,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id")
@@ -567,6 +504,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id")
@@ -586,6 +524,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id")
@@ -605,6 +544,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/connections/id")
@@ -634,6 +574,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/status")
@@ -652,6 +593,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/status")
@@ -670,6 +612,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/status")
@@ -688,6 +631,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/status")
@@ -706,6 +650,7 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/status")

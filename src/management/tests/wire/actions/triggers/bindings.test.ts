@@ -23,6 +23,7 @@ describe("BindingsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/triggers/post-login/bindings")
@@ -31,20 +32,7 @@ describe("BindingsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            total: 1.1,
-            page: 1.1,
-            per_page: 1.1,
-            bindings: [
-                {
-                    id: "id",
-                    trigger_id: "post-login",
-                    display_name: "display_name",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.actions.triggers.bindings.list("post-login", {
             page: 1,
             per_page: 1,
@@ -61,6 +49,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/triggers/post-login/bindings")
@@ -79,6 +68,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/triggers/post-login/bindings")
@@ -97,6 +87,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/triggers/post-login/bindings")
@@ -115,6 +106,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/actions/triggers/post-login/bindings")
@@ -143,6 +135,7 @@ describe("BindingsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint()
             .patch("/actions/triggers/post-login/bindings")
@@ -153,17 +146,7 @@ describe("BindingsClient", () => {
             .build();
 
         const response = await client.actions.triggers.bindings.updateMany("post-login");
-        expect(response).toEqual({
-            bindings: [
-                {
-                    id: "id",
-                    trigger_id: "post-login",
-                    display_name: "display_name",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("updateMany (2)", async () => {
@@ -171,6 +154,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/actions/triggers/post-login/bindings")
@@ -190,6 +174,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/actions/triggers/post-login/bindings")
@@ -209,6 +194,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/actions/triggers/post-login/bindings")
@@ -228,6 +214,7 @@ describe("BindingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/actions/triggers/post-login/bindings")

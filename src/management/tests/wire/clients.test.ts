@@ -74,6 +74,7 @@ describe("ClientsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/clients")
@@ -82,81 +83,7 @@ describe("ClientsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            clients: [
-                {
-                    client_id: "client_id",
-                    tenant: "tenant",
-                    name: "name",
-                    description: "description",
-                    global: true,
-                    client_secret: "client_secret",
-                    app_type: "native",
-                    logo_uri: "logo_uri",
-                    is_first_party: true,
-                    oidc_conformant: true,
-                    callbacks: ["callbacks"],
-                    allowed_origins: ["allowed_origins"],
-                    web_origins: ["web_origins"],
-                    client_aliases: ["client_aliases"],
-                    allowed_clients: ["allowed_clients"],
-                    allowed_logout_urls: ["allowed_logout_urls"],
-                    grant_types: ["grant_types"],
-                    signing_keys: [{}],
-                    sso: true,
-                    sso_disabled: true,
-                    cross_origin_authentication: true,
-                    cross_origin_loc: "cross_origin_loc",
-                    custom_login_page_on: true,
-                    custom_login_page: "custom_login_page",
-                    custom_login_page_preview: "custom_login_page_preview",
-                    form_template: "form_template",
-                    token_endpoint_auth_method: "none",
-                    is_token_endpoint_ip_header_trusted: true,
-                    client_metadata: {
-                        key: "value",
-                    },
-                    initiate_login_uri: "initiate_login_uri",
-                    refresh_token: {
-                        rotation_type: "rotating",
-                        expiration_type: "expiring",
-                    },
-                    default_organization: {
-                        organization_id: "organization_id",
-                        flows: ["client_credentials"],
-                    },
-                    organization_usage: "deny",
-                    organization_require_behavior: "no_prompt",
-                    organization_discovery_methods: ["email"],
-                    require_pushed_authorization_requests: true,
-                    require_proof_of_possession: true,
-                    compliance_level: "none",
-                    skip_non_verifiable_callback_uri_confirmation_prompt: true,
-                    par_request_expiry: 1,
-                    token_quota: {
-                        client_credentials: {},
-                    },
-                    express_configuration: {
-                        initiate_login_uri_template: "initiate_login_uri_template",
-                        user_attribute_profile_id: "user_attribute_profile_id",
-                        connection_profile_id: "connection_profile_id",
-                        enable_client: true,
-                        enable_organization: true,
-                        okta_oin_client_id: "okta_oin_client_id",
-                        admin_login_domain: "admin_login_domain",
-                    },
-                    resource_server_identifier: "resource_server_identifier",
-                    async_approval_notification_channels: ["guardian-push"],
-                    external_metadata_type: "cimd",
-                    external_metadata_created_by: "admin",
-                    external_client_id: "external_client_id",
-                    jwks_uri: "jwks_uri",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.clients.list({
             fields: "fields",
             include_fields: true,
@@ -181,6 +108,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/clients")
@@ -199,6 +127,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/clients")
@@ -217,6 +146,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/clients")
@@ -235,6 +165,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/clients")
@@ -447,6 +378,7 @@ describe("ClientsClient", () => {
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
+
         server
             .mockEndpoint()
             .post("/clients")
@@ -459,323 +391,7 @@ describe("ClientsClient", () => {
         const response = await client.clients.create({
             name: "name",
         });
-        expect(response).toEqual({
-            client_id: "client_id",
-            tenant: "tenant",
-            name: "name",
-            description: "description",
-            global: true,
-            client_secret: "client_secret",
-            app_type: "native",
-            logo_uri: "logo_uri",
-            is_first_party: true,
-            oidc_conformant: true,
-            callbacks: ["callbacks"],
-            allowed_origins: ["allowed_origins"],
-            web_origins: ["web_origins"],
-            client_aliases: ["client_aliases"],
-            allowed_clients: ["allowed_clients"],
-            allowed_logout_urls: ["allowed_logout_urls"],
-            session_transfer: {
-                can_create_session_transfer_token: true,
-                enforce_cascade_revocation: true,
-                allowed_authentication_methods: ["cookie"],
-                enforce_device_binding: "ip",
-                allow_refresh_token: true,
-                enforce_online_refresh_tokens: true,
-            },
-            oidc_logout: {
-                backchannel_logout_urls: ["backchannel_logout_urls"],
-                backchannel_logout_initiators: {
-                    mode: "custom",
-                    selected_initiators: ["rp-logout"],
-                },
-                backchannel_logout_session_metadata: {
-                    include: true,
-                },
-            },
-            grant_types: ["grant_types"],
-            jwt_configuration: {
-                lifetime_in_seconds: 1,
-                secret_encoded: true,
-                scopes: {
-                    key: "value",
-                },
-                alg: "HS256",
-            },
-            signing_keys: [
-                {
-                    pkcs7: "pkcs7",
-                    cert: "cert",
-                    subject: "subject",
-                },
-            ],
-            encryption_key: {
-                pub: "pub",
-                cert: "cert",
-                subject: "subject",
-            },
-            sso: true,
-            sso_disabled: true,
-            cross_origin_authentication: true,
-            cross_origin_loc: "cross_origin_loc",
-            custom_login_page_on: true,
-            custom_login_page: "custom_login_page",
-            custom_login_page_preview: "custom_login_page_preview",
-            form_template: "form_template",
-            addons: {
-                aws: {
-                    principal: "principal",
-                    role: "role",
-                    lifetime_in_seconds: 1,
-                },
-                azure_blob: {
-                    accountName: "accountName",
-                    storageAccessKey: "storageAccessKey",
-                    containerName: "containerName",
-                    blobName: "blobName",
-                    expiration: 1,
-                    signedIdentifier: "signedIdentifier",
-                    blob_read: true,
-                    blob_write: true,
-                    blob_delete: true,
-                    container_read: true,
-                    container_write: true,
-                    container_delete: true,
-                    container_list: true,
-                },
-                azure_sb: {
-                    namespace: "namespace",
-                    sasKeyName: "sasKeyName",
-                    sasKey: "sasKey",
-                    entityPath: "entityPath",
-                    expiration: 1,
-                },
-                rms: {
-                    url: "url",
-                },
-                mscrm: {
-                    url: "url",
-                },
-                slack: {
-                    team: "team",
-                },
-                sentry: {
-                    org_slug: "org_slug",
-                    base_url: "base_url",
-                },
-                box: {
-                    key: "value",
-                },
-                cloudbees: {
-                    key: "value",
-                },
-                concur: {
-                    key: "value",
-                },
-                dropbox: {
-                    key: "value",
-                },
-                echosign: {
-                    domain: "domain",
-                },
-                egnyte: {
-                    domain: "domain",
-                },
-                firebase: {
-                    secret: "secret",
-                    private_key_id: "private_key_id",
-                    private_key: "private_key",
-                    client_email: "client_email",
-                    lifetime_in_seconds: 1,
-                },
-                newrelic: {
-                    account: "account",
-                },
-                office365: {
-                    domain: "domain",
-                    connection: "connection",
-                },
-                salesforce: {
-                    entity_id: "entity_id",
-                },
-                salesforce_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                salesforce_sandbox_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                samlp: {
-                    mappings: {
-                        key: "value",
-                    },
-                    audience: "audience",
-                    recipient: "recipient",
-                    createUpnClaim: true,
-                    mapUnknownClaimsAsIs: true,
-                    passthroughClaimsWithNoMapping: true,
-                    mapIdentities: true,
-                    signatureAlgorithm: "signatureAlgorithm",
-                    digestAlgorithm: "digestAlgorithm",
-                    issuer: "issuer",
-                    destination: "destination",
-                    lifetimeInSeconds: 1,
-                    signResponse: true,
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                    nameIdentifierProbes: ["nameIdentifierProbes"],
-                    authnContextClassRef: "authnContextClassRef",
-                },
-                layer: {
-                    providerId: "providerId",
-                    keyId: "keyId",
-                    privateKey: "privateKey",
-                    principal: "principal",
-                    expiration: 1,
-                },
-                sap_api: {
-                    clientid: "clientid",
-                    usernameAttribute: "usernameAttribute",
-                    tokenEndpointUrl: "tokenEndpointUrl",
-                    scope: "scope",
-                    servicePassword: "servicePassword",
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                },
-                sharepoint: {
-                    url: "url",
-                    external_url: ["external_url"],
-                },
-                springcm: {
-                    acsurl: "acsurl",
-                },
-                wams: {
-                    masterkey: "masterkey",
-                },
-                wsfed: {
-                    key: "value",
-                },
-                zendesk: {
-                    accountName: "accountName",
-                },
-                zoom: {
-                    account: "account",
-                },
-                sso_integration: {
-                    name: "name",
-                    version: "version",
-                },
-            },
-            token_endpoint_auth_method: "none",
-            is_token_endpoint_ip_header_trusted: true,
-            client_metadata: {
-                key: "value",
-            },
-            mobile: {
-                android: {
-                    app_package_name: "app_package_name",
-                    sha256_cert_fingerprints: ["sha256_cert_fingerprints"],
-                },
-                ios: {
-                    team_id: "team_id",
-                    app_bundle_identifier: "app_bundle_identifier",
-                },
-            },
-            initiate_login_uri: "initiate_login_uri",
-            refresh_token: {
-                rotation_type: "rotating",
-                expiration_type: "expiring",
-                leeway: 1,
-                token_lifetime: 1,
-                infinite_token_lifetime: true,
-                idle_token_lifetime: 1,
-                infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
-            },
-            default_organization: {
-                organization_id: "organization_id",
-                flows: ["client_credentials"],
-            },
-            organization_usage: "deny",
-            organization_require_behavior: "no_prompt",
-            organization_discovery_methods: ["email"],
-            client_authentication_methods: {
-                private_key_jwt: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                self_signed_tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-            },
-            require_pushed_authorization_requests: true,
-            require_proof_of_possession: true,
-            signed_request_object: {
-                required: true,
-                credentials: [
-                    {
-                        id: "id",
-                    },
-                ],
-            },
-            compliance_level: "none",
-            skip_non_verifiable_callback_uri_confirmation_prompt: true,
-            token_exchange: {
-                allow_any_profile_of_type: ["custom_authentication"],
-            },
-            par_request_expiry: 1,
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-            express_configuration: {
-                initiate_login_uri_template: "initiate_login_uri_template",
-                user_attribute_profile_id: "user_attribute_profile_id",
-                connection_profile_id: "connection_profile_id",
-                enable_client: true,
-                enable_organization: true,
-                linked_clients: [
-                    {
-                        client_id: "client_id",
-                    },
-                ],
-                okta_oin_client_id: "okta_oin_client_id",
-                admin_login_domain: "admin_login_domain",
-                oin_submission_id: "oin_submission_id",
-            },
-            resource_server_identifier: "resource_server_identifier",
-            async_approval_notification_channels: ["guardian-push"],
-            external_metadata_type: "cimd",
-            external_metadata_created_by: "admin",
-            external_client_id: "external_client_id",
-            jwks_uri: "jwks_uri",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -783,6 +399,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients")
@@ -804,6 +421,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients")
@@ -825,6 +443,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients")
@@ -846,6 +465,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients")
@@ -867,6 +487,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients")
@@ -906,6 +527,7 @@ describe("ClientsClient", () => {
                 },
             },
         };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/preview")
@@ -918,37 +540,7 @@ describe("ClientsClient", () => {
         const response = await client.clients.previewCimdMetadata({
             external_client_id: "external_client_id",
         });
-        expect(response).toEqual({
-            client_id: "client_id",
-            errors: ["errors"],
-            validation: {
-                valid: true,
-                violations: ["violations"],
-                warnings: ["warnings"],
-            },
-            mapped_fields: {
-                external_client_id: "external_client_id",
-                name: "name",
-                app_type: "app_type",
-                callbacks: ["callbacks"],
-                logo_uri: "logo_uri",
-                description: "description",
-                grant_types: ["grant_types"],
-                token_endpoint_auth_method: "token_endpoint_auth_method",
-                jwks_uri: "jwks_uri",
-                client_authentication_methods: {
-                    private_key_jwt: {
-                        credentials: [
-                            {
-                                credential_type: "credential_type",
-                                kid: "kid",
-                                alg: "alg",
-                            },
-                        ],
-                    },
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("previewCimdMetadata (2)", async () => {
@@ -956,6 +548,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/preview")
@@ -977,6 +570,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/preview")
@@ -998,6 +592,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/preview")
@@ -1019,6 +614,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/preview")
@@ -1040,6 +636,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/preview")
@@ -1078,6 +675,7 @@ describe("ClientsClient", () => {
             },
             validation: { valid: true, violations: ["violations"], warnings: ["warnings"] },
         };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/register")
@@ -1090,36 +688,7 @@ describe("ClientsClient", () => {
         const response = await client.clients.registerCimdClient({
             external_client_id: "external_client_id",
         });
-        expect(response).toEqual({
-            client_id: "client_id",
-            mapped_fields: {
-                external_client_id: "external_client_id",
-                name: "name",
-                app_type: "app_type",
-                callbacks: ["callbacks"],
-                logo_uri: "logo_uri",
-                description: "description",
-                grant_types: ["grant_types"],
-                token_endpoint_auth_method: "token_endpoint_auth_method",
-                jwks_uri: "jwks_uri",
-                client_authentication_methods: {
-                    private_key_jwt: {
-                        credentials: [
-                            {
-                                credential_type: "credential_type",
-                                kid: "kid",
-                                alg: "alg",
-                            },
-                        ],
-                    },
-                },
-            },
-            validation: {
-                valid: true,
-                violations: ["violations"],
-                warnings: ["warnings"],
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("registerCimdClient (2)", async () => {
@@ -1127,6 +696,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/register")
@@ -1148,6 +718,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/register")
@@ -1169,6 +740,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/register")
@@ -1190,6 +762,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/register")
@@ -1211,6 +784,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/cimd/register")
@@ -1426,329 +1000,14 @@ describe("ClientsClient", () => {
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
+
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.clients.get("id", {
             fields: "fields",
             include_fields: true,
         });
-        expect(response).toEqual({
-            client_id: "client_id",
-            tenant: "tenant",
-            name: "name",
-            description: "description",
-            global: true,
-            client_secret: "client_secret",
-            app_type: "native",
-            logo_uri: "logo_uri",
-            is_first_party: true,
-            oidc_conformant: true,
-            callbacks: ["callbacks"],
-            allowed_origins: ["allowed_origins"],
-            web_origins: ["web_origins"],
-            client_aliases: ["client_aliases"],
-            allowed_clients: ["allowed_clients"],
-            allowed_logout_urls: ["allowed_logout_urls"],
-            session_transfer: {
-                can_create_session_transfer_token: true,
-                enforce_cascade_revocation: true,
-                allowed_authentication_methods: ["cookie"],
-                enforce_device_binding: "ip",
-                allow_refresh_token: true,
-                enforce_online_refresh_tokens: true,
-            },
-            oidc_logout: {
-                backchannel_logout_urls: ["backchannel_logout_urls"],
-                backchannel_logout_initiators: {
-                    mode: "custom",
-                    selected_initiators: ["rp-logout"],
-                },
-                backchannel_logout_session_metadata: {
-                    include: true,
-                },
-            },
-            grant_types: ["grant_types"],
-            jwt_configuration: {
-                lifetime_in_seconds: 1,
-                secret_encoded: true,
-                scopes: {
-                    key: "value",
-                },
-                alg: "HS256",
-            },
-            signing_keys: [
-                {
-                    pkcs7: "pkcs7",
-                    cert: "cert",
-                    subject: "subject",
-                },
-            ],
-            encryption_key: {
-                pub: "pub",
-                cert: "cert",
-                subject: "subject",
-            },
-            sso: true,
-            sso_disabled: true,
-            cross_origin_authentication: true,
-            cross_origin_loc: "cross_origin_loc",
-            custom_login_page_on: true,
-            custom_login_page: "custom_login_page",
-            custom_login_page_preview: "custom_login_page_preview",
-            form_template: "form_template",
-            addons: {
-                aws: {
-                    principal: "principal",
-                    role: "role",
-                    lifetime_in_seconds: 1,
-                },
-                azure_blob: {
-                    accountName: "accountName",
-                    storageAccessKey: "storageAccessKey",
-                    containerName: "containerName",
-                    blobName: "blobName",
-                    expiration: 1,
-                    signedIdentifier: "signedIdentifier",
-                    blob_read: true,
-                    blob_write: true,
-                    blob_delete: true,
-                    container_read: true,
-                    container_write: true,
-                    container_delete: true,
-                    container_list: true,
-                },
-                azure_sb: {
-                    namespace: "namespace",
-                    sasKeyName: "sasKeyName",
-                    sasKey: "sasKey",
-                    entityPath: "entityPath",
-                    expiration: 1,
-                },
-                rms: {
-                    url: "url",
-                },
-                mscrm: {
-                    url: "url",
-                },
-                slack: {
-                    team: "team",
-                },
-                sentry: {
-                    org_slug: "org_slug",
-                    base_url: "base_url",
-                },
-                box: {
-                    key: "value",
-                },
-                cloudbees: {
-                    key: "value",
-                },
-                concur: {
-                    key: "value",
-                },
-                dropbox: {
-                    key: "value",
-                },
-                echosign: {
-                    domain: "domain",
-                },
-                egnyte: {
-                    domain: "domain",
-                },
-                firebase: {
-                    secret: "secret",
-                    private_key_id: "private_key_id",
-                    private_key: "private_key",
-                    client_email: "client_email",
-                    lifetime_in_seconds: 1,
-                },
-                newrelic: {
-                    account: "account",
-                },
-                office365: {
-                    domain: "domain",
-                    connection: "connection",
-                },
-                salesforce: {
-                    entity_id: "entity_id",
-                },
-                salesforce_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                salesforce_sandbox_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                samlp: {
-                    mappings: {
-                        key: "value",
-                    },
-                    audience: "audience",
-                    recipient: "recipient",
-                    createUpnClaim: true,
-                    mapUnknownClaimsAsIs: true,
-                    passthroughClaimsWithNoMapping: true,
-                    mapIdentities: true,
-                    signatureAlgorithm: "signatureAlgorithm",
-                    digestAlgorithm: "digestAlgorithm",
-                    issuer: "issuer",
-                    destination: "destination",
-                    lifetimeInSeconds: 1,
-                    signResponse: true,
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                    nameIdentifierProbes: ["nameIdentifierProbes"],
-                    authnContextClassRef: "authnContextClassRef",
-                },
-                layer: {
-                    providerId: "providerId",
-                    keyId: "keyId",
-                    privateKey: "privateKey",
-                    principal: "principal",
-                    expiration: 1,
-                },
-                sap_api: {
-                    clientid: "clientid",
-                    usernameAttribute: "usernameAttribute",
-                    tokenEndpointUrl: "tokenEndpointUrl",
-                    scope: "scope",
-                    servicePassword: "servicePassword",
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                },
-                sharepoint: {
-                    url: "url",
-                    external_url: ["external_url"],
-                },
-                springcm: {
-                    acsurl: "acsurl",
-                },
-                wams: {
-                    masterkey: "masterkey",
-                },
-                wsfed: {
-                    key: "value",
-                },
-                zendesk: {
-                    accountName: "accountName",
-                },
-                zoom: {
-                    account: "account",
-                },
-                sso_integration: {
-                    name: "name",
-                    version: "version",
-                },
-            },
-            token_endpoint_auth_method: "none",
-            is_token_endpoint_ip_header_trusted: true,
-            client_metadata: {
-                key: "value",
-            },
-            mobile: {
-                android: {
-                    app_package_name: "app_package_name",
-                    sha256_cert_fingerprints: ["sha256_cert_fingerprints"],
-                },
-                ios: {
-                    team_id: "team_id",
-                    app_bundle_identifier: "app_bundle_identifier",
-                },
-            },
-            initiate_login_uri: "initiate_login_uri",
-            refresh_token: {
-                rotation_type: "rotating",
-                expiration_type: "expiring",
-                leeway: 1,
-                token_lifetime: 1,
-                infinite_token_lifetime: true,
-                idle_token_lifetime: 1,
-                infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
-            },
-            default_organization: {
-                organization_id: "organization_id",
-                flows: ["client_credentials"],
-            },
-            organization_usage: "deny",
-            organization_require_behavior: "no_prompt",
-            organization_discovery_methods: ["email"],
-            client_authentication_methods: {
-                private_key_jwt: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                self_signed_tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-            },
-            require_pushed_authorization_requests: true,
-            require_proof_of_possession: true,
-            signed_request_object: {
-                required: true,
-                credentials: [
-                    {
-                        id: "id",
-                    },
-                ],
-            },
-            compliance_level: "none",
-            skip_non_verifiable_callback_uri_confirmation_prompt: true,
-            token_exchange: {
-                allow_any_profile_of_type: ["custom_authentication"],
-            },
-            par_request_expiry: 1,
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-            express_configuration: {
-                initiate_login_uri_template: "initiate_login_uri_template",
-                user_attribute_profile_id: "user_attribute_profile_id",
-                connection_profile_id: "connection_profile_id",
-                enable_client: true,
-                enable_organization: true,
-                linked_clients: [
-                    {
-                        client_id: "client_id",
-                    },
-                ],
-                okta_oin_client_id: "okta_oin_client_id",
-                admin_login_domain: "admin_login_domain",
-                oin_submission_id: "oin_submission_id",
-            },
-            resource_server_identifier: "resource_server_identifier",
-            async_approval_notification_channels: ["guardian-push"],
-            external_metadata_type: "cimd",
-            external_metadata_created_by: "admin",
-            external_client_id: "external_client_id",
-            jwks_uri: "jwks_uri",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -1756,6 +1015,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1768,6 +1028,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1780,6 +1041,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1792,6 +1054,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1804,6 +1067,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/clients/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1826,6 +1090,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1838,6 +1103,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1850,6 +1116,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -1862,6 +1129,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/clients/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -2068,6 +1336,7 @@ describe("ClientsClient", () => {
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
+
         server
             .mockEndpoint()
             .patch("/clients/id")
@@ -2078,323 +1347,7 @@ describe("ClientsClient", () => {
             .build();
 
         const response = await client.clients.update("id");
-        expect(response).toEqual({
-            client_id: "client_id",
-            tenant: "tenant",
-            name: "name",
-            description: "description",
-            global: true,
-            client_secret: "client_secret",
-            app_type: "native",
-            logo_uri: "logo_uri",
-            is_first_party: true,
-            oidc_conformant: true,
-            callbacks: ["callbacks"],
-            allowed_origins: ["allowed_origins"],
-            web_origins: ["web_origins"],
-            client_aliases: ["client_aliases"],
-            allowed_clients: ["allowed_clients"],
-            allowed_logout_urls: ["allowed_logout_urls"],
-            session_transfer: {
-                can_create_session_transfer_token: true,
-                enforce_cascade_revocation: true,
-                allowed_authentication_methods: ["cookie"],
-                enforce_device_binding: "ip",
-                allow_refresh_token: true,
-                enforce_online_refresh_tokens: true,
-            },
-            oidc_logout: {
-                backchannel_logout_urls: ["backchannel_logout_urls"],
-                backchannel_logout_initiators: {
-                    mode: "custom",
-                    selected_initiators: ["rp-logout"],
-                },
-                backchannel_logout_session_metadata: {
-                    include: true,
-                },
-            },
-            grant_types: ["grant_types"],
-            jwt_configuration: {
-                lifetime_in_seconds: 1,
-                secret_encoded: true,
-                scopes: {
-                    key: "value",
-                },
-                alg: "HS256",
-            },
-            signing_keys: [
-                {
-                    pkcs7: "pkcs7",
-                    cert: "cert",
-                    subject: "subject",
-                },
-            ],
-            encryption_key: {
-                pub: "pub",
-                cert: "cert",
-                subject: "subject",
-            },
-            sso: true,
-            sso_disabled: true,
-            cross_origin_authentication: true,
-            cross_origin_loc: "cross_origin_loc",
-            custom_login_page_on: true,
-            custom_login_page: "custom_login_page",
-            custom_login_page_preview: "custom_login_page_preview",
-            form_template: "form_template",
-            addons: {
-                aws: {
-                    principal: "principal",
-                    role: "role",
-                    lifetime_in_seconds: 1,
-                },
-                azure_blob: {
-                    accountName: "accountName",
-                    storageAccessKey: "storageAccessKey",
-                    containerName: "containerName",
-                    blobName: "blobName",
-                    expiration: 1,
-                    signedIdentifier: "signedIdentifier",
-                    blob_read: true,
-                    blob_write: true,
-                    blob_delete: true,
-                    container_read: true,
-                    container_write: true,
-                    container_delete: true,
-                    container_list: true,
-                },
-                azure_sb: {
-                    namespace: "namespace",
-                    sasKeyName: "sasKeyName",
-                    sasKey: "sasKey",
-                    entityPath: "entityPath",
-                    expiration: 1,
-                },
-                rms: {
-                    url: "url",
-                },
-                mscrm: {
-                    url: "url",
-                },
-                slack: {
-                    team: "team",
-                },
-                sentry: {
-                    org_slug: "org_slug",
-                    base_url: "base_url",
-                },
-                box: {
-                    key: "value",
-                },
-                cloudbees: {
-                    key: "value",
-                },
-                concur: {
-                    key: "value",
-                },
-                dropbox: {
-                    key: "value",
-                },
-                echosign: {
-                    domain: "domain",
-                },
-                egnyte: {
-                    domain: "domain",
-                },
-                firebase: {
-                    secret: "secret",
-                    private_key_id: "private_key_id",
-                    private_key: "private_key",
-                    client_email: "client_email",
-                    lifetime_in_seconds: 1,
-                },
-                newrelic: {
-                    account: "account",
-                },
-                office365: {
-                    domain: "domain",
-                    connection: "connection",
-                },
-                salesforce: {
-                    entity_id: "entity_id",
-                },
-                salesforce_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                salesforce_sandbox_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                samlp: {
-                    mappings: {
-                        key: "value",
-                    },
-                    audience: "audience",
-                    recipient: "recipient",
-                    createUpnClaim: true,
-                    mapUnknownClaimsAsIs: true,
-                    passthroughClaimsWithNoMapping: true,
-                    mapIdentities: true,
-                    signatureAlgorithm: "signatureAlgorithm",
-                    digestAlgorithm: "digestAlgorithm",
-                    issuer: "issuer",
-                    destination: "destination",
-                    lifetimeInSeconds: 1,
-                    signResponse: true,
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                    nameIdentifierProbes: ["nameIdentifierProbes"],
-                    authnContextClassRef: "authnContextClassRef",
-                },
-                layer: {
-                    providerId: "providerId",
-                    keyId: "keyId",
-                    privateKey: "privateKey",
-                    principal: "principal",
-                    expiration: 1,
-                },
-                sap_api: {
-                    clientid: "clientid",
-                    usernameAttribute: "usernameAttribute",
-                    tokenEndpointUrl: "tokenEndpointUrl",
-                    scope: "scope",
-                    servicePassword: "servicePassword",
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                },
-                sharepoint: {
-                    url: "url",
-                    external_url: ["external_url"],
-                },
-                springcm: {
-                    acsurl: "acsurl",
-                },
-                wams: {
-                    masterkey: "masterkey",
-                },
-                wsfed: {
-                    key: "value",
-                },
-                zendesk: {
-                    accountName: "accountName",
-                },
-                zoom: {
-                    account: "account",
-                },
-                sso_integration: {
-                    name: "name",
-                    version: "version",
-                },
-            },
-            token_endpoint_auth_method: "none",
-            is_token_endpoint_ip_header_trusted: true,
-            client_metadata: {
-                key: "value",
-            },
-            mobile: {
-                android: {
-                    app_package_name: "app_package_name",
-                    sha256_cert_fingerprints: ["sha256_cert_fingerprints"],
-                },
-                ios: {
-                    team_id: "team_id",
-                    app_bundle_identifier: "app_bundle_identifier",
-                },
-            },
-            initiate_login_uri: "initiate_login_uri",
-            refresh_token: {
-                rotation_type: "rotating",
-                expiration_type: "expiring",
-                leeway: 1,
-                token_lifetime: 1,
-                infinite_token_lifetime: true,
-                idle_token_lifetime: 1,
-                infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
-            },
-            default_organization: {
-                organization_id: "organization_id",
-                flows: ["client_credentials"],
-            },
-            organization_usage: "deny",
-            organization_require_behavior: "no_prompt",
-            organization_discovery_methods: ["email"],
-            client_authentication_methods: {
-                private_key_jwt: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                self_signed_tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-            },
-            require_pushed_authorization_requests: true,
-            require_proof_of_possession: true,
-            signed_request_object: {
-                required: true,
-                credentials: [
-                    {
-                        id: "id",
-                    },
-                ],
-            },
-            compliance_level: "none",
-            skip_non_verifiable_callback_uri_confirmation_prompt: true,
-            token_exchange: {
-                allow_any_profile_of_type: ["custom_authentication"],
-            },
-            par_request_expiry: 1,
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-            express_configuration: {
-                initiate_login_uri_template: "initiate_login_uri_template",
-                user_attribute_profile_id: "user_attribute_profile_id",
-                connection_profile_id: "connection_profile_id",
-                enable_client: true,
-                enable_organization: true,
-                linked_clients: [
-                    {
-                        client_id: "client_id",
-                    },
-                ],
-                okta_oin_client_id: "okta_oin_client_id",
-                admin_login_domain: "admin_login_domain",
-                oin_submission_id: "oin_submission_id",
-            },
-            resource_server_identifier: "resource_server_identifier",
-            async_approval_notification_channels: ["guardian-push"],
-            external_metadata_type: "cimd",
-            external_metadata_created_by: "admin",
-            external_client_id: "external_client_id",
-            jwks_uri: "jwks_uri",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -2402,6 +1355,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/id")
@@ -2421,6 +1375,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/id")
@@ -2440,6 +1395,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/id")
@@ -2459,6 +1415,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/id")
@@ -2478,6 +1435,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/clients/id")
@@ -2691,6 +1649,7 @@ describe("ClientsClient", () => {
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
+
         server
             .mockEndpoint()
             .post("/clients/id/rotate-secret")
@@ -2700,323 +1659,7 @@ describe("ClientsClient", () => {
             .build();
 
         const response = await client.clients.rotateSecret("id");
-        expect(response).toEqual({
-            client_id: "client_id",
-            tenant: "tenant",
-            name: "name",
-            description: "description",
-            global: true,
-            client_secret: "client_secret",
-            app_type: "native",
-            logo_uri: "logo_uri",
-            is_first_party: true,
-            oidc_conformant: true,
-            callbacks: ["callbacks"],
-            allowed_origins: ["allowed_origins"],
-            web_origins: ["web_origins"],
-            client_aliases: ["client_aliases"],
-            allowed_clients: ["allowed_clients"],
-            allowed_logout_urls: ["allowed_logout_urls"],
-            session_transfer: {
-                can_create_session_transfer_token: true,
-                enforce_cascade_revocation: true,
-                allowed_authentication_methods: ["cookie"],
-                enforce_device_binding: "ip",
-                allow_refresh_token: true,
-                enforce_online_refresh_tokens: true,
-            },
-            oidc_logout: {
-                backchannel_logout_urls: ["backchannel_logout_urls"],
-                backchannel_logout_initiators: {
-                    mode: "custom",
-                    selected_initiators: ["rp-logout"],
-                },
-                backchannel_logout_session_metadata: {
-                    include: true,
-                },
-            },
-            grant_types: ["grant_types"],
-            jwt_configuration: {
-                lifetime_in_seconds: 1,
-                secret_encoded: true,
-                scopes: {
-                    key: "value",
-                },
-                alg: "HS256",
-            },
-            signing_keys: [
-                {
-                    pkcs7: "pkcs7",
-                    cert: "cert",
-                    subject: "subject",
-                },
-            ],
-            encryption_key: {
-                pub: "pub",
-                cert: "cert",
-                subject: "subject",
-            },
-            sso: true,
-            sso_disabled: true,
-            cross_origin_authentication: true,
-            cross_origin_loc: "cross_origin_loc",
-            custom_login_page_on: true,
-            custom_login_page: "custom_login_page",
-            custom_login_page_preview: "custom_login_page_preview",
-            form_template: "form_template",
-            addons: {
-                aws: {
-                    principal: "principal",
-                    role: "role",
-                    lifetime_in_seconds: 1,
-                },
-                azure_blob: {
-                    accountName: "accountName",
-                    storageAccessKey: "storageAccessKey",
-                    containerName: "containerName",
-                    blobName: "blobName",
-                    expiration: 1,
-                    signedIdentifier: "signedIdentifier",
-                    blob_read: true,
-                    blob_write: true,
-                    blob_delete: true,
-                    container_read: true,
-                    container_write: true,
-                    container_delete: true,
-                    container_list: true,
-                },
-                azure_sb: {
-                    namespace: "namespace",
-                    sasKeyName: "sasKeyName",
-                    sasKey: "sasKey",
-                    entityPath: "entityPath",
-                    expiration: 1,
-                },
-                rms: {
-                    url: "url",
-                },
-                mscrm: {
-                    url: "url",
-                },
-                slack: {
-                    team: "team",
-                },
-                sentry: {
-                    org_slug: "org_slug",
-                    base_url: "base_url",
-                },
-                box: {
-                    key: "value",
-                },
-                cloudbees: {
-                    key: "value",
-                },
-                concur: {
-                    key: "value",
-                },
-                dropbox: {
-                    key: "value",
-                },
-                echosign: {
-                    domain: "domain",
-                },
-                egnyte: {
-                    domain: "domain",
-                },
-                firebase: {
-                    secret: "secret",
-                    private_key_id: "private_key_id",
-                    private_key: "private_key",
-                    client_email: "client_email",
-                    lifetime_in_seconds: 1,
-                },
-                newrelic: {
-                    account: "account",
-                },
-                office365: {
-                    domain: "domain",
-                    connection: "connection",
-                },
-                salesforce: {
-                    entity_id: "entity_id",
-                },
-                salesforce_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                salesforce_sandbox_api: {
-                    clientid: "clientid",
-                    principal: "principal",
-                    communityName: "communityName",
-                    community_url_section: "community_url_section",
-                },
-                samlp: {
-                    mappings: {
-                        key: "value",
-                    },
-                    audience: "audience",
-                    recipient: "recipient",
-                    createUpnClaim: true,
-                    mapUnknownClaimsAsIs: true,
-                    passthroughClaimsWithNoMapping: true,
-                    mapIdentities: true,
-                    signatureAlgorithm: "signatureAlgorithm",
-                    digestAlgorithm: "digestAlgorithm",
-                    issuer: "issuer",
-                    destination: "destination",
-                    lifetimeInSeconds: 1,
-                    signResponse: true,
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                    nameIdentifierProbes: ["nameIdentifierProbes"],
-                    authnContextClassRef: "authnContextClassRef",
-                },
-                layer: {
-                    providerId: "providerId",
-                    keyId: "keyId",
-                    privateKey: "privateKey",
-                    principal: "principal",
-                    expiration: 1,
-                },
-                sap_api: {
-                    clientid: "clientid",
-                    usernameAttribute: "usernameAttribute",
-                    tokenEndpointUrl: "tokenEndpointUrl",
-                    scope: "scope",
-                    servicePassword: "servicePassword",
-                    nameIdentifierFormat: "nameIdentifierFormat",
-                },
-                sharepoint: {
-                    url: "url",
-                    external_url: ["external_url"],
-                },
-                springcm: {
-                    acsurl: "acsurl",
-                },
-                wams: {
-                    masterkey: "masterkey",
-                },
-                wsfed: {
-                    key: "value",
-                },
-                zendesk: {
-                    accountName: "accountName",
-                },
-                zoom: {
-                    account: "account",
-                },
-                sso_integration: {
-                    name: "name",
-                    version: "version",
-                },
-            },
-            token_endpoint_auth_method: "none",
-            is_token_endpoint_ip_header_trusted: true,
-            client_metadata: {
-                key: "value",
-            },
-            mobile: {
-                android: {
-                    app_package_name: "app_package_name",
-                    sha256_cert_fingerprints: ["sha256_cert_fingerprints"],
-                },
-                ios: {
-                    team_id: "team_id",
-                    app_bundle_identifier: "app_bundle_identifier",
-                },
-            },
-            initiate_login_uri: "initiate_login_uri",
-            refresh_token: {
-                rotation_type: "rotating",
-                expiration_type: "expiring",
-                leeway: 1,
-                token_lifetime: 1,
-                infinite_token_lifetime: true,
-                idle_token_lifetime: 1,
-                infinite_idle_token_lifetime: true,
-                policies: [
-                    {
-                        audience: "audience",
-                        scope: ["scope"],
-                    },
-                ],
-            },
-            default_organization: {
-                organization_id: "organization_id",
-                flows: ["client_credentials"],
-            },
-            organization_usage: "deny",
-            organization_require_behavior: "no_prompt",
-            organization_discovery_methods: ["email"],
-            client_authentication_methods: {
-                private_key_jwt: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-                self_signed_tls_client_auth: {
-                    credentials: [
-                        {
-                            id: "id",
-                        },
-                    ],
-                },
-            },
-            require_pushed_authorization_requests: true,
-            require_proof_of_possession: true,
-            signed_request_object: {
-                required: true,
-                credentials: [
-                    {
-                        id: "id",
-                    },
-                ],
-            },
-            compliance_level: "none",
-            skip_non_verifiable_callback_uri_confirmation_prompt: true,
-            token_exchange: {
-                allow_any_profile_of_type: ["custom_authentication"],
-            },
-            par_request_expiry: 1,
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-            express_configuration: {
-                initiate_login_uri_template: "initiate_login_uri_template",
-                user_attribute_profile_id: "user_attribute_profile_id",
-                connection_profile_id: "connection_profile_id",
-                enable_client: true,
-                enable_organization: true,
-                linked_clients: [
-                    {
-                        client_id: "client_id",
-                    },
-                ],
-                okta_oin_client_id: "okta_oin_client_id",
-                admin_login_domain: "admin_login_domain",
-                oin_submission_id: "oin_submission_id",
-            },
-            resource_server_identifier: "resource_server_identifier",
-            async_approval_notification_channels: ["guardian-push"],
-            external_metadata_type: "cimd",
-            external_metadata_created_by: "admin",
-            external_client_id: "external_client_id",
-            jwks_uri: "jwks_uri",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("rotateSecret (2)", async () => {
@@ -3024,6 +1667,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/id/rotate-secret")
@@ -3042,6 +1686,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/id/rotate-secret")
@@ -3060,6 +1705,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/id/rotate-secret")
@@ -3078,6 +1724,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/id/rotate-secret")
@@ -3096,6 +1743,7 @@ describe("ClientsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/clients/id/rotate-secret")

@@ -1,4 +1,4 @@
-import { join } from "../../../../../src/management/core/url/index";
+import { join } from "../../../core/url/index";
 
 describe("join", () => {
     interface TestCase {

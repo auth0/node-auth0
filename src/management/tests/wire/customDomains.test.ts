@@ -36,6 +36,7 @@ describe("CustomDomainsClient", () => {
                 relying_party_identifier: "relying_party_identifier",
             },
         ];
+
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.customDomains.list({
@@ -44,40 +45,7 @@ describe("CustomDomainsClient", () => {
             include_fields: true,
             sort: "sort",
         });
-        expect(response).toEqual([
-            {
-                custom_domain_id: "custom_domain_id",
-                domain: "domain",
-                primary: true,
-                is_default: true,
-                status: "pending_verification",
-                type: "auth0_managed_certs",
-                origin_domain_name: "origin_domain_name",
-                verification: {
-                    methods: [
-                        {
-                            name: "cname",
-                            record: "record",
-                        },
-                    ],
-                    status: "verified",
-                    error_msg: "error_msg",
-                    last_verified_at: "last_verified_at",
-                },
-                custom_client_ip_header: "custom_client_ip_header",
-                tls_policy: "tls_policy",
-                domain_metadata: {
-                    key: "value",
-                },
-                certificate: {
-                    status: "provisioning",
-                    error_msg: "error_msg",
-                    certificate_authority: "letsencrypt",
-                    renews_before: "renews_before",
-                },
-                relying_party_identifier: "relying_party_identifier",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -85,6 +53,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -97,6 +66,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -109,6 +79,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -144,6 +115,7 @@ describe("CustomDomainsClient", () => {
             },
             relying_party_identifier: "relying_party_identifier",
         };
+
         server
             .mockEndpoint()
             .post("/custom-domains")
@@ -157,37 +129,7 @@ describe("CustomDomainsClient", () => {
             domain: "domain",
             type: "auth0_managed_certs",
         });
-        expect(response).toEqual({
-            custom_domain_id: "custom_domain_id",
-            domain: "domain",
-            primary: true,
-            is_default: true,
-            status: "pending_verification",
-            type: "auth0_managed_certs",
-            verification: {
-                methods: [
-                    {
-                        name: "cname",
-                        record: "record",
-                    },
-                ],
-                status: "verified",
-                error_msg: "error_msg",
-                last_verified_at: "last_verified_at",
-            },
-            custom_client_ip_header: "custom_client_ip_header",
-            tls_policy: "tls_policy",
-            domain_metadata: {
-                key: "value",
-            },
-            certificate: {
-                status: "provisioning",
-                error_msg: "error_msg",
-                certificate_authority: "letsencrypt",
-                renews_before: "renews_before",
-            },
-            relying_party_identifier: "relying_party_identifier",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -195,6 +137,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains")
@@ -217,6 +160,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains")
@@ -239,6 +183,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains")
@@ -261,6 +206,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains")
@@ -283,6 +229,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains")
@@ -329,6 +276,7 @@ describe("CustomDomainsClient", () => {
             },
             relying_party_identifier: "relying_party_identifier",
         };
+
         server
             .mockEndpoint()
             .get("/custom-domains/default")
@@ -338,38 +286,7 @@ describe("CustomDomainsClient", () => {
             .build();
 
         const response = await client.customDomains.getDefault();
-        expect(response).toEqual({
-            custom_domain_id: "custom_domain_id",
-            domain: "domain",
-            primary: true,
-            is_default: true,
-            status: "pending_verification",
-            type: "auth0_managed_certs",
-            origin_domain_name: "origin_domain_name",
-            verification: {
-                methods: [
-                    {
-                        name: "cname",
-                        record: "record",
-                    },
-                ],
-                status: "verified",
-                error_msg: "error_msg",
-                last_verified_at: "last_verified_at",
-            },
-            custom_client_ip_header: "custom_client_ip_header",
-            tls_policy: "tls_policy",
-            domain_metadata: {
-                key: "value",
-            },
-            certificate: {
-                status: "provisioning",
-                error_msg: "error_msg",
-                certificate_authority: "letsencrypt",
-                renews_before: "renews_before",
-            },
-            relying_party_identifier: "relying_party_identifier",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getDefault (2)", async () => {
@@ -377,6 +294,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/custom-domains/default")
@@ -395,6 +313,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/custom-domains/default")
@@ -413,6 +332,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/custom-domains/default")
@@ -455,6 +375,7 @@ describe("CustomDomainsClient", () => {
             },
             relying_party_identifier: "relying_party_identifier",
         };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/default")
@@ -467,38 +388,7 @@ describe("CustomDomainsClient", () => {
         const response = await client.customDomains.setDefault({
             domain: "domain",
         });
-        expect(response).toEqual({
-            custom_domain_id: "custom_domain_id",
-            domain: "domain",
-            primary: true,
-            is_default: true,
-            status: "pending_verification",
-            type: "auth0_managed_certs",
-            origin_domain_name: "origin_domain_name",
-            verification: {
-                methods: [
-                    {
-                        name: "cname",
-                        record: "record",
-                    },
-                ],
-                status: "verified",
-                error_msg: "error_msg",
-                last_verified_at: "last_verified_at",
-            },
-            custom_client_ip_header: "custom_client_ip_header",
-            tls_policy: "tls_policy",
-            domain_metadata: {
-                key: "value",
-            },
-            certificate: {
-                status: "provisioning",
-                error_msg: "error_msg",
-                certificate_authority: "letsencrypt",
-                renews_before: "renews_before",
-            },
-            relying_party_identifier: "relying_party_identifier",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setDefault (2)", async () => {
@@ -506,6 +396,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/default")
@@ -527,6 +418,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "x" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/default")
@@ -572,41 +464,11 @@ describe("CustomDomainsClient", () => {
             },
             relying_party_identifier: "relying_party_identifier",
         };
+
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.customDomains.get("id");
-        expect(response).toEqual({
-            custom_domain_id: "custom_domain_id",
-            domain: "domain",
-            primary: true,
-            is_default: true,
-            status: "pending_verification",
-            type: "auth0_managed_certs",
-            origin_domain_name: "origin_domain_name",
-            verification: {
-                methods: [
-                    {
-                        name: "cname",
-                        record: "record",
-                    },
-                ],
-                status: "verified",
-                error_msg: "error_msg",
-                last_verified_at: "last_verified_at",
-            },
-            custom_client_ip_header: "custom_client_ip_header",
-            tls_policy: "tls_policy",
-            domain_metadata: {
-                key: "value",
-            },
-            certificate: {
-                status: "provisioning",
-                error_msg: "error_msg",
-                certificate_authority: "letsencrypt",
-                renews_before: "renews_before",
-            },
-            relying_party_identifier: "relying_party_identifier",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -614,6 +476,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -626,6 +489,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -638,6 +502,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -650,6 +515,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -662,6 +528,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/custom-domains/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -684,6 +551,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/custom-domains/id")
@@ -702,6 +570,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/custom-domains/id")
@@ -720,6 +589,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/custom-domains/id")
@@ -738,6 +608,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/custom-domains/id")
@@ -779,6 +650,7 @@ describe("CustomDomainsClient", () => {
             },
             relying_party_identifier: "relying_party_identifier",
         };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/id")
@@ -789,37 +661,7 @@ describe("CustomDomainsClient", () => {
             .build();
 
         const response = await client.customDomains.update("id");
-        expect(response).toEqual({
-            custom_domain_id: "custom_domain_id",
-            domain: "domain",
-            primary: true,
-            is_default: true,
-            status: "pending_verification",
-            type: "auth0_managed_certs",
-            verification: {
-                methods: [
-                    {
-                        name: "cname",
-                        record: "record",
-                    },
-                ],
-                status: "verified",
-                error_msg: "error_msg",
-                last_verified_at: "last_verified_at",
-            },
-            custom_client_ip_header: "custom_client_ip_header",
-            tls_policy: "tls_policy",
-            domain_metadata: {
-                key: "value",
-            },
-            certificate: {
-                status: "provisioning",
-                error_msg: "error_msg",
-                certificate_authority: "letsencrypt",
-                renews_before: "renews_before",
-            },
-            relying_party_identifier: "relying_party_identifier",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -827,6 +669,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/id")
@@ -846,6 +689,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/id")
@@ -865,6 +709,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/id")
@@ -884,6 +729,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/custom-domains/id")
@@ -903,6 +749,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { success: true, message: "message" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/test")
@@ -912,10 +759,7 @@ describe("CustomDomainsClient", () => {
             .build();
 
         const response = await client.customDomains.test("id");
-        expect(response).toEqual({
-            success: true,
-            message: "message",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("test (2)", async () => {
@@ -923,6 +767,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/test")
@@ -941,6 +786,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/test")
@@ -959,6 +805,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/test")
@@ -977,6 +824,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/test")
@@ -995,6 +843,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/test")
@@ -1036,6 +885,7 @@ describe("CustomDomainsClient", () => {
                 renews_before: "renews_before",
             },
         };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/verify")
@@ -1045,37 +895,7 @@ describe("CustomDomainsClient", () => {
             .build();
 
         const response = await client.customDomains.verify("id");
-        expect(response).toEqual({
-            custom_domain_id: "custom_domain_id",
-            domain: "domain",
-            primary: true,
-            status: "pending_verification",
-            type: "auth0_managed_certs",
-            cname_api_key: "cname_api_key",
-            origin_domain_name: "origin_domain_name",
-            verification: {
-                methods: [
-                    {
-                        name: "cname",
-                        record: "record",
-                    },
-                ],
-                status: "verified",
-                error_msg: "error_msg",
-                last_verified_at: "last_verified_at",
-            },
-            custom_client_ip_header: "custom_client_ip_header",
-            tls_policy: "tls_policy",
-            domain_metadata: {
-                key: "value",
-            },
-            certificate: {
-                status: "provisioning",
-                error_msg: "error_msg",
-                certificate_authority: "letsencrypt",
-                renews_before: "renews_before",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("verify (2)", async () => {
@@ -1083,6 +903,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/verify")
@@ -1101,6 +922,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/verify")
@@ -1119,6 +941,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/verify")
@@ -1137,6 +960,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/verify")
@@ -1155,6 +979,7 @@ describe("CustomDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/custom-domains/id/verify")

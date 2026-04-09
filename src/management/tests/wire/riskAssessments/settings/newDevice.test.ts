@@ -10,6 +10,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { remember_for: 1 };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings/new-device")
@@ -19,9 +20,7 @@ describe("NewDeviceClient", () => {
             .build();
 
         const response = await client.riskAssessments.settings.newDevice.get();
-        expect(response).toEqual({
-            remember_for: 1,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -29,6 +28,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings/new-device")
@@ -47,6 +47,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings/new-device")
@@ -65,6 +66,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings/new-device")
@@ -83,6 +85,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings/new-device")
@@ -101,6 +104,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { remember_for: 1 };
         const rawResponseBody = { remember_for: 1 };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings/new-device")
@@ -113,9 +117,7 @@ describe("NewDeviceClient", () => {
         const response = await client.riskAssessments.settings.newDevice.update({
             remember_for: 1,
         });
-        expect(response).toEqual({
-            remember_for: 1,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -123,6 +125,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings/new-device")
@@ -144,6 +147,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings/new-device")
@@ -165,6 +169,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings/new-device")
@@ -186,6 +191,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings/new-device")
@@ -207,6 +213,7 @@ describe("NewDeviceClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { remember_for: 365 };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings/new-device")

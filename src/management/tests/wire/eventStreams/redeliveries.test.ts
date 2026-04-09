@@ -15,6 +15,7 @@ describe("RedeliveriesClient", () => {
             statuses: ["failed"],
             event_types: ["user.created"],
         };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver")
@@ -25,12 +26,7 @@ describe("RedeliveriesClient", () => {
             .build();
 
         const response = await client.eventStreams.redeliveries.create("id");
-        expect(response).toEqual({
-            date_from: "2024-01-15T09:30:00Z",
-            date_to: "2024-01-15T09:30:00Z",
-            statuses: ["failed"],
-            event_types: ["user.created"],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -38,6 +34,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver")
@@ -57,6 +54,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver")
@@ -76,6 +74,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver")
@@ -95,6 +94,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver")
@@ -114,6 +114,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver")
@@ -143,6 +144,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver/event_id")
@@ -161,6 +163,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver/event_id")
@@ -179,6 +182,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver/event_id")
@@ -197,6 +201,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver/event_id")
@@ -215,6 +220,7 @@ describe("RedeliveriesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/event-streams/id/redeliver/event_id")
