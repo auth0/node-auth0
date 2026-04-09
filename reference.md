@@ -22030,6 +22030,320 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 </dl>
 </details>
 
+## Organizations Connections
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationAllConnectionPost, Management.ListOrganizationAllConnectionsOffsetPaginatedResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.connections.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    is_enabled: true,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.connections.list("id", {
+    page: 1,
+    per_page: 1,
+    include_totals: true,
+    is_enabled: true,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationAllConnectionsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">create</a>(id, { ...params }) -> Management.CreateOrganizationAllConnectionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.create("id", {
+    connection_id: "connection_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateOrganizationAllConnectionRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">get</a>(id, connection_id) -> Management.GetOrganizationAllConnectionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.get("id", "connection_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**connection_id:** `string` — Connection identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">delete</a>(id, connection_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.delete("id", "connection_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**connection_id:** `string` — Connection identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">update</a>(id, connection_id, { ...params }) -> Management.UpdateOrganizationAllConnectionResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.connections.update("id", "connection_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Organization identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**connection_id:** `string` — Connection identifier.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateOrganizationConnectionRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ConnectionsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Organizations DiscoveryDomains
 
 <details><summary><code>client.organizations.discoveryDomains.<a href="/src/management/api/resources/organizations/resources/discoveryDomains/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationDiscoveryDomain, Management.ListOrganizationDiscoveryDomainsResponseContent&gt;</code></summary>

@@ -3073,6 +3073,66 @@ export interface AssociateOrganizationClientGrantRequestContent {
 /**
  * @example
  *     {
+ *         page: 1,
+ *         per_page: 1,
+ *         include_totals: true,
+ *         is_enabled: true
+ *     }
+ */
+export interface ListOrganizationAllConnectionsRequestParameters {
+    /** Page index of the results to return. First page is 0. */
+    page?: number | null;
+    /** Number of results per page. Defaults to 50. */
+    per_page?: number | null;
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
+    /** Filter connections by enabled status. */
+    is_enabled?: boolean | null;
+}
+
+/**
+ * @example
+ *     {
+ *         connection_id: "connection_id"
+ *     }
+ */
+export interface CreateOrganizationAllConnectionRequestParameters {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean;
+    organization_access_level?: Management.OrganizationAccessLevelEnum;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean;
+    /** Connection identifier. */
+    connection_id: string;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateOrganizationConnectionRequestParameters {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string | null;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean;
+    organization_access_level?: Management.OrganizationAccessLevelEnumWithNull | null;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean | null;
+}
+
+/**
+ * @example
+ *     {
  *         from: "from",
  *         take: 1
  *     }

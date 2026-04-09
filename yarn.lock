@@ -1703,9 +1703,9 @@ dunder-proto@^1.0.1:
     gopd "^1.2.0"
 
 electron-to-chromium@^1.5.328:
-  version "1.5.333"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.333.tgz#1a9f02e181c16af470639cf0da41c6db93f65123"
-  integrity sha512-skNh4FsE+IpCJV7xAQGbQ4eyOGvcEctVBAk7a5KPzxC3alES9rLrT+2IsPRPgeQr8LVxdJr8BHQ9481+TOr0xg==
+  version "1.5.334"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.334.tgz#1e3fdd8d014852104eb8e632e760fb364db7dd0e"
+  integrity sha512-mgjZAz7Jyx1SRCwEpy9wefDS7GvNPazLthHg8eQMJ76wBdGQQDW33TCrUTvQ4wzpmOrv2zrFoD3oNufMdyMpog==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -4009,9 +4009,9 @@ webpack-sources@^3.3.4:
   integrity sha512-7tP1PdV4vF+lYPnkMR0jMY5/la2ub5Fc/8VQrrU+lXkiM6C4TjVfGw7iKfyhnTQOsD+6Q/iKw0eFciziRgD58Q==
 
 webpack@^5.97.1:
-  version "5.105.4"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.105.4.tgz#1b77fcd55a985ac7ca9de80a746caffa38220169"
-  integrity sha512-jTywjboN9aHxFlToqb0K0Zs9SbBoW4zRUlGzI2tYNxVYcEi/IPpn+Xi4ye5jTLvX2YeLuic/IvxNot+Q1jMoOw==
+  version "5.106.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.106.0.tgz#ee374da5573eef1e47b2650d6be8e40fb928d697"
+  integrity sha512-Pkx5joZ9RrdgO5LBkyX1L2ZAJeK/Taz3vqZ9CbcP0wS5LEMx5QkKsEwLl29QJfihZ+DKRBFldzy1O30pJ1MDpA==
   dependencies:
     "@types/eslint-scope" "^3.7.7"
     "@types/estree" "^1.0.8"
