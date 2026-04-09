@@ -1,5 +1,15 @@
 # Change Log
 
+## [v5.6.0](https://github.com/auth0/node-auth0/tree/v5.6.0) (2026-04-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.5.0...v5.6.0)
+
+**Added**
+
+- Feat: Passthrough fetch, error cause propagation, type refinements, and core improvements [\#1318](https://github.com/auth0/node-auth0/pull/1318) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Feat: Added Organization Connections and type updates [\#1315](https://github.com/auth0/node-auth0/pull/1315) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Feat: Added CIMD client support, default custom domains, refresh token listing, and type updates [\#1314](https://github.com/auth0/node-auth0/pull/1314) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.5.0](https://github.com/auth0/node-auth0/tree/v5.5.0) (2026-03-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.4.0...v5.5.0)
