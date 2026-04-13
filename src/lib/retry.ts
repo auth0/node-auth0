@@ -57,10 +57,25 @@ export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }
     const nrOfTriesToAttempt = Math.min(MAX_NUMBER_RETRIES, maxRetries ?? DEFAULT_NUMBER_RETRIES);
     let nrOfTries = 0;
 
-    const retryAndWait = async () => {
+    const retryAndWait = async (): Promise<Response> => {
         let result: Response;
 
-        result = await action();
+        try {
+            result = await action();
+        } catch (e: any) {
+            if (e.name !== "TimeoutError" && nrOfTries < nrOfTriesToAttempt) {
+                nrOfTries++;
+
+                let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
+                wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
+                wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
+
+                await pause(wait);
+
+                return retryAndWait();
+            }
+            throw e;
+        }
 
         if ((retryWhen || [429]).includes(result.status) && nrOfTries < nrOfTriesToAttempt) {
             nrOfTries++;

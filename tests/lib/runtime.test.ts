@@ -268,6 +268,73 @@ describe("Runtime", () => {
         ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
     });
 
+    it("should retry on socket hang up (ECONNRESET) when retry is enabled", async () => {
+        // issue #1020 — network errors were not retried, only HTTP status codes were
+        const request = nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .times(2)
+            .replyWithError({ code: "ECONNRESET", message: "socket hang up" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        const response = await client.testRequest({
+            path: `/clients`,
+            method: "GET",
+        });
+
+        const data = (await response.json()) as Array<{ client_id: string }>;
+
+        expect(data[0].client_id).toBe("123");
+        expect(request.isDone()).toBe(true);
+    });
+
+    it("should throw after exhausting retries on repeated socket hang up", async () => {
+        // issue #1020 — should give up after maxRetries attempts
+        nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .times(4)
+            .replyWithError({ code: "ECONNRESET", message: "socket hang up" });
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        await expect(
+            client.testRequest({
+                path: `/clients`,
+                method: "GET",
+            }),
+        ).rejects.toThrow();
+    });
+
+    it("should not retry on socket hang up when retry is disabled", async () => {
+        // issue #1020 — disabled retry should still not retry network errors
+        nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .replyWithError({ code: "ECONNRESET", message: "socket hang up" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+            retry: { enabled: false },
+        });
+
+        await expect(
+            client.testRequest({
+                path: `/clients`,
+                method: "GET",
+            }),
+        ).rejects.toThrow();
+    });
+
     it("should timeout after default time", async () => {
         nock(URL).get("/clients").delayConnection(10000).reply(200, []);
 
