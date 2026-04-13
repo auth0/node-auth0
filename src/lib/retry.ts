@@ -62,8 +62,8 @@ export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }
 
         try {
             result = await action();
-        } catch (e: any) {
-            if (e.name !== "TimeoutError" && nrOfTries < nrOfTriesToAttempt) {
+        } catch (e: unknown) {
+            if (!(e instanceof Error && e.name === "TimeoutError") && nrOfTries < nrOfTriesToAttempt) {
                 nrOfTries++;
 
                 let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
