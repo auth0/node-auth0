@@ -102,7 +102,7 @@ export class BaseAPI {
         }
     };
 
-    private fetch = async (url: URL | RequestInfo, init: RequestInit) => {
+    private fetch = async (url: string | URL | Request, init: RequestInit) => {
         let fetchParams = { url, init };
         for (const middleware of this.middleware) {
             if (middleware.pre) {
