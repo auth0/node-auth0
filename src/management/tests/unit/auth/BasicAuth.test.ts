@@ -1,10 +1,10 @@
-import { BasicAuth } from "../../../core/auth/BasicAuth";
+import { BasicAuth } from "../../../../../src/management/core/auth/BasicAuth";
 
 describe("BasicAuth", () => {
     interface ToHeaderTestCase {
         description: string;
-        input: { username?: string; password?: string };
-        expected: string | undefined;
+        input: { username: string; password: string };
+        expected: string;
     }
 
     interface FromHeaderTestCase {
@@ -22,29 +22,9 @@ describe("BasicAuth", () => {
     describe("toAuthorizationHeader", () => {
         const toHeaderTests: ToHeaderTestCase[] = [
             {
-                description: "correctly converts to header with both username and password",
+                description: "correctly converts to header",
                 input: { username: "username", password: "password" },
                 expected: "Basic dXNlcm5hbWU6cGFzc3dvcmQ=",
-            },
-            {
-                description: "encodes username only with trailing colon",
-                input: { username: "username" },
-                expected: "Basic dXNlcm5hbWU6",
-            },
-            {
-                description: "encodes password only with leading colon",
-                input: { password: "password" },
-                expected: "Basic OnBhc3N3b3Jk",
-            },
-            {
-                description: "returns undefined when neither provided",
-                input: {},
-                expected: undefined,
-            },
-            {
-                description: "returns undefined when both are empty strings",
-                input: { username: "", password: "" },
-                expected: undefined,
             },
         ];
 

@@ -26,7 +26,6 @@ describe("SelfServiceProfilesClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/self-service-profiles")
@@ -35,7 +34,29 @@ describe("SelfServiceProfilesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            self_service_profiles: [
+                {
+                    id: "id",
+                    name: "name",
+                    description: "description",
+                    user_attributes: [
+                        {
+                            name: "name",
+                            description: "description",
+                            is_optional: true,
+                        },
+                    ],
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    allowed_strategies: ["oidc"],
+                    user_attribute_profile_id: "user_attribute_profile_id",
+                },
+            ],
+        };
         const page = await client.selfServiceProfiles.list({
             page: 1,
             per_page: 1,
@@ -53,7 +74,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/self-service-profiles")
@@ -72,7 +92,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/self-service-profiles")
@@ -91,7 +110,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/self-service-profiles")
@@ -110,7 +128,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/self-service-profiles")
@@ -139,7 +156,6 @@ describe("SelfServiceProfilesClient", () => {
             allowed_strategies: ["oidc"],
             user_attribute_profile_id: "user_attribute_profile_id",
         };
-
         server
             .mockEndpoint()
             .post("/self-service-profiles")
@@ -152,7 +168,28 @@ describe("SelfServiceProfilesClient", () => {
         const response = await client.selfServiceProfiles.create({
             name: "name",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            description: "description",
+            user_attributes: [
+                {
+                    name: "name",
+                    description: "description",
+                    is_optional: true,
+                },
+            ],
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            branding: {
+                logo_url: "logo_url",
+                colors: {
+                    primary: "primary",
+                },
+            },
+            allowed_strategies: ["oidc"],
+            user_attribute_profile_id: "user_attribute_profile_id",
+        });
     });
 
     test("create (2)", async () => {
@@ -160,7 +197,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/self-service-profiles")
@@ -182,7 +218,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/self-service-profiles")
@@ -204,7 +239,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/self-service-profiles")
@@ -226,7 +260,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/self-service-profiles")
@@ -248,7 +281,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/self-service-profiles")
@@ -270,7 +302,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/self-service-profiles")
@@ -302,7 +333,6 @@ describe("SelfServiceProfilesClient", () => {
             allowed_strategies: ["oidc"],
             user_attribute_profile_id: "user_attribute_profile_id",
         };
-
         server
             .mockEndpoint()
             .get("/self-service-profiles/id")
@@ -312,7 +342,28 @@ describe("SelfServiceProfilesClient", () => {
             .build();
 
         const response = await client.selfServiceProfiles.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            description: "description",
+            user_attributes: [
+                {
+                    name: "name",
+                    description: "description",
+                    is_optional: true,
+                },
+            ],
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            branding: {
+                logo_url: "logo_url",
+                colors: {
+                    primary: "primary",
+                },
+            },
+            allowed_strategies: ["oidc"],
+            user_attribute_profile_id: "user_attribute_profile_id",
+        });
     });
 
     test("get (2)", async () => {
@@ -320,7 +371,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/self-service-profiles/id")
@@ -339,7 +389,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/self-service-profiles/id")
@@ -358,7 +407,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/self-service-profiles/id")
@@ -377,7 +425,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/self-service-profiles/id")
@@ -396,7 +443,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/self-service-profiles/id")
@@ -415,7 +461,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/self-service-profiles/id")
@@ -444,7 +489,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/self-service-profiles/id")
@@ -463,7 +507,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/self-service-profiles/id")
@@ -482,7 +525,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/self-service-profiles/id")
@@ -501,7 +543,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/self-service-profiles/id")
@@ -520,7 +561,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/self-service-profiles/id")
@@ -549,7 +589,6 @@ describe("SelfServiceProfilesClient", () => {
             allowed_strategies: ["oidc"],
             user_attribute_profile_id: "user_attribute_profile_id",
         };
-
         server
             .mockEndpoint()
             .patch("/self-service-profiles/id")
@@ -560,7 +599,28 @@ describe("SelfServiceProfilesClient", () => {
             .build();
 
         const response = await client.selfServiceProfiles.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            description: "description",
+            user_attributes: [
+                {
+                    name: "name",
+                    description: "description",
+                    is_optional: true,
+                },
+            ],
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            branding: {
+                logo_url: "logo_url",
+                colors: {
+                    primary: "primary",
+                },
+            },
+            allowed_strategies: ["oidc"],
+            user_attribute_profile_id: "user_attribute_profile_id",
+        });
     });
 
     test("update (2)", async () => {
@@ -568,7 +628,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/self-service-profiles/id")
@@ -588,7 +647,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/self-service-profiles/id")
@@ -608,7 +666,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/self-service-profiles/id")
@@ -628,7 +685,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/self-service-profiles/id")
@@ -648,7 +704,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/self-service-profiles/id")
@@ -668,7 +723,6 @@ describe("SelfServiceProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/self-service-profiles/id")

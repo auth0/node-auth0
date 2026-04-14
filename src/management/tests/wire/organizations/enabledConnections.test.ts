@@ -22,7 +22,6 @@ describe("EnabledConnectionsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/enabled_connections")
@@ -31,7 +30,19 @@ describe("EnabledConnectionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            enabled_connections: [
+                {
+                    connection_id: "connection_id",
+                    assign_membership_on_login: true,
+                    show_as_button: true,
+                    is_signup_enabled: true,
+                },
+            ],
+        };
         const page = await client.organizations.enabledConnections.list("id", {
             page: 1,
             per_page: 1,
@@ -49,7 +60,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/enabled_connections")
@@ -68,7 +78,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/enabled_connections")
@@ -87,7 +96,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/enabled_connections")
@@ -106,7 +114,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/enabled_connections")
@@ -131,7 +138,6 @@ describe("EnabledConnectionsClient", () => {
             is_signup_enabled: true,
             connection: { name: "name", strategy: "strategy" },
         };
-
         server
             .mockEndpoint()
             .post("/organizations/id/enabled_connections")
@@ -144,7 +150,16 @@ describe("EnabledConnectionsClient", () => {
         const response = await client.organizations.enabledConnections.add("id", {
             connection_id: "connection_id",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            connection_id: "connection_id",
+            assign_membership_on_login: true,
+            show_as_button: true,
+            is_signup_enabled: true,
+            connection: {
+                name: "name",
+                strategy: "strategy",
+            },
+        });
     });
 
     test("add (2)", async () => {
@@ -152,7 +167,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection_id: "connection_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/enabled_connections")
@@ -174,7 +188,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection_id: "connection_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/enabled_connections")
@@ -196,7 +209,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection_id: "connection_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/enabled_connections")
@@ -218,7 +230,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { connection_id: "connection_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/enabled_connections")
@@ -246,7 +257,6 @@ describe("EnabledConnectionsClient", () => {
             is_signup_enabled: true,
             connection: { name: "name", strategy: "strategy" },
         };
-
         server
             .mockEndpoint()
             .get("/organizations/id/enabled_connections/connectionId")
@@ -256,7 +266,16 @@ describe("EnabledConnectionsClient", () => {
             .build();
 
         const response = await client.organizations.enabledConnections.get("id", "connectionId");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            connection_id: "connection_id",
+            assign_membership_on_login: true,
+            show_as_button: true,
+            is_signup_enabled: true,
+            connection: {
+                name: "name",
+                strategy: "strategy",
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -264,7 +283,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/enabled_connections/connectionId")
@@ -283,7 +301,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/enabled_connections/connectionId")
@@ -302,7 +319,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/enabled_connections/connectionId")
@@ -336,7 +352,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/enabled_connections/connectionId")
@@ -355,7 +370,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/enabled_connections/connectionId")
@@ -374,7 +388,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/enabled_connections/connectionId")
@@ -393,7 +406,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/enabled_connections/connectionId")
@@ -418,7 +430,6 @@ describe("EnabledConnectionsClient", () => {
             is_signup_enabled: true,
             connection: { name: "name", strategy: "strategy" },
         };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/enabled_connections/connectionId")
@@ -429,7 +440,16 @@ describe("EnabledConnectionsClient", () => {
             .build();
 
         const response = await client.organizations.enabledConnections.update("id", "connectionId");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            connection_id: "connection_id",
+            assign_membership_on_login: true,
+            show_as_button: true,
+            is_signup_enabled: true,
+            connection: {
+                name: "name",
+                strategy: "strategy",
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -437,7 +457,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/enabled_connections/connectionId")
@@ -457,7 +476,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/enabled_connections/connectionId")
@@ -477,7 +495,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/enabled_connections/connectionId")
@@ -497,7 +514,6 @@ describe("EnabledConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/enabled_connections/connectionId")

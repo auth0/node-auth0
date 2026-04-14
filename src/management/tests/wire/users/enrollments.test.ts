@@ -22,7 +22,6 @@ describe("EnrollmentsClient", () => {
                 last_auth: "2024-01-15T09:30:00Z",
             },
         ];
-
         server
             .mockEndpoint()
             .get("/users/id/enrollments")
@@ -32,7 +31,19 @@ describe("EnrollmentsClient", () => {
             .build();
 
         const response = await client.users.enrollments.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual([
+            {
+                id: "id",
+                status: "pending",
+                type: "type",
+                name: "name",
+                identifier: "identifier",
+                phone_number: "phone_number",
+                auth_method: "authenticator",
+                enrolled_at: "2024-01-15T09:30:00Z",
+                last_auth: "2024-01-15T09:30:00Z",
+            },
+        ]);
     });
 
     test("get (2)", async () => {
@@ -40,7 +51,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/id/enrollments")
@@ -59,7 +69,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/id/enrollments")
@@ -78,7 +87,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/id/enrollments")
@@ -97,7 +105,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/id/enrollments")
@@ -116,7 +123,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/id/enrollments")

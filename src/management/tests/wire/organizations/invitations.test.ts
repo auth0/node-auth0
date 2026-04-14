@@ -30,7 +30,6 @@ describe("InvitationsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/invitations")
@@ -39,7 +38,35 @@ describe("InvitationsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            invitations: [
+                {
+                    id: "id",
+                    organization_id: "organization_id",
+                    inviter: {
+                        name: "name",
+                    },
+                    invitee: {
+                        email: "email",
+                    },
+                    invitation_url: "invitation_url",
+                    created_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                    client_id: "client_id",
+                    connection_id: "connection_id",
+                    app_metadata: {
+                        key: "value",
+                    },
+                    user_metadata: {
+                        key: "value",
+                    },
+                    roles: ["roles"],
+                    ticket_id: "ticket_id",
+                },
+            ],
+        };
         const page = await client.organizations.invitations.list("id", {
             page: 1,
             per_page: 1,
@@ -60,7 +87,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/invitations")
@@ -79,7 +105,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/invitations")
@@ -98,7 +123,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/invitations")
@@ -117,7 +141,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/invitations")
@@ -136,7 +159,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/invitations")
@@ -169,7 +191,6 @@ describe("InvitationsClient", () => {
             roles: ["roles"],
             ticket_id: "ticket_id",
         };
-
         server
             .mockEndpoint()
             .post("/organizations/id/invitations")
@@ -188,7 +209,29 @@ describe("InvitationsClient", () => {
             },
             client_id: "client_id",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            organization_id: "organization_id",
+            inviter: {
+                name: "name",
+            },
+            invitee: {
+                email: "email",
+            },
+            invitation_url: "invitation_url",
+            created_at: "2024-01-15T09:30:00Z",
+            expires_at: "2024-01-15T09:30:00Z",
+            client_id: "client_id",
+            connection_id: "connection_id",
+            app_metadata: {
+                key: "value",
+            },
+            user_metadata: {
+                key: "value",
+            },
+            roles: ["roles"],
+            ticket_id: "ticket_id",
+        });
     });
 
     test("create (2)", async () => {
@@ -200,7 +243,6 @@ describe("InvitationsClient", () => {
             client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/invitations")
@@ -232,7 +274,6 @@ describe("InvitationsClient", () => {
             client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/invitations")
@@ -264,7 +305,6 @@ describe("InvitationsClient", () => {
             client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/invitations")
@@ -296,7 +336,6 @@ describe("InvitationsClient", () => {
             client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/invitations")
@@ -328,7 +367,6 @@ describe("InvitationsClient", () => {
             client_id: "AaiyAPdpYdesoKnqjj8HJqRn4T5titww",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/invitations")
@@ -370,7 +408,6 @@ describe("InvitationsClient", () => {
             roles: ["roles"],
             ticket_id: "ticket_id",
         };
-
         server
             .mockEndpoint()
             .get("/organizations/id/invitations/invitation_id")
@@ -383,7 +420,29 @@ describe("InvitationsClient", () => {
             fields: "fields",
             include_fields: true,
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            organization_id: "organization_id",
+            inviter: {
+                name: "name",
+            },
+            invitee: {
+                email: "email",
+            },
+            invitation_url: "invitation_url",
+            created_at: "2024-01-15T09:30:00Z",
+            expires_at: "2024-01-15T09:30:00Z",
+            client_id: "client_id",
+            connection_id: "connection_id",
+            app_metadata: {
+                key: "value",
+            },
+            user_metadata: {
+                key: "value",
+            },
+            roles: ["roles"],
+            ticket_id: "ticket_id",
+        });
     });
 
     test("get (2)", async () => {
@@ -391,7 +450,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/invitations/invitation_id")
@@ -410,7 +468,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/invitations/invitation_id")
@@ -429,7 +486,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/invitations/invitation_id")
@@ -448,7 +504,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/invitations/invitation_id")
@@ -467,7 +522,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/invitations/invitation_id")
@@ -501,7 +555,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/invitations/invitation_id")
@@ -520,7 +573,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/invitations/invitation_id")
@@ -539,7 +591,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/invitations/invitation_id")
@@ -558,7 +609,6 @@ describe("InvitationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/invitations/invitation_id")

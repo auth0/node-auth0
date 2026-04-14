@@ -15,7 +15,6 @@ describe("OrganizationsClient", () => {
                 { id: "id", name: "name", display_name: "display_name", token_quota: { client_credentials: {} } },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/client-grants/id/organizations")
@@ -24,7 +23,19 @@ describe("OrganizationsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            next: "next",
+            organizations: [
+                {
+                    id: "id",
+                    name: "name",
+                    display_name: "display_name",
+                    token_quota: {
+                        client_credentials: {},
+                    },
+                },
+            ],
+        };
         const page = await client.clientGrants.organizations.list("id", {
             from: "from",
             take: 1,
@@ -41,7 +52,6 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/client-grants/id/organizations")
@@ -60,7 +70,6 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/client-grants/id/organizations")
@@ -79,7 +88,6 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/client-grants/id/organizations")
@@ -98,7 +106,6 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/client-grants/id/organizations")

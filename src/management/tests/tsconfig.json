@@ -2,7 +2,8 @@
     "extends": "../../../tsconfig.base.json",
     "compilerOptions": {
         "outDir": null,
-        "rootDir": ".."
+        "rootDir": "..",
+        "baseUrl": ".."
     },
     "include": ["../../../src/management", "../../../src/management/tests"],
     "exclude": []

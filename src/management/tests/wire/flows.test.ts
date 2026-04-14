@@ -23,7 +23,6 @@ describe("FlowsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows")
@@ -32,7 +31,20 @@ describe("FlowsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            flows: [
+                {
+                    id: "id",
+                    name: "name",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    executed_at: "executed_at",
+                },
+            ],
+        };
         const page = await client.flows.list({
             page: 1,
             per_page: 1,
@@ -51,7 +63,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows")
@@ -70,7 +81,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows")
@@ -89,7 +99,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows")
@@ -108,7 +117,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows")
@@ -144,7 +152,6 @@ describe("FlowsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             executed_at: "executed_at",
         };
-
         server
             .mockEndpoint()
             .post("/flows")
@@ -157,7 +164,27 @@ describe("FlowsClient", () => {
         const response = await client.flows.create({
             name: "name",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            actions: [
+                {
+                    id: "id",
+                    alias: "alias",
+                    type: "ACTIVECAMPAIGN",
+                    action: "LIST_CONTACTS",
+                    allow_failure: true,
+                    mask_output: true,
+                    params: {
+                        connection_id: "connection_id",
+                        email: "email",
+                    },
+                },
+            ],
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            executed_at: "executed_at",
+        });
     });
 
     test("create (2)", async () => {
@@ -165,7 +192,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows")
@@ -187,7 +213,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows")
@@ -209,7 +234,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows")
@@ -231,7 +255,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows")
@@ -270,11 +293,30 @@ describe("FlowsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             executed_at: "executed_at",
         };
-
         server.mockEndpoint().get("/flows/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.flows.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            actions: [
+                {
+                    id: "id",
+                    alias: "alias",
+                    type: "ACTIVECAMPAIGN",
+                    action: "LIST_CONTACTS",
+                    allow_failure: true,
+                    mask_output: true,
+                    params: {
+                        connection_id: "connection_id",
+                        email: "email",
+                    },
+                },
+            ],
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            executed_at: "executed_at",
+        });
     });
 
     test("get (2)", async () => {
@@ -282,7 +324,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/flows/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -295,7 +336,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/flows/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -308,7 +348,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/flows/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -321,7 +360,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/flows/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -334,7 +372,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/flows/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -357,7 +394,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/flows/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -370,7 +406,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/flows/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -383,7 +418,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/flows/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -396,7 +430,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/flows/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -409,7 +442,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/flows/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -439,7 +471,6 @@ describe("FlowsClient", () => {
             updated_at: "2024-01-15T09:30:00Z",
             executed_at: "executed_at",
         };
-
         server
             .mockEndpoint()
             .patch("/flows/id")
@@ -450,7 +481,27 @@ describe("FlowsClient", () => {
             .build();
 
         const response = await client.flows.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            actions: [
+                {
+                    id: "id",
+                    alias: "alias",
+                    type: "ACTIVECAMPAIGN",
+                    action: "LIST_CONTACTS",
+                    allow_failure: true,
+                    mask_output: true,
+                    params: {
+                        connection_id: "connection_id",
+                        email: "email",
+                    },
+                },
+            ],
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            executed_at: "executed_at",
+        });
     });
 
     test("update (2)", async () => {
@@ -458,7 +509,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/id")
@@ -478,7 +528,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/id")
@@ -498,7 +547,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/id")
@@ -518,7 +566,6 @@ describe("FlowsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/id")

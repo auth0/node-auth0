@@ -10,7 +10,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/custom-text/am")
@@ -20,7 +19,9 @@ describe("CustomTextClient", () => {
             .build();
 
         const response = await client.prompts.customText.get("login", "am");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            key: "value",
+        });
     });
 
     test("get (2)", async () => {
@@ -28,7 +29,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/custom-text/am")
@@ -47,7 +47,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/custom-text/am")
@@ -66,7 +65,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/custom-text/am")
@@ -85,7 +83,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/custom-text/am")
@@ -104,7 +101,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/custom-text/am")
@@ -142,7 +138,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/prompts/login/custom-text/am")
@@ -166,7 +161,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/prompts/login/custom-text/am")
@@ -190,7 +184,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/prompts/login/custom-text/am")
@@ -214,7 +207,6 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: { key: "value" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/prompts/login/custom-text/am")

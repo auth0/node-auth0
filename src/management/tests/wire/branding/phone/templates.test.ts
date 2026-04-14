@@ -22,7 +22,6 @@ describe("TemplatesClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates")
@@ -34,7 +33,19 @@ describe("TemplatesClient", () => {
         const response = await client.branding.phone.templates.list({
             disabled: true,
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            templates: [
+                {
+                    id: "id",
+                    channel: "channel",
+                    customizable: true,
+                    tenant: "tenant",
+                    content: {},
+                    type: "otp_verify",
+                    disabled: true,
+                },
+            ],
+        });
     });
 
     test("list (2)", async () => {
@@ -42,7 +53,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates")
@@ -61,7 +71,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates")
@@ -80,7 +89,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates")
@@ -99,7 +107,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates")
@@ -126,7 +133,6 @@ describe("TemplatesClient", () => {
             type: "otp_verify",
             disabled: true,
         };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates")
@@ -137,7 +143,22 @@ describe("TemplatesClient", () => {
             .build();
 
         const response = await client.branding.phone.templates.create();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            channel: "channel",
+            customizable: true,
+            tenant: "tenant",
+            content: {
+                syntax: "syntax",
+                from: "from",
+                body: {
+                    text: "text",
+                    voice: "voice",
+                },
+            },
+            type: "otp_verify",
+            disabled: true,
+        });
     });
 
     test("create (2)", async () => {
@@ -145,7 +166,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates")
@@ -165,7 +185,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates")
@@ -185,7 +204,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates")
@@ -205,7 +223,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates")
@@ -225,7 +242,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates")
@@ -253,7 +269,6 @@ describe("TemplatesClient", () => {
             type: "otp_verify",
             disabled: true,
         };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates/id")
@@ -263,7 +278,22 @@ describe("TemplatesClient", () => {
             .build();
 
         const response = await client.branding.phone.templates.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            channel: "channel",
+            customizable: true,
+            tenant: "tenant",
+            content: {
+                syntax: "syntax",
+                from: "from",
+                body: {
+                    text: "text",
+                    voice: "voice",
+                },
+            },
+            type: "otp_verify",
+            disabled: true,
+        });
     });
 
     test("get (2)", async () => {
@@ -271,7 +301,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates/id")
@@ -290,7 +319,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates/id")
@@ -309,7 +337,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates/id")
@@ -328,7 +355,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates/id")
@@ -347,7 +373,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/templates/id")
@@ -376,7 +401,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/templates/id")
@@ -395,7 +419,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/templates/id")
@@ -414,7 +437,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/templates/id")
@@ -433,7 +455,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/templates/id")
@@ -452,7 +473,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/templates/id")
@@ -479,7 +499,6 @@ describe("TemplatesClient", () => {
             type: "otp_verify",
             disabled: true,
         };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id")
@@ -490,7 +509,22 @@ describe("TemplatesClient", () => {
             .build();
 
         const response = await client.branding.phone.templates.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            channel: "channel",
+            customizable: true,
+            tenant: "tenant",
+            content: {
+                syntax: "syntax",
+                from: "from",
+                body: {
+                    text: "text",
+                    voice: "voice",
+                },
+            },
+            type: "otp_verify",
+            disabled: true,
+        });
     });
 
     test("update (2)", async () => {
@@ -498,7 +532,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id")
@@ -518,7 +551,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id")
@@ -538,7 +570,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id")
@@ -558,7 +589,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id")
@@ -578,7 +608,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id")
@@ -606,7 +635,6 @@ describe("TemplatesClient", () => {
             type: "otp_verify",
             disabled: true,
         };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id/reset")
@@ -619,7 +647,22 @@ describe("TemplatesClient", () => {
         const response = await client.branding.phone.templates.reset("id", {
             key: "value",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "x",
+            channel: "channel",
+            customizable: true,
+            tenant: "x",
+            content: {
+                syntax: "syntax",
+                from: "x",
+                body: {
+                    text: "x",
+                    voice: "x",
+                },
+            },
+            type: "otp_verify",
+            disabled: true,
+        });
     });
 
     test("reset (2)", async () => {
@@ -627,7 +670,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { key: "value" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id/reset")
@@ -649,7 +691,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { key: "value" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id/reset")
@@ -671,7 +712,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { key: "value" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id/reset")
@@ -693,7 +733,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { key: "value" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/templates/id/reset")
@@ -715,7 +754,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "to" };
         const rawResponseBody = { message: "message" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates/id/try")
@@ -728,7 +766,9 @@ describe("TemplatesClient", () => {
         const response = await client.branding.phone.templates.test("id", {
             to: "to",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            message: "message",
+        });
     });
 
     test("test (2)", async () => {
@@ -736,7 +776,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates/id/try")
@@ -758,7 +797,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates/id/try")
@@ -780,7 +818,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates/id/try")
@@ -802,7 +839,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates/id/try")
@@ -824,7 +860,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/templates/id/try")

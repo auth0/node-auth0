@@ -38,7 +38,6 @@ describe("LogsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/users/id/logs")
@@ -47,7 +46,37 @@ describe("LogsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            length: 1.1,
+            total: 1.1,
+            logs: [
+                {
+                    date: "date",
+                    type: "type",
+                    description: "description",
+                    connection: "connection",
+                    connection_id: "connection_id",
+                    client_id: "client_id",
+                    client_name: "client_name",
+                    ip: "ip",
+                    hostname: "hostname",
+                    user_id: "user_id",
+                    user_name: "user_name",
+                    audience: "audience",
+                    scope: "scope",
+                    strategy: "strategy",
+                    strategy_type: "strategy_type",
+                    log_id: "log_id",
+                    isMobile: true,
+                    details: {
+                        key: "value",
+                    },
+                    user_agent: "user_agent",
+                },
+            ],
+        };
         const page = await client.users.logs.list("id", {
             page: 1,
             per_page: 1,
@@ -66,7 +95,6 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/users/id/logs")
@@ -85,7 +113,6 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/users/id/logs")
@@ -104,7 +131,6 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/users/id/logs")
@@ -123,7 +149,6 @@ describe("LogsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/users/id/logs")

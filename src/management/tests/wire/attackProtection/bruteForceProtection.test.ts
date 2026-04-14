@@ -16,7 +16,6 @@ describe("BruteForceProtectionClient", () => {
             mode: "count_per_identifier_and_ip",
             max_attempts: 1,
         };
-
         server
             .mockEndpoint()
             .get("/attack-protection/brute-force-protection")
@@ -26,7 +25,13 @@ describe("BruteForceProtectionClient", () => {
             .build();
 
         const response = await client.attackProtection.bruteForceProtection.get();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            enabled: true,
+            shields: ["block"],
+            allowlist: ["allowlist"],
+            mode: "count_per_identifier_and_ip",
+            max_attempts: 1,
+        });
     });
 
     test("get (2)", async () => {
@@ -34,7 +39,6 @@ describe("BruteForceProtectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/brute-force-protection")
@@ -53,7 +57,6 @@ describe("BruteForceProtectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/brute-force-protection")
@@ -72,7 +75,6 @@ describe("BruteForceProtectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/brute-force-protection")
@@ -97,7 +99,6 @@ describe("BruteForceProtectionClient", () => {
             mode: "count_per_identifier_and_ip",
             max_attempts: 1,
         };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/brute-force-protection")
@@ -108,7 +109,13 @@ describe("BruteForceProtectionClient", () => {
             .build();
 
         const response = await client.attackProtection.bruteForceProtection.update();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            enabled: true,
+            shields: ["block"],
+            allowlist: ["allowlist"],
+            mode: "count_per_identifier_and_ip",
+            max_attempts: 1,
+        });
     });
 
     test("update (2)", async () => {
@@ -116,7 +123,6 @@ describe("BruteForceProtectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/brute-force-protection")
@@ -136,7 +142,6 @@ describe("BruteForceProtectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/brute-force-protection")
@@ -156,7 +161,6 @@ describe("BruteForceProtectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/brute-force-protection")
@@ -176,7 +180,6 @@ describe("BruteForceProtectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/brute-force-protection")

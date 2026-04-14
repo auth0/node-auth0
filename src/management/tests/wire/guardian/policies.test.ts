@@ -10,11 +10,10 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = ["all-applications"];
-
         server.mockEndpoint().get("/guardian/policies").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.guardian.policies.list();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual(["all-applications"]);
     });
 
     test("list (2)", async () => {
@@ -22,7 +21,6 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/guardian/policies").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -35,7 +33,6 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/guardian/policies").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -48,7 +45,6 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/guardian/policies").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -61,7 +57,6 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = ["all-applications"];
         const rawResponseBody = ["all-applications"];
-
         server
             .mockEndpoint()
             .put("/guardian/policies")
@@ -72,7 +67,7 @@ describe("PoliciesClient", () => {
             .build();
 
         const response = await client.guardian.policies.set(["all-applications"]);
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual(["all-applications"]);
     });
 
     test("set (2)", async () => {
@@ -80,7 +75,6 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = ["all-applications", "all-applications"];
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/policies")
@@ -100,7 +94,6 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = ["all-applications", "all-applications"];
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/policies")
@@ -120,7 +113,6 @@ describe("PoliciesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = ["all-applications", "all-applications"];
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/policies")

@@ -27,7 +27,6 @@ describe("ConnectionsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows/vault/connections")
@@ -36,7 +35,24 @@ describe("ConnectionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            connections: [
+                {
+                    id: "id",
+                    app_id: "app_id",
+                    name: "name",
+                    account_name: "account_name",
+                    ready: true,
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    refreshed_at: "2024-01-15T09:30:00Z",
+                    fingerprint: "fingerprint",
+                },
+            ],
+        };
         const page = await client.flows.vault.connections.list({
             page: 1,
             per_page: 1,
@@ -54,7 +70,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows/vault/connections")
@@ -73,7 +88,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows/vault/connections")
@@ -92,7 +106,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows/vault/connections")
@@ -111,7 +124,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/flows/vault/connections")
@@ -145,7 +157,6 @@ describe("ConnectionsClient", () => {
             refreshed_at: "2024-01-15T09:30:00Z",
             fingerprint: "fingerprint",
         };
-
         server
             .mockEndpoint()
             .post("/flows/vault/connections")
@@ -164,7 +175,18 @@ describe("ConnectionsClient", () => {
                 base_url: "base_url",
             },
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            app_id: "app_id",
+            environment: "environment",
+            name: "name",
+            account_name: "account_name",
+            ready: true,
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            refreshed_at: "2024-01-15T09:30:00Z",
+            fingerprint: "fingerprint",
+        });
     });
 
     test("create (2)", async () => {
@@ -176,7 +198,6 @@ describe("ConnectionsClient", () => {
             setup: { type: "API_KEY", api_key: "api_key", base_url: "base_url" },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows/vault/connections")
@@ -208,7 +229,6 @@ describe("ConnectionsClient", () => {
             setup: { type: "API_KEY", api_key: "api_key", base_url: "base_url" },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows/vault/connections")
@@ -240,7 +260,6 @@ describe("ConnectionsClient", () => {
             setup: { type: "API_KEY", api_key: "api_key", base_url: "base_url" },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows/vault/connections")
@@ -272,7 +291,6 @@ describe("ConnectionsClient", () => {
             setup: { type: "API_KEY", api_key: "api_key", base_url: "base_url" },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/flows/vault/connections")
@@ -311,7 +329,6 @@ describe("ConnectionsClient", () => {
             refreshed_at: "2024-01-15T09:30:00Z",
             fingerprint: "fingerprint",
         };
-
         server
             .mockEndpoint()
             .get("/flows/vault/connections/id")
@@ -321,7 +338,18 @@ describe("ConnectionsClient", () => {
             .build();
 
         const response = await client.flows.vault.connections.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            app_id: "app_id",
+            environment: "environment",
+            name: "name",
+            account_name: "account_name",
+            ready: true,
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            refreshed_at: "2024-01-15T09:30:00Z",
+            fingerprint: "fingerprint",
+        });
     });
 
     test("get (2)", async () => {
@@ -329,7 +357,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/flows/vault/connections/id")
@@ -348,7 +375,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/flows/vault/connections/id")
@@ -367,7 +393,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/flows/vault/connections/id")
@@ -386,7 +411,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/flows/vault/connections/id")
@@ -405,7 +429,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/flows/vault/connections/id")
@@ -434,7 +457,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/flows/vault/connections/id")
@@ -453,7 +475,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/flows/vault/connections/id")
@@ -472,7 +493,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/flows/vault/connections/id")
@@ -491,7 +511,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/flows/vault/connections/id")
@@ -521,7 +540,6 @@ describe("ConnectionsClient", () => {
             refreshed_at: "2024-01-15T09:30:00Z",
             fingerprint: "fingerprint",
         };
-
         server
             .mockEndpoint()
             .patch("/flows/vault/connections/id")
@@ -532,7 +550,18 @@ describe("ConnectionsClient", () => {
             .build();
 
         const response = await client.flows.vault.connections.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            app_id: "app_id",
+            environment: "environment",
+            name: "name",
+            account_name: "account_name",
+            ready: true,
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            refreshed_at: "2024-01-15T09:30:00Z",
+            fingerprint: "fingerprint",
+        });
     });
 
     test("update (2)", async () => {
@@ -540,7 +569,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/vault/connections/id")
@@ -560,7 +588,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/vault/connections/id")
@@ -580,7 +607,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/vault/connections/id")
@@ -600,7 +626,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/vault/connections/id")
@@ -620,7 +645,6 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/flows/vault/connections/id")

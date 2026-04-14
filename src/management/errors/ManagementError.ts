@@ -7,20 +7,17 @@ export class ManagementError extends Error {
     public readonly statusCode?: number;
     public readonly body?: unknown;
     public readonly rawResponse?: core.RawResponse;
-    public readonly cause?: unknown;
 
     constructor({
         message,
         statusCode,
         body,
         rawResponse,
-        cause,
     }: {
         message?: string;
         statusCode?: number;
         body?: unknown;
         rawResponse?: core.RawResponse;
-        cause?: unknown;
     }) {
         super(buildMessage({ message, statusCode, body }));
         Object.setPrototypeOf(this, new.target.prototype);
@@ -32,9 +29,6 @@ export class ManagementError extends Error {
         this.statusCode = statusCode;
         this.body = body;
         this.rawResponse = rawResponse;
-        if (cause != null) {
-            this.cause = cause;
-        }
     }
 }
 

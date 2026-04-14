@@ -24,7 +24,6 @@ describe("HooksClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/hooks")
@@ -33,7 +32,23 @@ describe("HooksClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            hooks: [
+                {
+                    triggerId: "triggerId",
+                    id: "id",
+                    name: "name",
+                    enabled: true,
+                    script: "script",
+                    dependencies: {
+                        key: "value",
+                    },
+                },
+            ],
+        };
         const page = await client.hooks.list({
             page: 1,
             per_page: 1,
@@ -54,7 +69,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/hooks")
@@ -73,7 +87,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/hooks")
@@ -92,7 +105,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/hooks")
@@ -111,7 +123,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/hooks")
@@ -130,7 +141,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/hooks")
@@ -156,7 +166,6 @@ describe("HooksClient", () => {
             script: "script",
             dependencies: { key: "value" },
         };
-
         server
             .mockEndpoint()
             .post("/hooks")
@@ -171,7 +180,16 @@ describe("HooksClient", () => {
             script: "script",
             triggerId: "credentials-exchange",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            triggerId: "triggerId",
+            id: "id",
+            name: "name",
+            enabled: true,
+            script: "script",
+            dependencies: {
+                key: "value",
+            },
+        });
     });
 
     test("create (2)", async () => {
@@ -183,7 +201,6 @@ describe("HooksClient", () => {
             triggerId: "credentials-exchange",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/hooks")
@@ -211,7 +228,6 @@ describe("HooksClient", () => {
             triggerId: "credentials-exchange",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/hooks")
@@ -239,7 +255,6 @@ describe("HooksClient", () => {
             triggerId: "credentials-exchange",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/hooks")
@@ -267,7 +282,6 @@ describe("HooksClient", () => {
             triggerId: "credentials-exchange",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/hooks")
@@ -295,7 +309,6 @@ describe("HooksClient", () => {
             triggerId: "credentials-exchange",
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/hooks")
@@ -326,13 +339,21 @@ describe("HooksClient", () => {
             script: "script",
             dependencies: { key: "value" },
         };
-
         server.mockEndpoint().get("/hooks/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.hooks.get("id", {
             fields: "fields",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            triggerId: "triggerId",
+            id: "id",
+            name: "name",
+            enabled: true,
+            script: "script",
+            dependencies: {
+                key: "value",
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -340,7 +361,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/hooks/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -353,7 +373,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/hooks/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -366,7 +385,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/hooks/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -379,7 +397,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/hooks/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -392,7 +409,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/hooks/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -415,7 +431,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/hooks/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -428,7 +443,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/hooks/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -441,7 +455,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/hooks/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -454,7 +467,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/hooks/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -474,7 +486,6 @@ describe("HooksClient", () => {
             script: "script",
             dependencies: { key: "value" },
         };
-
         server
             .mockEndpoint()
             .patch("/hooks/id")
@@ -485,7 +496,16 @@ describe("HooksClient", () => {
             .build();
 
         const response = await client.hooks.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            triggerId: "triggerId",
+            id: "id",
+            name: "name",
+            enabled: true,
+            script: "script",
+            dependencies: {
+                key: "value",
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -493,7 +513,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/hooks/id")
@@ -513,7 +532,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/hooks/id")
@@ -533,7 +551,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/hooks/id")
@@ -553,7 +570,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/hooks/id")
@@ -573,7 +589,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/hooks/id")
@@ -593,7 +608,6 @@ describe("HooksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/hooks/id")

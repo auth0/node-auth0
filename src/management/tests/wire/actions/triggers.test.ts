@@ -22,11 +22,27 @@ describe("TriggersClient", () => {
                 },
             ],
         };
-
         server.mockEndpoint().get("/actions/triggers").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.actions.triggers.list();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            triggers: [
+                {
+                    id: "post-login",
+                    version: "version",
+                    status: "status",
+                    runtimes: ["runtimes"],
+                    default_runtime: "default_runtime",
+                    compatible_triggers: [
+                        {
+                            id: "post-login",
+                            version: "version",
+                        },
+                    ],
+                    binding_policy: "trigger-bound",
+                },
+            ],
+        });
     });
 
     test("list (2)", async () => {
@@ -34,7 +50,6 @@ describe("TriggersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/actions/triggers").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -47,7 +62,6 @@ describe("TriggersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/actions/triggers").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -60,7 +74,6 @@ describe("TriggersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/actions/triggers").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -73,7 +86,6 @@ describe("TriggersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/actions/triggers").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {

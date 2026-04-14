@@ -19,7 +19,6 @@ describe("UsersExportsClient", () => {
             limit: 1,
             fields: [{ name: "name", export_as: "export_as" }],
         };
-
         server
             .mockEndpoint()
             .post("/jobs/users-exports")
@@ -30,7 +29,21 @@ describe("UsersExportsClient", () => {
             .build();
 
         const response = await client.jobs.usersExports.create();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            status: "status",
+            type: "type",
+            created_at: "created_at",
+            id: "id",
+            connection_id: "connection_id",
+            format: "json",
+            limit: 1,
+            fields: [
+                {
+                    name: "name",
+                    export_as: "export_as",
+                },
+            ],
+        });
     });
 
     test("create (2)", async () => {
@@ -38,7 +51,6 @@ describe("UsersExportsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/jobs/users-exports")
@@ -58,7 +70,6 @@ describe("UsersExportsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/jobs/users-exports")
@@ -78,7 +89,6 @@ describe("UsersExportsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/jobs/users-exports")
@@ -98,7 +108,6 @@ describe("UsersExportsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/jobs/users-exports")

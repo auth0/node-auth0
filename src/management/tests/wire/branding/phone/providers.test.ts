@@ -23,7 +23,6 @@ describe("ProvidersClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers")
@@ -35,7 +34,23 @@ describe("ProvidersClient", () => {
         const response = await client.branding.phone.providers.list({
             disabled: true,
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            providers: [
+                {
+                    id: "id",
+                    tenant: "tenant",
+                    name: "twilio",
+                    channel: "phone",
+                    disabled: true,
+                    configuration: {
+                        sid: "sid",
+                        delivery_methods: ["text"],
+                    },
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+        });
     });
 
     test("list (2)", async () => {
@@ -43,7 +58,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers")
@@ -62,7 +76,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers")
@@ -81,7 +94,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers")
@@ -100,7 +112,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers")
@@ -128,7 +139,6 @@ describe("ProvidersClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers")
@@ -144,7 +154,21 @@ describe("ProvidersClient", () => {
                 auth_token: "auth_token",
             },
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            tenant: "tenant",
+            name: "twilio",
+            channel: "phone",
+            disabled: true,
+            configuration: {
+                default_from: "default_from",
+                mssid: "mssid",
+                sid: "sid",
+                delivery_methods: ["text"],
+            },
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+        });
     });
 
     test("create (2)", async () => {
@@ -152,7 +176,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "twilio", credentials: { auth_token: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers")
@@ -177,7 +200,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "twilio", credentials: { auth_token: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers")
@@ -202,7 +224,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "twilio", credentials: { auth_token: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers")
@@ -227,7 +248,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "twilio", credentials: { auth_token: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers")
@@ -252,7 +272,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "twilio", credentials: { auth_token: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers")
@@ -286,7 +305,6 @@ describe("ProvidersClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers/id")
@@ -296,7 +314,21 @@ describe("ProvidersClient", () => {
             .build();
 
         const response = await client.branding.phone.providers.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            tenant: "tenant",
+            name: "twilio",
+            channel: "phone",
+            disabled: true,
+            configuration: {
+                default_from: "default_from",
+                mssid: "mssid",
+                sid: "sid",
+                delivery_methods: ["text"],
+            },
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+        });
     });
 
     test("get (2)", async () => {
@@ -304,7 +336,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers/id")
@@ -323,7 +354,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers/id")
@@ -342,7 +372,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers/id")
@@ -361,7 +390,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers/id")
@@ -380,7 +408,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/phone/providers/id")
@@ -409,7 +436,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/providers/id")
@@ -428,7 +454,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/providers/id")
@@ -447,7 +472,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/providers/id")
@@ -466,7 +490,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/phone/providers/id")
@@ -494,7 +517,6 @@ describe("ProvidersClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/providers/id")
@@ -505,7 +527,21 @@ describe("ProvidersClient", () => {
             .build();
 
         const response = await client.branding.phone.providers.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            tenant: "tenant",
+            name: "twilio",
+            channel: "phone",
+            disabled: true,
+            configuration: {
+                default_from: "default_from",
+                mssid: "mssid",
+                sid: "sid",
+                delivery_methods: ["text"],
+            },
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+        });
     });
 
     test("update (2)", async () => {
@@ -513,7 +549,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/providers/id")
@@ -533,7 +568,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/providers/id")
@@ -553,7 +587,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/providers/id")
@@ -573,7 +606,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/providers/id")
@@ -593,7 +625,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/providers/id")
@@ -613,7 +644,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding/phone/providers/id")
@@ -633,7 +663,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "to" };
         const rawResponseBody = { code: 1.1, message: "message" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers/id/try")
@@ -646,7 +675,10 @@ describe("ProvidersClient", () => {
         const response = await client.branding.phone.providers.test("id", {
             to: "to",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            code: 1.1,
+            message: "message",
+        });
     });
 
     test("test (2)", async () => {
@@ -654,7 +686,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers/id/try")
@@ -676,7 +707,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers/id/try")
@@ -698,7 +728,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers/id/try")
@@ -720,7 +749,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers/id/try")
@@ -742,7 +770,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers/id/try")
@@ -764,7 +791,6 @@ describe("ProvidersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { to: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/branding/phone/providers/id/try")

@@ -26,7 +26,6 @@ describe("SessionsClient", () => {
             ],
             next: "next",
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/users/user_id/sessions")
@@ -35,7 +34,25 @@ describe("SessionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            sessions: [
+                {
+                    id: "id",
+                    user_id: "user_id",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    authenticated_at: "2024-01-15T09:30:00Z",
+                    idle_expires_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                    last_interacted_at: "2024-01-15T09:30:00Z",
+                    clients: [{}],
+                    session_metadata: {
+                        key: "value",
+                    },
+                },
+            ],
+            next: "next",
+        };
         const page = await client.users.sessions.list("user_id", {
             from: "from",
             take: 1,
@@ -52,7 +69,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/sessions")
@@ -71,7 +87,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/sessions")
@@ -90,7 +105,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/sessions")
@@ -109,7 +123,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/sessions")
@@ -138,7 +151,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/sessions")
@@ -157,7 +169,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/sessions")
@@ -176,7 +187,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/sessions")
@@ -195,7 +205,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/sessions")
@@ -214,7 +223,6 @@ describe("SessionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/sessions")

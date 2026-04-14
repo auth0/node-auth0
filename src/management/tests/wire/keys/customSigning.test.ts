@@ -29,7 +29,6 @@ describe("CustomSigningClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint()
             .get("/keys/custom-signing")
@@ -39,7 +38,26 @@ describe("CustomSigningClient", () => {
             .build();
 
         const response = await client.keys.customSigning.get();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            keys: [
+                {
+                    kty: "EC",
+                    kid: "kid",
+                    use: "sig",
+                    key_ops: ["verify"],
+                    alg: "RS256",
+                    n: "n",
+                    e: "e",
+                    crv: "P-256",
+                    x: "x",
+                    y: "y",
+                    x5u: "x5u",
+                    x5c: ["x5c"],
+                    x5t: "x5t",
+                    "x5t#S256": "x5t#S256",
+                },
+            ],
+        });
     });
 
     test("get (2)", async () => {
@@ -47,7 +65,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/custom-signing")
@@ -66,7 +83,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/custom-signing")
@@ -85,7 +101,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/custom-signing")
@@ -104,7 +119,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/custom-signing")
@@ -142,7 +156,6 @@ describe("CustomSigningClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint()
             .put("/keys/custom-signing")
@@ -159,7 +172,26 @@ describe("CustomSigningClient", () => {
                 },
             ],
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            keys: [
+                {
+                    kty: "EC",
+                    kid: "kid",
+                    use: "sig",
+                    key_ops: ["verify"],
+                    alg: "RS256",
+                    n: "n",
+                    e: "e",
+                    crv: "P-256",
+                    x: "x",
+                    y: "y",
+                    x5u: "x5u",
+                    x5c: ["x5c"],
+                    x5t: "x5t",
+                    "x5t#S256": "x5t#S256",
+                },
+            ],
+        });
     });
 
     test("set (2)", async () => {
@@ -167,7 +199,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { keys: [{ kty: "EC" }, { kty: "EC" }] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/keys/custom-signing")
@@ -196,7 +227,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { keys: [{ kty: "EC" }, { kty: "EC" }] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/keys/custom-signing")
@@ -225,7 +255,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { keys: [{ kty: "EC" }, { kty: "EC" }] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/keys/custom-signing")
@@ -254,7 +283,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { keys: [{ kty: "EC" }, { kty: "EC" }] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/keys/custom-signing")
@@ -293,7 +321,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/keys/custom-signing")
@@ -312,7 +339,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/keys/custom-signing")
@@ -331,7 +357,6 @@ describe("CustomSigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/keys/custom-signing")

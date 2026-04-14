@@ -17,7 +17,6 @@ describe("BotDetectionClient", () => {
             allowlist: ["allowlist"],
             monitoring_mode_enabled: true,
         };
-
         server
             .mockEndpoint()
             .get("/attack-protection/bot-detection")
@@ -27,7 +26,14 @@ describe("BotDetectionClient", () => {
             .build();
 
         const response = await client.attackProtection.botDetection.get();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            bot_detection_level: "low",
+            challenge_password_policy: "never",
+            challenge_passwordless_policy: "never",
+            challenge_password_reset_policy: "never",
+            allowlist: ["allowlist"],
+            monitoring_mode_enabled: true,
+        });
     });
 
     test("get (2)", async () => {
@@ -35,7 +41,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/bot-detection")
@@ -54,7 +59,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/bot-detection")
@@ -73,7 +77,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/bot-detection")
@@ -92,7 +95,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/bot-detection")
@@ -118,7 +120,6 @@ describe("BotDetectionClient", () => {
             allowlist: ["allowlist"],
             monitoring_mode_enabled: true,
         };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/bot-detection")
@@ -129,7 +130,14 @@ describe("BotDetectionClient", () => {
             .build();
 
         const response = await client.attackProtection.botDetection.update();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            bot_detection_level: "low",
+            challenge_password_policy: "never",
+            challenge_passwordless_policy: "never",
+            challenge_password_reset_policy: "never",
+            allowlist: ["allowlist"],
+            monitoring_mode_enabled: true,
+        });
     });
 
     test("update (2)", async () => {
@@ -137,7 +145,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/bot-detection")
@@ -157,7 +164,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/bot-detection")
@@ -177,7 +183,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/bot-detection")
@@ -197,7 +202,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/bot-detection")
@@ -217,7 +221,6 @@ describe("BotDetectionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/bot-detection")

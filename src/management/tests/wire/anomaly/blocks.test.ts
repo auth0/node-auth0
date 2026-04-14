@@ -20,7 +20,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/anomaly/blocks/ips/id")
@@ -39,7 +38,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/anomaly/blocks/ips/id")
@@ -58,7 +56,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/anomaly/blocks/ips/id")
@@ -77,7 +74,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/anomaly/blocks/ips/id")
@@ -96,7 +92,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/anomaly/blocks/ips/id")
@@ -125,7 +120,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/anomaly/blocks/ips/id")
@@ -144,7 +138,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/anomaly/blocks/ips/id")
@@ -163,7 +156,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/anomaly/blocks/ips/id")
@@ -182,7 +174,6 @@ describe("BlocksClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/anomaly/blocks/ips/id")

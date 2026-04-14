@@ -39,7 +39,6 @@ describe("ResourceServersClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/resource-servers")
@@ -48,7 +47,46 @@ describe("ResourceServersClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            resource_servers: [
+                {
+                    id: "id",
+                    name: "name",
+                    is_system: true,
+                    identifier: "identifier",
+                    scopes: [
+                        {
+                            value: "value",
+                        },
+                    ],
+                    signing_alg: "HS256",
+                    signing_secret: "signing_secret",
+                    allow_offline_access: true,
+                    allow_online_access: true,
+                    skip_consent_for_verifiable_first_party_clients: true,
+                    token_lifetime: 1,
+                    token_lifetime_for_web: 1,
+                    enforce_policies: true,
+                    token_dialect: "access_token",
+                    token_encryption: {
+                        format: "compact-nested-jwe",
+                        encryption_key: {
+                            alg: "RSA-OAEP-256",
+                            pem: "pem",
+                        },
+                    },
+                    consent_policy: "transactional-authorization-with-mfa",
+                    proof_of_possession: {
+                        mechanism: "mtls",
+                        required: true,
+                    },
+                    client_id: "client_id",
+                },
+            ],
+        };
         const page = await client.resourceServers.list({
             page: 1,
             per_page: 1,
@@ -67,7 +105,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/resource-servers")
@@ -86,7 +123,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/resource-servers")
@@ -105,7 +141,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/resource-servers")
@@ -124,7 +159,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/resource-servers")
@@ -167,7 +201,6 @@ describe("ResourceServersClient", () => {
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
             client_id: "client_id",
         };
-
         server
             .mockEndpoint()
             .post("/resource-servers")
@@ -180,7 +213,56 @@ describe("ResourceServersClient", () => {
         const response = await client.resourceServers.create({
             identifier: "identifier",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            is_system: true,
+            identifier: "identifier",
+            scopes: [
+                {
+                    value: "value",
+                    description: "description",
+                },
+            ],
+            signing_alg: "HS256",
+            signing_secret: "signing_secret",
+            allow_offline_access: true,
+            allow_online_access: true,
+            skip_consent_for_verifiable_first_party_clients: true,
+            token_lifetime: 1,
+            token_lifetime_for_web: 1,
+            enforce_policies: true,
+            token_dialect: "access_token",
+            token_encryption: {
+                format: "compact-nested-jwe",
+                encryption_key: {
+                    name: "name",
+                    alg: "RSA-OAEP-256",
+                    kid: "kid",
+                    pem: "pem",
+                },
+            },
+            consent_policy: "transactional-authorization-with-mfa",
+            authorization_details: [
+                {
+                    key: "value",
+                },
+            ],
+            proof_of_possession: {
+                mechanism: "mtls",
+                required: true,
+                required_for: "public_clients",
+            },
+            subject_type_authorization: {
+                user: {
+                    policy: "allow_all",
+                },
+                client: {
+                    policy: "deny_all",
+                },
+            },
+            client_id: "client_id",
+        });
     });
 
     test("create (2)", async () => {
@@ -188,7 +270,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { identifier: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/resource-servers")
@@ -210,7 +291,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { identifier: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/resource-servers")
@@ -232,7 +312,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { identifier: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/resource-servers")
@@ -254,7 +333,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { identifier: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/resource-servers")
@@ -276,7 +354,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { identifier: "x" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/resource-servers")
@@ -322,7 +399,6 @@ describe("ResourceServersClient", () => {
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
             client_id: "client_id",
         };
-
         server
             .mockEndpoint()
             .get("/resource-servers/id")
@@ -334,7 +410,56 @@ describe("ResourceServersClient", () => {
         const response = await client.resourceServers.get("id", {
             include_fields: true,
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            is_system: true,
+            identifier: "identifier",
+            scopes: [
+                {
+                    value: "value",
+                    description: "description",
+                },
+            ],
+            signing_alg: "HS256",
+            signing_secret: "signing_secret",
+            allow_offline_access: true,
+            allow_online_access: true,
+            skip_consent_for_verifiable_first_party_clients: true,
+            token_lifetime: 1,
+            token_lifetime_for_web: 1,
+            enforce_policies: true,
+            token_dialect: "access_token",
+            token_encryption: {
+                format: "compact-nested-jwe",
+                encryption_key: {
+                    name: "name",
+                    alg: "RSA-OAEP-256",
+                    kid: "kid",
+                    pem: "pem",
+                },
+            },
+            consent_policy: "transactional-authorization-with-mfa",
+            authorization_details: [
+                {
+                    key: "value",
+                },
+            ],
+            proof_of_possession: {
+                mechanism: "mtls",
+                required: true,
+                required_for: "public_clients",
+            },
+            subject_type_authorization: {
+                user: {
+                    policy: "allow_all",
+                },
+                client: {
+                    policy: "deny_all",
+                },
+            },
+            client_id: "client_id",
+        });
     });
 
     test("get (2)", async () => {
@@ -342,7 +467,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/resource-servers/id")
@@ -361,7 +485,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/resource-servers/id")
@@ -380,7 +503,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/resource-servers/id")
@@ -399,7 +521,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/resource-servers/id")
@@ -418,7 +539,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/resource-servers/id")
@@ -447,7 +567,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/resource-servers/id")
@@ -466,7 +585,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/resource-servers/id")
@@ -485,7 +603,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/resource-servers/id")
@@ -504,7 +621,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/resource-servers/id")
@@ -547,7 +663,6 @@ describe("ResourceServersClient", () => {
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
             client_id: "client_id",
         };
-
         server
             .mockEndpoint()
             .patch("/resource-servers/id")
@@ -558,7 +673,56 @@ describe("ResourceServersClient", () => {
             .build();
 
         const response = await client.resourceServers.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            is_system: true,
+            identifier: "identifier",
+            scopes: [
+                {
+                    value: "value",
+                    description: "description",
+                },
+            ],
+            signing_alg: "HS256",
+            signing_secret: "signing_secret",
+            allow_offline_access: true,
+            allow_online_access: true,
+            skip_consent_for_verifiable_first_party_clients: true,
+            token_lifetime: 1,
+            token_lifetime_for_web: 1,
+            enforce_policies: true,
+            token_dialect: "access_token",
+            token_encryption: {
+                format: "compact-nested-jwe",
+                encryption_key: {
+                    name: "name",
+                    alg: "RSA-OAEP-256",
+                    kid: "kid",
+                    pem: "pem",
+                },
+            },
+            consent_policy: "transactional-authorization-with-mfa",
+            authorization_details: [
+                {
+                    key: "value",
+                },
+            ],
+            proof_of_possession: {
+                mechanism: "mtls",
+                required: true,
+                required_for: "public_clients",
+            },
+            subject_type_authorization: {
+                user: {
+                    policy: "allow_all",
+                },
+                client: {
+                    policy: "deny_all",
+                },
+            },
+            client_id: "client_id",
+        });
     });
 
     test("update (2)", async () => {
@@ -566,7 +730,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/resource-servers/id")
@@ -586,7 +749,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/resource-servers/id")
@@ -606,7 +768,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/resource-servers/id")
@@ -626,7 +787,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/resource-servers/id")
@@ -646,7 +806,6 @@ describe("ResourceServersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/resource-servers/id")

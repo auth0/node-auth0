@@ -26,7 +26,6 @@ describe("UserAttributeProfilesClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/user-attribute-profiles")
@@ -35,7 +34,23 @@ describe("UserAttributeProfilesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            next: "next",
+            user_attribute_profiles: [
+                {
+                    id: "id",
+                    name: "name",
+                    user_attributes: {
+                        key: {
+                            description: "description",
+                            label: "label",
+                            profile_required: true,
+                            auth0_mapping: "auth0_mapping",
+                        },
+                    },
+                },
+            ],
+        };
         const page = await client.userAttributeProfiles.list({
             from: "from",
             take: 1,
@@ -52,7 +67,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles")
@@ -71,7 +85,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles")
@@ -90,7 +103,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles")
@@ -109,7 +121,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles")
@@ -153,7 +164,6 @@ describe("UserAttributeProfilesClient", () => {
                 },
             },
         };
-
         server
             .mockEndpoint()
             .post("/user-attribute-profiles")
@@ -174,7 +184,28 @@ describe("UserAttributeProfilesClient", () => {
                 },
             },
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            user_id: {
+                oidc_mapping: "sub",
+                saml_mapping: ["saml_mapping"],
+                scim_mapping: "scim_mapping",
+            },
+            user_attributes: {
+                key: {
+                    description: "description",
+                    label: "label",
+                    profile_required: true,
+                    auth0_mapping: "auth0_mapping",
+                    oidc_mapping: {
+                        mapping: "mapping",
+                    },
+                    saml_mapping: ["saml_mapping"],
+                    scim_mapping: "scim_mapping",
+                },
+            },
+        });
     });
 
     test("create (2)", async () => {
@@ -187,7 +218,6 @@ describe("UserAttributeProfilesClient", () => {
             },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/user-attribute-profiles")
@@ -222,7 +252,6 @@ describe("UserAttributeProfilesClient", () => {
             },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/user-attribute-profiles")
@@ -257,7 +286,6 @@ describe("UserAttributeProfilesClient", () => {
             },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/user-attribute-profiles")
@@ -292,7 +320,6 @@ describe("UserAttributeProfilesClient", () => {
             },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/user-attribute-profiles")
@@ -327,7 +354,6 @@ describe("UserAttributeProfilesClient", () => {
             },
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/user-attribute-profiles")
@@ -357,7 +383,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { user_attribute_profile_templates: [{ id: "id", display_name: "display_name" }] };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates")
@@ -367,7 +392,14 @@ describe("UserAttributeProfilesClient", () => {
             .build();
 
         const response = await client.userAttributeProfiles.listTemplates();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            user_attribute_profile_templates: [
+                {
+                    id: "id",
+                    display_name: "display_name",
+                },
+            ],
+        });
     });
 
     test("listTemplates (2)", async () => {
@@ -375,7 +407,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates")
@@ -394,7 +425,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates")
@@ -413,7 +443,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates")
@@ -447,7 +476,6 @@ describe("UserAttributeProfilesClient", () => {
                 },
             },
         };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates/id")
@@ -457,7 +485,26 @@ describe("UserAttributeProfilesClient", () => {
             .build();
 
         const response = await client.userAttributeProfiles.getTemplate("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            display_name: "display_name",
+            template: {
+                name: "name",
+                user_id: {
+                    oidc_mapping: "sub",
+                    saml_mapping: ["saml_mapping"],
+                    scim_mapping: "scim_mapping",
+                },
+                user_attributes: {
+                    key: {
+                        description: "description",
+                        label: "label",
+                        profile_required: true,
+                        auth0_mapping: "auth0_mapping",
+                    },
+                },
+            },
+        });
     });
 
     test("getTemplate (2)", async () => {
@@ -465,7 +512,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates/id")
@@ -484,7 +530,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates/id")
@@ -503,7 +548,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates/id")
@@ -522,7 +566,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/templates/id")
@@ -556,7 +599,6 @@ describe("UserAttributeProfilesClient", () => {
                 },
             },
         };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/id")
@@ -566,7 +608,28 @@ describe("UserAttributeProfilesClient", () => {
             .build();
 
         const response = await client.userAttributeProfiles.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            user_id: {
+                oidc_mapping: "sub",
+                saml_mapping: ["saml_mapping"],
+                scim_mapping: "scim_mapping",
+            },
+            user_attributes: {
+                key: {
+                    description: "description",
+                    label: "label",
+                    profile_required: true,
+                    auth0_mapping: "auth0_mapping",
+                    oidc_mapping: {
+                        mapping: "mapping",
+                    },
+                    saml_mapping: ["saml_mapping"],
+                    scim_mapping: "scim_mapping",
+                },
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -574,7 +637,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/id")
@@ -593,7 +655,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/id")
@@ -612,7 +673,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/id")
@@ -631,7 +691,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/user-attribute-profiles/id")
@@ -660,7 +719,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/user-attribute-profiles/id")
@@ -679,7 +737,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/user-attribute-profiles/id")
@@ -698,7 +755,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/user-attribute-profiles/id")
@@ -732,7 +788,6 @@ describe("UserAttributeProfilesClient", () => {
                 },
             },
         };
-
         server
             .mockEndpoint()
             .patch("/user-attribute-profiles/id")
@@ -743,7 +798,28 @@ describe("UserAttributeProfilesClient", () => {
             .build();
 
         const response = await client.userAttributeProfiles.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            user_id: {
+                oidc_mapping: "sub",
+                saml_mapping: ["saml_mapping"],
+                scim_mapping: "scim_mapping",
+            },
+            user_attributes: {
+                key: {
+                    description: "description",
+                    label: "label",
+                    profile_required: true,
+                    auth0_mapping: "auth0_mapping",
+                    oidc_mapping: {
+                        mapping: "mapping",
+                    },
+                    saml_mapping: ["saml_mapping"],
+                    scim_mapping: "scim_mapping",
+                },
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -751,7 +827,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/user-attribute-profiles/id")
@@ -771,7 +846,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/user-attribute-profiles/id")
@@ -791,7 +865,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/user-attribute-profiles/id")
@@ -811,7 +884,6 @@ describe("UserAttributeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/user-attribute-profiles/id")

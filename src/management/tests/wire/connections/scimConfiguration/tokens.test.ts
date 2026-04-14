@@ -18,7 +18,6 @@ describe("TokensClient", () => {
                 last_used_at: "last_used_at",
             },
         ];
-
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration/tokens")
@@ -28,7 +27,15 @@ describe("TokensClient", () => {
             .build();
 
         const response = await client.connections.scimConfiguration.tokens.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual([
+            {
+                token_id: "token_id",
+                scopes: ["scopes"],
+                created_at: "created_at",
+                valid_until: "valid_until",
+                last_used_at: "last_used_at",
+            },
+        ]);
     });
 
     test("get (2)", async () => {
@@ -36,7 +43,6 @@ describe("TokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration/tokens")
@@ -55,7 +61,6 @@ describe("TokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/connections/id/scim-configuration/tokens")
@@ -80,7 +85,6 @@ describe("TokensClient", () => {
             created_at: "created_at",
             valid_until: "valid_until",
         };
-
         server
             .mockEndpoint()
             .post("/connections/id/scim-configuration/tokens")
@@ -91,7 +95,13 @@ describe("TokensClient", () => {
             .build();
 
         const response = await client.connections.scimConfiguration.tokens.create("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            token_id: "token_id",
+            token: "token",
+            scopes: ["scopes"],
+            created_at: "created_at",
+            valid_until: "valid_until",
+        });
     });
 
     test("create (2)", async () => {
@@ -99,7 +109,6 @@ describe("TokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/connections/id/scim-configuration/tokens")
@@ -119,7 +128,6 @@ describe("TokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/connections/id/scim-configuration/tokens")
@@ -139,7 +147,6 @@ describe("TokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/connections/id/scim-configuration/tokens")
@@ -174,7 +181,6 @@ describe("TokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/connections/id/scim-configuration/tokens/tokenId")
@@ -193,7 +199,6 @@ describe("TokensClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/connections/id/scim-configuration/tokens/tokenId")

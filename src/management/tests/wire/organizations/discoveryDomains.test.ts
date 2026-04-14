@@ -22,7 +22,6 @@ describe("DiscoveryDomainsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/discovery-domains")
@@ -31,7 +30,19 @@ describe("DiscoveryDomainsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            next: "next",
+            domains: [
+                {
+                    id: "id",
+                    domain: "domain",
+                    status: "pending",
+                    use_for_organization_discovery: true,
+                    verification_txt: "verification_txt",
+                    verification_host: "verification_host",
+                },
+            ],
+        };
         const page = await client.organizations.discoveryDomains.list("id", {
             from: "from",
             take: 1,
@@ -48,7 +59,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains")
@@ -67,7 +77,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains")
@@ -86,7 +95,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains")
@@ -105,7 +113,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains")
@@ -124,7 +131,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains")
@@ -150,7 +156,6 @@ describe("DiscoveryDomainsClient", () => {
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         };
-
         server
             .mockEndpoint()
             .post("/organizations/id/discovery-domains")
@@ -163,7 +168,14 @@ describe("DiscoveryDomainsClient", () => {
         const response = await client.organizations.discoveryDomains.create("id", {
             domain: "domain",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            domain: "domain",
+            status: "pending",
+            use_for_organization_discovery: true,
+            verification_txt: "verification_txt",
+            verification_host: "verification_host",
+        });
     });
 
     test("create (2)", async () => {
@@ -171,7 +183,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/discovery-domains")
@@ -193,7 +204,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/discovery-domains")
@@ -215,7 +225,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/discovery-domains")
@@ -237,7 +246,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/discovery-domains")
@@ -259,7 +267,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/discovery-domains")
@@ -281,7 +288,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/discovery-domains")
@@ -310,7 +316,6 @@ describe("DiscoveryDomainsClient", () => {
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/name/discovery_domain")
@@ -320,7 +325,14 @@ describe("DiscoveryDomainsClient", () => {
             .build();
 
         const response = await client.organizations.discoveryDomains.getByName("id", "discovery_domain");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            domain: "domain",
+            status: "pending",
+            use_for_organization_discovery: true,
+            verification_txt: "verification_txt",
+            verification_host: "verification_host",
+        });
     });
 
     test("getByName (2)", async () => {
@@ -328,7 +340,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/name/discovery_domain")
@@ -347,7 +358,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/name/discovery_domain")
@@ -366,7 +376,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/name/discovery_domain")
@@ -385,7 +394,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/name/discovery_domain")
@@ -404,7 +412,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/name/discovery_domain")
@@ -430,7 +437,6 @@ describe("DiscoveryDomainsClient", () => {
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/discovery_domain_id")
@@ -440,7 +446,14 @@ describe("DiscoveryDomainsClient", () => {
             .build();
 
         const response = await client.organizations.discoveryDomains.get("id", "discovery_domain_id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            domain: "domain",
+            status: "pending",
+            use_for_organization_discovery: true,
+            verification_txt: "verification_txt",
+            verification_host: "verification_host",
+        });
     });
 
     test("get (2)", async () => {
@@ -448,7 +461,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/discovery_domain_id")
@@ -467,7 +479,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/discovery_domain_id")
@@ -486,7 +497,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/discovery_domain_id")
@@ -505,7 +515,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/discovery_domain_id")
@@ -524,7 +533,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/discovery-domains/discovery_domain_id")
@@ -558,7 +566,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/discovery-domains/discovery_domain_id")
@@ -577,7 +584,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/discovery-domains/discovery_domain_id")
@@ -596,7 +602,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/discovery-domains/discovery_domain_id")
@@ -615,7 +620,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/discovery-domains/discovery_domain_id")
@@ -641,7 +645,6 @@ describe("DiscoveryDomainsClient", () => {
             verification_txt: "verification_txt",
             verification_host: "verification_host",
         };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/discovery-domains/discovery_domain_id")
@@ -652,7 +655,14 @@ describe("DiscoveryDomainsClient", () => {
             .build();
 
         const response = await client.organizations.discoveryDomains.update("id", "discovery_domain_id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            domain: "domain",
+            status: "pending",
+            use_for_organization_discovery: true,
+            verification_txt: "verification_txt",
+            verification_host: "verification_host",
+        });
     });
 
     test("update (2)", async () => {
@@ -660,7 +670,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/discovery-domains/discovery_domain_id")
@@ -680,7 +689,6 @@ describe("DiscoveryDomainsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/organizations/id/discovery-domains/discovery_domain_id")

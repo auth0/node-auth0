@@ -15,7 +15,6 @@ describe("SuspiciousIpThrottlingClient", () => {
             allowlist: ["allowlist"],
             stage: { "pre-login": { max_attempts: 1, rate: 1 }, "pre-user-registration": { max_attempts: 1, rate: 1 } },
         };
-
         server
             .mockEndpoint()
             .get("/attack-protection/suspicious-ip-throttling")
@@ -25,7 +24,21 @@ describe("SuspiciousIpThrottlingClient", () => {
             .build();
 
         const response = await client.attackProtection.suspiciousIpThrottling.get();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            enabled: true,
+            shields: ["block"],
+            allowlist: ["allowlist"],
+            stage: {
+                "pre-login": {
+                    max_attempts: 1,
+                    rate: 1,
+                },
+                "pre-user-registration": {
+                    max_attempts: 1,
+                    rate: 1,
+                },
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -33,7 +46,6 @@ describe("SuspiciousIpThrottlingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/suspicious-ip-throttling")
@@ -52,7 +64,6 @@ describe("SuspiciousIpThrottlingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/suspicious-ip-throttling")
@@ -71,7 +82,6 @@ describe("SuspiciousIpThrottlingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/suspicious-ip-throttling")
@@ -95,7 +105,6 @@ describe("SuspiciousIpThrottlingClient", () => {
             allowlist: ["allowlist"],
             stage: { "pre-login": { max_attempts: 1, rate: 1 }, "pre-user-registration": { max_attempts: 1, rate: 1 } },
         };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/suspicious-ip-throttling")
@@ -106,7 +115,21 @@ describe("SuspiciousIpThrottlingClient", () => {
             .build();
 
         const response = await client.attackProtection.suspiciousIpThrottling.update();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            enabled: true,
+            shields: ["block"],
+            allowlist: ["allowlist"],
+            stage: {
+                "pre-login": {
+                    max_attempts: 1,
+                    rate: 1,
+                },
+                "pre-user-registration": {
+                    max_attempts: 1,
+                    rate: 1,
+                },
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -114,7 +137,6 @@ describe("SuspiciousIpThrottlingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/suspicious-ip-throttling")
@@ -134,7 +156,6 @@ describe("SuspiciousIpThrottlingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/suspicious-ip-throttling")
@@ -154,7 +175,6 @@ describe("SuspiciousIpThrottlingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/suspicious-ip-throttling")
@@ -174,7 +194,6 @@ describe("SuspiciousIpThrottlingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/suspicious-ip-throttling")

@@ -10,7 +10,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { ikey: "ikey", skey: "skey", host: "host" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/duo/settings")
@@ -20,7 +19,11 @@ describe("SettingsClient", () => {
             .build();
 
         const response = await client.guardian.factors.duo.settings.get();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            ikey: "ikey",
+            skey: "skey",
+            host: "host",
+        });
     });
 
     test("get (2)", async () => {
@@ -28,7 +31,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/duo/settings")
@@ -47,7 +49,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/duo/settings")
@@ -66,7 +67,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/duo/settings")
@@ -85,7 +85,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { ikey: "ikey", skey: "skey", host: "host" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/duo/settings")
@@ -96,7 +95,11 @@ describe("SettingsClient", () => {
             .build();
 
         const response = await client.guardian.factors.duo.settings.set();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            ikey: "ikey",
+            skey: "skey",
+            host: "host",
+        });
     });
 
     test("set (2)", async () => {
@@ -104,7 +107,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/duo/settings")
@@ -124,7 +126,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/duo/settings")
@@ -144,7 +145,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/duo/settings")
@@ -164,7 +164,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { ikey: "ikey", skey: "skey", host: "host" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/duo/settings")
@@ -175,7 +174,11 @@ describe("SettingsClient", () => {
             .build();
 
         const response = await client.guardian.factors.duo.settings.update();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            ikey: "ikey",
+            skey: "skey",
+            host: "host",
+        });
     });
 
     test("update (2)", async () => {
@@ -183,7 +186,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/duo/settings")
@@ -203,7 +205,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/duo/settings")
@@ -223,7 +224,6 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/duo/settings")

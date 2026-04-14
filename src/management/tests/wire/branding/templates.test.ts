@@ -10,7 +10,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { body: "body" };
-
         server
             .mockEndpoint()
             .get("/branding/templates/universal-login")
@@ -20,7 +19,9 @@ describe("TemplatesClient", () => {
             .build();
 
         const response = await client.branding.templates.getUniversalLogin();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            body: "body",
+        });
     });
 
     test("getUniversalLogin (2)", async () => {
@@ -28,7 +29,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/templates/universal-login")
@@ -47,7 +47,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/templates/universal-login")
@@ -66,7 +65,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/templates/universal-login")
@@ -85,7 +83,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/templates/universal-login")
@@ -104,7 +101,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/branding/templates/universal-login")
@@ -140,7 +136,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = "string";
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/branding/templates/universal-login")
@@ -160,7 +155,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = "string";
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/branding/templates/universal-login")
@@ -180,7 +174,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = "string";
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/branding/templates/universal-login")
@@ -200,7 +193,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = "string";
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/branding/templates/universal-login")
@@ -220,7 +212,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = "string";
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/branding/templates/universal-login")
@@ -240,7 +231,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = "string";
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/branding/templates/universal-login")
@@ -270,7 +260,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/templates/universal-login")
@@ -289,7 +278,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/templates/universal-login")
@@ -308,7 +296,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/templates/universal-login")
@@ -327,7 +314,6 @@ describe("TemplatesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/branding/templates/universal-login")

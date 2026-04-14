@@ -22,14 +22,11 @@ export function handleNonStatusCodeError(
                 rawResponse: rawResponse,
             });
         case "timeout":
-            throw new errors.ManagementTimeoutError(`Timeout exceeded when calling ${method} ${path}.`, {
-                cause: error.cause,
-            });
+            throw new errors.ManagementTimeoutError(`Timeout exceeded when calling ${method} ${path}.`);
         case "unknown":
             throw new errors.ManagementError({
                 message: error.errorMessage,
                 rawResponse: rawResponse,
-                cause: error.cause,
             });
         default:
             throw new errors.ManagementError({

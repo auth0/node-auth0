@@ -15,7 +15,6 @@ describe("UserGrantsClient", () => {
             total: 1.1,
             grants: [{ id: "id", clientID: "clientID", user_id: "user_id", audience: "audience", scope: ["scope"] }],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/grants")
@@ -24,7 +23,20 @@ describe("UserGrantsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+            grants: [
+                {
+                    id: "id",
+                    clientID: "clientID",
+                    user_id: "user_id",
+                    audience: "audience",
+                    scope: ["scope"],
+                },
+            ],
+        };
         const page = await client.userGrants.list({
             per_page: 1,
             page: 1,
@@ -45,7 +57,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/grants")
@@ -64,7 +75,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/grants")
@@ -83,7 +93,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/grants")
@@ -114,7 +123,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/grants").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -129,7 +137,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/grants").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -144,7 +151,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/grants").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -169,7 +175,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/grants/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -182,7 +187,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/grants/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -195,7 +199,6 @@ describe("UserGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().delete("/grants/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {

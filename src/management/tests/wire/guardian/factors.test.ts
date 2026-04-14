@@ -10,11 +10,16 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [{ enabled: true, trial_expired: true, name: "push-notification" }];
-
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.guardian.factors.list();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual([
+            {
+                enabled: true,
+                trial_expired: true,
+                name: "push-notification",
+            },
+        ]);
     });
 
     test("list (2)", async () => {
@@ -22,7 +27,6 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -35,7 +39,6 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -48,7 +51,6 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -61,7 +63,6 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { enabled: true };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification")
@@ -74,7 +75,9 @@ describe("FactorsClient", () => {
         const response = await client.guardian.factors.set("push-notification", {
             enabled: true,
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            enabled: true,
+        });
     });
 
     test("set (2)", async () => {
@@ -82,7 +85,6 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification")
@@ -104,7 +106,6 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification")
@@ -126,7 +127,6 @@ describe("FactorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification")

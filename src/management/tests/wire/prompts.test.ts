@@ -14,11 +14,14 @@ describe("PromptsClient", () => {
             identifier_first: true,
             webauthn_platform_first_factor: true,
         };
-
         server.mockEndpoint().get("/prompts").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.prompts.getSettings();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            universal_login_experience: "new",
+            identifier_first: true,
+            webauthn_platform_first_factor: true,
+        });
     });
 
     test("getSettings (2)", async () => {
@@ -26,7 +29,6 @@ describe("PromptsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/prompts").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -39,7 +41,6 @@ describe("PromptsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/prompts").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -52,7 +53,6 @@ describe("PromptsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/prompts").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -69,7 +69,6 @@ describe("PromptsClient", () => {
             identifier_first: true,
             webauthn_platform_first_factor: true,
         };
-
         server
             .mockEndpoint()
             .patch("/prompts")
@@ -80,7 +79,11 @@ describe("PromptsClient", () => {
             .build();
 
         const response = await client.prompts.updateSettings();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            universal_login_experience: "new",
+            identifier_first: true,
+            webauthn_platform_first_factor: true,
+        });
     });
 
     test("updateSettings (2)", async () => {
@@ -88,7 +91,6 @@ describe("PromptsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts")
@@ -108,7 +110,6 @@ describe("PromptsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts")
@@ -128,7 +129,6 @@ describe("PromptsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts")
@@ -148,7 +148,6 @@ describe("PromptsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts")

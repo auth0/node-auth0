@@ -1,8 +1,8 @@
 import { base64Decode, base64Encode } from "../base64.js";
 
 export interface BasicAuth {
-    username?: string;
-    password?: string;
+    username: string;
+    password: string;
 }
 
 const BASIC_AUTH_HEADER_PREFIX = /^Basic /i;
@@ -12,12 +12,7 @@ export const BasicAuth = {
         if (basicAuth == null) {
             return undefined;
         }
-        const username = basicAuth.username ?? "";
-        const password = basicAuth.password ?? "";
-        if (username === "" && password === "") {
-            return undefined;
-        }
-        const token = base64Encode(`${username}:${password}`);
+        const token = base64Encode(`${basicAuth.username}:${basicAuth.password}`);
         return `Basic ${token}`;
     },
     fromAuthorizationHeader: (header: string): BasicAuth => {

@@ -56,13 +56,11 @@ export declare namespace Fetcher {
 
     export interface TimeoutError {
         reason: "timeout";
-        cause?: unknown;
     }
 
     export interface UnknownError {
         reason: "unknown";
         errorMessage: string;
-        cause?: unknown;
     }
 }
 
@@ -284,7 +282,6 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
                     args.abortSignal,
                     args.withCredentials,
                     args.duplex,
-                    args.responseType === "streaming" || args.responseType === "sse",
                 ),
             args.maxRetries,
         );
@@ -340,7 +337,6 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
                 error: {
                     reason: "unknown",
                     errorMessage: "The user aborted a request",
-                    cause: error,
                 },
                 rawResponse: abortRawResponse,
             };
@@ -357,7 +353,6 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
                 ok: false,
                 error: {
                     reason: "timeout",
-                    cause: error,
                 },
                 rawResponse: abortRawResponse,
             };
@@ -375,7 +370,6 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
                 error: {
                     reason: "unknown",
                     errorMessage: error.message,
-                    cause: error,
                 },
                 rawResponse: unknownRawResponse,
             };
@@ -394,7 +388,6 @@ export async function fetcherImpl<R = unknown>(args: Fetcher.Args): Promise<APIR
             error: {
                 reason: "unknown",
                 errorMessage: toJson(error),
-                cause: error,
             },
             rawResponse: unknownRawResponse,
         };

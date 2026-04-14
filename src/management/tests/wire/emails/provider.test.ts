@@ -22,14 +22,27 @@ describe("ProviderClient", () => {
             },
             settings: { key: "value" },
         };
-
         server.mockEndpoint().get("/emails/provider").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.emails.provider.get({
             fields: "fields",
             include_fields: true,
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            name: "name",
+            enabled: true,
+            default_from_address: "default_from_address",
+            credentials: {
+                api_user: "api_user",
+                region: "region",
+                smtp_host: "smtp_host",
+                smtp_port: 1,
+                smtp_user: "smtp_user",
+            },
+            settings: {
+                key: "value",
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -37,7 +50,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/emails/provider").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -50,7 +62,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/emails/provider").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -63,7 +74,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/emails/provider").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -76,7 +86,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/emails/provider").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -89,7 +98,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/emails/provider").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -114,7 +122,6 @@ describe("ProviderClient", () => {
             },
             settings: { key: "value" },
         };
-
         server
             .mockEndpoint()
             .post("/emails/provider")
@@ -130,7 +137,21 @@ describe("ProviderClient", () => {
                 api_key: "api_key",
             },
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            name: "name",
+            enabled: true,
+            default_from_address: "default_from_address",
+            credentials: {
+                api_user: "api_user",
+                region: "region",
+                smtp_host: "smtp_host",
+                smtp_port: 1,
+                smtp_user: "smtp_user",
+            },
+            settings: {
+                key: "value",
+            },
+        });
     });
 
     test("create (2)", async () => {
@@ -138,7 +159,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/emails/provider")
@@ -163,7 +183,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/emails/provider")
@@ -188,7 +207,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/emails/provider")
@@ -213,7 +231,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/emails/provider")
@@ -238,7 +255,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/emails/provider")
@@ -273,7 +289,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/emails/provider")
@@ -292,7 +307,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/emails/provider")
@@ -311,7 +325,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/emails/provider")
@@ -330,7 +343,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/emails/provider")
@@ -349,7 +361,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/emails/provider")
@@ -380,7 +391,6 @@ describe("ProviderClient", () => {
             },
             settings: { key: "value" },
         };
-
         server
             .mockEndpoint()
             .patch("/emails/provider")
@@ -391,7 +401,21 @@ describe("ProviderClient", () => {
             .build();
 
         const response = await client.emails.provider.update();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            name: "name",
+            enabled: true,
+            default_from_address: "default_from_address",
+            credentials: {
+                api_user: "api_user",
+                region: "region",
+                smtp_host: "smtp_host",
+                smtp_port: 1,
+                smtp_user: "smtp_user",
+            },
+            settings: {
+                key: "value",
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -399,7 +423,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/emails/provider")
@@ -419,7 +442,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/emails/provider")
@@ -439,7 +461,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/emails/provider")
@@ -459,7 +480,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/emails/provider")
@@ -479,7 +499,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/emails/provider")
@@ -499,7 +518,6 @@ describe("ProviderClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/emails/provider")

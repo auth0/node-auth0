@@ -10,7 +10,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { ticket_id: "ticket_id", ticket_url: "ticket_url" };
-
         server
             .mockEndpoint()
             .post("/guardian/enrollments/ticket")
@@ -23,7 +22,10 @@ describe("EnrollmentsClient", () => {
         const response = await client.guardian.enrollments.createTicket({
             user_id: "user_id",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            ticket_id: "ticket_id",
+            ticket_url: "ticket_url",
+        });
     });
 
     test("createTicket (2)", async () => {
@@ -31,7 +33,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/guardian/enrollments/ticket")
@@ -53,7 +54,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/guardian/enrollments/ticket")
@@ -75,7 +75,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/guardian/enrollments/ticket")
@@ -97,7 +96,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/guardian/enrollments/ticket")
@@ -127,7 +125,6 @@ describe("EnrollmentsClient", () => {
             enrolled_at: "enrolled_at",
             last_auth: "last_auth",
         };
-
         server
             .mockEndpoint()
             .get("/guardian/enrollments/id")
@@ -137,7 +134,15 @@ describe("EnrollmentsClient", () => {
             .build();
 
         const response = await client.guardian.enrollments.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            status: "pending",
+            name: "name",
+            identifier: "identifier",
+            phone_number: "phone_number",
+            enrolled_at: "enrolled_at",
+            last_auth: "last_auth",
+        });
     });
 
     test("get (2)", async () => {
@@ -145,7 +150,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/enrollments/id")
@@ -164,7 +168,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/enrollments/id")
@@ -183,7 +186,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/enrollments/id")
@@ -212,7 +214,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/guardian/enrollments/id")
@@ -231,7 +232,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/guardian/enrollments/id")
@@ -250,7 +250,6 @@ describe("EnrollmentsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/guardian/enrollments/id")

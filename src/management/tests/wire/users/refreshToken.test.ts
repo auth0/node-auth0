@@ -27,7 +27,6 @@ describe("RefreshTokenClient", () => {
             ],
             next: "next",
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/users/user_id/refresh-tokens")
@@ -36,7 +35,26 @@ describe("RefreshTokenClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            tokens: [
+                {
+                    id: "id",
+                    user_id: "user_id",
+                    created_at: "2024-01-15T09:30:00Z",
+                    idle_expires_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                    client_id: "client_id",
+                    session_id: "session_id",
+                    rotating: true,
+                    resource_servers: [{}],
+                    refresh_token_metadata: {
+                        key: "value",
+                    },
+                    last_exchanged_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            next: "next",
+        };
         const page = await client.users.refreshToken.list("user_id", {
             from: "from",
             take: 1,
@@ -53,7 +71,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
@@ -72,7 +89,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
@@ -91,7 +107,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
@@ -110,7 +125,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/users/user_id/refresh-tokens")
@@ -139,7 +153,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/refresh-tokens")
@@ -158,7 +171,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/refresh-tokens")
@@ -177,7 +189,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/refresh-tokens")
@@ -196,7 +207,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/refresh-tokens")
@@ -215,7 +225,6 @@ describe("RefreshTokenClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/users/user_id/refresh-tokens")

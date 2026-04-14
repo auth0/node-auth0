@@ -10,7 +10,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = 1.1;
-
         server
             .mockEndpoint()
             .get("/stats/active-users")
@@ -20,7 +19,7 @@ describe("StatsClient", () => {
             .build();
 
         const response = await client.stats.getActiveUsersCount();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual(1.1);
     });
 
     test("getActiveUsersCount (2)", async () => {
@@ -28,7 +27,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/stats/active-users")
@@ -47,7 +45,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/stats/active-users")
@@ -66,7 +63,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/stats/active-users")
@@ -94,14 +90,22 @@ describe("StatsClient", () => {
                 created_at: "created_at",
             },
         ];
-
         server.mockEndpoint().get("/stats/daily").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.stats.getDaily({
             from: "from",
             to: "to",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual([
+            {
+                date: "date",
+                logins: 1,
+                signups: 1,
+                leaked_passwords: 1,
+                updated_at: "updated_at",
+                created_at: "created_at",
+            },
+        ]);
     });
 
     test("getDaily (2)", async () => {
@@ -109,7 +113,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/stats/daily").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -122,7 +125,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/stats/daily").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -135,7 +137,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/stats/daily").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -148,7 +149,6 @@ describe("StatsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/stats/daily").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {

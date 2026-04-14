@@ -15,11 +15,20 @@ describe("BrandingClient", () => {
             logo_url: "logo_url",
             font: { url: "url" },
         };
-
         server.mockEndpoint().get("/branding").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.branding.get();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            colors: {
+                primary: "primary",
+                page_background: "page_background",
+            },
+            favicon_url: "favicon_url",
+            logo_url: "logo_url",
+            font: {
+                url: "url",
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -27,7 +36,6 @@ describe("BrandingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/branding").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -40,7 +48,6 @@ describe("BrandingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/branding").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -53,7 +60,6 @@ describe("BrandingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server.mockEndpoint().get("/branding").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -71,7 +77,6 @@ describe("BrandingClient", () => {
             logo_url: "logo_url",
             font: { url: "url" },
         };
-
         server
             .mockEndpoint()
             .patch("/branding")
@@ -82,7 +87,17 @@ describe("BrandingClient", () => {
             .build();
 
         const response = await client.branding.update();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            colors: {
+                primary: "primary",
+                page_background: "page_background",
+            },
+            favicon_url: "favicon_url",
+            logo_url: "logo_url",
+            font: {
+                url: "url",
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -90,7 +105,6 @@ describe("BrandingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding")
@@ -110,7 +124,6 @@ describe("BrandingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding")
@@ -130,7 +143,6 @@ describe("BrandingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding")
@@ -150,7 +162,6 @@ describe("BrandingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/branding")

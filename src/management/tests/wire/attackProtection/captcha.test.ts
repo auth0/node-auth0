@@ -24,7 +24,6 @@ describe("CaptchaClient", () => {
             recaptcha_v2: { site_key: "site_key" },
             simple_captcha: { key: "value" },
         };
-
         server
             .mockEndpoint()
             .get("/attack-protection/captcha")
@@ -34,7 +33,34 @@ describe("CaptchaClient", () => {
             .build();
 
         const response = await client.attackProtection.captcha.get();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            active_provider_id: "active_provider_id",
+            arkose: {
+                site_key: "site_key",
+                fail_open: true,
+                client_subdomain: "client_subdomain",
+                verify_subdomain: "verify_subdomain",
+            },
+            auth_challenge: {
+                fail_open: true,
+            },
+            hcaptcha: {
+                site_key: "site_key",
+            },
+            friendly_captcha: {
+                site_key: "site_key",
+            },
+            recaptcha_enterprise: {
+                site_key: "site_key",
+                project_id: "project_id",
+            },
+            recaptcha_v2: {
+                site_key: "site_key",
+            },
+            simple_captcha: {
+                key: "value",
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -42,7 +68,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/captcha")
@@ -61,7 +86,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/captcha")
@@ -80,7 +104,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/captcha")
@@ -99,7 +122,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/attack-protection/captcha")
@@ -132,7 +154,6 @@ describe("CaptchaClient", () => {
             recaptcha_v2: { site_key: "site_key" },
             simple_captcha: { key: "value" },
         };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/captcha")
@@ -143,7 +164,34 @@ describe("CaptchaClient", () => {
             .build();
 
         const response = await client.attackProtection.captcha.update();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            active_provider_id: "active_provider_id",
+            arkose: {
+                site_key: "site_key",
+                fail_open: true,
+                client_subdomain: "client_subdomain",
+                verify_subdomain: "verify_subdomain",
+            },
+            auth_challenge: {
+                fail_open: true,
+            },
+            hcaptcha: {
+                site_key: "site_key",
+            },
+            friendly_captcha: {
+                site_key: "site_key",
+            },
+            recaptcha_enterprise: {
+                site_key: "site_key",
+                project_id: "project_id",
+            },
+            recaptcha_v2: {
+                site_key: "site_key",
+            },
+            simple_captcha: {
+                key: "value",
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -151,7 +199,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/captcha")
@@ -171,7 +218,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/captcha")
@@ -191,7 +237,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/captcha")
@@ -211,7 +256,6 @@ describe("CaptchaClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/attack-protection/captcha")

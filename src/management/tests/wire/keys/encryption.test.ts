@@ -25,7 +25,6 @@ describe("EncryptionClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/keys/encryption")
@@ -34,7 +33,22 @@ describe("EncryptionClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            start: 1,
+            limit: 1,
+            total: 1,
+            keys: [
+                {
+                    kid: "kid",
+                    type: "customer-provided-root-key",
+                    state: "pre-activation",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    parent_kid: "parent_kid",
+                    public_key: "public_key",
+                },
+            ],
+        };
         const page = await client.keys.encryption.list({
             page: 1,
             per_page: 1,
@@ -52,7 +66,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/keys/encryption")
@@ -71,7 +84,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/keys/encryption")
@@ -90,7 +102,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/keys/encryption")
@@ -109,7 +120,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/keys/encryption")
@@ -136,7 +146,6 @@ describe("EncryptionClient", () => {
             parent_kid: "parent_kid",
             public_key: "public_key",
         };
-
         server
             .mockEndpoint()
             .post("/keys/encryption")
@@ -149,7 +158,15 @@ describe("EncryptionClient", () => {
         const response = await client.keys.encryption.create({
             type: "customer-provided-root-key",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            kid: "kid",
+            type: "customer-provided-root-key",
+            state: "pre-activation",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            parent_kid: "parent_kid",
+            public_key: "public_key",
+        });
     });
 
     test("create (2)", async () => {
@@ -157,7 +174,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "customer-provided-root-key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption")
@@ -179,7 +195,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "customer-provided-root-key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption")
@@ -201,7 +216,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "customer-provided-root-key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption")
@@ -223,7 +237,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "customer-provided-root-key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption")
@@ -245,7 +258,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "customer-provided-root-key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption")
@@ -277,7 +289,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/rekey")
@@ -296,7 +307,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/rekey")
@@ -315,7 +325,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/rekey")
@@ -342,7 +351,6 @@ describe("EncryptionClient", () => {
             parent_kid: "parent_kid",
             public_key: "public_key",
         };
-
         server
             .mockEndpoint()
             .get("/keys/encryption/kid")
@@ -352,7 +360,15 @@ describe("EncryptionClient", () => {
             .build();
 
         const response = await client.keys.encryption.get("kid");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            kid: "kid",
+            type: "customer-provided-root-key",
+            state: "pre-activation",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            parent_kid: "parent_kid",
+            public_key: "public_key",
+        });
     });
 
     test("get (2)", async () => {
@@ -360,7 +376,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/encryption/kid")
@@ -379,7 +394,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/encryption/kid")
@@ -398,7 +412,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/encryption/kid")
@@ -417,7 +430,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/encryption/kid")
@@ -436,7 +448,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/keys/encryption/kid")
@@ -463,7 +474,6 @@ describe("EncryptionClient", () => {
             parent_kid: "parent_kid",
             public_key: "public_key",
         };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid")
@@ -476,7 +486,15 @@ describe("EncryptionClient", () => {
         const response = await client.keys.encryption.import("kid", {
             wrapped_key: "wrapped_key",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            kid: "kid",
+            type: "customer-provided-root-key",
+            state: "pre-activation",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            parent_kid: "parent_kid",
+            public_key: "public_key",
+        });
     });
 
     test("import (2)", async () => {
@@ -484,7 +502,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { wrapped_key: "wrapped_key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid")
@@ -506,7 +523,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { wrapped_key: "wrapped_key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid")
@@ -528,7 +544,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { wrapped_key: "wrapped_key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid")
@@ -550,7 +565,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { wrapped_key: "wrapped_key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid")
@@ -572,7 +586,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { wrapped_key: "wrapped_key" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid")
@@ -604,7 +617,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/keys/encryption/kid")
@@ -623,7 +635,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/keys/encryption/kid")
@@ -642,7 +653,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/keys/encryption/kid")
@@ -661,7 +671,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/keys/encryption/kid")
@@ -680,7 +689,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { public_key: "public_key", algorithm: "CKM_RSA_AES_KEY_WRAP" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid/wrapping-key")
@@ -690,7 +698,10 @@ describe("EncryptionClient", () => {
             .build();
 
         const response = await client.keys.encryption.createPublicWrappingKey("kid");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            public_key: "public_key",
+            algorithm: "CKM_RSA_AES_KEY_WRAP",
+        });
     });
 
     test("createPublicWrappingKey (2)", async () => {
@@ -698,7 +709,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid/wrapping-key")
@@ -717,7 +727,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid/wrapping-key")
@@ -736,7 +745,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid/wrapping-key")
@@ -755,7 +763,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid/wrapping-key")
@@ -774,7 +781,6 @@ describe("EncryptionClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/keys/encryption/kid/wrapping-key")

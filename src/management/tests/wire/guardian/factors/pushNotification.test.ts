@@ -10,7 +10,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { bundle_id: "bundle_id", sandbox: true, enabled: true };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/apns")
@@ -20,7 +19,11 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.getApnsProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            bundle_id: "bundle_id",
+            sandbox: true,
+            enabled: true,
+        });
     });
 
     test("getApnsProvider (2)", async () => {
@@ -28,7 +31,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/apns")
@@ -47,7 +49,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/apns")
@@ -66,7 +67,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/apns")
@@ -85,7 +85,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { sandbox: true, bundle_id: "bundle_id" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/apns")
@@ -96,7 +95,10 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.setApnsProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            sandbox: true,
+            bundle_id: "bundle_id",
+        });
     });
 
     test("setApnsProvider (2)", async () => {
@@ -104,7 +106,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/apns")
@@ -124,7 +125,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/apns")
@@ -144,7 +144,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/apns")
@@ -164,7 +163,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { sandbox: true, bundle_id: "bundle_id" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/apns")
@@ -175,7 +173,10 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.updateApnsProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            sandbox: true,
+            bundle_id: "bundle_id",
+        });
     });
 
     test("updateApnsProvider (2)", async () => {
@@ -183,7 +184,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/apns")
@@ -203,7 +203,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/apns")
@@ -223,7 +222,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/apns")
@@ -243,7 +241,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcm")
@@ -254,7 +251,9 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.setFcmProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            key: "value",
+        });
     });
 
     test("setFcmProvider (2)", async () => {
@@ -262,7 +261,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcm")
@@ -282,7 +280,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcm")
@@ -302,7 +299,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcm")
@@ -322,7 +318,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcm")
@@ -333,7 +328,9 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.updateFcmProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            key: "value",
+        });
     });
 
     test("updateFcmProvider (2)", async () => {
@@ -341,7 +338,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcm")
@@ -361,7 +357,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcm")
@@ -381,7 +376,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcm")
@@ -401,7 +395,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcmv1")
@@ -412,7 +405,9 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.setFcmv1Provider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            key: "value",
+        });
     });
 
     test("setFcmv1Provider (2)", async () => {
@@ -420,7 +415,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcmv1")
@@ -440,7 +434,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcmv1")
@@ -460,7 +453,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/fcmv1")
@@ -480,7 +472,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcmv1")
@@ -491,7 +482,9 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.updateFcmv1Provider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            key: "value",
+        });
     });
 
     test("updateFcmv1Provider (2)", async () => {
@@ -499,7 +492,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcmv1")
@@ -519,7 +511,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcmv1")
@@ -539,7 +530,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/fcmv1")
@@ -565,7 +555,6 @@ describe("PushNotificationClient", () => {
             sns_apns_platform_application_arn: "sns_apns_platform_application_arn",
             sns_gcm_platform_application_arn: "sns_gcm_platform_application_arn",
         };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/sns")
@@ -575,7 +564,13 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.getSnsProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            aws_access_key_id: "aws_access_key_id",
+            aws_secret_access_key: "aws_secret_access_key",
+            aws_region: "aws_region",
+            sns_apns_platform_application_arn: "sns_apns_platform_application_arn",
+            sns_gcm_platform_application_arn: "sns_gcm_platform_application_arn",
+        });
     });
 
     test("getSnsProvider (2)", async () => {
@@ -583,7 +578,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/sns")
@@ -602,7 +596,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/sns")
@@ -621,7 +614,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/providers/sns")
@@ -646,7 +638,6 @@ describe("PushNotificationClient", () => {
             sns_apns_platform_application_arn: "sns_apns_platform_application_arn",
             sns_gcm_platform_application_arn: "sns_gcm_platform_application_arn",
         };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/sns")
@@ -657,7 +648,13 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.setSnsProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            aws_access_key_id: "aws_access_key_id",
+            aws_secret_access_key: "aws_secret_access_key",
+            aws_region: "aws_region",
+            sns_apns_platform_application_arn: "sns_apns_platform_application_arn",
+            sns_gcm_platform_application_arn: "sns_gcm_platform_application_arn",
+        });
     });
 
     test("setSnsProvider (2)", async () => {
@@ -665,7 +662,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/sns")
@@ -685,7 +681,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/sns")
@@ -705,7 +700,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/providers/sns")
@@ -731,7 +725,6 @@ describe("PushNotificationClient", () => {
             sns_apns_platform_application_arn: "sns_apns_platform_application_arn",
             sns_gcm_platform_application_arn: "sns_gcm_platform_application_arn",
         };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/sns")
@@ -742,7 +735,13 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.updateSnsProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            aws_access_key_id: "aws_access_key_id",
+            aws_secret_access_key: "aws_secret_access_key",
+            aws_region: "aws_region",
+            sns_apns_platform_application_arn: "sns_apns_platform_application_arn",
+            sns_gcm_platform_application_arn: "sns_gcm_platform_application_arn",
+        });
     });
 
     test("updateSnsProvider (2)", async () => {
@@ -750,7 +749,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/sns")
@@ -770,7 +768,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/sns")
@@ -790,7 +787,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/guardian/factors/push-notification/providers/sns")
@@ -810,7 +806,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { provider: "guardian" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/selected-provider")
@@ -820,7 +815,9 @@ describe("PushNotificationClient", () => {
             .build();
 
         const response = await client.guardian.factors.pushNotification.getSelectedProvider();
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            provider: "guardian",
+        });
     });
 
     test("getSelectedProvider (2)", async () => {
@@ -828,7 +825,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/selected-provider")
@@ -847,7 +843,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/selected-provider")
@@ -866,7 +861,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/guardian/factors/push-notification/selected-provider")
@@ -885,7 +879,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "guardian" };
         const rawResponseBody = { provider: "guardian" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/selected-provider")
@@ -898,7 +891,9 @@ describe("PushNotificationClient", () => {
         const response = await client.guardian.factors.pushNotification.setProvider({
             provider: "guardian",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            provider: "guardian",
+        });
     });
 
     test("setProvider (2)", async () => {
@@ -906,7 +901,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "guardian" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/selected-provider")
@@ -928,7 +922,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "guardian" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/selected-provider")
@@ -950,7 +943,6 @@ describe("PushNotificationClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "guardian" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .put("/guardian/factors/push-notification/selected-provider")

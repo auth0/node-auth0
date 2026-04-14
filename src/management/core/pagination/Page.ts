@@ -68,7 +68,7 @@ export class Page<T, R = unknown> implements AsyncIterable<T> {
         }
     }
 
-    async *[Symbol.asyncIterator](): AsyncIterator<T, void, unknown> {
+    async *[Symbol.asyncIterator](): AsyncIterator<T, void, any> {
         for await (const message of this.iterMessages()) {
             yield message;
         }

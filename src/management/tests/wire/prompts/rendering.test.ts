@@ -26,7 +26,6 @@ describe("RenderingClient", () => {
             limit: 1.1,
             total: 1.1,
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/prompts/rendering")
@@ -35,7 +34,23 @@ describe("RenderingClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            configs: [
+                {
+                    tenant: "tenant",
+                    prompt: "prompt",
+                    screen: "screen",
+                    rendering_mode: "advanced",
+                    context_configuration: ["branding.settings"],
+                    default_head_tags_disabled: true,
+                    use_page_template: true,
+                    head_tags: [{}],
+                },
+            ],
+            start: 1.1,
+            limit: 1.1,
+            total: 1.1,
+        };
         const page = await client.prompts.rendering.list({
             fields: "fields",
             include_fields: true,
@@ -58,7 +73,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/prompts/rendering")
@@ -77,7 +91,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/prompts/rendering")
@@ -96,7 +109,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/prompts/rendering")
@@ -115,7 +127,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/prompts/rendering")
@@ -134,7 +145,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/prompts/rendering")
@@ -165,7 +175,6 @@ describe("RenderingClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint()
             .patch("/prompts/rendering")
@@ -183,7 +192,19 @@ describe("RenderingClient", () => {
                 },
             ],
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            configs: [
+                {
+                    prompt: "login",
+                    screen: "login",
+                    rendering_mode: "advanced",
+                    context_configuration: ["branding.settings"],
+                    default_head_tags_disabled: true,
+                    use_page_template: true,
+                    head_tags: [{}],
+                },
+            ],
+        });
     });
 
     test("bulkUpdate (2)", async () => {
@@ -196,7 +217,6 @@ describe("RenderingClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/rendering")
@@ -232,7 +252,6 @@ describe("RenderingClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/rendering")
@@ -268,7 +287,6 @@ describe("RenderingClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/rendering")
@@ -304,7 +322,6 @@ describe("RenderingClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/rendering")
@@ -340,7 +357,6 @@ describe("RenderingClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/rendering")
@@ -386,7 +402,6 @@ describe("RenderingClient", () => {
                 domains: [{ id: "id" }],
             },
         };
-
         server
             .mockEndpoint()
             .get("/prompts/login/screen/login/rendering")
@@ -396,7 +411,42 @@ describe("RenderingClient", () => {
             .build();
 
         const response = await client.prompts.rendering.get("login", "login");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            tenant: "tenant",
+            prompt: "prompt",
+            screen: "screen",
+            rendering_mode: "advanced",
+            context_configuration: ["branding.settings"],
+            default_head_tags_disabled: true,
+            use_page_template: true,
+            head_tags: [
+                {
+                    tag: "tag",
+                    attributes: {
+                        key: "value",
+                    },
+                    content: "content",
+                },
+            ],
+            filters: {
+                match_type: "includes_any",
+                clients: [
+                    {
+                        id: "id",
+                    },
+                ],
+                organizations: [
+                    {
+                        id: "id",
+                    },
+                ],
+                domains: [
+                    {
+                        id: "id",
+                    },
+                ],
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -404,7 +454,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/screen/login/rendering")
@@ -423,7 +472,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/screen/login/rendering")
@@ -442,7 +490,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/screen/login/rendering")
@@ -461,7 +508,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/screen/login/rendering")
@@ -480,7 +526,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/screen/login/rendering")
@@ -499,7 +544,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/prompts/login/screen/login/rendering")
@@ -530,7 +574,6 @@ describe("RenderingClient", () => {
                 domains: [{ id: "id" }],
             },
         };
-
         server
             .mockEndpoint()
             .patch("/prompts/login/screen/login/rendering")
@@ -541,7 +584,39 @@ describe("RenderingClient", () => {
             .build();
 
         const response = await client.prompts.rendering.update("login", "login");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            rendering_mode: "advanced",
+            context_configuration: ["branding.settings"],
+            default_head_tags_disabled: true,
+            use_page_template: true,
+            head_tags: [
+                {
+                    tag: "tag",
+                    attributes: {
+                        key: "value",
+                    },
+                    content: "content",
+                },
+            ],
+            filters: {
+                match_type: "includes_any",
+                clients: [
+                    {
+                        id: "id",
+                    },
+                ],
+                organizations: [
+                    {
+                        id: "id",
+                    },
+                ],
+                domains: [
+                    {
+                        id: "id",
+                    },
+                ],
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -549,7 +624,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/login/screen/login/rendering")
@@ -569,7 +643,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/login/screen/login/rendering")
@@ -589,7 +662,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/login/screen/login/rendering")
@@ -609,7 +681,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/login/screen/login/rendering")
@@ -629,7 +700,6 @@ describe("RenderingClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/prompts/login/screen/login/rendering")

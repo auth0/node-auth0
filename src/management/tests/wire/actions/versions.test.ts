@@ -33,7 +33,6 @@ describe("VersionsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/actions/actionId/versions")
@@ -42,7 +41,34 @@ describe("VersionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            total: 1.1,
+            page: 1.1,
+            per_page: 1.1,
+            versions: [
+                {
+                    id: "id",
+                    action_id: "action_id",
+                    code: "code",
+                    dependencies: [{}],
+                    deployed: true,
+                    runtime: "runtime",
+                    secrets: [{}],
+                    status: "pending",
+                    number: 1.1,
+                    errors: [{}],
+                    built_at: "2024-01-15T09:30:00Z",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                    supported_triggers: [
+                        {
+                            id: "post-login",
+                        },
+                    ],
+                    modules: [{}],
+                },
+            ],
+        };
         const page = await client.actions.versions.list("actionId", {
             page: 1,
             per_page: 1,
@@ -59,7 +85,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/actions/actionId/versions")
@@ -78,7 +103,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/actions/actionId/versions")
@@ -97,7 +121,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/actions/actionId/versions")
@@ -116,7 +139,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/actions/actionId/versions")
@@ -176,7 +198,6 @@ describe("VersionsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint()
             .get("/actions/actions/actionId/versions/id")
@@ -186,7 +207,74 @@ describe("VersionsClient", () => {
             .build();
 
         const response = await client.actions.versions.get("actionId", "id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            action_id: "action_id",
+            code: "code",
+            dependencies: [
+                {
+                    name: "name",
+                    version: "version",
+                    registry_url: "registry_url",
+                },
+            ],
+            deployed: true,
+            runtime: "runtime",
+            secrets: [
+                {
+                    name: "name",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            status: "pending",
+            number: 1.1,
+            errors: [
+                {
+                    id: "id",
+                    msg: "msg",
+                    url: "url",
+                },
+            ],
+            action: {
+                id: "id",
+                name: "name",
+                supported_triggers: [
+                    {
+                        id: "post-login",
+                    },
+                ],
+                all_changes_deployed: true,
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
+            },
+            built_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            supported_triggers: [
+                {
+                    id: "post-login",
+                    version: "version",
+                    status: "status",
+                    runtimes: ["runtimes"],
+                    default_runtime: "default_runtime",
+                    compatible_triggers: [
+                        {
+                            id: "post-login",
+                            version: "version",
+                        },
+                    ],
+                    binding_policy: "trigger-bound",
+                },
+            ],
+            modules: [
+                {
+                    module_id: "module_id",
+                    module_name: "module_name",
+                    module_version_id: "module_version_id",
+                    module_version_number: 1,
+                },
+            ],
+        });
     });
 
     test("get (2)", async () => {
@@ -194,7 +282,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/actions/actionId/versions/id")
@@ -213,7 +300,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/actions/actionId/versions/id")
@@ -232,7 +318,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/actions/actionId/versions/id")
@@ -251,7 +336,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/actions/actionId/versions/id")
@@ -270,7 +354,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/actions/actionId/versions/id")
@@ -330,7 +413,6 @@ describe("VersionsClient", () => {
                 },
             ],
         };
-
         server
             .mockEndpoint()
             .post("/actions/actions/actionId/versions/id/deploy")
@@ -340,7 +422,74 @@ describe("VersionsClient", () => {
             .build();
 
         const response = await client.actions.versions.deploy("actionId", "id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            action_id: "action_id",
+            code: "code",
+            dependencies: [
+                {
+                    name: "name",
+                    version: "version",
+                    registry_url: "registry_url",
+                },
+            ],
+            deployed: true,
+            runtime: "runtime",
+            secrets: [
+                {
+                    name: "name",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            status: "pending",
+            number: 1.1,
+            errors: [
+                {
+                    id: "id",
+                    msg: "msg",
+                    url: "url",
+                },
+            ],
+            action: {
+                id: "id",
+                name: "name",
+                supported_triggers: [
+                    {
+                        id: "post-login",
+                    },
+                ],
+                all_changes_deployed: true,
+                created_at: "2024-01-15T09:30:00Z",
+                updated_at: "2024-01-15T09:30:00Z",
+            },
+            built_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            supported_triggers: [
+                {
+                    id: "post-login",
+                    version: "version",
+                    status: "status",
+                    runtimes: ["runtimes"],
+                    default_runtime: "default_runtime",
+                    compatible_triggers: [
+                        {
+                            id: "post-login",
+                            version: "version",
+                        },
+                    ],
+                    binding_policy: "trigger-bound",
+                },
+            ],
+            modules: [
+                {
+                    module_id: "module_id",
+                    module_name: "module_name",
+                    module_version_id: "module_version_id",
+                    module_version_number: 1,
+                },
+            ],
+        });
     });
 
     test("deploy (2)", async () => {
@@ -348,7 +497,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/actions/actionId/versions/id/deploy")
@@ -367,7 +515,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/actions/actionId/versions/id/deploy")
@@ -386,7 +533,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/actions/actionId/versions/id/deploy")
@@ -405,7 +551,6 @@ describe("VersionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/actions/actionId/versions/id/deploy")

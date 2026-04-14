@@ -28,7 +28,6 @@ describe("ModulesClient", () => {
             page: 1,
             per_page: 1,
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules")
@@ -37,7 +36,25 @@ describe("ModulesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            modules: [
+                {
+                    id: "id",
+                    name: "name",
+                    code: "code",
+                    dependencies: [{}],
+                    secrets: [{}],
+                    actions_using_module_total: 1,
+                    all_changes_published: true,
+                    latest_version_number: 1,
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            total: 1,
+            page: 1,
+            per_page: 1,
+        };
         const page = await client.actions.modules.list({
             page: 1,
             per_page: 1,
@@ -54,7 +71,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules")
@@ -73,7 +89,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules")
@@ -92,7 +107,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules")
@@ -111,7 +125,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules")
@@ -149,7 +162,6 @@ describe("ModulesClient", () => {
                 created_at: "2024-01-15T09:30:00Z",
             },
         };
-
         server
             .mockEndpoint()
             .post("/actions/modules")
@@ -163,7 +175,36 @@ describe("ModulesClient", () => {
             name: "name",
             code: "code",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            code: "code",
+            dependencies: [
+                {
+                    name: "name",
+                    version: "version",
+                },
+            ],
+            secrets: [
+                {
+                    name: "name",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            actions_using_module_total: 1,
+            all_changes_published: true,
+            latest_version_number: 1,
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            latest_version: {
+                id: "id",
+                version_number: 1,
+                code: "code",
+                dependencies: [{}],
+                secrets: [{}],
+                created_at: "2024-01-15T09:30:00Z",
+            },
+        });
     });
 
     test("create (2)", async () => {
@@ -171,7 +212,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", code: "code" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules")
@@ -194,7 +234,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", code: "code" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules")
@@ -217,7 +256,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", code: "code" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules")
@@ -240,7 +278,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", code: "code" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules")
@@ -263,7 +300,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", code: "code" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules")
@@ -305,7 +341,6 @@ describe("ModulesClient", () => {
                 created_at: "2024-01-15T09:30:00Z",
             },
         };
-
         server
             .mockEndpoint()
             .get("/actions/modules/id")
@@ -315,7 +350,36 @@ describe("ModulesClient", () => {
             .build();
 
         const response = await client.actions.modules.get("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            code: "code",
+            dependencies: [
+                {
+                    name: "name",
+                    version: "version",
+                },
+            ],
+            secrets: [
+                {
+                    name: "name",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            actions_using_module_total: 1,
+            all_changes_published: true,
+            latest_version_number: 1,
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            latest_version: {
+                id: "id",
+                version_number: 1,
+                code: "code",
+                dependencies: [{}],
+                secrets: [{}],
+                created_at: "2024-01-15T09:30:00Z",
+            },
+        });
     });
 
     test("get (2)", async () => {
@@ -323,7 +387,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/modules/id")
@@ -342,7 +405,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/modules/id")
@@ -361,7 +423,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/modules/id")
@@ -380,7 +441,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/modules/id")
@@ -399,7 +459,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/actions/modules/id")
@@ -428,7 +487,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/actions/modules/id")
@@ -447,7 +505,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/actions/modules/id")
@@ -466,7 +523,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/actions/modules/id")
@@ -485,7 +541,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/actions/modules/id")
@@ -504,7 +559,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/actions/modules/id")
@@ -523,7 +577,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/actions/modules/id")
@@ -561,7 +614,6 @@ describe("ModulesClient", () => {
                 created_at: "2024-01-15T09:30:00Z",
             },
         };
-
         server
             .mockEndpoint()
             .patch("/actions/modules/id")
@@ -572,7 +624,36 @@ describe("ModulesClient", () => {
             .build();
 
         const response = await client.actions.modules.update("id");
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            code: "code",
+            dependencies: [
+                {
+                    name: "name",
+                    version: "version",
+                },
+            ],
+            secrets: [
+                {
+                    name: "name",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            actions_using_module_total: 1,
+            all_changes_published: true,
+            latest_version_number: 1,
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            latest_version: {
+                id: "id",
+                version_number: 1,
+                code: "code",
+                dependencies: [{}],
+                secrets: [{}],
+                created_at: "2024-01-15T09:30:00Z",
+            },
+        });
     });
 
     test("update (2)", async () => {
@@ -580,7 +661,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/actions/modules/id")
@@ -600,7 +680,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/actions/modules/id")
@@ -620,7 +699,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/actions/modules/id")
@@ -640,7 +718,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/actions/modules/id")
@@ -660,7 +737,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/actions/modules/id")
@@ -680,7 +756,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .patch("/actions/modules/id")
@@ -713,7 +788,6 @@ describe("ModulesClient", () => {
             page: 1,
             per_page: 1,
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/actions")
@@ -722,7 +796,24 @@ describe("ModulesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            actions: [
+                {
+                    action_id: "action_id",
+                    action_name: "action_name",
+                    module_version_id: "module_version_id",
+                    module_version_number: 1,
+                    supported_triggers: [
+                        {
+                            id: "post-login",
+                        },
+                    ],
+                },
+            ],
+            total: 1,
+            page: 1,
+            per_page: 1,
+        };
         const page = await client.actions.modules.listActions("id", {
             page: 1,
             per_page: 1,
@@ -739,7 +830,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/actions")
@@ -758,7 +848,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/actions")
@@ -777,7 +866,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/actions")
@@ -796,7 +884,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/actions")
@@ -815,7 +902,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint({ once: false })
             .get("/actions/modules/id/actions")
@@ -853,7 +939,6 @@ describe("ModulesClient", () => {
                 created_at: "2024-01-15T09:30:00Z",
             },
         };
-
         server
             .mockEndpoint()
             .post("/actions/modules/id/rollback")
@@ -866,7 +951,36 @@ describe("ModulesClient", () => {
         const response = await client.actions.modules.rollback("id", {
             module_version_id: "module_version_id",
         });
-        expect(response).toEqual(rawResponseBody);
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            code: "code",
+            dependencies: [
+                {
+                    name: "name",
+                    version: "version",
+                },
+            ],
+            secrets: [
+                {
+                    name: "name",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            actions_using_module_total: 1,
+            all_changes_published: true,
+            latest_version_number: 1,
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+            latest_version: {
+                id: "id",
+                version_number: 1,
+                code: "code",
+                dependencies: [{}],
+                secrets: [{}],
+                created_at: "2024-01-15T09:30:00Z",
+            },
+        });
     });
 
     test("rollback (2)", async () => {
@@ -874,7 +988,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { module_version_id: "module_version_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules/id/rollback")
@@ -896,7 +1009,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { module_version_id: "module_version_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules/id/rollback")
@@ -918,7 +1030,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { module_version_id: "module_version_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules/id/rollback")
@@ -940,7 +1051,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { module_version_id: "module_version_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules/id/rollback")
@@ -962,7 +1072,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { module_version_id: "module_version_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules/id/rollback")
@@ -984,7 +1093,6 @@ describe("ModulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { module_version_id: "module_version_id" };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/actions/modules/id/rollback")

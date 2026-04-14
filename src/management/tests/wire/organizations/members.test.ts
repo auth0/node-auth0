@@ -13,7 +13,6 @@ describe("MembersClient", () => {
             next: "next",
             members: [{ user_id: "user_id", picture: "picture", name: "name", email: "email", roles: [{}] }],
         };
-
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/members")
@@ -22,7 +21,18 @@ describe("MembersClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = rawResponseBody;
+        const expected = {
+            next: "next",
+            members: [
+                {
+                    user_id: "user_id",
+                    picture: "picture",
+                    name: "name",
+                    email: "email",
+                    roles: [{}],
+                },
+            ],
+        };
         const page = await client.organizations.members.list("id", {
             from: "from",
             take: 1,
@@ -41,7 +51,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/members")
@@ -60,7 +69,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/members")
@@ -79,7 +87,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/members")
@@ -98,7 +105,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .get("/organizations/id/members")
@@ -136,7 +142,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -158,7 +163,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -180,7 +184,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -202,7 +205,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -243,7 +245,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/members")
@@ -265,7 +266,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/members")
@@ -287,7 +287,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/members")
@@ -309,7 +308,6 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
-
         server
             .mockEndpoint()
             .delete("/organizations/id/members")
