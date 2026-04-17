@@ -2027,6 +2027,9 @@ export interface Client {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
     async_approval_notification_channels?:
@@ -2668,6 +2671,12 @@ export type ClientExternalMetadataTypeEnum =
  */
 export type ClientGrantAllowAnyOrganizationEnum = boolean;
 
+/** Used to filter the returned client grants to include only default client grants for the specified group of clients. */
+export const ClientGrantDefaultForEnum = {
+    ThirdPartyClients: "third_party_clients",
+} as const;
+export type ClientGrantDefaultForEnum = (typeof ClientGrantDefaultForEnum)[keyof typeof ClientGrantDefaultForEnum];
+
 /** Controls how organizations may be used with this grant */
 export const ClientGrantOrganizationNullableUsageEnum = {
     Deny: "deny",
@@ -2698,6 +2707,8 @@ export interface ClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
+    default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
     subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
@@ -2770,6 +2781,78 @@ export interface ClientMobileiOs {
     app_bundle_identifier?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+/** The allowed connection strategy values for the My Organization Configuration. */
+export const ClientMyOrganizationConfigurationAllowedStrategiesEnum = {
+    Pingfederate: "pingfederate",
+    Adfs: "adfs",
+    Waad: "waad",
+    GoogleApps: "google-apps",
+    Okta: "okta",
+    Oidc: "oidc",
+    Samlp: "samlp",
+} as const;
+export type ClientMyOrganizationConfigurationAllowedStrategiesEnum =
+    (typeof ClientMyOrganizationConfigurationAllowedStrategiesEnum)[keyof typeof ClientMyOrganizationConfigurationAllowedStrategiesEnum];
+
+/** The deletion behavior for this client. */
+export const ClientMyOrganizationDeletionBehaviorEnum = {
+    Allow: "allow",
+    AllowIfEmpty: "allow_if_empty",
+} as const;
+export type ClientMyOrganizationDeletionBehaviorEnum =
+    (typeof ClientMyOrganizationDeletionBehaviorEnum)[keyof typeof ClientMyOrganizationDeletionBehaviorEnum];
+
+/**
+ * Configuration related to the My Organization Configuration for the client.
+ */
+export interface ClientMyOrganizationPatchConfiguration {
+    /** The connection profile ID that this client should validate against. */
+    connection_profile_id?: string | undefined;
+    /** The user attribute profile ID that this client should validate against. */
+    user_attribute_profile_id?: string | undefined;
+    /** The allowed connection strategies for the My Organization Configuration. */
+    allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
+    connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
+    /** The client ID this client uses while creating invitations through My Organization API. */
+    invitation_landing_client_id?: string | undefined;
+    /** List of role IDs allowed when inviting users through the My Organization API. */
+    allowed_roles?: string[] | undefined;
+}
+
+/**
+ * Configuration related to the My Organization Configuration for the client.
+ */
+export interface ClientMyOrganizationPostConfiguration {
+    /** The connection profile ID that this client should validate against. */
+    connection_profile_id?: string | undefined;
+    /** The user attribute profile ID that this client should validate against. */
+    user_attribute_profile_id?: string | undefined;
+    /** The allowed connection strategies for the My Organization Configuration. */
+    allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
+    connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
+    /** The client ID this client uses while creating invitations through My Organization API. */
+    invitation_landing_client_id?: string | undefined;
+    /** List of role IDs allowed when inviting users through the My Organization API. */
+    allowed_roles?: string[] | undefined;
+}
+
+/**
+ * Configuration related to the My Organization Configuration for the client.
+ */
+export interface ClientMyOrganizationResponseConfiguration {
+    /** The connection profile ID that this client should validate against. */
+    connection_profile_id?: string | undefined;
+    /** The user attribute profile ID that this client should validate against. */
+    user_attribute_profile_id?: string | undefined;
+    /** The allowed connection strategies for the My Organization Configuration. */
+    allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
+    connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
+    /** The client ID this client uses while creating invitations through My Organization API. */
+    invitation_landing_client_id?: string | undefined;
+    /** List of role IDs allowed when inviting users through the My Organization API. */
+    allowed_roles?: string[] | undefined;
 }
 
 /**
@@ -2871,6 +2954,14 @@ export const ClientOrganizationUsagePatchEnum = {
 export type ClientOrganizationUsagePatchEnum =
     (typeof ClientOrganizationUsagePatchEnum)[keyof typeof ClientOrganizationUsagePatchEnum];
 
+/** Controls whether Auth0 redirects users to the application's callback URL on authentication errors or in email verification flows. `open_redirect_protection` shows an error page instead of redirecting, and hides the callback domain from email templates. `allow_always` enables standard redirect behavior. Defaults to `open_redirect_protection` for third-party clients. Only applies when `is_first_party` is `false` and `third_party_security_mode` is `strict`. */
+export const ClientRedirectionPolicyEnum = {
+    AllowAlways: "allow_always",
+    OpenRedirectProtection: "open_redirect_protection",
+} as const;
+export type ClientRedirectionPolicyEnum =
+    (typeof ClientRedirectionPolicyEnum)[keyof typeof ClientRedirectionPolicyEnum];
+
 /**
  * Refresh token configuration
  */
@@ -2967,6 +3058,14 @@ export interface ClientSigningKey {
  */
 export type ClientSigningKeys = (Management.ClientSigningKey[] | null) | undefined;
 
+/** Security mode for third-party clients. `strict` enforces enhanced security controls: OAuth 2.1 alignment, explicit API authorization, and a curated set of supported features. `permissive` preserves pre-existing behavior and is only available to tenants with prior third-party client usage. Set on creation and cannot be modified. */
+export const ClientThirdPartySecurityModeEnum = {
+    Strict: "strict",
+    Permissive: "permissive",
+} as const;
+export type ClientThirdPartySecurityModeEnum =
+    (typeof ClientThirdPartySecurityModeEnum)[keyof typeof ClientThirdPartySecurityModeEnum];
+
 /** Defines the requested authentication method for the token endpoint. Can be `none` (public client without a client secret), `client_secret_post` (client uses HTTP POST parameters), or `client_secret_basic` (client uses HTTP Basic). */
 export const ClientTokenEndpointAuthMethodEnum = {
     None: "none",
@@ -3001,6 +3100,7 @@ export interface ClientTokenExchangeConfigurationOrNull {
     allow_any_profile_of_type?: Management.ClientTokenExchangeTypeEnum[] | undefined;
 }
 
+/** Token exchange type. `on_behalf_of_token_exchange`: enables On-Behalf-Of token exchange (Generally Available). `custom_authentication`: enables custom token exchange profiles (Early Access, requires entitlement). */
 export const ClientTokenExchangeTypeEnum = {
     CustomAuthentication: "custom_authentication",
     OnBehalfOfTokenExchange: "on_behalf_of_token_exchange",
@@ -3024,6 +3124,8 @@ export interface ConnectedAccount {
     created_at: string;
     /** ISO 8601 timestamp when the connected account expires. */
     expires_at?: string | undefined;
+    /** The identifier of the organization associated with the connected account. */
+    organization_id?: string | undefined;
 }
 
 /** The access type for the connected account. */
@@ -3537,6 +3639,14 @@ export type ConnectionDomainGoogleApps = string;
  * Domain of the Okta organization (e.g., dev-123456.okta.com). Should be just the domain of the okta server with no scheme or trailing backslash. Discovery runs only when connection.options.oidc_metadata is empty and a domain is provided
  */
 export type ConnectionDomainOkta = string;
+
+/** Algorithm used for DPoP proof JWT signing. */
+export const ConnectionDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Ed25519: "Ed25519",
+} as const;
+export type ConnectionDpopSigningAlgEnum =
+    (typeof ConnectionDpopSigningAlgEnum)[keyof typeof ConnectionDpopSigningAlgEnum];
 
 /**
  * JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing.
@@ -4465,6 +4575,7 @@ export interface ConnectionOptionsCommonOidc {
     client_secret?: Management.ConnectionClientSecretOidc | undefined;
     connection_settings?: Management.ConnectionConnectionSettings | undefined;
     domain_aliases?: Management.ConnectionDomainAliases | undefined;
+    dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
@@ -5819,6 +5930,7 @@ export interface ConnectionPropertiesOptions {
     password_no_personal_info?: (Management.ConnectionPasswordNoPersonalInfoOptions | null) | undefined;
     password_dictionary?: (Management.ConnectionPasswordDictionaryOptions | null) | undefined;
     api_enable_users?: boolean | undefined;
+    api_enable_groups?: boolean | undefined;
     basic_profile?: boolean | undefined;
     ext_admin?: boolean | undefined;
     ext_is_suspended?: boolean | undefined;
@@ -7538,6 +7650,8 @@ export interface CreateClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
+    default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
     subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
@@ -7634,6 +7748,9 @@ export interface CreateClientResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
     async_approval_notification_channels?:
@@ -10477,24 +10594,28 @@ export interface EventStreamDeliveryAttempt {
 
 /** Type of event */
 export const EventStreamDeliveryEventTypeEnum = {
-    UserCreated: "user.created",
-    UserDeleted: "user.deleted",
-    UserUpdated: "user.updated",
+    GroupCreated: "group.created",
+    GroupDeleted: "group.deleted",
+    GroupMemberAdded: "group.member.added",
+    GroupMemberDeleted: "group.member.deleted",
+    GroupRoleAssigned: "group.role.assigned",
+    GroupRoleDeleted: "group.role.deleted",
+    GroupUpdated: "group.updated",
+    OrganizationConnectionAdded: "organization.connection.added",
+    OrganizationConnectionRemoved: "organization.connection.removed",
+    OrganizationConnectionUpdated: "organization.connection.updated",
     OrganizationCreated: "organization.created",
-    OrganizationUpdated: "organization.updated",
     OrganizationDeleted: "organization.deleted",
+    OrganizationGroupRoleAssigned: "organization.group.role.assigned",
+    OrganizationGroupRoleDeleted: "organization.group.role.deleted",
     OrganizationMemberAdded: "organization.member.added",
     OrganizationMemberDeleted: "organization.member.deleted",
     OrganizationMemberRoleAssigned: "organization.member.role.assigned",
     OrganizationMemberRoleDeleted: "organization.member.role.deleted",
-    OrganizationConnectionAdded: "organization.connection.added",
-    OrganizationConnectionUpdated: "organization.connection.updated",
-    OrganizationConnectionRemoved: "organization.connection.removed",
-    GroupCreated: "group.created",
-    GroupUpdated: "group.updated",
-    GroupDeleted: "group.deleted",
-    GroupMemberAdded: "group.member.added",
-    GroupMemberDeleted: "group.member.deleted",
+    OrganizationUpdated: "organization.updated",
+    UserCreated: "user.created",
+    UserDeleted: "user.deleted",
+    UserUpdated: "user.updated",
 } as const;
 export type EventStreamDeliveryEventTypeEnum =
     (typeof EventStreamDeliveryEventTypeEnum)[keyof typeof EventStreamDeliveryEventTypeEnum];
@@ -10590,24 +10711,28 @@ export interface EventStreamEventBridgeResponseContent {
 }
 
 export const EventStreamEventTypeEnum = {
-    UserCreated: "user.created",
-    UserDeleted: "user.deleted",
-    UserUpdated: "user.updated",
+    GroupCreated: "group.created",
+    GroupDeleted: "group.deleted",
+    GroupMemberAdded: "group.member.added",
+    GroupMemberDeleted: "group.member.deleted",
+    GroupRoleAssigned: "group.role.assigned",
+    GroupRoleDeleted: "group.role.deleted",
+    GroupUpdated: "group.updated",
+    OrganizationConnectionAdded: "organization.connection.added",
+    OrganizationConnectionRemoved: "organization.connection.removed",
+    OrganizationConnectionUpdated: "organization.connection.updated",
     OrganizationCreated: "organization.created",
-    OrganizationUpdated: "organization.updated",
     OrganizationDeleted: "organization.deleted",
+    OrganizationGroupRoleAssigned: "organization.group.role.assigned",
+    OrganizationGroupRoleDeleted: "organization.group.role.deleted",
     OrganizationMemberAdded: "organization.member.added",
     OrganizationMemberDeleted: "organization.member.deleted",
     OrganizationMemberRoleAssigned: "organization.member.role.assigned",
     OrganizationMemberRoleDeleted: "organization.member.role.deleted",
-    OrganizationConnectionAdded: "organization.connection.added",
-    OrganizationConnectionUpdated: "organization.connection.updated",
-    OrganizationConnectionRemoved: "organization.connection.removed",
-    GroupCreated: "group.created",
-    GroupUpdated: "group.updated",
-    GroupDeleted: "group.deleted",
-    GroupMemberAdded: "group.member.added",
-    GroupMemberDeleted: "group.member.deleted",
+    OrganizationUpdated: "organization.updated",
+    UserCreated: "user.created",
+    UserDeleted: "user.deleted",
+    UserUpdated: "user.updated",
 } as const;
 export type EventStreamEventTypeEnum = (typeof EventStreamEventTypeEnum)[keyof typeof EventStreamEventTypeEnum];
 
@@ -10632,24 +10757,28 @@ export interface EventStreamSubscription {
 
 /** The type of event this test event represents. */
 export const EventStreamTestEventTypeEnum = {
-    UserCreated: "user.created",
-    UserDeleted: "user.deleted",
-    UserUpdated: "user.updated",
+    GroupCreated: "group.created",
+    GroupDeleted: "group.deleted",
+    GroupMemberAdded: "group.member.added",
+    GroupMemberDeleted: "group.member.deleted",
+    GroupRoleAssigned: "group.role.assigned",
+    GroupRoleDeleted: "group.role.deleted",
+    GroupUpdated: "group.updated",
+    OrganizationConnectionAdded: "organization.connection.added",
+    OrganizationConnectionRemoved: "organization.connection.removed",
+    OrganizationConnectionUpdated: "organization.connection.updated",
     OrganizationCreated: "organization.created",
-    OrganizationUpdated: "organization.updated",
     OrganizationDeleted: "organization.deleted",
+    OrganizationGroupRoleAssigned: "organization.group.role.assigned",
+    OrganizationGroupRoleDeleted: "organization.group.role.deleted",
     OrganizationMemberAdded: "organization.member.added",
     OrganizationMemberDeleted: "organization.member.deleted",
     OrganizationMemberRoleAssigned: "organization.member.role.assigned",
     OrganizationMemberRoleDeleted: "organization.member.role.deleted",
-    OrganizationConnectionAdded: "organization.connection.added",
-    OrganizationConnectionUpdated: "organization.connection.updated",
-    OrganizationConnectionRemoved: "organization.connection.removed",
-    GroupCreated: "group.created",
-    GroupUpdated: "group.updated",
-    GroupDeleted: "group.deleted",
-    GroupMemberAdded: "group.member.added",
-    GroupMemberDeleted: "group.member.deleted",
+    OrganizationUpdated: "organization.updated",
+    UserCreated: "user.created",
+    UserDeleted: "user.deleted",
+    UserUpdated: "user.updated",
 } as const;
 export type EventStreamTestEventTypeEnum =
     (typeof EventStreamTestEventTypeEnum)[keyof typeof EventStreamTestEventTypeEnum];
@@ -14543,6 +14672,8 @@ export interface GetClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
+    default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
     subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
@@ -14639,6 +14770,9 @@ export interface GetClientResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
     async_approval_notification_channels?:
@@ -15642,10 +15776,15 @@ export interface GetTenantSettingsResponseContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: (boolean | null) | undefined;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
+    /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
+    client_id_metadata_document_supported?: boolean | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean | undefined;
+    dynamic_client_registration_security_mode?:
+        | Management.TenantSettingsDynamicClientRegistrationSecurityMode
+        | undefined;
 }
 
 export interface GetTokenExchangeProfileResponseContent {
@@ -16528,6 +16667,13 @@ export interface ListSelfServiceProfilesPaginatedResponseContent {
     self_service_profiles?: Management.SelfServiceProfile[] | undefined;
 }
 
+export interface ListSynchronizedGroupsResponseContent {
+    /** Array of Google Workspace group ids configured for synchronization. */
+    groups: Management.SynchronizedGroupPayload[];
+    /** The cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+}
+
 export interface ListTokenExchangeProfileResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
     next?: string | undefined;
@@ -17310,7 +17456,6 @@ export type NetworkAclActionRedirectEnum = boolean;
 
 export interface NetworkAclMatch {
     asns?: number[] | undefined;
-    auth0_managed?: string[] | undefined;
     geo_country_codes?: string[] | undefined;
     geo_subdivision_codes?: string[] | undefined;
     ipv4_cidrs?: Management.NetworkAclMatchIpv4Cidr[] | undefined;
@@ -18447,6 +18592,9 @@ export interface RotateClientSecretResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
     async_approval_notification_channels?:
@@ -19382,8 +19530,14 @@ export interface SuspiciousIpThrottlingStage {
 export const SynchronizeGroupsEnum = {
     All: "all",
     Off: "off",
+    Selected: "selected",
 } as const;
 export type SynchronizeGroupsEnum = (typeof SynchronizeGroupsEnum)[keyof typeof SynchronizeGroupsEnum];
+
+export interface SynchronizedGroupPayload {
+    /** Google Workspace Directory group ID. */
+    id: string;
+}
 
 /**
  * Settings related to OIDC RP-initiated Logout
@@ -19409,6 +19563,14 @@ export const TenantSettingsDeviceFlowCharset = {
 } as const;
 export type TenantSettingsDeviceFlowCharset =
     (typeof TenantSettingsDeviceFlowCharset)[keyof typeof TenantSettingsDeviceFlowCharset];
+
+/** Sets the `third_party_security_mode` assigned to clients created via Dynamic Client Registration. `strict` applies enhanced security controls. `permissive` preserves pre-existing behavior and is only available to tenants with prior third-party client usage. */
+export const TenantSettingsDynamicClientRegistrationSecurityMode = {
+    Strict: "strict",
+    Permissive: "permissive",
+} as const;
+export type TenantSettingsDynamicClientRegistrationSecurityMode =
+    (typeof TenantSettingsDynamicClientRegistrationSecurityMode)[keyof typeof TenantSettingsDynamicClientRegistrationSecurityMode];
 
 /**
  * Error page customization.
@@ -19932,6 +20094,8 @@ export interface UpdateClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
+    default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
     subject_type?: Management.ClientGrantSubjectTypeEnum | undefined;
@@ -20028,6 +20192,9 @@ export interface UpdateClientResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
     async_approval_notification_channels?:
@@ -20070,6 +20237,7 @@ export interface UpdateConnectionOptions {
     password_no_personal_info?: (Management.ConnectionPasswordNoPersonalInfoOptions | null) | undefined;
     password_dictionary?: (Management.ConnectionPasswordDictionaryOptions | null) | undefined;
     api_enable_users?: boolean | undefined;
+    api_enable_groups?: boolean | undefined;
     basic_profile?: boolean | undefined;
     ext_admin?: boolean | undefined;
     ext_is_suspended?: boolean | undefined;
@@ -21091,10 +21259,15 @@ export interface UpdateTenantSettingsResponseContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: (boolean | null) | undefined;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
+    /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
+    client_id_metadata_document_supported?: boolean | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean | undefined;
+    dynamic_client_registration_security_mode?:
+        | Management.TenantSettingsDynamicClientRegistrationSecurityMode
+        | undefined;
 }
 
 export interface UpdateTokenQuota {

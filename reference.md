@@ -663,6 +663,7 @@ const pageableResponse = await client.clientGrants.list({
     client_id: "client_id",
     allow_any_organization: true,
     subject_type: "client",
+    default_for: "third_party_clients",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -676,6 +677,7 @@ let page = await client.clientGrants.list({
     client_id: "client_id",
     allow_any_organization: true,
     subject_type: "client",
+    default_for: "third_party_clients",
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -3962,7 +3964,7 @@ await client.eventStreams.update("id");
 
 ```typescript
 await client.eventStreams.test("id", {
-    event_type: "user.created",
+    event_type: "group.created",
 });
 ```
 
@@ -15911,6 +15913,172 @@ await client.connections.directoryProvisioning.getDefaultMapping("id");
 <dd>
 
 **id:** `string` — The id of the connection to retrieve its directory provisioning configuration
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">listSynchronizedGroups</a>(id, { ...params }) -> core.Page&lt;Management.SynchronizedGroupPayload, Management.ListSynchronizedGroupsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the configured synchronized groups for a connection directory provisioning configuration.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to list synchronized groups for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListSynchronizedGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">set</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create or replace the selected groups for a connection directory provisioning configuration.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.set("id", {
+    groups: [
+        {
+            id: "id",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to create or replace synchronized groups for
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ReplaceSynchronizedGroupsRequestContent`
 
 </dd>
 </dl>

@@ -19,6 +19,7 @@ describe("ClientGrantsClient", () => {
                     scope: ["scope"],
                     organization_usage: "deny",
                     allow_any_organization: true,
+                    default_for: "third_party_clients",
                     is_system: true,
                     subject_type: "client",
                     authorization_details_types: ["authorization_details_types"],
@@ -43,6 +44,7 @@ describe("ClientGrantsClient", () => {
             client_id: "client_id",
             allow_any_organization: true,
             subject_type: "client",
+            default_for: "third_party_clients",
         });
 
         expect(expected.client_grants).toEqual(page.data);
@@ -101,6 +103,7 @@ describe("ClientGrantsClient", () => {
             scope: ["scope"],
             organization_usage: "deny",
             allow_any_organization: true,
+            default_for: "third_party_clients",
             is_system: true,
             subject_type: "client",
             authorization_details_types: ["authorization_details_types"],
@@ -265,6 +268,7 @@ describe("ClientGrantsClient", () => {
             scope: ["scope"],
             organization_usage: "deny",
             allow_any_organization: true,
+            default_for: "third_party_clients",
             is_system: true,
             subject_type: "client",
             authorization_details_types: ["authorization_details_types"],
@@ -426,6 +430,7 @@ describe("ClientGrantsClient", () => {
             scope: ["scope"],
             organization_usage: "deny",
             allow_any_organization: true,
+            default_for: "third_party_clients",
             is_system: true,
             subject_type: "client",
             authorization_details_types: ["authorization_details_types"],
