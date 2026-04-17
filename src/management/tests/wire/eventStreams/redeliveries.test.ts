@@ -13,7 +13,7 @@ describe("RedeliveriesClient", () => {
             date_from: "2024-01-15T09:30:00Z",
             date_to: "2024-01-15T09:30:00Z",
             statuses: ["failed"],
-            event_types: ["user.created"],
+            event_types: ["group.created"],
         };
 
         server

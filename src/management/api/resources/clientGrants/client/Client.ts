@@ -45,7 +45,8 @@ export class ClientGrantsClient {
      *         audience: "audience",
      *         client_id: "client_id",
      *         allow_any_organization: true,
-     *         subject_type: "client"
+     *         subject_type: "client",
+     *         default_for: "third_party_clients"
      *     })
      */
     public async list(
@@ -63,6 +64,7 @@ export class ClientGrantsClient {
                     client_id: clientId,
                     allow_any_organization: allowAnyOrganization,
                     subject_type: subjectType,
+                    default_for: defaultFor,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
                     from: from_,
@@ -71,6 +73,7 @@ export class ClientGrantsClient {
                     client_id: clientId,
                     allow_any_organization: allowAnyOrganization,
                     subject_type: subjectType !== undefined ? subjectType : undefined,
+                    default_for: defaultFor !== undefined ? defaultFor : undefined,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(

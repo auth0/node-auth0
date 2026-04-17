@@ -457,7 +457,7 @@ export class EventStreamsClient {
      *
      * @example
      *     await client.eventStreams.test("id", {
-     *         event_type: "user.created"
+     *         event_type: "group.created"
      *     })
      */
     public test(

@@ -123,7 +123,8 @@ export interface UpdateBrandingRequestContent {
  *         audience: "audience",
  *         client_id: "client_id",
  *         allow_any_organization: true,
- *         subject_type: "client"
+ *         subject_type: "client",
+ *         default_for: "third_party_clients"
  *     }
  */
 export interface ListClientGrantsRequestParameters {
@@ -139,6 +140,8 @@ export interface ListClientGrantsRequestParameters {
     allow_any_organization?: Management.ClientGrantAllowAnyOrganizationEnum | null;
     /** The type of application access the client grant allows. */
     subject_type?: Management.ClientGrantSubjectTypeEnum | null;
+    /** Used to filter the returned client grants to include only default client grants for the specified group of clients. */
+    default_for?: Management.ClientGrantDefaultForEnum | null;
 }
 
 /**
@@ -152,6 +155,8 @@ export interface CreateClientGrantRequestContent {
     client_id?: string;
     /** The audience (API identifier) of this client grant */
     audience: string;
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. If specified, a value for `client_id` must not be specified. */
+    default_for?: Management.ClientGrantDefaultForEnum;
     organization_usage?: Management.ClientGrantOrganizationUsageEnum;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean;
@@ -306,7 +311,10 @@ export interface CreateClientRequestContent {
     token_quota?: Management.CreateTokenQuota;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum;
     express_configuration?: Management.ExpressConfiguration;
+    my_organization_configuration?: Management.ClientMyOrganizationPostConfiguration;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
 }
 
@@ -435,9 +443,12 @@ export interface UpdateClientRequestContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     express_configuration?: Management.ExpressConfigurationOrNull | null;
+    my_organization_configuration?: Management.ClientMyOrganizationPatchConfiguration | null;
     async_approval_notification_channels?:
         | (Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration | undefined)
         | null;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum;
 }
 
 /**
@@ -791,7 +802,7 @@ export interface UpdateEventStreamRequestContent {
 /**
  * @example
  *     {
- *         event_type: "user.created"
+ *         event_type: "group.created"
  *     }
  */
 export interface CreateEventStreamTestEventRequestContent {
@@ -2491,6 +2502,33 @@ export interface ListDirectoryProvisioningsRequestParameters {
  *         take: 1
  *     }
  */
+export interface ListSynchronizedGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         groups: [{
+ *                 id: "id"
+ *             }]
+ *     }
+ */
+export interface ReplaceSynchronizedGroupsRequestContent {
+    /** Array of Google Workspace Directory group objects to synchronize. */
+    groups: Management.SynchronizedGroupPayload[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
 export interface ListScimConfigurationsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
@@ -3616,10 +3654,13 @@ export interface UpdateTenantSettingsRequestContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
+    /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
+    client_id_metadata_document_supported?: boolean;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean;
+    dynamic_client_registration_security_mode?: Management.TenantSettingsDynamicClientRegistrationSecurityMode;
 }
 
 /**
