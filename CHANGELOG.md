@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.7.0](https://github.com/auth0/node-auth0/tree/v5.7.0) (2026-04-17)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.6.0...v5.7.0)
+
+**Added**
+
+- feat: add third-party client security, synchronized groups, and new event stream types [\#1326](https://github.com/auth0/node-auth0/pull/1326) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.6.0](https://github.com/auth0/node-auth0/tree/v5.6.0) (2026-04-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.5.0...v5.6.0)
