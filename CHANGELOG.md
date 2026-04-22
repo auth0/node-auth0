@@ -1,5 +1,23 @@
 # Change Log
 
+## [v5.8.0](https://github.com/auth0/node-auth0/tree/v5.8.0) (2026-04-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.7.0...v5.8.0)
+
+**⚠️ BREAKING CHANGES**
+
+- Removed `invitation_landing_client_id` and `allowed_roles` fields from `ClientMyOrganizationPatchConfiguration`, `ClientMyOrganizationPostConfiguration`, and `ClientMyOrganizationResponseConfiguration` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Added**
+
+- Session Transfer Delegation: new `delegation` property on `ClientSessionTransferConfiguration` with `ClientSessionTransferDelegationConfiguration` interface supporting `allow_delegated_access` and `enforce_device_binding` options [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Self-Service SSO Ticket Features: new `enabled_features` property on `CreateSelfServiceProfileSsoTicketRequestContent` with `SelfServiceProfileSsoTicketEnabledFeatures` interface supporting `sso`, `domain_verification`, and `provisioning` toggles [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Self-Service SSO Ticket Domain Aliases: new `pending_domains` field on `SelfServiceProfileSsoTicketDomainAliasesConfig` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Changed**
+
+- Updated JSDoc descriptions for `default_for` field across Client Grant response types and `CreateClientGrantRequestContent` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.7.0](https://github.com/auth0/node-auth0/tree/v5.7.0) (2026-04-17)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.6.0...v5.7.0)
