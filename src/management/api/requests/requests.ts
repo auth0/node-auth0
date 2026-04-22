@@ -140,7 +140,7 @@ export interface ListClientGrantsRequestParameters {
     allow_any_organization?: Management.ClientGrantAllowAnyOrganizationEnum | null;
     /** The type of application access the client grant allows. */
     subject_type?: Management.ClientGrantSubjectTypeEnum | null;
-    /** Used to filter the returned client grants to include only default client grants for the specified group of clients. */
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
     default_for?: Management.ClientGrantDefaultForEnum | null;
 }
 
@@ -155,7 +155,6 @@ export interface CreateClientGrantRequestContent {
     client_id?: string;
     /** The audience (API identifier) of this client grant */
     audience: string;
-    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. If specified, a value for `client_id` must not be specified. */
     default_for?: Management.ClientGrantDefaultForEnum;
     organization_usage?: Management.ClientGrantOrganizationUsageEnum;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
@@ -3575,6 +3574,7 @@ export interface CreateSelfServiceProfileSsoTicketRequestContent {
     provisioning_config?: Management.SelfServiceProfileSsoTicketProvisioningConfig;
     /** Indicates whether a verified domain should be used for organization discovery during authentication. */
     use_for_organization_discovery?: boolean;
+    enabled_features?: Management.SelfServiceProfileSsoTicketEnabledFeatures;
 }
 
 /**

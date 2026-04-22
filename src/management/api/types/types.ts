@@ -2671,7 +2671,7 @@ export type ClientExternalMetadataTypeEnum =
  */
 export type ClientGrantAllowAnyOrganizationEnum = boolean;
 
-/** Used to filter the returned client grants to include only default client grants for the specified group of clients. */
+/** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
 export const ClientGrantDefaultForEnum = {
     ThirdPartyClients: "third_party_clients",
 } as const;
@@ -2707,7 +2707,6 @@ export interface ClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
-    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
     default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
@@ -2815,10 +2814,6 @@ export interface ClientMyOrganizationPatchConfiguration {
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
-    /** The client ID this client uses while creating invitations through My Organization API. */
-    invitation_landing_client_id?: string | undefined;
-    /** List of role IDs allowed when inviting users through the My Organization API. */
-    allowed_roles?: string[] | undefined;
 }
 
 /**
@@ -2832,10 +2827,6 @@ export interface ClientMyOrganizationPostConfiguration {
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
-    /** The client ID this client uses while creating invitations through My Organization API. */
-    invitation_landing_client_id?: string | undefined;
-    /** List of role IDs allowed when inviting users through the My Organization API. */
-    allowed_roles?: string[] | undefined;
 }
 
 /**
@@ -2849,10 +2840,6 @@ export interface ClientMyOrganizationResponseConfiguration {
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
-    /** The client ID this client uses while creating invitations through My Organization API. */
-    invitation_landing_client_id?: string | undefined;
-    /** List of role IDs allowed when inviting users through the My Organization API. */
-    allowed_roles?: string[] | undefined;
 }
 
 /**
@@ -3013,7 +3000,25 @@ export interface ClientSessionTransferConfiguration {
     allow_refresh_token?: boolean | undefined;
     /** Indicates whether Refresh Tokens created during a Native to Web session are tied to that session's lifetime. This determines if such refresh tokens should be automatically revoked when their corresponding sessions are. Usually configured in the web application. Default value is `true`, applicable only in Native to Web SSO context. */
     enforce_online_refresh_tokens?: boolean | undefined;
+    delegation?: (Management.ClientSessionTransferDelegationConfiguration | null) | undefined;
 }
+
+/**
+ * Configuration for delegation (impersonation) access using Session Transfer Tokens
+ */
+export interface ClientSessionTransferDelegationConfiguration {
+    /** Indicates whether delegation (impersonation) access is allowed using Session Transfer Tokens. Default value is `false`. */
+    allow_delegated_access?: boolean | undefined;
+    enforce_device_binding?: Management.ClientSessionTransferDelegationDeviceBindingEnum | undefined;
+}
+
+/** Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Default value is `ip`. */
+export const ClientSessionTransferDelegationDeviceBindingEnum = {
+    Ip: "ip",
+    Asn: "asn",
+} as const;
+export type ClientSessionTransferDelegationDeviceBindingEnum =
+    (typeof ClientSessionTransferDelegationDeviceBindingEnum)[keyof typeof ClientSessionTransferDelegationDeviceBindingEnum];
 
 /** Indicates whether device binding security should be enforced for the app. If set to 'ip', the app will enforce device binding by IP, meaning that consumption of Session Transfer Token must be done from the same IP of the issuer. Likewise, if set to 'asn', device binding is enforced by ASN, meaning consumption of Session Transfer Token must be done from the same ASN as the issuer. If set to 'none', device binding is not enforced. Usually configured in the web application. Default value is `ip`. */
 export const ClientSessionTransferDeviceBindingEnum = {
@@ -7650,7 +7655,6 @@ export interface CreateClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
-    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
     default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
@@ -14672,7 +14676,6 @@ export interface GetClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
-    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
     default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
@@ -18925,6 +18928,8 @@ export interface SelfServiceProfileSsoTicketConnectionOptions {
  */
 export interface SelfServiceProfileSsoTicketDomainAliasesConfig {
     domain_verification: Management.SelfServiceProfileSsoTicketDomainVerificationEnum;
+    /** List of domains that will be submitted for verification during the self-service SSO flow. */
+    pending_domains?: string[] | undefined;
 }
 
 /** Whether the end user should complete the domain verification step. Possible values are 'none' (the step is not shown to the user), 'optional' (the user may add a domain alias in the domain verification step) or 'required' (the user must add a domain alias in order to enable the connection). Defaults to 'none'. */
@@ -18935,6 +18940,18 @@ export const SelfServiceProfileSsoTicketDomainVerificationEnum = {
 } as const;
 export type SelfServiceProfileSsoTicketDomainVerificationEnum =
     (typeof SelfServiceProfileSsoTicketDomainVerificationEnum)[keyof typeof SelfServiceProfileSsoTicketDomainVerificationEnum];
+
+/**
+ * Specifies which features are enabled for an "edit connection" ticket. Only applicable when connection ID is provided.
+ */
+export interface SelfServiceProfileSsoTicketEnabledFeatures {
+    /** Whether SSO configuration is enabled in this ticket. */
+    sso?: boolean | undefined;
+    /** Whether domain verification is enabled in this ticket. */
+    domain_verification?: boolean | undefined;
+    /** Whether provisioning configuration is enabled in this ticket. */
+    provisioning?: boolean | undefined;
+}
 
 export interface SelfServiceProfileSsoTicketEnabledOrganization {
     /** Organization identifier. */
@@ -20094,7 +20111,6 @@ export interface UpdateClientGrantResponseContent {
     organization_usage?: Management.ClientGrantOrganizationUsageEnum | undefined;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
-    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
     default_for?: Management.ClientGrantDefaultForEnum | undefined;
     /** If enabled, this grant is a special grant created by Auth0. It cannot be modified or deleted directly. */
     is_system?: boolean | undefined;
