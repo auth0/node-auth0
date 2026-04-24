@@ -1,3 +1,5 @@
+import { TimeoutError } from "./errors.js";
+
 const MAX_REQUEST_RETRY_JITTER = 250;
 const MAX_REQUEST_RETRY_DELAY = 10000;
 const DEFAULT_NUMBER_RETRIES = 3;
@@ -27,6 +29,12 @@ async function pause(delay: number) {
     return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
+function calculateWait(nrOfTries: number): number {
+    let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
+    wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
+    return Math.min(wait, MAX_REQUEST_RETRY_DELAY);
+}
+
 /**
  * Configure the retry logic for http calls.
  * By default, this retries any request that returns a 429 3 times.
@@ -43,7 +51,9 @@ export interface RetryConfiguration {
      */
     maxRetries?: number;
     /**
-     * Status Codes on which the SDK should trigger retries.
+     * HTTP Status Codes on which the SDK should trigger retries.
+     * Note: network-level errors (e.g. ECONNRESET) are always retried up to maxRetries,
+     * regardless of this setting. Use `enabled: false` to disable all retries.
      * Defaults to [429].
      */
     retryWhen?: number[];
@@ -63,15 +73,9 @@ export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }
         try {
             result = await action();
         } catch (e: unknown) {
-            if (!(e instanceof Error && e.name === "TimeoutError") && nrOfTries < nrOfTriesToAttempt) {
+            if (!(e instanceof TimeoutError) && nrOfTries < nrOfTriesToAttempt) {
                 nrOfTries++;
-
-                let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
-                wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
-                wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
-
-                await pause(wait);
-
+                await pause(calculateWait(nrOfTries));
                 return retryAndWait();
             }
             throw e;
@@ -79,13 +83,7 @@ export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }
 
         if ((retryWhen || [429]).includes(result.status) && nrOfTries < nrOfTriesToAttempt) {
             nrOfTries++;
-
-            let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
-            wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
-            wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
-
-            await pause(wait);
-
+            await pause(calculateWait(nrOfTries));
             result = await retryAndWait();
         }
 

@@ -310,11 +310,12 @@ describe("Runtime", () => {
                 path: `/clients`,
                 method: "GET",
             }),
-        ).rejects.toThrow();
+        ).rejects.toThrowError(
+            expect.objectContaining({ cause: expect.objectContaining({ message: "socket hang up" }) }),
+        );
     });
 
     it("should not retry on socket hang up when retry is disabled", async () => {
-        // issue #1020 — disabled retry should still not retry network errors
         nock(URL, { encodedQueryParams: true })
             .get("/clients")
             .replyWithError({ code: "ECONNRESET", message: "socket hang up" })
@@ -333,6 +334,32 @@ describe("Runtime", () => {
                 method: "GET",
             }),
         ).rejects.toThrow();
+    });
+
+    it("should not retry on timeout errors", async () => {
+        nock(URL)
+            .get("/clients")
+            .delayConnection(100)
+            .reply(200, [{ client_id: "123" }])
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+            timeoutDuration: 50,
+        });
+
+        await expect(
+            client.testRequest({
+                path: `/clients`,
+                method: "GET",
+            }),
+        ).rejects.toThrowError(expect.objectContaining({ cause: expect.objectContaining({ name: "TimeoutError" }) }));
+
+        // Second nock was never consumed — confirms no retry occurred
+        expect(nock.pendingMocks().length).toBe(1);
+        nock.abortPendingRequests();
     });
 
     it("should timeout after default time", async () => {
