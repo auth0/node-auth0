@@ -73,11 +73,13 @@ export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }
         try {
             result = await action();
         } catch (e: unknown) {
+            // All other errors (e.g. ECONNRESET) are transient network failures worth retrying.
             if (!(e instanceof TimeoutError) && nrOfTries < nrOfTriesToAttempt) {
                 nrOfTries++;
                 await pause(calculateWait(nrOfTries));
                 return retryAndWait();
             }
+            // only reached when retries exhausted OR it's a TimeoutError
             throw e;
         }
 
