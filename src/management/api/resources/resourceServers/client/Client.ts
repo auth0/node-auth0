@@ -35,6 +35,7 @@ export class ResourceServersClient {
      *
      * @example
      *     await client.resourceServers.list({
+     *         identifiers: ["identifiers"],
      *         page: 1,
      *         per_page: 1,
      *         include_totals: true,

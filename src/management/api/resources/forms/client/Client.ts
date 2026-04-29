@@ -35,7 +35,8 @@ export class FormsClient {
      *     await client.forms.list({
      *         page: 1,
      *         per_page: 1,
-     *         include_totals: true
+     *         include_totals: true,
+     *         hydrate: ["flow_count"]
      *     })
      */
     public async list(
@@ -217,7 +218,9 @@ export class FormsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.forms.get("id")
+     *     await client.forms.get("id", {
+     *         hydrate: ["flow_count"]
+     *     })
      */
     public get(
         id: string,

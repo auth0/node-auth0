@@ -134,7 +134,7 @@ export class UserAttributeProfilesClient {
     }
 
     /**
-     * Retrieve details about a single User Attribute Profile specified by ID.
+     * Create a User Attribute Profile
      *
      * @param {Management.CreateUserAttributeProfileRequestContent} request
      * @param {UserAttributeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.

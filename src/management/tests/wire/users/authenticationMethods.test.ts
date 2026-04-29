@@ -843,6 +843,7 @@ describe("AuthenticationMethodsClient", () => {
             public_key: "public_key",
             aaguid: "aaguid",
             relying_party_identifier: "relying_party_identifier",
+            confirmed: true,
             created_at: "2024-01-15T09:30:00Z",
         };
 

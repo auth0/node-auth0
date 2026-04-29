@@ -140,7 +140,9 @@ export class ExecutionsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.flows.executions.get("flow_id", "execution_id")
+     *     await client.flows.executions.get("flow_id", "execution_id", {
+     *         hydrate: ["debug"]
+     *     })
      */
     public get(
         flow_id: string,

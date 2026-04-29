@@ -85,6 +85,7 @@ export class ConnectionsClient {
      *     await client.connections.list({
      *         from: "from",
      *         take: 1,
+     *         strategy: ["ad"],
      *         name: "name",
      *         fields: "fields",
      *         include_fields: true

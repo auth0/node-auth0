@@ -23,7 +23,7 @@ export class CustomTextClient {
     }
 
     /**
-     * Retrieves text customizations for a given self-service profile, language and Self Service SSO Flow page.
+     * Retrieves text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
      *
      * @param {string} id - The id of the self-service profile.
      * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
@@ -110,7 +110,7 @@ export class CustomTextClient {
     }
 
     /**
-     * Updates text customizations for a given self-service profile, language and Self Service SSO Flow page.
+     * Updates text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
      *
      * @param {string} id - The id of the self-service profile.
      * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.

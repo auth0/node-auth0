@@ -26,7 +26,7 @@ export class TemplatesClient {
     }
 
     /**
-     * List a verifiable credential templates.
+     * List verifiable credential templates.
      *
      * @param {Management.ListVerifiableCredentialTemplatesRequestParameters} request
      * @param {TemplatesClient.RequestOptions} requestOptions - Request-specific configuration.

@@ -48,6 +48,7 @@ export class FlowsClient {
      *         page: 1,
      *         per_page: 1,
      *         include_totals: true,
+     *         hydrate: ["form_count"],
      *         synchronous: true
      *     })
      */
@@ -237,7 +238,9 @@ export class FlowsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.flows.get("id")
+     *     await client.flows.get("id", {
+     *         hydrate: ["form_count"]
+     *     })
      */
     public get(
         id: string,
