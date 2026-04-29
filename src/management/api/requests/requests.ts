@@ -816,7 +816,7 @@ export interface CreateEventStreamTestEventRequestContent {
  *     {
  *         from: "from",
  *         from_timestamp: "from_timestamp",
- *         event_type: "group.created"
+ *         event_type: ["group.created"]
  *     }
  */
 export interface SubscribeEventsRequestParameters {
@@ -825,7 +825,9 @@ export interface SubscribeEventsRequestParameters {
     /** RFC-3339 timestamp indicating where to start streaming events from. This should only be used on the initial query when a cursor may not be available. Subsequent requests should use the cursor (from) as it will be more accurate. */
     from_timestamp?: string | null;
     /** Event type(s) to listen for. Specify multiple times for multiple types (e.g., ?event_type=user.created&event_type=user.updated). If not provided, all event types will be streamed. */
-    event_type?: Management.EventStreamSubscribeEventsEventTypeParam | null;
+    event_type?:
+        | (Management.EventStreamSubscribeEventsEventTypeEnum | null)
+        | (Management.EventStreamSubscribeEventsEventTypeEnum | null)[];
 }
 
 /**

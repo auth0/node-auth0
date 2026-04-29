@@ -10,14 +10,14 @@ describe("EventsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody =
-            'event: \ndata: {"offset":"offset","event":{"specversion":"specversion","type":"group.created","source":"source","id":"id","time":"2024-01-15T09:30:00Z","data":{"object":{"id":"id","name":"name","created_at":"2024-01-15T09:30:00Z","type":"connection","connection_id":"connection_id"},"context":{"tenant":{"tenant_id":"tenant_id"}}},"a0tenant":"a0tenant","a0stream":"a0stream","a0purpose":"test"}}\n\n';
+            'event: group.created\ndata: {"offset":"offset","event":{"specversion":"specversion","type":"group.created","source":"source","id":"id","time":"2024-01-15T09:30:00Z","data":{"object":{"id":"id","name":"name","created_at":"2024-01-15T09:30:00Z","type":"connection","connection_id":"connection_id"},"context":{"tenant":{"tenant_id":"tenant_id"}}},"a0tenant":"a0tenant","a0stream":"a0stream","a0purpose":"test"}}\n\n';
 
         server.mockEndpoint().get("/events").respondWith().statusCode(200).sseBody(rawResponseBody).build();
 
         const response = await client.events.subscribe({
             from: "from",
             from_timestamp: "from_timestamp",
-            event_type: "group.created",
+            event_type: ["group.created"],
         });
         const events: unknown[] = [];
         for await (const event of response) {
@@ -25,34 +25,31 @@ describe("EventsClient", () => {
         }
         expect(events).toEqual([
             {
-                type: "",
-                ...{
+                type: "group.created",
+                offset: "offset",
+                event: {
+                    specversion: "specversion",
                     type: "group.created",
-                    offset: "offset",
-                    event: {
-                        specversion: "specversion",
-                        type: "group.created",
-                        source: "source",
-                        id: "id",
-                        time: "2024-01-15T09:30:00Z",
-                        data: {
-                            object: {
-                                id: "id",
-                                name: "name",
-                                created_at: "2024-01-15T09:30:00Z",
-                                type: "connection",
-                                connection_id: "connection_id",
-                            },
-                            context: {
-                                tenant: {
-                                    tenant_id: "tenant_id",
-                                },
+                    source: "source",
+                    id: "id",
+                    time: "2024-01-15T09:30:00Z",
+                    data: {
+                        object: {
+                            id: "id",
+                            name: "name",
+                            created_at: "2024-01-15T09:30:00Z",
+                            type: "connection",
+                            connection_id: "connection_id",
+                        },
+                        context: {
+                            tenant: {
+                                tenant_id: "tenant_id",
                             },
                         },
-                        a0tenant: "a0tenant",
-                        a0stream: "a0stream",
-                        a0purpose: "test",
                     },
+                    a0tenant: "a0tenant",
+                    a0stream: "a0stream",
+                    a0purpose: "test",
                 },
             },
         ]);
