@@ -3255,6 +3255,22 @@ export type ConnectionApiEnableUsersGoogleApps = Management.ConnectionApiEnableU
  */
 export type ConnectionAppDomainAzureAd = string;
 
+/** The algorithm profile to use for decrypting SAML assertions. */
+export const ConnectionAssertionDecryptionAlgorithmProfileEnum = {
+    V20261: "v2026-1",
+} as const;
+export type ConnectionAssertionDecryptionAlgorithmProfileEnum =
+    (typeof ConnectionAssertionDecryptionAlgorithmProfileEnum)[keyof typeof ConnectionAssertionDecryptionAlgorithmProfileEnum];
+
+/**
+ * Settings for SAML assertion decryption.
+ */
+export interface ConnectionAssertionDecryptionSettings {
+    algorithm_profile: Management.ConnectionAssertionDecryptionAlgorithmProfileEnum;
+    /** A list of insecure algorithms to allow for SAML assertion decryption. */
+    algorithm_exceptions?: string[] | undefined;
+}
+
 export interface ConnectionAttributeIdentifier {
     /** Determines if the attribute is used for identification */
     active?: boolean | undefined;
@@ -4649,6 +4665,7 @@ export interface ConnectionOptionsCommonOidc {
  * Common options for SAML-based enterprise connections (shared by samlp and pingfederate).
  */
 export interface ConnectionOptionsCommonSaml {
+    assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     cert?: Management.ConnectionSigningCertificateDerSaml | undefined;
     decryptionKey?: Management.ConnectionDecryptionKeySaml | undefined;
     digestAlgorithm?: Management.ConnectionDigestAlgorithmSaml | undefined;
@@ -5994,6 +6011,7 @@ export interface ConnectionPropertiesOptions {
     gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     password_options?: Management.ConnectionPasswordOptions | undefined;
+    assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
@@ -14404,9 +14422,7 @@ export type EventStreamSubscribeEventsEventTypeEnum =
 /**
  * Event type(s) to listen for. Specify multiple times for multiple types (e.g., ?event_type=user.created&event_type=user.updated). If not provided, all event types will be streamed.
  */
-export type EventStreamSubscribeEventsEventTypeParam =
-    | Management.EventStreamSubscribeEventsEventTypeEnum
-    | Management.EventStreamSubscribeEventsEventTypeEnum[];
+export type EventStreamSubscribeEventsEventTypeParam = Management.EventStreamSubscribeEventsEventTypeEnum[];
 
 /**
  * The JSON payload delivered in each SSE data line. The type field is injected from the SSE event field by the SDK. Discriminated by type: an event type name for events, "error" for errors, and "offset-only" for cursor-only heartbeats.
@@ -24105,6 +24121,7 @@ export interface UpdateConnectionOptions {
     gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     password_options?: Management.ConnectionPasswordOptions | undefined;
+    assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;

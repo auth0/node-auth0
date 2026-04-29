@@ -4043,7 +4043,7 @@ Subscribe to events via Server-Sent Events (SSE)
 const response = await client.events.subscribe({
     from: "from",
     from_timestamp: "from_timestamp",
-    event_type: "group.created",
+    event_type: ["group.created"],
 });
 for await (const item of response) {
     console.log(item);

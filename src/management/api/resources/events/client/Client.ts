@@ -4,7 +4,6 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClie
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../BaseClient.js";
 import * as core from "../../../../core/index.js";
 import { mergeHeaders } from "../../../../core/headers.js";
-import { toJson } from "../../../../core/json.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
@@ -41,8 +40,11 @@ export class EventsClient {
         const _queryParams: Record<string, unknown> = {
             from: from_,
             from_timestamp: fromTimestamp,
-            event_type:
-                eventType !== undefined ? (typeof eventType === "string" ? eventType : toJson(eventType)) : undefined,
+            event_type: Array.isArray(eventType)
+                ? eventType.map((item) => item)
+                : eventType !== undefined
+                  ? eventType
+                  : undefined,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -59,7 +61,11 @@ export class EventsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             responseType: "sse",
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
