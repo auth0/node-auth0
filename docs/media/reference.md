@@ -2153,6 +2153,7 @@ To search by checkpoint, use the following parameters:
 const pageableResponse = await client.connections.list({
     from: "from",
     take: 1,
+    strategy: ["ad"],
     name: "name",
     fields: "fields",
     include_fields: true,
@@ -2165,6 +2166,7 @@ for await (const item of pageableResponse) {
 let page = await client.connections.list({
     from: "from",
     take: 1,
+    strategy: ["ad"],
     name: "name",
     fields: "fields",
     include_fields: true,
@@ -4008,6 +4010,78 @@ await client.eventStreams.test("id", {
 </dl>
 </details>
 
+## Events
+
+<details><summary><code>client.events.<a href="/src/management/api/resources/events/client/Client.ts">subscribe</a>({ ...params }) -> core.Stream&lt;Management.EventStreamSubscribeEventsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Subscribe to events via Server-Sent Events (SSE)
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.events.subscribe({
+    from: "from",
+    from_timestamp: "from_timestamp",
+    event_type: ["group.created"],
+});
+for await (const item of response) {
+    console.log(item);
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SubscribeEventsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `EventsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Flows
 
 <details><summary><code>client.flows.<a href="/src/management/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent&gt;</code></summary>
@@ -4027,6 +4101,7 @@ const pageableResponse = await client.flows.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["form_count"],
     synchronous: true,
 });
 for await (const item of pageableResponse) {
@@ -4038,6 +4113,7 @@ let page = await client.flows.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["form_count"],
     synchronous: true,
 });
 while (page.hasNextPage()) {
@@ -4143,7 +4219,9 @@ await client.flows.create({
 <dd>
 
 ```typescript
-await client.flows.get("id");
+await client.flows.get("id", {
+    hydrate: ["form_count"],
+});
 ```
 
 </dd>
@@ -4309,6 +4387,7 @@ const pageableResponse = await client.forms.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["flow_count"],
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -4319,6 +4398,7 @@ let page = await client.forms.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["flow_count"],
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -4423,7 +4503,9 @@ await client.forms.create({
 <dd>
 
 ```typescript
-await client.forms.get("id");
+await client.forms.get("id", {
+    hydrate: ["flow_count"],
+});
 ```
 
 </dd>
@@ -4823,6 +4905,7 @@ const pageableResponse = await client.groups.list({
     connection_id: "connection_id",
     name: "name",
     external_id: "external_id",
+    search: "search",
     fields: "fields",
     include_fields: true,
     from: "from",
@@ -4837,6 +4920,7 @@ let page = await client.groups.list({
     connection_id: "connection_id",
     name: "name",
     external_id: "external_id",
+    search: "search",
     fields: "fields",
     include_fields: true,
     from: "from",
@@ -7521,6 +7605,69 @@ const response = page.response;
 </dl>
 </details>
 
+<details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">revoke</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Revoke refresh tokens in bulk by ID list, user, user+client, or client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.refreshTokens.revoke();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.RevokeRefreshTokensRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RefreshTokensClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">get</a>(id) -> Management.GetRefreshTokenResponseContent</code></summary>
 <dl>
 <dd>
@@ -7749,6 +7896,7 @@ Retrieve details of all APIs associated with your tenant.
 
 ```typescript
 const pageableResponse = await client.resourceServers.list({
+    identifiers: ["identifiers"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -7760,6 +7908,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.resourceServers.list({
+    identifiers: ["identifiers"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -10440,7 +10589,7 @@ const response = page.response;
 <dl>
 <dd>
 
-Retrieve details about a single User Attribute Profile specified by ID.
+Create a User Attribute Profile
 
 </dd>
 </dl>
@@ -15635,6 +15784,7 @@ Retrieve all connections that are enabled for the specified <a href="https://www
 
 ```typescript
 const pageableResponse = await client.clients.connections.get("id", {
+    strategy: ["ad"],
     from: "from",
     take: 1,
     fields: "fields",
@@ -15646,6 +15796,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.clients.connections.get("id", {
+    strategy: ["ad"],
     from: "from",
     take: 1,
     fields: "fields",
@@ -18062,7 +18213,9 @@ const response = page.response;
 <dd>
 
 ```typescript
-await client.flows.executions.get("flow_id", "execution_id");
+await client.flows.executions.get("flow_id", "execution_id", {
+    hydrate: ["debug"],
+});
 ```
 
 </dd>
@@ -22202,6 +22355,7 @@ await client.keys.signing.revoke("kid");
 const pageableResponse = await client.organizations.clientGrants.list("id", {
     audience: "audience",
     client_id: "client_id",
+    grant_ids: ["grant_ids"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -22214,6 +22368,7 @@ for await (const item of pageableResponse) {
 let page = await client.organizations.clientGrants.list("id", {
     audience: "audience",
     client_id: "client_id",
+    grant_ids: ["grant_ids"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -25663,7 +25818,7 @@ await client.roles.users.assign("id", {
 <dl>
 <dd>
 
-Retrieves text customizations for a given self-service profile, language and Self Service SSO Flow page.
+Retrieves text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
 
 </dd>
 </dl>
@@ -25742,7 +25897,7 @@ await client.selfServiceProfiles.customText.list("id", "en", "get-started");
 <dl>
 <dd>
 
-Updates text customizations for a given self-service profile, language and Self Service SSO Flow page.
+Updates text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
 
 </dd>
 </dl>
@@ -25833,7 +25988,7 @@ await client.selfServiceProfiles.customText.set("id", "en", "get-started", {
 <dl>
 <dd>
 
-Creates an SSO access ticket to initiate the Self Service SSO Flow using a self-service profile.
+Creates an access ticket to initiate the Self-Service Enterprise Configuration flow using a self-service profile.
 
 </dd>
 </dl>
@@ -25904,7 +26059,7 @@ await client.selfServiceProfiles.ssoTicket.create("id");
 <dl>
 <dd>
 
-Revokes an SSO access ticket and invalidates associated sessions. The ticket will no longer be accepted to initiate a Self-Service SSO session. If any users have already started a session through this ticket, their session will be terminated. Clients should expect a `202 Accepted` response upon successful processing, indicating that the request has been acknowledged and that the revocation is underway but may not be fully completed at the time of response. If the specified ticket does not exist, a `202 Accepted` response is also returned, signaling that no further action is required.
+Revokes a Self-Service Enterprise Configuration access ticket and invalidates associated sessions. The ticket will no longer be accepted to initiate a Self-Service Enterprise Configuration session. If any users have already started a session through this ticket, their session will be terminated. Clients should expect a `202 Accepted` response upon successful processing, indicating that the request has been acknowledged and that the revocation is underway but may not be fully completed at the time of response. If the specified ticket does not exist, a `202 Accepted` response is also returned, signaling that no further action is required.
 Clients should treat these `202` responses as an acknowledgment that the request has been accepted and is in progress, even if the ticket was not found.
 
 </dd>
@@ -28446,7 +28601,7 @@ await client.users.sessions.delete("user_id");
 <dl>
 <dd>
 
-List a verifiable credential templates.
+List verifiable credential templates.
 
 </dd>
 </dl>
