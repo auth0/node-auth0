@@ -12,6 +12,7 @@ import { CustomDomainsClient } from "./api/resources/customDomains/client/Client
 import { DeviceCredentialsClient } from "./api/resources/deviceCredentials/client/Client.js";
 import { EmailsClient } from "./api/resources/emails/client/Client.js";
 import { EmailTemplatesClient } from "./api/resources/emailTemplates/client/Client.js";
+import { EventsClient } from "./api/resources/events/client/Client.js";
 import { EventStreamsClient } from "./api/resources/eventStreams/client/Client.js";
 import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { FormsClient } from "./api/resources/forms/client/Client.js";
@@ -66,6 +67,7 @@ export class ManagementClient {
     protected _deviceCredentials: DeviceCredentialsClient | undefined;
     protected _emailTemplates: EmailTemplatesClient | undefined;
     protected _eventStreams: EventStreamsClient | undefined;
+    protected _events: EventsClient | undefined;
     protected _flows: FlowsClient | undefined;
     protected _forms: FormsClient | undefined;
     protected _userGrants: UserGrantsClient | undefined;
@@ -142,6 +144,10 @@ export class ManagementClient {
 
     public get eventStreams(): EventStreamsClient {
         return (this._eventStreams ??= new EventStreamsClient(this._options));
+    }
+
+    public get events(): EventsClient {
+        return (this._events ??= new EventsClient(this._options));
     }
 
     public get flows(): FlowsClient {

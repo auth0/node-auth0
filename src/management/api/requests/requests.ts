@@ -112,6 +112,7 @@ export interface UpdateBrandingRequestContent {
     favicon_url?: string | null;
     /** URL for the logo. Must use HTTPS. */
     logo_url?: string | null;
+    identifiers?: Management.UpdateBrandingIdentifiers | null;
     font?: Management.UpdateBrandingFont | null;
 }
 
@@ -140,7 +141,7 @@ export interface ListClientGrantsRequestParameters {
     allow_any_organization?: Management.ClientGrantAllowAnyOrganizationEnum | null;
     /** The type of application access the client grant allows. */
     subject_type?: Management.ClientGrantSubjectTypeEnum | null;
-    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is `third_party_clients`, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is <a href="https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants#default-permissions-for-third-party-applications">`third_party_clients`</a>, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
     default_for?: Management.ClientGrantDefaultForEnum | null;
 }
 
@@ -497,6 +498,7 @@ export interface UpdateConnectionProfileRequestContent {
  *     {
  *         from: "from",
  *         take: 1,
+ *         strategy: ["ad"],
  *         name: "name",
  *         fields: "fields",
  *         include_fields: true
@@ -812,9 +814,29 @@ export interface CreateEventStreamTestEventRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         from_timestamp: "from_timestamp",
+ *         event_type: ["group.created"]
+ *     }
+ */
+export interface SubscribeEventsRequestParameters {
+    /** Opaque token representing position in the stream. If not provided, stream will start from the latest events. */
+    from?: string | null;
+    /** RFC-3339 timestamp indicating where to start streaming events from. This should only be used on the initial query when a cursor may not be available. Subsequent requests should use the cursor (from) as it will be more accurate. */
+    from_timestamp?: string | null;
+    /** Event type(s) to listen for. Specify multiple times for multiple types (e.g., ?event_type=user.created&event_type=user.updated). If not provided, all event types will be streamed. */
+    event_type?:
+        | (Management.EventStreamSubscribeEventsEventTypeEnum | null)
+        | (Management.EventStreamSubscribeEventsEventTypeEnum | null)[];
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
+ *         hydrate: ["form_count"],
  *         synchronous: true
  *     }
  */
@@ -846,7 +868,9 @@ export interface CreateFlowRequestContent {
 
 /**
  * @example
- *     {}
+ *     {
+ *         hydrate: ["form_count"]
+ *     }
  */
 export interface GetFlowRequestParameters {
     /** hydration param */
@@ -869,7 +893,8 @@ export interface UpdateFlowRequestContent {
  *     {
  *         page: 1,
  *         per_page: 1,
- *         include_totals: true
+ *         include_totals: true,
+ *         hydrate: ["flow_count"]
  *     }
  */
 export interface ListFormsRequestParameters {
@@ -904,7 +929,9 @@ export interface CreateFormRequestContent {
 
 /**
  * @example
- *     {}
+ *     {
+ *         hydrate: ["flow_count"]
+ *     }
  */
 export interface GetFormRequestParameters {
     /** Query parameter to hydrate the response with additional data */
@@ -971,6 +998,7 @@ export interface DeleteUserGrantByUserIdRequestParameters {
  *         connection_id: "connection_id",
  *         name: "name",
  *         external_id: "external_id",
+ *         search: "search",
  *         fields: "fields",
  *         include_fields: true,
  *         from: "from",
@@ -984,6 +1012,8 @@ export interface ListGroupsRequestParameters {
     name?: string | null;
     /** Filter groups by external ID. */
     external_id?: string | null;
+    /** Search for groups by name or external ID. */
+    search?: string | null;
     /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
@@ -1275,6 +1305,19 @@ export interface GetRefreshTokensRequestParameters {
  * @example
  *     {}
  */
+export interface RevokeRefreshTokensRequestContent {
+    /** Array of refresh token IDs to revoke. Limited to 100 at a time. */
+    ids?: string[];
+    /** Revoke all refresh tokens for this user. */
+    user_id?: string;
+    /** Revoke all refresh tokens for this client. */
+    client_id?: string;
+}
+
+/**
+ * @example
+ *     {}
+ */
 export interface UpdateRefreshTokenRequestContent {
     /** Metadata associated with the refresh token. Pass null or {} to remove all metadata. */
     refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
@@ -1283,6 +1326,7 @@ export interface UpdateRefreshTokenRequestContent {
 /**
  * @example
  *     {
+ *         identifiers: ["identifiers"],
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
@@ -1334,6 +1378,7 @@ export interface CreateResourceServerRequestContent {
     authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
 }
 
 /**
@@ -1375,6 +1420,7 @@ export interface UpdateResourceServerRequestContent {
     authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
 }
 
 /**
@@ -1534,9 +1580,9 @@ export interface CreateSelfServiceProfileRequestContent {
     /** The description of the self-service Profile. */
     description?: string;
     branding?: Management.SelfServiceProfileBrandingProperties;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
+    /** List of IdP strategies that will be shown to users during the Self-Service Enterprise Configuration flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
     allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
-    /** List of attributes to be mapped that will be shown to the user during the SS-SSO flow. */
+    /** List of attributes to be mapped that will be shown to the user during the Self-Service Enterprise Configuration flow. */
     user_attributes?: Management.SelfServiceProfileUserAttribute[];
     /** ID of the user-attribute-profile to associate with this self-service profile. */
     user_attribute_profile_id?: string;
@@ -1551,7 +1597,7 @@ export interface UpdateSelfServiceProfileRequestContent {
     name?: string;
     description?: (Management.SelfServiceProfileDescription | undefined) | null;
     branding?: Management.SelfServiceProfileBranding | undefined;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
+    /** List of IdP strategies that will be shown to users during the Self-Service Enterprise Configuration flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
     allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
     user_attributes?: (Management.SelfServiceProfileUserAttributes | undefined) | null;
     /** ID of the user-attribute-profile to associate with this self-service profile. */
@@ -2461,6 +2507,7 @@ export interface PatchClientCredentialRequestContent {
 /**
  * @example
  *     {
+ *         strategy: ["ad"],
  *         from: "from",
  *         take: 1,
  *         fields: "fields",
@@ -2689,7 +2736,9 @@ export interface ListFlowExecutionsRequestParameters {
 
 /**
  * @example
- *     {}
+ *     {
+ *         hydrate: ["debug"]
+ *     }
  */
 export interface GetFlowExecutionRequestParameters {
     /** Hydration param */
@@ -3076,6 +3125,7 @@ export interface ImportEncryptionKeyRequestContent {
  *     {
  *         audience: "audience",
  *         client_id: "client_id",
+ *         grant_ids: ["grant_ids"],
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true
@@ -3561,7 +3611,7 @@ export interface AssignRoleUsersRequestContent {
  *     {}
  */
 export interface CreateSelfServiceProfileSsoTicketRequestContent {
-    /** If provided, this will allow editing of the provided connection during the SSO Flow */
+    /** If provided, this will allow editing of the provided connection during the Self-Service Enterprise Configuration flow */
     connection_id?: string;
     connection_config?: Management.SelfServiceProfileSsoTicketConnectionConfig;
     /** List of client_ids that the connection will be enabled for. */
