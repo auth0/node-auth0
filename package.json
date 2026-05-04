@@ -71,7 +71,7 @@
         "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
     },
     "dependencies": {
-        "uuid": "^11.1.0",
+        "uuid": "^14.0.0",
         "jose": "^4.13.2",
         "auth0-legacy": "npm:auth0@^4.27.0"
     },

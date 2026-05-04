@@ -1,5 +1,4 @@
 import * as jose from "jose";
-import { v4 as uuid } from "uuid";
 
 export interface AddClientAuthenticationPayload {
     client_id?: string;
@@ -41,6 +40,7 @@ export const addClientAuthentication = async ({
     if (clientAssertionSigningKey && !payload.client_assertion) {
         const alg = clientAssertionSigningAlg || "RS256";
         const privateKey = await jose.importPKCS8(clientAssertionSigningKey, alg);
+        const { v4: uuid } = await import("uuid");
 
         payload.client_assertion = await new jose.SignJWT({})
             .setProtectedHeader({ alg })

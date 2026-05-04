@@ -23,10 +23,6 @@ jest.mock("jose", () => ({
     },
 }));
 
-jest.mock("uuid", () => ({
-    v4: jest.fn(() => "test-uuid"),
-}));
-
 // Mock the core fetcher to avoid actual HTTP calls
 jest.mock("../../core/index.js", () => {
     const actual = jest.requireActual("../../core/index.js");
