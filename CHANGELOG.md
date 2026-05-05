@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.10.0](https://github.com/auth0/node-auth0/tree/v5.10.0) (2026-05-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.9.0...v5.10.0)
+
+**Security**
+
+- UUID Package Dependency Update [\#1337](https://github.com/auth0/node-auth0/pull/1337) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.9.0](https://github.com/auth0/node-auth0/tree/v5.9.0) (2026-04-30)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.8.0...v5.9.0)
