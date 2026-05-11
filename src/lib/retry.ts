@@ -1,8 +1,27 @@
+import { TimeoutError } from "./errors.js";
+
 const MAX_REQUEST_RETRY_JITTER = 250;
 const MAX_REQUEST_RETRY_DELAY = 10000;
 const DEFAULT_NUMBER_RETRIES = 3;
 const MAX_NUMBER_RETRIES = 10;
 const BASE_DELAY = 500;
+
+// Transient network errors that are safe to retry — failures that can self-heal
+// without any config change (socket reset, broken pipe, aborted connection).
+// Deliberately excludes ENOTFOUND, ECONNREFUSED, cert errors — those won't self-heal.
+const RETRYABLE_ERROR_CODES = new Set(["ECONNRESET", "EPIPE", "ECONNABORTED"]);
+
+function isRetryableNetworkError(e: unknown): boolean {
+    if (typeof e !== "object" || e === null) return false;
+    const code = (e as NodeJS.ErrnoException).code ?? "";
+    return RETRYABLE_ERROR_CODES.has(code);
+}
+
+function calculateWait(nrOfTries: number): number {
+    let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
+    wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
+    return Math.min(wait, MAX_REQUEST_RETRY_DELAY);
+}
 
 /**
  * @private
@@ -43,7 +62,9 @@ export interface RetryConfiguration {
      */
     maxRetries?: number;
     /**
-     * Status Codes on which the SDK should trigger retries.
+     * HTTP Status Codes on which the SDK should trigger retries.
+     * Note: transient network errors (ECONNRESET, EPIPE, ECONNABORTED) are always retried
+     * up to maxRetries regardless of this setting. Use `enabled: false` to disable all retries.
      * Defaults to [429].
      */
     retryWhen?: number[];
@@ -57,19 +78,26 @@ export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }
     const nrOfTriesToAttempt = Math.min(MAX_NUMBER_RETRIES, maxRetries ?? DEFAULT_NUMBER_RETRIES);
     let nrOfTries = 0;
 
-    const retryAndWait = async () => {
+    const retryAndWait = async (): Promise<Response> => {
         let result: Response;
 
-        result = await action();
+        try {
+            result = await action();
+        } catch (e: unknown) {
+            if (e instanceof TimeoutError) {
+                throw e;
+            }
+            if (isRetryableNetworkError(e) && nrOfTries < nrOfTriesToAttempt) {
+                nrOfTries++;
+                await pause(calculateWait(nrOfTries));
+                return retryAndWait();
+            }
+            throw e;
+        }
 
         if ((retryWhen || [429]).includes(result.status) && nrOfTries < nrOfTriesToAttempt) {
             nrOfTries++;
-
-            let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
-            wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
-            wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
-
-            await pause(wait);
+            await pause(calculateWait(nrOfTries));
 
             result = await retryAndWait();
         }
