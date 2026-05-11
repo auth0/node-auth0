@@ -145,7 +145,9 @@ describe("ExecutionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.flows.executions.get("flow_id", "execution_id");
+        const response = await client.flows.executions.get("flow_id", "execution_id", {
+            hydrate: ["debug"],
+        });
         expect(response).toEqual(rawResponseBody);
     });
 

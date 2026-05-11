@@ -1,5 +1,47 @@
 # Change Log
 
+## [v5.9.1](https://github.com/auth0/node-auth0/tree/v5.9.1) (2026-05-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.9.0...v5.9.1)
+
+**Security**
+
+- UUID Package Dependency Update [\#1337](https://github.com/auth0/node-auth0/pull/1337) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.9.0](https://github.com/auth0/node-auth0/tree/v5.9.0) (2026-04-30)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.8.0...v5.9.0)
+
+**Added**
+
+- feat: add events SSE streaming, bulk refresh token revocation, and query string builder [\#1331](https://github.com/auth0/node-auth0/pull/1331) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.8.0](https://github.com/auth0/node-auth0/tree/v5.8.0) (2026-04-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.7.0...v5.8.0)
+
+**⚠️ BREAKING CHANGES**
+
+- Removed `invitation_landing_client_id` and `allowed_roles` fields from `ClientMyOrganizationPatchConfiguration`, `ClientMyOrganizationPostConfiguration`, and `ClientMyOrganizationResponseConfiguration` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Added**
+
+- Session Transfer Delegation: new `delegation` property on `ClientSessionTransferConfiguration` with `ClientSessionTransferDelegationConfiguration` interface supporting `allow_delegated_access` and `enforce_device_binding` options [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Self-Service SSO Ticket Features: new `enabled_features` property on `CreateSelfServiceProfileSsoTicketRequestContent` with `SelfServiceProfileSsoTicketEnabledFeatures` interface supporting `sso`, `domain_verification`, and `provisioning` toggles [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Self-Service SSO Ticket Domain Aliases: new `pending_domains` field on `SelfServiceProfileSsoTicketDomainAliasesConfig` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Changed**
+
+- Updated JSDoc descriptions for `default_for` field across Client Grant response types and `CreateClientGrantRequestContent` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.7.0](https://github.com/auth0/node-auth0/tree/v5.7.0) (2026-04-17)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.6.0...v5.7.0)
+
+**Added**
+
+- feat: add third-party client security, synchronized groups, and new event stream types [\#1326](https://github.com/auth0/node-auth0/pull/1326) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.6.0](https://github.com/auth0/node-auth0/tree/v5.6.0) (2026-04-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.5.0...v5.6.0)

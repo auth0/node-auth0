@@ -10,6 +10,7 @@ export * as customDomains from "./customDomains/index.js";
 export * as deviceCredentials from "./deviceCredentials/index.js";
 export * as emails from "./emails/index.js";
 export * as emailTemplates from "./emailTemplates/index.js";
+export * as events from "./events/index.js";
 export * as eventStreams from "./eventStreams/index.js";
 export * from "./eventStreams/types/index.js";
 export * as flows from "./flows/index.js";

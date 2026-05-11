@@ -663,6 +663,7 @@ const pageableResponse = await client.clientGrants.list({
     client_id: "client_id",
     allow_any_organization: true,
     subject_type: "client",
+    default_for: "third_party_clients",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -676,6 +677,7 @@ let page = await client.clientGrants.list({
     client_id: "client_id",
     allow_any_organization: true,
     subject_type: "client",
+    default_for: "third_party_clients",
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -2151,6 +2153,7 @@ To search by checkpoint, use the following parameters:
 const pageableResponse = await client.connections.list({
     from: "from",
     take: 1,
+    strategy: ["ad"],
     name: "name",
     fields: "fields",
     include_fields: true,
@@ -2163,6 +2166,7 @@ for await (const item of pageableResponse) {
 let page = await client.connections.list({
     from: "from",
     take: 1,
+    strategy: ["ad"],
     name: "name",
     fields: "fields",
     include_fields: true,
@@ -3962,7 +3966,7 @@ await client.eventStreams.update("id");
 
 ```typescript
 await client.eventStreams.test("id", {
-    event_type: "user.created",
+    event_type: "group.created",
 });
 ```
 
@@ -4006,6 +4010,78 @@ await client.eventStreams.test("id", {
 </dl>
 </details>
 
+## Events
+
+<details><summary><code>client.events.<a href="/src/management/api/resources/events/client/Client.ts">subscribe</a>({ ...params }) -> core.Stream&lt;Management.EventStreamSubscribeEventsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Subscribe to events via Server-Sent Events (SSE)
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.events.subscribe({
+    from: "from",
+    from_timestamp: "from_timestamp",
+    event_type: ["group.created"],
+});
+for await (const item of response) {
+    console.log(item);
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SubscribeEventsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `EventsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Flows
 
 <details><summary><code>client.flows.<a href="/src/management/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent&gt;</code></summary>
@@ -4025,6 +4101,7 @@ const pageableResponse = await client.flows.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["form_count"],
     synchronous: true,
 });
 for await (const item of pageableResponse) {
@@ -4036,6 +4113,7 @@ let page = await client.flows.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["form_count"],
     synchronous: true,
 });
 while (page.hasNextPage()) {
@@ -4141,7 +4219,9 @@ await client.flows.create({
 <dd>
 
 ```typescript
-await client.flows.get("id");
+await client.flows.get("id", {
+    hydrate: ["form_count"],
+});
 ```
 
 </dd>
@@ -4307,6 +4387,7 @@ const pageableResponse = await client.forms.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["flow_count"],
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -4317,6 +4398,7 @@ let page = await client.forms.list({
     page: 1,
     per_page: 1,
     include_totals: true,
+    hydrate: ["flow_count"],
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -4421,7 +4503,9 @@ await client.forms.create({
 <dd>
 
 ```typescript
-await client.forms.get("id");
+await client.forms.get("id", {
+    hydrate: ["flow_count"],
+});
 ```
 
 </dd>
@@ -4821,6 +4905,7 @@ const pageableResponse = await client.groups.list({
     connection_id: "connection_id",
     name: "name",
     external_id: "external_id",
+    search: "search",
     fields: "fields",
     include_fields: true,
     from: "from",
@@ -4835,6 +4920,7 @@ let page = await client.groups.list({
     connection_id: "connection_id",
     name: "name",
     external_id: "external_id",
+    search: "search",
     fields: "fields",
     include_fields: true,
     from: "from",
@@ -5450,73 +5536,81 @@ await client.jobs.get("id");
 <dl>
 <dd>
 
-Retrieve details on <a href="https://auth0.com/docs/logs/streams">log streams</a>.
+Retrieve details on [log streams](https://auth0.com/docs/logs/streams).
 
-<h5>Sample Response</h5><pre><code>[{
-	"id": "string",
-	"name": "string",
-	"type": "eventbridge",
-	"status": "active|paused|suspended",
-	"sink": {
-		"awsAccountId": "string",
-		"awsRegion": "string",
-		"awsPartnerEventSource": "string"
-	}
-}, {
-	"id": "string",
-	"name": "string",
-	"type": "http",
-	"status": "active|paused|suspended",
-	"sink": {
-		"httpContentFormat": "JSONLINES|JSONARRAY",
-		"httpContentType": "string",
-		"httpEndpoint": "string",
-		"httpAuthorization": "string"
-	}
-},
-{
-	"id": "string",
-	"name": "string",
-	"type": "eventgrid",
-	"status": "active|paused|suspended",
-	"sink": {
-		"azureSubscriptionId": "string",
-		"azureResourceGroup": "string",
-		"azureRegion": "string",
-		"azurePartnerTopic": "string"
-	}
-},
-{
-	"id": "string",
-	"name": "string",
-	"type": "splunk",
-	"status": "active|paused|suspended",
-	"sink": {
-		"splunkDomain": "string",
-		"splunkToken": "string",
-		"splunkPort": "string",
-		"splunkSecure": "boolean"
-	}
-},
-{
-	"id": "string",
-	"name": "string",
-	"type": "sumo",
-	"status": "active|paused|suspended",
-	"sink": {
-		"sumoSourceAddress": "string",
-	}
-},
-{
-	"id": "string",
-	"name": "string",
-	"type": "datadog",
-	"status": "active|paused|suspended",
-	"sink": {
-		"datadogRegion": "string",
-		"datadogApiKey": "string"
-	}
-}]</code></pre>
+**Sample Response**
+
+```json
+[
+    {
+        "id": "string",
+        "name": "string",
+        "type": "eventbridge",
+        "status": "active|paused|suspended",
+        "sink": {
+            "awsAccountId": "string",
+            "awsRegion": "string",
+            "awsPartnerEventSource": "string"
+        }
+    },
+    {
+        "id": "string",
+        "name": "string",
+        "type": "http",
+        "status": "active|paused|suspended",
+        "sink": {
+            "httpContentFormat": "JSONLINES|JSONARRAY",
+            "httpContentType": "string",
+            "httpEndpoint": "string",
+            "httpAuthorization": "string"
+        }
+    },
+    {
+        "id": "string",
+        "name": "string",
+        "type": "eventgrid",
+        "status": "active|paused|suspended",
+        "sink": {
+            "azureSubscriptionId": "string",
+            "azureResourceGroup": "string",
+            "azureRegion": "string",
+            "azurePartnerTopic": "string"
+        }
+    },
+    {
+        "id": "string",
+        "name": "string",
+        "type": "splunk",
+        "status": "active|paused|suspended",
+        "sink": {
+            "splunkDomain": "string",
+            "splunkToken": "string",
+            "splunkPort": "string",
+            "splunkSecure": "boolean"
+        }
+    },
+    {
+        "id": "string",
+        "name": "string",
+        "type": "sumo",
+        "status": "active|paused|suspended",
+        "sink": {
+            "sumoSourceAddress": "string"
+        }
+    },
+    {
+        "id": "string",
+        "name": "string",
+        "type": "datadog",
+        "status": "active|paused|suspended",
+        "sink": {
+            "datadogRegion": "string",
+            "datadogApiKey": "string"
+        }
+    }
+]
+```
+
 </dd>
 </dl>
 </dd>
@@ -5572,131 +5666,214 @@ await client.logStreams.list();
 
 Create a log stream.
 
-<h5>Log Stream Types</h5> The <code>type</code> of log stream being created determines the properties required in the <code>sink</code> payload.
-<h5>HTTP Stream</h5> For an <code>http</code> Stream, the <code>sink</code> properties are listed in the payload below
-Request: <pre><code>{
-	"name": "string",
-	"type": "http",
-	"sink": {
-		"httpEndpoint": "string",
-		"httpContentType": "string",
-		"httpContentFormat": "JSONLINES|JSONARRAY",
-		"httpAuthorization": "string"
-	}
-}</code></pre>
-Response: <pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "http",
-	"status": "active",
-	"sink": {
-		"httpEndpoint": "string",
-		"httpContentType": "string",
-		"httpContentFormat": "JSONLINES|JSONARRAY",
-		"httpAuthorization": "string"
-	}
-}</code></pre>
-<h5>Amazon EventBridge Stream</h5> For an <code>eventbridge</code> Stream, the <code>sink</code> properties are listed in the payload below
-Request: <pre><code>{
-	"name": "string",
-	"type": "eventbridge",
-	"sink": {
-		"awsRegion": "string",
-		"awsAccountId": "string"
-	}
-}</code></pre>
-The response will include an additional field <code>awsPartnerEventSource</code> in the <code>sink</code>: <pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "eventbridge",
-	"status": "active",
-	"sink": {
-		"awsAccountId": "string",
-		"awsRegion": "string",
-		"awsPartnerEventSource": "string"
-	}
-}</code></pre>
-<h5>Azure Event Grid Stream</h5> For an <code>Azure Event Grid</code> Stream, the <code>sink</code> properties are listed in the payload below
-Request: <pre><code>{
-	"name": "string",
-	"type": "eventgrid",
-	"sink": {
-		"azureSubscriptionId": "string",
-		"azureResourceGroup": "string",
-		"azureRegion": "string"
-	}
-}</code></pre>
-Response: <pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "http",
-	"status": "active",
-	"sink": {
-		"azureSubscriptionId": "string",
-		"azureResourceGroup": "string",
-		"azureRegion": "string",
-		"azurePartnerTopic": "string"
-	}
-}</code></pre>
-<h5>Datadog Stream</h5> For a <code>Datadog</code> Stream, the <code>sink</code> properties are listed in the payload below
-Request: <pre><code>{
-	"name": "string",
-	"type": "datadog",
-	"sink": {
-		"datadogRegion": "string",
-		"datadogApiKey": "string"
-	}
-}</code></pre>
-Response: <pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "datadog",
-	"status": "active",
-	"sink": {
-		"datadogRegion": "string",
-		"datadogApiKey": "string"
-	}
-}</code></pre>
-<h5>Splunk Stream</h5> For a <code>Splunk</code> Stream, the <code>sink</code> properties are listed in the payload below
-Request: <pre><code>{
-	"name": "string",
-	"type": "splunk",
-	"sink": {
-		"splunkDomain": "string",
-		"splunkToken": "string",
-		"splunkPort": "string",
-		"splunkSecure": "boolean"
-	}
-}</code></pre>
-Response: <pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "splunk",
-	"status": "active",
-	"sink": {
-		"splunkDomain": "string",
-		"splunkToken": "string",
-		"splunkPort": "string",
-		"splunkSecure": "boolean"
-	}
-}</code></pre>
-<h5>Sumo Logic Stream</h5> For a <code>Sumo Logic</code> Stream, the <code>sink</code> properties are listed in the payload below
-Request: <pre><code>{
-	"name": "string",
-	"type": "sumo",
-	"sink": {
-		"sumoSourceAddress": "string",
-	}
-}</code></pre>
-Response: <pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "sumo",
-	"status": "active",
-	"sink": {
-		"sumoSourceAddress": "string",
-	}
-}</code></pre>
+**Log Stream Types**
+
+The `type` of log stream being created determines the properties required in the `sink` payload.
+
+**HTTP Stream**
+
+For an `http` Stream, the `sink` properties are listed in the payload below.
+
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "http",
+    "sink": {
+        "httpEndpoint": "string",
+        "httpContentType": "string",
+        "httpContentFormat": "JSONLINES|JSONARRAY",
+        "httpAuthorization": "string"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "http",
+    "status": "active",
+    "sink": {
+        "httpEndpoint": "string",
+        "httpContentType": "string",
+        "httpContentFormat": "JSONLINES|JSONARRAY",
+        "httpAuthorization": "string"
+    }
+}
+```
+
+**Amazon EventBridge Stream**
+
+For an `eventbridge` Stream, the `sink` properties are listed in the payload below.
+
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "eventbridge",
+    "sink": {
+        "awsRegion": "string",
+        "awsAccountId": "string"
+    }
+}
+```
+
+The response will include an additional field `awsPartnerEventSource` in the `sink`:
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "eventbridge",
+    "status": "active",
+    "sink": {
+        "awsAccountId": "string",
+        "awsRegion": "string",
+        "awsPartnerEventSource": "string"
+    }
+}
+```
+
+**Azure Event Grid Stream**
+
+For an `Azure Event Grid` Stream, the `sink` properties are listed in the payload below.
+
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "eventgrid",
+    "sink": {
+        "azureSubscriptionId": "string",
+        "azureResourceGroup": "string",
+        "azureRegion": "string"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "http",
+    "status": "active",
+    "sink": {
+        "azureSubscriptionId": "string",
+        "azureResourceGroup": "string",
+        "azureRegion": "string",
+        "azurePartnerTopic": "string"
+    }
+}
+```
+
+**Datadog Stream**
+
+For a `Datadog` Stream, the `sink` properties are listed in the payload below.
+
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "datadog",
+    "sink": {
+        "datadogRegion": "string",
+        "datadogApiKey": "string"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "datadog",
+    "status": "active",
+    "sink": {
+        "datadogRegion": "string",
+        "datadogApiKey": "string"
+    }
+}
+```
+
+**Splunk Stream**
+
+For a `Splunk` Stream, the `sink` properties are listed in the payload below.
+
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "splunk",
+    "sink": {
+        "splunkDomain": "string",
+        "splunkToken": "string",
+        "splunkPort": "string",
+        "splunkSecure": "boolean"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "splunk",
+    "status": "active",
+    "sink": {
+        "splunkDomain": "string",
+        "splunkToken": "string",
+        "splunkPort": "string",
+        "splunkSecure": "boolean"
+    }
+}
+```
+
+**Sumo Logic Stream**
+
+For a `Sumo Logic` Stream, the `sink` properties are listed in the payload below.
+
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "sumo",
+    "sink": {
+        "sumoSourceAddress": "string"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "sumo",
+    "status": "active",
+    "sink": {
+        "sumoSourceAddress": "string"
+    }
+}
+```
+
 </dd>
 </dl>
 </dd>
@@ -5765,108 +5942,160 @@ await client.logStreams.create({
 
 Retrieve a log stream configuration and status.
 
-<h5>Sample responses</h5><h5>Amazon EventBridge Log Stream</h5><pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "eventbridge",
-	"status": "active|paused|suspended",
-	"sink": {
-		"awsAccountId": "string",
-		"awsRegion": "string",
-		"awsPartnerEventSource": "string"
-	}
-}</code></pre> <h5>HTTP Log Stream</h5><pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "http",
-	"status": "active|paused|suspended",
-	"sink": {
-		"httpContentFormat": "JSONLINES|JSONARRAY",
-		"httpContentType": "string",
-		"httpEndpoint": "string",
-		"httpAuthorization": "string"
-	}
-}</code></pre> <h5>Datadog Log Stream</h5><pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "datadog",
-	"status": "active|paused|suspended",
-	"sink": {
-		"datadogRegion": "string",
-		"datadogApiKey": "string"
-	}
+**Sample responses**
 
-}</code></pre><h5>Mixpanel</h5>
-Request: <pre><code>{
-"name": "string",
-"type": "mixpanel",
-"sink": {
-"mixpanelRegion": "string", // "us" | "eu",
-"mixpanelProjectId": "string",
-"mixpanelServiceAccountUsername": "string",
-"mixpanelServiceAccountPassword": "string"
+**Amazon EventBridge Log Stream**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "eventbridge",
+    "status": "active|paused|suspended",
+    "sink": {
+        "awsAccountId": "string",
+        "awsRegion": "string",
+        "awsPartnerEventSource": "string"
+    }
 }
-} </code></pre>
-Response: <pre><code>{
-"id": "string",
-"name": "string",
-"type": "mixpanel",
-"status": "active",
-"sink": {
-"mixpanelRegion": "string", // "us" | "eu",
-"mixpanelProjectId": "string",
-"mixpanelServiceAccountUsername": "string",
-"mixpanelServiceAccountPassword": "string" // the following is redacted on return
+```
+
+**HTTP Log Stream**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "http",
+    "status": "active|paused|suspended",
+    "sink": {
+        "httpContentFormat": "JSONLINES|JSONARRAY",
+        "httpContentType": "string",
+        "httpEndpoint": "string",
+        "httpAuthorization": "string"
+    }
 }
-} </code></pre>
+```
 
-    <h5>Segment</h5>
+**Datadog Log Stream**
 
-    Request: <pre><code> {
-      "name": "string",
-      "type": "segment",
-      "sink": {
-    	"segmentWriteKey": "string"
-      }
-    }</code></pre>
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "datadog",
+    "status": "active|paused|suspended",
+    "sink": {
+        "datadogRegion": "string",
+        "datadogApiKey": "string"
+    }
+}
+```
 
-    Response: <pre><code>{
-      "id": "string",
-      "name": "string",
-      "type": "segment",
-      "status": "active",
-      "sink": {
-    	"segmentWriteKey": "string"
-      }
-    } </code></pre>
+**Mixpanel**
 
-<h5>Splunk Log Stream</h5><pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "splunk",
-	"status": "active|paused|suspended",
-	"sink": {
-		"splunkDomain": "string",
-		"splunkToken": "string",
-		"splunkPort": "string",
-		"splunkSecure": "boolean"
-	}
-}</code></pre> <h5>Sumo Logic Log Stream</h5><pre><code>{
-	"id": "string",
-	"name": "string",
-	"type": "sumo",
-	"status": "active|paused|suspended",
-	"sink": {
-		"sumoSourceAddress": "string",
-	}
-}</code></pre> <h5>Status</h5> The <code>status</code> of a log stream maybe any of the following:
-1. <code>active</code> - Stream is currently enabled.
-2. <code>paused</code> - Stream is currently user disabled and will not attempt log delivery.
-3. <code>suspended</code> - Stream is currently disabled because of errors and will not attempt log delivery.
-</dd>
-</dl>
-</dd>
-</dl>
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "mixpanel",
+    "sink": {
+        "mixpanelRegion": "string",
+        "mixpanelProjectId": "string",
+        "mixpanelServiceAccountUsername": "string",
+        "mixpanelServiceAccountPassword": "string"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "mixpanel",
+    "status": "active",
+    "sink": {
+        "mixpanelRegion": "string",
+        "mixpanelProjectId": "string",
+        "mixpanelServiceAccountUsername": "string",
+        "mixpanelServiceAccountPassword": "string"
+    }
+}
+```
+
+**Segment**
+
+**Request:**
+
+```json
+{
+    "name": "string",
+    "type": "segment",
+    "sink": {
+        "segmentWriteKey": "string"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "segment",
+    "status": "active",
+    "sink": {
+        "segmentWriteKey": "string"
+    }
+}
+```
+
+**Splunk Log Stream**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "splunk",
+    "status": "active|paused|suspended",
+    "sink": {
+        "splunkDomain": "string",
+        "splunkToken": "string",
+        "splunkPort": "string",
+        "splunkSecure": "boolean"
+    }
+}
+```
+
+**Sumo Logic Log Stream**
+
+```json
+{
+    "id": "string",
+    "name": "string",
+    "type": "sumo",
+    "status": "active|paused|suspended",
+    "sink": {
+        "sumoSourceAddress": "string"
+    }
+}
+```
+
+**Status**
+
+The `status` of a log stream maybe any of the following:
+
+1. `active` - Stream is currently enabled.
+2. `paused` - Stream is currently user disabled and will not attempt log delivery.
+3. `suspended` - Stream is currently disabled because of errors and will not attempt log delivery.
+ </dd>
+ </dl>
+ </dd>
+ </dl>
 
 #### 🔌 Usage
 
@@ -5989,40 +6218,79 @@ await client.logStreams.delete("id");
 
 Update a log stream.
 
-<h4>Examples of how to use the PATCH endpoint.</h4> The following fields may be updated in a PATCH operation: <ul><li>name</li><li>status</li><li>sink</li></ul> Note: For log streams of type <code>eventbridge</code> and <code>eventgrid</code>, updating the <code>sink</code> is not permitted.
-<h5>Update the status of a log stream</h5><pre><code>{
-	"status": "active|paused"
-}</code></pre>
-<h5>Update the name of a log stream</h5><pre><code>{
-	"name": "string"
-}</code></pre>
-<h5>Update the sink properties of a stream of type <code>http</code></h5><pre><code>{
-  "sink": {
-    "httpEndpoint": "string",
-    "httpContentType": "string",
-    "httpContentFormat": "JSONARRAY|JSONLINES",
-    "httpAuthorization": "string"
-  }
-}</code></pre>
-<h5>Update the sink properties of a stream of type <code>datadog</code></h5><pre><code>{
-  "sink": {
-		"datadogRegion": "string",
-		"datadogApiKey": "string"
-  }
-}</code></pre>
-<h5>Update the sink properties of a stream of type <code>splunk</code></h5><pre><code>{
-  "sink": {
-    "splunkDomain": "string",
-    "splunkToken": "string",
-    "splunkPort": "string",
-    "splunkSecure": "boolean"
-  }
-}</code></pre>
-<h5>Update the sink properties of a stream of type <code>sumo</code></h5><pre><code>{
-  "sink": {
-    "sumoSourceAddress": "string"
-  }
-}</code></pre> 
+**Examples of how to use the PATCH endpoint.**
+
+The following fields may be updated in a PATCH operation:
+
+- name
+- status
+- sink
+
+Note: For log streams of type `eventbridge` and `eventgrid`, updating the `sink` is not permitted.
+
+**Update the status of a log stream**
+
+```json
+{
+    "status": "active|paused"
+}
+```
+
+**Update the name of a log stream**
+
+```json
+{
+    "name": "string"
+}
+```
+
+**Update the sink properties of a stream of type `http`**
+
+```json
+{
+    "sink": {
+        "httpEndpoint": "string",
+        "httpContentType": "string",
+        "httpContentFormat": "JSONARRAY|JSONLINES",
+        "httpAuthorization": "string"
+    }
+}
+```
+
+**Update the sink properties of a stream of type `datadog`**
+
+```json
+{
+    "sink": {
+        "datadogRegion": "string",
+        "datadogApiKey": "string"
+    }
+}
+```
+
+**Update the sink properties of a stream of type `splunk`**
+
+```json
+{
+    "sink": {
+        "splunkDomain": "string",
+        "splunkToken": "string",
+        "splunkPort": "string",
+        "splunkSecure": "boolean"
+    }
+}
+```
+
+**Update the sink properties of a stream of type `sumo`**
+
+```json
+{
+    "sink": {
+        "sumoSourceAddress": "string"
+    }
+}
+```
+
 </dd>
 </dl>
 </dd>
@@ -7337,6 +7605,69 @@ const response = page.response;
 </dl>
 </details>
 
+<details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">revoke</a>({ ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Revoke refresh tokens in bulk by ID list, user, user+client, or client.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.refreshTokens.revoke();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.RevokeRefreshTokensRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `RefreshTokensClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.refreshTokens.<a href="/src/management/api/resources/refreshTokens/client/Client.ts">get</a>(id) -> Management.GetRefreshTokenResponseContent</code></summary>
 <dl>
 <dd>
@@ -7565,6 +7896,7 @@ Retrieve details of all APIs associated with your tenant.
 
 ```typescript
 const pageableResponse = await client.resourceServers.list({
+    identifiers: ["identifiers"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -7576,6 +7908,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.resourceServers.list({
+    identifiers: ["identifiers"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -10256,7 +10589,7 @@ const response = page.response;
 <dl>
 <dd>
 
-Retrieve details about a single User Attribute Profile specified by ID.
+Create a User Attribute Profile
 
 </dd>
 </dl>
@@ -15451,6 +15784,7 @@ Retrieve all connections that are enabled for the specified <a href="https://www
 
 ```typescript
 const pageableResponse = await client.clients.connections.get("id", {
+    strategy: ["ad"],
     from: "from",
     take: 1,
     fields: "fields",
@@ -15462,6 +15796,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.clients.connections.get("id", {
+    strategy: ["ad"],
     from: "from",
     take: 1,
     fields: "fields",
@@ -15911,6 +16246,172 @@ await client.connections.directoryProvisioning.getDefaultMapping("id");
 <dd>
 
 **id:** `string` — The id of the connection to retrieve its directory provisioning configuration
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">listSynchronizedGroups</a>(id, { ...params }) -> core.Page&lt;Management.SynchronizedGroupPayload, Management.ListSynchronizedGroupsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the configured synchronized groups for a connection directory provisioning configuration.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to list synchronized groups for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListSynchronizedGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">set</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create or replace the selected groups for a connection directory provisioning configuration.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.set("id", {
+    groups: [
+        {
+            id: "id",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to create or replace synchronized groups for
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ReplaceSynchronizedGroupsRequestContent`
 
 </dd>
 </dl>
@@ -17712,7 +18213,9 @@ const response = page.response;
 <dd>
 
 ```typescript
-await client.flows.executions.get("flow_id", "execution_id");
+await client.flows.executions.get("flow_id", "execution_id", {
+    hydrate: ["debug"],
+});
 ```
 
 </dd>
@@ -21852,6 +22355,7 @@ await client.keys.signing.revoke("kid");
 const pageableResponse = await client.organizations.clientGrants.list("id", {
     audience: "audience",
     client_id: "client_id",
+    grant_ids: ["grant_ids"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -21864,6 +22368,7 @@ for await (const item of pageableResponse) {
 let page = await client.organizations.clientGrants.list("id", {
     audience: "audience",
     client_id: "client_id",
+    grant_ids: ["grant_ids"],
     page: 1,
     per_page: 1,
     include_totals: true,
@@ -25313,7 +25818,7 @@ await client.roles.users.assign("id", {
 <dl>
 <dd>
 
-Retrieves text customizations for a given self-service profile, language and Self Service SSO Flow page.
+Retrieves text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
 
 </dd>
 </dl>
@@ -25392,7 +25897,7 @@ await client.selfServiceProfiles.customText.list("id", "en", "get-started");
 <dl>
 <dd>
 
-Updates text customizations for a given self-service profile, language and Self Service SSO Flow page.
+Updates text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
 
 </dd>
 </dl>
@@ -25483,7 +25988,7 @@ await client.selfServiceProfiles.customText.set("id", "en", "get-started", {
 <dl>
 <dd>
 
-Creates an SSO access ticket to initiate the Self Service SSO Flow using a self-service profile.
+Creates an access ticket to initiate the Self-Service Enterprise Configuration flow using a self-service profile.
 
 </dd>
 </dl>
@@ -25554,7 +26059,7 @@ await client.selfServiceProfiles.ssoTicket.create("id");
 <dl>
 <dd>
 
-Revokes an SSO access ticket and invalidates associated sessions. The ticket will no longer be accepted to initiate a Self-Service SSO session. If any users have already started a session through this ticket, their session will be terminated. Clients should expect a `202 Accepted` response upon successful processing, indicating that the request has been acknowledged and that the revocation is underway but may not be fully completed at the time of response. If the specified ticket does not exist, a `202 Accepted` response is also returned, signaling that no further action is required.
+Revokes a Self-Service Enterprise Configuration access ticket and invalidates associated sessions. The ticket will no longer be accepted to initiate a Self-Service Enterprise Configuration session. If any users have already started a session through this ticket, their session will be terminated. Clients should expect a `202 Accepted` response upon successful processing, indicating that the request has been acknowledged and that the revocation is underway but may not be fully completed at the time of response. If the specified ticket does not exist, a `202 Accepted` response is also returned, signaling that no further action is required.
 Clients should treat these `202` responses as an acknowledgment that the request has been accepted and is in progress, even if the ticket was not found.
 
 </dd>
@@ -28096,7 +28601,7 @@ await client.users.sessions.delete("user_id");
 <dl>
 <dd>
 
-List a verifiable credential templates.
+List verifiable credential templates.
 
 </dd>
 </dl>

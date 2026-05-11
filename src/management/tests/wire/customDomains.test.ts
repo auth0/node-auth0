@@ -135,7 +135,7 @@ describe("CustomDomainsClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
+        const rawRequestBody = { domain: "foo", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -149,7 +149,7 @@ describe("CustomDomainsClient", () => {
 
         await expect(async () => {
             return await client.customDomains.create({
-                domain: "domain",
+                domain: "foo",
                 type: "auth0_managed_certs",
             });
         }).rejects.toThrow(Management.BadRequestError);
@@ -158,7 +158,7 @@ describe("CustomDomainsClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
+        const rawRequestBody = { domain: "foo", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -172,7 +172,7 @@ describe("CustomDomainsClient", () => {
 
         await expect(async () => {
             return await client.customDomains.create({
-                domain: "domain",
+                domain: "foo",
                 type: "auth0_managed_certs",
             });
         }).rejects.toThrow(Management.UnauthorizedError);
@@ -181,7 +181,7 @@ describe("CustomDomainsClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
+        const rawRequestBody = { domain: "foo", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -195,7 +195,7 @@ describe("CustomDomainsClient", () => {
 
         await expect(async () => {
             return await client.customDomains.create({
-                domain: "domain",
+                domain: "foo",
                 type: "auth0_managed_certs",
             });
         }).rejects.toThrow(Management.ForbiddenError);
@@ -204,7 +204,7 @@ describe("CustomDomainsClient", () => {
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
+        const rawRequestBody = { domain: "foo", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -218,7 +218,7 @@ describe("CustomDomainsClient", () => {
 
         await expect(async () => {
             return await client.customDomains.create({
-                domain: "domain",
+                domain: "foo",
                 type: "auth0_managed_certs",
             });
         }).rejects.toThrow(Management.ConflictError);
@@ -227,7 +227,7 @@ describe("CustomDomainsClient", () => {
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { domain: "domain", type: "auth0_managed_certs" };
+        const rawRequestBody = { domain: "foo", type: "auth0_managed_certs" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -241,7 +241,7 @@ describe("CustomDomainsClient", () => {
 
         await expect(async () => {
             return await client.customDomains.create({
-                domain: "domain",
+                domain: "foo",
                 type: "auth0_managed_certs",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
@@ -394,7 +394,7 @@ describe("CustomDomainsClient", () => {
     test("setDefault (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { domain: "x" };
+        const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -408,7 +408,7 @@ describe("CustomDomainsClient", () => {
 
         await expect(async () => {
             return await client.customDomains.setDefault({
-                domain: "x",
+                domain: "foo",
             });
         }).rejects.toThrow(Management.BadRequestError);
     });
@@ -416,7 +416,7 @@ describe("CustomDomainsClient", () => {
     test("setDefault (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { domain: "x" };
+        const rawRequestBody = { domain: "foo" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -430,7 +430,7 @@ describe("CustomDomainsClient", () => {
 
         await expect(async () => {
             return await client.customDomains.setDefault({
-                domain: "x",
+                domain: "foo",
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });

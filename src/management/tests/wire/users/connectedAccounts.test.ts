@@ -20,6 +20,7 @@ describe("ConnectedAccountsClient", () => {
                     scopes: ["scopes"],
                     created_at: "2024-01-15T09:30:00Z",
                     expires_at: "2024-01-15T09:30:00Z",
+                    organization_id: "organization_id",
                 },
             ],
             next: "next",
