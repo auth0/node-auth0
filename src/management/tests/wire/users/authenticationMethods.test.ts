@@ -33,6 +33,8 @@ describe("AuthenticationMethodsClient", () => {
                     credential_backed_up: true,
                     identity_user_id: "identity_user_id",
                     user_agent: "user_agent",
+                    user_handle: "user_handle",
+                    transports: ["transports"],
                     aaguid: "aaguid",
                     relying_party_identifier: "relying_party_identifier",
                 },
@@ -172,6 +174,12 @@ describe("AuthenticationMethodsClient", () => {
             public_key: "public_key",
             aaguid: "aaguid",
             relying_party_identifier: "relying_party_identifier",
+            credential_device_type: "single_device",
+            credential_backed_up: true,
+            identity_user_id: "identity_user_id",
+            user_agent: "user_agent",
+            user_handle: "user_handle",
+            transports: ["transports"],
             created_at: "2024-01-15T09:30:00Z",
         };
 
@@ -605,6 +613,8 @@ describe("AuthenticationMethodsClient", () => {
             credential_backed_up: true,
             identity_user_id: "identity_user_id",
             user_agent: "user_agent",
+            user_handle: "user_handle",
+            transports: ["transports"],
             aaguid: "aaguid",
             relying_party_identifier: "relying_party_identifier",
         };

@@ -1426,6 +1426,22 @@ export const AuthenticationTypeEnum = {
 export type AuthenticationTypeEnum = (typeof AuthenticationTypeEnum)[keyof typeof AuthenticationTypeEnum];
 
 /**
+ * Bad Request
+ */
+export interface BadRequestSchema {
+    message: string;
+    statusCode: string;
+    error: BadRequestSchema.Error_;
+}
+
+export namespace BadRequestSchema {
+    export const Error_ = {
+        BadRequest: "Bad Request",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
+/**
  * List of IP addresses or CIDR blocks to allowlist
  */
 export type BotDetectionAllowlist = Management.BotDetectionIpAddressOrCidrBlock[];
@@ -6121,7 +6137,7 @@ export type ConnectionRequireRequestUriRegistration = boolean;
 export type ConnectionRequiresUsername = boolean;
 
 export interface ConnectionResponseCommon extends Management.CreateConnectionCommon {
-    id?: Management.ConnectionId | undefined;
+    id: Management.ConnectionId;
     realms?: Management.ConnectionRealms | undefined;
 }
 
@@ -7846,7 +7862,7 @@ export interface CreateClientResponseContent {
 }
 
 export interface CreateConnectionCommon {
-    name?: Management.ConnectionName | undefined;
+    name: Management.ConnectionName;
     /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
     enabled_clients?: string[] | undefined;
     display_name?: Management.ConnectionDisplayName | undefined;
@@ -9730,6 +9746,8 @@ export interface CreateResourceServerResponseContent {
     allow_offline_access?: boolean | undefined;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -9892,6 +9910,17 @@ export interface CreateUserAuthenticationMethodResponseContent {
     aaguid?: string | undefined;
     /** Applies to webauthn authenticators only. The relying party identifier. */
     relying_party_identifier?: string | undefined;
+    credential_device_type?: Management.CredentialDeviceTypeEnum | undefined;
+    /** Applies to passkeys only. Whether the credential was backed up. */
+    credential_backed_up?: boolean | undefined;
+    /** Applies to passkeys only. The ID of the user identity linked with the authentication method. */
+    identity_user_id?: string | undefined;
+    /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
+    user_agent?: string | undefined;
+    /** Applies to passkeys only. The user handle of the user identity. */
+    user_handle?: string | undefined;
+    /** Applies to passkeys only. The transports used by clients to communicate with the authenticator. */
+    transports?: string[] | undefined;
     /** Authentication method creation date */
     created_at?: string | undefined;
 }
@@ -9991,6 +10020,13 @@ export const CreatedUserAuthenticationMethodTypeEnum = {
 } as const;
 export type CreatedUserAuthenticationMethodTypeEnum =
     (typeof CreatedUserAuthenticationMethodTypeEnum)[keyof typeof CreatedUserAuthenticationMethodTypeEnum];
+
+/** Applies to passkeys only. The kind of device the credential is stored on as defined by backup eligibility. "single_device" credentials cannot be backed up and synced to another device, "multi_device" credentials can be backed up if enabled by the end-user. */
+export const CredentialDeviceTypeEnum = {
+    SingleDevice: "single_device",
+    MultiDevice: "multi_device",
+} as const;
+export type CredentialDeviceTypeEnum = (typeof CredentialDeviceTypeEnum)[keyof typeof CredentialDeviceTypeEnum];
 
 export interface CredentialId {
     /** Credential ID */
@@ -17201,6 +17237,22 @@ export interface FlowsVaultConnectionSummary {
     fingerprint: string;
 }
 
+/**
+ * Forbidden
+ */
+export interface ForbiddenSchema {
+    message: string;
+    statusCode: string;
+    error: ForbiddenSchema.Error_;
+}
+
+export namespace ForbiddenSchema {
+    export const Error_ = {
+        Forbidden: "Forbidden",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
 export type FormBlock =
     | Management.FormBlockDivider
     | Management.FormBlockHtml
@@ -19344,6 +19396,8 @@ export interface GetResourceServerResponseContent {
     allow_offline_access?: boolean | undefined;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -19669,6 +19723,10 @@ export interface GetUserAuthenticationMethodResponseContent {
     identity_user_id?: string | undefined;
     /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
     user_agent?: string | undefined;
+    /** Applies to passkeys only. The user handle of the user identity. */
+    user_handle?: string | undefined;
+    /** Applies to passkeys only. The transports used by clients to communicate with the authenticator. */
+    transports?: string[] | undefined;
     /** Applies to passkey authentication methods only. Authenticator Attestation Globally Unique Identifier. */
     aaguid?: string | undefined;
     /** Applies to webauthn/passkey authentication methods only. The credential's relying party identifier. */
@@ -22100,6 +22158,8 @@ export interface ResourceServer {
     allow_offline_access?: boolean | undefined;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -23679,6 +23739,22 @@ export interface TokenQuotaConfiguration {
     [key: string]: any;
 }
 
+/**
+ * Too Many Requests
+ */
+export interface TooManyRequestsSchema {
+    message: string;
+    statusCode: string;
+    error: TooManyRequestsSchema.Error_;
+}
+
+export namespace TooManyRequestsSchema {
+    export const Error_ = {
+        TooManyRequests: "Too Many Requests",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
 export interface TwilioProviderConfiguration {
     default_from?: string | undefined;
     mssid?: string | undefined;
@@ -23696,6 +23772,22 @@ export const TwilioProviderDeliveryMethodEnum = {
 } as const;
 export type TwilioProviderDeliveryMethodEnum =
     (typeof TwilioProviderDeliveryMethodEnum)[keyof typeof TwilioProviderDeliveryMethodEnum];
+
+/**
+ * Unauthorized
+ */
+export interface UnauthorizedSchema {
+    message: string;
+    statusCode: string;
+    error: UnauthorizedSchema.Error_;
+}
+
+export namespace UnauthorizedSchema {
+    export const Error_ = {
+        Unauthorized: "Unauthorized",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
 
 /** Which login experience to use. Can be `new` or `classic`. */
 export const UniversalLoginExperienceEnum = {
@@ -24940,6 +25032,8 @@ export interface UpdateResourceServerResponseContent {
     allow_offline_access?: boolean | undefined;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean | undefined;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
@@ -25448,6 +25542,10 @@ export interface UserAuthenticationMethod {
     identity_user_id?: string | undefined;
     /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
     user_agent?: string | undefined;
+    /** Applies to passkeys only. The user handle of the user identity. */
+    user_handle?: string | undefined;
+    /** Applies to passkeys only. The transports used by clients to communicate with the authenticator. */
+    transports?: string[] | undefined;
     /** Applies to passkey authentication methods only. Authenticator Attestation Globally Unique Identifier. */
     aaguid?: string | undefined;
     /** Applies to webauthn/passkey authentication methods only. The credential's relying party identifier. */
