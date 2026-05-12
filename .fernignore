@@ -49,3 +49,6 @@ eslint.config.mjs
 .prettierignore
 CONTRIBUTING.md
 .fern/
+.fern/replay.lock
+.fern/replay.yml
+.gitattributes

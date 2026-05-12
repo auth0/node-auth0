@@ -1312,6 +1312,8 @@ export interface RevokeRefreshTokensRequestContent {
     user_id?: string;
     /** Revoke all refresh tokens for this client. */
     client_id?: string;
+    /** Resource server identifier (audience) to scope the revocation. Must be used with both `user_id` and `client_id`. */
+    audience?: string;
 }
 
 /**
@@ -1366,6 +1368,8 @@ export interface CreateResourceServerRequestContent {
     allow_offline_access?: boolean;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
@@ -1410,6 +1414,8 @@ export interface UpdateResourceServerRequestContent {
     allow_offline_access?: boolean;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
@@ -1665,7 +1671,7 @@ export interface VerifyEmailTicketRequestContent {
  *     {}
  */
 export interface ChangePasswordTicketRequestContent {
-    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using client_id or organization_id. */
+    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using organization_id. May be specified together with client_id when the tenant has a custom password reset page enabled and a password-reset-post-challenge Action bound. */
     result_url?: string;
     /** user_id of for whom the ticket should be created. */
     user_id?: string;
@@ -3747,12 +3753,25 @@ export interface CreateUserAuthenticationMethodRequestContent {
     /** Applies to email authentication methods only. The email address used to send verification messages. */
     email?: string;
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
-    /** Applies to webauthn authentication methods only. The id of the credential. */
+    /** Applies to webauthn/passkey authentication methods only. The id of the credential. */
     key_id?: string;
-    /** Applies to webauthn authentication methods only. The public key, which is encoded as base64. */
+    /** Applies to webauthn/passkey authentication methods only. The public key, which is encoded as base64. */
     public_key?: string;
+    /** Applies to passkeys only. Authenticator Attestation Globally Unique Identifier */
+    aaguid?: string;
     /** Applies to webauthn authentication methods only. The relying party identifier. */
     relying_party_identifier?: string;
+    credential_device_type?: Management.CredentialDeviceTypeEnum;
+    /** Applies to passkeys only. Whether the credential was backed up. */
+    credential_backed_up?: boolean;
+    /** Applies to passkeys only. The ID of the user identity linked with the authentication method. */
+    identity_user_id?: string;
+    /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
+    user_agent?: string;
+    /** Applies to passkeys only. The user handle of the user identity. */
+    user_handle?: string;
+    /** Applies to passkeys only. The transports used by clients to communicate with the authenticator. */
+    transports?: string[];
 }
 
 /**
