@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.10.0](https://github.com/auth0/node-auth0/tree/v5.10.0) (2026-05-13)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.9.1...v5.10.0)
+
+**Added**
+
+- feat: add passkey authentication methods, ephemeral session support, and improved error handling [\#1342](https://github.com/auth0/node-auth0/pull/1342) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.9.1](https://github.com/auth0/node-auth0/tree/v5.9.1) (2026-05-05)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.9.0...v5.9.1)
