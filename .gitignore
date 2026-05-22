@@ -45,3 +45,4 @@ build
 test-results.xml
 .nyc_output
 dist/
+.npmrc
