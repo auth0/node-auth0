@@ -4,7 +4,7 @@
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v4.37.0...v4.37.1)
 
-**Changed**
+**Security**
 
 - Chore: Bump uuid dependency to version 11.1.1 [\#1345](https://github.com/auth0/node-auth0/pull/1345)
 
