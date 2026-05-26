@@ -139,7 +139,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Retrieves a scim configuration by its <code>connectionId</code>.
+     * Retrieves a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to retrieve its SCIM configuration
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -295,7 +295,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Deletes a scim configuration by its <code>connectionId</code>.
+     * Deletes a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to delete its SCIM configuration
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -364,7 +364,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Update a scim configuration by its <code>connectionId</code>.
+     * Update a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to update its SCIM configuration
      * @param {Management.UpdateScimConfigurationRequestContent} request
@@ -448,7 +448,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Retrieves a scim configuration's default mapping by its <code>connectionId</code>.
+     * Retrieves a scim configuration's default mapping by its `connectionId`.
      *
      * @param {string} id - The id of the connection to retrieve its default SCIM mapping
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.

@@ -23,10 +23,7 @@ export class EnrollmentsClient {
     }
 
     /**
-     * Create a <a href="https://auth0.com/docs/secure/multi-factor-authentication/auth0-guardian/create-custom-enrollment-tickets">multi-factor authentication (MFA) enrollment ticket</a>, and optionally send an email with the created ticket, to a given user.
-     * Create a <a href="https://auth0.com/docs/secure/multi-factor-authentication/auth0-guardian/create-custom-enrollment-tickets">multi-factor authentication (MFA) enrollment ticket</a>, and optionally send an email with the created ticket to a given user. Enrollment tickets can specify which factor users must enroll with or allow existing MFA users to enroll in additional factors.<br/>
-     *
-     * Note: Users cannot enroll in Email as a factor through custom enrollment tickets.
+     * Create a [multi-factor authentication (MFA) enrollment ticket](https://auth0.com/docs/secure/multi-factor-authentication/auth0-guardian/create-custom-enrollment-tickets), and optionally send an email with the created ticket to a given user. Enrollment tickets can specify which factor users must enroll with or allow existing MFA users to enroll in additional factors.
      *
      * @param {Management.CreateGuardianEnrollmentTicketRequestContent} request
      * @param {EnrollmentsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -180,7 +177,7 @@ export class EnrollmentsClient {
     }
 
     /**
-     * Remove a specific multi-factor authentication (MFA) enrollment from a user's account. This allows the user to re-enroll with MFA. For more information, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa">Reset User Multi-Factor Authentication and Recovery Codes</a>.
+     * Remove a specific multi-factor authentication (MFA) enrollment from a user's account. This allows the user to re-enroll with MFA. For more information, review [Reset User Multi-Factor Authentication and Recovery Codes](https://auth0.com/docs/secure/multi-factor-authentication/reset-user-mfa).
      *
      * @param {string} id - ID of the enrollment to be deleted.
      * @param {EnrollmentsClient.RequestOptions} requestOptions - Request-specific configuration.

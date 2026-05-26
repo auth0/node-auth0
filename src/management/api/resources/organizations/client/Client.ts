@@ -12,6 +12,7 @@ import { ClientGrantsClient } from "../resources/clientGrants/client/Client.js";
 import { ConnectionsClient } from "../resources/connections/client/Client.js";
 import { DiscoveryDomainsClient } from "../resources/discoveryDomains/client/Client.js";
 import { EnabledConnectionsClient } from "../resources/enabledConnections/client/Client.js";
+import { GroupsClient } from "../resources/groups/client/Client.js";
 import { InvitationsClient } from "../resources/invitations/client/Client.js";
 import { MembersClient } from "../resources/members/client/Client.js";
 
@@ -29,6 +30,7 @@ export class OrganizationsClient {
     protected _enabledConnections: EnabledConnectionsClient | undefined;
     protected _invitations: InvitationsClient | undefined;
     protected _members: MembersClient | undefined;
+    protected _groups: GroupsClient | undefined;
 
     constructor(options: OrganizationsClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -56,6 +58,10 @@ export class OrganizationsClient {
 
     public get members(): MembersClient {
         return (this._members ??= new MembersClient(this._options));
+    }
+
+    public get groups(): GroupsClient {
+        return (this._groups ??= new GroupsClient(this._options));
     }
 
     /**

@@ -23,7 +23,7 @@ export class MultifactorClient {
     }
 
     /**
-     * Invalidate all remembered browsers across all <a href="https://auth0.com/docs/multifactor-authentication">authentication factors</a> for a user.
+     * Invalidate all remembered browsers across all [authentication factors](https://auth0.com/docs/multifactor-authentication) for a user.
      *
      * @param {string} id - ID of the user to invalidate all remembered browsers and authentication factors for.
      * @param {MultifactorClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -98,7 +98,7 @@ export class MultifactorClient {
     }
 
     /**
-     * Remove a <a href="https://auth0.com/docs/multifactor-authentication">multifactor</a> authentication configuration from a user's account. This forces the user to manually reconfigure the multi-factor provider.
+     * Remove a [multifactor](https://auth0.com/docs/multifactor-authentication) authentication configuration from a user's account. This forces the user to manually reconfigure the multi-factor provider.
      *
      * @param {string} id - ID of the user to remove a multifactor configuration from.
      * @param {Management.UserMultifactorProviderEnum} provider - The multi-factor provider. Supported values 'duo' or 'google-authenticator'

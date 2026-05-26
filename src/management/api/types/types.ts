@@ -301,6 +301,15 @@ export const OauthScope = {
      * Read Group Members */
     ReadGroupMembers: "read:group_members",
     /**
+     * Create Group Roles */
+    CreateGroupRoles: "create:group_roles",
+    /**
+     * Read Group Roles */
+    ReadGroupRoles: "read:group_roles",
+    /**
+     * Delete Group Roles */
+    DeleteGroupRoles: "delete:group_roles",
+    /**
      * Read Groups */
     ReadGroups: "read:groups",
     /**
@@ -403,6 +412,18 @@ export const OauthScope = {
      * Delete Organization Discovery Domains */
     DeleteOrganizationDiscoveryDomains: "delete:organization_discovery_domains",
     /**
+     * Create Organization Group Roles */
+    CreateOrganizationGroupRoles: "create:organization_group_roles",
+    /**
+     * Read Organization Group Roles */
+    ReadOrganizationGroupRoles: "read:organization_group_roles",
+    /**
+     * Delete Organization Group Roles */
+    DeleteOrganizationGroupRoles: "delete:organization_group_roles",
+    /**
+     * Read Organization Groups */
+    ReadOrganizationGroups: "read:organization_groups",
+    /**
      * Create Organization Invitations */
     CreateOrganizationInvitations: "create:organization_invitations",
     /**
@@ -411,6 +432,12 @@ export const OauthScope = {
     /**
      * Delete Organization Invitations */
     DeleteOrganizationInvitations: "delete:organization_invitations",
+    /**
+     * Read Organization Member Effective Roles */
+    ReadOrganizationMemberEffectiveRoles: "read:organization_member_effective_roles",
+    /**
+     * Read Organization Member Role Source Groups */
+    ReadOrganizationMemberRoleSourceGroups: "read:organization_member_role_source_groups",
     /**
      * Create Organization Member Roles */
     CreateOrganizationMemberRoles: "create:organization_member_roles",
@@ -474,6 +501,18 @@ export const OauthScope = {
     /**
      * Update Prompts */
     UpdatePrompts: "update:prompts",
+    /**
+     * Create Rate Limit Policies */
+    CreateRateLimitPolicies: "create:rate_limit_policies",
+    /**
+     * Read Rate Limit Policies */
+    ReadRateLimitPolicies: "read:rate_limit_policies",
+    /**
+     * Update Rate Limit Policies */
+    UpdateRateLimitPolicies: "update:rate_limit_policies",
+    /**
+     * Delete Rate Limit Policies */
+    DeleteRateLimitPolicies: "delete:rate_limit_policies",
     /**
      * Read Refresh Tokens */
     ReadRefreshTokens: "read:refresh_tokens",
@@ -634,8 +673,20 @@ export const OauthScope = {
      * Delete User Attribute Profiles */
     DeleteUserAttributeProfiles: "delete:user_attribute_profiles",
     /**
+     * Read User Effective Permissions */
+    ReadUserEffectivePermissions: "read:user_effective_permissions",
+    /**
+     * Read User Effective Roles */
+    ReadUserEffectiveRoles: "read:user_effective_roles",
+    /**
      * Read User Idp Tokens */
     ReadUserIdpTokens: "read:user_idp_tokens",
+    /**
+     * Read User Permission Source Roles */
+    ReadUserPermissionSourceRoles: "read:user_permission_source_roles",
+    /**
+     * Read User Role Source Groups */
+    ReadUserRoleSourceGroups: "read:user_role_source_groups",
     /**
      * Create User Tickets */
     CreateUserTickets: "create:user_tickets",
@@ -1547,16 +1598,16 @@ export type BrandingLoginDisplayEnum = (typeof BrandingLoginDisplayEnum)[keyof t
 
 /**
  * Page Background Color or Gradient.
- * Property contains either <code>null</code> to unset, a solid color as a string value <code>#FFFFFF</code>, or a gradient as an object.
+ * Property contains either `null` to unset, a solid color as a string value `#FFFFFF`, or a gradient as an object.
  *
- * <pre><code>
+ * ```js
  * {
  *   type: 'linear-gradient',
  *   start: '#FFFFFF',
  *   end: '#000000',
  *   angle_deg: 35
  * }
- * </code></pre>
+ * ```
  */
 export type BrandingPageBackground = (string | null) | undefined | (Record<string, unknown> | null) | undefined;
 
@@ -2719,9 +2770,10 @@ export const ClientExternalMetadataCreatedByEnum = {
 export type ClientExternalMetadataCreatedByEnum =
     (typeof ClientExternalMetadataCreatedByEnum)[keyof typeof ClientExternalMetadataCreatedByEnum];
 
-/** Indicates the type of external metadata used to register the client. This field is omitted for regular clients. The value <code>cimd</code> identifies clients registered via a Client ID Metadata Document. */
+/** Indicates the type of external metadata used to register the client. This field is omitted for regular clients. The value <code>cimd</code> identifies clients registered via a Client ID Metadata Document. The value <code>dcr</code> identifies clients registered via Dynamic Client Registration. */
 export const ClientExternalMetadataTypeEnum = {
     Cimd: "cimd",
+    Dcr: "dcr",
 } as const;
 export type ClientExternalMetadataTypeEnum =
     (typeof ClientExternalMetadataTypeEnum)[keyof typeof ClientExternalMetadataTypeEnum];
@@ -3372,7 +3424,7 @@ export type ConnectionAuthorizationEndpoint = string;
 /**
  * Base URL override for the Exact Online API endpoint used for OAuth2 authorization and API requests. Defaults to https://start.exactonline.nl.
  */
-export type ConnectionBaseUrlExact = Management.ConnectionHttpsUrlWithHttpFallback;
+export type ConnectionBaseUrlExact = string;
 
 /**
  * Enables Auth0's brute force protection to prevent credential stuffing attacks. When enabled, blocks suspicious login attempts from specific IP addresses after repeated failures.
@@ -3417,26 +3469,29 @@ export type ConnectionClientIdBitbucket = string;
 export type ConnectionClientId = string;
 
 /**
- * OAuth 2.0 client identifier obtained from Amazon Developer Console during Login with Amazon application registration. When not provided, Auth0 development keys are used for testing purposes.
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
-export type ConnectionClientIdAmazon = Management.ConnectionClientId;
-
-export type ConnectionClientIdAzureAd = Management.ConnectionClientId;
+export type ConnectionClientIdAmazon = string;
 
 /**
- * OAuth2.0 client identifier for the Exact Online connection, obtained when registering your application in the Exact App Center.
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
-export type ConnectionClientIdExact = Management.ConnectionClientId;
+export type ConnectionClientIdAzureAd = string;
 
 /**
- * Your Facebook App ID. You can find this in your [Facebook Developers Console](https://developers.facebook.com/apps) under the App Settings section.
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
-export type ConnectionClientIdFacebook = Management.ConnectionClientId;
+export type ConnectionClientIdExact = string;
 
 /**
- * Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
-export type ConnectionClientIdGoogleApps = Management.ConnectionClientId;
+export type ConnectionClientIdFacebook = string;
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
+ */
+export type ConnectionClientIdGoogleApps = string;
 
 /**
  * Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
@@ -3454,18 +3509,24 @@ export type ConnectionClientIdLine = string;
 export type ConnectionClientIdLinkedin = string;
 
 /**
- * OAuth 1.0a client ID (consumer key) that identifies the client to the provider and is used to sign OAuth 1.0a requests.
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
-export type ConnectionClientIdOAuth1 = Management.ConnectionClientId;
-
-export type ConnectionClientIdOAuth2 = Management.ConnectionClientId;
-
-export type ConnectionClientIdOidc = Management.ConnectionClientId;
+export type ConnectionClientIdOAuth1 = string;
 
 /**
- * OAuth 2.0 client identifier issued by PayPal during application registration. This value identifies your Auth0 connection to PayPal. Leave empty to use Auth0 Dev Keys.
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
  */
-export type ConnectionClientIdPaypal = Management.ConnectionClientId;
+export type ConnectionClientIdOAuth2 = string;
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
+ */
+export type ConnectionClientIdOidc = string;
+
+/**
+ * OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider.
+ */
+export type ConnectionClientIdPaypal = string;
 
 /**
  * The OAuth 2.0 client identifier
@@ -3488,31 +3549,34 @@ export type ConnectionClientProtocolSaml = Management.ConnectionOptionsIdpInitia
 export type ConnectionClientSecret = string;
 
 /**
- * OAuth 2.0 client secret obtained from Amazon Developer Console during Login with Amazon application registration. Used to authenticate your application when exchanging authorization codes for tokens.
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
-export type ConnectionClientSecretAmazon = Management.ConnectionClientSecret;
+export type ConnectionClientSecretAmazon = string;
 
 /**
  * The client secret (application password) from your Azure AD app registration. Used to authenticate your application when exchanging authorization codes for tokens.
  */
 export type ConnectionClientSecretAzureAd = string;
 
-export type ConnectionClientSecretBitbucket = Management.ConnectionClientSecret;
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
+ */
+export type ConnectionClientSecretBitbucket = string;
 
 /**
- * OAuth2.0 client secret for the Exact Online connection, obtained when registering your application in the Exact App Center.
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
-export type ConnectionClientSecretExact = Management.ConnectionClientSecret;
+export type ConnectionClientSecretExact = string;
 
 /**
- * Your Facebook App Secret. You can find this in your [Facebook Developers Console](https://developers.facebook.com/apps) under the App Settings section.
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
-export type ConnectionClientSecretFacebook = Management.ConnectionClientSecret;
+export type ConnectionClientSecretFacebook = string;
 
 /**
- * Your Google OAuth 2.0 client secret. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
-export type ConnectionClientSecretGoogleApps = Management.ConnectionClientSecret;
+export type ConnectionClientSecretGoogleApps = string;
 
 /**
  * Your Google OAuth 2.0 client secret. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section.
@@ -3530,25 +3594,34 @@ export type ConnectionClientSecretLine = string;
 export type ConnectionClientSecretLinkedin = string;
 
 /**
- * OAuth 1.0a client secret paired with the consumer key to sign request-token and access-token requests for this connection. Treat as a sensitive credential and supply the exact secret issued by the upstream provider.
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
-export type ConnectionClientSecretOAuth1 = Management.ConnectionClientSecret;
-
-export type ConnectionClientSecretOAuth2 = Management.ConnectionClientSecret;
-
-export type ConnectionClientSecretOidc = Management.ConnectionClientSecret;
+export type ConnectionClientSecretOAuth1 = string;
 
 /**
- * OAuth 2.0 client secret issued by PayPal during application registration. Leave empty to use Auth0 Dev Keys.
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
-export type ConnectionClientSecretPaypal = Management.ConnectionClientSecret;
+export type ConnectionClientSecretOAuth2 = string;
+
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
+ */
+export type ConnectionClientSecretOidc = string;
+
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
+ */
+export type ConnectionClientSecretPaypal = string;
 
 /**
  * The OAuth 2.0 client secret
  */
 export type ConnectionClientSecretSalesforce = string;
 
-export type ConnectionClientSecretWindowsLive = Management.ConnectionClientSecret;
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
+ */
+export type ConnectionClientSecretWindowsLive = string;
 
 export interface ConnectionCommon {
     display_name?: Management.ConnectionDisplayName | undefined;
@@ -3724,6 +3797,8 @@ export type ConnectionDomainOkta = string;
 /** Algorithm used for DPoP proof JWT signing. */
 export const ConnectionDpopSigningAlgEnum = {
     Es256: "ES256",
+    Es384: "ES384",
+    Es512: "ES512",
     Ed25519: "Ed25519",
 } as const;
 export type ConnectionDpopSigningAlgEnum =
@@ -4032,9 +4107,9 @@ export type ConnectionHandleLoginFromSocialGoogleApps = boolean;
 
 export type ConnectionHttpsUrlWithHttpFallback = string;
 
-export type ConnectionHttpsUrlWithHttpFallback2048 = Management.ConnectionHttpsUrlWithHttpFallback;
+export type ConnectionHttpsUrlWithHttpFallback2048 = string;
 
-export type ConnectionHttpsUrlWithHttpFallback255 = Management.ConnectionHttpsUrlWithHttpFallback;
+export type ConnectionHttpsUrlWithHttpFallback255 = string;
 
 /**
  * https url of the icon to be shown
@@ -4209,9 +4284,15 @@ export type ConnectionIpsAd = string[];
  */
 export type ConnectionIsDomainConnection = boolean;
 
-export type ConnectionIssuer = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider.
+ */
+export type ConnectionIssuer = string;
 
-export type ConnectionJwksUri = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures.
+ */
+export type ConnectionJwksUri = string;
 
 export interface ConnectionKey {
     /** The key id of the signing key */
@@ -4318,9 +4399,15 @@ export type ConnectionNamePrefixTemplate = string;
  */
 export type ConnectionNonPersistentAttrs = string[];
 
-export type ConnectionOpPolicyUri = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given.
+ */
+export type ConnectionOpPolicyUri = string;
 
-export type ConnectionOpTosUri = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given.
+ */
+export type ConnectionOpTosUri = string;
 
 /**
  * In order to return options in the response, the `read:connections_options` scope must be present
@@ -5871,7 +5958,7 @@ export type ConnectionPingFederateBaseUrl = Management.ConnectionPingFederateBas
 /**
  * PingFederate base URL constrained to HTTP/HTTPS with length bounds
  */
-export type ConnectionPingFederateBaseUrlPingFederate = Management.ConnectionHttpsUrlWithHttpFallback;
+export type ConnectionPingFederateBaseUrlPingFederate = string;
 
 export interface ConnectionProfile {
     id?: Management.ConnectionProfileId | undefined;
@@ -6029,6 +6116,7 @@ export interface ConnectionPropertiesOptions {
     password_options?: Management.ConnectionPasswordOptions | undefined;
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
+    dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
@@ -6089,7 +6177,10 @@ export type ConnectionRealms = string[];
  */
 export type ConnectionRecipientUrlSaml = Management.ConnectionHttpsUrlWithHttpFallback255;
 
-export type ConnectionRegistrationEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration
+ */
+export type ConnectionRegistrationEndpoint = string;
 
 /**
  * JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference.
@@ -7153,7 +7244,10 @@ export interface ConnectionScriptsOAuth2 {
  */
 export type ConnectionSendBackChannelNonce = boolean;
 
-export type ConnectionServiceDocumentation = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation.
+ */
+export type ConnectionServiceDocumentation = string;
 
 /** When using an external IdP, this flag determines  whether 'name', 'given_name', 'family_name', 'nickname', and 'picture' attributes are updated. In addition, it also determines whether the user is created when user doesnt exist previously. Possible values are 'on_each_login' (default value, it configures the connection to automatically create the user if necessary and update the root attributes from the external IdP with each user login. When this setting is used, root attributes cannot be independently updated), 'on_first_login' (configures the connection to create the user and set the root attributes on first login only, allowing them to be independently updated thereafter), and 'never_on_login' (configures the connection not to create the user and not to set the root attributes from the external IdP, allowing them to be independently updated). */
 export const ConnectionSetUserRootAttributesEnum = {
@@ -7367,7 +7461,10 @@ export type ConnectionTenantDomainAzureAdOne = string;
  */
 export type ConnectionTenantDomainGoogleApps = Management.ConnectionTenantDomain;
 
-export type ConnectionTenantDomainSaml = Management.ConnectionTenantDomain;
+/**
+ * For SAML connections, the tenant domain used to construct the login endpoint URL. Can be a string for single-tenant or an array of strings for multi-tenant validation.
+ */
+export type ConnectionTenantDomainSaml = string;
 
 /**
  * The Azure AD tenant ID as a UUID. The unique identifier for your Azure AD organization. Must be a valid 36-character UUID.
@@ -7389,7 +7486,10 @@ export type ConnectionThumbprintsAd = Management.ConnectionSha1Thumbprint[];
  */
 export type ConnectionThumbprintsSaml = Management.ConnectionSha1Thumbprint[];
 
-export type ConnectionTokenEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow.
+ */
+export type ConnectionTokenEndpoint = string;
 
 /** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. */
 export const ConnectionTokenEndpointAuthMethodEnum = {
@@ -7580,7 +7680,10 @@ export type ConnectionUserinfoEncryptionAlgValuesSupported = string[];
  */
 export type ConnectionUserinfoEncryptionEncValuesSupported = string[];
 
-export type ConnectionUserinfoEndpoint = Management.ConnectionHttpsUrlWithHttpFallback255;
+/**
+ * Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token.
+ */
+export type ConnectionUserinfoEndpoint = string;
 
 /**
  * JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included.
@@ -9728,6 +9831,20 @@ export interface CreatePublicKeyDeviceCredentialResponseContent {
     [key: string]: any;
 }
 
+export interface CreateRateLimitPolicyResponseContent {
+    /** Unique identifier for the Rate Limit Policy. */
+    id: string;
+    resource: Management.RateLimitPolicyResourceEnum;
+    consumer: Management.RateLimitPolicyConsumerEnum;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector: string;
+    configuration: Management.RateLimitPolicyConfiguration;
+    /** The date and time when the rate limit policy was created. */
+    created_at?: string | undefined;
+    /** The date and time when the rate limit policy was last updated. */
+    updated_at?: string | undefined;
+}
+
 export interface CreateResourceServerResponseContent {
     /** ID of the API (resource server). */
     id?: string | undefined;
@@ -9952,9 +10069,11 @@ export interface CreateUserResponseContent {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
+    multifactor_last_modified?: Management.UserDateSchema | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
     last_login?: Management.UserDateSchema | undefined;
+    last_password_reset?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
@@ -14758,6 +14877,21 @@ export interface ExpressConfigurationOrNull {
 
 export interface ExtensibilityEmailProviderCredentials {}
 
+/**
+ * Configure FedCM login settings for New Universal Login
+ */
+export interface FedCmLogin {
+    google?: Management.FedCmLoginGoogle | undefined;
+}
+
+/**
+ * Google FedCM configuration for this client
+ */
+export interface FedCmLoginGoogle {
+    /** When true, shows the Google FedCM prompt on New Universal Login for this client */
+    is_enabled?: boolean | undefined;
+}
+
 export interface FederatedConnectionTokenSet {
     id?: string | undefined;
     connection?: string | undefined;
@@ -19348,6 +19482,20 @@ export interface GetPhoneTemplateResponseContent {
     disabled: boolean;
 }
 
+export interface GetRateLimitPolicyResponseContent {
+    /** Unique identifier for the Rate Limit Policy. */
+    id: string;
+    resource: Management.RateLimitPolicyResourceEnum;
+    consumer: Management.RateLimitPolicyConsumerEnum;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector: string;
+    configuration: Management.RateLimitPolicyConfiguration;
+    /** The date and time when the rate limit policy was created. */
+    created_at?: string | undefined;
+    /** The date and time when the rate limit policy was last updated. */
+    updated_at?: string | undefined;
+}
+
 export interface GetRefreshTokenResponseContent {
     /** The ID of the refresh token */
     id?: string | undefined;
@@ -19769,9 +19917,11 @@ export interface GetUserResponseContent {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
+    multifactor_last_modified?: Management.UserDateSchema | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
     last_login?: Management.UserDateSchema | undefined;
+    last_password_reset?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
@@ -20381,6 +20531,12 @@ export interface ListFormsOffsetPaginatedResponseContent {
     forms?: Management.FormSummary[] | undefined;
 }
 
+export interface ListGroupRolesResponseContent {
+    roles: Management.Role[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+}
+
 export interface ListGroupsPaginatedResponseContent {
     groups: Management.Group[];
     /** A cursor to be used as the "from" query parameter for the next page of results. */
@@ -20440,10 +20596,34 @@ export interface ListOrganizationDiscoveryDomainsResponseContent {
     domains: Management.OrganizationDiscoveryDomain[];
 }
 
+export interface ListOrganizationGroupRolesResponseContent {
+    roles: Management.Role[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+}
+
+export interface ListOrganizationGroupsResponseContent {
+    groups: Management.Group[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+}
+
 export interface ListOrganizationInvitationsOffsetPaginatedResponseContent {
     start?: number | undefined;
     limit?: number | undefined;
     invitations?: Management.OrganizationInvitation[] | undefined;
+}
+
+export interface ListOrganizationMemberEffectiveRolesResponseContent {
+    roles: Management.OrganizationMemberEffectiveRole[];
+    /** Cursor for the next page of results */
+    next?: string | undefined;
+}
+
+export interface ListOrganizationMemberRoleSourceGroupsResponseContent {
+    groups: Management.Group[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
 }
 
 export interface ListOrganizationMemberRolesOffsetPaginatedResponseContent {
@@ -20469,6 +20649,12 @@ export interface ListPhoneTemplatesResponseContent {
     templates?: Management.PhoneTemplate[] | undefined;
 }
 
+export interface ListRateLimitPoliciesPaginatedResponseContent {
+    rate_limit_policies?: Management.RateLimitPolicy[] | undefined;
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+}
+
 export interface ListRefreshTokensPaginatedResponseContent {
     tokens?: Management.RefreshTokenResponseContent[] | undefined;
     /** A cursor to be used as the "from" query parameter for the next page of results. */
@@ -20482,6 +20668,12 @@ export interface ListResourceServerOffsetPaginatedResponseContent {
     limit?: number | undefined;
     total?: number | undefined;
     resource_servers?: Management.ResourceServer[] | undefined;
+}
+
+export interface ListRoleGroupsResponseContent {
+    groups: Management.Group[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
 }
 
 export interface ListRolePermissionsOffsetPaginatedResponseContent {
@@ -20579,6 +20771,26 @@ export interface ListUserConnectedAccountsResponseContent {
     next?: string | undefined;
 }
 
+export interface ListUserEffectivePermissionRoleSourcesResponseContent {
+    /** Roles with the specified permission assigned to the user, both directly and via groups. */
+    roles: Management.UserEffectivePermissionRoleSourceResponseContent[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+}
+
+export interface ListUserEffectivePermissionsResponseContent {
+    /** List of permissions assigned to the user. */
+    permissions: Management.UserEffectivePermissionResponseContent[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+}
+
+export interface ListUserEffectiveRolesResponseContent {
+    roles: Management.UserEffectiveRole[];
+    /** Cursor for the next page of results */
+    next?: string | undefined;
+}
+
 export interface ListUserGrantsOffsetPaginatedResponseContent {
     start?: number | undefined;
     limit?: number | undefined;
@@ -20598,6 +20810,12 @@ export interface ListUserPermissionsOffsetPaginatedResponseContent {
     limit?: number | undefined;
     total?: number | undefined;
     permissions?: Management.UserPermissionSchema[] | undefined;
+}
+
+export interface ListUserRoleSourceGroupsResponseContent {
+    groups: Management.Group[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
 }
 
 export interface ListUserRolesOffsetPaginatedResponseContent {
@@ -21548,6 +21766,24 @@ export interface OrganizationMember {
     roles?: Management.OrganizationMemberRole[] | undefined;
 }
 
+export interface OrganizationMemberEffectiveRole {
+    /** Role ID */
+    id: string;
+    /** Role name */
+    name: string;
+    /** Role description */
+    description: string;
+    /** Sources of the role assignment (direct or through group membership) */
+    sources: Management.OrganizationMemberEffectiveRoleSource[];
+}
+
+export const OrganizationMemberEffectiveRoleSource = {
+    Direct: "direct",
+    Groups: "groups",
+} as const;
+export type OrganizationMemberEffectiveRoleSource =
+    (typeof OrganizationMemberEffectiveRoleSource)[keyof typeof OrganizationMemberEffectiveRoleSource];
+
 export interface OrganizationMemberRole {
     /** ID for this role. */
     id?: string | undefined;
@@ -21658,6 +21894,20 @@ export interface PatchClientCredentialResponseContent {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+export type PatchRateLimitPolicyConfigurationRequestContent =
+    | {
+          action: "allow";
+      }
+    | {
+          action: "block" | "log";
+          limit: number;
+      }
+    | {
+          action: "redirect";
+          limit: number;
+          redirect_uri: string;
+      };
 
 export interface PatchSupplementalSignalsResponseContent {
     /** Indicates if incoming Akamai Headers should be processed */
@@ -22020,6 +22270,51 @@ export const PublicKeyCredentialTypeEnum = {
 } as const;
 export type PublicKeyCredentialTypeEnum =
     (typeof PublicKeyCredentialTypeEnum)[keyof typeof PublicKeyCredentialTypeEnum];
+
+export interface RateLimitPolicy {
+    /** Unique identifier for the Rate Limit Policy. */
+    id: string;
+    resource: Management.RateLimitPolicyResourceEnum;
+    consumer: Management.RateLimitPolicyConsumerEnum;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector: string;
+    configuration: Management.RateLimitPolicyConfiguration;
+    /** The date and time when the rate limit policy was created. */
+    created_at?: string | undefined;
+    /** The date and time when the rate limit policy was last updated. */
+    updated_at?: string | undefined;
+}
+
+/**
+ * The configuration of the rate limit policy.
+ */
+export type RateLimitPolicyConfiguration =
+    | {
+          action: "allow";
+      }
+    | {
+          action: "block" | "log";
+          limit: number;
+      }
+    | {
+          action: "redirect";
+          limit: number;
+          redirect_uri: string;
+      };
+
+/** The consumer to which the rate limit policy applies. */
+export const RateLimitPolicyConsumerEnum = {
+    Client: "client",
+} as const;
+export type RateLimitPolicyConsumerEnum =
+    (typeof RateLimitPolicyConsumerEnum)[keyof typeof RateLimitPolicyConsumerEnum];
+
+/** The API protected by the Rate Limit Policy. */
+export const RateLimitPolicyResourceEnum = {
+    OauthAuthenticationApi: "oauth_authentication_api",
+} as const;
+export type RateLimitPolicyResourceEnum =
+    (typeof RateLimitPolicyResourceEnum)[keyof typeof RateLimitPolicyResourceEnum];
 
 export type RefreshTokenDate =
     /**
@@ -23933,16 +24228,16 @@ export type UpdateBrandingLoginDisplayEnum =
 
 /**
  * Page Background Color or Gradient.
- * Property contains either <code>null</code> to unset, a solid color as a string value <code>#FFFFFF</code>, or a gradient as an object.
+ * Property contains either `null` to unset, a solid color as a string value `#FFFFFF`, or a gradient as an object.
  *
- * <pre><code>
+ * ```js
  * {
  *   type: 'linear-gradient',
  *   start: '#FFFFFF',
  *   end: '#000000',
  *   angle_deg: 35
  * }
- * </code></pre>
+ * ```
  */
 export type UpdateBrandingPageBackground = (string | null) | undefined | (Record<string, unknown> | null) | undefined;
 
@@ -24215,6 +24510,7 @@ export interface UpdateConnectionOptions {
     password_options?: Management.ConnectionPasswordOptions | undefined;
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
+    dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
@@ -24992,6 +25288,20 @@ export interface UpdatePhoneTemplateResponseContent {
     disabled: boolean;
 }
 
+export interface UpdateRateLimitPolicyResponseContent {
+    /** Unique identifier for the Rate Limit Policy. */
+    id: string;
+    resource: Management.RateLimitPolicyResourceEnum;
+    consumer: Management.RateLimitPolicyConsumerEnum;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector: string;
+    configuration: Management.RateLimitPolicyConfiguration;
+    /** The date and time when the rate limit policy was created. */
+    created_at?: string | undefined;
+    /** The date and time when the rate limit policy was last updated. */
+    updated_at?: string | undefined;
+}
+
 export interface UpdateRefreshTokenResponseContent {
     /** The ID of the refresh token */
     id?: string | undefined;
@@ -25315,9 +25625,11 @@ export interface UpdateUserResponseContent {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
+    multifactor_last_modified?: Management.UserDateSchema | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
     last_login?: Management.UserDateSchema | undefined;
+    last_password_reset?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
@@ -25587,6 +25899,63 @@ export type UserDateSchema =
      * Date and time when this user was created (ISO_8601 format). */
     | Record<string, unknown>;
 
+export interface UserEffectivePermissionResponseContent {
+    /** Resource server (API) identifier that this permission is for. */
+    resource_server_identifier?: string | undefined;
+    /** Name of this permission. */
+    permission_name?: string | undefined;
+    /** Resource server (API) name this permission is for. */
+    resource_server_name?: string | undefined;
+    /** Description of this permission. */
+    description?: string | undefined;
+    /** List of sources where this permission is coming from. */
+    sources?: Management.UserEffectivePermissionSourceEnum[] | undefined;
+}
+
+/** The source type of a user effective permission roles. */
+export const UserEffectivePermissionRoleSourceEnum = {
+    Direct: "direct",
+    Groups: "groups",
+} as const;
+export type UserEffectivePermissionRoleSourceEnum =
+    (typeof UserEffectivePermissionRoleSourceEnum)[keyof typeof UserEffectivePermissionRoleSourceEnum];
+
+export interface UserEffectivePermissionRoleSourceResponseContent {
+    /** ID for this role. */
+    id?: string | undefined;
+    /** Name of this role. */
+    name?: string | undefined;
+    /** Description of this role. */
+    description?: string | undefined;
+    /** List of sources where this role is coming from. */
+    sources?: Management.UserEffectivePermissionRoleSourceEnum[] | undefined;
+}
+
+/** The source type of a user effective permission. */
+export const UserEffectivePermissionSourceEnum = {
+    Direct: "direct",
+    Roles: "roles",
+} as const;
+export type UserEffectivePermissionSourceEnum =
+    (typeof UserEffectivePermissionSourceEnum)[keyof typeof UserEffectivePermissionSourceEnum];
+
+export interface UserEffectiveRole {
+    /** Role ID */
+    id: string;
+    /** Role name */
+    name: string;
+    /** Role description */
+    description: string;
+    /** Sources of the role assignment (direct or through group membership) */
+    sources: Management.UserEffectiveRoleSource[];
+}
+
+export const UserEffectiveRoleSource = {
+    Direct: "direct",
+    Groups: "groups",
+} as const;
+export type UserEffectiveRoleSource = (typeof UserEffectiveRoleSource)[keyof typeof UserEffectiveRoleSource];
+
 /** Authentication method for this enrollment. Can be `authenticator`, `guardian`, `sms`, `webauthn-roaming`, or `webauthn-platform`. */
 export const UserEnrollmentAuthMethodEnum = {
     Authenticator: "authenticator",
@@ -25808,9 +26177,11 @@ export interface UserResponseSchema {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
+    multifactor_last_modified?: Management.UserDateSchema | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
     last_login?: Management.UserDateSchema | undefined;
+    last_password_reset?: Management.UserDateSchema | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */

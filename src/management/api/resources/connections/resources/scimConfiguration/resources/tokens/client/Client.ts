@@ -26,7 +26,7 @@ export class TokensClient {
     }
 
     /**
-     * Retrieves all scim tokens by its connection <code>id</code>.
+     * Retrieves all scim tokens by its connection `id`.
      *
      * @param {string} id - The id of the connection to retrieve its SCIM configuration
      * @param {TokensClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -185,7 +185,7 @@ export class TokensClient {
     }
 
     /**
-     * Deletes a scim token by its connection <code>id</code> and <code>tokenId</code>.
+     * Deletes a scim token by its connection `id` and `tokenId`.
      *
      * @param {string} id - The connection id that owns the SCIM token to delete
      * @param {string} tokenId - The id of the scim token to delete

@@ -8,6 +8,7 @@ import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../errors/index.js";
 import * as Management from "../../../../../index.js";
+import { EffectiveRolesClient } from "../resources/effectiveRoles/client/Client.js";
 import { RolesClient } from "../resources/roles/client/Client.js";
 
 export declare namespace MembersClient {
@@ -18,10 +19,15 @@ export declare namespace MembersClient {
 
 export class MembersClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<MembersClient.Options>;
+    protected _effectiveRoles: EffectiveRolesClient | undefined;
     protected _roles: RolesClient | undefined;
 
     constructor(options: MembersClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
+    }
+
+    public get effectiveRoles(): EffectiveRolesClient {
+        return (this._effectiveRoles ??= new EffectiveRolesClient(this._options));
     }
 
     public get roles(): RolesClient {

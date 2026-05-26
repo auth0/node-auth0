@@ -23,7 +23,7 @@ export class EnrollmentsClient {
     }
 
     /**
-     * Retrieve the first <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors">multi-factor authentication</a> enrollment that a specific user has confirmed.
+     * Retrieve the first [multi-factor authentication](https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors) enrollment that a specific user has confirmed.
      *
      * @param {string} id - ID of the user to list enrollments for.
      * @param {EnrollmentsClient.RequestOptions} requestOptions - Request-specific configuration.

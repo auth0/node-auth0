@@ -286,6 +286,7 @@ export interface CreateClientRequestContent {
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
     native_social_login?: Management.NativeSocialLogin;
+    fedcm_login?: Management.FedCmLogin;
     refresh_token?: Management.ClientRefreshTokenConfiguration | null;
     default_organization?: Management.ClientDefaultOrganization | null;
     organization_usage?: Management.ClientOrganizationUsageEnum;
@@ -420,6 +421,7 @@ export interface UpdateClientRequestContent {
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
     native_social_login?: Management.NativeSocialLogin;
+    fedcm_login?: Management.FedCmLogin;
     refresh_token?: Management.ClientRefreshTokenConfiguration | null;
     default_organization?: Management.ClientDefaultOrganization | null;
     organization_usage?: Management.ClientOrganizationUsagePatchEnum | null;
@@ -1273,6 +1275,60 @@ export interface UpdateSettingsRequestContent {
     identifier_first?: boolean | null;
     /** Use WebAuthn with Device Biometrics as the first authentication factor */
     webauthn_platform_first_factor?: boolean | null;
+}
+
+/**
+ * @example
+ *     {
+ *         resource: "oauth_authentication_api",
+ *         consumer: "client",
+ *         consumer_selector: "consumer_selector",
+ *         take: 1,
+ *         from: "from"
+ *     }
+ */
+export interface ListRateLimitPoliciesRequestParameters {
+    /** The API protected by the Rate Limit Policy. */
+    resource?: Management.RateLimitPolicyResourceEnum | null;
+    /** The consumer to which the rate limit policy applies. */
+    consumer?: Management.RateLimitPolicyConsumerEnum | null;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Cursor for pagination. */
+    from?: string | null;
+}
+
+/**
+ * @example
+ *     {
+ *         resource: "oauth_authentication_api",
+ *         consumer: "client",
+ *         consumer_selector: "consumer_selector",
+ *         configuration: {
+ *             action: "allow"
+ *         }
+ *     }
+ */
+export interface CreateRateLimitPolicyRequestContent {
+    resource: Management.RateLimitPolicyResourceEnum;
+    consumer: Management.RateLimitPolicyConsumerEnum;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector: string;
+    configuration: Management.RateLimitPolicyConfiguration;
+}
+
+/**
+ * @example
+ *     {
+ *         configuration: {
+ *             action: "allow"
+ *         }
+ *     }
+ */
+export interface PatchRateLimitPolicyRequestContent {
+    configuration: Management.PatchRateLimitPolicyConfigurationRequestContent;
 }
 
 /**
@@ -2803,6 +2859,42 @@ export interface GetGroupMembersRequestParameters {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListGroupRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface CreateGroupRolesRequestParameters {
+    /** Array of role IDs to assign to the group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface DeleteGroupRolesRequestContent {
+    /** Array of role IDs to remove from the group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
  *         user_id: "user_id"
  *     }
  */
@@ -3422,6 +3514,70 @@ export interface DeleteOrganizationMembersRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationGroupRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface CreateOrganizationGroupRolesRequestContent {
+    /** Array of role IDs to assign to organization group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface DeleteOrganizationGroupRolesRequestContent {
+    /** Array of role IDs to delete from organization group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationMemberEffectiveRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true
@@ -3456,6 +3612,23 @@ export interface AssignOrganizationMemberRolesRequestContent {
 export interface DeleteOrganizationMemberRolesRequestContent {
     /** List of roles IDs associated with the organization member to remove. */
     roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         role_id: "role_id"
+ *     }
+ */
+export interface ListOrganizationMemberRoleSourceGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The role ID to get group sources for. */
+    role_id: string;
 }
 
 /**
@@ -3540,6 +3713,42 @@ export interface UpdateRiskAssessmentsSettingsRequestContent {
 export interface UpdateRiskAssessmentsSettingsNewDeviceRequestContent {
     /** Length of time to remember devices for, in days. */
     remember_for: number;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListRoleGroupsParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         groups: ["groups"]
+ *     }
+ */
+export interface AssignRoleGroupsRequestContent {
+    /** Array of group IDs to assign to the role. */
+    groups: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         groups: ["groups"]
+ *     }
+ */
+export interface DeleteRoleGroupsRequestContent {
+    /** Array of group IDs to remove from the role. */
+    groups: string[];
 }
 
 /**
@@ -3802,6 +4011,37 @@ export interface GetUserConnectedAccountsRequestParameters {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1,
+ *         resource_server_identifier: "resource_server_identifier"
+ *     }
+ */
+export interface ListUserEffectivePermissionsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The identifier of the resource server for which to calculate user permissions. */
+    resource_server_identifier: string;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListUserEffectiveRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         fields: "fields",
  *         include_fields: true,
  *         from: "from",
@@ -3991,6 +4231,43 @@ export interface ListRefreshTokensRequestParameters {
  */
 export interface ListUserSessionsRequestParameters {
     /** An optional cursor from which to start the selection (exclusive). */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         resource_server_identifier: "resource_server_identifier",
+ *         permission_name: "permission_name"
+ *     }
+ */
+export interface ListUserEffectivePermissionRoleSourceRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The identifier of the resource server for which to calculate user permissions. */
+    resource_server_identifier: string;
+    /** Name of this permission */
+    permission_name: string;
+}
+
+/**
+ * @example
+ *     {
+ *         role_id: "role_id",
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListUserRoleSourceGroupsRequestParameters {
+    /** ID of the role to get source groups for. */
+    role_id: string;
+    /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
     take?: number | null;
