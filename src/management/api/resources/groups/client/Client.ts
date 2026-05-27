@@ -9,6 +9,7 @@ import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCode
 import * as errors from "../../../../errors/index.js";
 import * as Management from "../../../index.js";
 import { MembersClient } from "../resources/members/client/Client.js";
+import { RolesClient } from "../resources/roles/client/Client.js";
 
 export declare namespace GroupsClient {
     export type Options = BaseClientOptions;
@@ -19,6 +20,7 @@ export declare namespace GroupsClient {
 export class GroupsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<GroupsClient.Options>;
     protected _members: MembersClient | undefined;
+    protected _roles: RolesClient | undefined;
 
     constructor(options: GroupsClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -26,6 +28,10 @@ export class GroupsClient {
 
     public get members(): MembersClient {
         return (this._members ??= new MembersClient(this._options));
+    }
+
+    public get roles(): RolesClient {
+        return (this._roles ??= new RolesClient(this._options));
     }
 
     /**

@@ -104,28 +104,28 @@ export class TemplatesClient {
     /**
      * Update the Universal Login branding template.
      *
-     * <p>When <code>content-type</code> header is set to <code>application/json</code>:</p>
-     * <pre>
-     * {
-     *   "template": "&lt;!DOCTYPE html&gt;{% assign resolved_dir = dir | default: "auto" %}&lt;html lang="{{locale}}" dir="{{resolved_dir}}"&gt;&lt;head&gt;{%- auth0:head -%}&lt;/head&gt;&lt;body class="_widget-auto-layout"&gt;{%- auth0:widget -%}&lt;/body&gt;&lt;/html&gt;"
-     * }
-     * </pre>
+     * When `content-type` header is set to `application/json`:
      *
-     * <p>
-     *   When <code>content-type</code> header is set to <code>text/html</code>:
-     * </p>
-     * <pre>
-     * &lt!DOCTYPE html&gt;
+     * ```json
+     * {
+     *   "template": "<!DOCTYPE html>{% assign resolved_dir = dir | default: \"auto\" %}<html lang=\"{{locale}}\" dir=\"{{resolved_dir}}\"><head>{%- auth0:head -%}</head><body class=\"_widget-auto-layout\">{%- auth0:widget -%}</body></html>"
+     * }
+     * ```
+     *
+     * When `content-type` header is set to `text/html`:
+     *
+     * ```html
+     * <!DOCTYPE html>
      * {% assign resolved_dir = dir | default: "auto" %}
-     * &lt;html lang="{{locale}}" dir="{{resolved_dir}}"&gt;
-     *   &lt;head&gt;
+     * <html lang="{{locale}}" dir="{{resolved_dir}}">
+     *   <head>
      *     {%- auth0:head -%}
-     *   &lt;/head&gt;
-     *   &lt;body class="_widget-auto-layout"&gt;
+     *   </head>
+     *   <body class="_widget-auto-layout">
      *     {%- auth0:widget -%}
-     *   &lt;/body&gt;
-     * &lt;/html&gt;
-     * </pre>
+     *   </body>
+     * </html>
+     * ```
      *
      * @param {Management.UpdateUniversalLoginTemplateRequestContent} request
      * @param {TemplatesClient.RequestOptions} requestOptions - Request-specific configuration.

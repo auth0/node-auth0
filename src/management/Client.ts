@@ -26,6 +26,7 @@ import { LogStreamsClient } from "./api/resources/logStreams/client/Client.js";
 import { NetworkAclsClient } from "./api/resources/networkAcls/client/Client.js";
 import { OrganizationsClient } from "./api/resources/organizations/client/Client.js";
 import { PromptsClient } from "./api/resources/prompts/client/Client.js";
+import { RateLimitPoliciesClient } from "./api/resources/rateLimitPolicies/client/Client.js";
 import { RefreshTokensClient } from "./api/resources/refreshTokens/client/Client.js";
 import { ResourceServersClient } from "./api/resources/resourceServers/client/Client.js";
 import { RiskAssessmentsClient } from "./api/resources/riskAssessments/client/Client.js";
@@ -79,6 +80,7 @@ export class ManagementClient {
     protected _networkAcls: NetworkAclsClient | undefined;
     protected _organizations: OrganizationsClient | undefined;
     protected _prompts: PromptsClient | undefined;
+    protected _rateLimitPolicies: RateLimitPoliciesClient | undefined;
     protected _refreshTokens: RefreshTokensClient | undefined;
     protected _resourceServers: ResourceServersClient | undefined;
     protected _roles: RolesClient | undefined;
@@ -192,6 +194,10 @@ export class ManagementClient {
 
     public get prompts(): PromptsClient {
         return (this._prompts ??= new PromptsClient(this._options));
+    }
+
+    public get rateLimitPolicies(): RateLimitPoliciesClient {
+        return (this._rateLimitPolicies ??= new RateLimitPoliciesClient(this._options));
     }
 
     public get refreshTokens(): RefreshTokensClient {
