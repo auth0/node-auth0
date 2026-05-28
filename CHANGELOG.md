@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.11.0](https://github.com/auth0/node-auth0/tree/v5.11.0) (2026-05-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.10.0...v5.11.0)
+
+**Added**
+
+- feat: add rate limit policies, group/org role management, and user effective roles/permissions [\#1348](https://github.com/auth0/node-auth0/pull/1348) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.10.0](https://github.com/auth0/node-auth0/tree/v5.10.0) (2026-05-13)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.9.1...v5.10.0)
