@@ -1,6 +1,8 @@
 export * as authenticationMethods from "./authenticationMethods/index.js";
 export * as authenticators from "./authenticators/index.js";
 export * as connectedAccounts from "./connectedAccounts/index.js";
+export * as effectivePermissions from "./effectivePermissions/index.js";
+export * as effectiveRoles from "./effectiveRoles/index.js";
 export * as enrollments from "./enrollments/index.js";
 export * as federatedConnectionsTokensets from "./federatedConnectionsTokensets/index.js";
 export * as groups from "./groups/index.js";

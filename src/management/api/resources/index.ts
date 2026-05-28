@@ -25,6 +25,7 @@ export * as logStreams from "./logStreams/index.js";
 export * as networkAcls from "./networkAcls/index.js";
 export * as organizations from "./organizations/index.js";
 export * as prompts from "./prompts/index.js";
+export * as rateLimitPolicies from "./rateLimitPolicies/index.js";
 export * as refreshTokens from "./refreshTokens/index.js";
 export * as resourceServers from "./resourceServers/index.js";
 export * as riskAssessments from "./riskAssessments/index.js";

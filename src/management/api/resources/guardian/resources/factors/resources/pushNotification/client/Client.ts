@@ -587,7 +587,7 @@ export class PushNotificationClient {
     }
 
     /**
-     * Retrieve configuration details for an AWS SNS push notification provider that has been enabled for MFA. To learn more, review <a href="https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa">Configure Push Notifications for MFA</a>.
+     * Retrieve configuration details for an AWS SNS push notification provider that has been enabled for MFA. To learn more, review [Configure Push Notifications for MFA](https://auth0.com/docs/secure/multi-factor-authentication/multi-factor-authentication-factors/configure-push-notifications-for-mfa).
      *
      * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -662,7 +662,7 @@ export class PushNotificationClient {
     }
 
     /**
-     * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
+     * Configure the [AWS SNS push notification provider configuration](https://auth0.com/docs/multifactor-authentication/developer/sns-configuration) (subscription required).
      *
      * @param {Management.SetGuardianFactorsProviderPushNotificationSnsRequestContent} request
      * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -743,7 +743,7 @@ export class PushNotificationClient {
     }
 
     /**
-     * Configure the <a href="https://auth0.com/docs/multifactor-authentication/developer/sns-configuration">AWS SNS push notification provider configuration</a> (subscription required).
+     * Configure the [AWS SNS push notification provider configuration](https://auth0.com/docs/multifactor-authentication/developer/sns-configuration) (subscription required).
      *
      * @param {Management.UpdateGuardianFactorsProviderPushNotificationSnsRequestContent} request
      * @param {PushNotificationClient.RequestOptions} requestOptions - Request-specific configuration.
