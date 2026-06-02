@@ -313,6 +313,28 @@ describe("Runtime", () => {
         expect(request.isDone()).toBe(true);
     });
 
+    it("should retry on ECONNABORTED when retry is enabled", async () => {
+        const request = nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .replyWithError({ code: "ECONNABORTED", message: "connection aborted" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        const response = await client.testRequest({
+            path: `/clients`,
+            method: "GET",
+        });
+
+        const data = (await response.json()) as Array<{ client_id: string }>;
+        expect(data[0].client_id).toBe("123");
+        expect(request.isDone()).toBe(true);
+    });
+
     it("should throw after exhausting retries on repeated ECONNRESET", async () => {
         nock(URL, { encodedQueryParams: true })
             .get("/clients")
