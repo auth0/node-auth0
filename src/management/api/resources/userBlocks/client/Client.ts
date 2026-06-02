@@ -23,7 +23,7 @@ export class UserBlocksClient {
     }
 
     /**
-     * Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for a user with the given identifier (username, phone number, or email).
+     * Retrieve details of all [Brute-force Protection](https://auth0.com/docs/secure/attack-protection/brute-force-protection) blocks for a user with the given identifier (username, phone number, or email).
      *
      * @param {Management.ListUserBlocksByIdentifierRequestParameters} request
      * @param {UserBlocksClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -111,9 +111,9 @@ export class UserBlocksClient {
     }
 
     /**
-     * Remove all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for the user with the given identifier (username, phone number, or email).
+     * Remove all [Brute-force Protection](https://auth0.com/docs/secure/attack-protection/brute-force-protection) blocks for the user with the given identifier (username, phone number, or email).
      *
-     * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by a tenant administrator</a>.
+     * Note: This endpoint does not unblock users that were [blocked by a tenant administrator](https://auth0.com/docs/user-profile#block-and-unblock-a-user).
      *
      * @param {Management.DeleteUserBlocksByIdentifierRequestParameters} request
      * @param {UserBlocksClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -196,7 +196,7 @@ export class UserBlocksClient {
     }
 
     /**
-     * Retrieve details of all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for the user with the given ID.
+     * Retrieve details of all [Brute-force Protection](https://auth0.com/docs/secure/attack-protection/brute-force-protection) blocks for the user with the given ID.
      *
      * @param {string} id - user_id of the user blocks to retrieve.
      * @param {Management.ListUserBlocksRequestParameters} request
@@ -288,9 +288,9 @@ export class UserBlocksClient {
     }
 
     /**
-     * Remove all <a href="https://auth0.com/docs/secure/attack-protection/brute-force-protection">Brute-force Protection</a> blocks for the user with the given ID.
+     * Remove all [Brute-force Protection](https://auth0.com/docs/secure/attack-protection/brute-force-protection) blocks for the user with the given ID.
      *
-     * Note: This endpoint does not unblock users that were <a href="https://auth0.com/docs/user-profile#block-and-unblock-a-user">blocked by a tenant administrator</a>.
+     * Note: This endpoint does not unblock users that were [blocked by a tenant administrator](https://auth0.com/docs/user-profile#block-and-unblock-a-user).
      *
      * @param {string} id - The user_id of the user to update.
      * @param {UserBlocksClient.RequestOptions} requestOptions - Request-specific configuration.

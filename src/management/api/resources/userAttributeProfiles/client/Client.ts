@@ -138,7 +138,7 @@ export class UserAttributeProfilesClient {
     }
 
     /**
-     * Create a User Attribute Profile
+     * Create a User Attribute Profile.
      *
      * @param {Management.CreateUserAttributeProfileRequestContent} request
      * @param {UserAttributeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.

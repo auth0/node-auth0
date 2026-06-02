@@ -286,6 +286,7 @@ export interface CreateClientRequestContent {
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
     native_social_login?: Management.NativeSocialLogin;
+    fedcm_login?: Management.FedCmLogin;
     refresh_token?: Management.ClientRefreshTokenConfiguration | null;
     default_organization?: Management.ClientDefaultOrganization | null;
     organization_usage?: Management.ClientOrganizationUsageEnum;
@@ -420,6 +421,7 @@ export interface UpdateClientRequestContent {
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
     native_social_login?: Management.NativeSocialLogin;
+    fedcm_login?: Management.FedCmLogin;
     refresh_token?: Management.ClientRefreshTokenConfiguration | null;
     default_organization?: Management.ClientDefaultOrganization | null;
     organization_usage?: Management.ClientOrganizationUsagePatchEnum | null;
@@ -1278,6 +1280,60 @@ export interface UpdateSettingsRequestContent {
 /**
  * @example
  *     {
+ *         resource: "oauth_authentication_api",
+ *         consumer: "client",
+ *         consumer_selector: "consumer_selector",
+ *         take: 1,
+ *         from: "from"
+ *     }
+ */
+export interface ListRateLimitPoliciesRequestParameters {
+    /** The API protected by the Rate Limit Policy. */
+    resource?: Management.RateLimitPolicyResourceEnum | null;
+    /** The consumer to which the rate limit policy applies. */
+    consumer?: Management.RateLimitPolicyConsumerEnum | null;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Cursor for pagination. */
+    from?: string | null;
+}
+
+/**
+ * @example
+ *     {
+ *         resource: "oauth_authentication_api",
+ *         consumer: "client",
+ *         consumer_selector: "consumer_selector",
+ *         configuration: {
+ *             action: "allow"
+ *         }
+ *     }
+ */
+export interface CreateRateLimitPolicyRequestContent {
+    resource: Management.RateLimitPolicyResourceEnum;
+    consumer: Management.RateLimitPolicyConsumerEnum;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector: string;
+    configuration: Management.RateLimitPolicyConfiguration;
+}
+
+/**
+ * @example
+ *     {
+ *         configuration: {
+ *             action: "allow"
+ *         }
+ *     }
+ */
+export interface PatchRateLimitPolicyRequestContent {
+    configuration: Management.PatchRateLimitPolicyConfigurationRequestContent;
+}
+
+/**
+ * @example
+ *     {
  *         user_id: "user_id",
  *         client_id: "client_id",
  *         from: "from",
@@ -1312,6 +1368,8 @@ export interface RevokeRefreshTokensRequestContent {
     user_id?: string;
     /** Revoke all refresh tokens for this client. */
     client_id?: string;
+    /** Resource server identifier (audience) to scope the revocation. Must be used with both `user_id` and `client_id`. */
+    audience?: string;
 }
 
 /**
@@ -1366,6 +1424,8 @@ export interface CreateResourceServerRequestContent {
     allow_offline_access?: boolean;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
@@ -1410,6 +1470,8 @@ export interface UpdateResourceServerRequestContent {
     allow_offline_access?: boolean;
     /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
     allow_online_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
@@ -1665,7 +1727,7 @@ export interface VerifyEmailTicketRequestContent {
  *     {}
  */
 export interface ChangePasswordTicketRequestContent {
-    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using client_id or organization_id. */
+    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using organization_id. May be specified together with client_id when the tenant has a custom password reset page enabled and a password-reset-post-challenge Action bound. */
     result_url?: string;
     /** user_id of for whom the ticket should be created. */
     user_id?: string;
@@ -2797,6 +2859,42 @@ export interface GetGroupMembersRequestParameters {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListGroupRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface CreateGroupRolesRequestParameters {
+    /** Array of role IDs to assign to the group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface DeleteGroupRolesRequestContent {
+    /** Array of role IDs to remove from the group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
  *         user_id: "user_id"
  *     }
  */
@@ -3416,6 +3514,70 @@ export interface DeleteOrganizationMembersRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationGroupRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface CreateOrganizationGroupRolesRequestContent {
+    /** Array of role IDs to assign to organization group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface DeleteOrganizationGroupRolesRequestContent {
+    /** Array of role IDs to delete from organization group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationMemberEffectiveRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true
@@ -3450,6 +3612,23 @@ export interface AssignOrganizationMemberRolesRequestContent {
 export interface DeleteOrganizationMemberRolesRequestContent {
     /** List of roles IDs associated with the organization member to remove. */
     roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         role_id: "role_id"
+ *     }
+ */
+export interface ListOrganizationMemberRoleSourceGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The role ID to get group sources for. */
+    role_id: string;
 }
 
 /**
@@ -3534,6 +3713,42 @@ export interface UpdateRiskAssessmentsSettingsRequestContent {
 export interface UpdateRiskAssessmentsSettingsNewDeviceRequestContent {
     /** Length of time to remember devices for, in days. */
     remember_for: number;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListRoleGroupsParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         groups: ["groups"]
+ *     }
+ */
+export interface AssignRoleGroupsRequestContent {
+    /** Array of group IDs to assign to the role. */
+    groups: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         groups: ["groups"]
+ *     }
+ */
+export interface DeleteRoleGroupsRequestContent {
+    /** Array of group IDs to remove from the role. */
+    groups: string[];
 }
 
 /**
@@ -3711,6 +3926,7 @@ export interface UpdateTenantSettingsRequestContent {
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean;
     dynamic_client_registration_security_mode?: Management.TenantSettingsDynamicClientRegistrationSecurityMode;
+    country_codes?: Management.TenantSettingsCountryCodes | null;
 }
 
 /**
@@ -3747,12 +3963,25 @@ export interface CreateUserAuthenticationMethodRequestContent {
     /** Applies to email authentication methods only. The email address used to send verification messages. */
     email?: string;
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
-    /** Applies to webauthn authentication methods only. The id of the credential. */
+    /** Applies to webauthn/passkey authentication methods only. The id of the credential. */
     key_id?: string;
-    /** Applies to webauthn authentication methods only. The public key, which is encoded as base64. */
+    /** Applies to webauthn/passkey authentication methods only. The public key, which is encoded as base64. */
     public_key?: string;
+    /** Applies to passkeys only. Authenticator Attestation Globally Unique Identifier */
+    aaguid?: string;
     /** Applies to webauthn authentication methods only. The relying party identifier. */
     relying_party_identifier?: string;
+    credential_device_type?: Management.CredentialDeviceTypeEnum;
+    /** Applies to passkeys only. Whether the credential was backed up. */
+    credential_backed_up?: boolean;
+    /** Applies to passkeys only. The ID of the user identity linked with the authentication method. */
+    identity_user_id?: string;
+    /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
+    user_agent?: string;
+    /** Applies to passkeys only. The user handle of the user identity. */
+    user_handle?: string;
+    /** Applies to passkeys only. The transports used by clients to communicate with the authenticator. */
+    transports?: string[];
 }
 
 /**
@@ -3777,6 +4006,37 @@ export interface GetUserConnectedAccountsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results to return.  Defaults to 10 with a maximum of 20 */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         resource_server_identifier: "resource_server_identifier"
+ *     }
+ */
+export interface ListUserEffectivePermissionsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The identifier of the resource server for which to calculate user permissions. */
+    resource_server_identifier: string;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListUserEffectiveRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
     take?: number | null;
 }
 
@@ -3972,6 +4232,43 @@ export interface ListRefreshTokensRequestParameters {
  */
 export interface ListUserSessionsRequestParameters {
     /** An optional cursor from which to start the selection (exclusive). */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         resource_server_identifier: "resource_server_identifier",
+ *         permission_name: "permission_name"
+ *     }
+ */
+export interface ListUserEffectivePermissionRoleSourceRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The identifier of the resource server for which to calculate user permissions. */
+    resource_server_identifier: string;
+    /** Name of this permission */
+    permission_name: string;
+}
+
+/**
+ * @example
+ *     {
+ *         role_id: "role_id",
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListUserRoleSourceGroupsRequestParameters {
+    /** ID of the role to get source groups for. */
+    role_id: string;
+    /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
     take?: number | null;

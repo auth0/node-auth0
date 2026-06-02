@@ -77,6 +77,7 @@ describe("SettingsClient", () => {
             phone_consolidated_experience: true,
             enable_ai_guide: true,
             dynamic_client_registration_security_mode: "strict",
+            country_codes: { list: ["list"], mode: "allow" },
         };
 
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -212,6 +213,7 @@ describe("SettingsClient", () => {
             phone_consolidated_experience: true,
             enable_ai_guide: true,
             dynamic_client_registration_security_mode: "strict",
+            country_codes: { list: ["list"], mode: "allow" },
         };
 
         server

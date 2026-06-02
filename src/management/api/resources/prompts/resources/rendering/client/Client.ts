@@ -159,7 +159,7 @@ export class RenderingClient {
     }
 
     /**
-     * Learn more about <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring render settings</a> for advanced customization.
+     * Learn more about [configuring render settings](https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens) for advanced customization.
      *
      * @param {Management.BulkUpdateAculRequestContent} request
      * @param {RenderingClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -333,7 +333,7 @@ export class RenderingClient {
     }
 
     /**
-     * Learn more about <a href='https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens'>configuring render settings</a> for advanced customization.
+     * Learn more about [configuring render settings](https://auth0.com/docs/customize/login-pages/advanced-customizations/getting-started/configure-acul-screens) for advanced customization.
      *
      * @param {Management.PromptGroupNameEnum} prompt - Name of the prompt
      * @param {Management.ScreenGroupNameEnum} screen - Name of the screen
