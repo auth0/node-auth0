@@ -9,6 +9,7 @@ import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCode
 import * as errors from "../../../../errors/index.js";
 import * as Management from "../../../index.js";
 import { MembersClient } from "../resources/members/client/Client.js";
+import { RolesClient } from "../resources/roles/client/Client.js";
 
 export declare namespace GroupsClient {
     export type Options = BaseClientOptions;
@@ -19,6 +20,7 @@ export declare namespace GroupsClient {
 export class GroupsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<GroupsClient.Options>;
     protected _members: MembersClient | undefined;
+    protected _roles: RolesClient | undefined;
 
     constructor(options: GroupsClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -26,6 +28,10 @@ export class GroupsClient {
 
     public get members(): MembersClient {
         return (this._members ??= new MembersClient(this._options));
+    }
+
+    public get roles(): RolesClient {
+        return (this._roles ??= new RolesClient(this._options));
     }
 
     /**
@@ -44,6 +50,7 @@ export class GroupsClient {
      *         connection_id: "connection_id",
      *         name: "name",
      *         external_id: "external_id",
+     *         search: "search",
      *         fields: "fields",
      *         include_fields: true,
      *         from: "from",
@@ -62,6 +69,7 @@ export class GroupsClient {
                     connection_id: connectionId,
                     name,
                     external_id: externalId,
+                    search,
                     fields,
                     include_fields: includeFields,
                     from: from_,
@@ -71,6 +79,7 @@ export class GroupsClient {
                     connection_id: connectionId,
                     name,
                     external_id: externalId,
+                    search,
                     fields,
                     include_fields: includeFields,
                     from: from_,
@@ -91,7 +100,11 @@ export class GroupsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -188,7 +201,7 @@ export class GroupsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -260,7 +273,7 @@ export class GroupsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

@@ -45,7 +45,8 @@ export class ClientGrantsClient {
      *         audience: "audience",
      *         client_id: "client_id",
      *         allow_any_organization: true,
-     *         subject_type: "client"
+     *         subject_type: "client",
+     *         default_for: "third_party_clients"
      *     })
      */
     public async list(
@@ -63,6 +64,7 @@ export class ClientGrantsClient {
                     client_id: clientId,
                     allow_any_organization: allowAnyOrganization,
                     subject_type: subjectType,
+                    default_for: defaultFor,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
                     from: from_,
@@ -71,6 +73,7 @@ export class ClientGrantsClient {
                     client_id: clientId,
                     allow_any_organization: allowAnyOrganization,
                     subject_type: subjectType !== undefined ? subjectType : undefined,
+                    default_for: defaultFor !== undefined ? defaultFor : undefined,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -87,7 +90,11 @@ export class ClientGrantsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -185,7 +192,7 @@ export class ClientGrantsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -268,7 +275,7 @@ export class ClientGrantsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -341,7 +348,7 @@ export class ClientGrantsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -419,7 +426,7 @@ export class ClientGrantsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

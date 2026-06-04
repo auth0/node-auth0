@@ -24,6 +24,7 @@ describe("ResourceServersClient", () => {
                     signing_secret: "signing_secret",
                     allow_offline_access: true,
                     allow_online_access: true,
+                    allow_online_access_with_ephemeral_sessions: true,
                     skip_consent_for_verifiable_first_party_clients: true,
                     token_lifetime: 1,
                     token_lifetime_for_web: 1,
@@ -35,6 +36,7 @@ describe("ResourceServersClient", () => {
                     },
                     consent_policy: "transactional-authorization-with-mfa",
                     proof_of_possession: { mechanism: "mtls", required: true },
+                    authorization_policy: { policy_id: "policy_id" },
                     client_id: "client_id",
                 },
             ],
@@ -50,6 +52,7 @@ describe("ResourceServersClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.resourceServers.list({
+            identifiers: ["identifiers"],
             page: 1,
             per_page: 1,
             include_totals: true,
@@ -152,6 +155,7 @@ describe("ResourceServersClient", () => {
             signing_secret: "signing_secret",
             allow_offline_access: true,
             allow_online_access: true,
+            allow_online_access_with_ephemeral_sessions: true,
             skip_consent_for_verifiable_first_party_clients: true,
             token_lifetime: 1,
             token_lifetime_for_web: 1,
@@ -165,6 +169,7 @@ describe("ResourceServersClient", () => {
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
+            authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
         };
 
@@ -307,6 +312,7 @@ describe("ResourceServersClient", () => {
             signing_secret: "signing_secret",
             allow_offline_access: true,
             allow_online_access: true,
+            allow_online_access_with_ephemeral_sessions: true,
             skip_consent_for_verifiable_first_party_clients: true,
             token_lifetime: 1,
             token_lifetime_for_web: 1,
@@ -320,6 +326,7 @@ describe("ResourceServersClient", () => {
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
+            authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
         };
 
@@ -532,6 +539,7 @@ describe("ResourceServersClient", () => {
             signing_secret: "signing_secret",
             allow_offline_access: true,
             allow_online_access: true,
+            allow_online_access_with_ephemeral_sessions: true,
             skip_consent_for_verifiable_first_party_clients: true,
             token_lifetime: 1,
             token_lifetime_for_web: 1,
@@ -545,6 +553,7 @@ describe("ResourceServersClient", () => {
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
+            authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
         };
 

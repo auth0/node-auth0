@@ -40,6 +40,7 @@ describe("GroupsClient", () => {
             connection_id: "connection_id",
             name: "name",
             external_id: "external_id",
+            search: "search",
             fields: "fields",
             include_fields: true,
             from: "from",

@@ -8,6 +8,7 @@ import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
 import * as Management from "../../../index.js";
+import { GroupsClient } from "../resources/groups/client/Client.js";
 import { PermissionsClient } from "../resources/permissions/client/Client.js";
 import { UsersClient } from "../resources/users/client/Client.js";
 
@@ -19,11 +20,16 @@ export declare namespace RolesClient {
 
 export class RolesClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<RolesClient.Options>;
+    protected _groups: GroupsClient | undefined;
     protected _permissions: PermissionsClient | undefined;
     protected _users: UsersClient | undefined;
 
     constructor(options: RolesClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
+    }
+
+    public get groups(): GroupsClient {
+        return (this._groups ??= new GroupsClient(this._options));
     }
 
     public get permissions(): PermissionsClient {
@@ -37,7 +43,7 @@ export class RolesClient {
     /**
      * Retrieve detailed list of user roles created in your tenant.
      *
-     * <b>Note</b>: The returned list does not include standard roles available for tenant members, such as Admin or Support Access.
+     * **Note**: The returned list does not include standard roles available for tenant members, such as Admin or Support Access.
      *
      * @param {Management.ListRolesRequestParameters} request
      * @param {RolesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -90,7 +96,11 @@ export class RolesClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -148,9 +158,9 @@ export class RolesClient {
     }
 
     /**
-     * Create a user role for <a href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based Access Control</a>.
+     * Create a user role for [Role-Based Access Control](https://auth0.com/docs/manage-users/access-control/rbac).
      *
-     * <b>Note</b>: New roles are not associated with any permissions by default. To assign existing permissions to your role, review Associate Permissions with a Role. To create new permissions, review Add API Permissions.
+     * **Note**: New roles are not associated with any permissions by default. To assign existing permissions to your role, review Associate Permissions with a Role. To create new permissions, review Add API Permissions.
      *
      * @param {Management.CreateRoleRequestContent} request
      * @param {RolesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -193,7 +203,7 @@ export class RolesClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -231,7 +241,7 @@ export class RolesClient {
     }
 
     /**
-     * Retrieve details about a specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">user role</a> specified by ID.
+     * Retrieve details about a specific [user role](https://auth0.com/docs/manage-users/access-control/rbac) specified by ID.
      *
      * @param {string} id - ID of the role to retrieve.
      * @param {RolesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -271,7 +281,7 @@ export class RolesClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -307,7 +317,7 @@ export class RolesClient {
     }
 
     /**
-     * Delete a specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">user role</a> from your tenant. Once deleted, it is removed from any user who was previously assigned that role. This action cannot be undone.
+     * Delete a specific [user role](https://auth0.com/docs/manage-users/access-control/rbac) from your tenant. Once deleted, it is removed from any user who was previously assigned that role. This action cannot be undone.
      *
      * @param {string} id - ID of the role to delete.
      * @param {RolesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -344,7 +354,7 @@ export class RolesClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -380,7 +390,7 @@ export class RolesClient {
     }
 
     /**
-     * Modify the details of a specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">user role</a> specified by ID.
+     * Modify the details of a specific [user role](https://auth0.com/docs/manage-users/access-control/rbac) specified by ID.
      *
      * @param {string} id - ID of the role to update.
      * @param {Management.UpdateRoleRequestContent} request
@@ -423,7 +433,7 @@ export class RolesClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

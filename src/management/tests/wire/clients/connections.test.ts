@@ -37,6 +37,7 @@ describe("ConnectionsClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.clients.connections.get("id", {
+            strategy: ["ad"],
             from: "from",
             take: 1,
             fields: "fields",

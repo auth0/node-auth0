@@ -38,6 +38,7 @@ describe("FormsClient", () => {
             page: 1,
             per_page: 1,
             include_totals: true,
+            hydrate: ["flow_count"],
         });
 
         expect(expected.forms).toEqual(page.data);
@@ -281,7 +282,9 @@ describe("FormsClient", () => {
 
         server.mockEndpoint().get("/forms/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.forms.get("id");
+        const response = await client.forms.get("id", {
+            hydrate: ["flow_count"],
+        });
         expect(response).toEqual(rawResponseBody);
     });
 

@@ -73,7 +73,11 @@ export class ScimConfigurationClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -135,7 +139,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Retrieves a scim configuration by its <code>connectionId</code>.
+     * Retrieves a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to retrieve its SCIM configuration
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -172,7 +176,7 @@ export class ScimConfigurationClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -251,7 +255,7 @@ export class ScimConfigurationClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -291,7 +295,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Deletes a scim configuration by its <code>connectionId</code>.
+     * Deletes a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to delete its SCIM configuration
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -325,7 +329,7 @@ export class ScimConfigurationClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -360,7 +364,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Update a scim configuration by its <code>connectionId</code>.
+     * Update a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to update its SCIM configuration
      * @param {Management.UpdateScimConfigurationRequestContent} request
@@ -404,7 +408,7 @@ export class ScimConfigurationClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -444,7 +448,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Retrieves a scim configuration's default mapping by its <code>connectionId</code>.
+     * Retrieves a scim configuration's default mapping by its `connectionId`.
      *
      * @param {string} id - The id of the connection to retrieve its default SCIM mapping
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -481,7 +485,7 @@ export class ScimConfigurationClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

@@ -12,6 +12,7 @@ import { CustomDomainsClient } from "./api/resources/customDomains/client/Client
 import { DeviceCredentialsClient } from "./api/resources/deviceCredentials/client/Client.js";
 import { EmailsClient } from "./api/resources/emails/client/Client.js";
 import { EmailTemplatesClient } from "./api/resources/emailTemplates/client/Client.js";
+import { EventsClient } from "./api/resources/events/client/Client.js";
 import { EventStreamsClient } from "./api/resources/eventStreams/client/Client.js";
 import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { FormsClient } from "./api/resources/forms/client/Client.js";
@@ -25,6 +26,7 @@ import { LogStreamsClient } from "./api/resources/logStreams/client/Client.js";
 import { NetworkAclsClient } from "./api/resources/networkAcls/client/Client.js";
 import { OrganizationsClient } from "./api/resources/organizations/client/Client.js";
 import { PromptsClient } from "./api/resources/prompts/client/Client.js";
+import { RateLimitPoliciesClient } from "./api/resources/rateLimitPolicies/client/Client.js";
 import { RefreshTokensClient } from "./api/resources/refreshTokens/client/Client.js";
 import { ResourceServersClient } from "./api/resources/resourceServers/client/Client.js";
 import { RiskAssessmentsClient } from "./api/resources/riskAssessments/client/Client.js";
@@ -66,6 +68,7 @@ export class ManagementClient {
     protected _deviceCredentials: DeviceCredentialsClient | undefined;
     protected _emailTemplates: EmailTemplatesClient | undefined;
     protected _eventStreams: EventStreamsClient | undefined;
+    protected _events: EventsClient | undefined;
     protected _flows: FlowsClient | undefined;
     protected _forms: FormsClient | undefined;
     protected _userGrants: UserGrantsClient | undefined;
@@ -77,6 +80,7 @@ export class ManagementClient {
     protected _networkAcls: NetworkAclsClient | undefined;
     protected _organizations: OrganizationsClient | undefined;
     protected _prompts: PromptsClient | undefined;
+    protected _rateLimitPolicies: RateLimitPoliciesClient | undefined;
     protected _refreshTokens: RefreshTokensClient | undefined;
     protected _resourceServers: ResourceServersClient | undefined;
     protected _roles: RolesClient | undefined;
@@ -144,6 +148,10 @@ export class ManagementClient {
         return (this._eventStreams ??= new EventStreamsClient(this._options));
     }
 
+    public get events(): EventsClient {
+        return (this._events ??= new EventsClient(this._options));
+    }
+
     public get flows(): FlowsClient {
         return (this._flows ??= new FlowsClient(this._options));
     }
@@ -186,6 +194,10 @@ export class ManagementClient {
 
     public get prompts(): PromptsClient {
         return (this._prompts ??= new PromptsClient(this._options));
+    }
+
+    public get rateLimitPolicies(): RateLimitPoliciesClient {
+        return (this._rateLimitPolicies ??= new RateLimitPoliciesClient(this._options));
     }
 
     public get refreshTokens(): RefreshTokensClient {

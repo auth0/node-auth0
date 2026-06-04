@@ -23,7 +23,7 @@ export class RulesClient {
     }
 
     /**
-     * Retrieve a filtered list of <a href="https://auth0.com/docs/rules">rules</a>. Accepts a list of fields to include or exclude.
+     * Retrieve a filtered list of [rules](https://auth0.com/docs/rules). Accepts a list of fields to include or exclude.
      *
      * @param {Management.ListRulesRequestParameters} request
      * @param {RulesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -83,7 +83,11 @@ export class RulesClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -143,9 +147,9 @@ export class RulesClient {
     }
 
     /**
-     * Create a <a href="https://auth0.com/docs/rules#create-a-new-rule-using-the-management-api">new rule</a>.
+     * Create a [new rule](https://auth0.com/docs/rules#create-a-new-rule-using-the-management-api).
      *
-     * Note: Changing a rule's stage of execution from the default <code>login_success</code> can change the rule's function signature to have user omitted.
+     * Note: Changing a rule's stage of execution from the default `login_success` can change the rule's function signature to have user omitted.
      *
      * @param {Management.CreateRuleRequestContent} request
      * @param {RulesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -189,7 +193,7 @@ export class RulesClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -227,7 +231,7 @@ export class RulesClient {
     }
 
     /**
-     * Retrieve <a href="https://auth0.com/docs/rules">rule</a> details. Accepts a list of fields to include or exclude in the result.
+     * Retrieve [rule](https://auth0.com/docs/rules) details. Accepts a list of fields to include or exclude in the result.
      *
      * @param {string} id - ID of the rule to retrieve.
      * @param {Management.GetRuleRequestParameters} request
@@ -278,7 +282,11 @@ export class RulesClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -350,7 +358,7 @@ export class RulesClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -429,7 +437,7 @@ export class RulesClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
