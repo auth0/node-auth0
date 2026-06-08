@@ -6,23 +6,6 @@ const DEFAULT_NUMBER_RETRIES = 3;
 const MAX_NUMBER_RETRIES = 10;
 const BASE_DELAY = 500;
 
-// Transient network errors that are safe to retry — failures that can self-heal
-// without any config change (socket reset, broken pipe, aborted connection).
-// Deliberately excludes ENOTFOUND, ECONNREFUSED, cert errors — those won't self-heal.
-const RETRYABLE_ERROR_CODES = new Set(["ECONNRESET", "EPIPE", "ECONNABORTED"]);
-
-function isRetryableNetworkError(e: unknown): boolean {
-    if (typeof e !== "object" || e === null) return false;
-    const code = (e as NodeJS.ErrnoException).code ?? "";
-    return RETRYABLE_ERROR_CODES.has(code);
-}
-
-function calculateWait(nrOfTries: number): number {
-    let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
-    wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
-    return Math.min(wait, MAX_REQUEST_RETRY_DELAY);
-}
-
 /**
  * @private
  * Function that returns a random int between a configurable min and max.
@@ -46,6 +29,26 @@ async function pause(delay: number) {
     return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
+// Transient network errors that are safe to retry — failures that can self-heal
+// without any config change (socket reset, broken pipe, aborted connection).
+// Deliberately excludes ENOTFOUND, ECONNREFUSED, cert errors — those won't self-heal.
+const RETRYABLE_ERROR_CODES = new Set(["ECONNRESET", "EPIPE", "ECONNABORTED"]);
+
+function isRetryableNetworkError(e: unknown): boolean {
+    if (typeof e !== "object" || e === null) return false;
+    // Check both e.code (old request-lib / nock shape) and e.cause.code
+    // (native fetch / undici shape: TypeError: fetch failed { cause: { code } })
+    const err = e as NodeJS.ErrnoException & { cause?: NodeJS.ErrnoException };
+    const code = err.code ?? err.cause?.code ?? "";
+    return RETRYABLE_ERROR_CODES.has(code);
+}
+
+function calculateWait(nrOfTries: number): number {
+    let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
+    wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
+    return Math.min(wait, MAX_REQUEST_RETRY_DELAY);
+}
+
 /**
  * Configure the retry logic for http calls.
  * By default, this retries any request that returns a 429 3 times.
@@ -59,6 +62,9 @@ export interface RetryConfiguration {
     /**
      * Configure the max amount of retries the SDK should do.
      * Defaults to 3.
+     * Note: this budget is shared between HTTP status code retries (e.g. 429) and
+     * transient network error retries (e.g. ECONNRESET). For example, with maxRetries: 3,
+     * 2 network retries and 1 status code retry would exhaust the full budget.
      */
     maxRetries?: number;
     /**

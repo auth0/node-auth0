@@ -291,6 +291,38 @@ describe("Runtime", () => {
         expect(request.isDone()).toBe(true);
     });
 
+    it("should retry on ECONNRESET wrapped in TypeError (native fetch shape)", async () => {
+        // Native fetch (undici) does not put code on the top-level error.
+        // It throws: TypeError: fetch failed { cause: Error: read ECONNRESET { code: "ECONNRESET" } }
+        // This test ensures isRetryableNetworkError handles that shape.
+        let callCount = 0;
+        const mockFetch = async (): Promise<Response> => {
+            callCount++;
+            if (callCount <= 2) {
+                const cause = Object.assign(new Error("read ECONNRESET"), { code: "ECONNRESET" });
+                const err = new TypeError("fetch failed");
+                (err as any).cause = cause;
+                throw err;
+            }
+            return new Response(JSON.stringify([{ client_id: "123" }]), { status: 200 });
+        };
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+            fetch: mockFetch,
+        });
+
+        const response = await client.testRequest({
+            path: `/clients`,
+            method: "GET",
+        });
+
+        const data = (await response.json()) as Array<{ client_id: string }>;
+        expect(data[0].client_id).toBe("123");
+        expect(callCount).toBe(3);
+    });
+
     it("should retry on EPIPE when retry is enabled", async () => {
         const request = nock(URL, { encodedQueryParams: true })
             .get("/clients")
