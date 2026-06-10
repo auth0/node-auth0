@@ -23,7 +23,7 @@ export class UserGrantsClient {
     }
 
     /**
-     * Retrieve the <a href="https://auth0.com/docs/api-auth/which-oauth-flow-to-use">grants</a> associated with your account.
+     * Retrieve the [grants](https://auth0.com/docs/api-auth/which-oauth-flow-to-use) associated with your account.
      *
      * @param {Management.ListUserGrantsRequestParameters} request
      * @param {UserGrantsClient.RequestOptions} requestOptions - Request-specific configuration.

@@ -112,7 +112,6 @@ export interface UpdateBrandingRequestContent {
     favicon_url?: string | null;
     /** URL for the logo. Must use HTTPS. */
     logo_url?: string | null;
-    identifiers?: Management.UpdateBrandingIdentifiers | null;
     font?: Management.UpdateBrandingFont | null;
 }
 
@@ -1366,7 +1365,7 @@ export interface RevokeRefreshTokensRequestContent {
     ids?: string[];
     /** Revoke all refresh tokens for this user. */
     user_id?: string;
-    /** Revoke all refresh tokens for this client. */
+    /** Revoke refresh tokens for this client. Must be paired with `user_id`; optionally narrowed further with `audience`. */
     client_id?: string;
     /** Resource server identifier (audience) to scope the revocation. Must be used with both `user_id` and `client_id`. */
     audience?: string;
@@ -3884,12 +3883,20 @@ export interface UpdateTenantSettingsRequestContent {
     allowed_logout_urls?: string[];
     /** Number of hours a session will stay valid. */
     session_lifetime?: number;
+    /** Number of minutes a session will stay valid. Cannot be specified together with `session_lifetime`. */
+    session_lifetime_in_minutes?: number;
     /** Number of hours for which a session can be inactive before the user must log in again. */
     idle_session_lifetime?: number;
+    /** Number of minutes a session can be inactive before the user must log in again. Cannot be specified together with `idle_session_lifetime`. */
+    idle_session_lifetime_in_minutes?: number;
     /** Number of hours an ephemeral (non-persistent) session will stay valid. */
     ephemeral_session_lifetime?: number;
     /** Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again. */
     idle_ephemeral_session_lifetime?: number;
+    /** Number of minutes an ephemeral (non-persistent) session will stay valid. Cannot be specified together with `ephemeral_session_lifetime`. */
+    ephemeral_session_lifetime_in_minutes?: number;
+    /** Number of minutes an ephemeral (non-persistent) session can be inactive before the user must log in again. Cannot be specified together with `idle_ephemeral_session_lifetime`. */
+    idle_ephemeral_session_lifetime_in_minutes?: number;
     /** Selected sandbox version for the extensibility environment */
     sandbox_version?: string;
     /** Selected legacy sandbox version for the extensibility environment */
@@ -3898,6 +3905,7 @@ export interface UpdateTenantSettingsRequestContent {
     default_redirection_uri?: string;
     /** Supported locales for the user interface */
     enabled_locales?: Management.TenantSettingsSupportedLocalesEnum[];
+    security_headers?: Management.TenantSettingsNullableSecurityHeaders | null;
     session_cookie?: Management.SessionCookieSchema | null;
     sessions?: Management.TenantSettingsSessions | null;
     oidc_logout?: Management.TenantOidcLogoutSettings;
@@ -3925,6 +3933,8 @@ export interface UpdateTenantSettingsRequestContent {
     enable_ai_guide?: boolean;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean;
+    /** Whether session metadata is included in specific tenant logs (slo, oidc_backchannel_logout_failed, oidc_backchannel_logout_succeeded). */
+    include_session_metadata_in_tenant_logs?: boolean;
     dynamic_client_registration_security_mode?: Management.TenantSettingsDynamicClientRegistrationSecurityMode;
     country_codes?: Management.TenantSettingsCountryCodes | null;
 }

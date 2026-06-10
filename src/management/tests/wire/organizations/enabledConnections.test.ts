@@ -111,6 +111,25 @@ describe("EnabledConnectionsClient", () => {
             .mockEndpoint({ once: false })
             .get("/organizations/id/enabled_connections")
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.enabledConnections.list("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/organizations/id/enabled_connections")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -224,6 +243,28 @@ describe("EnabledConnectionsClient", () => {
             .post("/organizations/id/enabled_connections")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.enabledConnections.add("id", {
+                connection_id: "connection_id",
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("add (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { connection_id: "connection_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/organizations/id/enabled_connections")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -298,6 +339,25 @@ describe("EnabledConnectionsClient", () => {
     });
 
     test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organizations/id/enabled_connections/connectionId")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.enabledConnections.get("id", "connectionId");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("get (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -389,6 +449,25 @@ describe("EnabledConnectionsClient", () => {
     });
 
     test("delete (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/organizations/id/enabled_connections/connectionId")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.enabledConnections.delete("id", "connectionId");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("delete (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -493,6 +572,26 @@ describe("EnabledConnectionsClient", () => {
     });
 
     test("update (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/organizations/id/enabled_connections/connectionId")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.enabledConnections.update("id", "connectionId");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("update (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};

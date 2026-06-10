@@ -327,6 +327,25 @@ describe("OrganizationsClient", () => {
             .mockEndpoint()
             .get("/organizations/name/name")
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.getByName("name");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("getByName (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organizations/name/name")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -395,6 +414,19 @@ describe("OrganizationsClient", () => {
     });
 
     test("get (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server.mockEndpoint().get("/organizations/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.organizations.get("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("get (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
