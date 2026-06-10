@@ -22,8 +22,10 @@ export declare namespace ManagementClient {
      * @group Management API
      * @public
      */
-    export interface ManagementClientOptions
-        extends Omit<FernClient.Options, "token" | "environment" | "fetcher" | "baseUrl" | "fetch"> {
+    export interface ManagementClientOptions extends Omit<
+        FernClient.Options,
+        "token" | "environment" | "fetcher" | "baseUrl"
+    > {
         /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
         domain: string;
         /**
@@ -206,9 +208,13 @@ export class ManagementClient extends FernClient {
         const headers = createTelemetryHeaders(_options);
         const token = createTokenSupplier(_options);
 
-        // Temporarily remove fetcher from options to avoid people passing it for now
+        // The underlying fetcher type is internal to the generated Fern client
+        // and is intentionally kept off the public surface. `fetch`, however,
+        // is supported all the way down through `fetcherImpl` and is a
+        // legitimate customization hook for callers that need to control the
+        // HTTP transport (proxies, retries, instrumentation).
+        // https://github.com/auth0/node-auth0/issues/1330
         delete (_options as any).fetcher;
-        delete (_options as any).fetch;
 
         // Prepare the base client options
         let clientOptions: any = {
