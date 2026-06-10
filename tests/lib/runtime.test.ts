@@ -268,6 +268,201 @@ describe("Runtime", () => {
         ).rejects.toThrowError(expect.objectContaining({ statusCode: 429 }));
     });
 
+    it("should retry on ECONNRESET when retry is enabled", async () => {
+        const request = nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .times(2)
+            .replyWithError({ code: "ECONNRESET", message: "socket hang up" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        const response = await client.testRequest({
+            path: `/clients`,
+            method: "GET",
+        });
+
+        const data = (await response.json()) as Array<{ client_id: string }>;
+        expect(data[0].client_id).toBe("123");
+        expect(request.isDone()).toBe(true);
+    });
+
+    it("should retry on ECONNRESET wrapped in TypeError (native fetch shape)", async () => {
+        // Native fetch (undici) does not put code on the top-level error.
+        // It throws: TypeError: fetch failed { cause: Error: read ECONNRESET { code: "ECONNRESET" } }
+        // This test ensures isRetryableNetworkError handles that shape.
+        let callCount = 0;
+        const mockFetch = async (): Promise<Response> => {
+            callCount++;
+            if (callCount <= 2) {
+                const cause = Object.assign(new Error("read ECONNRESET"), { code: "ECONNRESET" });
+                const err = new TypeError("fetch failed");
+                (err as any).cause = cause;
+                throw err;
+            }
+            return new Response(JSON.stringify([{ client_id: "123" }]), { status: 200 });
+        };
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+            fetch: mockFetch,
+        });
+
+        const response = await client.testRequest({
+            path: `/clients`,
+            method: "GET",
+        });
+
+        const data = (await response.json()) as Array<{ client_id: string }>;
+        expect(data[0].client_id).toBe("123");
+        expect(callCount).toBe(3);
+    });
+
+    it("should retry on EPIPE when retry is enabled", async () => {
+        const request = nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .replyWithError({ code: "EPIPE", message: "write EPIPE" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        const response = await client.testRequest({
+            path: `/clients`,
+            method: "GET",
+        });
+
+        const data = (await response.json()) as Array<{ client_id: string }>;
+        expect(data[0].client_id).toBe("123");
+        expect(request.isDone()).toBe(true);
+    });
+
+    it("should retry on ECONNABORTED when retry is enabled", async () => {
+        const request = nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .replyWithError({ code: "ECONNABORTED", message: "connection aborted" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        const response = await client.testRequest({
+            path: `/clients`,
+            method: "GET",
+        });
+
+        const data = (await response.json()) as Array<{ client_id: string }>;
+        expect(data[0].client_id).toBe("123");
+        expect(request.isDone()).toBe(true);
+    });
+
+    it("should throw after exhausting retries on repeated ECONNRESET", async () => {
+        nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .times(4)
+            .replyWithError({ code: "ECONNRESET", message: "socket hang up" });
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        await expect(
+            client.testRequest({
+                path: `/clients`,
+                method: "GET",
+            }),
+        ).rejects.toThrowError(
+            expect.objectContaining({ cause: expect.objectContaining({ message: "socket hang up" }) }),
+        );
+    });
+
+    it("should not retry ECONNRESET when retry is disabled", async () => {
+        nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .replyWithError({ code: "ECONNRESET", message: "socket hang up" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+            retry: { enabled: false },
+        });
+
+        await expect(
+            client.testRequest({
+                path: `/clients`,
+                method: "GET",
+            }),
+        ).rejects.toThrowError(
+            expect.objectContaining({ cause: expect.objectContaining({ message: "socket hang up" }) }),
+        );
+    });
+
+    it("should not retry non-retryable errors like ECONNREFUSED", async () => {
+        nock(URL, { encodedQueryParams: true })
+            .get("/clients")
+            .replyWithError({ code: "ECONNREFUSED", message: "connect ECONNREFUSED" })
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+        });
+
+        await expect(
+            client.testRequest({
+                path: `/clients`,
+                method: "GET",
+            }),
+        ).rejects.toThrowError(
+            expect.objectContaining({ cause: expect.objectContaining({ message: "connect ECONNREFUSED" }) }),
+        );
+
+        // Second nock was never consumed — confirms no retry occurred
+        expect(nock.pendingMocks().length).toBe(1);
+        nock.cleanAll();
+    });
+
+    it("should not retry on timeout errors", async () => {
+        nock(URL)
+            .get("/clients")
+            .delayConnection(100)
+            .reply(200, [{ client_id: "123" }])
+            .get("/clients")
+            .reply(200, [{ client_id: "123" }]);
+
+        const client = new TestClient({
+            baseUrl: URL,
+            parseError,
+            timeoutDuration: 50,
+        });
+
+        await expect(
+            client.testRequest({
+                path: `/clients`,
+                method: "GET",
+            }),
+        ).rejects.toThrowError(expect.objectContaining({ cause: expect.objectContaining({ name: "TimeoutError" }) }));
+
+        // Second nock was never consumed — confirms no retry occurred
+        expect(nock.pendingMocks().length).toBe(1);
+        nock.abortPendingRequests();
+    });
+
     it("should timeout after default time", async () => {
         nock(URL).get("/clients").delayConnection(10000).reply(200, []);
 

@@ -1,3 +1,5 @@
+import { TimeoutError } from "./errors.js";
+
 const MAX_REQUEST_RETRY_JITTER = 250;
 const MAX_REQUEST_RETRY_DELAY = 10000;
 const DEFAULT_NUMBER_RETRIES = 3;
@@ -27,6 +29,26 @@ async function pause(delay: number) {
     return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
+// Transient network errors that are safe to retry — failures that can self-heal
+// without any config change (socket reset, broken pipe, aborted connection).
+// Deliberately excludes ENOTFOUND, ECONNREFUSED, cert errors — those won't self-heal.
+const RETRYABLE_ERROR_CODES = new Set(["ECONNRESET", "EPIPE", "ECONNABORTED"]);
+
+function isRetryableNetworkError(e: unknown): boolean {
+    if (typeof e !== "object" || e === null) return false;
+    // Check both e.code (old request-lib / nock shape) and e.cause.code
+    // (native fetch / undici shape: TypeError: fetch failed { cause: { code } })
+    const err = e as NodeJS.ErrnoException & { cause?: NodeJS.ErrnoException };
+    const code = err.code ?? err.cause?.code ?? "";
+    return RETRYABLE_ERROR_CODES.has(code);
+}
+
+function calculateWait(nrOfTries: number): number {
+    let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
+    wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
+    return Math.min(wait, MAX_REQUEST_RETRY_DELAY);
+}
+
 /**
  * Configure the retry logic for http calls.
  * By default, this retries any request that returns a 429 3 times.
@@ -39,11 +61,16 @@ export interface RetryConfiguration {
     enabled?: boolean;
     /**
      * Configure the max amount of retries the SDK should do.
-     * Defaults to 5.
+     * Defaults to 3.
+     * Note: this budget is shared between HTTP status code retries (e.g. 429) and
+     * transient network error retries (e.g. ECONNRESET). For example, with maxRetries: 3,
+     * 2 network retries and 1 status code retry would exhaust the full budget.
      */
     maxRetries?: number;
     /**
-     * Status Codes on which the SDK should trigger retries.
+     * HTTP Status Codes on which the SDK should trigger retries.
+     * Note: transient network errors (ECONNRESET, EPIPE, ECONNABORTED) are always retried
+     * up to maxRetries regardless of this setting. Use `enabled: false` to disable all retries.
      * Defaults to [429].
      */
     retryWhen?: number[];
@@ -57,19 +84,26 @@ export function retry(action: () => Promise<Response>, { maxRetries, retryWhen }
     const nrOfTriesToAttempt = Math.min(MAX_NUMBER_RETRIES, maxRetries ?? DEFAULT_NUMBER_RETRIES);
     let nrOfTries = 0;
 
-    const retryAndWait = async () => {
+    const retryAndWait = async (): Promise<Response> => {
         let result: Response;
 
-        result = await action();
+        try {
+            result = await action();
+        } catch (e: unknown) {
+            if (e instanceof TimeoutError) {
+                throw e;
+            }
+            if (isRetryableNetworkError(e) && nrOfTries < nrOfTriesToAttempt) {
+                nrOfTries++;
+                await pause(calculateWait(nrOfTries));
+                return retryAndWait();
+            }
+            throw e;
+        }
 
         if ((retryWhen || [429]).includes(result.status) && nrOfTries < nrOfTriesToAttempt) {
             nrOfTries++;
-
-            let wait = BASE_DELAY * Math.pow(2, nrOfTries - 1);
-            wait = getRandomInt(wait + 1, wait + MAX_REQUEST_RETRY_JITTER);
-            wait = Math.min(wait, MAX_REQUEST_RETRY_DELAY);
-
-            await pause(wait);
+            await pause(calculateWait(nrOfTries));
 
             result = await retryAndWait();
         }
