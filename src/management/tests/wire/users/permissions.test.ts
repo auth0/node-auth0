@@ -291,6 +291,42 @@ describe("PermissionsClient", () => {
             .post("/users/id/permissions")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.create("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("create (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -448,6 +484,42 @@ describe("PermissionsClient", () => {
     });
 
     test("delete (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/users/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.permissions.delete("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("delete (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {

@@ -1201,6 +1201,7 @@ export const AculContextEnum = {
     UntrustedDataAuthorizationParamsUiLocales: "untrusted_data.authorization_params.ui_locales",
     UserOrganizations: "user.organizations",
     TransactionCustomDomainDomain: "transaction.custom_domain.domain",
+    Experiment: "experiment",
 } as const;
 export type AculContextEnum = (typeof AculContextEnum)[keyof typeof AculContextEnum];
 
@@ -1580,23 +1581,6 @@ export interface BrandingFont {
 }
 
 /**
- * Identifier input display settings.
- */
-export interface BrandingIdentifiers {
-    login_display?: Management.BrandingLoginDisplayEnum | undefined;
-    /** Whether OTP autocomplete (autocomplete="one-time-code") is enabled. */
-    otp_autocomplete?: boolean | undefined;
-    phone_display?: Management.BrandingPhoneDisplay | undefined;
-}
-
-/** Controls identifier input presentation on the login flow. Defaults to "unified" for legacy tenants, "separate" for tenants created post-GA of this feature. */
-export const BrandingLoginDisplayEnum = {
-    Unified: "unified",
-    Separate: "separate",
-} as const;
-export type BrandingLoginDisplayEnum = (typeof BrandingLoginDisplayEnum)[keyof typeof BrandingLoginDisplayEnum];
-
-/**
  * Page Background Color or Gradient.
  * Property contains either `null` to unset, a solid color as a string value `#FFFFFF`, or a gradient as an object.
  *
@@ -1610,30 +1594,6 @@ export type BrandingLoginDisplayEnum = (typeof BrandingLoginDisplayEnum)[keyof t
  * ```
  */
 export type BrandingPageBackground = (string | null) | undefined | (Record<string, unknown> | null) | undefined;
-
-/**
- * Phone number display settings.
- */
-export interface BrandingPhoneDisplay {
-    masking?: Management.BrandingPhoneMaskingEnum | undefined;
-    formatting?: Management.BrandingPhoneFormattingEnum | undefined;
-}
-
-/** Controls the format used when displaying phone numbers. */
-export const BrandingPhoneFormattingEnum = {
-    Regional: "regional",
-    International: "international",
-} as const;
-export type BrandingPhoneFormattingEnum =
-    (typeof BrandingPhoneFormattingEnum)[keyof typeof BrandingPhoneFormattingEnum];
-
-/** Controls how phone numbers are masked when displayed back to users. */
-export const BrandingPhoneMaskingEnum = {
-    ShowAll: "show_all",
-    HideCountryCode: "hide_country_code",
-    MaskDigits: "mask_digits",
-} as const;
-export type BrandingPhoneMaskingEnum = (typeof BrandingPhoneMaskingEnum)[keyof typeof BrandingPhoneMaskingEnum];
 
 export interface BrandingThemeBorders {
     /** Button border radius */
@@ -2926,6 +2886,8 @@ export interface ClientMyOrganizationPatchConfiguration {
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
+    /** The client ID this client uses while creating invitations through My Organization API. */
+    invitation_landing_client_id?: string | undefined;
 }
 
 /**
@@ -2939,6 +2901,8 @@ export interface ClientMyOrganizationPostConfiguration {
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
+    /** The client ID this client uses while creating invitations through My Organization API. */
+    invitation_landing_client_id?: string | undefined;
 }
 
 /**
@@ -2952,6 +2916,8 @@ export interface ClientMyOrganizationResponseConfiguration {
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
+    /** The client ID this client uses while creating invitations through My Organization API. */
+    invitation_landing_client_id?: string | undefined;
 }
 
 /**
@@ -4156,6 +4122,11 @@ export type ConnectionIdTokenEncryptionAlgValuesSupported = string[];
  */
 export type ConnectionIdTokenEncryptionEncValuesSupported = string[];
 
+/**
+ * Indicates whether the identity provider supports session expiry via the id_token. If true, the system will use the session_expiry claim in the id_token to determine session expiry.
+ */
+export type ConnectionIdTokenSessionExpirySupported = boolean;
+
 /** Algorithm allowed to verify the ID tokens. */
 export const ConnectionIdTokenSignedResponseAlgEnum = {
     Es256: "ES256",
@@ -4746,6 +4717,7 @@ export interface ConnectionOptionsCommonOidc {
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
+    id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     issuer?: Management.ConnectionIssuer | undefined;
     jwks_uri?: Management.ConnectionJwksUri | undefined;
@@ -6120,6 +6092,7 @@ export interface ConnectionPropertiesOptions {
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
+    id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -7719,6 +7692,16 @@ export type ConnectionWaadProtocolEnumAzureAd =
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
  */
 export type ConnectionsMetadata = Record<string, string | null>;
+
+/**
+ * Content Security Policy configuration with multi-policy support.
+ */
+export interface ContentSecurityPolicyConfig {
+    /** Whether CSP is enabled. */
+    enabled?: boolean | undefined;
+    policies?: Management.CspPolicies | undefined;
+    reporting_infrastructure?: (Management.CspReportingInfrastructure | null) | undefined;
+}
 
 export interface CreateActionModuleResponseContent {
     /** The unique ID of the module. */
@@ -9808,7 +9791,7 @@ export interface CreatePhoneProviderSendTestResponseContent {
 }
 
 export interface CreatePhoneTemplateResponseContent {
-    id: string;
+    id?: string | undefined;
     channel?: string | undefined;
     customizable?: boolean | undefined;
     tenant?: string | undefined;
@@ -10150,6 +10133,91 @@ export type CredentialDeviceTypeEnum = (typeof CredentialDeviceTypeEnum)[keyof t
 export interface CredentialId {
     /** Credential ID */
     id: string;
+}
+
+/**
+ * CSP directives map. Keys are directive names, values are arrays of directive values.
+ */
+export type CspDirectives = Record<string, string[]>;
+
+export const CspFlag = {
+    UpgradeInsecureRequests: "upgrade-insecure-requests",
+    BlockAllMixedContent: "block-all-mixed-content",
+} as const;
+export type CspFlag = (typeof CspFlag)[keyof typeof CspFlag];
+
+/**
+ * CSP flags (bare directives without values).
+ */
+export type CspFlags = Management.CspFlag[];
+
+/**
+ * Array of CSP policies (enforcing and/or reporting).
+ */
+export type CspPolicies = Management.CspPolicy[];
+
+/**
+ * A single CSP policy with mode, directives, flags, and optional reporting.
+ */
+export interface CspPolicy {
+    mode?: Management.CspPolicyMode | undefined;
+    directives?: Management.CspDirectives | undefined;
+    flags?: Management.CspFlags | undefined;
+    reporting?: (Management.CspPolicyReporting | null) | undefined;
+}
+
+/** Policy mode: enforcing or reporting. */
+export const CspPolicyMode = {
+    Enforcing: "enforcing",
+    Reporting: "reporting",
+} as const;
+export type CspPolicyMode = (typeof CspPolicyMode)[keyof typeof CspPolicyMode];
+
+/**
+ * Per-policy reporting configuration.
+ */
+export interface CspPolicyReporting {
+    /** HTTPS endpoint for CSP violation reports. */
+    report_uri?: string | undefined;
+    /** Report-To group name for modern reporting. */
+    report_to_group?: string | undefined;
+}
+
+/**
+ * Report-To header configuration.
+ */
+export interface CspReportTo {
+    /** Reporting group identifier. */
+    group?: string | undefined;
+    /** Maximum age in seconds for the Report-To header. */
+    max_age?: number | undefined;
+    endpoints?: Management.CspReportToEndpoints | undefined;
+}
+
+/**
+ * A single reporting endpoint.
+ */
+export interface CspReportToEndpoint {
+    /** HTTPS URL for the reporting endpoint. */
+    url?: string | undefined;
+}
+
+/**
+ * Array of reporting endpoints.
+ */
+export type CspReportToEndpoints = Management.CspReportToEndpoint[];
+
+/**
+ * Reporting-Endpoints header configuration (key-value pairs).
+ */
+export type CspReportingEndpoints = Record<string, string>;
+
+/**
+ * Global reporting infrastructure configuration.
+ */
+export interface CspReportingInfrastructure {
+    report_to?: (Management.CspReportTo | null) | undefined;
+    reporting_endpoints?: Management.CspReportingEndpoints | undefined;
 }
 
 export interface CustomDomain {
@@ -18577,7 +18645,6 @@ export interface GetBrandingResponseContent {
     favicon_url?: string | undefined;
     /** URL for the logo. Must use HTTPS. */
     logo_url?: string | undefined;
-    identifiers?: Management.BrandingIdentifiers | undefined;
     font?: Management.BrandingFont | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -19472,7 +19539,7 @@ export interface GetOrganizationResponseContent {
 export type GetPartialsResponseContent = Record<string, unknown>;
 
 export interface GetPhoneTemplateResponseContent {
-    id: string;
+    id?: string | undefined;
     channel?: string | undefined;
     customizable?: boolean | undefined;
     tenant?: string | undefined;
@@ -19761,6 +19828,7 @@ export interface GetTenantSettingsResponseContent {
     default_redirection_uri?: string | undefined;
     /** Supported locales for the user interface. */
     enabled_locales?: Management.SupportedLocales[] | undefined;
+    security_headers?: (Management.TenantSettingsNullableSecurityHeaders | null) | undefined;
     session_cookie?: (Management.SessionCookieSchema | null) | undefined;
     sessions?: (Management.TenantSettingsSessions | null) | undefined;
     oidc_logout?: Management.TenantOidcLogoutSettings | undefined;
@@ -19788,6 +19856,8 @@ export interface GetTenantSettingsResponseContent {
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean | undefined;
+    /** Whether session metadata is included in specific tenant logs (slo, oidc_backchannel_logout_failed, oidc_backchannel_logout_succeeded). */
+    include_session_metadata_in_tenant_logs?: boolean | undefined;
     dynamic_client_registration_security_mode?:
         | Management.TenantSettingsDynamicClientRegistrationSecurityMode
         | undefined;
@@ -21994,7 +22064,7 @@ export interface PhoneProviderSchemaMasked {
 }
 
 export interface PhoneTemplate {
-    id: string;
+    id?: string | undefined;
     channel?: string | undefined;
     customizable?: boolean | undefined;
     tenant?: string | undefined;
@@ -22151,6 +22221,7 @@ export const PromptGroupNameEnum = {
     Captcha: "captcha",
     BruteForceProtection: "brute-force-protection",
     AsyncApprovalFlow: "async-approval-flow",
+    Confirmation: "confirmation",
 } as const;
 export type PromptGroupNameEnum = (typeof PromptGroupNameEnum)[keyof typeof PromptGroupNameEnum];
 
@@ -22426,7 +22497,7 @@ export interface RegisterCimdClientResponseContent {
 export type ResetPhoneTemplateRequestContent = unknown;
 
 export interface ResetPhoneTemplateResponseContent {
-    id: string;
+    id?: string | undefined;
     channel?: string | undefined;
     customizable?: boolean | undefined;
     tenant?: string | undefined;
@@ -22981,6 +23052,7 @@ export const ScreenGroupNameEnum = {
     AsyncApprovalError: "async-approval-error",
     AsyncApprovalAccepted: "async-approval-accepted",
     AsyncApprovalDenied: "async-approval-denied",
+    Confirmation: "confirmation",
     AsyncApprovalWrongUser: "async-approval-wrong-user",
 } as const;
 export type ScreenGroupNameEnum = (typeof ScreenGroupNameEnum)[keyof typeof ScreenGroupNameEnum];
@@ -23884,6 +23956,14 @@ export interface TenantSettingsMtls {
 }
 
 /**
+ * Security headers configuration for tenant responses.
+ */
+export interface TenantSettingsNullableSecurityHeaders {
+    content_security_policy?: (Management.ContentSecurityPolicyConfig | null) | undefined;
+    x_xss_protection?: (Management.XssProtectionConfig | null) | undefined;
+}
+
+/**
  * Change Password page customization.
  */
 export interface TenantSettingsPasswordPage {
@@ -24244,24 +24324,6 @@ export interface UpdateBrandingFont {
 }
 
 /**
- * Identifier input display settings.
- */
-export interface UpdateBrandingIdentifiers {
-    login_display?: Management.UpdateBrandingLoginDisplayEnum | undefined;
-    /** Whether OTP autocomplete (autocomplete="one-time-code") is enabled. */
-    otp_autocomplete?: boolean | undefined;
-    phone_display?: (Management.UpdateBrandingPhoneDisplay | null) | undefined;
-}
-
-/** Controls identifier input presentation on the login flow. Defaults to "unified" for legacy tenants, "separate" for tenants created post-GA of this feature. */
-export const UpdateBrandingLoginDisplayEnum = {
-    Unified: "unified",
-    Separate: "separate",
-} as const;
-export type UpdateBrandingLoginDisplayEnum =
-    (typeof UpdateBrandingLoginDisplayEnum)[keyof typeof UpdateBrandingLoginDisplayEnum];
-
-/**
  * Page Background Color or Gradient.
  * Property contains either `null` to unset, a solid color as a string value `#FFFFFF`, or a gradient as an object.
  *
@@ -24275,31 +24337,6 @@ export type UpdateBrandingLoginDisplayEnum =
  * ```
  */
 export type UpdateBrandingPageBackground = (string | null) | undefined | (Record<string, unknown> | null) | undefined;
-
-/**
- * Phone number display settings.
- */
-export interface UpdateBrandingPhoneDisplay {
-    masking: Management.UpdateBrandingPhoneMaskingEnum;
-    formatting: Management.UpdateBrandingPhoneFormattingEnum;
-}
-
-/** Controls the format used when displaying phone numbers. */
-export const UpdateBrandingPhoneFormattingEnum = {
-    Regional: "regional",
-    International: "international",
-} as const;
-export type UpdateBrandingPhoneFormattingEnum =
-    (typeof UpdateBrandingPhoneFormattingEnum)[keyof typeof UpdateBrandingPhoneFormattingEnum];
-
-/** Controls how phone numbers are masked when displayed back to users. */
-export const UpdateBrandingPhoneMaskingEnum = {
-    ShowAll: "show_all",
-    HideCountryCode: "hide_country_code",
-    MaskDigits: "mask_digits",
-} as const;
-export type UpdateBrandingPhoneMaskingEnum =
-    (typeof UpdateBrandingPhoneMaskingEnum)[keyof typeof UpdateBrandingPhoneMaskingEnum];
 
 /**
  * Phone provider configuration schema
@@ -24325,7 +24362,6 @@ export interface UpdateBrandingResponseContent {
     favicon_url?: string | undefined;
     /** URL for the logo. Must use HTTPS. */
     logo_url?: string | undefined;
-    identifiers?: Management.BrandingIdentifiers | undefined;
     font?: Management.BrandingFont | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -24549,6 +24585,7 @@ export interface UpdateConnectionOptions {
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
+    id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -25313,7 +25350,7 @@ export interface UpdateOrganizationResponseContent {
 }
 
 export interface UpdatePhoneTemplateResponseContent {
-    id: string;
+    id?: string | undefined;
     channel?: string | undefined;
     customizable?: boolean | undefined;
     tenant?: string | undefined;
@@ -25553,6 +25590,7 @@ export interface UpdateTenantSettingsResponseContent {
     default_redirection_uri?: string | undefined;
     /** Supported locales for the user interface. */
     enabled_locales?: Management.SupportedLocales[] | undefined;
+    security_headers?: (Management.TenantSettingsNullableSecurityHeaders | null) | undefined;
     session_cookie?: (Management.SessionCookieSchema | null) | undefined;
     sessions?: (Management.TenantSettingsSessions | null) | undefined;
     oidc_logout?: Management.TenantOidcLogoutSettings | undefined;
@@ -25580,6 +25618,8 @@ export interface UpdateTenantSettingsResponseContent {
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean | undefined;
+    /** Whether session metadata is included in specific tenant logs (slo, oidc_backchannel_logout_failed, oidc_backchannel_logout_succeeded). */
+    include_session_metadata_in_tenant_logs?: boolean | undefined;
     dynamic_client_registration_security_mode?:
         | Management.TenantSettingsDynamicClientRegistrationSecurityMode
         | undefined;
@@ -26345,3 +26385,20 @@ export const X509CertificateCredentialTypeEnum = {
 } as const;
 export type X509CertificateCredentialTypeEnum =
     (typeof X509CertificateCredentialTypeEnum)[keyof typeof X509CertificateCredentialTypeEnum];
+
+/**
+ * X-XSS-Protection header configuration (deprecated header, use CSP instead).
+ */
+export interface XssProtectionConfig {
+    /** Whether X-XSS-Protection header is enabled. */
+    enabled?: boolean | undefined;
+    mode?: Management.XssProtectionMode | undefined;
+    /** HTTPS endpoint for X-XSS-Protection violation reports. */
+    report_uri?: string | undefined;
+}
+
+/** X-XSS-Protection mode: block. */
+export const XssProtectionMode = {
+    Block: "block",
+} as const;
+export type XssProtectionMode = (typeof XssProtectionMode)[keyof typeof XssProtectionMode];

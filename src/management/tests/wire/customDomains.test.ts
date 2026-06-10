@@ -613,6 +613,25 @@ describe("CustomDomainsClient", () => {
             .mockEndpoint()
             .delete("/custom-domains/id")
             .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customDomains.delete("id");
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("delete (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/custom-domains/id")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();

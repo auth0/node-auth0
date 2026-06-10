@@ -90,6 +90,27 @@ describe("UsersClient", () => {
             .mockEndpoint()
             .delete("/connections/id/users")
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.users.deleteByEmail("id", {
+                email: "email",
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("deleteByEmail (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/connections/id/users")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
