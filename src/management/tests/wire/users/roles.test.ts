@@ -222,6 +222,28 @@ describe("RolesClient", () => {
             .post("/users/id/roles")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.roles.assign("id", {
+                roles: ["roles", "roles"],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("assign (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { roles: ["roles", "roles"] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/users/id/roles")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -291,6 +313,28 @@ describe("RolesClient", () => {
     });
 
     test("delete (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { roles: ["roles", "roles"] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/users/id/roles")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.roles.delete("id", {
+                roles: ["roles", "roles"],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("delete (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };

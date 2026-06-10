@@ -98,6 +98,25 @@ describe("RolesClient", () => {
             .mockEndpoint()
             .get("/organizations/organization_id/groups/group_id/roles")
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.groups.roles.list("organization_id", "group_id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organizations/organization_id/groups/group_id/roles")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -203,6 +222,28 @@ describe("RolesClient", () => {
             .post("/organizations/organization_id/groups/group_id/roles")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.groups.roles.create("organization_id", "group_id", {
+                roles: ["roles", "roles"],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("create (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { roles: ["roles", "roles"] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/organizations/organization_id/groups/group_id/roles")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(409)
             .jsonBody(rawResponseBody)
             .build();
@@ -214,7 +255,7 @@ describe("RolesClient", () => {
         }).rejects.toThrow(Management.ConflictError);
     });
 
-    test("create (6)", async () => {
+    test("create (7)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
@@ -322,6 +363,28 @@ describe("RolesClient", () => {
     });
 
     test("delete (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { roles: ["roles", "roles"] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/organizations/organization_id/groups/group_id/roles")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.groups.roles.delete("organization_id", "group_id", {
+                roles: ["roles", "roles"],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("delete (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };

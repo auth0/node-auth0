@@ -101,6 +101,25 @@ describe("EffectiveRolesClient", () => {
             .mockEndpoint()
             .get("/users/id/effective-roles")
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.effectiveRoles.list("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/effective-roles")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();

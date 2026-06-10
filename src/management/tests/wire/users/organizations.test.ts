@@ -87,6 +87,25 @@ describe("OrganizationsClient", () => {
             .mockEndpoint({ once: false })
             .get("/users/id/organizations")
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.organizations.list("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/users/id/organizations")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();

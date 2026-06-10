@@ -62,6 +62,10 @@ describe("SettingsClient", () => {
             sandbox_versions_available: ["sandbox_versions_available"],
             default_redirection_uri: "default_redirection_uri",
             enabled_locales: ["am"],
+            security_headers: {
+                content_security_policy: { enabled: true, policies: [{}] },
+                x_xss_protection: { enabled: true, mode: "block", report_uri: "report_uri" },
+            },
             session_cookie: { mode: "persistent" },
             sessions: { oidc_logout_prompt_enabled: true },
             oidc_logout: { rp_logout_end_session_endpoint_discovery: true },
@@ -76,6 +80,7 @@ describe("SettingsClient", () => {
             client_id_metadata_document_supported: true,
             phone_consolidated_experience: true,
             enable_ai_guide: true,
+            include_session_metadata_in_tenant_logs: true,
             dynamic_client_registration_security_mode: "strict",
             country_codes: { list: ["list"], mode: "allow" },
         };
@@ -198,6 +203,10 @@ describe("SettingsClient", () => {
             sandbox_versions_available: ["sandbox_versions_available"],
             default_redirection_uri: "default_redirection_uri",
             enabled_locales: ["am"],
+            security_headers: {
+                content_security_policy: { enabled: true, policies: [{}] },
+                x_xss_protection: { enabled: true, mode: "block", report_uri: "report_uri" },
+            },
             session_cookie: { mode: "persistent" },
             sessions: { oidc_logout_prompt_enabled: true },
             oidc_logout: { rp_logout_end_session_endpoint_discovery: true },
@@ -212,6 +221,7 @@ describe("SettingsClient", () => {
             client_id_metadata_document_supported: true,
             phone_consolidated_experience: true,
             enable_ai_guide: true,
+            include_session_metadata_in_tenant_logs: true,
             dynamic_client_registration_security_mode: "strict",
             country_codes: { list: ["list"], mode: "allow" },
         };
