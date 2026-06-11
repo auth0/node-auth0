@@ -1,5 +1,17 @@
 # Change Log
 
+## [v5.12.0](https://github.com/auth0/node-auth0/tree/v5.12.0) (2026-06-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.11.0...v5.12.0)
+
+**Added**
+
+- feat: add tenant security headers, minute-based session lifetimes, and OIDC session expiry [\#1351](https://github.com/auth0/node-auth0/pull/1351) ([developerkunal](https://github.com/developerkunal))
+
+**Fixed**
+
+- fix: implement retry logic for socket hang up errors in HTTP requests [\#1341](https://github.com/auth0/node-auth0/pull/1341) ([amitsingh05667](https://github.com/amitsingh05667))
+
 ## [v5.11.0](https://github.com/auth0/node-auth0/tree/v5.11.0) (2026-05-28)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.10.0...v5.11.0)
