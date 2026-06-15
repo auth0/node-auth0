@@ -1,10 +1,10 @@
 import { RetryConfiguration } from "./retry.js";
-import { Dispatcher } from "undici-types";
+import type { Dispatcher } from "undici-types";
 
 /**
  * @private
  */
-export type FetchAPI = (url: URL | RequestInfo, init?: RequestInit) => Promise<Response>;
+export type FetchAPI = (url: string | URL | Request, init?: RequestInit) => Promise<Response>;
 
 export interface ClientOptions extends Omit<Configuration, "baseUrl" | "parseError" | "middleware"> {
     telemetry?: boolean;
@@ -61,7 +61,7 @@ export type HTTPBody = any | FormData | URLSearchParams;
 export type HTTPRequestInit = {
     headers?: HTTPHeaders;
     method: HTTPMethod;
-    credentials?: RequestCredentials;
+    credentials?: "include" | "omit" | "same-origin";
     body?: HTTPBody;
 };
 
@@ -120,26 +120,26 @@ export class TextApiResponse implements ApiResponse<string> {
 }
 
 export interface FetchParams {
-    url: URL | RequestInfo;
+    url: string | URL | Request;
     init: RequestInit;
 }
 
 export interface RequestContext {
     fetch: FetchAPI;
-    url: URL | RequestInfo;
+    url: string | URL | Request;
     init: RequestInit;
 }
 
 export interface ResponseContext {
     fetch: FetchAPI;
-    url: URL | RequestInfo;
+    url: string | URL | Request;
     init: RequestInit;
     response: Response;
 }
 
 export interface ErrorContext {
     fetch: FetchAPI;
-    url: URL | RequestInfo;
+    url: string | URL | Request;
     init: RequestInit;
     error: unknown;
     response?: Response;
