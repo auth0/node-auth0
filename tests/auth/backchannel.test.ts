@@ -145,7 +145,7 @@ describe("Backchannel", () => {
             expect(receivedRequestExpiry).toBe(999);
         });
 
-        it("should pass authorization_details to /bc-authorize", async () => {
+        it("should pass authorization_details to /bc-authorize when provided as string", async () => {
             let receivedAuthorizationDetails: { type: string }[] = [];
             nock(`https://${opts.domain}`)
                 .post("/bc-authorize")
@@ -168,6 +168,29 @@ describe("Backchannel", () => {
             });
 
             expect(receivedAuthorizationDetails[0].type).toBe("test-type");
+        });
+
+        it("should serialize authorization_details to a JSON string when provided as array", async () => {
+            let rawAuthorizationDetails = "";
+            nock(`https://${opts.domain}`)
+                .post("/bc-authorize")
+                .reply(201, (uri, requestBody, cb) => {
+                    rawAuthorizationDetails = querystring.parse(requestBody as any)["authorization_details"] as string;
+                    cb(null, {
+                        auth_req_id: "test-auth-req-id",
+                        expires_in: 300,
+                        interval: 5,
+                    });
+                });
+
+            await backchannel.authorize({
+                userId: "auth0|test-user-id",
+                binding_message: "Test binding message",
+                scope: "openid",
+                authorization_details: [{ type: "test-type", actions: ["read"] }],
+            });
+
+            expect(rawAuthorizationDetails).toBe(JSON.stringify([{ type: "test-type", actions: ["read"] }]));
         });
 
         it("should pass custom parameters to /bc-authorize", async () => {

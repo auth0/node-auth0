@@ -8,6 +8,7 @@
 
 import { JSONApiResponse } from "../lib/models.js";
 import { BaseAuthAPI } from "./base-auth-api.js";
+import { AuthorizationDetails } from "./oauth.js";
 
 /**
  * The response from the authorize endpoint.
@@ -118,11 +119,6 @@ type AuthorizeRequest = Omit<AuthorizeOptions, "userId"> &
         authorization_details?: string;
     } & Record<string, string>;
 
-export interface AuthorizationDetails {
-    readonly type: string;
-    readonly [parameter: string]: unknown;
-}
-
 /**
  * The response from the token endpoint.
  */
@@ -201,11 +197,10 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
         const { authorization_details, ...authorizeOptions } = options;
 
         if (authorization_details) {
-            // Convert to string if not already
             authorizeOptions.authorization_details =
-                typeof authorization_details !== "string"
-                    ? JSON.stringify(authorization_details)
-                    : authorization_details;
+                typeof authorization_details === "string"
+                    ? authorization_details
+                    : JSON.stringify(authorization_details);
         }
 
         const body: AuthorizeRequest = {
