@@ -173,8 +173,12 @@ type TokenRequestBody = AuthorizeCredentialsPartial & {
  * Interface for the backchannel authentication.
  */
 export interface IBackchannel {
-    authorize: (options: AuthorizeOptions) => Promise<AuthorizeResponse>;
-    backchannelGrant: (options: TokenOptions) => Promise<TokenResponse>;
+    authorize: <TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
+        options: AuthorizeOptions<TAuthorizationDetails>,
+    ) => Promise<AuthorizeResponse>;
+    backchannelGrant: <TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
+        options: TokenOptions,
+    ) => Promise<TokenResponse<TAuthorizationDetails>>;
 }
 
 const CIBA_GRANT_TYPE = "urn:openid:params:grant-type:ciba";
@@ -193,7 +197,10 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
      *
      * @throws {Error} - If the request fails.
      */
-    async authorize({ userId, ...options }: AuthorizeOptions): Promise<AuthorizeResponse> {
+    async authorize<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>({
+        userId,
+        ...options
+    }: AuthorizeOptions<TAuthorizationDetails>): Promise<AuthorizeResponse> {
         const { authorization_details, ...authorizeOptions } = options;
 
         if (authorization_details) {
