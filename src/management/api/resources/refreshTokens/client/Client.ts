@@ -149,7 +149,7 @@ export class RefreshTokensClient {
     }
 
     /**
-     * Revoke refresh tokens in bulk by ID list, user, user+client, or client.
+     * Revoke refresh tokens in bulk by ID list, user, user+client, or user+client+audience.
      *
      * @param {Management.RevokeRefreshTokensRequestContent} request
      * @param {RefreshTokensClient.RequestOptions} requestOptions - Request-specific configuration.

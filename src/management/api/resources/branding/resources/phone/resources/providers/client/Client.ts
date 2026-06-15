@@ -26,7 +26,7 @@ export class ProvidersClient {
     }
 
     /**
-     * Retrieve a list of <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone providers</a> details set for a Tenant. A list of fields to include or exclude may also be specified.
+     * Retrieve a list of [phone providers](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers) details set for a Tenant. A list of fields to include or exclude may also be specified.
      *
      * @param {Management.ListBrandingPhoneProvidersRequestParameters} request
      * @param {ProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -112,8 +112,8 @@ export class ProvidersClient {
     }
 
     /**
-     * Create a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
-     * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
+     * Create a [phone provider](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers).
+     * The `credentials` object requires different properties depending on the phone provider (which is specified using the `name` property).
      *
      * @param {Management.CreateBrandingPhoneProviderRequestContent} request
      * @param {ProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -200,7 +200,7 @@ export class ProvidersClient {
     }
 
     /**
-     * Retrieve <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a> details. A list of fields to include or exclude may also be specified.
+     * Retrieve [phone provider](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers) details. A list of fields to include or exclude may also be specified.
      *
      * @param {string} id
      * @param {ProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -359,8 +359,8 @@ export class ProvidersClient {
     }
 
     /**
-     * Update a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
-     * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
+     * Update a [phone provider](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers).
+     * The `credentials` object requires different properties depending on the phone provider (which is specified using the `name` property).
      *
      * @param {string} id
      * @param {Management.UpdateBrandingPhoneProviderRequestContent} request

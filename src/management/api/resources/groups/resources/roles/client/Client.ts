@@ -23,7 +23,7 @@ export class RolesClient {
     }
 
     /**
-     * Lists the <a href="https://auth0.com/docs/manage-users/access-control/rbac">roles</a> assigned to a group.
+     * Lists the [roles](https://auth0.com/docs/manage-users/access-control/rbac) assigned to a group.
      *
      * @param {string} id - Unique identifier for the group (service-generated).
      * @param {Management.ListGroupRolesRequestParameters} request
@@ -32,6 +32,7 @@ export class RolesClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -100,6 +101,8 @@ export class RolesClient {
                             );
                         case 403:
                             throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
                             throw new Management.TooManyRequestsError(
                                 _response.error.body as unknown,
@@ -130,7 +133,7 @@ export class RolesClient {
     }
 
     /**
-     * Assign one or more <a href="https://auth0.com/docs/manage-users/access-control/rbac">roles</a> to a specified group.
+     * Assign one or more [roles](https://auth0.com/docs/manage-users/access-control/rbac) to a specified group.
      *
      * @param {string} id - Unique identifier for the group (service-generated).
      * @param {Management.CreateGroupRolesRequestParameters} request
@@ -214,7 +217,7 @@ export class RolesClient {
     }
 
     /**
-     * Unassign one or more <a href="https://auth0.com/docs/manage-users/access-control/rbac">roles</a> from a specified group.
+     * Unassign one or more [roles](https://auth0.com/docs/manage-users/access-control/rbac) from a specified group.
      *
      * @param {string} id - Unique identifier for the group (service-generated).
      * @param {Management.DeleteGroupRolesRequestContent} request
@@ -223,6 +226,7 @@ export class RolesClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -280,6 +284,8 @@ export class RolesClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
