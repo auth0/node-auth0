@@ -8,9 +8,7 @@ interface AuthorizationDetails {
     readonly [parameter: string]: unknown;
 }
 
-export interface TokenSet<
-    TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails,
-> {
+export interface TokenSet<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails> {
     /**
      * The access token.
      */

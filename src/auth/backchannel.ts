@@ -73,9 +73,7 @@ const getLoginHint = (userId: string, domain: string): string => {
 /**
  * Options for the authorize request.
  */
-export interface AuthorizeOptions<
-    TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails,
-> {
+export interface AuthorizeOptions<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails> {
     /**
      * A human-readable string intended to be displayed on both the device calling /bc-authorize and the user’s authentication device.
      */
@@ -128,9 +126,7 @@ export interface AuthorizationDetails {
 /**
  * The response from the token endpoint.
  */
-export interface TokenResponse<
-    TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails,
-> {
+export interface TokenResponse<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails> {
     /**
      * The access token.
      */
@@ -272,9 +268,9 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
      * }
      * ```
      */
-    async backchannelGrant<
-        TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails,
-    >({ auth_req_id }: TokenOptions): Promise<TokenResponse<TAuthorizationDetails>> {
+    async backchannelGrant<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>({
+        auth_req_id,
+    }: TokenOptions): Promise<TokenResponse<TAuthorizationDetails>> {
         const body: TokenRequestBody = {
             client_id: this.clientId,
             auth_req_id,
@@ -293,8 +289,7 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
             {},
         );
 
-        const r: JSONApiResponse<TokenResponse<TAuthorizationDetails>> =
-            await JSONApiResponse.fromResponse(response);
+        const r: JSONApiResponse<TokenResponse<TAuthorizationDetails>> = await JSONApiResponse.fromResponse(response);
         return r.data;
     }
 }
