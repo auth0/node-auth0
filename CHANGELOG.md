@@ -1,5 +1,119 @@
 # Change Log
 
+## [v5.12.0](https://github.com/auth0/node-auth0/tree/v5.12.0) (2026-06-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.11.0...v5.12.0)
+
+**Added**
+
+- feat: add tenant security headers, minute-based session lifetimes, and OIDC session expiry [\#1351](https://github.com/auth0/node-auth0/pull/1351) ([developerkunal](https://github.com/developerkunal))
+
+**Fixed**
+
+- fix: implement retry logic for socket hang up errors in HTTP requests [\#1341](https://github.com/auth0/node-auth0/pull/1341) ([amitsingh05667](https://github.com/amitsingh05667))
+
+## [v5.11.0](https://github.com/auth0/node-auth0/tree/v5.11.0) (2026-05-28)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.10.0...v5.11.0)
+
+**Added**
+
+- feat: add rate limit policies, group/org role management, and user effective roles/permissions [\#1348](https://github.com/auth0/node-auth0/pull/1348) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.10.0](https://github.com/auth0/node-auth0/tree/v5.10.0) (2026-05-13)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.9.1...v5.10.0)
+
+**Added**
+
+- feat: add passkey authentication methods, ephemeral session support, and improved error handling [\#1342](https://github.com/auth0/node-auth0/pull/1342) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.9.1](https://github.com/auth0/node-auth0/tree/v5.9.1) (2026-05-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.9.0...v5.9.1)
+
+**Security**
+
+- UUID Package Dependency Update [\#1337](https://github.com/auth0/node-auth0/pull/1337) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.9.0](https://github.com/auth0/node-auth0/tree/v5.9.0) (2026-04-30)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.8.0...v5.9.0)
+
+**Added**
+
+- feat: add events SSE streaming, bulk refresh token revocation, and query string builder [\#1331](https://github.com/auth0/node-auth0/pull/1331) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.8.0](https://github.com/auth0/node-auth0/tree/v5.8.0) (2026-04-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.7.0...v5.8.0)
+
+**⚠️ BREAKING CHANGES**
+
+- Removed `invitation_landing_client_id` and `allowed_roles` fields from `ClientMyOrganizationPatchConfiguration`, `ClientMyOrganizationPostConfiguration`, and `ClientMyOrganizationResponseConfiguration` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Added**
+
+- Session Transfer Delegation: new `delegation` property on `ClientSessionTransferConfiguration` with `ClientSessionTransferDelegationConfiguration` interface supporting `allow_delegated_access` and `enforce_device_binding` options [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Self-Service SSO Ticket Features: new `enabled_features` property on `CreateSelfServiceProfileSsoTicketRequestContent` with `SelfServiceProfileSsoTicketEnabledFeatures` interface supporting `sso`, `domain_verification`, and `provisioning` toggles [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Self-Service SSO Ticket Domain Aliases: new `pending_domains` field on `SelfServiceProfileSsoTicketDomainAliasesConfig` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Changed**
+
+- Updated JSDoc descriptions for `default_for` field across Client Grant response types and `CreateClientGrantRequestContent` [\#1328](https://github.com/auth0/node-auth0/pull/1328) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.7.0](https://github.com/auth0/node-auth0/tree/v5.7.0) (2026-04-17)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.6.0...v5.7.0)
+
+**Added**
+
+- feat: add third-party client security, synchronized groups, and new event stream types [\#1326](https://github.com/auth0/node-auth0/pull/1326) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.6.0](https://github.com/auth0/node-auth0/tree/v5.6.0) (2026-04-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.5.0...v5.6.0)
+
+**Added**
+
+- Feat: Passthrough fetch, error cause propagation, type refinements, and core improvements [\#1318](https://github.com/auth0/node-auth0/pull/1318) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Feat: Added Organization Connections and type updates [\#1315](https://github.com/auth0/node-auth0/pull/1315) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Feat: Added CIMD client support, default custom domains, refresh token listing, and type updates [\#1314](https://github.com/auth0/node-auth0/pull/1314) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.5.0](https://github.com/auth0/node-auth0/tree/v5.5.0) (2026-03-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.4.0...v5.5.0)
+
+**Added**
+
+- feat: add group management scopes and network ACL enhancements [\#1305](https://github.com/auth0/node-auth0/pull/1305) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.4.0](https://github.com/auth0/node-auth0/tree/v5.4.0) (2026-03-04)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.3.1...v5.4.0)
+
+**Added**
+
+- Feat: Added new connection options, type consolidation, and core improvements [\#1301](https://github.com/auth0/node-auth0/pull/1301) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.3.1](https://github.com/auth0/node-auth0/tree/v5.3.1) (2026-02-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.3.0...v5.3.1)
+
+**Added**
+
+- Feat: Added pagination support for Actions Modules Versions API and type improvements [\#1298](https://github.com/auth0/node-auth0/pull/1298) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v5.3.0](https://github.com/auth0/node-auth0/tree/v5.3.0) (2026-01-29)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.2.0...v5.3.0)
+
+**Added**
+
+- Feat: Added support for Actions Modules API, Connection OTP Authentication and Custom Domain Passkey rpId [\#1292](https://github.com/auth0/node-auth0/pull/1292) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Feat: Added support for SCIM Groups API and Self-Service Organization Domain endpoints [\#1289](https://github.com/auth0/node-auth0/pull/1289) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: Refresh Token Metadata API and Organization Discovery Domain by Name [\#1283](https://github.com/auth0/node-auth0/pull/1283) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v5.2.0](https://github.com/auth0/node-auth0/tree/v5.2.0) (2025-12-10)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.1.0...v5.2.0)

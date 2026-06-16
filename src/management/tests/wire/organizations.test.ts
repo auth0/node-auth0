@@ -15,6 +15,7 @@ describe("OrganizationsClient", () => {
                 { id: "id", name: "name", display_name: "display_name", token_quota: { client_credentials: {} } },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/organizations")
@@ -23,19 +24,7 @@ describe("OrganizationsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            organizations: [
-                {
-                    id: "id",
-                    name: "name",
-                    display_name: "display_name",
-                    token_quota: {
-                        client_credentials: {},
-                    },
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.organizations.list({
             from: "from",
             take: 1,
@@ -53,13 +42,8 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();
@@ -71,13 +55,8 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();
@@ -89,13 +68,8 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();
@@ -107,13 +81,8 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server
-            .mockEndpoint({ once: false })
-            .get("/organizations")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+
+        server.mockEndpoint().get("/organizations").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.organizations.list();
@@ -140,6 +109,7 @@ describe("OrganizationsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint()
             .post("/organizations")
@@ -152,36 +122,7 @@ describe("OrganizationsClient", () => {
         const response = await client.organizations.create({
             name: "name",
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            display_name: "display_name",
-            branding: {
-                logo_url: "logo_url",
-                colors: {
-                    primary: "primary",
-                    page_background: "page_background",
-                },
-            },
-            metadata: {
-                key: "value",
-            },
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-            enabled_connections: [
-                {
-                    connection_id: "connection_id",
-                    assign_membership_on_login: true,
-                    show_as_button: true,
-                    is_signup_enabled: true,
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -189,6 +130,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "organization-1" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations")
@@ -210,6 +152,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "organization-1" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations")
@@ -231,6 +174,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "organization-1" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations")
@@ -252,6 +196,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "organization-1" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations")
@@ -273,6 +218,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "organization-1" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations")
@@ -301,6 +247,7 @@ describe("OrganizationsClient", () => {
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
         };
+
         server
             .mockEndpoint()
             .get("/organizations/name/name")
@@ -310,28 +257,7 @@ describe("OrganizationsClient", () => {
             .build();
 
         const response = await client.organizations.getByName("name");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            display_name: "display_name",
-            branding: {
-                logo_url: "logo_url",
-                colors: {
-                    primary: "primary",
-                    page_background: "page_background",
-                },
-            },
-            metadata: {
-                key: "value",
-            },
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getByName (2)", async () => {
@@ -339,6 +265,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/organizations/name/name")
@@ -357,6 +284,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/organizations/name/name")
@@ -375,6 +303,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/organizations/name/name")
@@ -393,6 +322,26 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organizations/name/name")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.getByName("name");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("getByName (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/organizations/name/name")
@@ -418,31 +367,11 @@ describe("OrganizationsClient", () => {
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
         };
+
         server.mockEndpoint().get("/organizations/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.organizations.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            display_name: "display_name",
-            branding: {
-                logo_url: "logo_url",
-                colors: {
-                    primary: "primary",
-                    page_background: "page_background",
-                },
-            },
-            metadata: {
-                key: "value",
-            },
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -450,6 +379,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/organizations/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -462,6 +392,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/organizations/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -474,6 +405,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/organizations/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -486,6 +418,20 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
+        server.mockEndpoint().get("/organizations/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.organizations.get("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("get (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/organizations/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -508,6 +454,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id")
@@ -526,6 +473,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id")
@@ -544,6 +492,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id")
@@ -562,6 +511,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id")
@@ -580,6 +530,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id")
@@ -605,6 +556,7 @@ describe("OrganizationsClient", () => {
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
         };
+
         server
             .mockEndpoint()
             .patch("/organizations/id")
@@ -615,28 +567,7 @@ describe("OrganizationsClient", () => {
             .build();
 
         const response = await client.organizations.update("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            display_name: "display_name",
-            branding: {
-                logo_url: "logo_url",
-                colors: {
-                    primary: "primary",
-                    page_background: "page_background",
-                },
-            },
-            metadata: {
-                key: "value",
-            },
-            token_quota: {
-                client_credentials: {
-                    enforce: true,
-                    per_day: 1,
-                    per_hour: 1,
-                },
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -644,6 +575,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/organizations/id")
@@ -663,6 +595,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/organizations/id")
@@ -682,6 +615,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/organizations/id")
@@ -701,6 +635,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/organizations/id")

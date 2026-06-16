@@ -23,7 +23,7 @@ export class DeviceCredentialsClient {
     }
 
     /**
-     * Retrieve device credential information (<code>public_key</code>, <code>refresh_token</code>, or <code>rotating_refresh_token</code>) associated with a specific user.
+     * Retrieve device credential information (`public_key`, `refresh_token`, or `rotating_refresh_token`) associated with a specific user.
      *
      * @param {Management.ListDeviceCredentialsRequestParameters} request
      * @param {DeviceCredentialsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -63,31 +63,16 @@ export class DeviceCredentialsClient {
                     client_id: clientId,
                     type: type_,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
-                if (userId !== undefined) {
-                    _queryParams["user_id"] = userId;
-                }
-                if (clientId !== undefined) {
-                    _queryParams["client_id"] = clientId;
-                }
-                if (type_ !== undefined) {
-                    _queryParams["type"] = type_;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    fields,
+                    include_fields: includeFields,
+                    user_id: userId,
+                    client_id: clientId,
+                    type: type_ !== undefined ? type_ : undefined,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -103,7 +88,11 @@ export class DeviceCredentialsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -165,9 +154,9 @@ export class DeviceCredentialsClient {
     }
 
     /**
-     * Create a device credential public key to manage refresh token rotation for a given <code>user_id</code>. Device Credentials APIs are designed for ad-hoc administrative use only and paging is by default enabled for GET requests.
+     * Create a device credential public key to manage refresh token rotation for a given `user_id`. Device Credentials APIs are designed for ad-hoc administrative use only and paging is by default enabled for GET requests.
      *
-     * When refresh token rotation is enabled, the endpoint becomes consistent. For more information, read <a href="https://auth0.com/docs/get-started/tenant-settings/signing-keys"> Signing Keys</a>.
+     * When refresh token rotation is enabled, the endpoint becomes consistent. For more information, read [Signing Keys](https://auth0.com/docs/get-started/tenant-settings/signing-keys).
      *
      * @param {Management.CreatePublicKeyDeviceCredentialRequestContent} request
      * @param {DeviceCredentialsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -181,6 +170,7 @@ export class DeviceCredentialsClient {
      * @example
      *     await client.deviceCredentials.createPublicKey({
      *         device_name: "device_name",
+     *         type: "public_key",
      *         value: "value",
      *         device_id: "device_id"
      *     })
@@ -212,9 +202,9 @@ export class DeviceCredentialsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: { ...request, type: "public_key" },
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -289,7 +279,7 @@ export class DeviceCredentialsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

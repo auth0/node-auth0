@@ -23,7 +23,7 @@ export class CustomDomainsClient {
     }
 
     /**
-     * Retrieve details on <a href="https://auth0.com/docs/custom-domains">custom domains</a>.
+     * Retrieve details on [custom domains](https://auth0.com/docs/custom-domains).
      *
      * @param {Management.ListCustomDomainsRequestParameters} request
      * @param {CustomDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -52,23 +52,12 @@ export class CustomDomainsClient {
         requestOptions?: CustomDomainsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListCustomDomainsResponseContent>> {
         const { q, fields, include_fields: includeFields, sort } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (q !== undefined) {
-            _queryParams["q"] = q;
-        }
-
-        if (fields !== undefined) {
-            _queryParams["fields"] = fields;
-        }
-
-        if (includeFields !== undefined) {
-            _queryParams["include_fields"] = includeFields?.toString() ?? null;
-        }
-
-        if (sort !== undefined) {
-            _queryParams["sort"] = sort;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            q,
+            fields,
+            include_fields: includeFields,
+            sort,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -84,7 +73,11 @@ export class CustomDomainsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -128,7 +121,6 @@ export class CustomDomainsClient {
      *
      * - custom_client_ip_header
      * - tls_policy
-     *
      *
      * TLS Policies:
      *
@@ -176,7 +168,7 @@ export class CustomDomainsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -214,6 +206,151 @@ export class CustomDomainsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/custom-domains");
+    }
+
+    /**
+     * Retrieve the tenant's default domain.
+     *
+     * @param {CustomDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.customDomains.getDefault()
+     */
+    public getDefault(
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetDefaultDomainResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__getDefault(requestOptions));
+    }
+
+    private async __getDefault(
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetDefaultDomainResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "custom-domains/default",
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.GetDefaultDomainResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/custom-domains/default");
+    }
+
+    /**
+     * Set the default custom domain for the tenant.
+     *
+     * @param {Management.SetDefaultCustomDomainRequestContent} request
+     * @param {CustomDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.ForbiddenError}
+     *
+     * @example
+     *     await client.customDomains.setDefault({
+     *         domain: "domain"
+     *     })
+     */
+    public setDefault(
+        request: Management.SetDefaultCustomDomainRequestContent,
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.UpdateDefaultDomainResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__setDefault(request, requestOptions));
+    }
+
+    private async __setDefault(
+        request: Management.SetDefaultCustomDomainRequestContent,
+        requestOptions?: CustomDomainsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.UpdateDefaultDomainResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                "custom-domains/default",
+            ),
+            method: "PATCH",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.UpdateDefaultDomainResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PATCH", "/custom-domains/default");
     }
 
     /**
@@ -257,7 +394,7 @@ export class CustomDomainsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -304,6 +441,7 @@ export class CustomDomainsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -332,7 +470,7 @@ export class CustomDomainsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -351,6 +489,8 @@ export class CustomDomainsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -373,23 +513,31 @@ export class CustomDomainsClient {
      * - custom_client_ip_header
      * - tls_policy
      *
-     * <h5>Updating CUSTOM_CLIENT_IP_HEADER for a custom domain</h5>To update the <code>custom_client_ip_header</code> for a domain, the body to
+     * **Updating CUSTOM_CLIENT_IP_HEADER for a custom domain**
+     *
+     * To update the `custom_client_ip_header` for a domain, the body to
      * send should be:
-     * <pre><code>{ "custom_client_ip_header": "cf-connecting-ip" }</code></pre>
      *
-     * <h5>Updating TLS_POLICY for a custom domain</h5>To update the <code>tls_policy</code> for a domain, the body to send should be:
-     * <pre><code>{ "tls_policy": "recommended" }</code></pre>
+     * ```json
+     * { "custom_client_ip_header": "cf-connecting-ip" }
+     * ```
      *
+     * **Updating TLS_POLICY for a custom domain**
+     *
+     * To update the `tls_policy` for a domain, the body to send should be:
+     *
+     * ```json
+     * { "tls_policy": "recommended" }
+     * ```
      *
      * TLS Policies:
      *
      * - recommended - for modern usage this includes TLS 1.2 only
      *
-     *
      * Some considerations:
      *
      * - The TLS ciphers and protocols available in each TLS policy follow industry recommendations, and may be updated occasionally.
-     * - The <code>compatible</code> TLS policy is no longer supported.
+     * - The `compatible` TLS policy is no longer supported.
      *
      * @param {string} id - The id of the custom domain to update
      * @param {Management.UpdateCustomDomainRequestContent} request
@@ -432,7 +580,7 @@ export class CustomDomainsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -511,7 +659,7 @@ export class CustomDomainsClient {
             ),
             method: "POST",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -552,12 +700,12 @@ export class CustomDomainsClient {
     /**
      * Run the verification process on a custom domain.
      *
-     * Note: Check the <code>status</code> field to see its verification status. Once verification is complete, it may take up to 10 minutes before the custom domain can start accepting requests.
+     * Note: Check the `status` field to see its verification status. Once verification is complete, it may take up to 10 minutes before the custom domain can start accepting requests.
      *
-     * For <code>self_managed_certs</code>, when the custom domain is verified for the first time, the response will also include the <code>cname_api_key</code> which you will need to configure your proxy. This key must be kept secret, and is used to validate the proxy requests.
+     * For `self_managed_certs`, when the custom domain is verified for the first time, the response will also include the `cname_api_key` which you will need to configure your proxy. This key must be kept secret, and is used to validate the proxy requests.
      *
-     * <a href="https://auth0.com/docs/custom-domains#step-2-verify-ownership">Learn more</a> about verifying custom domains that use Auth0 Managed certificates.
-     * <a href="https://auth0.com/docs/custom-domains/self-managed-certificates#step-2-verify-ownership">Learn more</a> about verifying custom domains that use Self Managed certificates.
+     * [Learn more](https://auth0.com/docs/custom-domains#step-2-verify-ownership) about verifying custom domains that use Auth0 Managed certificates.
+     * [Learn more](https://auth0.com/docs/custom-domains/self-managed-certificates#step-2-verify-ownership) about verifying custom domains that use Self Managed certificates.
      *
      * @param {string} id - ID of the custom domain to verify.
      * @param {CustomDomainsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -597,7 +745,7 @@ export class CustomDomainsClient {
             ),
             method: "POST",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

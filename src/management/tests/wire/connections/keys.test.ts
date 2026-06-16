@@ -25,6 +25,7 @@ describe("KeysClient", () => {
                 subject_dn: "subject_dn",
             },
         ];
+
         server
             .mockEndpoint()
             .get("/connections/id/keys")
@@ -34,22 +35,7 @@ describe("KeysClient", () => {
             .build();
 
         const response = await client.connections.keys.get("id");
-        expect(response).toEqual([
-            {
-                kid: "kid",
-                cert: "cert",
-                pkcs: "pkcs",
-                current: true,
-                next: true,
-                previous: true,
-                current_since: "current_since",
-                fingerprint: "fingerprint",
-                thumbprint: "thumbprint",
-                algorithm: "algorithm",
-                key_use: "encryption",
-                subject_dn: "subject_dn",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -57,6 +43,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/keys")
@@ -75,6 +62,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/keys")
@@ -93,6 +81,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/keys")
@@ -111,6 +100,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/keys")
@@ -129,6 +119,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/connections/id/keys")
@@ -139,6 +130,152 @@ describe("KeysClient", () => {
 
         await expect(async () => {
             return await client.connections.keys.get("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("create (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = [
+            {
+                kid: "kid",
+                cert: "cert",
+                pkcs: "pkcs",
+                current: true,
+                next: true,
+                current_since: "current_since",
+                fingerprint: "fingerprint",
+                thumbprint: "thumbprint",
+                algorithm: "algorithm",
+                key_use: "encryption",
+                subject_dn: "subject_dn",
+            },
+        ];
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/keys")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.connections.keys.create("id");
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("create (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/keys")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.keys.create("id", undefined);
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("create (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/keys")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.keys.create("id", undefined);
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("create (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/keys")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.keys.create("id", undefined);
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("create (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/keys")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.keys.create("id", undefined);
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("create (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/keys")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.keys.create("id", undefined);
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("create (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/keys")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.keys.create("id", undefined);
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
@@ -157,6 +294,7 @@ describe("KeysClient", () => {
             key_use: "encryption",
             subject_dn: "subject_dn",
         };
+
         server
             .mockEndpoint()
             .post("/connections/id/keys/rotate")
@@ -166,17 +304,7 @@ describe("KeysClient", () => {
             .build();
 
         const response = await client.connections.keys.rotate("id");
-        expect(response).toEqual({
-            kid: "kid",
-            cert: "cert",
-            pkcs: "pkcs",
-            next: true,
-            fingerprint: "fingerprint",
-            thumbprint: "thumbprint",
-            algorithm: "algorithm",
-            key_use: "encryption",
-            subject_dn: "subject_dn",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("rotate (2)", async () => {
@@ -184,6 +312,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/keys/rotate")
@@ -202,6 +331,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/keys/rotate")
@@ -220,6 +350,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/keys/rotate")
@@ -238,6 +369,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/keys/rotate")
@@ -256,6 +388,7 @@ describe("KeysClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/keys/rotate")

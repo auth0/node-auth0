@@ -27,31 +27,11 @@ describe("LogStreamsClient", () => {
                 },
             },
         ];
+
         server.mockEndpoint().get("/log-streams").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.logStreams.list();
-        expect(response).toEqual([
-            {
-                id: "id",
-                name: "name",
-                status: "active",
-                type: "http",
-                isPriority: true,
-                filters: [{}],
-                pii_config: {
-                    log_fields: ["first_name"],
-                    method: "mask",
-                    algorithm: "xxhash",
-                },
-                sink: {
-                    httpAuthorization: "httpAuthorization",
-                    httpContentFormat: "JSONARRAY",
-                    httpContentType: "httpContentType",
-                    httpEndpoint: "httpEndpoint",
-                    httpCustomHeaders: [{}],
-                },
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -59,6 +39,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -71,6 +52,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -83,6 +65,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -95,6 +78,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -122,6 +106,7 @@ describe("LogStreamsClient", () => {
                 httpCustomHeaders: [{}],
             },
         };
+
         server
             .mockEndpoint()
             .post("/log-streams")
@@ -137,31 +122,7 @@ describe("LogStreamsClient", () => {
                 httpEndpoint: "httpEndpoint",
             },
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            status: "active",
-            type: "http",
-            isPriority: true,
-            filters: [
-                {
-                    type: "category",
-                    name: "auth.login.fail",
-                },
-            ],
-            pii_config: {
-                log_fields: ["first_name"],
-                method: "mask",
-                algorithm: "xxhash",
-            },
-            sink: {
-                httpAuthorization: "httpAuthorization",
-                httpContentFormat: "JSONARRAY",
-                httpContentType: "httpContentType",
-                httpEndpoint: "httpEndpoint",
-                httpCustomHeaders: [{}],
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -169,6 +130,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/log-streams")
@@ -193,6 +155,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/log-streams")
@@ -217,6 +180,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/log-streams")
@@ -241,6 +205,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/log-streams")
@@ -265,6 +230,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/log-streams")
@@ -304,34 +270,11 @@ describe("LogStreamsClient", () => {
                 httpCustomHeaders: [{}],
             },
         };
+
         server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.logStreams.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            status: "active",
-            type: "http",
-            isPriority: true,
-            filters: [
-                {
-                    type: "category",
-                    name: "auth.login.fail",
-                },
-            ],
-            pii_config: {
-                log_fields: ["first_name"],
-                method: "mask",
-                algorithm: "xxhash",
-            },
-            sink: {
-                httpAuthorization: "httpAuthorization",
-                httpContentFormat: "JSONARRAY",
-                httpContentType: "httpContentType",
-                httpEndpoint: "httpEndpoint",
-                httpCustomHeaders: [{}],
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -339,6 +282,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -351,6 +295,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -363,6 +308,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -375,6 +321,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/log-streams/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -397,6 +344,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -409,6 +357,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -421,6 +370,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -433,6 +383,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -445,6 +396,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/log-streams/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -472,6 +424,7 @@ describe("LogStreamsClient", () => {
                 httpCustomHeaders: [{}],
             },
         };
+
         server
             .mockEndpoint()
             .patch("/log-streams/id")
@@ -482,31 +435,7 @@ describe("LogStreamsClient", () => {
             .build();
 
         const response = await client.logStreams.update("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            status: "active",
-            type: "http",
-            isPriority: true,
-            filters: [
-                {
-                    type: "category",
-                    name: "auth.login.fail",
-                },
-            ],
-            pii_config: {
-                log_fields: ["first_name"],
-                method: "mask",
-                algorithm: "xxhash",
-            },
-            sink: {
-                httpAuthorization: "httpAuthorization",
-                httpContentFormat: "JSONARRAY",
-                httpContentType: "httpContentType",
-                httpEndpoint: "httpEndpoint",
-                httpCustomHeaders: [{}],
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -514,6 +443,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/log-streams/id")
@@ -533,6 +463,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/log-streams/id")
@@ -552,6 +483,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/log-streams/id")
@@ -571,6 +503,7 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/log-streams/id")

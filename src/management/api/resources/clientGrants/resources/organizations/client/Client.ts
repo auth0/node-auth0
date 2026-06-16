@@ -30,6 +30,7 @@ export class OrganizationsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -48,13 +49,10 @@ export class OrganizationsClient {
                 request: Management.ListClientGrantOrganizationsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListClientGrantOrganizationsPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -70,7 +68,11 @@ export class OrganizationsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -97,6 +99,8 @@ export class OrganizationsClient {
                             );
                         case 403:
                             throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
                             throw new Management.TooManyRequestsError(
                                 _response.error.body as unknown,

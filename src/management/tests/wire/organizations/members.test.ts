@@ -13,6 +13,7 @@ describe("MembersClient", () => {
             next: "next",
             members: [{ user_id: "user_id", picture: "picture", name: "name", email: "email", roles: [{}] }],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/members")
@@ -21,18 +22,7 @@ describe("MembersClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            members: [
-                {
-                    user_id: "user_id",
-                    picture: "picture",
-                    name: "name",
-                    email: "email",
-                    roles: [{}],
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.organizations.members.list("id", {
             from: "from",
             take: 1,
@@ -51,8 +41,9 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members")
             .respondWith()
             .statusCode(400)
@@ -69,8 +60,9 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members")
             .respondWith()
             .statusCode(401)
@@ -87,8 +79,9 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members")
             .respondWith()
             .statusCode(403)
@@ -105,8 +98,28 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
+            .get("/organizations/id/members")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.members.list("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
             .get("/organizations/id/members")
             .respondWith()
             .statusCode(429)
@@ -142,6 +155,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -163,6 +177,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -184,6 +199,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -205,6 +221,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/members")
@@ -245,6 +262,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/members")
@@ -266,6 +284,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/members")
@@ -287,6 +306,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/members")
@@ -308,6 +328,7 @@ describe("MembersClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { members: ["members", "members"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/members")

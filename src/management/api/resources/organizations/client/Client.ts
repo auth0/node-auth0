@@ -9,8 +9,10 @@ import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCode
 import * as errors from "../../../../errors/index.js";
 import * as Management from "../../../index.js";
 import { ClientGrantsClient } from "../resources/clientGrants/client/Client.js";
+import { ConnectionsClient } from "../resources/connections/client/Client.js";
 import { DiscoveryDomainsClient } from "../resources/discoveryDomains/client/Client.js";
 import { EnabledConnectionsClient } from "../resources/enabledConnections/client/Client.js";
+import { GroupsClient } from "../resources/groups/client/Client.js";
 import { InvitationsClient } from "../resources/invitations/client/Client.js";
 import { MembersClient } from "../resources/members/client/Client.js";
 
@@ -23,10 +25,12 @@ export declare namespace OrganizationsClient {
 export class OrganizationsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<OrganizationsClient.Options>;
     protected _clientGrants: ClientGrantsClient | undefined;
+    protected _connections: ConnectionsClient | undefined;
     protected _discoveryDomains: DiscoveryDomainsClient | undefined;
     protected _enabledConnections: EnabledConnectionsClient | undefined;
     protected _invitations: InvitationsClient | undefined;
     protected _members: MembersClient | undefined;
+    protected _groups: GroupsClient | undefined;
 
     constructor(options: OrganizationsClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -34,6 +38,10 @@ export class OrganizationsClient {
 
     public get clientGrants(): ClientGrantsClient {
         return (this._clientGrants ??= new ClientGrantsClient(this._options));
+    }
+
+    public get connections(): ConnectionsClient {
+        return (this._connections ??= new ConnectionsClient(this._options));
     }
 
     public get discoveryDomains(): DiscoveryDomainsClient {
@@ -52,26 +60,28 @@ export class OrganizationsClient {
         return (this._members ??= new MembersClient(this._options));
     }
 
+    public get groups(): GroupsClient {
+        return (this._groups ??= new GroupsClient(this._options));
+    }
+
     /**
      * Retrieve detailed list of all Organizations available in your tenant. For more information, see Auth0 Organizations.
      *
      * This endpoint supports two types of pagination:
-     * <ul>
-     * <li>Offset pagination</li>
-     * <li>Checkpoint pagination</li>
-     * </ul>
+     *
+     * - Offset pagination
+     * - Checkpoint pagination
      *
      * Checkpoint pagination must be used if you need to retrieve more than 1000 organizations.
      *
-     * <h2>Checkpoint Pagination</h2>
+     * **Checkpoint Pagination**
      *
      * To search by checkpoint, use the following parameters:
-     * <ul>
-     * <li><code>from</code>: Optional id from which to start selection.</li>
-     * <li><code>take</code>: The total number of entries to retrieve when using the <code>from</code> parameter. Defaults to 50.</li>
-     * </ul>
      *
-     * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
+     * - `from`: Optional id from which to start selection.
+     * - `take`: The total number of entries to retrieve when using the `from` parameter. Defaults to 50.
+     *
+     * **Note**: The first time you call this endpoint using checkpoint pagination, omit the `from` parameter. If there are more results, a `next` value is included in the response. You can use this for subsequent API calls. When `next` is no longer included in the response, no pages are remaining.
      *
      * @param {Management.ListOrganizationsRequestParameters} request
      * @param {OrganizationsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -97,16 +107,11 @@ export class OrganizationsClient {
                 request: Management.ListOrganizationsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationsPaginatedResponseContent>> => {
                 const { from: from_, take = 50, sort } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (sort !== undefined) {
-                    _queryParams["sort"] = sort;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                    sort,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -122,7 +127,11 @@ export class OrganizationsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -179,7 +188,7 @@ export class OrganizationsClient {
     }
 
     /**
-     * Create a new Organization within your tenant.  To learn more about Organization settings, behavior, and configuration options, review <a href="https://auth0.com/docs/manage-users/organizations/create-first-organization">Create Your First Organization</a>.
+     * Create a new Organization within your tenant.  To learn more about Organization settings, behavior, and configuration options, review [Create Your First Organization](https://auth0.com/docs/manage-users/organizations/create-first-organization).
      *
      * @param {Management.CreateOrganizationRequestContent} request
      * @param {OrganizationsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -222,7 +231,7 @@ export class OrganizationsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -271,6 +280,7 @@ export class OrganizationsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -302,7 +312,7 @@ export class OrganizationsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -324,6 +334,8 @@ export class OrganizationsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -347,6 +359,7 @@ export class OrganizationsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -378,7 +391,7 @@ export class OrganizationsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -400,6 +413,8 @@ export class OrganizationsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -417,7 +432,7 @@ export class OrganizationsClient {
     /**
      * Remove an Organization from your tenant.  This action cannot be undone.
      *
-     * <b>Note</b>: Members are automatically disassociated from an Organization when it is deleted. However, this action does <b>not</b> delete these users from your tenant.
+     * **Note**: Members are automatically disassociated from an Organization when it is deleted. However, this action does **not** delete these users from your tenant.
      *
      * @param {string} id - Organization identifier.
      * @param {OrganizationsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -454,7 +469,7 @@ export class OrganizationsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -490,7 +505,7 @@ export class OrganizationsClient {
     }
 
     /**
-     * Update the details of a specific <a href="https://auth0.com/docs/manage-users/organizations/configure-organizations/create-organizations">Organization</a>, such as name and display name, branding options, and metadata.
+     * Update the details of a specific [Organization](https://auth0.com/docs/manage-users/organizations/configure-organizations/create-organizations), such as name and display name, branding options, and metadata.
      *
      * @param {string} id - ID of the organization to update.
      * @param {Management.UpdateOrganizationRequestContent} request
@@ -533,7 +548,7 @@ export class OrganizationsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

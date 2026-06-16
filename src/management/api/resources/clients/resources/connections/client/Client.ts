@@ -23,15 +23,10 @@ export class ConnectionsClient {
     }
 
     /**
-     * Retrieve all connections that are enabled for the specified <a href="https://www.auth0.com/docs/get-started/applications"> Application</a>, using checkpoint pagination. A list of fields to include or exclude for each connection may also be specified.
-     * <ul>
-     *   <li>
-     *     This endpoint requires the <code>read:connections</code> scope and any one of <code>read:clients</code> or <code>read:client_summary</code>.
-     *   </li>
-     *   <li>
-     *     <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
-     *   </li>
-     * </ul>
+     * Retrieve all connections that are enabled for the specified [Application](https://www.auth0.com/docs/get-started/applications), using checkpoint pagination. A list of fields to include or exclude for each connection may also be specified.
+     *
+     * - This endpoint requires the `read:connections` scope and any one of `read:clients` or `read:client_summary`.
+     * - **Note**: The first time you call this endpoint, omit the `from` parameter. If there are more results, a `next` value is included in the response. You can use this for subsequent API calls. When `next` is no longer included in the response, no further results are remaining.
      *
      * @param {string} id - ID of the client for which to retrieve enabled connections.
      * @param {Management.ConnectionsGetRequest} request
@@ -45,6 +40,7 @@ export class ConnectionsClient {
      *
      * @example
      *     await client.clients.connections.get("id", {
+     *         strategy: ["ad"],
      *         from: "from",
      *         take: 1,
      *         fields: "fields",
@@ -61,26 +57,17 @@ export class ConnectionsClient {
                 request: Management.ConnectionsGetRequest,
             ): Promise<core.WithRawResponse<Management.ListClientConnectionsResponseContent>> => {
                 const { strategy, from: from_, take = 50, fields, include_fields: includeFields } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (strategy !== undefined) {
-                    if (Array.isArray(strategy)) {
-                        _queryParams["strategy"] = strategy.map((item) => item);
-                    } else {
-                        _queryParams["strategy"] = strategy;
-                    }
-                }
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (fields !== undefined) {
-                    _queryParams["fields"] = fields;
-                }
-                if (includeFields !== undefined) {
-                    _queryParams["include_fields"] = includeFields?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    strategy: Array.isArray(strategy)
+                        ? strategy.map((item) => item)
+                        : strategy !== undefined
+                          ? strategy
+                          : undefined,
+                    from: from_,
+                    take,
+                    fields,
+                    include_fields: includeFields,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -96,7 +83,11 @@ export class ConnectionsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,

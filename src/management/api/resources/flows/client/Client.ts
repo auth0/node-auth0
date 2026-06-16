@@ -35,7 +35,7 @@ export class FlowsClient {
     }
 
     /**
-     * @param {Management.FlowsListRequest} request
+     * @param {Management.ListFlowsRequestParameters} request
      * @param {FlowsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -48,16 +48,17 @@ export class FlowsClient {
      *         page: 1,
      *         per_page: 1,
      *         include_totals: true,
+     *         hydrate: ["form_count"],
      *         synchronous: true
      *     })
      */
     public async list(
-        request: Management.FlowsListRequest = {},
+        request: Management.ListFlowsRequestParameters = {},
         requestOptions?: FlowsClient.RequestOptions,
     ): Promise<core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.FlowsListRequest,
+                request: Management.ListFlowsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListFlowsOffsetPaginatedResponseContent>> => {
                 const {
                     page = 0,
@@ -66,26 +67,17 @@ export class FlowsClient {
                     hydrate,
                     synchronous,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (hydrate !== undefined) {
-                    if (Array.isArray(hydrate)) {
-                        _queryParams["hydrate"] = hydrate.map((item) => item);
-                    } else {
-                        _queryParams["hydrate"] = hydrate;
-                    }
-                }
-                if (synchronous !== undefined) {
-                    _queryParams["synchronous"] = synchronous?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    hydrate: Array.isArray(hydrate)
+                        ? hydrate.map((item) => item)
+                        : hydrate !== undefined
+                          ? hydrate
+                          : undefined,
+                    synchronous,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -101,7 +93,11 @@ export class FlowsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -199,7 +195,7 @@ export class FlowsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -246,7 +242,9 @@ export class FlowsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.flows.get("id")
+     *     await client.flows.get("id", {
+     *         hydrate: ["form_count"]
+     *     })
      */
     public get(
         id: string,
@@ -262,15 +260,9 @@ export class FlowsClient {
         requestOptions?: FlowsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetFlowResponseContent>> {
         const { hydrate } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (hydrate !== undefined) {
-            if (Array.isArray(hydrate)) {
-                _queryParams["hydrate"] = hydrate.map((item) => item);
-            } else {
-                _queryParams["hydrate"] = hydrate;
-            }
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            hydrate: Array.isArray(hydrate) ? hydrate.map((item) => item) : hydrate !== undefined ? hydrate : undefined,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -286,7 +278,11 @@ export class FlowsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -357,7 +353,7 @@ export class FlowsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -434,7 +430,7 @@ export class FlowsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

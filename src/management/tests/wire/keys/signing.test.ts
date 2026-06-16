@@ -25,25 +25,11 @@ describe("SigningClient", () => {
                 revoked_at: "revoked_at",
             },
         ];
+
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.keys.signing.list();
-        expect(response).toEqual([
-            {
-                kid: "kid",
-                cert: "cert",
-                pkcs7: "pkcs7",
-                current: true,
-                next: true,
-                previous: true,
-                current_since: "current_since",
-                current_until: "current_until",
-                fingerprint: "fingerprint",
-                thumbprint: "thumbprint",
-                revoked: true,
-                revoked_at: "revoked_at",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -51,6 +37,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -63,6 +50,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -75,6 +63,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -87,6 +76,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -99,6 +89,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { cert: "cert", kid: "kid" };
+
         server
             .mockEndpoint()
             .post("/keys/signing/rotate")
@@ -108,10 +99,7 @@ describe("SigningClient", () => {
             .build();
 
         const response = await client.keys.signing.rotate();
-        expect(response).toEqual({
-            cert: "cert",
-            kid: "kid",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("rotate (2)", async () => {
@@ -119,6 +107,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/keys/signing/rotate")
@@ -137,6 +126,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/keys/signing/rotate")
@@ -155,6 +145,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/keys/signing/rotate")
@@ -186,23 +177,11 @@ describe("SigningClient", () => {
             revoked: true,
             revoked_at: "revoked_at",
         };
+
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.keys.signing.get("kid");
-        expect(response).toEqual({
-            kid: "kid",
-            cert: "cert",
-            pkcs7: "pkcs7",
-            current: true,
-            next: true,
-            previous: true,
-            current_since: "current_since",
-            current_until: "current_until",
-            fingerprint: "fingerprint",
-            thumbprint: "thumbprint",
-            revoked: true,
-            revoked_at: "revoked_at",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -210,6 +189,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -222,6 +202,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -234,6 +215,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -246,6 +228,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -258,6 +241,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { cert: "cert", kid: "kid" };
+
         server
             .mockEndpoint()
             .put("/keys/signing/kid/revoke")
@@ -267,10 +251,7 @@ describe("SigningClient", () => {
             .build();
 
         const response = await client.keys.signing.revoke("kid");
-        expect(response).toEqual({
-            cert: "cert",
-            kid: "kid",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("revoke (2)", async () => {
@@ -278,6 +259,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/keys/signing/kid/revoke")
@@ -296,6 +278,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/keys/signing/kid/revoke")
@@ -314,6 +297,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/keys/signing/kid/revoke")
@@ -332,6 +316,7 @@ describe("SigningClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/keys/signing/kid/revoke")

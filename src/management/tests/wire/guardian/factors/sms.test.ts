@@ -15,6 +15,7 @@ describe("SmsClient", () => {
             auth_token: "auth_token",
             sid: "sid",
         };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/providers/twilio")
@@ -24,12 +25,7 @@ describe("SmsClient", () => {
             .build();
 
         const response = await client.guardian.factors.sms.getTwilioProvider();
-        expect(response).toEqual({
-            from: "from",
-            messaging_service_sid: "messaging_service_sid",
-            auth_token: "auth_token",
-            sid: "sid",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getTwilioProvider (2)", async () => {
@@ -37,6 +33,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/providers/twilio")
@@ -55,6 +52,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/providers/twilio")
@@ -73,6 +71,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/providers/twilio")
@@ -96,6 +95,7 @@ describe("SmsClient", () => {
             auth_token: "auth_token",
             sid: "sid",
         };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/providers/twilio")
@@ -106,12 +106,7 @@ describe("SmsClient", () => {
             .build();
 
         const response = await client.guardian.factors.sms.setTwilioProvider();
-        expect(response).toEqual({
-            from: "from",
-            messaging_service_sid: "messaging_service_sid",
-            auth_token: "auth_token",
-            sid: "sid",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setTwilioProvider (2)", async () => {
@@ -119,6 +114,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/providers/twilio")
@@ -138,6 +134,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/providers/twilio")
@@ -157,6 +154,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/providers/twilio")
@@ -176,6 +174,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { provider: "auth0" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/selected-provider")
@@ -185,9 +184,7 @@ describe("SmsClient", () => {
             .build();
 
         const response = await client.guardian.factors.sms.getSelectedProvider();
-        expect(response).toEqual({
-            provider: "auth0",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getSelectedProvider (2)", async () => {
@@ -195,6 +192,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/selected-provider")
@@ -213,6 +211,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/selected-provider")
@@ -231,6 +230,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/selected-provider")
@@ -249,6 +249,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { provider: "auth0" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/selected-provider")
@@ -261,9 +262,7 @@ describe("SmsClient", () => {
         const response = await client.guardian.factors.sms.setProvider({
             provider: "auth0",
         });
-        expect(response).toEqual({
-            provider: "auth0",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setProvider (2)", async () => {
@@ -271,6 +270,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/selected-provider")
@@ -292,6 +292,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/selected-provider")
@@ -313,6 +314,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { provider: "auth0" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/selected-provider")
@@ -337,6 +339,7 @@ describe("SmsClient", () => {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
         };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/templates")
@@ -346,10 +349,7 @@ describe("SmsClient", () => {
             .build();
 
         const response = await client.guardian.factors.sms.getTemplates();
-        expect(response).toEqual({
-            enrollment_message: "enrollment_message",
-            verification_message: "verification_message",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getTemplates (2)", async () => {
@@ -357,6 +357,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/templates")
@@ -375,6 +376,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/templates")
@@ -393,6 +395,7 @@ describe("SmsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/guardian/factors/sms/templates")
@@ -417,6 +420,7 @@ describe("SmsClient", () => {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
         };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/templates")
@@ -430,10 +434,7 @@ describe("SmsClient", () => {
             enrollment_message: "enrollment_message",
             verification_message: "verification_message",
         });
-        expect(response).toEqual({
-            enrollment_message: "enrollment_message",
-            verification_message: "verification_message",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("setTemplates (2)", async () => {
@@ -445,6 +446,7 @@ describe("SmsClient", () => {
             verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/templates")
@@ -472,6 +474,7 @@ describe("SmsClient", () => {
             verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/templates")
@@ -499,6 +502,7 @@ describe("SmsClient", () => {
             verification_message: "{{code}} is your verification code for {{tenant.friendly_name}}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/guardian/factors/sms/templates")

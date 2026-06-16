@@ -9,6 +9,7 @@ import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCode
 import * as errors from "../../../../errors/index.js";
 import * as Management from "../../../index.js";
 import { ExecutionsClient } from "../resources/executions/client/Client.js";
+import { ModulesClient } from "../resources/modules/client/Client.js";
 import { TriggersClient } from "../resources/triggers/client/Client.js";
 import { VersionsClient } from "../resources/versions/client/Client.js";
 
@@ -22,6 +23,7 @@ export class ActionsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ActionsClient.Options>;
     protected _versions: VersionsClient | undefined;
     protected _executions: ExecutionsClient | undefined;
+    protected _modules: ModulesClient | undefined;
     protected _triggers: TriggersClient | undefined;
 
     constructor(options: ActionsClient.Options) {
@@ -34,6 +36,10 @@ export class ActionsClient {
 
     public get executions(): ExecutionsClient {
         return (this._executions ??= new ExecutionsClient(this._options));
+    }
+
+    public get modules(): ModulesClient {
+        return (this._modules ??= new ModulesClient(this._options));
     }
 
     public get triggers(): TriggersClient {
@@ -53,7 +59,7 @@ export class ActionsClient {
      *
      * @example
      *     await client.actions.list({
-     *         triggerId: "triggerId",
+     *         triggerId: "post-login",
      *         actionName: "actionName",
      *         deployed: true,
      *         page: 1,
@@ -70,25 +76,14 @@ export class ActionsClient {
                 request: Management.ListActionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListActionsPaginatedResponseContent>> => {
                 const { triggerId, actionName, deployed, page = 0, per_page: perPage = 50, installed } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (triggerId !== undefined) {
-                    _queryParams["triggerId"] = triggerId;
-                }
-                if (actionName !== undefined) {
-                    _queryParams["actionName"] = actionName;
-                }
-                if (deployed !== undefined) {
-                    _queryParams["deployed"] = deployed?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (installed !== undefined) {
-                    _queryParams["installed"] = installed?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    triggerId: triggerId !== undefined ? triggerId : undefined,
+                    actionName,
+                    deployed,
+                    page,
+                    per_page: perPage,
+                    installed,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -104,7 +99,11 @@ export class ActionsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -176,7 +175,7 @@ export class ActionsClient {
      *     await client.actions.create({
      *         name: "name",
      *         supported_triggers: [{
-     *                 id: "id"
+     *                 id: "post-login"
      *             }]
      *     })
      */
@@ -207,7 +206,7 @@ export class ActionsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -286,7 +285,7 @@ export class ActionsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -353,11 +352,9 @@ export class ActionsClient {
         requestOptions?: ActionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const { force } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (force !== undefined) {
-            _queryParams["force"] = force?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            force,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -373,7 +370,11 @@ export class ActionsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -409,7 +410,7 @@ export class ActionsClient {
     }
 
     /**
-     * Update an existing action. If this action is currently bound to a trigger, updating it will <strong>not</strong> affect any user flows until the action is deployed.
+     * Update an existing action. If this action is currently bound to a trigger, updating it will **not** affect any user flows until the action is deployed.
      *
      * @param {string} id - The id of the action to update.
      * @param {Management.UpdateActionRequestContent} request
@@ -453,7 +454,7 @@ export class ActionsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -533,7 +534,7 @@ export class ActionsClient {
             ),
             method: "POST",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -617,7 +618,7 @@ export class ActionsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

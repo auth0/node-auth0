@@ -29,7 +29,7 @@ export class ClientGrantsClient {
     }
 
     /**
-     * Retrieve a list of <a href="https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants">client grants</a>, including the scopes associated with the application/API pair.
+     * Retrieve a list of [client grants](https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants), including the scopes associated with the application/API pair.
      *
      * @param {Management.ListClientGrantsRequestParameters} request
      * @param {ClientGrantsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -45,7 +45,8 @@ export class ClientGrantsClient {
      *         audience: "audience",
      *         client_id: "client_id",
      *         allow_any_organization: true,
-     *         subject_type: "client"
+     *         subject_type: "client",
+     *         default_for: "third_party_clients"
      *     })
      */
     public async list(
@@ -63,26 +64,17 @@ export class ClientGrantsClient {
                     client_id: clientId,
                     allow_any_organization: allowAnyOrganization,
                     subject_type: subjectType,
+                    default_for: defaultFor,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (audience !== undefined) {
-                    _queryParams["audience"] = audience;
-                }
-                if (clientId !== undefined) {
-                    _queryParams["client_id"] = clientId;
-                }
-                if (allowAnyOrganization !== undefined) {
-                    _queryParams["allow_any_organization"] = allowAnyOrganization?.toString() ?? null;
-                }
-                if (subjectType !== undefined) {
-                    _queryParams["subject_type"] = subjectType;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                    audience,
+                    client_id: clientId,
+                    allow_any_organization: allowAnyOrganization,
+                    subject_type: subjectType !== undefined ? subjectType : undefined,
+                    default_for: defaultFor !== undefined ? defaultFor : undefined,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -98,7 +90,11 @@ export class ClientGrantsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -152,7 +148,7 @@ export class ClientGrantsClient {
     }
 
     /**
-     * Create a client grant for a machine-to-machine login flow. To learn more, read <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a>.
+     * Create a client grant for a machine-to-machine login flow. To learn more, read [Client Credential Flow](https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow).
      *
      * @param {Management.CreateClientGrantRequestContent} request
      * @param {ClientGrantsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -166,7 +162,6 @@ export class ClientGrantsClient {
      *
      * @example
      *     await client.clientGrants.create({
-     *         client_id: "client_id",
      *         audience: "audience"
      *     })
      */
@@ -197,7 +192,7 @@ export class ClientGrantsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -240,7 +235,84 @@ export class ClientGrantsClient {
     }
 
     /**
-     * Delete the <a href="https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow">Client Credential Flow</a> from your machine-to-machine application.
+     * Retrieve a single [client grant](https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants), including the
+     * scopes associated with the application/API pair.
+     *
+     * @param {string} id - The ID of the client grant to retrieve.
+     * @param {ClientGrantsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.clientGrants.get("id")
+     */
+    public get(
+        id: string,
+        requestOptions?: ClientGrantsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetClientGrantResponseContent> {
+        return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
+    }
+
+    private async __get(
+        id: string,
+        requestOptions?: ClientGrantsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetClientGrantResponseContent>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `client-grants/${core.url.encodePathParam(id)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as Management.GetClientGrantResponseContent,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/client-grants/{id}");
+    }
+
+    /**
+     * Delete the [Client Credential Flow](https://www.auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow) from your machine-to-machine application.
      *
      * @param {string} id - ID of the client grant to delete.
      * @param {ClientGrantsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -276,7 +348,7 @@ export class ClientGrantsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -354,7 +426,7 @@ export class ClientGrantsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

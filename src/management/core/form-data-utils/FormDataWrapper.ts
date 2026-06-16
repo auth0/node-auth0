@@ -102,14 +102,14 @@ async function streamToBuffer(stream: unknown): Promise<Buffer> {
     }
 
     throw new Error(
-        "Unsupported stream type: " + typeof stream + ". Expected Node.js Readable stream or Web ReadableStream.",
+        `Unsupported stream type: ${typeof stream}. Expected Node.js Readable stream or Web ReadableStream.`,
     );
 }
 
 async function convertToBlob(value: unknown, contentType?: string): Promise<Blob> {
     if (isStreamLike(value) || isReadableStream(value)) {
         const buffer = await streamToBuffer(value);
-        return new Blob([buffer], { type: contentType });
+        return new Blob([buffer as BlobPart], { type: contentType });
     }
 
     if (value instanceof Blob) {
@@ -117,7 +117,7 @@ async function convertToBlob(value: unknown, contentType?: string): Promise<Blob
     }
 
     if (isBuffer(value)) {
-        return new Blob([value], { type: contentType });
+        return new Blob([value as BlobPart], { type: contentType });
     }
 
     if (value instanceof ArrayBuffer) {
@@ -125,7 +125,7 @@ async function convertToBlob(value: unknown, contentType?: string): Promise<Blob
     }
 
     if (isArrayBufferView(value)) {
-        return new Blob([value], { type: contentType });
+        return new Blob([value as BlobPart], { type: contentType });
     }
 
     if (typeof value === "string") {

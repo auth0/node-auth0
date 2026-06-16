@@ -64,31 +64,14 @@ export class DeliveriesClient {
             from: from_,
             take = 50,
         } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (statuses !== undefined) {
-            _queryParams["statuses"] = statuses;
-        }
-
-        if (eventTypes !== undefined) {
-            _queryParams["event_types"] = eventTypes;
-        }
-
-        if (dateFrom !== undefined) {
-            _queryParams["date_from"] = dateFrom;
-        }
-
-        if (dateTo !== undefined) {
-            _queryParams["date_to"] = dateTo;
-        }
-
-        if (from_ !== undefined) {
-            _queryParams["from"] = from_;
-        }
-
-        if (take !== undefined) {
-            _queryParams["take"] = take?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            statuses,
+            event_types: eventTypes,
+            date_from: dateFrom,
+            date_to: dateTo,
+            from: from_,
+            take,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -104,7 +87,11 @@ export class DeliveriesClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -185,7 +172,7 @@ export class DeliveriesClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

@@ -54,16 +54,11 @@ export class PermissionsClient {
                 request: Management.ListRolePermissionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListRolePermissionsOffsetPaginatedResponseContent>> => {
                 const { per_page: perPage = 50, page = 0, include_totals: includeTotals = true } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    per_page: perPage,
+                    page,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -79,7 +74,11 @@ export class PermissionsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -147,7 +146,7 @@ export class PermissionsClient {
     }
 
     /**
-     * Add one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> to a specified user role.
+     * Add one or more [permissions](https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions) to a specified user role.
      *
      * @param {string} id - ID of the role to add permissions to.
      * @param {Management.AddRolePermissionsRequestContent} request
@@ -156,6 +155,7 @@ export class PermissionsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -195,7 +195,7 @@ export class PermissionsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -216,6 +216,8 @@ export class PermissionsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -231,7 +233,7 @@ export class PermissionsClient {
     }
 
     /**
-     * Remove one or more <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions">permissions</a> from a specified user role.
+     * Remove one or more [permissions](https://auth0.com/docs/manage-users/access-control/configure-core-rbac/manage-permissions) from a specified user role.
      *
      * @param {string} id - ID of the role to remove permissions from.
      * @param {Management.DeleteRolePermissionsRequestContent} request
@@ -279,7 +281,7 @@ export class PermissionsClient {
             method: "DELETE",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

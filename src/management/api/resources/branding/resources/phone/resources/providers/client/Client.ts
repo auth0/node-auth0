@@ -26,7 +26,7 @@ export class ProvidersClient {
     }
 
     /**
-     * Retrieve a list of <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone providers</a> details set for a Tenant. A list of fields to include or exclude may also be specified.
+     * Retrieve a list of [phone providers](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers) details set for a Tenant. A list of fields to include or exclude may also be specified.
      *
      * @param {Management.ListBrandingPhoneProvidersRequestParameters} request
      * @param {ProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -53,11 +53,9 @@ export class ProvidersClient {
         requestOptions?: ProvidersClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.ListBrandingPhoneProvidersResponseContent>> {
         const { disabled } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (disabled !== undefined) {
-            _queryParams["disabled"] = disabled?.toString() ?? null;
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            disabled,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -73,7 +71,11 @@ export class ProvidersClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -110,8 +112,8 @@ export class ProvidersClient {
     }
 
     /**
-     * Create a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
-     * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
+     * Create a [phone provider](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers).
+     * The `credentials` object requires different properties depending on the phone provider (which is specified using the `name` property).
      *
      * @param {Management.CreateBrandingPhoneProviderRequestContent} request
      * @param {ProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -157,7 +159,7 @@ export class ProvidersClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -198,7 +200,7 @@ export class ProvidersClient {
     }
 
     /**
-     * Retrieve <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a> details. A list of fields to include or exclude may also be specified.
+     * Retrieve [phone provider](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers) details. A list of fields to include or exclude may also be specified.
      *
      * @param {string} id
      * @param {ProvidersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -238,7 +240,7 @@ export class ProvidersClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -318,7 +320,7 @@ export class ProvidersClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -357,8 +359,8 @@ export class ProvidersClient {
     }
 
     /**
-     * Update a <a href="https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers">phone provider</a>.
-     * The <code>credentials</code> object requires different properties depending on the phone provider (which is specified using the <code>name</code> property).
+     * Update a [phone provider](https://auth0.com/docs/customize/phone-messages/configure-phone-messaging-providers).
+     * The `credentials` object requires different properties depending on the phone provider (which is specified using the `name` property).
      *
      * @param {string} id
      * @param {Management.UpdateBrandingPhoneProviderRequestContent} request
@@ -403,7 +405,7 @@ export class ProvidersClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -496,7 +498,7 @@ export class ProvidersClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

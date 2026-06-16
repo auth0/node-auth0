@@ -15,6 +15,7 @@ describe("OrganizationsClient", () => {
                 { id: "id", name: "name", display_name: "display_name", token_quota: { client_credentials: {} } },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/client-grants/id/organizations")
@@ -23,19 +24,7 @@ describe("OrganizationsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            organizations: [
-                {
-                    id: "id",
-                    name: "name",
-                    display_name: "display_name",
-                    token_quota: {
-                        client_credentials: {},
-                    },
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.clientGrants.organizations.list("id", {
             from: "from",
             take: 1,
@@ -52,8 +41,9 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(400)
@@ -70,8 +60,9 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(401)
@@ -88,8 +79,9 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(403)
@@ -106,8 +98,28 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
+            .get("/client-grants/id/organizations")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.organizations.list("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
             .get("/client-grants/id/organizations")
             .respondWith()
             .statusCode(429)

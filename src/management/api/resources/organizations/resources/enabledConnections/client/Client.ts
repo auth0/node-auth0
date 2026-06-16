@@ -32,6 +32,7 @@ export class EnabledConnectionsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -56,16 +57,11 @@ export class EnabledConnectionsClient {
                 request: Management.ListOrganizationConnectionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationConnectionsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -81,7 +77,11 @@ export class EnabledConnectionsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -108,6 +108,8 @@ export class EnabledConnectionsClient {
                             );
                         case 403:
                             throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
                             throw new Management.TooManyRequestsError(
                                 _response.error.body as unknown,
@@ -150,7 +152,7 @@ export class EnabledConnectionsClient {
     /**
      * Enable a specific connection for a given Organization. To enable a connection, it must already exist within your tenant; connections cannot be created through this action.
      *
-     * <a href="https://auth0.com/docs/authenticate/identity-providers">Connections</a> represent the relationship between Auth0 and a source of users. Available types of connections include database, enterprise, and social.
+     * [Connections](https://auth0.com/docs/authenticate/identity-providers) represent the relationship between Auth0 and a source of users. Available types of connections include database, enterprise, and social.
      *
      * @param {string} id - Organization identifier.
      * @param {Management.AddOrganizationConnectionRequestContent} request
@@ -159,6 +161,7 @@ export class EnabledConnectionsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -195,7 +198,7 @@ export class EnabledConnectionsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -219,6 +222,8 @@ export class EnabledConnectionsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -247,6 +252,7 @@ export class EnabledConnectionsClient {
      *
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -280,7 +286,7 @@ export class EnabledConnectionsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -300,6 +306,8 @@ export class EnabledConnectionsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -322,7 +330,7 @@ export class EnabledConnectionsClient {
     /**
      * Disable a specific connection for an Organization. Once disabled, Organization members can no longer use that connection to authenticate.
      *
-     * <b>Note</b>: This action does not remove the connection from your tenant.
+     * **Note**: This action does not remove the connection from your tenant.
      *
      * @param {string} id - Organization identifier.
      * @param {string} connectionId - Connection identifier.
@@ -331,6 +339,7 @@ export class EnabledConnectionsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -364,7 +373,7 @@ export class EnabledConnectionsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -383,6 +392,8 @@ export class EnabledConnectionsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -413,6 +424,7 @@ export class EnabledConnectionsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -449,7 +461,7 @@ export class EnabledConnectionsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -473,6 +485,8 @@ export class EnabledConnectionsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:

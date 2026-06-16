@@ -12,9 +12,11 @@ import { CustomDomainsClient } from "./api/resources/customDomains/client/Client
 import { DeviceCredentialsClient } from "./api/resources/deviceCredentials/client/Client.js";
 import { EmailsClient } from "./api/resources/emails/client/Client.js";
 import { EmailTemplatesClient } from "./api/resources/emailTemplates/client/Client.js";
+import { EventsClient } from "./api/resources/events/client/Client.js";
 import { EventStreamsClient } from "./api/resources/eventStreams/client/Client.js";
 import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { FormsClient } from "./api/resources/forms/client/Client.js";
+import { GroupsClient } from "./api/resources/groups/client/Client.js";
 import { GuardianClient } from "./api/resources/guardian/client/Client.js";
 import { HooksClient } from "./api/resources/hooks/client/Client.js";
 import { JobsClient } from "./api/resources/jobs/client/Client.js";
@@ -24,6 +26,7 @@ import { LogStreamsClient } from "./api/resources/logStreams/client/Client.js";
 import { NetworkAclsClient } from "./api/resources/networkAcls/client/Client.js";
 import { OrganizationsClient } from "./api/resources/organizations/client/Client.js";
 import { PromptsClient } from "./api/resources/prompts/client/Client.js";
+import { RateLimitPoliciesClient } from "./api/resources/rateLimitPolicies/client/Client.js";
 import { RefreshTokensClient } from "./api/resources/refreshTokens/client/Client.js";
 import { ResourceServersClient } from "./api/resources/resourceServers/client/Client.js";
 import { RiskAssessmentsClient } from "./api/resources/riskAssessments/client/Client.js";
@@ -65,9 +68,11 @@ export class ManagementClient {
     protected _deviceCredentials: DeviceCredentialsClient | undefined;
     protected _emailTemplates: EmailTemplatesClient | undefined;
     protected _eventStreams: EventStreamsClient | undefined;
+    protected _events: EventsClient | undefined;
     protected _flows: FlowsClient | undefined;
     protected _forms: FormsClient | undefined;
     protected _userGrants: UserGrantsClient | undefined;
+    protected _groups: GroupsClient | undefined;
     protected _hooks: HooksClient | undefined;
     protected _jobs: JobsClient | undefined;
     protected _logStreams: LogStreamsClient | undefined;
@@ -75,6 +80,7 @@ export class ManagementClient {
     protected _networkAcls: NetworkAclsClient | undefined;
     protected _organizations: OrganizationsClient | undefined;
     protected _prompts: PromptsClient | undefined;
+    protected _rateLimitPolicies: RateLimitPoliciesClient | undefined;
     protected _refreshTokens: RefreshTokensClient | undefined;
     protected _resourceServers: ResourceServersClient | undefined;
     protected _roles: RolesClient | undefined;
@@ -142,6 +148,10 @@ export class ManagementClient {
         return (this._eventStreams ??= new EventStreamsClient(this._options));
     }
 
+    public get events(): EventsClient {
+        return (this._events ??= new EventsClient(this._options));
+    }
+
     public get flows(): FlowsClient {
         return (this._flows ??= new FlowsClient(this._options));
     }
@@ -152,6 +162,10 @@ export class ManagementClient {
 
     public get userGrants(): UserGrantsClient {
         return (this._userGrants ??= new UserGrantsClient(this._options));
+    }
+
+    public get groups(): GroupsClient {
+        return (this._groups ??= new GroupsClient(this._options));
     }
 
     public get hooks(): HooksClient {
@@ -180,6 +194,10 @@ export class ManagementClient {
 
     public get prompts(): PromptsClient {
         return (this._prompts ??= new PromptsClient(this._options));
+    }
+
+    public get rateLimitPolicies(): RateLimitPoliciesClient {
+        return (this._rateLimitPolicies ??= new RateLimitPoliciesClient(this._options));
     }
 
     public get refreshTokens(): RefreshTokensClient {
@@ -268,5 +286,36 @@ export class ManagementClient {
 
     public get verifiableCredentials(): VerifiableCredentialsClient {
         return (this._verifiableCredentials ??= new VerifiableCredentialsClient(this._options));
+    }
+
+    /**
+     * Make a passthrough request using the SDK's configured auth, retry, logging, etc.
+     * This is useful for making requests to endpoints not yet supported in the SDK.
+     * The input can be a URL string, URL object, or Request object. Relative paths are resolved against the configured base URL.
+     *
+     * @param {Request | string | URL} input - The URL, path, or Request object.
+     * @param {RequestInit} init - Standard fetch RequestInit options.
+     * @param {core.PassthroughRequest.RequestOptions} requestOptions - Per-request overrides (timeout, retries, headers, abort signal).
+     * @returns {Promise<Response>} A standard Response object.
+     */
+    public async fetch(
+        input: Request | string | URL,
+        init?: RequestInit,
+        requestOptions?: core.PassthroughRequest.RequestOptions,
+    ): Promise<Response> {
+        return core.makePassthroughRequest(
+            input,
+            init,
+            {
+                baseUrl: this._options.baseUrl ?? this._options.environment,
+                headers: this._options.headers,
+                timeoutInSeconds: this._options.timeoutInSeconds,
+                maxRetries: this._options.maxRetries,
+                fetch: this._options.fetch,
+                logging: this._options.logging,
+                getAuthHeaders: async () => (await this._options.authProvider.getAuthRequest()).headers,
+            },
+            requestOptions,
+        );
     }
 }

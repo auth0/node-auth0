@@ -23,7 +23,7 @@ export class OrganizationsClient {
     }
 
     /**
-     * Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review <a href="https://auth0.com/docs/manage-users/organizations">Auth0 Organizations</a>.
+     * Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review [Auth0 Organizations](https://auth0.com/docs/manage-users/organizations).
      *
      * @param {string} id - ID of the user to retrieve the organizations for.
      * @param {Management.ListUserOrganizationsRequestParameters} request
@@ -31,6 +31,7 @@ export class OrganizationsClient {
      *
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -50,16 +51,11 @@ export class OrganizationsClient {
                 request: Management.ListUserOrganizationsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListUserOrganizationsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -75,7 +71,11 @@ export class OrganizationsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -97,6 +97,8 @@ export class OrganizationsClient {
                             );
                         case 403:
                             throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
                             throw new Management.TooManyRequestsError(
                                 _response.error.body as unknown,

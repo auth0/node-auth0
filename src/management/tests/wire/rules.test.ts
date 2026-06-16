@@ -15,6 +15,7 @@ describe("RulesClient", () => {
             total: 1.1,
             rules: [{ name: "name", id: "id", enabled: true, script: "script", order: 1.1, stage: "stage" }],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/rules")
@@ -23,21 +24,7 @@ describe("RulesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            rules: [
-                {
-                    name: "name",
-                    id: "id",
-                    enabled: true,
-                    script: "script",
-                    order: 1.1,
-                    stage: "stage",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.rules.list({
             page: 1,
             per_page: 1,
@@ -58,6 +45,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/rules")
@@ -76,6 +64,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/rules")
@@ -94,6 +83,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/rules")
@@ -112,6 +102,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/rules")
@@ -130,6 +121,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/rules")
@@ -148,6 +140,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name", script: "script" };
         const rawResponseBody = { name: "name", id: "id", enabled: true, script: "script", order: 1.1, stage: "stage" };
+
         server
             .mockEndpoint()
             .post("/rules")
@@ -161,14 +154,7 @@ describe("RulesClient", () => {
             name: "name",
             script: "script",
         });
-        expect(response).toEqual({
-            name: "name",
-            id: "id",
-            enabled: true,
-            script: "script",
-            order: 1.1,
-            stage: "stage",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -179,6 +165,7 @@ describe("RulesClient", () => {
             script: "function (user, context, callback) {\n  callback(null, user, context);\n}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/rules")
@@ -204,6 +191,7 @@ describe("RulesClient", () => {
             script: "function (user, context, callback) {\n  callback(null, user, context);\n}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/rules")
@@ -229,6 +217,7 @@ describe("RulesClient", () => {
             script: "function (user, context, callback) {\n  callback(null, user, context);\n}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/rules")
@@ -254,6 +243,7 @@ describe("RulesClient", () => {
             script: "function (user, context, callback) {\n  callback(null, user, context);\n}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/rules")
@@ -279,6 +269,7 @@ describe("RulesClient", () => {
             script: "function (user, context, callback) {\n  callback(null, user, context);\n}",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/rules")
@@ -301,20 +292,14 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { name: "name", id: "id", enabled: true, script: "script", order: 1.1, stage: "stage" };
+
         server.mockEndpoint().get("/rules/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.rules.get("id", {
             fields: "fields",
             include_fields: true,
         });
-        expect(response).toEqual({
-            name: "name",
-            id: "id",
-            enabled: true,
-            script: "script",
-            order: 1.1,
-            stage: "stage",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -322,6 +307,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -334,6 +320,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -346,6 +333,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -358,6 +346,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -370,6 +359,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -392,6 +382,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/rules/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -404,6 +395,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/rules/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -416,6 +408,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/rules/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -428,6 +421,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/rules/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -440,6 +434,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { name: "name", id: "id", enabled: true, script: "script", order: 1.1, stage: "stage" };
+
         server
             .mockEndpoint()
             .patch("/rules/id")
@@ -450,14 +445,7 @@ describe("RulesClient", () => {
             .build();
 
         const response = await client.rules.update("id");
-        expect(response).toEqual({
-            name: "name",
-            id: "id",
-            enabled: true,
-            script: "script",
-            order: 1.1,
-            stage: "stage",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -465,6 +453,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/rules/id")
@@ -484,6 +473,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/rules/id")
@@ -503,6 +493,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/rules/id")
@@ -522,6 +513,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/rules/id")
@@ -541,6 +533,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/rules/id")
@@ -560,6 +553,7 @@ describe("RulesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/rules/id")

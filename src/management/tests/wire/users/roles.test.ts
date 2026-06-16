@@ -15,6 +15,7 @@ describe("RolesClient", () => {
             total: 1.1,
             roles: [{ id: "id", name: "name", description: "description" }],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/roles")
@@ -23,18 +24,7 @@ describe("RolesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            roles: [
-                {
-                    id: "id",
-                    name: "name",
-                    description: "description",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.users.roles.list("id", {
             per_page: 1,
             page: 1,
@@ -52,6 +42,26 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/users/id/roles")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.roles.list("id");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/roles")
@@ -65,11 +75,12 @@ describe("RolesClient", () => {
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
-    test("list (3)", async () => {
+    test("list (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/roles")
@@ -83,11 +94,31 @@ describe("RolesClient", () => {
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
-    test("list (4)", async () => {
+    test("list (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/users/id/roles")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.roles.list("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/roles")
@@ -119,6 +150,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/roles")
@@ -140,6 +172,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/roles")
@@ -161,6 +194,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/roles")
@@ -182,6 +216,29 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/users/id/roles")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.roles.assign("id", {
+                roles: ["roles", "roles"],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("assign (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { roles: ["roles", "roles"] };
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/roles")
@@ -216,6 +273,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/roles")
@@ -237,6 +295,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/roles")
@@ -258,6 +317,29 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { roles: ["roles", "roles"] };
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/users/id/roles")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.roles.delete("id", {
+                roles: ["roles", "roles"],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("delete (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { roles: ["roles", "roles"] };
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/roles")

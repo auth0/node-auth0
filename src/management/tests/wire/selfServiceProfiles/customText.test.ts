@@ -10,6 +10,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/self-service-profiles/id/custom-text/en/get-started")
@@ -19,9 +20,7 @@ describe("CustomTextClient", () => {
             .build();
 
         const response = await client.selfServiceProfiles.customText.list("id", "en", "get-started");
-        expect(response).toEqual({
-            key: "value",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -29,6 +28,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/self-service-profiles/id/custom-text/en/get-started")
@@ -47,6 +47,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/self-service-profiles/id/custom-text/en/get-started")
@@ -65,6 +66,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/self-service-profiles/id/custom-text/en/get-started")
@@ -83,6 +85,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/self-service-profiles/id/custom-text/en/get-started")
@@ -101,6 +104,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { key: "value" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/self-service-profiles/id/custom-text/en/get-started")
@@ -113,9 +117,7 @@ describe("CustomTextClient", () => {
         const response = await client.selfServiceProfiles.customText.set("id", "en", "get-started", {
             key: "value",
         });
-        expect(response).toEqual({
-            key: "value",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("set (2)", async () => {
@@ -123,6 +125,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: "string" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/self-service-profiles/id/custom-text/en/get-started")
@@ -144,6 +147,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: "string" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/self-service-profiles/id/custom-text/en/get-started")
@@ -165,6 +169,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: "string" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/self-service-profiles/id/custom-text/en/get-started")
@@ -186,6 +191,7 @@ describe("CustomTextClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { string: "string" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/self-service-profiles/id/custom-text/en/get-started")

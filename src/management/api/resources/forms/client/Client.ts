@@ -35,7 +35,8 @@ export class FormsClient {
      *     await client.forms.list({
      *         page: 1,
      *         per_page: 1,
-     *         include_totals: true
+     *         include_totals: true,
+     *         hydrate: ["flow_count"]
      *     })
      */
     public async list(
@@ -47,23 +48,16 @@ export class FormsClient {
                 request: Management.ListFormsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListFormsOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true, hydrate } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
-                if (hydrate !== undefined) {
-                    if (Array.isArray(hydrate)) {
-                        _queryParams["hydrate"] = hydrate.map((item) => item);
-                    } else {
-                        _queryParams["hydrate"] = hydrate;
-                    }
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                    hydrate: Array.isArray(hydrate)
+                        ? hydrate.map((item) => item)
+                        : hydrate !== undefined
+                          ? hydrate
+                          : undefined,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -79,7 +73,11 @@ export class FormsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -177,7 +175,7 @@ export class FormsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -224,7 +222,9 @@ export class FormsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.forms.get("id")
+     *     await client.forms.get("id", {
+     *         hydrate: ["flow_count"]
+     *     })
      */
     public get(
         id: string,
@@ -240,15 +240,9 @@ export class FormsClient {
         requestOptions?: FormsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.GetFormResponseContent>> {
         const { hydrate } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (hydrate !== undefined) {
-            if (Array.isArray(hydrate)) {
-                _queryParams["hydrate"] = hydrate.map((item) => item);
-            } else {
-                _queryParams["hydrate"] = hydrate;
-            }
-        }
-
+        const _queryParams: Record<string, unknown> = {
+            hydrate: Array.isArray(hydrate) ? hydrate.map((item) => item) : hydrate !== undefined ? hydrate : undefined,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -264,7 +258,11 @@ export class FormsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -334,7 +332,7 @@ export class FormsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -408,7 +406,7 @@ export class FormsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

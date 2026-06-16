@@ -22,6 +22,7 @@ describe("PermissionsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles/id/permissions")
@@ -30,19 +31,7 @@ describe("PermissionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            permissions: [
-                {
-                    resource_server_identifier: "resource_server_identifier",
-                    permission_name: "permission_name",
-                    resource_server_name: "resource_server_name",
-                    description: "description",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.roles.permissions.list("id", {
             per_page: 1,
             page: 1,
@@ -60,6 +49,7 @@ describe("PermissionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles/id/permissions")
@@ -78,6 +68,7 @@ describe("PermissionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles/id/permissions")
@@ -96,6 +87,7 @@ describe("PermissionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles/id/permissions")
@@ -114,6 +106,7 @@ describe("PermissionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles/id/permissions")
@@ -132,6 +125,7 @@ describe("PermissionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles/id/permissions")
@@ -183,6 +177,7 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles/id/permissions")
@@ -218,6 +213,7 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles/id/permissions")
@@ -253,6 +249,7 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles/id/permissions")
@@ -288,6 +285,43 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/roles/id/permissions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.roles.permissions.add("id", {
+                permissions: [
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                    {
+                        resource_server_identifier: "resource_server_identifier",
+                        permission_name: "permission_name",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("add (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            permissions: [
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+                { resource_server_identifier: "resource_server_identifier", permission_name: "permission_name" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles/id/permissions")
@@ -351,6 +385,7 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/roles/id/permissions")
@@ -386,6 +421,7 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/roles/id/permissions")
@@ -421,6 +457,7 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/roles/id/permissions")
@@ -456,6 +493,7 @@ describe("PermissionsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/roles/id/permissions")

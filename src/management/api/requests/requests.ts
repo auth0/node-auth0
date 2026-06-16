@@ -7,7 +7,7 @@ import * as Management from "../index.js";
 /**
  * @example
  *     {
- *         triggerId: "triggerId",
+ *         triggerId: "post-login",
  *         actionName: "actionName",
  *         deployed: true,
  *         page: 1,
@@ -35,7 +35,7 @@ export interface ListActionsRequestParameters {
  *     {
  *         name: "name",
  *         supported_triggers: [{
- *                 id: "id"
+ *                 id: "post-login"
  *             }]
  *     }
  */
@@ -52,6 +52,8 @@ export interface CreateActionRequestContent {
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretRequest[];
+    /** The list of action modules and their versions used by this action. */
+    modules?: Management.ActionModuleReference[];
     /** True if the action should be deployed after creation. */
     deploy?: boolean;
 }
@@ -84,6 +86,8 @@ export interface UpdateActionRequestContent {
     runtime?: string;
     /** The list of secrets that are included in an action or a version of an action. */
     secrets?: Management.ActionSecretRequest[];
+    /** The list of action modules and their versions used by this action. */
+    modules?: Management.ActionModuleReference[];
 }
 
 /**
@@ -119,7 +123,8 @@ export interface UpdateBrandingRequestContent {
  *         audience: "audience",
  *         client_id: "client_id",
  *         allow_any_organization: true,
- *         subject_type: "client"
+ *         subject_type: "client",
+ *         default_for: "third_party_clients"
  *     }
  */
 export interface ListClientGrantsRequestParameters {
@@ -133,30 +138,34 @@ export interface ListClientGrantsRequestParameters {
     client_id?: string | null;
     /** Optional filter on allow_any_organization. */
     allow_any_organization?: Management.ClientGrantAllowAnyOrganizationEnum | null;
-    /** The type of application access the client grant allows. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href="https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** The type of application access the client grant allows. */
     subject_type?: Management.ClientGrantSubjectTypeEnum | null;
+    /** Applies this client grant as the default for all clients in the specified group. The only accepted value is <a href="https://auth0.com/docs/get-started/applications/application-access-to-apis-client-grants#default-permissions-for-third-party-applications">`third_party_clients`</a>, which applies the grant to all third-party clients. Per-client grants for the same audience take precedence. Mutually exclusive with `client_id`. */
+    default_for?: Management.ClientGrantDefaultForEnum | null;
 }
 
 /**
  * @example
  *     {
- *         client_id: "client_id",
  *         audience: "audience"
  *     }
  */
 export interface CreateClientGrantRequestContent {
     /** ID of the client. */
-    client_id: string;
+    client_id?: string;
     /** The audience (API identifier) of this client grant */
     audience: string;
+    default_for?: Management.ClientGrantDefaultForEnum;
     organization_usage?: Management.ClientGrantOrganizationUsageEnum;
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean;
     /** Scopes allowed for this client grant. */
     scope?: string[];
     subject_type?: Management.ClientGrantSubjectTypeEnum;
-    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** Types of authorization_details allowed for this client grant. */
     authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean;
 }
 
 /**
@@ -165,12 +174,14 @@ export interface CreateClientGrantRequestContent {
  */
 export interface UpdateClientGrantRequestContent {
     /** Scopes allowed for this client grant. */
-    scope?: string[];
+    scope?: string[] | null;
     organization_usage?: Management.ClientGrantOrganizationNullableUsageEnum | null;
     /** Controls allowing any organization to be used with this grant */
     allow_any_organization?: boolean | null;
-    /** Types of authorization_details allowed for this client grant. Use of this field is subject to the applicable Free Trial terms in Okta’s <a href= "https://www.okta.com/legal/"> Master Subscription Agreement.</a> */
+    /** Types of authorization_details allowed for this client grant. */
     authorization_details_types?: string[];
+    /** If enabled, all scopes configured on the resource server are allowed for this grant. */
+    allow_all_scopes?: boolean | null;
 }
 
 /**
@@ -184,6 +195,7 @@ export interface UpdateClientGrantRequestContent {
  *         is_global: true,
  *         is_first_party: true,
  *         app_type: "app_type",
+ *         external_client_id: "external_client_id",
  *         q: "q"
  *     }
  */
@@ -204,7 +216,9 @@ export interface ListClientsRequestParameters {
     is_first_party?: boolean | null;
     /** Optional filter by a comma-separated list of application types. */
     app_type?: string | null;
-    /** Advanced Query in <a href="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i> */
+    /** Optional filter by the <a href="https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-04.html">Client ID Metadata Document</a> URI for CIMD-registered clients. */
+    external_client_id?: string | null;
+    /** Advanced Query in <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i> */
     q?: string | null;
 }
 
@@ -224,6 +238,7 @@ export interface CreateClientRequestContent {
     /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
     callbacks?: string[];
     oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    /** Configuration for OIDC backchannel logout (deprecated, in favor of oidc_logout) */
     oidc_backchannel_logout?: Management.ClientOidcBackchannelLogoutSettings;
     session_transfer?: Management.ClientSessionTransferConfiguration | null;
     /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
@@ -270,6 +285,7 @@ export interface CreateClientRequestContent {
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
     native_social_login?: Management.NativeSocialLogin;
+    fedcm_login?: Management.FedCmLogin;
     refresh_token?: Management.ClientRefreshTokenConfiguration | null;
     default_organization?: Management.ClientDefaultOrganization | null;
     organization_usage?: Management.ClientOrganizationUsageEnum;
@@ -295,8 +311,33 @@ export interface CreateClientRequestContent {
     token_quota?: Management.CreateTokenQuota;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum;
     express_configuration?: Management.ExpressConfiguration;
+    my_organization_configuration?: Management.ClientMyOrganizationPostConfiguration;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+}
+
+/**
+ * @example
+ *     {
+ *         external_client_id: "external_client_id"
+ *     }
+ */
+export interface PreviewCimdMetadataRequestContent {
+    /** URL to the Client ID Metadata Document */
+    external_client_id: string;
+}
+
+/**
+ * @example
+ *     {
+ *         external_client_id: "external_client_id"
+ *     }
+ */
+export interface RegisterCimdClientRequestContent {
+    /** URL to the Client ID Metadata Document. Acts as the unique identifier for upsert operations. */
+    external_client_id: string;
 }
 
 /**
@@ -329,6 +370,7 @@ export interface UpdateClientRequestContent {
     /** A set of URLs that are valid to call back from Auth0 when authenticating users */
     callbacks?: string[];
     oidc_logout?: Management.ClientOidcBackchannelLogoutSettings;
+    /** Configuration for OIDC backchannel logout (deprecated, in favor of oidc_logout) */
     oidc_backchannel_logout?: Management.ClientOidcBackchannelLogoutSettings;
     session_transfer?: Management.ClientSessionTransferConfiguration | null;
     /** A set of URLs that represents valid origins for CORS */
@@ -341,9 +383,11 @@ export interface UpdateClientRequestContent {
     client_aliases?: string[];
     /** Ids of clients that will be allowed to perform delegation requests. Clients that will be allowed to make delegation request. By default, all your clients will be allowed. This field allows you to specify specific clients */
     allowed_clients?: string[];
-    /** URLs that are valid to redirect to after logout from Auth0. */
+    /** URLs that are valid to redirect to after logout from Auth0 */
     allowed_logout_urls?: string[];
+    /** An object that holds settings related to how JWTs are created */
     jwt_configuration?: Management.ClientJwtConfiguration;
+    /** The client's encryption key */
     encryption_key?: Management.ClientEncryptionKey | null;
     /** <code>true</code> to use Auth0 instead of the IdP to do Single Sign On, <code>false</code> otherwise (default: <code>false</code>) */
     sso?: boolean;
@@ -371,16 +415,18 @@ export interface UpdateClientRequestContent {
     form_template?: string;
     addons?: Management.ClientAddons;
     client_metadata?: Management.ClientMetadata;
+    /** Configuration related to native mobile apps */
     mobile?: Management.ClientMobile;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
     native_social_login?: Management.NativeSocialLogin;
+    fedcm_login?: Management.FedCmLogin;
     refresh_token?: Management.ClientRefreshTokenConfiguration | null;
     default_organization?: Management.ClientDefaultOrganization | null;
     organization_usage?: Management.ClientOrganizationUsagePatchEnum | null;
     organization_require_behavior?: Management.ClientOrganizationRequireBehaviorPatchEnum | null;
     /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
-    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[];
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | null;
     client_authentication_methods?: Management.ClientAuthenticationMethod | null;
     /** Makes the use of Pushed Authorization Requests mandatory for this client */
     require_pushed_authorization_requests?: boolean;
@@ -398,7 +444,12 @@ export interface UpdateClientRequestContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     express_configuration?: Management.ExpressConfigurationOrNull | null;
-    async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration;
+    my_organization_configuration?: Management.ClientMyOrganizationPatchConfiguration | null;
+    async_approval_notification_channels?:
+        | (Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration | undefined)
+        | null;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum;
 }
 
 /**
@@ -448,6 +499,7 @@ export interface UpdateConnectionProfileRequestContent {
  *     {
  *         from: "from",
  *         take: 1,
+ *         strategy: ["ad"],
  *         name: "name",
  *         fields: "fields",
  *         include_fields: true
@@ -482,7 +534,7 @@ export interface CreateConnectionRequestContent {
     display_name?: string;
     strategy: Management.ConnectionIdentityProviderEnum;
     options?: Management.ConnectionPropertiesOptions;
-    /** DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
     enabled_clients?: string[];
     /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
     is_domain_connection?: boolean;
@@ -518,7 +570,7 @@ export interface UpdateConnectionRequestContent {
     display_name?: string;
     options?: Management.UpdateConnectionOptions | null;
     /** DEPRECATED property. Use the PATCH /v2/connections/{id}/clients endpoint to enable or disable the connection for any clients. */
-    enabled_clients?: string[];
+    enabled_clients?: string[] | null;
     /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
     is_domain_connection?: boolean;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. (Defaults to <code>false</code>.) */
@@ -540,7 +592,7 @@ export interface UpdateConnectionRequestContent {
  *     }
  */
 export interface ListCustomDomainsRequestParameters {
-    /** Query in <a href ="http://www.lucenetutorial.com/lucene-query-syntax.html">Lucene query string syntax</a>. */
+    /** Query in <a href ="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene query string syntax</a>. */
     q?: string | null;
     /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
     fields?: string | null;
@@ -565,6 +617,19 @@ export interface CreateCustomDomainRequestContent {
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
     domain_metadata?: Management.DomainMetadata;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided, the full domain will be used. */
+    relying_party_identifier?: string;
+}
+
+/**
+ * @example
+ *     {
+ *         domain: "domain"
+ *     }
+ */
+export interface SetDefaultCustomDomainRequestContent {
+    /** The domain to set as the default custom domain. Must be a verified custom domain or the canonical domain. */
+    domain: string;
 }
 
 /**
@@ -572,9 +637,12 @@ export interface CreateCustomDomainRequestContent {
  *     {}
  */
 export interface UpdateCustomDomainRequestContent {
+    /** recommended includes TLS 1.2 */
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
     custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
     domain_metadata?: Management.DomainMetadata;
+    /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. Set to null to remove the rpId and fall back to using the full domain. */
+    relying_party_identifier?: string | null;
 }
 
 /**
@@ -613,6 +681,7 @@ export interface ListDeviceCredentialsRequestParameters {
  * @example
  *     {
  *         device_name: "device_name",
+ *         type: "public_key",
  *         value: "value",
  *         device_id: "device_id"
  *     }
@@ -620,6 +689,7 @@ export interface ListDeviceCredentialsRequestParameters {
 export interface CreatePublicKeyDeviceCredentialRequestContent {
     /** Name for this device easily recognized by owner. */
     device_name: string;
+    type: Management.DeviceCredentialPublicKeyTypeEnum;
     /** Base64 encoded string containing the credential. */
     value: string;
     /** Unique identifier for the device. Recommend using <a href="http://developer.android.com/reference/android/provider/Settings.Secure.html#ANDROID_ID">Android_ID</a> on Android and <a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIDevice_Class/index.html#//apple_ref/occ/instp/UIDevice/identifierForVendor">identifierForVendor</a>. */
@@ -734,7 +804,7 @@ export interface UpdateEventStreamRequestContent {
 /**
  * @example
  *     {
- *         event_type: "user.created"
+ *         event_type: "group.created"
  *     }
  */
 export interface CreateEventStreamTestEventRequestContent {
@@ -745,13 +815,33 @@ export interface CreateEventStreamTestEventRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         from_timestamp: "from_timestamp",
+ *         event_type: ["group.created"]
+ *     }
+ */
+export interface SubscribeEventsRequestParameters {
+    /** Opaque token representing position in the stream. If not provided, stream will start from the latest events. */
+    from?: string | null;
+    /** RFC-3339 timestamp indicating where to start streaming events from. This should only be used on the initial query when a cursor may not be available. Subsequent requests should use the cursor (from) as it will be more accurate. */
+    from_timestamp?: string | null;
+    /** Event type(s) to listen for. Specify multiple times for multiple types (e.g., ?event_type=user.created&event_type=user.updated). If not provided, all event types will be streamed. */
+    event_type?:
+        | (Management.EventStreamSubscribeEventsEventTypeEnum | null)
+        | (Management.EventStreamSubscribeEventsEventTypeEnum | null)[];
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
+ *         hydrate: ["form_count"],
  *         synchronous: true
  *     }
  */
-export interface FlowsListRequest {
+export interface ListFlowsRequestParameters {
     /** Page index of the results to return. First page is 0. */
     page?: number | null;
     /** Number of results per page. Defaults to 50. */
@@ -759,7 +849,9 @@ export interface FlowsListRequest {
     /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
     include_totals?: boolean | null;
     /** hydration param */
-    hydrate?: ("form_count" | null) | ("form_count" | null)[];
+    hydrate?:
+        | (Management.ListFlowsRequestParametersHydrateEnum | null)
+        | (Management.ListFlowsRequestParametersHydrateEnum | null)[];
     /** flag to filter by sync/async flows */
     synchronous?: boolean | null;
 }
@@ -777,7 +869,9 @@ export interface CreateFlowRequestContent {
 
 /**
  * @example
- *     {}
+ *     {
+ *         hydrate: ["form_count"]
+ *     }
  */
 export interface GetFlowRequestParameters {
     /** hydration param */
@@ -792,7 +886,7 @@ export interface GetFlowRequestParameters {
  */
 export interface UpdateFlowRequestContent {
     name?: string;
-    actions?: Management.FlowAction[];
+    actions?: Management.FlowAction[] | null;
 }
 
 /**
@@ -800,7 +894,8 @@ export interface UpdateFlowRequestContent {
  *     {
  *         page: 1,
  *         per_page: 1,
- *         include_totals: true
+ *         include_totals: true,
+ *         hydrate: ["flow_count"]
  *     }
  */
 export interface ListFormsRequestParameters {
@@ -835,7 +930,9 @@ export interface CreateFormRequestContent {
 
 /**
  * @example
- *     {}
+ *     {
+ *         hydrate: ["flow_count"]
+ *     }
  */
 export interface GetFormRequestParameters {
     /** Query parameter to hydrate the response with additional data */
@@ -899,6 +996,38 @@ export interface DeleteUserGrantByUserIdRequestParameters {
 /**
  * @example
  *     {
+ *         connection_id: "connection_id",
+ *         name: "name",
+ *         external_id: "external_id",
+ *         search: "search",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListGroupsRequestParameters {
+    /** Filter groups by connection ID. */
+    connection_id?: string | null;
+    /** Filter groups by name. */
+    name?: string | null;
+    /** Filter groups by external ID. */
+    external_id?: string | null;
+    /** Search for groups by name or external ID. */
+    search?: string | null;
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
@@ -938,6 +1067,7 @@ export interface CreateHookRequestContent {
     /** Whether this hook will be executed (true) or ignored (false). */
     enabled?: boolean;
     dependencies?: Management.HookDependencies;
+    /** Execution stage of this rule. Can be `credentials-exchange`, `pre-user-registration`, `post-user-registration`, `post-change-password`, or `send-phone-message`. */
     triggerId: Management.HookTriggerIdEnum;
 }
 
@@ -1037,7 +1167,6 @@ export interface ListNetworkAclsRequestParameters {
  *     {
  *         description: "description",
  *         active: true,
- *         priority: 1.1,
  *         rule: {
  *             action: {},
  *             scope: "management"
@@ -1049,7 +1178,7 @@ export interface CreateNetworkAclRequestContent {
     /** Indicates whether or not this access control list is actively being used */
     active: boolean;
     /** Indicates the order in which the ACL will be evaluated relative to other ACL rules. */
-    priority: number;
+    priority?: number;
     rule: Management.NetworkAclRule;
 }
 
@@ -1058,7 +1187,6 @@ export interface CreateNetworkAclRequestContent {
  *     {
  *         description: "description",
  *         active: true,
- *         priority: 1.1,
  *         rule: {
  *             action: {},
  *             scope: "management"
@@ -1070,7 +1198,7 @@ export interface SetNetworkAclRequestContent {
     /** Indicates whether or not this access control list is actively being used */
     active: boolean;
     /** Indicates the order in which the ACL will be evaluated relative to other ACL rules. */
-    priority: number;
+    priority?: number;
     rule: Management.NetworkAclRule;
 }
 
@@ -1150,15 +1278,112 @@ export interface UpdateSettingsRequestContent {
 
 /**
  * @example
+ *     {
+ *         resource: "oauth_authentication_api",
+ *         consumer: "client",
+ *         consumer_selector: "consumer_selector",
+ *         take: 1,
+ *         from: "from"
+ *     }
+ */
+export interface ListRateLimitPoliciesRequestParameters {
+    /** The API protected by the Rate Limit Policy. */
+    resource?: Management.RateLimitPolicyResourceEnum | null;
+    /** The consumer to which the rate limit policy applies. */
+    consumer?: Management.RateLimitPolicyConsumerEnum | null;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Cursor for pagination. */
+    from?: string | null;
+}
+
+/**
+ * @example
+ *     {
+ *         resource: "oauth_authentication_api",
+ *         consumer: "client",
+ *         consumer_selector: "consumer_selector",
+ *         configuration: {
+ *             action: "allow"
+ *         }
+ *     }
+ */
+export interface CreateRateLimitPolicyRequestContent {
+    resource: Management.RateLimitPolicyResourceEnum;
+    consumer: Management.RateLimitPolicyConsumerEnum;
+    /** Identifier or category within the consumer to which the policy applies. Supported values: `client_id:<client_id>` to target a specific client by ID, `client_id:<cimd_uri>` to target a CIMD client by URI, `cimd_clients` to target all CIMD clients, `third_party_clients` to target all third-party clients, or `default` to apply the policy to any consumer identifier not otherwise explicitly targeted. */
+    consumer_selector: string;
+    configuration: Management.RateLimitPolicyConfiguration;
+}
+
+/**
+ * @example
+ *     {
+ *         configuration: {
+ *             action: "allow"
+ *         }
+ *     }
+ */
+export interface PatchRateLimitPolicyRequestContent {
+    configuration: Management.PatchRateLimitPolicyConfigurationRequestContent;
+}
+
+/**
+ * @example
+ *     {
+ *         user_id: "user_id",
+ *         client_id: "client_id",
+ *         from: "from",
+ *         take: 1,
+ *         fields: "fields",
+ *         include_fields: true
+ *     }
+ */
+export interface GetRefreshTokensRequestParameters {
+    /** ID of the user whose refresh tokens to retrieve. Required. */
+    user_id: string;
+    /** Filter results by client ID. Only valid when user_id is provided. */
+    client_id?: string | null;
+    /** An opaque cursor from which to start the selection (exclusive). Expires after 24 hours. Obtained from the next property of a previous response. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface RevokeRefreshTokensRequestContent {
+    /** Array of refresh token IDs to revoke. Limited to 100 at a time. */
+    ids?: string[];
+    /** Revoke all refresh tokens for this user. */
+    user_id?: string;
+    /** Revoke refresh tokens for this client. Must be paired with `user_id`; optionally narrowed further with `audience`. */
+    client_id?: string;
+    /** Resource server identifier (audience) to scope the revocation. Must be used with both `user_id` and `client_id`. */
+    audience?: string;
+}
+
+/**
+ * @example
  *     {}
  */
 export interface UpdateRefreshTokenRequestContent {
+    /** Metadata associated with the refresh token. Pass null or {} to remove all metadata. */
     refresh_token_metadata?: (Management.RefreshTokenMetadata | undefined) | null;
 }
 
 /**
  * @example
  *     {
+ *         identifiers: ["identifiers"],
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
@@ -1196,6 +1421,10 @@ export interface CreateResourceServerRequestContent {
     signing_secret?: string;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
     allow_offline_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
+    allow_online_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
@@ -1204,10 +1433,11 @@ export interface CreateResourceServerRequestContent {
     /** Whether to enforce authorization policies (true) or to ignore them (false). */
     enforce_policies?: boolean;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
-    authorization_details?: unknown[];
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
+    authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
 }
 
 /**
@@ -1237,16 +1467,21 @@ export interface UpdateResourceServerRequestContent {
     skip_consent_for_verifiable_first_party_clients?: boolean;
     /** Whether refresh tokens can be issued for this API (true) or not (false). */
     allow_offline_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
+    allow_online_access?: boolean;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
     /** Whether authorization policies are enforced (true) or not enforced (false). */
     enforce_policies?: boolean;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
-    consent_policy?: (Management.ResourceServerConsentPolicyEnum | undefined) | null;
-    authorization_details?: unknown[];
+    consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
+    authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
+    authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
 }
 
 /**
@@ -1406,9 +1641,9 @@ export interface CreateSelfServiceProfileRequestContent {
     /** The description of the self-service Profile. */
     description?: string;
     branding?: Management.SelfServiceProfileBrandingProperties;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
+    /** List of IdP strategies that will be shown to users during the Self-Service Enterprise Configuration flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
     allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
-    /** List of attributes to be mapped that will be shown to the user during the SS-SSO flow. */
+    /** List of attributes to be mapped that will be shown to the user during the Self-Service Enterprise Configuration flow. */
     user_attributes?: Management.SelfServiceProfileUserAttribute[];
     /** ID of the user-attribute-profile to associate with this self-service profile. */
     user_attribute_profile_id?: string;
@@ -1423,7 +1658,7 @@ export interface UpdateSelfServiceProfileRequestContent {
     name?: string;
     description?: (Management.SelfServiceProfileDescription | undefined) | null;
     branding?: Management.SelfServiceProfileBranding | undefined;
-    /** List of IdP strategies that will be shown to users during the Self-Service SSO flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `keycloak-samlp`, `pingfederate`] */
+    /** List of IdP strategies that will be shown to users during the Self-Service Enterprise Configuration flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
     allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
     user_attributes?: (Management.SelfServiceProfileUserAttributes | undefined) | null;
     /** ID of the user-attribute-profile to associate with this self-service profile. */
@@ -1435,6 +1670,7 @@ export interface UpdateSelfServiceProfileRequestContent {
  *     {}
  */
 export interface UpdateSessionRequestContent {
+    /** Metadata associated with the session. Pass null or {} to remove all session_metadata. */
     session_metadata?: (Management.SessionMetadata | undefined) | null;
 }
 
@@ -1490,7 +1726,7 @@ export interface VerifyEmailTicketRequestContent {
  *     {}
  */
 export interface ChangePasswordTicketRequestContent {
-    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using client_id or organization_id. */
+    /** URL the user will be redirected to in the classic Universal Login experience once the ticket is used. Cannot be specified when using organization_id. May be specified together with client_id when the tenant has a custom password reset page enabled and a password-reset-post-challenge Action bound. */
     result_url?: string;
     /** user_id of for whom the ticket should be created. */
     user_id?: string;
@@ -1530,7 +1766,8 @@ export interface TokenExchangeProfilesListRequest {
  *     {
  *         name: "name",
  *         subject_token_type: "subject_token_type",
- *         action_id: "action_id"
+ *         action_id: "action_id",
+ *         type: "custom_authentication"
  *     }
  */
 export interface CreateTokenExchangeProfileRequestContent {
@@ -1540,6 +1777,7 @@ export interface CreateTokenExchangeProfileRequestContent {
     subject_token_type: string;
     /** The ID of the Custom Token Exchange action to execute for this profile, in order to validate the subject_token. The action must use the custom-token-exchange trigger. */
     action_id: string;
+    type: Management.TokenExchangeProfileTypeEnum;
 }
 
 /**
@@ -1671,7 +1909,7 @@ export interface ListUsersRequestParameters {
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean | null;
-    /** Query in <a target='_new' href ='http://www.lucenetutorial.com/lucene-query-syntax.html'>Lucene query string syntax</a>. Some query types cannot be used on metadata fields, for details see <a href='https://auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable Fields</a>. */
+    /** Query in <a target='_new' href ='https://lucene.apache.org/core/2_9_4/queryparsersyntax.html'>Lucene query string syntax</a>. Some query types cannot be used on metadata fields, for details see <a href='https://auth0.com/docs/users/search/v3/query-syntax#searchable-fields'>Searchable Fields</a>. */
     q?: string | null;
     /** The version of the search engine */
     search_engine?: Management.SearchEngineVersionsEnum | null;
@@ -1766,7 +2004,9 @@ export interface UpdateUserRequestContent {
     phone_number?: string | null;
     /** Whether this phone number has been verified (true) or not (false). */
     phone_verified?: boolean;
+    /** User metadata to which this user has read/write access. */
     user_metadata?: Management.UserMetadata;
+    /** User metadata to which this user has read-only access. */
     app_metadata?: Management.AppMetadata;
     /** Given name/first name/forename of this user. */
     given_name?: string | null;
@@ -1814,6 +2054,94 @@ export interface ListActionVersionsRequestParameters {
     /** Use this field to request a specific page of the list results. */
     page?: number | null;
     /** This field specify the maximum number of results to be returned by the server. 20 by default */
+    per_page?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         page: 1,
+ *         per_page: 1
+ *     }
+ */
+export interface GetActionModulesRequestParameters {
+    /** Page index of the results to return. First page is 0. */
+    page?: number | null;
+    /** Number of results per page. Paging is disabled if parameter not sent. */
+    per_page?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         code: "code"
+ *     }
+ */
+export interface CreateActionModuleRequestContent {
+    /** The name of the action module. */
+    name: string;
+    /** The source code of the action module. */
+    code: string;
+    /** The secrets to associate with the action module. */
+    secrets?: Management.ActionModuleSecretRequest[];
+    /** The npm dependencies of the action module. */
+    dependencies?: Management.ActionModuleDependencyRequest[];
+    /** The API version of the module. */
+    api_version?: string;
+    /** Whether to publish the module immediately after creation. */
+    publish?: boolean;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateActionModuleRequestContent {
+    /** The source code of the action module. */
+    code?: string;
+    /** The secrets to associate with the action module. */
+    secrets?: Management.ActionModuleSecretRequest[];
+    /** The npm dependencies of the action module. */
+    dependencies?: Management.ActionModuleDependencyRequest[];
+}
+
+/**
+ * @example
+ *     {
+ *         page: 1,
+ *         per_page: 1
+ *     }
+ */
+export interface GetActionModuleActionsRequestParameters {
+    /** Page index of the results to return. First page is 0. */
+    page?: number | null;
+    /** Number of results per page. */
+    per_page?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         module_version_id: "module_version_id"
+ *     }
+ */
+export interface RollbackActionModuleRequestParameters {
+    /** The unique ID of the module version to roll back to. */
+    module_version_id: string;
+}
+
+/**
+ * @example
+ *     {
+ *         page: 1,
+ *         per_page: 1
+ *     }
+ */
+export interface GetActionModuleVersionsRequestParameters {
+    /** Use this field to request a specific page of the list results. */
+    page?: number | null;
+    /** The maximum number of results to be returned by the server in a single response. 20 by default. */
     per_page?: number | null;
 }
 
@@ -1885,38 +2213,12 @@ export interface UpdateBruteForceSettingsRequestContent {
      * Action to take when a brute force protection threshold is violated.
      *         Possible values: <code>block</code>, <code>user_notification</code>.
      */
-    shields?: UpdateBruteForceSettingsRequestContent.Shields.Item[];
+    shields?: Management.BruteForceProtectionShieldsEnum[];
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[];
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    mode?: UpdateBruteForceSettingsRequestContent.Mode;
+    mode?: Management.BruteForceProtectionModeEnum;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number;
-}
-
-export namespace UpdateBruteForceSettingsRequestContent {
-    export type Shields = Shields.Item[];
-
-    export namespace Shields {
-        export const Item = {
-            Block: "block",
-            UserNotification: "user_notification",
-        } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
-    }
-
-    /**
-     * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
-     *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
-     */
-    export const Mode = {
-        CountPerIdentifierAndIp: "count_per_identifier_and_ip",
-        CountPerIdentifier: "count_per_identifier",
-    } as const;
-    export type Mode = (typeof Mode)[keyof typeof Mode];
 }
 
 /**
@@ -2213,6 +2515,7 @@ export interface UpdatePhoneTemplateRequestContent {
 export interface CreatePhoneTemplateTestNotificationRequestContent {
     /** Destination of the testing phone notification */
     to: string;
+    /** Medium to use to send the notification */
     delivery_method?: Management.PhoneProviderDeliveryMethodEnum;
 }
 
@@ -2249,6 +2552,8 @@ export interface PostClientCredentialRequestContent {
     parse_expiry_from_cert?: boolean;
     /** The ISO 8601 formatted date representing the expiration of the credential. If not specified (not recommended), the credential never expires. Applies to `public_key` credential type. */
     expires_at?: string;
+    /** Optional kid (Key ID), used to uniquely identify the credential. If not specified, a kid value will be auto-generated. The kid header parameter in JWTs sent by your client should match this value. Valid format is [0-9a-zA-Z-_]{10,64} */
+    kid?: string;
 }
 
 /**
@@ -2263,6 +2568,7 @@ export interface PatchClientCredentialRequestContent {
 /**
  * @example
  *     {
+ *         strategy: ["ad"],
  *         from: "from",
  *         take: 1,
  *         fields: "fields",
@@ -2285,15 +2591,56 @@ export interface ConnectionsGetRequest {
 /**
  * @example
  *     {
- *         take: 1,
- *         from: "from"
+ *         from: "from",
+ *         take: 1
  *     }
  */
-export interface GetConnectionEnabledClientsRequestParameters {
-    /** Number of results per page. Defaults to 50. */
-    take?: number | null;
+export interface ListDirectoryProvisioningsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListSynchronizedGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         groups: [{
+ *                 id: "id"
+ *             }]
+ *     }
+ */
+export interface ReplaceSynchronizedGroupsRequestContent {
+    /** Array of Google Workspace Directory group objects to synchronize. */
+    groups: Management.SynchronizedGroupPayload[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListScimConfigurationsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
 }
 
 /**
@@ -2308,6 +2655,20 @@ export interface UpdateScimConfigurationRequestContent {
     user_id_attribute: string;
     /** The mapping between auth0 and SCIM */
     mapping: Management.ScimMappingItem[];
+}
+
+/**
+ * @example
+ *     {
+ *         take: 1,
+ *         from: "from"
+ *     }
+ */
+export interface GetConnectionEnabledClientsRequestParameters {
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
 }
 
 /**
@@ -2427,7 +2788,7 @@ export interface CreateEventStreamRedeliveryRequestContent {
  *         take: 1
  *     }
  */
-export interface ExecutionsListRequest {
+export interface ListFlowExecutionsRequestParameters {
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -2436,11 +2797,15 @@ export interface ExecutionsListRequest {
 
 /**
  * @example
- *     {}
+ *     {
+ *         hydrate: ["debug"]
+ *     }
  */
-export interface ExecutionsGetRequest {
+export interface GetFlowExecutionRequestParameters {
     /** Hydration param */
-    hydrate?: ("debug" | null) | ("debug" | null)[];
+    hydrate?:
+        | (Management.GetFlowExecutionRequestParametersHydrateEnum | null)
+        | (Management.GetFlowExecutionRequestParametersHydrateEnum | null)[];
 }
 
 /**
@@ -2468,6 +2833,62 @@ export interface UpdateFlowsVaultConnectionRequestContent {
     /** Flows Vault Connection name. */
     name?: string;
     setup?: Management.UpdateFlowsVaultConnectionSetup;
+}
+
+/**
+ * @example
+ *     {
+ *         fields: "fields",
+ *         include_fields: true,
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface GetGroupMembersRequestParameters {
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListGroupRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface CreateGroupRolesRequestParameters {
+    /** Array of role IDs to assign to the group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface DeleteGroupRolesRequestContent {
+    /** Array of role IDs to remove from the group. */
+    roles: string[];
 }
 
 /**
@@ -2801,6 +3222,7 @@ export interface ImportEncryptionKeyRequestContent {
  *     {
  *         audience: "audience",
  *         client_id: "client_id",
+ *         grant_ids: ["grant_ids"],
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true
@@ -2835,6 +3257,66 @@ export interface AssociateOrganizationClientGrantRequestContent {
 /**
  * @example
  *     {
+ *         page: 1,
+ *         per_page: 1,
+ *         include_totals: true,
+ *         is_enabled: true
+ *     }
+ */
+export interface ListOrganizationAllConnectionsRequestParameters {
+    /** Page index of the results to return. First page is 0. */
+    page?: number | null;
+    /** Number of results per page. Defaults to 50. */
+    per_page?: number | null;
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
+    /** Filter connections by enabled status. */
+    is_enabled?: boolean | null;
+}
+
+/**
+ * @example
+ *     {
+ *         connection_id: "connection_id"
+ *     }
+ */
+export interface CreateOrganizationAllConnectionRequestParameters {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean;
+    organization_access_level?: Management.OrganizationAccessLevelEnum;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean;
+    /** Connection identifier. */
+    connection_id: string;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateOrganizationConnectionRequestParameters {
+    /** Name of the connection in the scope of this organization. */
+    organization_connection_name?: string | null;
+    /** When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection. */
+    assign_membership_on_login?: boolean;
+    /** Determines whether a connection should be displayed on this organization’s login prompt. Only applicable for enterprise connections. Default: true. */
+    show_as_button?: boolean;
+    /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
+    is_signup_enabled?: boolean;
+    organization_access_level?: Management.OrganizationAccessLevelEnumWithNull | null;
+    /** Whether the connection is enabled for the organization. */
+    is_enabled?: boolean | null;
+}
+
+/**
+ * @example
+ *     {
  *         from: "from",
  *         take: 1
  *     }
@@ -2856,7 +3338,7 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
     /** The domain name to associate with the organization e.g. acme.com. */
     domain: string;
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
 }
 
@@ -2866,7 +3348,7 @@ export interface CreateOrganizationDiscoveryDomainRequestContent {
  */
 export interface UpdateOrganizationDiscoveryDomainRequestContent {
     status?: Management.OrganizationDiscoveryDomainStatus;
-    /** Indicates whether this discovery domain should be used for organization discovery. */
+    /** Indicates whether this domain should be used for organization discovery. */
     use_for_organization_discovery?: boolean;
 }
 
@@ -3031,6 +3513,70 @@ export interface DeleteOrganizationMembersRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationGroupRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface CreateOrganizationGroupRolesRequestContent {
+    /** Array of role IDs to assign to organization group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         roles: ["roles"]
+ *     }
+ */
+export interface DeleteOrganizationGroupRolesRequestContent {
+    /** Array of role IDs to delete from organization group. */
+    roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationMemberEffectiveRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true
@@ -3065,6 +3611,23 @@ export interface AssignOrganizationMemberRolesRequestContent {
 export interface DeleteOrganizationMemberRolesRequestContent {
     /** List of roles IDs associated with the organization member to remove. */
     roles: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         role_id: "role_id"
+ *     }
+ */
+export interface ListOrganizationMemberRoleSourceGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The role ID to get group sources for. */
+    role_id: string;
 }
 
 /**
@@ -3117,14 +3680,15 @@ export interface BulkUpdateAculRequestContent {
  *     {}
  */
 export interface UpdateAculRequestContent {
+    /** Rendering mode */
     rendering_mode?: Management.AculRenderingModeEnum;
-    context_configuration?: Management.AculContextConfiguration;
+    context_configuration?: (Management.AculContextConfiguration | undefined) | null;
     /** Override Universal Login default head tags */
     default_head_tags_disabled?: boolean | null;
     /** Use page template with ACUL */
     use_page_template?: boolean | null;
     /** An array of head tags */
-    head_tags?: Management.AculHeadTag[];
+    head_tags?: Management.AculHeadTag[] | null;
     filters?: Management.AculFilters | null;
 }
 
@@ -3148,6 +3712,42 @@ export interface UpdateRiskAssessmentsSettingsRequestContent {
 export interface UpdateRiskAssessmentsSettingsNewDeviceRequestContent {
     /** Length of time to remember devices for, in days. */
     remember_for: number;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListRoleGroupsParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         groups: ["groups"]
+ *     }
+ */
+export interface AssignRoleGroupsRequestContent {
+    /** Array of group IDs to assign to the role. */
+    groups: string[];
+}
+
+/**
+ * @example
+ *     {
+ *         groups: ["groups"]
+ *     }
+ */
+export interface DeleteRoleGroupsRequestContent {
+    /** Array of group IDs to remove from the role. */
+    groups: string[];
 }
 
 /**
@@ -3225,7 +3825,7 @@ export interface AssignRoleUsersRequestContent {
  *     {}
  */
 export interface CreateSelfServiceProfileSsoTicketRequestContent {
-    /** If provided, this will allow editing of the provided connection during the SSO Flow */
+    /** If provided, this will allow editing of the provided connection during the Self-Service Enterprise Configuration flow */
     connection_id?: string;
     connection_config?: Management.SelfServiceProfileSsoTicketConnectionConfig;
     /** List of client_ids that the connection will be enabled for. */
@@ -3238,6 +3838,7 @@ export interface CreateSelfServiceProfileSsoTicketRequestContent {
     provisioning_config?: Management.SelfServiceProfileSsoTicketProvisioningConfig;
     /** Indicates whether a verified domain should be used for organization discovery during authentication. */
     use_for_organization_discovery?: boolean;
+    enabled_features?: Management.SelfServiceProfileSsoTicketEnabledFeatures;
 }
 
 /**
@@ -3260,6 +3861,7 @@ export interface GetTenantSettingsRequestParameters {
  */
 export interface UpdateTenantSettingsRequestContent {
     change_password?: Management.TenantSettingsPasswordPage | null;
+    /** Device Flow configuration. */
     device_flow?: Management.TenantSettingsDeviceFlow | null;
     guardian_mfa_page?: Management.TenantSettingsGuardianPage | null;
     /** Default audience for API Authorization. */
@@ -3281,12 +3883,20 @@ export interface UpdateTenantSettingsRequestContent {
     allowed_logout_urls?: string[];
     /** Number of hours a session will stay valid. */
     session_lifetime?: number;
+    /** Number of minutes a session will stay valid. Cannot be specified together with `session_lifetime`. */
+    session_lifetime_in_minutes?: number;
     /** Number of hours for which a session can be inactive before the user must log in again. */
     idle_session_lifetime?: number;
+    /** Number of minutes a session can be inactive before the user must log in again. Cannot be specified together with `idle_session_lifetime`. */
+    idle_session_lifetime_in_minutes?: number;
     /** Number of hours an ephemeral (non-persistent) session will stay valid. */
     ephemeral_session_lifetime?: number;
     /** Number of hours for which an ephemeral (non-persistent) session can be inactive before the user must log in again. */
     idle_ephemeral_session_lifetime?: number;
+    /** Number of minutes an ephemeral (non-persistent) session will stay valid. Cannot be specified together with `ephemeral_session_lifetime`. */
+    ephemeral_session_lifetime_in_minutes?: number;
+    /** Number of minutes an ephemeral (non-persistent) session can be inactive before the user must log in again. Cannot be specified together with `idle_ephemeral_session_lifetime`. */
+    idle_ephemeral_session_lifetime_in_minutes?: number;
     /** Selected sandbox version for the extensibility environment */
     sandbox_version?: string;
     /** Selected legacy sandbox version for the extensibility environment */
@@ -3294,7 +3904,8 @@ export interface UpdateTenantSettingsRequestContent {
     /** The default absolute redirection uri, must be https */
     default_redirection_uri?: string;
     /** Supported locales for the user interface */
-    enabled_locales?: UpdateTenantSettingsRequestContent.EnabledLocales.Item[];
+    enabled_locales?: Management.TenantSettingsSupportedLocalesEnum[];
+    security_headers?: Management.TenantSettingsNullableSecurityHeaders | null;
     session_cookie?: Management.SessionCookieSchema | null;
     sessions?: Management.TenantSettingsSessions | null;
     oidc_logout?: Management.TenantOidcLogoutSettings;
@@ -3303,7 +3914,7 @@ export interface UpdateTenantSettingsRequestContent {
     /** Whether to accept an organization name instead of an ID on auth endpoints */
     allow_organization_name_in_authentication_api?: boolean | null;
     /** Supported ACR values */
-    acr_values_supported?: string[];
+    acr_values_supported?: string[] | null;
     mtls?: Management.TenantSettingsMtls | null;
     /** Enables the use of Pushed Authorization Requests */
     pushed_authorization_requests_supported?: boolean | null;
@@ -3316,97 +3927,16 @@ export interface UpdateTenantSettingsRequestContent {
      */
     skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | null;
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
-}
-
-export namespace UpdateTenantSettingsRequestContent {
-    export type EnabledLocales = EnabledLocales.Item[];
-
-    export namespace EnabledLocales {
-        export const Item = {
-            Am: "am",
-            Ar: "ar",
-            ArEg: "ar-EG",
-            ArSa: "ar-SA",
-            Az: "az",
-            Bg: "bg",
-            Bn: "bn",
-            Bs: "bs",
-            CaEs: "ca-ES",
-            Cnr: "cnr",
-            Cs: "cs",
-            Cy: "cy",
-            Da: "da",
-            De: "de",
-            El: "el",
-            En: "en",
-            EnCa: "en-CA",
-            Es: "es",
-            Es419: "es-419",
-            EsAr: "es-AR",
-            EsMx: "es-MX",
-            Et: "et",
-            EuEs: "eu-ES",
-            Fa: "fa",
-            Fi: "fi",
-            Fr: "fr",
-            FrCa: "fr-CA",
-            FrFr: "fr-FR",
-            GlEs: "gl-ES",
-            Gu: "gu",
-            He: "he",
-            Hi: "hi",
-            Hr: "hr",
-            Hu: "hu",
-            Hy: "hy",
-            Id: "id",
-            Is: "is",
-            It: "it",
-            Ja: "ja",
-            Ka: "ka",
-            Kk: "kk",
-            Kn: "kn",
-            Ko: "ko",
-            Lt: "lt",
-            Lv: "lv",
-            Mk: "mk",
-            Ml: "ml",
-            Mn: "mn",
-            Mr: "mr",
-            Ms: "ms",
-            My: "my",
-            Nb: "nb",
-            Nl: "nl",
-            Nn: "nn",
-            No: "no",
-            Pa: "pa",
-            Pl: "pl",
-            Pt: "pt",
-            PtBr: "pt-BR",
-            PtPt: "pt-PT",
-            Ro: "ro",
-            Ru: "ru",
-            Sk: "sk",
-            Sl: "sl",
-            So: "so",
-            Sq: "sq",
-            Sr: "sr",
-            Sv: "sv",
-            Sw: "sw",
-            Ta: "ta",
-            Te: "te",
-            Th: "th",
-            Tl: "tl",
-            Tr: "tr",
-            Uk: "uk",
-            Ur: "ur",
-            Vi: "vi",
-            Zgh: "zgh",
-            ZhCn: "zh-CN",
-            ZhHk: "zh-HK",
-            ZhTw: "zh-TW",
-        } as const;
-        export type Item = (typeof Item)[keyof typeof Item];
-    }
+    /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
+    client_id_metadata_document_supported?: boolean;
+    /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
+    enable_ai_guide?: boolean;
+    /** Whether Phone Consolidated Experience is enabled for this tenant. */
+    phone_consolidated_experience?: boolean;
+    /** Whether session metadata is included in specific tenant logs (slo, oidc_backchannel_logout_failed, oidc_backchannel_logout_succeeded). */
+    include_session_metadata_in_tenant_logs?: boolean;
+    dynamic_client_registration_security_mode?: Management.TenantSettingsDynamicClientRegistrationSecurityMode;
+    country_codes?: Management.TenantSettingsCountryCodes | null;
 }
 
 /**
@@ -3443,12 +3973,25 @@ export interface CreateUserAuthenticationMethodRequestContent {
     /** Applies to email authentication methods only. The email address used to send verification messages. */
     email?: string;
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
-    /** Applies to webauthn authentication methods only. The id of the credential. */
+    /** Applies to webauthn/passkey authentication methods only. The id of the credential. */
     key_id?: string;
-    /** Applies to webauthn authentication methods only. The public key, which is encoded as base64. */
+    /** Applies to webauthn/passkey authentication methods only. The public key, which is encoded as base64. */
     public_key?: string;
+    /** Applies to passkeys only. Authenticator Attestation Globally Unique Identifier */
+    aaguid?: string;
     /** Applies to webauthn authentication methods only. The relying party identifier. */
     relying_party_identifier?: string;
+    credential_device_type?: Management.CredentialDeviceTypeEnum;
+    /** Applies to passkeys only. Whether the credential was backed up. */
+    credential_backed_up?: boolean;
+    /** Applies to passkeys only. The ID of the user identity linked with the authentication method. */
+    identity_user_id?: string;
+    /** Applies to passkeys only. The user-agent of the browser used to create the passkey. */
+    user_agent?: string;
+    /** Applies to passkeys only. The user handle of the user identity. */
+    user_handle?: string;
+    /** Applies to passkeys only. The transports used by clients to communicate with the authenticator. */
+    transports?: string[];
 }
 
 /**
@@ -3458,6 +4001,7 @@ export interface CreateUserAuthenticationMethodRequestContent {
 export interface UpdateUserAuthenticationMethodRequestContent {
     /** A human-readable label to identify the authentication method. */
     name?: string;
+    /** Preferred phone authentication method */
     preferred_authentication_method?: Management.PreferredAuthenticationMethodEnum;
 }
 
@@ -3477,9 +4021,61 @@ export interface GetUserConnectedAccountsRequestParameters {
 
 /**
  * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         resource_server_identifier: "resource_server_identifier"
+ *     }
+ */
+export interface ListUserEffectivePermissionsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The identifier of the resource server for which to calculate user permissions. */
+    resource_server_identifier: string;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListUserEffectiveRolesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         fields: "fields",
+ *         include_fields: true,
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface GetUserGroupsRequestParameters {
+    /** A comma separated list of fields to include or exclude (depending on include_fields) from the result, empty to retrieve all fields */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). */
+    include_fields?: boolean | null;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
  *     {}
  */
 export interface LinkUserIdentityRequestContent {
+    /** Identity provider of the secondary user account being linked. */
     provider?: Management.UserIdentityProviderEnum;
     /** connection_id of the secondary user account being linked when more than one `auth0` database provider exists. */
     connection_id?: string;
@@ -3655,6 +4251,43 @@ export interface ListUserSessionsRequestParameters {
  * @example
  *     {
  *         from: "from",
+ *         take: 1,
+ *         resource_server_identifier: "resource_server_identifier",
+ *         permission_name: "permission_name"
+ *     }
+ */
+export interface ListUserEffectivePermissionRoleSourceRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+    /** The identifier of the resource server for which to calculate user permissions. */
+    resource_server_identifier: string;
+    /** Name of this permission */
+    permission_name: string;
+}
+
+/**
+ * @example
+ *     {
+ *         role_id: "role_id",
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListUserRoleSourceGroupsRequestParameters {
+    /** ID of the role to get source groups for. */
+    role_id: string;
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
  *         take: 1
  *     }
  */
@@ -3684,7 +4317,7 @@ export interface CreateVerifiableCredentialTemplateRequestContent {
     type: string;
     dialect: string;
     presentation: Management.MdlPresentationRequest;
-    custom_certificate_authority?: string;
+    custom_certificate_authority?: string | null;
     well_known_trusted_issuers: string;
 }
 
@@ -3693,10 +4326,10 @@ export interface CreateVerifiableCredentialTemplateRequestContent {
  *     {}
  */
 export interface UpdateVerifiableCredentialTemplateRequestContent {
-    name?: string;
-    type?: string;
-    dialect?: string;
+    name?: string | null;
+    type?: string | null;
+    dialect?: string | null;
     presentation?: Management.MdlPresentationRequest;
-    well_known_trusted_issuers?: string;
-    version?: number;
+    well_known_trusted_issuers?: string | null;
+    version?: number | null;
 }

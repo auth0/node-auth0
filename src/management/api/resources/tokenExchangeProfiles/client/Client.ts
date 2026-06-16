@@ -25,15 +25,14 @@ export class TokenExchangeProfilesClient {
     /**
      * Retrieve a list of all Token Exchange Profiles available in your tenant.
      *
-     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     * By using this feature, you agree to the applicable Free Trial terms in [Okta’s Master Subscription Agreement](https://www.okta.com/legal/). It is your responsibility to securely validate the user’s subject_token. See [User Guide](https://auth0.com/docs/authenticate/custom-token-exchange) for more details.
      *
      * This endpoint supports Checkpoint pagination. To search by checkpoint, use the following parameters:
-     * <ul>
-     * <li><code>from</code>: Optional id from which to start selection.</li>
-     * <li><code>take</code>: The total amount of entries to retrieve when using the from parameter. Defaults to 50.</li>
-     * </ul>
      *
-     * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
+     * - `from`: Optional id from which to start selection.
+     * - `take`: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+     *
+     * **Note**: The first time you call this endpoint using checkpoint pagination, omit the `from` parameter. If there are more results, a `next` value is included in the response. You can use this for subsequent API calls. When `next` is no longer included in the response, no pages are remaining.
      *
      * @param {Management.TokenExchangeProfilesListRequest} request
      * @param {TokenExchangeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -60,13 +59,10 @@ export class TokenExchangeProfilesClient {
                 request: Management.TokenExchangeProfilesListRequest,
             ): Promise<core.WithRawResponse<Management.ListTokenExchangeProfileResponseContent>> => {
                 const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -82,7 +78,11 @@ export class TokenExchangeProfilesClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -149,7 +149,7 @@ export class TokenExchangeProfilesClient {
     /**
      * Create a new Token Exchange Profile within your tenant.
      *
-     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     * By using this feature, you agree to the applicable Free Trial terms in [Okta’s Master Subscription Agreement](https://www.okta.com/legal/). It is your responsibility to securely validate the user’s subject_token. See [User Guide](https://auth0.com/docs/authenticate/custom-token-exchange) for more details.
      *
      * @param {Management.CreateTokenExchangeProfileRequestContent} request
      * @param {TokenExchangeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -164,7 +164,8 @@ export class TokenExchangeProfilesClient {
      *     await client.tokenExchangeProfiles.create({
      *         name: "name",
      *         subject_token_type: "subject_token_type",
-     *         action_id: "action_id"
+     *         action_id: "action_id",
+     *         type: "custom_authentication"
      *     })
      */
     public create(
@@ -194,9 +195,9 @@ export class TokenExchangeProfilesClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: { ...request, type: "custom_authentication" },
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -237,7 +238,7 @@ export class TokenExchangeProfilesClient {
     /**
      * Retrieve details about a single Token Exchange Profile specified by ID.
      *
-     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta’s Master Subscription Agreement</a>. It is your responsibility to securely validate the user’s subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
+     * By using this feature, you agree to the applicable Free Trial terms in [Okta’s Master Subscription Agreement](https://www.okta.com/legal/). It is your responsibility to securely validate the user’s subject_token. See [User Guide](https://auth0.com/docs/authenticate/custom-token-exchange) for more details.
      *
      * @param {string} id - ID of the Token Exchange Profile to retrieve.
      * @param {TokenExchangeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -277,7 +278,7 @@ export class TokenExchangeProfilesClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -318,8 +319,7 @@ export class TokenExchangeProfilesClient {
     /**
      * Delete a Token Exchange Profile within your tenant.
      *
-     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta's Master Subscription Agreement</a>. It is your responsibility to securely validate the user's subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
-     *
+     * By using this feature, you agree to the applicable Free Trial terms in [Okta's Master Subscription Agreement](https://www.okta.com/legal/). It is your responsibility to securely validate the user's subject_token. See [User Guide](https://auth0.com/docs/authenticate/custom-token-exchange) for more details.
      *
      * @param {string} id - ID of the Token Exchange Profile to delete.
      * @param {TokenExchangeProfilesClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -357,7 +357,7 @@ export class TokenExchangeProfilesClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -396,8 +396,7 @@ export class TokenExchangeProfilesClient {
     /**
      * Update a Token Exchange Profile within your tenant.
      *
-     * By using this feature, you agree to the applicable Free Trial terms in <a href="https://www.okta.com/legal/">Okta's Master Subscription Agreement</a>. It is your responsibility to securely validate the user's subject_token. See <a href="https://auth0.com/docs/authenticate/custom-token-exchange">User Guide</a> for more details.
-     *
+     * By using this feature, you agree to the applicable Free Trial terms in [Okta's Master Subscription Agreement](https://www.okta.com/legal/). It is your responsibility to securely validate the user's subject_token. See [User Guide](https://auth0.com/docs/authenticate/custom-token-exchange) for more details.
      *
      * @param {string} id - ID of the Token Exchange Profile to update.
      * @param {Management.UpdateTokenExchangeProfileRequestContent} request
@@ -407,6 +406,7 @@ export class TokenExchangeProfilesClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -441,7 +441,7 @@ export class TokenExchangeProfilesClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -464,6 +464,8 @@ export class TokenExchangeProfilesClient {
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:

@@ -1,5 +1,5 @@
-import { getRequestBody } from "../../../../../src/management/core/fetcher/getRequestBody";
-import { RUNTIME } from "../../../../../src/management/core/runtime";
+import { getRequestBody } from "../../../core/fetcher/getRequestBody";
+import { RUNTIME } from "../../../core/runtime";
 
 describe("Test getRequestBody", () => {
     interface TestCase {

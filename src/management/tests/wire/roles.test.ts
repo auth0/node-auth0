@@ -15,6 +15,7 @@ describe("RolesClient", () => {
             total: 1.1,
             roles: [{ id: "id", name: "name", description: "description" }],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles")
@@ -23,18 +24,7 @@ describe("RolesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            roles: [
-                {
-                    id: "id",
-                    name: "name",
-                    description: "description",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.roles.list({
             per_page: 1,
             page: 1,
@@ -53,6 +43,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles")
@@ -71,6 +62,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles")
@@ -89,6 +81,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles")
@@ -107,6 +100,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/roles")
@@ -125,6 +119,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { id: "id", name: "name", description: "description" };
+
         server
             .mockEndpoint()
             .post("/roles")
@@ -137,11 +132,7 @@ describe("RolesClient", () => {
         const response = await client.roles.create({
             name: "name",
         });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -149,6 +140,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles")
@@ -170,6 +162,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles")
@@ -191,6 +184,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles")
@@ -212,6 +206,29 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/roles")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.roles.create({
+                name: "name",
+            });
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("create (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/roles")
@@ -233,14 +250,11 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { id: "id", name: "name", description: "description" };
+
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.roles.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -248,6 +262,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -260,6 +275,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -272,6 +288,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -284,6 +301,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -296,6 +314,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -318,6 +337,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/roles/id").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -330,6 +350,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/roles/id").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -342,6 +363,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/roles/id").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -354,6 +376,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/roles/id").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -366,6 +389,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/roles/id").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -378,6 +402,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { id: "id", name: "name", description: "description" };
+
         server
             .mockEndpoint()
             .patch("/roles/id")
@@ -388,11 +413,7 @@ describe("RolesClient", () => {
             .build();
 
         const response = await client.roles.update("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -400,6 +421,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/roles/id")
@@ -419,6 +441,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/roles/id")
@@ -438,6 +461,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/roles/id")
@@ -457,6 +481,7 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/roles/id")

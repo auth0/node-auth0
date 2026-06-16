@@ -2,7 +2,7 @@
 import { Readable } from "stream";
 import { join } from "path";
 import { File, Blob } from "buffer";
-import { FormDataWrapper, newFormData } from "../../../../../src/management/core/form-data-utils/FormDataWrapper";
+import { FormDataWrapper, newFormData } from "../../../core/form-data-utils/FormDataWrapper";
 
 // Helper function to serialize FormData to string for inspection
 async function serializeFormData(formData: FormData): Promise<string> {

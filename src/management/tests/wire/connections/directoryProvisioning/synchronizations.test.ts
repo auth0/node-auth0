@@ -14,6 +14,7 @@ describe("SynchronizationsClient", () => {
             synchronization_id: "synchronization_id",
             status: "status",
         };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning/synchronizations")
@@ -23,11 +24,7 @@ describe("SynchronizationsClient", () => {
             .build();
 
         const response = await client.connections.directoryProvisioning.synchronizations.create("id");
-        expect(response).toEqual({
-            connection_id: "connection_id",
-            synchronization_id: "synchronization_id",
-            status: "status",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -35,6 +32,7 @@ describe("SynchronizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning/synchronizations")
@@ -53,6 +51,7 @@ describe("SynchronizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning/synchronizations")
@@ -71,6 +70,7 @@ describe("SynchronizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning/synchronizations")
@@ -89,6 +89,7 @@ describe("SynchronizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning/synchronizations")
@@ -107,6 +108,7 @@ describe("SynchronizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning/synchronizations")
@@ -125,6 +127,7 @@ describe("SynchronizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/connections/id/directory-provisioning/synchronizations")

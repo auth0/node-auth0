@@ -23,25 +23,23 @@ export class UsersClient {
     }
 
     /**
-     * Retrieve list of users associated with a specific role. For Dashboard instructions, review <a href="https://auth0.com/docs/manage-users/access-control/configure-core-rbac/roles/view-users-assigned-to-roles">View Users Assigned to Roles</a>.
+     * Retrieve list of users associated with a specific role. For Dashboard instructions, review [View Users Assigned to Roles](https://auth0.com/docs/manage-users/access-control/configure-core-rbac/roles/view-users-assigned-to-roles).
      *
      * This endpoint supports two types of pagination:
-     * <ul>
-     * <li>Offset pagination</li>
-     * <li>Checkpoint pagination</li>
-     * </ul>
+     *
+     * - Offset pagination
+     * - Checkpoint pagination
      *
      * Checkpoint pagination must be used if you need to retrieve more than 1000 organization members.
      *
-     * <h2>Checkpoint Pagination</h2>
+     * **Checkpoint Pagination**
      *
      * To search by checkpoint, use the following parameters:
-     * <ul>
-     * <li><code>from</code>: Optional id from which to start selection.</li>
-     * <li><code>take</code>: The total amount of entries to retrieve when using the from parameter. Defaults to 50.</li>
-     * </ul>
      *
-     * <b>Note</b>: The first time you call this endpoint using checkpoint pagination, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no pages are remaining.
+     * - `from`: Optional id from which to start selection.
+     * - `take`: The total amount of entries to retrieve when using the from parameter. Defaults to 50.
+     *
+     * **Note**: The first time you call this endpoint using checkpoint pagination, omit the `from` parameter. If there are more results, a `next` value is included in the response. You can use this for subsequent API calls. When `next` is no longer included in the response, no pages are remaining.
      *
      * @param {string} id - ID of the role to retrieve a list of users associated with.
      * @param {Management.ListRoleUsersRequestParameters} request
@@ -69,13 +67,10 @@ export class UsersClient {
                 request: Management.ListRoleUsersRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListRoleUsersPaginatedResponseContent>> => {
                 const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -91,7 +86,11 @@ export class UsersClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -150,9 +149,9 @@ export class UsersClient {
     }
 
     /**
-     * Assign one or more users to an existing user role. To learn more, review <a href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based Access Control</a>.
+     * Assign one or more users to an existing user role. To learn more, review [Role-Based Access Control](https://auth0.com/docs/manage-users/access-control/rbac).
      *
-     * <b>Note</b>: New roles cannot be created through this action.
+     * **Note**: New roles cannot be created through this action.
      *
      * @param {string} id - ID of the role to assign users to.
      * @param {Management.AssignRoleUsersRequestContent} request
@@ -198,7 +197,7 @@ export class UsersClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

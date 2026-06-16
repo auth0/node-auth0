@@ -33,11 +33,14 @@ describe("AuthenticationMethodsClient", () => {
                     credential_backed_up: true,
                     identity_user_id: "identity_user_id",
                     user_agent: "user_agent",
+                    user_handle: "user_handle",
+                    transports: ["transports"],
                     aaguid: "aaguid",
                     relying_party_identifier: "relying_party_identifier",
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/authentication-methods")
@@ -46,35 +49,7 @@ describe("AuthenticationMethodsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            authenticators: [
-                {
-                    id: "id",
-                    type: "recovery-code",
-                    confirmed: true,
-                    name: "name",
-                    authentication_methods: [{}],
-                    preferred_authentication_method: "voice",
-                    link_id: "link_id",
-                    phone_number: "phone_number",
-                    email: "email",
-                    key_id: "key_id",
-                    public_key: "public_key",
-                    created_at: "2024-01-15T09:30:00Z",
-                    enrolled_at: "2024-01-15T09:30:00Z",
-                    last_auth_at: "2024-01-15T09:30:00Z",
-                    credential_device_type: "credential_device_type",
-                    credential_backed_up: true,
-                    identity_user_id: "identity_user_id",
-                    user_agent: "user_agent",
-                    aaguid: "aaguid",
-                    relying_party_identifier: "relying_party_identifier",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.users.authenticationMethods.list("id", {
             page: 1,
             per_page: 1,
@@ -92,6 +67,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/authentication-methods")
@@ -110,6 +86,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/authentication-methods")
@@ -128,6 +105,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/authentication-methods")
@@ -146,6 +124,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/authentication-methods")
@@ -164,6 +143,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/authentication-methods")
@@ -194,8 +174,15 @@ describe("AuthenticationMethodsClient", () => {
             public_key: "public_key",
             aaguid: "aaguid",
             relying_party_identifier: "relying_party_identifier",
+            credential_device_type: "single_device",
+            credential_backed_up: true,
+            identity_user_id: "identity_user_id",
+            user_agent: "user_agent",
+            user_handle: "user_handle",
+            transports: ["transports"],
             created_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .post("/users/id/authentication-methods")
@@ -208,26 +195,7 @@ describe("AuthenticationMethodsClient", () => {
         const response = await client.users.authenticationMethods.create("id", {
             type: "phone",
         });
-        expect(response).toEqual({
-            id: "id",
-            type: "phone",
-            name: "name",
-            totp_secret: "totp_secret",
-            phone_number: "phone_number",
-            email: "email",
-            authentication_methods: [
-                {
-                    type: "totp",
-                    id: "id",
-                },
-            ],
-            preferred_authentication_method: "voice",
-            key_id: "key_id",
-            public_key: "public_key",
-            aaguid: "aaguid",
-            relying_party_identifier: "relying_party_identifier",
-            created_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -235,6 +203,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "phone" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/authentication-methods")
@@ -256,6 +225,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "phone" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/authentication-methods")
@@ -277,6 +247,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "phone" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/authentication-methods")
@@ -298,6 +269,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "phone" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/authentication-methods")
@@ -319,6 +291,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "phone" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/authentication-methods")
@@ -340,6 +313,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "phone" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/authentication-methods")
@@ -377,6 +351,7 @@ describe("AuthenticationMethodsClient", () => {
                 created_at: "2024-01-15T09:30:00Z",
             },
         ];
+
         server
             .mockEndpoint()
             .put("/users/id/authentication-methods")
@@ -391,23 +366,7 @@ describe("AuthenticationMethodsClient", () => {
                 type: "phone",
             },
         ]);
-        expect(response).toEqual([
-            {
-                id: "id",
-                type: "phone",
-                name: "name",
-                totp_secret: "totp_secret",
-                phone_number: "phone_number",
-                email: "email",
-                authentication_methods: [{}],
-                preferred_authentication_method: "voice",
-                key_id: "key_id",
-                public_key: "public_key",
-                aaguid: "aaguid",
-                relying_party_identifier: "relying_party_identifier",
-                created_at: "2024-01-15T09:30:00Z",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("set (2)", async () => {
@@ -415,6 +374,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = [{ type: "phone" }, { type: "phone" }];
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/users/id/authentication-methods")
@@ -441,6 +401,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = [{ type: "phone" }, { type: "phone" }];
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/users/id/authentication-methods")
@@ -467,6 +428,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = [{ type: "phone" }, { type: "phone" }];
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/users/id/authentication-methods")
@@ -493,6 +455,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = [{ type: "phone" }, { type: "phone" }];
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/users/id/authentication-methods")
@@ -519,6 +482,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = [{ type: "phone" }, { type: "phone" }];
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/users/id/authentication-methods")
@@ -555,6 +519,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods")
@@ -573,6 +538,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods")
@@ -591,6 +557,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods")
@@ -609,6 +576,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods")
@@ -645,9 +613,12 @@ describe("AuthenticationMethodsClient", () => {
             credential_backed_up: true,
             identity_user_id: "identity_user_id",
             user_agent: "user_agent",
+            user_handle: "user_handle",
+            transports: ["transports"],
             aaguid: "aaguid",
             relying_party_identifier: "relying_party_identifier",
         };
+
         server
             .mockEndpoint()
             .get("/users/id/authentication-methods/authentication_method_id")
@@ -657,33 +628,7 @@ describe("AuthenticationMethodsClient", () => {
             .build();
 
         const response = await client.users.authenticationMethods.get("id", "authentication_method_id");
-        expect(response).toEqual({
-            id: "id",
-            type: "recovery-code",
-            confirmed: true,
-            name: "name",
-            authentication_methods: [
-                {
-                    type: "totp",
-                    id: "id",
-                },
-            ],
-            preferred_authentication_method: "voice",
-            link_id: "link_id",
-            phone_number: "phone_number",
-            email: "email",
-            key_id: "key_id",
-            public_key: "public_key",
-            created_at: "2024-01-15T09:30:00Z",
-            enrolled_at: "2024-01-15T09:30:00Z",
-            last_auth_at: "2024-01-15T09:30:00Z",
-            credential_device_type: "credential_device_type",
-            credential_backed_up: true,
-            identity_user_id: "identity_user_id",
-            user_agent: "user_agent",
-            aaguid: "aaguid",
-            relying_party_identifier: "relying_party_identifier",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -691,6 +636,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/authentication-methods/authentication_method_id")
@@ -709,6 +655,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/authentication-methods/authentication_method_id")
@@ -727,6 +674,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/authentication-methods/authentication_method_id")
@@ -745,6 +693,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/authentication-methods/authentication_method_id")
@@ -763,6 +712,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/users/id/authentication-methods/authentication_method_id")
@@ -796,6 +746,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods/authentication_method_id")
@@ -814,6 +765,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods/authentication_method_id")
@@ -832,6 +784,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods/authentication_method_id")
@@ -850,6 +803,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods/authentication_method_id")
@@ -868,6 +822,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/authentication-methods/authentication_method_id")
@@ -898,8 +853,10 @@ describe("AuthenticationMethodsClient", () => {
             public_key: "public_key",
             aaguid: "aaguid",
             relying_party_identifier: "relying_party_identifier",
+            confirmed: true,
             created_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .patch("/users/id/authentication-methods/authentication_method_id")
@@ -910,26 +867,7 @@ describe("AuthenticationMethodsClient", () => {
             .build();
 
         const response = await client.users.authenticationMethods.update("id", "authentication_method_id");
-        expect(response).toEqual({
-            id: "id",
-            type: "phone",
-            name: "name",
-            totp_secret: "totp_secret",
-            phone_number: "phone_number",
-            email: "email",
-            authentication_methods: [
-                {
-                    type: "totp",
-                    id: "id",
-                },
-            ],
-            preferred_authentication_method: "voice",
-            key_id: "key_id",
-            public_key: "public_key",
-            aaguid: "aaguid",
-            relying_party_identifier: "relying_party_identifier",
-            created_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -937,6 +875,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id/authentication-methods/authentication_method_id")
@@ -956,6 +895,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id/authentication-methods/authentication_method_id")
@@ -975,6 +915,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id/authentication-methods/authentication_method_id")
@@ -994,6 +935,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id/authentication-methods/authentication_method_id")
@@ -1013,6 +955,7 @@ describe("AuthenticationMethodsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/users/id/authentication-methods/authentication_method_id")

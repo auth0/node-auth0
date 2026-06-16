@@ -38,6 +38,7 @@ export class RolesClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -58,16 +59,11 @@ export class RolesClient {
                 request: Management.ListOrganizationMemberRolesRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50, include_totals: includeTotals = true } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -83,7 +79,11 @@ export class RolesClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -110,6 +110,8 @@ export class RolesClient {
                             );
                         case 403:
                             throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
                             throw new Management.TooManyRequestsError(
                                 _response.error.body as unknown,
@@ -146,7 +148,7 @@ export class RolesClient {
     }
 
     /**
-     * Assign one or more <a href="https://auth0.com/docs/manage-users/access-control/rbac">roles</a> to a user to determine their access for a specific Organization.
+     * Assign one or more [roles](https://auth0.com/docs/manage-users/access-control/rbac) to a user to determine their access for a specific Organization.
      *
      * Users can be members of multiple Organizations with unique roles assigned for each membership. This action assigns roles to a user only for the specified Organization. Roles cannot be assigned to a user across multiple Organizations in the same call.
      *
@@ -197,7 +199,7 @@ export class RolesClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -240,7 +242,7 @@ export class RolesClient {
     }
 
     /**
-     * Remove one or more Organization-specific <a href="https://auth0.com/docs/manage-users/access-control/rbac">roles</a> from a given user.
+     * Remove one or more Organization-specific [roles](https://auth0.com/docs/manage-users/access-control/rbac) from a given user.
      *
      * Users can be members of multiple Organizations with unique roles assigned for each membership. This action removes roles from a user in relation to the specified Organization. Roles assigned to the user within a different Organization cannot be managed in the same call.
      *
@@ -290,7 +292,7 @@ export class RolesClient {
             method: "DELETE",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

@@ -29,6 +29,116 @@ export class DirectoryProvisioningClient {
     }
 
     /**
+     * Retrieve a list of directory provisioning configurations of a tenant.
+     *
+     * @param {Management.ListDirectoryProvisioningsRequestParameters} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.list({
+     *         from: "from",
+     *         take: 1
+     *     })
+     */
+    public async list(
+        request: Management.ListDirectoryProvisioningsRequestParameters = {},
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.Page<Management.DirectoryProvisioning, Management.ListDirectoryProvisioningsResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.ListDirectoryProvisioningsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListDirectoryProvisioningsResponseContent>> => {
+                const { from: from_, take = 50 } = request;
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "connections-directory-provisionings",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.ListDirectoryProvisioningsResponseContent,
+                        rawResponse: _response.rawResponse,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(
+                    _response.error,
+                    _response.rawResponse,
+                    "GET",
+                    "/connections-directory-provisionings",
+                );
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.DirectoryProvisioning, Management.ListDirectoryProvisioningsResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.directory_provisionings ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
+    }
+
+    /**
      * Retrieve the directory provisioning configuration of a connection.
      *
      * @param {string} id - The id of the connection to retrieve its directory provisioning configuration
@@ -69,7 +179,7 @@ export class DirectoryProvisioningClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -158,9 +268,9 @@ export class DirectoryProvisioningClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request != null ? request : undefined,
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -246,7 +356,7 @@ export class DirectoryProvisioningClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -331,9 +441,9 @@ export class DirectoryProvisioningClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request != null ? request : undefined,
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -417,7 +527,7 @@ export class DirectoryProvisioningClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -457,6 +567,215 @@ export class DirectoryProvisioningClient {
             _response.rawResponse,
             "GET",
             "/connections/{id}/directory-provisioning/default-mapping",
+        );
+    }
+
+    /**
+     * Retrieve the configured synchronized groups for a connection directory provisioning configuration.
+     *
+     * @param {string} id - The id of the connection to list synchronized groups for.
+     * @param {Management.ListSynchronizedGroupsRequestParameters} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
+     *         from: "from",
+     *         take: 1
+     *     })
+     */
+    public async listSynchronizedGroups(
+        id: string,
+        request: Management.ListSynchronizedGroupsRequestParameters = {},
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.Page<Management.SynchronizedGroupPayload, Management.ListSynchronizedGroupsResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.ListSynchronizedGroupsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListSynchronizedGroupsResponseContent>> => {
+                const { from: from_, take = 50 } = request;
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.ListSynchronizedGroupsResponseContent,
+                        rawResponse: _response.rawResponse,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(
+                    _response.error,
+                    _response.rawResponse,
+                    "GET",
+                    "/connections/{id}/directory-provisioning/synchronized-groups",
+                );
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.SynchronizedGroupPayload, Management.ListSynchronizedGroupsResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.groups ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
+    }
+
+    /**
+     * Create or replace the selected groups for a connection directory provisioning configuration.
+     *
+     * @param {string} id - The id of the connection to create or replace synchronized groups for
+     * @param {Management.ReplaceSynchronizedGroupsRequestContent} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.ConflictError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.set("id", {
+     *         groups: [{
+     *                 id: "id"
+     *             }]
+     *     })
+     */
+    public set(
+        id: string,
+        request: Management.ReplaceSynchronizedGroupsRequestContent,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__set(id, request, requestOptions));
+    }
+
+    private async __set(
+        id: string,
+        request: Management.ReplaceSynchronizedGroupsRequestContent,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<void>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PUT",
+            "/connections/{id}/directory-provisioning/synchronized-groups",
         );
     }
 }

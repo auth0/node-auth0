@@ -10,14 +10,11 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [{ key: "key" }];
+
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.rulesConfigs.list();
-        expect(response).toEqual([
-            {
-                key: "key",
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -25,6 +22,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -37,6 +35,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -49,6 +48,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/rules-configs").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -61,6 +61,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "value" };
         const rawResponseBody = { key: "key", value: "value" };
+
         server
             .mockEndpoint()
             .put("/rules-configs/key")
@@ -73,10 +74,7 @@ describe("RulesConfigsClient", () => {
         const response = await client.rulesConfigs.set("key", {
             value: "value",
         });
-        expect(response).toEqual({
-            key: "key",
-            value: "value",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("set (2)", async () => {
@@ -84,6 +82,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "MY_RULES_CONFIG_VALUE" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/rules-configs/key")
@@ -105,6 +104,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "MY_RULES_CONFIG_VALUE" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/rules-configs/key")
@@ -126,6 +126,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { value: "MY_RULES_CONFIG_VALUE" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/rules-configs/key")
@@ -157,6 +158,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/rules-configs/key")
@@ -175,6 +177,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/rules-configs/key")
@@ -193,6 +196,7 @@ describe("RulesConfigsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/rules-configs/key")

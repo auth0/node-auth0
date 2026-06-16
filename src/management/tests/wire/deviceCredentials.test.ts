@@ -24,6 +24,7 @@ describe("DeviceCredentialsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/device-credentials")
@@ -32,21 +33,7 @@ describe("DeviceCredentialsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            device_credentials: [
-                {
-                    id: "id",
-                    device_name: "device_name",
-                    device_id: "device_id",
-                    type: "public_key",
-                    user_id: "user_id",
-                    client_id: "client_id",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.deviceCredentials.list({
             page: 1,
             per_page: 1,
@@ -69,6 +56,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/device-credentials")
@@ -87,6 +75,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/device-credentials")
@@ -105,6 +94,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/device-credentials")
@@ -123,6 +113,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/device-credentials")
@@ -146,6 +137,7 @@ describe("DeviceCredentialsClient", () => {
             device_id: "device_id",
         };
         const rawResponseBody = { id: "id" };
+
         server
             .mockEndpoint()
             .post("/device-credentials")
@@ -157,12 +149,11 @@ describe("DeviceCredentialsClient", () => {
 
         const response = await client.deviceCredentials.createPublicKey({
             device_name: "device_name",
+            type: "public_key",
             value: "value",
             device_id: "device_id",
         });
-        expect(response).toEqual({
-            id: "id",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("createPublicKey (2)", async () => {
@@ -170,6 +161,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { device_name: "x", type: "public_key", value: "x", device_id: "device_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/device-credentials")
@@ -182,6 +174,7 @@ describe("DeviceCredentialsClient", () => {
         await expect(async () => {
             return await client.deviceCredentials.createPublicKey({
                 device_name: "x",
+                type: "public_key",
                 value: "x",
                 device_id: "device_id",
             });
@@ -193,6 +186,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { device_name: "x", type: "public_key", value: "x", device_id: "device_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/device-credentials")
@@ -205,6 +199,7 @@ describe("DeviceCredentialsClient", () => {
         await expect(async () => {
             return await client.deviceCredentials.createPublicKey({
                 device_name: "x",
+                type: "public_key",
                 value: "x",
                 device_id: "device_id",
             });
@@ -216,6 +211,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { device_name: "x", type: "public_key", value: "x", device_id: "device_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/device-credentials")
@@ -228,6 +224,7 @@ describe("DeviceCredentialsClient", () => {
         await expect(async () => {
             return await client.deviceCredentials.createPublicKey({
                 device_name: "x",
+                type: "public_key",
                 value: "x",
                 device_id: "device_id",
             });
@@ -239,6 +236,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { device_name: "x", type: "public_key", value: "x", device_id: "device_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/device-credentials")
@@ -251,6 +249,7 @@ describe("DeviceCredentialsClient", () => {
         await expect(async () => {
             return await client.deviceCredentials.createPublicKey({
                 device_name: "x",
+                type: "public_key",
                 value: "x",
                 device_id: "device_id",
             });
@@ -262,6 +261,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { device_name: "x", type: "public_key", value: "x", device_id: "device_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/device-credentials")
@@ -274,6 +274,7 @@ describe("DeviceCredentialsClient", () => {
         await expect(async () => {
             return await client.deviceCredentials.createPublicKey({
                 device_name: "x",
+                type: "public_key",
                 value: "x",
                 device_id: "device_id",
             });
@@ -295,6 +296,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/device-credentials/id")
@@ -313,6 +315,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/device-credentials/id")
@@ -331,6 +334,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/device-credentials/id")
@@ -349,6 +353,7 @@ describe("DeviceCredentialsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/device-credentials/id")

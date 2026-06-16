@@ -24,6 +24,7 @@ describe("ClientGrantsClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/client-grants")
@@ -32,24 +33,11 @@ describe("ClientGrantsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            client_grants: [
-                {
-                    id: "id",
-                    client_id: "client_id",
-                    audience: "audience",
-                    scope: ["scope"],
-                    organization_usage: "deny",
-                    allow_any_organization: true,
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.organizations.clientGrants.list("id", {
             audience: "audience",
             client_id: "client_id",
+            grant_ids: ["grant_ids"],
             page: 1,
             per_page: 1,
             include_totals: true,
@@ -66,6 +54,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/client-grants")
@@ -84,6 +73,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/client-grants")
@@ -102,6 +92,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/client-grants")
@@ -120,6 +111,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/organizations/id/client-grants")
@@ -145,6 +137,7 @@ describe("ClientGrantsClient", () => {
             organization_usage: "deny",
             allow_any_organization: true,
         };
+
         server
             .mockEndpoint()
             .post("/organizations/id/client-grants")
@@ -157,14 +150,7 @@ describe("ClientGrantsClient", () => {
         const response = await client.organizations.clientGrants.create("id", {
             grant_id: "grant_id",
         });
-        expect(response).toEqual({
-            id: "id",
-            client_id: "client_id",
-            audience: "audience",
-            scope: ["scope"],
-            organization_usage: "deny",
-            allow_any_organization: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -172,6 +158,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { grant_id: "grant_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/client-grants")
@@ -193,6 +180,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { grant_id: "grant_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/client-grants")
@@ -214,6 +202,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { grant_id: "grant_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/client-grants")
@@ -235,6 +224,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { grant_id: "grant_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/client-grants")
@@ -256,6 +246,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { grant_id: "grant_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/client-grants")
@@ -277,6 +268,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { grant_id: "grant_id" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/organizations/id/client-grants")
@@ -308,6 +300,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/client-grants/grant_id")
@@ -326,6 +319,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/client-grants/grant_id")
@@ -344,6 +338,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/client-grants/grant_id")
@@ -362,6 +357,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/client-grants/grant_id")
@@ -380,6 +376,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/organizations/id/client-grants/grant_id")

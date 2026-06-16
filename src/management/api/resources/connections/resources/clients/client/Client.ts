@@ -23,9 +23,9 @@ export class ClientsClient {
     }
 
     /**
-     * Retrieve all clients that have the specified <a href="https://auth0.com/docs/authenticate/identity-providers">connection</a> enabled.
+     * Retrieve all clients that have the specified [connection](https://auth0.com/docs/authenticate/identity-providers) enabled.
      *
-     * <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+     * **Note**: The first time you call this endpoint, omit the `from` parameter. If there are more results, a `next` value is included in the response. You can use this for subsequent API calls. When `next` is no longer included in the response, no further results are remaining.
      *
      * @param {string} id - The id of the connection for which enabled clients are to be retrieved
      * @param {Management.GetConnectionEnabledClientsRequestParameters} request
@@ -53,13 +53,10 @@ export class ClientsClient {
                 request: Management.GetConnectionEnabledClientsRequestParameters,
             ): Promise<core.WithRawResponse<Management.GetConnectionEnabledClientsResponseContent>> => {
                 const { take = 50, from: from_ } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    take,
+                    from: from_,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -75,7 +72,11 @@ export class ClientsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -186,7 +187,7 @@ export class ClientsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

@@ -50,13 +50,10 @@ export class VersionsClient {
                 request: Management.ListActionVersionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListActionVersionsPaginatedResponseContent>> => {
                 const { page = 0, per_page: perPage = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    page,
+                    per_page: perPage,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -72,7 +69,11 @@ export class VersionsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -178,7 +179,7 @@ export class VersionsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -226,7 +227,7 @@ export class VersionsClient {
      *
      * @param {string} actionId - The ID of an action.
      * @param {string} id - The ID of an action version.
-     * @param {Management.DeployActionVersionRequestContent | undefined} request
+     * @param {Management.DeployActionVersionRequestContent | null} request
      * @param {VersionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
@@ -240,7 +241,7 @@ export class VersionsClient {
     public deploy(
         actionId: string,
         id: string,
-        request?: Management.DeployActionVersionRequestContent | undefined,
+        request?: Management.DeployActionVersionRequestContent | null,
         requestOptions?: VersionsClient.RequestOptions,
     ): core.HttpResponsePromise<Management.DeployActionVersionResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__deploy(actionId, id, request, requestOptions));
@@ -249,7 +250,7 @@ export class VersionsClient {
     private async __deploy(
         actionId: string,
         id: string,
-        request?: Management.DeployActionVersionRequestContent | undefined,
+        request?: Management.DeployActionVersionRequestContent | null,
         requestOptions?: VersionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<Management.DeployActionVersionResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -268,9 +269,9 @@ export class VersionsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request != null ? request : undefined,
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

@@ -20,10 +20,12 @@ describe("ConnectedAccountsClient", () => {
                     scopes: ["scopes"],
                     created_at: "2024-01-15T09:30:00Z",
                     expires_at: "2024-01-15T09:30:00Z",
+                    organization_id: "organization_id",
                 },
             ],
             next: "next",
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/connected-accounts")
@@ -32,21 +34,7 @@ describe("ConnectedAccountsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            connected_accounts: [
-                {
-                    id: "id",
-                    connection: "connection",
-                    connection_id: "connection_id",
-                    strategy: "strategy",
-                    access_type: "offline",
-                    scopes: ["scopes"],
-                    created_at: "2024-01-15T09:30:00Z",
-                    expires_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-            next: "next",
-        };
+        const expected = rawResponseBody;
         const page = await client.users.connectedAccounts.list("id", {
             from: "from",
             take: 1,
@@ -63,8 +51,9 @@ describe("ConnectedAccountsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(400)
@@ -81,8 +70,9 @@ describe("ConnectedAccountsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(401)
@@ -99,8 +89,9 @@ describe("ConnectedAccountsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(403)
@@ -117,8 +108,9 @@ describe("ConnectedAccountsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/connected-accounts")
             .respondWith()
             .statusCode(429)

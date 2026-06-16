@@ -25,6 +25,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/multifactor/actions/invalidate-remember-browser")
@@ -43,6 +44,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/multifactor/actions/invalidate-remember-browser")
@@ -61,6 +63,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/users/id/multifactor/actions/invalidate-remember-browser")
@@ -89,6 +92,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/multifactor/duo")
@@ -107,6 +111,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/multifactor/duo")
@@ -125,6 +130,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/multifactor/duo")
@@ -143,6 +149,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/multifactor/duo")
@@ -161,6 +168,7 @@ describe("MultifactorClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/users/id/multifactor/duo")

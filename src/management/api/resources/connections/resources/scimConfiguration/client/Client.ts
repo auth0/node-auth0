@@ -29,7 +29,117 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Retrieves a scim configuration by its <code>connectionId</code>.
+     * Retrieve a list of SCIM configurations of a tenant.
+     *
+     * @param {Management.ListScimConfigurationsRequestParameters} request
+     * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.scimConfiguration.list({
+     *         from: "from",
+     *         take: 1
+     *     })
+     */
+    public async list(
+        request: Management.ListScimConfigurationsRequestParameters = {},
+        requestOptions?: ScimConfigurationClient.RequestOptions,
+    ): Promise<core.Page<Management.ScimConfiguration, Management.ListScimConfigurationsResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.ListScimConfigurationsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListScimConfigurationsResponseContent>> => {
+                const { from: from_, take = 50 } = request;
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "connections-scim-configurations",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.ListScimConfigurationsResponseContent,
+                        rawResponse: _response.rawResponse,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(
+                    _response.error,
+                    _response.rawResponse,
+                    "GET",
+                    "/connections-scim-configurations",
+                );
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.ScimConfiguration, Management.ListScimConfigurationsResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.scim_configurations ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
+    }
+
+    /**
+     * Retrieves a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to retrieve its SCIM configuration
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -66,7 +176,7 @@ export class ScimConfigurationClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -145,9 +255,9 @@ export class ScimConfigurationClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request != null ? request : undefined,
+            body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -185,7 +295,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Deletes a scim configuration by its <code>connectionId</code>.
+     * Deletes a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to delete its SCIM configuration
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -219,7 +329,7 @@ export class ScimConfigurationClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -254,7 +364,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Update a scim configuration by its <code>connectionId</code>.
+     * Update a scim configuration by its `connectionId`.
      *
      * @param {string} id - The id of the connection to update its SCIM configuration
      * @param {Management.UpdateScimConfigurationRequestContent} request
@@ -298,7 +408,7 @@ export class ScimConfigurationClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -338,7 +448,7 @@ export class ScimConfigurationClient {
     }
 
     /**
-     * Retrieves a scim configuration's default mapping by its <code>connectionId</code>.
+     * Retrieves a scim configuration's default mapping by its `connectionId`.
      *
      * @param {string} id - The id of the connection to retrieve its default SCIM mapping
      * @param {ScimConfigurationClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -375,7 +485,7 @@ export class ScimConfigurationClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

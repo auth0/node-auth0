@@ -10,6 +10,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { akamai_enabled: true };
+
         server
             .mockEndpoint()
             .get("/supplemental-signals")
@@ -19,9 +20,7 @@ describe("SupplementalSignalsClient", () => {
             .build();
 
         const response = await client.supplementalSignals.get();
-        expect(response).toEqual({
-            akamai_enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -29,6 +28,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/supplemental-signals")
@@ -47,6 +47,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/supplemental-signals")
@@ -65,6 +66,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/supplemental-signals")
@@ -83,6 +85,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/supplemental-signals")
@@ -101,6 +104,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { akamai_enabled: true };
         const rawResponseBody = { akamai_enabled: true };
+
         server
             .mockEndpoint()
             .patch("/supplemental-signals")
@@ -113,9 +117,7 @@ describe("SupplementalSignalsClient", () => {
         const response = await client.supplementalSignals.patch({
             akamai_enabled: true,
         });
-        expect(response).toEqual({
-            akamai_enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("patch (2)", async () => {
@@ -123,6 +125,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { akamai_enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/supplemental-signals")
@@ -144,6 +147,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { akamai_enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/supplemental-signals")
@@ -165,6 +169,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { akamai_enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/supplemental-signals")
@@ -186,6 +191,7 @@ describe("SupplementalSignalsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { akamai_enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/supplemental-signals")

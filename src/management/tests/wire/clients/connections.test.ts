@@ -26,6 +26,7 @@ describe("ConnectionsClient", () => {
             ],
             next: "next",
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/clients/id/connections")
@@ -34,30 +35,9 @@ describe("ConnectionsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            connections: [
-                {
-                    name: "name",
-                    display_name: "display_name",
-                    options: {
-                        key: "value",
-                    },
-                    id: "id",
-                    strategy: "strategy",
-                    realms: ["realms"],
-                    is_domain_connection: true,
-                    show_as_button: true,
-                    authentication: {
-                        active: true,
-                    },
-                    connected_accounts: {
-                        active: true,
-                    },
-                },
-            ],
-            next: "next",
-        };
+        const expected = rawResponseBody;
         const page = await client.clients.connections.get("id", {
+            strategy: ["ad"],
             from: "from",
             take: 1,
             fields: "fields",
@@ -75,8 +55,9 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/clients/id/connections")
             .respondWith()
             .statusCode(400)
@@ -93,8 +74,9 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/clients/id/connections")
             .respondWith()
             .statusCode(401)
@@ -111,8 +93,9 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/clients/id/connections")
             .respondWith()
             .statusCode(403)
@@ -129,8 +112,9 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/clients/id/connections")
             .respondWith()
             .statusCode(404)
@@ -147,8 +131,9 @@ describe("ConnectionsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/clients/id/connections")
             .respondWith()
             .statusCode(429)

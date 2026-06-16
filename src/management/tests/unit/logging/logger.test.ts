@@ -1,4 +1,4 @@
-import { ConsoleLogger, createLogger, Logger, LogLevel } from "../../../../../src/management/core/logging/logger";
+import { ConsoleLogger, createLogger, Logger, LogLevel } from "../../../core/logging/logger";
 
 function createMockLogger() {
     return {

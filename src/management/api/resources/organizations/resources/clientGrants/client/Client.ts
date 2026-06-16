@@ -36,6 +36,7 @@ export class ClientGrantsClient {
      *     await client.organizations.clientGrants.list("id", {
      *         audience: "audience",
      *         client_id: "client_id",
+     *         grant_ids: ["grant_ids"],
      *         page: 1,
      *         per_page: 1,
      *         include_totals: true
@@ -63,29 +64,14 @@ export class ClientGrantsClient {
                     per_page: perPage = 50,
                     include_totals: includeTotals = true,
                 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (audience !== undefined) {
-                    _queryParams["audience"] = audience;
-                }
-                if (clientId !== undefined) {
-                    _queryParams["client_id"] = clientId;
-                }
-                if (grantIds !== undefined) {
-                    if (Array.isArray(grantIds)) {
-                        _queryParams["grant_ids"] = grantIds.map((item) => item);
-                    } else {
-                        _queryParams["grant_ids"] = grantIds;
-                    }
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    audience,
+                    client_id: clientId,
+                    grant_ids: grantIds,
+                    page,
+                    per_page: perPage,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -101,7 +87,11 @@ export class ClientGrantsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -212,7 +202,7 @@ export class ClientGrantsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -301,7 +291,7 @@ export class ClientGrantsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

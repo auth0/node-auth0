@@ -10,17 +10,11 @@ describe("ErrorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = [{ user: { key: "value" }, errors: [{}] }];
+
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.jobs.errors.get("id");
-        expect(response).toEqual([
-            {
-                user: {
-                    key: "value",
-                },
-                errors: [{}],
-            },
-        ]);
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -28,6 +22,7 @@ describe("ErrorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -40,6 +35,7 @@ describe("ErrorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -52,6 +48,7 @@ describe("ErrorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -64,6 +61,7 @@ describe("ErrorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -76,6 +74,7 @@ describe("ErrorsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/jobs/id/errors").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {

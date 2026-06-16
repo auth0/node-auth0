@@ -23,6 +23,7 @@ describe("TokenExchangeProfilesClient", () => {
                 },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/token-exchange-profiles")
@@ -31,20 +32,7 @@ describe("TokenExchangeProfilesClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            next: "next",
-            token_exchange_profiles: [
-                {
-                    id: "id",
-                    name: "name",
-                    subject_token_type: "subject_token_type",
-                    action_id: "action_id",
-                    type: "custom_authentication",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.tokenExchangeProfiles.list({
             from: "from",
             take: 1,
@@ -61,8 +49,9 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(400)
@@ -79,8 +68,9 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(401)
@@ -97,8 +87,9 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(403)
@@ -115,8 +106,9 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/token-exchange-profiles")
             .respondWith()
             .statusCode(429)
@@ -146,6 +138,7 @@ describe("TokenExchangeProfilesClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -159,16 +152,9 @@ describe("TokenExchangeProfilesClient", () => {
             name: "name",
             subject_token_type: "subject_token_type",
             action_id: "action_id",
-        });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            subject_token_type: "subject_token_type",
-            action_id: "action_id",
             type: "custom_authentication",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
         });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -181,6 +167,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -195,6 +182,7 @@ describe("TokenExchangeProfilesClient", () => {
                 name: "Token Exchange Profile 1",
                 subject_token_type: "mandarin",
                 action_id: "x",
+                type: "custom_authentication",
             });
         }).rejects.toThrow(Management.BadRequestError);
     });
@@ -209,6 +197,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -223,6 +212,7 @@ describe("TokenExchangeProfilesClient", () => {
                 name: "Token Exchange Profile 1",
                 subject_token_type: "mandarin",
                 action_id: "x",
+                type: "custom_authentication",
             });
         }).rejects.toThrow(Management.UnauthorizedError);
     });
@@ -237,6 +227,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -251,6 +242,7 @@ describe("TokenExchangeProfilesClient", () => {
                 name: "Token Exchange Profile 1",
                 subject_token_type: "mandarin",
                 action_id: "x",
+                type: "custom_authentication",
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });
@@ -265,6 +257,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -279,6 +272,7 @@ describe("TokenExchangeProfilesClient", () => {
                 name: "Token Exchange Profile 1",
                 subject_token_type: "mandarin",
                 action_id: "x",
+                type: "custom_authentication",
             });
         }).rejects.toThrow(Management.ConflictError);
     });
@@ -293,6 +287,7 @@ describe("TokenExchangeProfilesClient", () => {
             type: "custom_authentication",
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/token-exchange-profiles")
@@ -307,6 +302,7 @@ describe("TokenExchangeProfilesClient", () => {
                 name: "Token Exchange Profile 1",
                 subject_token_type: "mandarin",
                 action_id: "x",
+                type: "custom_authentication",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
@@ -324,6 +320,7 @@ describe("TokenExchangeProfilesClient", () => {
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
         };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -333,15 +330,7 @@ describe("TokenExchangeProfilesClient", () => {
             .build();
 
         const response = await client.tokenExchangeProfiles.get("id");
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            subject_token_type: "subject_token_type",
-            action_id: "action_id",
-            type: "custom_authentication",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -349,6 +338,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -367,6 +357,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -385,6 +376,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -403,6 +395,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -421,6 +414,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/token-exchange-profiles/id")
@@ -449,6 +443,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/token-exchange-profiles/id")
@@ -467,6 +462,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/token-exchange-profiles/id")
@@ -485,6 +481,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/token-exchange-profiles/id")
@@ -520,6 +517,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -539,6 +537,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -558,6 +557,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -577,6 +577,7 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")
@@ -596,6 +597,27 @@ describe("TokenExchangeProfilesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/token-exchange-profiles/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.tokenExchangeProfiles.update("id");
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("update (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/token-exchange-profiles/id")

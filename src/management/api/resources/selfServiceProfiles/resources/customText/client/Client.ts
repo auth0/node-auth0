@@ -23,7 +23,7 @@ export class CustomTextClient {
     }
 
     /**
-     * Retrieves text customizations for a given self-service profile, language and Self Service SSO Flow page.
+     * Retrieves text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
      *
      * @param {string} id - The id of the self-service profile.
      * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
@@ -68,7 +68,7 @@ export class CustomTextClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -110,7 +110,7 @@ export class CustomTextClient {
     }
 
     /**
-     * Updates text customizations for a given self-service profile, language and Self Service SSO Flow page.
+     * Updates text customizations for a given self-service profile, language and Self-Service Enterprise Configuration flow page.
      *
      * @param {string} id - The id of the self-service profile.
      * @param {Management.SelfServiceProfileCustomTextLanguageEnum} language - The language of the custom text.
@@ -161,7 +161,7 @@ export class CustomTextClient {
             method: "PUT",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

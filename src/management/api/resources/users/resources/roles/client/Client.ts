@@ -25,14 +25,16 @@ export class RolesClient {
     /**
      * Retrieve detailed list of all user roles currently assigned to a user.
      *
-     * <b>Note</b>: This action retrieves all roles assigned to a user in the context of your whole tenant. To retrieve Organization-specific roles, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/get-organization-member-roles">Get user roles assigned to an Organization member</a>.
+     * **Note**: This action retrieves all roles assigned to a user in the context of your whole tenant. To retrieve Organization-specific roles, use the following endpoint: [Get user roles assigned to an Organization member](https://auth0.com/docs/api/management/v2/organizations/get-organization-member-roles).
      *
      * @param {string} id - ID of the user to list roles for.
      * @param {Management.ListUserRolesRequestParameters} request
      * @param {RolesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -52,16 +54,11 @@ export class RolesClient {
                 request: Management.ListUserRolesRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListUserRolesOffsetPaginatedResponseContent>> => {
                 const { per_page: perPage = 50, page = 0, include_totals: includeTotals = true } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (perPage !== undefined) {
-                    _queryParams["per_page"] = perPage?.toString() ?? null;
-                }
-                if (page !== undefined) {
-                    _queryParams["page"] = page?.toString() ?? null;
-                }
-                if (includeTotals !== undefined) {
-                    _queryParams["include_totals"] = includeTotals?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    per_page: perPage,
+                    page,
+                    include_totals: includeTotals,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -77,7 +74,11 @@ export class RolesClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -92,6 +93,11 @@ export class RolesClient {
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
                         case 401:
                             throw new Management.UnauthorizedError(
                                 _response.error.body as unknown,
@@ -99,6 +105,8 @@ export class RolesClient {
                             );
                         case 403:
                             throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                         case 429:
                             throw new Management.TooManyRequestsError(
                                 _response.error.body as unknown,
@@ -130,9 +138,9 @@ export class RolesClient {
     }
 
     /**
-     * Assign one or more existing user roles to a user. For more information, review <a href="https://auth0.com/docs/manage-users/access-control/rbac">Role-Based Access Control</a>.
+     * Assign one or more existing user roles to a user. For more information, review [Role-Based Access Control](https://auth0.com/docs/manage-users/access-control/rbac).
      *
-     * <b>Note</b>: New roles cannot be created through this action. Additionally, this action is used to assign roles to a user in the context of your whole tenant. To assign roles in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/post-organization-member-roles">Assign user roles to an Organization member</a>.
+     * **Note**: New roles cannot be created through this action. Additionally, this action is used to assign roles to a user in the context of your whole tenant. To assign roles in the context of a specific Organization, use the following endpoint: [Assign user roles to an Organization member](https://auth0.com/docs/api/management/v2/organizations/post-organization-member-roles).
      *
      * @param {string} id - ID of the user to associate roles with.
      * @param {Management.AssignUserRolesRequestContent} request
@@ -141,6 +149,7 @@ export class RolesClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -177,7 +186,7 @@ export class RolesClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -198,6 +207,8 @@ export class RolesClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -215,7 +226,7 @@ export class RolesClient {
     /**
      * Remove one or more specified user roles assigned to a user.
      *
-     * <b>Note</b>: This action removes a role from a user in the context of your whole tenant. If you want to unassign a role from a user in the context of a specific Organization, use the following endpoint: <a href="https://auth0.com/docs/api/management/v2/organizations/delete-organization-member-roles">Delete user roles from an Organization member</a>.
+     * **Note**: This action removes a role from a user in the context of your whole tenant. If you want to unassign a role from a user in the context of a specific Organization, use the following endpoint: [Delete user roles from an Organization member](https://auth0.com/docs/api/management/v2/organizations/delete-organization-member-roles).
      *
      * @param {string} id - ID of the user to remove roles from.
      * @param {Management.DeleteUserRolesRequestContent} request
@@ -223,6 +234,7 @@ export class RolesClient {
      *
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
@@ -259,7 +271,7 @@ export class RolesClient {
             method: "DELETE",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -278,6 +290,8 @@ export class RolesClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:

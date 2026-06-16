@@ -10,6 +10,7 @@ describe("VerificationEmailClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "user_id" };
         const rawResponseBody = { status: "status", type: "type", created_at: "created_at", id: "id" };
+
         server
             .mockEndpoint()
             .post("/jobs/verification-email")
@@ -22,12 +23,7 @@ describe("VerificationEmailClient", () => {
         const response = await client.jobs.verificationEmail.create({
             user_id: "user_id",
         });
-        expect(response).toEqual({
-            status: "status",
-            type: "type",
-            created_at: "created_at",
-            id: "id",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -35,6 +31,7 @@ describe("VerificationEmailClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "google-oauth2|1234" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/jobs/verification-email")
@@ -56,6 +53,7 @@ describe("VerificationEmailClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "google-oauth2|1234" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/jobs/verification-email")
@@ -77,6 +75,7 @@ describe("VerificationEmailClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "google-oauth2|1234" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/jobs/verification-email")
@@ -98,6 +97,7 @@ describe("VerificationEmailClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { user_id: "google-oauth2|1234" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/jobs/verification-email")

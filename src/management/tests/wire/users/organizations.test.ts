@@ -17,6 +17,7 @@ describe("OrganizationsClient", () => {
                 { id: "id", name: "name", display_name: "display_name", token_quota: { client_credentials: {} } },
             ],
         };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/organizations")
@@ -25,21 +26,7 @@ describe("OrganizationsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const expected = {
-            start: 1.1,
-            limit: 1.1,
-            total: 1.1,
-            organizations: [
-                {
-                    id: "id",
-                    name: "name",
-                    display_name: "display_name",
-                    token_quota: {
-                        client_credentials: {},
-                    },
-                },
-            ],
-        };
+        const expected = rawResponseBody;
         const page = await client.users.organizations.list("id", {
             page: 1,
             per_page: 1,
@@ -57,6 +44,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/organizations")
@@ -75,6 +63,7 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/organizations")
@@ -93,6 +82,26 @@ describe("OrganizationsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/users/id/organizations")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.organizations.list("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint({ once: false })
             .get("/users/id/organizations")

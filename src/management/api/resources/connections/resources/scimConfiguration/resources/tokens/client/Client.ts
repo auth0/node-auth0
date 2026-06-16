@@ -26,7 +26,7 @@ export class TokensClient {
     }
 
     /**
-     * Retrieves all scim tokens by its connection <code>id</code>.
+     * Retrieves all scim tokens by its connection `id`.
      *
      * @param {string} id - The id of the connection to retrieve its SCIM configuration
      * @param {TokensClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -63,7 +63,7 @@ export class TokensClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -143,7 +143,7 @@ export class TokensClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -185,7 +185,7 @@ export class TokensClient {
     }
 
     /**
-     * Deletes a scim token by its connection <code>id</code> and <code>tokenId</code>.
+     * Deletes a scim token by its connection `id` and `tokenId`.
      *
      * @param {string} id - The connection id that owns the SCIM token to delete
      * @param {string} tokenId - The id of the scim token to delete
@@ -225,7 +225,7 @@ export class TokensClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

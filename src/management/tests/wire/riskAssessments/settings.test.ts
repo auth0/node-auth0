@@ -10,6 +10,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { enabled: true };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings")
@@ -19,9 +20,7 @@ describe("SettingsClient", () => {
             .build();
 
         const response = await client.riskAssessments.settings.get();
-        expect(response).toEqual({
-            enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -29,6 +28,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings")
@@ -47,6 +47,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings")
@@ -65,6 +66,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings")
@@ -83,6 +85,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/risk-assessments/settings")
@@ -101,6 +104,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { enabled: true };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings")
@@ -113,9 +117,7 @@ describe("SettingsClient", () => {
         const response = await client.riskAssessments.settings.update({
             enabled: true,
         });
-        expect(response).toEqual({
-            enabled: true,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -123,6 +125,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings")
@@ -144,6 +147,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings")
@@ -165,6 +169,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings")
@@ -186,6 +191,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings")
@@ -207,6 +213,7 @@ describe("SettingsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { enabled: true };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .patch("/risk-assessments/settings")

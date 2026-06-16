@@ -24,6 +24,7 @@ export class DiscoveryDomainsClient {
 
     /**
      * Retrieve list of all organization discovery domains associated with the specified organization.
+     * This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
      *
      * @param {string} id - ID of the organization.
      * @param {Management.ListOrganizationDiscoveryDomainsRequestParameters} request
@@ -53,13 +54,10 @@ export class DiscoveryDomainsClient {
                 request: Management.ListOrganizationDiscoveryDomainsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationDiscoveryDomainsResponseContent>> => {
                 const { from: from_, take = 50 } = request;
-                const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-                if (from_ !== undefined) {
-                    _queryParams["from"] = from_;
-                }
-                if (take !== undefined) {
-                    _queryParams["take"] = take?.toString() ?? null;
-                }
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
                     _authRequest.headers,
@@ -75,7 +73,11 @@ export class DiscoveryDomainsClient {
                     ),
                     method: "GET",
                     headers: _headers,
-                    queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
                     timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
                     maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
@@ -142,7 +144,7 @@ export class DiscoveryDomainsClient {
     }
 
     /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+     * Create a new discovery domain for an organization.
      *
      * @param {string} id - ID of the organization.
      * @param {Management.CreateOrganizationDiscoveryDomainRequestContent} request
@@ -189,7 +191,7 @@ export class DiscoveryDomainsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -238,7 +240,7 @@ export class DiscoveryDomainsClient {
 
     /**
      * Retrieve details about a single organization discovery domain specified by domain name.
-     *
+     * This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
      *
      * @param {string} id - ID of the organization.
      * @param {string} discovery_domain - Domain name of the discovery domain.
@@ -281,7 +283,7 @@ export class DiscoveryDomainsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -326,6 +328,7 @@ export class DiscoveryDomainsClient {
 
     /**
      * Retrieve details about a single organization discovery domain specified by ID.
+     * This endpoint is subject to eventual consistency; newly created, updated, or deleted discovery domains may not immediately appear in the response.
      *
      * @param {string} id - ID of the organization.
      * @param {string} discovery_domain_id - ID of the discovery domain.
@@ -368,7 +371,7 @@ export class DiscoveryDomainsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -454,7 +457,7 @@ export class DiscoveryDomainsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -493,7 +496,7 @@ export class DiscoveryDomainsClient {
     }
 
     /**
-     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The <code>status</code> field must be either <code>pending</code> or <code>verified</code>. The <code>use_for_organization_discovery</code> field can be <code>true</code> or <code>false</code> (default: <code>true</code>).
+     * Update the verification status and/or use_for_organization_discovery for an organization discovery domain. The `status` field must be either `pending` or `verified`. The `use_for_organization_discovery` field can be `true` or `false` (default: `true`).
      *
      * @param {string} id - ID of the organization.
      * @param {string} discovery_domain_id - ID of the discovery domain to update.
@@ -537,7 +540,7 @@ export class DiscoveryDomainsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,

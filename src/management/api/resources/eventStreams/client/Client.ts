@@ -49,76 +49,92 @@ export class EventStreamsClient {
      *         take: 1
      *     })
      */
-    public list(
+    public async list(
         request: Management.ListEventStreamsRequestParameters = {},
         requestOptions?: EventStreamsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.EventStreamResponseContent[]> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
-    }
-
-    private async __list(
-        request: Management.ListEventStreamsRequestParameters = {},
-        requestOptions?: EventStreamsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.EventStreamResponseContent[]>> {
-        const { from: from_, take = 50 } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (from_ !== undefined) {
-            _queryParams["from"] = from_;
-        }
-
-        if (take !== undefined) {
-            _queryParams["take"] = take?.toString() ?? null;
-        }
-
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "event-streams",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.EventStreamResponseContent[],
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+    ): Promise<core.Page<Management.EventStreamResponseContent, Management.ListEventStreamsResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.ListEventStreamsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListEventStreamsResponseContent>> => {
+                const { from: from_, take = 50 } = request;
+                const _queryParams: Record<string, unknown> = {
+                    from: from_,
+                    take,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "event-streams",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.ListEventStreamsResponseContent,
                         rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/event-streams");
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/event-streams");
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.EventStreamResponseContent, Management.ListEventStreamsResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.eventStreams ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
     }
 
     /**
@@ -172,7 +188,7 @@ export class EventStreamsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -250,7 +266,7 @@ export class EventStreamsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -321,7 +337,7 @@ export class EventStreamsClient {
             ),
             method: "DELETE",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -396,7 +412,7 @@ export class EventStreamsClient {
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
@@ -445,7 +461,7 @@ export class EventStreamsClient {
      *
      * @example
      *     await client.eventStreams.test("id", {
-     *         event_type: "user.created"
+     *         event_type: "group.created"
      *     })
      */
     public test(
@@ -477,7 +493,7 @@ export class EventStreamsClient {
             method: "POST",
             headers: _headers,
             contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
             body: request,
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
