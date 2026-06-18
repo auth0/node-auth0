@@ -21,7 +21,7 @@
 
 This library supports the following tooling versions:
 
-- Node.js: `^20.19.0 || ^22.12.0 || ^24.0.0`
+- Node.js: `^20.19.0 || ^22.12.0 || ^24.0.0 || ^26.0.0`
 
 ### Installation
 
@@ -578,7 +578,7 @@ console.log(rawResponse.headers);
 The SDK defaults to `node-fetch` but will use the global fetch client if present. The SDK works in the following
 runtimes:
 
-- Node.js 20.19.0+, 22.12.0+, 24+
+- Node.js 20.19.0+, 22.12.0+, 24+, 26+
 - Vercel
 - Cloudflare Workers
 - Deno v1.25+
