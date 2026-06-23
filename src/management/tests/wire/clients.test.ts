@@ -52,6 +52,7 @@ describe("ClientsClient", () => {
                     organization_discovery_methods: ["email"],
                     require_pushed_authorization_requests: true,
                     require_proof_of_possession: true,
+                    token_vault_privileged_access: { credentials: [{ id: "id" }] },
                     compliance_level: "none",
                     skip_non_verifiable_callback_uri_confirmation_prompt: true,
                     par_request_expiry: 1,
@@ -340,6 +341,8 @@ describe("ClientsClient", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
+            native_social_login: { apple: { enabled: true }, facebook: { enabled: true }, google: { enabled: true } },
+            fedcm_login: { google: { is_enabled: true } },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -362,6 +365,7 @@ describe("ClientsClient", () => {
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
+            token_vault_privileged_access: { credentials: [{ id: "id" }], ip_allowlist: ["ip_allowlist"] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
@@ -487,6 +491,28 @@ describe("ClientsClient", () => {
             .post("/clients")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.create({
+                name: "name",
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("create (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/clients")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(409)
             .jsonBody(rawResponseBody)
             .build();
@@ -498,7 +524,7 @@ describe("ClientsClient", () => {
         }).rejects.toThrow(Management.ConflictError);
     });
 
-    test("create (6)", async () => {
+    test("create (7)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
@@ -972,6 +998,8 @@ describe("ClientsClient", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
+            native_social_login: { apple: { enabled: true }, facebook: { enabled: true }, google: { enabled: true } },
+            fedcm_login: { google: { is_enabled: true } },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -994,6 +1022,7 @@ describe("ClientsClient", () => {
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
+            token_vault_privileged_access: { credentials: [{ id: "id" }], ip_allowlist: ["ip_allowlist"] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
@@ -1318,6 +1347,8 @@ describe("ClientsClient", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
+            native_social_login: { apple: { enabled: true }, facebook: { enabled: true }, google: { enabled: true } },
+            fedcm_login: { google: { is_enabled: true } },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -1340,6 +1371,7 @@ describe("ClientsClient", () => {
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
+            token_vault_privileged_access: { credentials: [{ id: "id" }], ip_allowlist: ["ip_allowlist"] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
@@ -1641,6 +1673,8 @@ describe("ClientsClient", () => {
                 ios: { team_id: "team_id", app_bundle_identifier: "app_bundle_identifier" },
             },
             initiate_login_uri: "initiate_login_uri",
+            native_social_login: { apple: { enabled: true }, facebook: { enabled: true }, google: { enabled: true } },
+            fedcm_login: { google: { is_enabled: true } },
             refresh_token: {
                 rotation_type: "rotating",
                 expiration_type: "expiring",
@@ -1663,6 +1697,7 @@ describe("ClientsClient", () => {
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
+            token_vault_privileged_access: { credentials: [{ id: "id" }], ip_allowlist: ["ip_allowlist"] },
             compliance_level: "none",
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             token_exchange: { allow_any_profile_of_type: ["custom_authentication"] },
