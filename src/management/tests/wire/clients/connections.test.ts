@@ -22,6 +22,7 @@ describe("ConnectionsClient", () => {
                     show_as_button: true,
                     authentication: { active: true },
                     connected_accounts: { active: true },
+                    cross_app_access_requesting_app: { active: true },
                 },
             ],
             next: "next",

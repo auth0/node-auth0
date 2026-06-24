@@ -229,6 +229,19 @@ describe("SigningClient", () => {
 
         const rawResponseBody = { key: "value" };
 
+        server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.keys.signing.get("kid");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("get (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/keys/signing/kid").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
