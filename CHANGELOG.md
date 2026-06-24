@@ -1,5 +1,15 @@
 # Change Log
 
+## [v5.13.0](https://github.com/auth0/node-auth0/tree/v5.13.0) (2026-06-24)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.12.0...v5.13.0)
+
+**Added**
+- feat: add phone provider protection, token vault access, and cross-app connection support  [\#1359](https://github.com/auth0/node-auth0/pull/1359) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Fixed**
+- fix: Refactor artifact path and version handling in RL Scanner action [\#1287](https://github.com/auth0/node-auth0/pull/1287) ([amitsingh05667](https://github.com/amitsingh05667))
+- fix: replace DOM globals  and  with inline types in models.ts [\#1323](https://github.com/auth0/node-auth0/pull/1323) ([amitsingh05667](https://github.com/amitsingh05667))
+
 ## [v5.12.0](https://github.com/auth0/node-auth0/tree/v5.12.0) (2026-06-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.11.0...v5.12.0)
