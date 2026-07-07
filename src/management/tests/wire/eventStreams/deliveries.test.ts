@@ -14,7 +14,7 @@ describe("DeliveriesClient", () => {
                 id: "id",
                 event_stream_id: "event_stream_id",
                 status: "failed",
-                event_type: "group.created",
+                event_type: "connection.created",
                 attempts: [{ status: "failed", timestamp: "2024-01-15T09:30:00Z" }],
                 event: {
                     id: "id",
@@ -149,7 +149,7 @@ describe("DeliveriesClient", () => {
             id: "id",
             event_stream_id: "event_stream_id",
             status: "failed",
-            event_type: "group.created",
+            event_type: "connection.created",
             attempts: [{ status: "failed", timestamp: "2024-01-15T09:30:00Z", error_message: "error_message" }],
             event: {
                 id: "id",

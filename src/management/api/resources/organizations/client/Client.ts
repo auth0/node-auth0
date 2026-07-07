@@ -15,6 +15,7 @@ import { EnabledConnectionsClient } from "../resources/enabledConnections/client
 import { GroupsClient } from "../resources/groups/client/Client.js";
 import { InvitationsClient } from "../resources/invitations/client/Client.js";
 import { MembersClient } from "../resources/members/client/Client.js";
+import { RolesClient } from "../resources/roles/client/Client.js";
 
 export declare namespace OrganizationsClient {
     export type Options = BaseClientOptions;
@@ -31,6 +32,7 @@ export class OrganizationsClient {
     protected _invitations: InvitationsClient | undefined;
     protected _members: MembersClient | undefined;
     protected _groups: GroupsClient | undefined;
+    protected _roles: RolesClient | undefined;
 
     constructor(options: OrganizationsClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -62,6 +64,10 @@ export class OrganizationsClient {
 
     public get groups(): GroupsClient {
         return (this._groups ??= new GroupsClient(this._options));
+    }
+
+    public get roles(): RolesClient {
+        return (this._roles ??= new RolesClient(this._options));
     }
 
     /**
