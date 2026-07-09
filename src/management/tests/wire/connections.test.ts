@@ -23,6 +23,7 @@ describe("ConnectionsClient", () => {
                     show_as_button: true,
                     authentication: { active: true },
                     connected_accounts: { active: true },
+                    cross_app_access_requesting_app: { active: true },
                 },
             ],
         };
@@ -120,6 +121,7 @@ describe("ConnectionsClient", () => {
             metadata: { key: "value" },
             authentication: { active: true },
             connected_accounts: { active: true, cross_app_access: true },
+            cross_app_access_requesting_app: { active: true },
         };
 
         server
@@ -270,6 +272,7 @@ describe("ConnectionsClient", () => {
             metadata: { key: "value" },
             authentication: { active: true },
             connected_accounts: { active: true, cross_app_access: true },
+            cross_app_access_requesting_app: { active: true },
         };
 
         server.mockEndpoint().get("/connections/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -425,6 +428,7 @@ describe("ConnectionsClient", () => {
             metadata: { key: "value" },
             authentication: { active: true },
             connected_accounts: { active: true, cross_app_access: true },
+            cross_app_access_requesting_app: { active: true },
         };
 
         server

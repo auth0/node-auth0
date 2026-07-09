@@ -2074,6 +2074,8 @@ export interface Client {
     mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string | undefined;
+    native_social_login?: Management.NativeSocialLogin | undefined;
+    fedcm_login?: Management.FedCmLogin | undefined;
     refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
     default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
     organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
@@ -2086,6 +2088,7 @@ export interface Client {
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
@@ -3191,6 +3194,22 @@ export const ClientTokenExchangeTypeEnum = {
 export type ClientTokenExchangeTypeEnum =
     (typeof ClientTokenExchangeTypeEnum)[keyof typeof ClientTokenExchangeTypeEnum];
 
+/**
+ * Settings for Token Vault Privileged Access.
+ */
+export interface ClientTokenVaultPrivilegedAccessWithCredentialId {
+    credentials: Management.CredentialId[];
+    ip_allowlist?: Management.TokenVaultPrivilegedAccessIpAllowlistEntry[] | undefined;
+}
+
+/**
+ * Settings for Token Vault Privileged Access.
+ */
+export interface ClientTokenVaultPrivilegedAccessWithPublicKey {
+    credentials: Management.PublicKeyCredential[];
+    ip_allowlist?: Management.TokenVaultPrivilegedAccessIpAllowlistEntry[] | undefined;
+}
+
 export interface ConnectedAccount {
     /** The unique identifier for the connected account. */
     id: string;
@@ -3942,6 +3961,7 @@ export interface ConnectionForList {
     metadata?: Management.ConnectionsMetadata | undefined;
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
 }
 
 /**
@@ -6701,6 +6721,7 @@ export interface ConnectionResponseContentOidc extends Management.ConnectionResp
     strategy: ConnectionResponseContentOidc.Strategy;
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     options?: Management.ConnectionOptionsOidc | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -6736,6 +6757,7 @@ export namespace ConnectionResponseContentOffice365 {
 export interface ConnectionResponseContentOkta
     extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentOkta.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     options?: Management.ConnectionOptionsOkta | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -7905,6 +7927,8 @@ export interface CreateClientResponseContent {
     mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string | undefined;
+    native_social_login?: Management.NativeSocialLogin | undefined;
+    fedcm_login?: Management.FedCmLogin | undefined;
     refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
     default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
     organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
@@ -7917,6 +7941,7 @@ export interface CreateClientResponseContent {
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
@@ -8432,6 +8457,7 @@ export interface CreateConnectionRequestContentOidc extends Management.CreateCon
     strategy: CreateConnectionRequestContentOidc.Strategy;
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     options?: Management.ConnectionOptionsOidc | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -8464,6 +8490,7 @@ export namespace CreateConnectionRequestContentOffice365 {
  */
 export interface CreateConnectionRequestContentOkta extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentOkta.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     options?: Management.ConnectionOptionsOkta | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -8830,6 +8857,7 @@ export interface CreateConnectionResponseContent {
     metadata?: Management.ConnectionsMetadata | undefined;
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
 }
 
 export interface CreateCustomDomainResponseContent {
@@ -10038,8 +10066,10 @@ export interface CreateUserResponseContent {
     phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
     phone_verified?: boolean | undefined;
-    created_at?: Management.UserDateSchema | undefined;
-    updated_at?: Management.UserDateSchema | undefined;
+    /** Date and time when this user was created. */
+    created_at?: string | undefined;
+    /** Date and time when this user was last updated/modified. */
+    updated_at?: string | undefined;
     /** Array of user identity objects when accounts are linked. */
     identities?: Management.UserIdentitySchema[] | undefined;
     app_metadata?: Management.UserAppMetadataSchema | undefined;
@@ -10052,11 +10082,14 @@ export interface CreateUserResponseContent {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
-    multifactor_last_modified?: Management.UserDateSchema | undefined;
+    /** Last date and time this user's multi-factor authentication providers were updated. */
+    multifactor_last_modified?: string | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
-    last_login?: Management.UserDateSchema | undefined;
-    last_password_reset?: Management.UserDateSchema | undefined;
+    /** Last date and time this user logged in. */
+    last_login?: string | undefined;
+    /** Last date and time this user had their password reset. */
+    last_password_reset?: string | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
@@ -10133,6 +10166,14 @@ export type CredentialDeviceTypeEnum = (typeof CredentialDeviceTypeEnum)[keyof t
 export interface CredentialId {
     /** Credential ID */
     id: string;
+}
+
+/**
+ * Configure the connection to be used as a Requesting Application for Cross App Access.
+ */
+export interface CrossAppAccessRequestingApp {
+    /** Set to `true` to enable the connection as a Requesting Application for Cross App Access. */
+    active: boolean;
 }
 
 /**
@@ -10421,7 +10462,7 @@ export interface DeleteUserIdentityResponseContentItem {
     /** The name of the connection for the identity. */
     connection: string;
     /** The unique identifier for the user for the identity. */
-    user_id: string;
+    user_id: Management.UserId;
     /** The type of identity provider. */
     provider: string;
     /** <code>true</code> if the identity provider is a social provider, <code>false</code>s otherwise */
@@ -10753,10 +10794,11 @@ export type EmailSparkPostRegionEnum = (typeof EmailSparkPostRegionEnum)[keyof t
  */
 export type EmailSpecificProviderSettingsWithAdditionalProperties = (Record<string, unknown> | null) | undefined;
 
-/** Template name. Can be `verify_email`, `verify_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy). */
+/** Template name. Can be `verify_email`, `verify_email_by_code`, `auth_email_by_code`, `reset_email`, `reset_email_by_code`, `welcome_email`, `blocked_account`, `stolen_credentials`, `enrollment_email`, `mfa_oob_code`, `user_invitation`, `async_approval`, `change_password` (legacy), or `password_reset` (legacy). */
 export const EmailTemplateNameEnum = {
     VerifyEmail: "verify_email",
     VerifyEmailByCode: "verify_email_by_code",
+    AuthEmailByCode: "auth_email_by_code",
     ResetEmail: "reset_email",
     ResetEmailByCode: "reset_email_by_code",
     WelcomeEmail: "welcome_email",
@@ -14960,6 +15002,21 @@ export interface FedCmLoginGoogle {
     is_enabled?: boolean | undefined;
 }
 
+/**
+ * Google FedCM configuration for this client
+ */
+export interface FedCmLoginGooglePatch {
+    /** When true, shows the Google FedCM prompt on New Universal Login for this client */
+    is_enabled?: boolean | undefined;
+}
+
+/**
+ * Configure FedCM login settings for New Universal Login
+ */
+export interface FedCmLoginPatch {
+    google?: (Management.FedCmLoginGooglePatch | null) | undefined;
+}
+
 export interface FederatedConnectionTokenSet {
     id?: string | undefined;
     connection?: string | undefined;
@@ -18802,6 +18859,8 @@ export interface GetClientResponseContent {
     mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string | undefined;
+    native_social_login?: Management.NativeSocialLogin | undefined;
+    fedcm_login?: Management.FedCmLogin | undefined;
     refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
     default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
     organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
@@ -18814,6 +18873,7 @@ export interface GetClientResponseContent {
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
@@ -18892,6 +18952,7 @@ export interface GetConnectionResponseContent {
     metadata?: Management.ConnectionsMetadata | undefined;
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
 }
 
 export interface GetCustomDomainResponseContent {
@@ -19538,6 +19599,12 @@ export interface GetOrganizationResponseContent {
  */
 export type GetPartialsResponseContent = Record<string, unknown>;
 
+export interface GetPhoneProviderProtectionResponseContent {
+    type: Management.PhoneProviderProtectionBackoffStrategyEnum;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export interface GetPhoneTemplateResponseContent {
     id?: string | undefined;
     channel?: string | undefined;
@@ -19974,8 +20041,10 @@ export interface GetUserResponseContent {
     phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
     phone_verified?: boolean | undefined;
-    created_at?: Management.UserDateSchema | undefined;
-    updated_at?: Management.UserDateSchema | undefined;
+    /** Date and time when this user was created. */
+    created_at?: string | undefined;
+    /** Date and time when this user was last updated/modified. */
+    updated_at?: string | undefined;
     /** Array of user identity objects when accounts are linked. */
     identities?: Management.UserIdentitySchema[] | undefined;
     app_metadata?: Management.UserAppMetadataSchema | undefined;
@@ -19988,11 +20057,14 @@ export interface GetUserResponseContent {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
-    multifactor_last_modified?: Management.UserDateSchema | undefined;
+    /** Last date and time this user's multi-factor authentication providers were updated. */
+    multifactor_last_modified?: string | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
-    last_login?: Management.UserDateSchema | undefined;
-    last_password_reset?: Management.UserDateSchema | undefined;
+    /** Last date and time this user logged in. */
+    last_login?: string | undefined;
+    /** Last date and time this user had their password reset. */
+    last_password_reset?: string | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
@@ -21553,9 +21625,25 @@ export interface NativeSocialLoginApple {
 }
 
 /**
+ * Native Social Login support for the Apple connection
+ */
+export interface NativeSocialLoginApplePatch {
+    /** Determine whether or not to allow signing in natively using an Apple authorization code */
+    enabled?: boolean | undefined;
+}
+
+/**
  * Native Social Login support for the Facebook connection
  */
 export interface NativeSocialLoginFacebook {
+    /** Determine whether or not to allow signing in natively using Facebook */
+    enabled?: boolean | undefined;
+}
+
+/**
+ * Native Social Login support for the Facebook connection
+ */
+export interface NativeSocialLoginFacebookPatch {
     /** Determine whether or not to allow signing in natively using Facebook */
     enabled?: boolean | undefined;
 }
@@ -21566,6 +21654,23 @@ export interface NativeSocialLoginFacebook {
 export interface NativeSocialLoginGoogle {
     /** Determine whether or not to allow signing in natively using a Google ID token */
     enabled?: boolean | undefined;
+}
+
+/**
+ * Native Social Login support for the google-oauth2 connection
+ */
+export interface NativeSocialLoginGooglePatch {
+    /** Determine whether or not to allow signing in natively using a Google ID token */
+    enabled?: boolean | undefined;
+}
+
+/**
+ * Configure native social settings
+ */
+export interface NativeSocialLoginPatch {
+    apple?: (Management.NativeSocialLoginApplePatch | null) | undefined;
+    facebook?: (Management.NativeSocialLoginFacebookPatch | null) | undefined;
+    google?: (Management.NativeSocialLoginGooglePatch | null) | undefined;
 }
 
 export type NetworkAclMatchConnectingIpv4Cidr = string;
@@ -21966,6 +22071,12 @@ export interface PatchClientCredentialResponseContent {
     [key: string]: any;
 }
 
+export interface PatchPhoneProviderProtectionResponseContent {
+    type: Management.PhoneProviderProtectionBackoffStrategyEnum;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export type PatchRateLimitPolicyConfigurationRequestContent =
     | {
           action: "allow";
@@ -22044,6 +22155,14 @@ export const PhoneProviderNameEnum = {
     Custom: "custom",
 } as const;
 export type PhoneProviderNameEnum = (typeof PhoneProviderNameEnum)[keyof typeof PhoneProviderNameEnum];
+
+/** The type of backoff strategy to use. */
+export const PhoneProviderProtectionBackoffStrategyEnum = {
+    Exponential: "exponential",
+    None: "none",
+} as const;
+export type PhoneProviderProtectionBackoffStrategyEnum =
+    (typeof PhoneProviderProtectionBackoffStrategyEnum)[keyof typeof PhoneProviderProtectionBackoffStrategyEnum];
 
 /**
  * Phone provider configuration schema
@@ -22808,6 +22927,8 @@ export interface RotateClientSecretResponseContent {
     mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string | undefined;
+    native_social_login?: Management.NativeSocialLogin | undefined;
+    fedcm_login?: Management.FedCmLogin | undefined;
     refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
     default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
     organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
@@ -22820,6 +22941,7 @@ export interface RotateClientSecretResponseContent {
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
@@ -24149,6 +24271,8 @@ export interface TokenQuotaConfiguration {
     [key: string]: any;
 }
 
+export type TokenVaultPrivilegedAccessIpAllowlistEntry = string;
+
 /**
  * Too Many Requests
  */
@@ -24496,6 +24620,8 @@ export interface UpdateClientResponseContent {
     mobile?: Management.ClientMobile | undefined;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string | undefined;
+    native_social_login?: Management.NativeSocialLogin | undefined;
+    fedcm_login?: Management.FedCmLogin | undefined;
     refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
     default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
     organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
@@ -24508,6 +24634,7 @@ export interface UpdateClientResponseContent {
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
@@ -24825,6 +24952,7 @@ export interface UpdateConnectionRequestContentOidc extends Management.Connectio
     options?: Management.ConnectionOptionsOidc | undefined;
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
@@ -24840,6 +24968,7 @@ export interface UpdateConnectionRequestContentOffice365 extends Management.Conn
  * Update a connection with strategy=okta
  */
 export interface UpdateConnectionRequestContentOkta extends Management.ConnectionCommon {
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     options?: Management.ConnectionOptionsOkta | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -25023,6 +25152,7 @@ export interface UpdateConnectionResponseContent {
     metadata?: Management.ConnectionsMetadata | undefined;
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
 }
 
 export interface UpdateCustomDomainResponseContent {
@@ -25687,8 +25817,10 @@ export interface UpdateUserResponseContent {
     phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
     phone_verified?: boolean | undefined;
-    created_at?: Management.UserDateSchema | undefined;
-    updated_at?: Management.UserDateSchema | undefined;
+    /** Date and time when this user was created. */
+    created_at?: string | undefined;
+    /** Date and time when this user was last updated/modified. */
+    updated_at?: string | undefined;
     /** Array of user identity objects when accounts are linked. */
     identities?: Management.UserIdentitySchema[] | undefined;
     app_metadata?: Management.UserAppMetadataSchema | undefined;
@@ -25701,11 +25833,14 @@ export interface UpdateUserResponseContent {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
-    multifactor_last_modified?: Management.UserDateSchema | undefined;
+    /** Last date and time this user's multi-factor authentication providers were updated. */
+    multifactor_last_modified?: string | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
-    last_login?: Management.UserDateSchema | undefined;
-    last_password_reset?: Management.UserDateSchema | undefined;
+    /** Last date and time this user logged in. */
+    last_login?: string | undefined;
+    /** Last date and time this user had their password reset. */
+    last_password_reset?: string | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */
@@ -25967,14 +26102,6 @@ export interface UserBlockIdentifier {
     [key: string]: any;
 }
 
-export type UserDateSchema =
-    /**
-     * Date and time when this user was created (ISO_8601 format). */
-    | string
-    /**
-     * Date and time when this user was created (ISO_8601 format). */
-    | Record<string, unknown>;
-
 export interface UserEffectivePermissionResponseContent {
     /** Resource server (API) identifier that this permission is for. */
     resource_server_identifier?: string | undefined;
@@ -26069,7 +26196,7 @@ export interface UserGroupsResponseSchema extends Management.Group {
 }
 
 /**
- * user_id of the secondary user account being linked.
+ * Unique identifier of the user for this identity.
  */
 export type UserId = string | number;
 
@@ -26154,8 +26281,7 @@ export type UserIdentityProviderEnum = (typeof UserIdentityProviderEnum)[keyof t
 export interface UserIdentitySchema {
     /** Name of the connection containing this identity. */
     connection?: string | undefined;
-    /** Unique identifier of the user user for this identity. */
-    user_id?: string | undefined;
+    user_id?: Management.UserId | undefined;
     provider?: Management.UserIdentityProviderEnum | undefined;
     /** Whether this identity is from a social provider (true) or not (false). */
     isSocial?: boolean | undefined;
@@ -26239,8 +26365,10 @@ export interface UserResponseSchema {
     phone_number?: string | undefined;
     /** Whether this phone number has been verified (true) or not (false). */
     phone_verified?: boolean | undefined;
-    created_at?: Management.UserDateSchema | undefined;
-    updated_at?: Management.UserDateSchema | undefined;
+    /** Date and time when this user was created. */
+    created_at?: string | undefined;
+    /** Date and time when this user was last updated/modified. */
+    updated_at?: string | undefined;
     /** Array of user identity objects when accounts are linked. */
     identities?: Management.UserIdentitySchema[] | undefined;
     app_metadata?: Management.UserAppMetadataSchema | undefined;
@@ -26253,11 +26381,14 @@ export interface UserResponseSchema {
     nickname?: string | undefined;
     /** List of multi-factor authentication providers with which this user has enrolled. */
     multifactor?: string[] | undefined;
-    multifactor_last_modified?: Management.UserDateSchema | undefined;
+    /** Last date and time this user's multi-factor authentication providers were updated. */
+    multifactor_last_modified?: string | undefined;
     /** Last IP address from which this user logged in. */
     last_ip?: string | undefined;
-    last_login?: Management.UserDateSchema | undefined;
-    last_password_reset?: Management.UserDateSchema | undefined;
+    /** Last date and time this user logged in. */
+    last_login?: string | undefined;
+    /** Last date and time this user had their password reset. */
+    last_password_reset?: string | undefined;
     /** Total number of logins this user has performed. */
     logins_count?: number | undefined;
     /** Whether this user was blocked by an administrator (true) or is not (false). */

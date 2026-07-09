@@ -298,6 +298,7 @@ export interface CreateClientRequestContent {
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean;
     signed_request_object?: Management.ClientSignedRequestObjectWithPublicKey;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithPublicKey;
     compliance_level?: Management.ClientComplianceLevelEnum | null;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
@@ -419,8 +420,8 @@ export interface UpdateClientRequestContent {
     mobile?: Management.ClientMobile;
     /** Initiate login uri, must be https */
     initiate_login_uri?: string;
-    native_social_login?: Management.NativeSocialLogin;
-    fedcm_login?: Management.FedCmLogin;
+    native_social_login?: Management.NativeSocialLoginPatch | null;
+    fedcm_login?: Management.FedCmLoginPatch | null;
     refresh_token?: Management.ClientRefreshTokenConfiguration | null;
     default_organization?: Management.ClientDefaultOrganization | null;
     organization_usage?: Management.ClientOrganizationUsagePatchEnum | null;
@@ -433,6 +434,7 @@ export interface UpdateClientRequestContent {
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId;
     compliance_level?: Management.ClientComplianceLevelEnum | null;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
@@ -545,6 +547,7 @@ export interface CreateConnectionRequestContent {
     metadata?: Management.ConnectionsMetadata;
     authentication?: Management.ConnectionAuthenticationPurpose;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp;
 }
 
 /**
@@ -580,6 +583,7 @@ export interface UpdateConnectionRequestContent {
     metadata?: Management.ConnectionsMetadata;
     authentication?: Management.ConnectionAuthenticationPurpose;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp;
 }
 
 /**
@@ -2234,6 +2238,16 @@ export interface UpdateAttackProtectionCaptchaRequestContent {
     recaptcha_enterprise?: Management.AttackProtectionUpdateCaptchaRecaptchaEnterprise;
     recaptcha_v2?: Management.AttackProtectionUpdateCaptchaRecaptchaV2;
     simple_captcha?: Management.AttackProtectionCaptchaSimpleCaptchaResponseContent;
+}
+
+/**
+ * @example
+ *     {
+ *         type: "exponential"
+ *     }
+ */
+export interface PatchPhoneProviderProtectionRequestContent {
+    type: Management.PhoneProviderProtectionBackoffStrategyEnum;
 }
 
 /**
@@ -4079,6 +4093,7 @@ export interface LinkUserIdentityRequestContent {
     provider?: Management.UserIdentityProviderEnum;
     /** connection_id of the secondary user account being linked when more than one `auth0` database provider exists. */
     connection_id?: string;
+    /** user_id of the secondary user account being linked. */
     user_id?: Management.UserId;
     /** JWT for the secondary account being linked. If sending this parameter, `provider`, `user_id`, and `connection_id` must not be sent. */
     link_with?: string;
