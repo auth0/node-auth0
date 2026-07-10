@@ -12,7 +12,13 @@ describe("OrganizationsClient", () => {
         const rawResponseBody = {
             next: "next",
             organizations: [
-                { id: "id", name: "name", display_name: "display_name", token_quota: { client_credentials: {} } },
+                {
+                    id: "id",
+                    name: "name",
+                    display_name: "display_name",
+                    token_quota: { client_credentials: {} },
+                    third_party_client_access: "block",
+                },
             ],
         };
 
@@ -100,6 +106,7 @@ describe("OrganizationsClient", () => {
             branding: { logo_url: "logo_url", colors: { primary: "primary", page_background: "page_background" } },
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            third_party_client_access: "block",
             enabled_connections: [
                 {
                     connection_id: "connection_id",
@@ -246,6 +253,7 @@ describe("OrganizationsClient", () => {
             branding: { logo_url: "logo_url", colors: { primary: "primary", page_background: "page_background" } },
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            third_party_client_access: "block",
         };
 
         server
@@ -366,6 +374,7 @@ describe("OrganizationsClient", () => {
             branding: { logo_url: "logo_url", colors: { primary: "primary", page_background: "page_background" } },
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            third_party_client_access: "block",
         };
 
         server.mockEndpoint().get("/organizations/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -555,6 +564,7 @@ describe("OrganizationsClient", () => {
             branding: { logo_url: "logo_url", colors: { primary: "primary", page_background: "page_background" } },
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
+            third_party_client_access: "block",
         };
 
         server

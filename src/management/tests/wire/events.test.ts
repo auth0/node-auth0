@@ -10,14 +10,14 @@ describe("EventsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody =
-            'event: group.created\ndata: {"offset":"offset","event":{"specversion":"specversion","type":"group.created","source":"source","id":"id","time":"2024-01-15T09:30:00Z","data":{"object":{"id":"id","name":"name","created_at":"2024-01-15T09:30:00Z","type":"connection","connection_id":"connection_id"},"context":{"tenant":{"tenant_id":"tenant_id"}}},"a0tenant":"a0tenant","a0stream":"a0stream","a0purpose":"test"}}\n\n';
+            'event: connection.created\ndata: {"offset":"offset","event":{"specversion":"1.0","type":"connection.created","source":"source","id":"id","time":"2024-01-15T09:30:00Z","data":{"object":{"id":"id","name":"name","strategy":"oidc"},"context":{"tenant":{"tenant_id":"tenant_id"}}},"a0tenant":"a0tenant","a0stream":"a0stream","a0purpose":"test"}}\n\n';
 
         server.mockEndpoint().get("/events").respondWith().statusCode(200).sseBody(rawResponseBody).build();
 
         const response = await client.events.subscribe({
             from: "from",
             from_timestamp: "from_timestamp",
-            event_type: ["group.created"],
+            event_type: ["connection.created"],
         });
         const events: unknown[] = [];
         for await (const event of response) {
@@ -25,11 +25,11 @@ describe("EventsClient", () => {
         }
         expect(events).toEqual([
             {
-                type: "group.created",
+                type: "connection.created",
                 offset: "offset",
                 event: {
-                    specversion: "specversion",
-                    type: "group.created",
+                    specversion: "1.0",
+                    type: "connection.created",
                     source: "source",
                     id: "id",
                     time: "2024-01-15T09:30:00Z",
@@ -37,9 +37,7 @@ describe("EventsClient", () => {
                         object: {
                             id: "id",
                             name: "name",
-                            created_at: "2024-01-15T09:30:00Z",
-                            type: "connection",
-                            connection_id: "connection_id",
+                            strategy: "oidc",
                         },
                         context: {
                             tenant: {
