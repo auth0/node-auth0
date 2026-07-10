@@ -3965,7 +3965,7 @@ await client.eventStreams.update("id");
 
 ```typescript
 await client.eventStreams.test("id", {
-    event_type: "group.created",
+    event_type: "connection.created",
 });
 ```
 
@@ -4042,7 +4042,7 @@ Subscribe to events via Server-Sent Events (SSE)
 const response = await client.events.subscribe({
     from: "from",
     from_timestamp: "from_timestamp",
-    event_type: ["group.created"],
+    event_type: ["connection.created"],
 });
 for await (const item of response) {
     console.log(item);
@@ -25682,6 +25682,109 @@ const response = page.response;
 <dd>
 
 **requestOptions:** `GroupsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Organizations Roles Members
+
+<details><summary><code>client.organizations.roles.members.<a href="/src/management/api/resources/organizations/resources/roles/resources/members/client/Client.ts">list</a>(id, role_id, { ...params }) -> core.Page&lt;Management.RoleMember, Management.ListOrganizationRoleMembersResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the organization members assigned a specific role within the context of an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.roles.members.list("id", "role_id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.roles.members.list("id", "role_id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**role_id:** `string` — ID of the role to retrieve the assigned members for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationRoleMembersRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MembersClient.RequestOptions`
 
 </dd>
 </dl>

@@ -629,12 +629,12 @@ describe("EventStreamsClient", () => {
     test("test (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { event_type: "group.created" };
+        const rawRequestBody = { event_type: "connection.created" };
         const rawResponseBody = {
             id: "id",
             event_stream_id: "event_stream_id",
             status: "failed",
-            event_type: "group.created",
+            event_type: "connection.created",
             attempts: [{ status: "failed", timestamp: "2024-01-15T09:30:00Z", error_message: "error_message" }],
             event: {
                 id: "id",
@@ -656,7 +656,7 @@ describe("EventStreamsClient", () => {
             .build();
 
         const response = await client.eventStreams.test("id", {
-            event_type: "group.created",
+            event_type: "connection.created",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -664,7 +664,7 @@ describe("EventStreamsClient", () => {
     test("test (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { event_type: "group.created" };
+        const rawRequestBody = { event_type: "connection.created" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -678,7 +678,7 @@ describe("EventStreamsClient", () => {
 
         await expect(async () => {
             return await client.eventStreams.test("id", {
-                event_type: "group.created",
+                event_type: "connection.created",
             });
         }).rejects.toThrow(Management.UnauthorizedError);
     });
@@ -686,7 +686,7 @@ describe("EventStreamsClient", () => {
     test("test (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { event_type: "group.created" };
+        const rawRequestBody = { event_type: "connection.created" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -700,7 +700,7 @@ describe("EventStreamsClient", () => {
 
         await expect(async () => {
             return await client.eventStreams.test("id", {
-                event_type: "group.created",
+                event_type: "connection.created",
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });
@@ -708,7 +708,7 @@ describe("EventStreamsClient", () => {
     test("test (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { event_type: "group.created" };
+        const rawRequestBody = { event_type: "connection.created" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -722,7 +722,7 @@ describe("EventStreamsClient", () => {
 
         await expect(async () => {
             return await client.eventStreams.test("id", {
-                event_type: "group.created",
+                event_type: "connection.created",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });

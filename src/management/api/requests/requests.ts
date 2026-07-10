@@ -808,7 +808,7 @@ export interface UpdateEventStreamRequestContent {
 /**
  * @example
  *     {
- *         event_type: "group.created"
+ *         event_type: "connection.created"
  *     }
  */
 export interface CreateEventStreamTestEventRequestContent {
@@ -821,7 +821,7 @@ export interface CreateEventStreamTestEventRequestContent {
  *     {
  *         from: "from",
  *         from_timestamp: "from_timestamp",
- *         event_type: ["group.created"]
+ *         event_type: ["connection.created"]
  *     }
  */
 export interface SubscribeEventsRequestParameters {
@@ -1252,6 +1252,7 @@ export interface CreateOrganizationRequestContent {
     /** Connections that will be enabled for this organization. See POST enabled_connections endpoint for the object format. (Max of 10 connections allowed) */
     enabled_connections?: Management.ConnectionForOrganization[];
     token_quota?: Management.CreateTokenQuota;
+    third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum;
 }
 
 /**
@@ -1266,6 +1267,7 @@ export interface UpdateOrganizationRequestContent {
     branding?: Management.OrganizationBranding;
     metadata?: Management.OrganizationMetadata;
     token_quota?: Management.UpdateTokenQuota | null;
+    third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum;
 }
 
 /**
@@ -3642,6 +3644,26 @@ export interface ListOrganizationMemberRoleSourceGroupsRequestParameters {
     take?: number | null;
     /** The role ID to get group sources for. */
     role_id: string;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         fields: "fields",
+ *         include_fields: true
+ *     }
+ */
+export interface ListOrganizationRoleMembersRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. Values above the maximum permitted size are capped. */
+    take?: number | null;
+    /** Comma-separated list of fields to include or exclude (based on value provided for include_fields) in the result. Leave empty to retrieve all fields. */
+    fields?: string | null;
+    /** Whether specified fields are to be included (true) or excluded (false). Defaults to true. */
+    include_fields?: boolean | null;
 }
 
 /**
