@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "5.13.0",
+    "version": "5.14.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -110,7 +110,7 @@
     },
     "packageManager": "yarn@1.22.22",
     "engines": {
-        "node": "^20.19.0 || ^22.12.0 || ^24.0.0"
+        "node": "^20.19.0 || ^22.12.0 || ^24.0.0 || ^26.0.0"
     },
     "sideEffects": false,
     "bugs": {
