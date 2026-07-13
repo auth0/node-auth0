@@ -8,6 +8,7 @@
 
 import { JSONApiResponse } from "../lib/models.js";
 import { BaseAuthAPI } from "./base-auth-api.js";
+import { AuthorizationDetails } from "./oauth.js";
 
 /**
  * The response from the authorize endpoint.
@@ -73,7 +74,7 @@ const getLoginHint = (userId: string, domain: string): string => {
 /**
  * Options for the authorize request.
  */
-export type AuthorizeOptions = {
+export interface AuthorizeOptions<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails> {
     /**
      * A human-readable string intended to be displayed on both the device calling /bc-authorize and the user’s authentication device.
      */
@@ -107,23 +108,21 @@ export type AuthorizeOptions = {
      * Optional authorization details to use Rich Authorization Requests (RAR).
      * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
      */
-    authorization_details?: string;
-} & Record<string, string>;
+    authorization_details?: string | TAuthorizationDetails[];
+
+    [key: string]: unknown;
+}
 
 type AuthorizeRequest = Omit<AuthorizeOptions, "userId"> &
     AuthorizeCredentialsPartial & {
         login_hint: string;
-    };
-
-export interface AuthorizationDetails {
-    readonly type: string;
-    readonly [parameter: string]: unknown;
-}
+        authorization_details?: string;
+    } & Record<string, string>;
 
 /**
  * The response from the token endpoint.
  */
-export type TokenResponse = {
+export interface TokenResponse<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails> {
     /**
      * The access token.
      */
@@ -152,8 +151,8 @@ export type TokenResponse = {
      * Optional authorization details when using Rich Authorization Requests (RAR).
      * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
      */
-    authorization_details?: AuthorizationDetails[];
-};
+    authorization_details?: TAuthorizationDetails[];
+}
 
 /**
  * Options for the token request.
@@ -174,8 +173,12 @@ type TokenRequestBody = AuthorizeCredentialsPartial & {
  * Interface for the backchannel authentication.
  */
 export interface IBackchannel {
-    authorize: (options: AuthorizeOptions) => Promise<AuthorizeResponse>;
-    backchannelGrant: (options: TokenOptions) => Promise<TokenResponse>;
+    authorize: <TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
+        options: AuthorizeOptions<TAuthorizationDetails>,
+    ) => Promise<AuthorizeResponse>;
+    backchannelGrant: <TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
+        options: TokenOptions,
+    ) => Promise<TokenResponse<TAuthorizationDetails>>;
 }
 
 const CIBA_GRANT_TYPE = "urn:openid:params:grant-type:ciba";
@@ -194,9 +197,21 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
      *
      * @throws {Error} - If the request fails.
      */
-    async authorize({ userId, ...options }: AuthorizeOptions): Promise<AuthorizeResponse> {
+    async authorize<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>({
+        userId,
+        ...options
+    }: AuthorizeOptions<TAuthorizationDetails>): Promise<AuthorizeResponse> {
+        const { authorization_details, ...authorizeOptions } = options;
+
+        if (authorization_details) {
+            authorizeOptions.authorization_details =
+                typeof authorization_details === "string"
+                    ? authorization_details
+                    : JSON.stringify(authorization_details);
+        }
+
         const body: AuthorizeRequest = {
-            ...options,
+            ...authorizeOptions,
             login_hint: getLoginHint(userId, this.domain),
             client_id: this.clientId,
         };
@@ -255,7 +270,9 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
      * }
      * ```
      */
-    async backchannelGrant({ auth_req_id }: TokenOptions): Promise<TokenResponse> {
+    async backchannelGrant<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>({
+        auth_req_id,
+    }: TokenOptions): Promise<TokenResponse<TAuthorizationDetails>> {
         const body: TokenRequestBody = {
             client_id: this.clientId,
             auth_req_id,
@@ -274,7 +291,7 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
             {},
         );
 
-        const r: JSONApiResponse<TokenResponse> = await JSONApiResponse.fromResponse(response);
+        const r: JSONApiResponse<TokenResponse<TAuthorizationDetails>> = await JSONApiResponse.fromResponse(response);
         return r.data;
     }
 }

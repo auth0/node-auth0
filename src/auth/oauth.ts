@@ -3,7 +3,12 @@ import { BaseAuthAPI, AuthenticationClientOptions, grant } from "./base-auth-api
 import { IDTokenValidateOptions, IDTokenValidator } from "./id-token-validator.js";
 import { mtlsPrefix } from "../utils.js";
 
-export interface TokenSet {
+export interface AuthorizationDetails {
+    readonly type: string;
+    readonly [parameter: string]: unknown;
+}
+
+export interface TokenSet<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails> {
     /**
      * The access token.
      */
@@ -24,6 +29,11 @@ export interface TokenSet {
      * The duration in secs that the access token is valid.
      */
     expires_in: number;
+    /**
+     * The authorization details when using Rich Authorization Requests (RAR).
+     * @see https://auth0.com/docs/get-started/apis/configure-rich-authorization-requests
+     */
+    authorization_details?: TAuthorizationDetails[];
 }
 
 export interface GrantOptions {
@@ -94,7 +104,9 @@ export interface ClientCredentialsGrantRequest extends ClientCredentials {
     organization?: string;
 }
 
-export interface PushedAuthorizationRequest extends ClientCredentials {
+export interface PushedAuthorizationRequest<
+    TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails,
+> extends ClientCredentials {
     /**
      * URI to redirect to.
      */
@@ -157,7 +169,7 @@ export interface PushedAuthorizationRequest extends ClientCredentials {
     /**
      * A JSON stringified array of objects. It can carry fine-grained authorization data in OAuth messages as part of Rich Authorization Requests (RAR) {@link https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow/authorization-code-flow-with-rar | Reference}
      */
-    authorization_details?: string;
+    authorization_details?: string | TAuthorizationDetails[];
 
     /**
      * Allow for any custom property to be sent to Auth0
@@ -359,13 +371,13 @@ export class OAuth extends BaseAuthAPI {
      * await auth0.oauth.authorizationCodeGrant({ code: 'mycode' });
      * ```
      */
-    async authorizationCodeGrant(
+    async authorizationCodeGrant<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
         bodyParameters: AuthorizationCodeGrantRequest,
         options: AuthorizationCodeGrantOptions = {},
-    ): Promise<JSONApiResponse<TokenSet>> {
+    ): Promise<JSONApiResponse<TokenSet<TAuthorizationDetails>>> {
         validateRequiredRequestParams(bodyParameters, ["code"]);
 
-        return grant(
+        return grant<TAuthorizationDetails>(
             "authorization_code",
             await this.addClientAuthentication(bodyParameters),
             options,
@@ -396,13 +408,13 @@ export class OAuth extends BaseAuthAPI {
      * });
      * ```
      */
-    async authorizationCodeGrantWithPKCE(
+    async authorizationCodeGrantWithPKCE<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
         bodyParameters: AuthorizationCodeGrantWithPKCERequest,
         options: AuthorizationCodeGrantOptions = {},
-    ): Promise<JSONApiResponse<TokenSet>> {
+    ): Promise<JSONApiResponse<TokenSet<TAuthorizationDetails>>> {
         validateRequiredRequestParams(bodyParameters, ["code", "code_verifier"]);
 
-        return grant(
+        return grant<TAuthorizationDetails>(
             "authorization_code",
             await this.addClientAuthentication(bodyParameters),
             options,
@@ -431,13 +443,13 @@ export class OAuth extends BaseAuthAPI {
      * await auth0.oauth.clientCredentialsGrant({ audience: 'myaudience' });
      * ```
      */
-    async clientCredentialsGrant(
+    async clientCredentialsGrant<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
         bodyParameters: ClientCredentialsGrantRequest,
         options: { initOverrides?: InitOverride } = {},
-    ): Promise<JSONApiResponse<TokenSet>> {
+    ): Promise<JSONApiResponse<TokenSet<TAuthorizationDetails>>> {
         validateRequiredRequestParams(bodyParameters, ["audience"]);
 
-        return grant(
+        return grant<TAuthorizationDetails>(
             "client_credentials",
             await this.addClientAuthentication(bodyParameters),
             options,
@@ -469,8 +481,16 @@ export class OAuth extends BaseAuthAPI {
         options: { initOverrides?: InitOverride } = {},
     ): Promise<JSONApiResponse<PushedAuthorizationResponse>> {
         validateRequiredRequestParams(bodyParameters, ["client_id", "response_type", "redirect_uri"]);
+        const { authorization_details, ...params } = bodyParameters;
 
-        const bodyParametersWithClientAuthentication = await this.addClientAuthentication(bodyParameters);
+        if (authorization_details) {
+            params.authorization_details =
+                typeof authorization_details === "string"
+                    ? authorization_details
+                    : JSON.stringify(authorization_details);
+        }
+
+        const bodyParametersWithClientAuthentication = await this.addClientAuthentication(params);
 
         const response = await this.request(
             {
@@ -518,13 +538,13 @@ export class OAuth extends BaseAuthAPI {
      * See https://auth0.com/docs/get-started/authentication-and-authorization-flow/avoid-common-issues-with-resource-owner-password-flow-and-attack-protection
      *
      */
-    async passwordGrant(
+    async passwordGrant<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
         bodyParameters: PasswordGrantRequest,
         options: GrantOptions = {},
-    ): Promise<JSONApiResponse<TokenSet>> {
+    ): Promise<JSONApiResponse<TokenSet<TAuthorizationDetails>>> {
         validateRequiredRequestParams(bodyParameters, ["username", "password"]);
 
-        return grant(
+        return grant<TAuthorizationDetails>(
             bodyParameters.realm ? "http://auth0.com/oauth/grant-type/password-realm" : "password",
             await this.addClientAuthentication(bodyParameters),
             options,
@@ -550,13 +570,13 @@ export class OAuth extends BaseAuthAPI {
      * await auth0.oauth.refreshTokenGrant({ refresh_token: 'myrefreshtoken' })
      * ```
      */
-    async refreshTokenGrant(
+    async refreshTokenGrant<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
         bodyParameters: RefreshTokenGrantRequest,
         options: GrantOptions = {},
-    ): Promise<JSONApiResponse<TokenSet>> {
+    ): Promise<JSONApiResponse<TokenSet<TAuthorizationDetails>>> {
         validateRequiredRequestParams(bodyParameters, ["refresh_token"]);
 
-        return grant(
+        return grant<TAuthorizationDetails>(
             "refresh_token",
             await this.addClientAuthentication(bodyParameters),
             options,
