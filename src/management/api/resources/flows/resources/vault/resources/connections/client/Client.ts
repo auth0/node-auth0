@@ -135,7 +135,9 @@ export class ConnectionsClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.connections ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.connections ?? []).length > 0 &&
+                (request?.per_page == null || (response?.connections ?? []).length >= request?.per_page),
             getItems: (response) => response?.connections ?? [],
             loadPage: (_response) => {
                 _offset += 1;

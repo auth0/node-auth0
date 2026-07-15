@@ -138,7 +138,9 @@ export class RolesClient {
         return new core.Page<Management.Role, Management.ListOrganizationMemberRolesOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.roles ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.roles ?? []).length > 0 &&
+                (request?.per_page == null || (response?.roles ?? []).length >= request?.per_page),
             getItems: (response) => response?.roles ?? [],
             loadPage: (_response) => {
                 _offset += 1;

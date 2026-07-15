@@ -147,7 +147,9 @@ export class ClientGrantsClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.client_grants ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.client_grants ?? []).length > 0 &&
+                (request?.per_page == null || (response?.client_grants ?? []).length >= request?.per_page),
             getItems: (response) => response?.client_grants ?? [],
             loadPage: (_response) => {
                 _offset += 1;

@@ -137,7 +137,9 @@ export class RulesClient {
         return new core.Page<Management.Rule, Management.ListRulesOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.rules ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.rules ?? []).length > 0 &&
+                (request?.per_page == null || (response?.rules ?? []).length >= request?.per_page),
             getItems: (response) => response?.rules ?? [],
             loadPage: (_response) => {
                 _offset += 1;

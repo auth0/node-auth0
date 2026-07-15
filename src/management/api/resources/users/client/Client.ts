@@ -14,7 +14,6 @@ import { ConnectedAccountsClient } from "../resources/connectedAccounts/client/C
 import { EffectivePermissionsClient } from "../resources/effectivePermissions/client/Client.js";
 import { EffectiveRolesClient } from "../resources/effectiveRoles/client/Client.js";
 import { EnrollmentsClient } from "../resources/enrollments/client/Client.js";
-import { FederatedConnectionsTokensetsClient } from "../resources/federatedConnectionsTokensets/client/Client.js";
 import { GroupsClient } from "../resources/groups/client/Client.js";
 import { IdentitiesClient } from "../resources/identities/client/Client.js";
 import { LogsClient } from "../resources/logs/client/Client.js";
@@ -40,7 +39,6 @@ export class UsersClient {
     protected _effectivePermissions: EffectivePermissionsClient | undefined;
     protected _effectiveRoles: EffectiveRolesClient | undefined;
     protected _enrollments: EnrollmentsClient | undefined;
-    protected _federatedConnectionsTokensets: FederatedConnectionsTokensetsClient | undefined;
     protected _groups: GroupsClient | undefined;
     protected _identities: IdentitiesClient | undefined;
     protected _logs: LogsClient | undefined;
@@ -78,10 +76,6 @@ export class UsersClient {
 
     public get enrollments(): EnrollmentsClient {
         return (this._enrollments ??= new EnrollmentsClient(this._options));
-    }
-
-    public get federatedConnectionsTokensets(): FederatedConnectionsTokensetsClient {
-        return (this._federatedConnectionsTokensets ??= new FederatedConnectionsTokensetsClient(this._options));
     }
 
     public get groups(): GroupsClient {
@@ -271,7 +265,9 @@ export class UsersClient {
         return new core.Page<Management.UserResponseSchema, Management.ListUsersOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.users ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.users ?? []).length > 0 &&
+                (request?.per_page == null || (response?.users ?? []).length >= request?.per_page),
             getItems: (response) => response?.users ?? [],
             loadPage: (_response) => {
                 _offset += 1;

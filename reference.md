@@ -21237,7 +21237,7 @@ await client.guardian.factors.sms.setProvider({
 </dl>
 </details>
 
-<details><summary><code>client.guardian.factors.sms.<a href="/src/management/api/resources/guardian/resources/factors/resources/sms/client/Client.ts">getTemplates</a>() -> Management.GetGuardianFactorSmsTemplatesResponseContent</code></summary>
+<details><summary><code>client.guardian.factors.sms.<a href="/src/management/api/resources/guardian/resources/factors/resources/sms/client/Client.ts">getTemplates</a>() -> Management.GetGuardianFactorSmsTemplatesResponseContent | undefined</code></summary>
 <dl>
 <dd>
 
@@ -22016,7 +22016,7 @@ await client.jobs.verificationEmail.create({
 
 ## Jobs Errors
 
-<details><summary><code>client.jobs.errors.<a href="/src/management/api/resources/jobs/resources/errors/client/Client.ts">get</a>(id) -> Management.ErrorsGetResponse</code></summary>
+<details><summary><code>client.jobs.errors.<a href="/src/management/api/resources/jobs/resources/errors/client/Client.ts">get</a>(id) -> Management.ErrorsGetResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -28667,127 +28667,6 @@ await client.users.enrollments.get("id");
 <dd>
 
 **requestOptions:** `EnrollmentsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Users FederatedConnectionsTokensets
-
-<details><summary><code>client.users.federatedConnectionsTokensets.<a href="/src/management/api/resources/users/resources/federatedConnectionsTokensets/client/Client.ts">list</a>(id) -> Management.FederatedConnectionTokenSet[]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List active federated connections tokensets for a provided user
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.federatedConnectionsTokensets.list("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — User identifier
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.users.federatedConnectionsTokensets.<a href="/src/management/api/resources/users/resources/federatedConnectionsTokensets/client/Client.ts">delete</a>(id, tokenset_id) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Id of the user that owns the tokenset
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**tokenset_id:** `string` — The tokenset id
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
 
 </dd>
 </dl>

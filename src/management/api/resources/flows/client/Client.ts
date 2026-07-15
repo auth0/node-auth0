@@ -145,7 +145,9 @@ export class FlowsClient {
         return new core.Page<Management.FlowSummary, Management.ListFlowsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.flows ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.flows ?? []).length > 0 &&
+                (request?.per_page == null || (response?.flows ?? []).length >= request?.per_page),
             getItems: (response) => response?.flows ?? [],
             loadPage: (_response) => {
                 _offset += 1;

@@ -136,7 +136,9 @@ export class PermissionsClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.permissions ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.permissions ?? []).length > 0 &&
+                (request?.per_page == null || (response?.permissions ?? []).length >= request?.per_page),
             getItems: (response) => response?.permissions ?? [],
             loadPage: (_response) => {
                 _offset += 1;

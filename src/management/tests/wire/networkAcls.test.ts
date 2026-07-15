@@ -316,6 +316,7 @@ describe("NetworkAclsClient", () => {
                 action: { block: true, allow: true, log: true, redirect: true, redirect_uri: "redirect_uri" },
                 match: {
                     asns: [1],
+                    auth0_managed: ["auth0_managed"],
                     geo_country_codes: ["geo_country_codes"],
                     geo_subdivision_codes: ["geo_subdivision_codes"],
                     ipv4_cidrs: ["ipv4_cidrs"],
@@ -329,6 +330,7 @@ describe("NetworkAclsClient", () => {
                 },
                 not_match: {
                     asns: [1],
+                    auth0_managed: ["auth0_managed"],
                     geo_country_codes: ["geo_country_codes"],
                     geo_subdivision_codes: ["geo_subdivision_codes"],
                     ipv4_cidrs: ["ipv4_cidrs"],
@@ -417,6 +419,7 @@ describe("NetworkAclsClient", () => {
                 action: { block: true, allow: true, log: true, redirect: true, redirect_uri: "redirect_uri" },
                 match: {
                     asns: [1],
+                    auth0_managed: ["auth0_managed"],
                     geo_country_codes: ["geo_country_codes"],
                     geo_subdivision_codes: ["geo_subdivision_codes"],
                     ipv4_cidrs: ["ipv4_cidrs"],
@@ -430,6 +433,7 @@ describe("NetworkAclsClient", () => {
                 },
                 not_match: {
                     asns: [1],
+                    auth0_managed: ["auth0_managed"],
                     geo_country_codes: ["geo_country_codes"],
                     geo_subdivision_codes: ["geo_subdivision_codes"],
                     ipv4_cidrs: ["ipv4_cidrs"],
@@ -720,6 +724,7 @@ describe("NetworkAclsClient", () => {
                 action: { block: true, allow: true, log: true, redirect: true, redirect_uri: "redirect_uri" },
                 match: {
                     asns: [1],
+                    auth0_managed: ["auth0_managed"],
                     geo_country_codes: ["geo_country_codes"],
                     geo_subdivision_codes: ["geo_subdivision_codes"],
                     ipv4_cidrs: ["ipv4_cidrs"],
@@ -733,6 +738,7 @@ describe("NetworkAclsClient", () => {
                 },
                 not_match: {
                     asns: [1],
+                    auth0_managed: ["auth0_managed"],
                     geo_country_codes: ["geo_country_codes"],
                     geo_subdivision_codes: ["geo_subdivision_codes"],
                     ipv4_cidrs: ["ipv4_cidrs"],

@@ -140,7 +140,8 @@ export class EnabledConnectionsClient {
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
-                (response?.enabled_connections ?? []).length >= Math.floor(request?.per_page ?? 50),
+                (response?.enabled_connections ?? []).length > 0 &&
+                (request?.per_page == null || (response?.enabled_connections ?? []).length >= request?.per_page),
             getItems: (response) => response?.enabled_connections ?? [],
             loadPage: (_response) => {
                 _offset += 1;

@@ -125,7 +125,9 @@ export class FormsClient {
         return new core.Page<Management.FormSummary, Management.ListFormsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.forms ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.forms ?? []).length > 0 &&
+                (request?.per_page == null || (response?.forms ?? []).length >= request?.per_page),
             getItems: (response) => response?.forms ?? [],
             loadPage: (_response) => {
                 _offset += 1;

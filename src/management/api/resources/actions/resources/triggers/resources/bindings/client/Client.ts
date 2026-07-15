@@ -129,7 +129,9 @@ export class BindingsClient {
         return new core.Page<Management.ActionBinding, Management.ListActionBindingsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.bindings ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.bindings ?? []).length > 0 &&
+                (request?.per_page == null || (response?.bindings ?? []).length >= request?.per_page),
             getItems: (response) => response?.bindings ?? [],
             loadPage: (_response) => {
                 _offset += 1;

@@ -152,7 +152,9 @@ export class InvitationsClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.invitations ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.invitations ?? []).length > 0 &&
+                (request?.per_page == null || (response?.invitations ?? []).length >= request?.per_page),
             getItems: (response) => response?.invitations ?? [],
             loadPage: (_response) => {
                 _offset += 1;

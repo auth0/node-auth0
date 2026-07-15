@@ -141,7 +141,9 @@ export class AuthenticationMethodsClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.authenticators ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.authenticators ?? []).length > 0 &&
+                (request?.per_page == null || (response?.authenticators ?? []).length >= request?.per_page),
             getItems: (response) => response?.authenticators ?? [],
             loadPage: (_response) => {
                 _offset += 1;

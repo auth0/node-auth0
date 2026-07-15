@@ -125,7 +125,9 @@ export class ModulesClient {
         return new core.Page<Management.ActionModuleListItem, Management.GetActionModulesResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.modules ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.modules ?? []).length > 0 &&
+                (request?.per_page == null || (response?.modules ?? []).length >= request?.per_page),
             getItems: (response) => response?.modules ?? [],
             loadPage: (_response) => {
                 _offset += 1;
@@ -572,7 +574,9 @@ export class ModulesClient {
         return new core.Page<Management.ActionModuleAction, Management.GetActionModuleActionsResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.actions ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.actions ?? []).length > 0 &&
+                (request?.per_page == null || (response?.actions ?? []).length >= request?.per_page),
             getItems: (response) => response?.actions ?? [],
             loadPage: (_response) => {
                 _offset += 1;
