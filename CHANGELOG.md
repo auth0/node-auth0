@@ -1,5 +1,28 @@
 # Change Log
 
+## [v6.0.0](https://github.com/auth0/node-auth0/tree/v6.0.0) (2026-07-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.14.0...v6.0.0)
+
+> **Important:** `v6.0.0` introduces breaking changes. Please review the [v6 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v6_MIGRATION_GUIDE.md) for detailed upgrade instructions.
+
+**⚠️ BREAKING CHANGES**
+
+- `ConnectionAttributeIdentifier` has been replaced with three identifier-specific types: `EmailAttributeIdentifier`, `PhoneAttributeIdentifier`, and `UsernameAttributeIdentifier` [\#1363](https://github.com/auth0/node-auth0/pull/1363) ([fern-api[bot]](https://github.com/apps/fern-api))
+- `PhoneProviderProtectionBackoffStrategyEnum` variant `None` (value: `"none"`) has been renamed to `Default` (value: `"default"`) to align with the updated API [\#1363](https://github.com/auth0/node-auth0/pull/1363) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Removed `client.users.federatedConnectionsTokensets` sub-client, including its `list()` and `delete()` methods [\#1369](https://github.com/auth0/node-auth0/pull/1369) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Removed `federated_connections_access_tokens` field from all connection option types (create and update) [\#1369](https://github.com/auth0/node-auth0/pull/1369) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Added**
+
+- feat: remove federatedConnectionsTokensets, add custom token exchange suspicious IP throttling stage, and internal fetcher improvements [\#1369](https://github.com/auth0/node-auth0/pull/1369) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: add org role members, third-party client access, passwordless type fixes, and OIDC connection updates [\#1363](https://github.com/auth0/node-auth0/pull/1363) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: add Node.js 26 support [\#1356](https://github.com/auth0/node-auth0/pull/1356) ([Poggen](https://github.com/Poggen))
+
+**Fixed**
+
+- fix: upgrade jose from v4 to v5 to fix pnpm trust policy install failure [\#1362](https://github.com/auth0/node-auth0/pull/1362) ([ankita10119](https://github.com/ankita10119))
+
 ## [v5.14.0](https://github.com/auth0/node-auth0/tree/v5.14.0) (2026-07-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.13.0...v5.14.0)

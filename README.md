@@ -14,6 +14,7 @@
 - [Docs Site](https://auth0.com/docs) - explore our docs site and learn more about Auth0
 - [SDK Documentation](http://auth0.github.io/node-auth0/) - explore the SDK documentation
 - [API Reference](https://github.com/auth0/node-auth0/blob/master/reference.md) - full reference for this library
+- [v6 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v6_MIGRATION_GUIDE.md) - upgrade from v5 to v6
 
 ## Getting Started
 
@@ -108,7 +109,7 @@ const { ManagementClient, AuthenticationClient } = require("auth0/legacy");
 
 ### Legacy Configuration
 
-The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current v5 API:
+The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current v6 API:
 
 #### Legacy Management Client
 
