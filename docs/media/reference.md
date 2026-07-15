@@ -3965,7 +3965,7 @@ await client.eventStreams.update("id");
 
 ```typescript
 await client.eventStreams.test("id", {
-    event_type: "group.created",
+    event_type: "connection.created",
 });
 ```
 
@@ -4042,7 +4042,7 @@ Subscribe to events via Server-Sent Events (SSE)
 const response = await client.events.subscribe({
     from: "from",
     from_timestamp: "from_timestamp",
-    event_type: ["group.created"],
+    event_type: ["connection.created"],
 });
 for await (const item of response) {
     console.log(item);
@@ -21237,7 +21237,7 @@ await client.guardian.factors.sms.setProvider({
 </dl>
 </details>
 
-<details><summary><code>client.guardian.factors.sms.<a href="/src/management/api/resources/guardian/resources/factors/resources/sms/client/Client.ts">getTemplates</a>() -> Management.GetGuardianFactorSmsTemplatesResponseContent</code></summary>
+<details><summary><code>client.guardian.factors.sms.<a href="/src/management/api/resources/guardian/resources/factors/resources/sms/client/Client.ts">getTemplates</a>() -> Management.GetGuardianFactorSmsTemplatesResponseContent | undefined</code></summary>
 <dl>
 <dd>
 
@@ -22016,7 +22016,7 @@ await client.jobs.verificationEmail.create({
 
 ## Jobs Errors
 
-<details><summary><code>client.jobs.errors.<a href="/src/management/api/resources/jobs/resources/errors/client/Client.ts">get</a>(id) -> Management.ErrorsGetResponse</code></summary>
+<details><summary><code>client.jobs.errors.<a href="/src/management/api/resources/jobs/resources/errors/client/Client.ts">get</a>(id) -> Management.ErrorsGetResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -25692,6 +25692,109 @@ const response = page.response;
 </dl>
 </details>
 
+## Organizations Roles Members
+
+<details><summary><code>client.organizations.roles.members.<a href="/src/management/api/resources/organizations/resources/roles/resources/members/client/Client.ts">list</a>(id, role_id, { ...params }) -> core.Page&lt;Management.RoleMember, Management.ListOrganizationRoleMembersResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the organization members assigned a specific role within the context of an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.roles.members.list("id", "role_id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.roles.members.list("id", "role_id", {
+    from: "from",
+    take: 1,
+    fields: "fields",
+    include_fields: true,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**role_id:** `string` — ID of the role to retrieve the assigned members for.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationRoleMembersRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `MembersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Prompts Rendering
 
 <details><summary><code>client.prompts.rendering.<a href="/src/management/api/resources/prompts/resources/rendering/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.ListAculsResponseContentItem, Management.ListAculsOffsetPaginatedResponseContent&gt;</code></summary>
@@ -28564,127 +28667,6 @@ await client.users.enrollments.get("id");
 <dd>
 
 **requestOptions:** `EnrollmentsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Users FederatedConnectionsTokensets
-
-<details><summary><code>client.users.federatedConnectionsTokensets.<a href="/src/management/api/resources/users/resources/federatedConnectionsTokensets/client/Client.ts">list</a>(id) -> Management.FederatedConnectionTokenSet[]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List active federated connections tokensets for a provided user
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.federatedConnectionsTokensets.list("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — User identifier
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.users.federatedConnectionsTokensets.<a href="/src/management/api/resources/users/resources/federatedConnectionsTokensets/client/Client.ts">delete</a>(id, tokenset_id) -> void</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.users.federatedConnectionsTokensets.delete("id", "tokenset_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Id of the user that owns the tokenset
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**tokenset_id:** `string` — The tokenset id
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `FederatedConnectionsTokensetsClient.RequestOptions`
 
 </dd>
 </dl>

@@ -2,7 +2,16 @@
 
 ## [v6.0.0](https://github.com/auth0/node-auth0/tree/v6.0.0) (2026-07-15)
 
-[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.13.0...v6.0.0)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.14.0...v6.0.0)
+
+> **Important:** `v6.0.0` introduces breaking changes. Please review the [v6 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v6_MIGRATION_GUIDE.md) for detailed upgrade instructions.
+
+**⚠️ BREAKING CHANGES**
+
+- `ConnectionAttributeIdentifier` has been replaced with three identifier-specific types: `EmailAttributeIdentifier`, `PhoneAttributeIdentifier`, and `UsernameAttributeIdentifier` [\#1363](https://github.com/auth0/node-auth0/pull/1363) ([fern-api[bot]](https://github.com/apps/fern-api))
+- `PhoneProviderProtectionBackoffStrategyEnum` variant `None` (value: `"none"`) has been renamed to `Default` (value: `"default"`) to align with the updated API [\#1363](https://github.com/auth0/node-auth0/pull/1363) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Removed `client.users.federatedConnectionsTokensets` sub-client, including its `list()` and `delete()` methods [\#1369](https://github.com/auth0/node-auth0/pull/1369) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Removed `federated_connections_access_tokens` field from all connection option types (create and update) [\#1369](https://github.com/auth0/node-auth0/pull/1369) ([fern-api[bot]](https://github.com/apps/fern-api))
 
 **Added**
 
