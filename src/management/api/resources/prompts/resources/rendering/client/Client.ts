@@ -149,7 +149,9 @@ export class RenderingClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.configs ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.configs ?? []).length > 0 &&
+                (request?.per_page == null || (response?.configs ?? []).length >= request?.per_page),
             getItems: (response) => response?.configs ?? [],
             loadPage: (_response) => {
                 _offset += 1;

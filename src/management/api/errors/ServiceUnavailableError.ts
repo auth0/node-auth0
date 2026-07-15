@@ -16,6 +16,6 @@ export class ServiceUnavailableError extends errors.ManagementError {
             Error.captureStackTrace(this, this.constructor);
         }
 
-        this.name = this.constructor.name;
+        this.name = "ServiceUnavailableError";
     }
 }

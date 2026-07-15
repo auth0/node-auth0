@@ -131,7 +131,9 @@ export class LogsClient {
         return new core.Page<Management.Log, Management.UserListLogOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.logs ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.logs ?? []).length > 0 &&
+                (request?.per_page == null || (response?.logs ?? []).length >= request?.per_page),
             getItems: (response) => response?.logs ?? [],
             loadPage: (_response) => {
                 _offset += 1;

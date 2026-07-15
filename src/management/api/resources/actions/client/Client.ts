@@ -151,7 +151,9 @@ export class ActionsClient {
         return new core.Page<Management.Action, Management.ListActionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.actions ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.actions ?? []).length > 0 &&
+                (request?.per_page == null || (response?.actions ?? []).length >= request?.per_page),
             getItems: (response) => response?.actions ?? [],
             loadPage: (_response) => {
                 _offset += 1;

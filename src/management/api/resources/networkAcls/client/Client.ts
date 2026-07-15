@@ -123,7 +123,9 @@ export class NetworkAclsClient {
         >({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.network_acls ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.network_acls ?? []).length > 0 &&
+                (request?.per_page == null || (response?.network_acls ?? []).length >= request?.per_page),
             getItems: (response) => response?.network_acls ?? [],
             loadPage: (_response) => {
                 _offset += 1;

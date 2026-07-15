@@ -143,7 +143,9 @@ export class HooksClient {
         return new core.Page<Management.Hook, Management.ListHooksOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.hooks ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.hooks ?? []).length > 0 &&
+                (request?.per_page == null || (response?.hooks ?? []).length >= request?.per_page),
             getItems: (response) => response?.hooks ?? [],
             loadPage: (_response) => {
                 _offset += 1;

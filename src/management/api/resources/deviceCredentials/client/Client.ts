@@ -144,7 +144,8 @@ export class DeviceCredentialsClient {
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
-                (response?.device_credentials ?? []).length >= Math.floor(request?.per_page ?? 50),
+                (response?.device_credentials ?? []).length > 0 &&
+                (request?.per_page == null || (response?.device_credentials ?? []).length >= request?.per_page),
             getItems: (response) => response?.device_credentials ?? [],
             loadPage: (_response) => {
                 _offset += 1;

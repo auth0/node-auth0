@@ -140,7 +140,8 @@ export class SelfServiceProfilesClient {
                 response: dataWithRawResponse.data,
                 rawResponse: dataWithRawResponse.rawResponse,
                 hasNextPage: (response) =>
-                    (response?.self_service_profiles ?? []).length >= Math.floor(request?.per_page ?? 50),
+                    (response?.self_service_profiles ?? []).length > 0 &&
+                    (request?.per_page == null || (response?.self_service_profiles ?? []).length >= request?.per_page),
                 getItems: (response) => response?.self_service_profiles ?? [],
                 loadPage: (_response) => {
                     _offset += 1;

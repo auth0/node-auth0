@@ -128,7 +128,9 @@ export class UserGrantsClient {
         return new core.Page<Management.UserGrant, Management.ListUserGrantsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.grants ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.grants ?? []).length > 0 &&
+                (request?.per_page == null || (response?.grants ?? []).length >= request?.per_page),
             getItems: (response) => response?.grants ?? [],
             loadPage: (_response) => {
                 _offset += 1;

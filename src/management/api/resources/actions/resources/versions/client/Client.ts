@@ -126,7 +126,9 @@ export class VersionsClient {
         return new core.Page<Management.ActionVersion, Management.ListActionVersionsPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.versions ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.versions ?? []).length > 0 &&
+                (request?.per_page == null || (response?.versions ?? []).length >= request?.per_page),
             getItems: (response) => response?.versions ?? [],
             loadPage: (_response) => {
                 _offset += 1;

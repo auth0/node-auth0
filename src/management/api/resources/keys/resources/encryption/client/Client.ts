@@ -121,7 +121,9 @@ export class EncryptionClient {
         return new core.Page<Management.EncryptionKey, Management.ListEncryptionKeyOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.keys ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.keys ?? []).length > 0 &&
+                (request?.per_page == null || (response?.keys ?? []).length >= request?.per_page),
             getItems: (response) => response?.keys ?? [],
             loadPage: (_response) => {
                 _offset += 1;

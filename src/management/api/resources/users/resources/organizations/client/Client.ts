@@ -125,7 +125,9 @@ export class OrganizationsClient {
         return new core.Page<Management.Organization, Management.ListUserOrganizationsOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.organizations ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.organizations ?? []).length > 0 &&
+                (request?.per_page == null || (response?.organizations ?? []).length >= request?.per_page),
             getItems: (response) => response?.organizations ?? [],
             loadPage: (_response) => {
                 _offset += 1;

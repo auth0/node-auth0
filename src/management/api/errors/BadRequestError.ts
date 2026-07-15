@@ -16,6 +16,6 @@ export class BadRequestError extends errors.ManagementError {
             Error.captureStackTrace(this, this.constructor);
         }
 
-        this.name = this.constructor.name;
+        this.name = "BadRequestError";
     }
 }

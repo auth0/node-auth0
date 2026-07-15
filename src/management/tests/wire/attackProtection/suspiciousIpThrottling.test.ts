@@ -13,7 +13,11 @@ describe("SuspiciousIpThrottlingClient", () => {
             enabled: true,
             shields: ["block"],
             allowlist: ["allowlist"],
-            stage: { "pre-login": { max_attempts: 1, rate: 1 }, "pre-user-registration": { max_attempts: 1, rate: 1 } },
+            stage: {
+                "pre-login": { max_attempts: 1, rate: 1 },
+                "pre-user-registration": { max_attempts: 1, rate: 1 },
+                "pre-custom-token-exchange": { max_attempts: 1, rate: 1 },
+            },
         };
 
         server
@@ -93,7 +97,11 @@ describe("SuspiciousIpThrottlingClient", () => {
             enabled: true,
             shields: ["block"],
             allowlist: ["allowlist"],
-            stage: { "pre-login": { max_attempts: 1, rate: 1 }, "pre-user-registration": { max_attempts: 1, rate: 1 } },
+            stage: {
+                "pre-login": { max_attempts: 1, rate: 1 },
+                "pre-user-registration": { max_attempts: 1, rate: 1 },
+                "pre-custom-token-exchange": { max_attempts: 1, rate: 1 },
+            },
         };
 
         server

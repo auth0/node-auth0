@@ -28,7 +28,7 @@ export class ManagementError extends Error {
             Error.captureStackTrace(this, this.constructor);
         }
 
-        this.name = this.constructor.name;
+        this.name = "ManagementError";
         this.statusCode = statusCode;
         this.body = body;
         this.rawResponse = rawResponse;

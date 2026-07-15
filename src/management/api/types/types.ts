@@ -244,12 +244,6 @@ export const OauthScope = {
      * Read Events */
     ReadEvents: "read:events",
     /**
-     * Read Federated Connections Tokens */
-    ReadFederatedConnectionsTokens: "read:federated_connections_tokens",
-    /**
-     * Delete Federated Connections Tokens */
-    DeleteFederatedConnectionsTokens: "delete:federated_connections_tokens",
-    /**
      * Create Flows */
     CreateFlows: "create:flows",
     /**
@@ -3119,10 +3113,9 @@ export interface ClientSessionTransferDelegationConfiguration {
     enforce_device_binding?: Management.ClientSessionTransferDelegationDeviceBindingEnum | undefined;
 }
 
-/** Indicates the device binding enforcement for delegation (impersonation) access. If set to 'ip', device binding is enforced by IP. If set to 'asn', device binding is enforced by ASN. Default value is `ip`. */
+/** Indicates the device binding enforcement for delegation (impersonation) access. The only supported value is `ip`, which enforces device binding by IP, meaning consumption of the Session Transfer Token must be done from the same IP as the issuer. */
 export const ClientSessionTransferDelegationDeviceBindingEnum = {
     Ip: "ip",
-    Asn: "asn",
 } as const;
 export type ClientSessionTransferDelegationDeviceBindingEnum =
     (typeof ClientSessionTransferDelegationDeviceBindingEnum)[keyof typeof ClientSessionTransferDelegationDeviceBindingEnum];
@@ -3943,14 +3936,6 @@ export type ConnectionExtIsSuspendedGoogleApps = Management.ConnectionExtIsSuspe
 export type ConnectionExtProfile = boolean;
 
 /**
- * Federated Connections Access Tokens
- */
-export interface ConnectionFederatedConnectionsAccessTokens {
-    /** Enables refresh tokens and access tokens collection for federated connections */
-    active?: boolean | undefined;
-}
-
-/**
  * Mapping of user profile fields returned from the OAuth2 provider to Auth0 user attributes
  */
 export type ConnectionFieldsMap = Record<string, string>;
@@ -4660,7 +4645,6 @@ export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCo
     ext_usage_location?: boolean | undefined;
     /** When false, prevents storing an alternative user ID. When true (default), this user ID is persisted in the user profile. */
     ext_user_id?: boolean | undefined;
-    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     /** Indicates whether admin consent has been granted for the required Azure AD permissions. Read-only status field managed by Auth0 during the OAuth authorization flow. */
     granted?: boolean | undefined;
     icon_url?: Management.ConnectionIconUrlAzureAd | undefined;
@@ -4757,7 +4741,6 @@ export interface ConnectionOptionsCommonOidc {
     connection_settings?: Management.ConnectionConnectionSettings | undefined;
     domain_aliases?: Management.ConnectionDomainAliases | undefined;
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
-    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
     id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
@@ -5058,7 +5041,6 @@ export interface ConnectionOptionsGoogleApps extends Management.ConnectionOption
     ext_groups_extended?: boolean | undefined;
     ext_is_admin?: Management.ConnectionExtIsAdminGoogleApps | undefined;
     ext_is_suspended?: Management.ConnectionExtIsSuspendedGoogleApps | undefined;
-    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     handle_login_from_social?: Management.ConnectionHandleLoginFromSocialGoogleApps | undefined;
     icon_url?: Management.ConnectionIconUrlGoogleApps | undefined;
     /** Determines how Auth0 generates the user_id for Google Workspace users. When false (default), the user's email address is used. When true, Google's stable numeric user ID is used instead, which persists even if the user's email changes. This setting can only be configured when creating the connection and cannot be changed afterward. */
@@ -6126,7 +6108,6 @@ export interface ConnectionPropertiesOptions {
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
-    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     password_options?: Management.ConnectionPasswordOptions | undefined;
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
@@ -19904,17 +19885,6 @@ export interface FedCmLoginPatch {
     google?: (Management.FedCmLoginGooglePatch | null) | undefined;
 }
 
-export interface FederatedConnectionTokenSet {
-    id?: string | undefined;
-    connection?: string | undefined;
-    scope?: string | undefined;
-    expires_at?: (string | null) | undefined;
-    issued_at?: string | undefined;
-    last_used_at?: (string | null) | undefined;
-    /** Accepts any additional properties */
-    [key: string]: any;
-}
-
 export type FlowAction =
     | Management.FlowActionActivecampaign
     | Management.FlowActionAirtable
@@ -26608,6 +26578,7 @@ export type NetworkAclActionRedirectEnum = boolean;
 
 export interface NetworkAclMatch {
     asns?: number[] | undefined;
+    auth0_managed?: string[] | undefined;
     geo_country_codes?: string[] | undefined;
     geo_subdivision_codes?: string[] | undefined;
     ipv4_cidrs?: Management.NetworkAclMatchIpv4Cidr[] | undefined;
@@ -26896,6 +26867,7 @@ export const PartialGroupsEnum = {
     SignupPassword: "signup-password",
     CustomizedConsent: "customized-consent",
     Passkeys: "passkeys",
+    Confirmation: "confirmation",
 } as const;
 export type PartialGroupsEnum = (typeof PartialGroupsEnum)[keyof typeof PartialGroupsEnum];
 
@@ -28791,6 +28763,16 @@ export type SuspiciousIpThrottlingAllowlist = Management.SuspiciousIpThrottlingA
 export type SuspiciousIpThrottlingAllowlistItem = string;
 
 /**
+ * Configuration options that apply before every custom token exchange attempt.
+ */
+export interface SuspiciousIpThrottlingPreCustomTokenExchangeStage {
+    /** Total number of attempts allowed. */
+    max_attempts?: number | undefined;
+    /** Interval of time, given in milliseconds, at which new attempts are granted. */
+    rate?: number | undefined;
+}
+
+/**
  * Configuration options that apply before every login attempt.
  */
 export interface SuspiciousIpThrottlingPreLoginStage {
@@ -28823,6 +28805,7 @@ export type SuspiciousIpThrottlingShieldsEnum =
 export interface SuspiciousIpThrottlingStage {
     "pre-login"?: Management.SuspiciousIpThrottlingPreLoginStage | undefined;
     "pre-user-registration"?: Management.SuspiciousIpThrottlingPreUserRegistrationStage | undefined;
+    "pre-custom-token-exchange"?: Management.SuspiciousIpThrottlingPreCustomTokenExchangeStage | undefined;
 }
 
 /** Group synchronization configuration */
@@ -29631,7 +29614,6 @@ export interface UpdateConnectionOptions {
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
     gateway_authentication?: (Management.ConnectionGatewayAuthentication | null) | undefined;
-    federated_connections_access_tokens?: (Management.ConnectionFederatedConnectionsAccessTokens | null) | undefined;
     password_options?: Management.ConnectionPasswordOptions | undefined;
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;

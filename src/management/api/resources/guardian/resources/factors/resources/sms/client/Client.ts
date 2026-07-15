@@ -363,13 +363,13 @@ export class SmsClient {
      */
     public getTemplates(
         requestOptions?: SmsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetGuardianFactorSmsTemplatesResponseContent> {
+    ): core.HttpResponsePromise<Management.GetGuardianFactorSmsTemplatesResponseContent | undefined> {
         return core.HttpResponsePromise.fromPromise(this.__getTemplates(requestOptions));
     }
 
     private async __getTemplates(
         requestOptions?: SmsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetGuardianFactorSmsTemplatesResponseContent>> {
+    ): Promise<core.WithRawResponse<Management.GetGuardianFactorSmsTemplatesResponseContent | undefined>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -394,7 +394,7 @@ export class SmsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetGuardianFactorSmsTemplatesResponseContent,
+                data: _response.body as Management.GetGuardianFactorSmsTemplatesResponseContent | undefined,
                 rawResponse: _response.rawResponse,
             };
         }

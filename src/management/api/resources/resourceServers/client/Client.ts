@@ -131,7 +131,9 @@ export class ResourceServersClient {
         return new core.Page<Management.ResourceServer, Management.ListResourceServerOffsetPaginatedResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
-            hasNextPage: (response) => (response?.resource_servers ?? []).length >= Math.floor(request?.per_page ?? 50),
+            hasNextPage: (response) =>
+                (response?.resource_servers ?? []).length > 0 &&
+                (request?.per_page == null || (response?.resource_servers ?? []).length >= request?.per_page),
             getItems: (response) => response?.resource_servers ?? [],
             loadPage: (_response) => {
                 _offset += 1;

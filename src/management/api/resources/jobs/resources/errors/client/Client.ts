@@ -40,14 +40,14 @@ export class ErrorsClient {
     public get(
         id: string,
         requestOptions?: ErrorsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.jobs.ErrorsGetResponse> {
+    ): core.HttpResponsePromise<Management.jobs.ErrorsGetResponse | undefined> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
         requestOptions?: ErrorsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.jobs.ErrorsGetResponse>> {
+    ): Promise<core.WithRawResponse<Management.jobs.ErrorsGetResponse | undefined>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -71,7 +71,10 @@ export class ErrorsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.jobs.ErrorsGetResponse, rawResponse: _response.rawResponse };
+            return {
+                data: _response.body as Management.jobs.ErrorsGetResponse | undefined,
+                rawResponse: _response.rawResponse,
+            };
         }
 
         if (_response.error.reason === "status-code") {
