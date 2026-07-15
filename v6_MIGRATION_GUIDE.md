@@ -7,7 +7,7 @@ A guide to migrating the Auth0 Node.js SDK from `5.x` to `6.x`.
     - [ConnectionAttributeIdentifier replaced with identifier-specific types](#connectionattributeidentifier-replaced-with-identifier-specific-types)
     - [PhoneProviderProtectionBackoffStrategyEnum value change](#phoneproviderprotectionbackoffstrategyenum-value-change)
     - [users.federatedConnectionsTokensets removed](#usersfederatedconnectionstokensets-removed)
-    - [federated_connections_access_tokens removed from UpdateConnectionOptions](#federated_connections_access_tokens-removed-from-updateconnectionoptions)
+    - [federated_connections_access_tokens removed from connection options](#federated_connections_access_tokens-removed-from-connection-options)
 
 ## Overall changes
 
@@ -109,13 +109,24 @@ These methods are no longer available. Remove any calls to `client.users.federat
 
 ---
 
-### federated_connections_access_tokens removed from UpdateConnectionOptions
+### federated_connections_access_tokens removed from connection options
 
-The `federated_connections_access_tokens` field has been removed from `UpdateConnectionOptions`. If you were setting this field when updating a connection, remove it from your update payload.
+The `federated_connections_access_tokens` field has been removed from all connection option types, including create and update. This affects OIDC, Azure AD, Google Apps, and other connection strategies. Remove it from any create or update payloads.
 
 **Before (v5):**
 
 ```ts
+// On create
+await client.connections.create({
+    strategy: "oidc",
+    name: "my-connection",
+    options: {
+        federated_connections_access_tokens: { ... },
+        // other options
+    },
+});
+
+// On update
 await client.connections.update("connection_id", {
     options: {
         federated_connections_access_tokens: { ... },
@@ -127,6 +138,17 @@ await client.connections.update("connection_id", {
 **After (v6):**
 
 ```ts
+// On create
+await client.connections.create({
+    strategy: "oidc",
+    name: "my-connection",
+    options: {
+        // remove federated_connections_access_tokens
+        // other options
+    },
+});
+
+// On update
 await client.connections.update("connection_id", {
     options: {
         // remove federated_connections_access_tokens
