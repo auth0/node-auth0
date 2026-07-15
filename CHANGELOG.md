@@ -1,5 +1,20 @@
 # Change Log
 
+## [v6.0.0](https://github.com/auth0/node-auth0/tree/v6.0.0) (2026-07-15)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.13.0...v6.0.0)
+
+**Added**
+
+- feat: remove federatedConnectionsTokensets, add custom token exchange suspicious IP throttling stage, and internal fetcher improvements [\#1369](https://github.com/auth0/node-auth0/pull/1369) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: add org role members, third-party client access, passwordless type fixes, and OIDC connection updates [\#1363](https://github.com/auth0/node-auth0/pull/1363) ([fern-api[bot]](https://github.com/apps/fern-api))
+- Release v5.14.0 [\#1365](https://github.com/auth0/node-auth0/pull/1365) ([ankita10119](https://github.com/ankita10119))
+- feat: add Node.js 26 support [\#1356](https://github.com/auth0/node-auth0/pull/1356) ([Poggen](https://github.com/Poggen))
+
+**Fixed**
+
+- fix: upgrade jose from v4 to v5 to fix pnpm trust policy install failure [\#1362](https://github.com/auth0/node-auth0/pull/1362) ([ankita10119](https://github.com/ankita10119))
+
 ## [v5.14.0](https://github.com/auth0/node-auth0/tree/v5.14.0) (2026-07-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.13.0...v5.14.0)
