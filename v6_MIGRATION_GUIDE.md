@@ -6,10 +6,12 @@ A guide to migrating the Auth0 Node.js SDK from `5.x` to `6.x`.
 - [Breaking changes](#breaking-changes)
     - [ConnectionAttributeIdentifier replaced with identifier-specific types](#connectionattributeidentifier-replaced-with-identifier-specific-types)
     - [PhoneProviderProtectionBackoffStrategyEnum value change](#phoneproviderprotectionbackoffstrategyenum-value-change)
+    - [users.federatedConnectionsTokensets removed](#usersfederatedconnectionstokensets-removed)
+    - [federated_connections_access_tokens removed from UpdateConnectionOptions](#federated_connections_access_tokens-removed-from-updateconnectionoptions)
 
 ## Overall changes
 
-V6 is a focused release that addresses type correctness for database connection attribute identifiers and aligns the phone provider backoff strategy enum with the updated API. There are no changes to the Authentication API — any code written for the Authentication API in `5.x` will continue to work in `6.x`.
+V6 addresses type correctness for database connection attribute identifiers, aligns the phone provider backoff strategy enum with the updated API, and removes the federated connections tokensets user sub-client. There are no changes to the Authentication API — any code written for the Authentication API in `5.x` will continue to work in `6.x`.
 
 ## Breaking changes
 
@@ -84,3 +86,51 @@ const strategy = Management.PhoneProviderProtectionBackoffStrategyEnum.Default; 
 ```
 
 If you were passing this value directly as a string `"none"`, update it to `"default"` to match the updated API.
+
+---
+
+### users.federatedConnectionsTokensets removed
+
+The `client.users.federatedConnectionsTokensets` sub-client has been removed. This includes the `list()` and `delete()` methods.
+
+**Before (v5):**
+
+```ts
+// List active federated connection tokensets for a user
+const tokensets = await client.users.federatedConnectionsTokensets.list("user_id");
+
+// Delete a tokenset
+await client.users.federatedConnectionsTokensets.delete("user_id", "tokenset_id");
+```
+
+**After (v6):**
+
+These methods are no longer available. Remove any calls to `client.users.federatedConnectionsTokensets` from your code.
+
+---
+
+### federated_connections_access_tokens removed from UpdateConnectionOptions
+
+The `federated_connections_access_tokens` field has been removed from `UpdateConnectionOptions`. If you were setting this field when updating a connection, remove it from your update payload.
+
+**Before (v5):**
+
+```ts
+await client.connections.update("connection_id", {
+    options: {
+        federated_connections_access_tokens: { ... },
+        // other options
+    },
+});
+```
+
+**After (v6):**
+
+```ts
+await client.connections.update("connection_id", {
+    options: {
+        // remove federated_connections_access_tokens
+        // other options
+    },
+});
+```
