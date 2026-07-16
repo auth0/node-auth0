@@ -23,9 +23,28 @@ export declare namespace ManagementClient {
      * @public
      */
     export interface ManagementClientOptions
-        extends Omit<FernClient.Options, "token" | "environment" | "fetcher" | "baseUrl" | "fetch"> {
+        extends Omit<FernClient.Options, "token" | "environment" | "fetcher" | "baseUrl"> {
         /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
         domain: string;
+        /**
+         * Custom `fetch` implementation used for all HTTP requests.
+         *
+         * Provide your own transport when you need to control how requests are
+         * made — for example to route through a proxy or corporate egress, add
+         * retry middleware, attach OpenTelemetry instrumentation, or run on
+         * platforms where the global `fetch` must be swapped (Cloudflare
+         * Workers, Bun). Defaults to the platform's global `fetch`.
+         *
+         * @example
+         * ```typescript
+         * const client = new ManagementClient({
+         *   domain: 'your-tenant.auth0.com',
+         *   token: 'your-static-token',
+         *   fetch: myInstrumentedFetch,
+         * });
+         * ```
+         */
+        fetch?: typeof fetch;
         /**
          * API audience. Defaults to https://{domain}/api/v2/
          * @defaultValue `https://{domain}/api/v2/`
@@ -206,9 +225,12 @@ export class ManagementClient extends FernClient {
         const headers = createTelemetryHeaders(_options);
         const token = createTokenSupplier(_options);
 
-        // Temporarily remove fetcher from options to avoid people passing it for now
+        // The underlying `fetcher` type is a Fern implementation detail and is
+        // intentionally kept off the public surface, so strip it here. `fetch`,
+        // by contrast, is supported all the way down through `fetcherImpl` and
+        // is a legitimate transport-customization hook, so it is left in place.
+        // https://github.com/auth0/node-auth0/issues/1330
         delete (_options as any).fetcher;
-        delete (_options as any).fetch;
 
         // Prepare the base client options
         let clientOptions: any = {
