@@ -199,16 +199,16 @@ export declare namespace ManagementClient {
  * });
  * ```
  *
- * @example Using custom fetcher with custom domain header (they work together)
+ * @example Using a custom fetch with custom domain header (they work together)
  * ```typescript
  * const client = new ManagementClient({
  *   domain: 'your-tenant.auth0.com',
  *   clientId: 'your-client-id',
  *   clientSecret: 'your-client-secret',
  *   withCustomDomainHeader: 'auth.example.com',  // Custom domain header logic
- *   fetcher: async (args) => {
- *     console.log('Making request:', args.url);  // Custom logging
- *     return fetch(args.url, { ...args });       // Custom fetch implementation
+ *   fetch: (input, init) => {
+ *     console.log('Making request:', input);  // Custom logging
+ *     return fetch(input, init);              // Custom fetch implementation
  *   }
  * });
  * ```
