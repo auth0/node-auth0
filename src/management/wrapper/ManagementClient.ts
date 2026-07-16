@@ -22,12 +22,29 @@ export declare namespace ManagementClient {
      * @group Management API
      * @public
      */
-    export interface ManagementClientOptions extends Omit<
-        FernClient.Options,
-        "token" | "environment" | "fetcher" | "baseUrl"
-    > {
+    export interface ManagementClientOptions
+        extends Omit<FernClient.Options, "token" | "environment" | "fetcher" | "baseUrl"> {
         /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
         domain: string;
+        /**
+         * Custom `fetch` implementation used for all HTTP requests.
+         *
+         * Provide your own transport when you need to control how requests are
+         * made — for example to route through a proxy or corporate egress, add
+         * retry middleware, attach OpenTelemetry instrumentation, or run on
+         * platforms where the global `fetch` must be swapped (Cloudflare
+         * Workers, Bun). Defaults to the platform's global `fetch`.
+         *
+         * @example
+         * ```typescript
+         * const client = new ManagementClient({
+         *   domain: 'your-tenant.auth0.com',
+         *   token: 'your-static-token',
+         *   fetch: myInstrumentedFetch,
+         * });
+         * ```
+         */
+        fetch?: typeof fetch;
         /**
          * API audience. Defaults to https://{domain}/api/v2/
          * @defaultValue `https://{domain}/api/v2/`
@@ -182,16 +199,16 @@ export declare namespace ManagementClient {
  * });
  * ```
  *
- * @example Using custom fetcher with custom domain header (they work together)
+ * @example Using a custom fetch with custom domain header (they work together)
  * ```typescript
  * const client = new ManagementClient({
  *   domain: 'your-tenant.auth0.com',
  *   clientId: 'your-client-id',
  *   clientSecret: 'your-client-secret',
  *   withCustomDomainHeader: 'auth.example.com',  // Custom domain header logic
- *   fetcher: async (args) => {
- *     console.log('Making request:', args.url);  // Custom logging
- *     return fetch(args.url, { ...args });       // Custom fetch implementation
+ *   fetch: (input, init) => {
+ *     console.log('Making request:', input);  // Custom logging
+ *     return fetch(input, init);              // Custom fetch implementation
  *   }
  * });
  * ```
@@ -208,11 +225,10 @@ export class ManagementClient extends FernClient {
         const headers = createTelemetryHeaders(_options);
         const token = createTokenSupplier(_options);
 
-        // The underlying fetcher type is internal to the generated Fern client
-        // and is intentionally kept off the public surface. `fetch`, however,
-        // is supported all the way down through `fetcherImpl` and is a
-        // legitimate customization hook for callers that need to control the
-        // HTTP transport (proxies, retries, instrumentation).
+        // The underlying `fetcher` type is a Fern implementation detail and is
+        // intentionally kept off the public surface, so strip it here. `fetch`,
+        // by contrast, is supported all the way down through `fetcherImpl` and
+        // is a legitimate transport-customization hook, so it is left in place.
         // https://github.com/auth0/node-auth0/issues/1330
         delete (_options as any).fetcher;
 
