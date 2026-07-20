@@ -22,3 +22,18 @@ jobs:
             require-build: true
         secrets:
             github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    deploy-docs:
+        name: Deploy Documentation
+        needs: release
+        if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged && startsWith(github.event.pull_request.head.ref, 'release/'))
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: ./.github/actions/deploy-docs
+              with:
+                  node-version: 22.23.1
+                  token: ${{ secrets.GITHUB_TOKEN }}
