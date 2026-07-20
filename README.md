@@ -76,6 +76,99 @@ const management = new ManagementClient({
 });
 ```
 
+#### Individual Management sub-clients (smaller bundles)
+
+If you only need a few Management API resources, you can import them individually instead of
+the full `ManagementClient`. Each resource has its own entry point (for example
+`auth0/clients`, `auth0/users`, `auth0/connections`), so a bundler ships only the resources
+you use. This keeps bundles small on size-constrained runtimes such as Cloudflare Workers.
+
+To avoid wiring up authentication for every client, use `createManagementAuth` from
+`auth0/management`. It handles the token once (fetching and refreshing via client
+credentials, or accepting a static token) and gives you an options object you spread into
+any sub-client. The token is cached and shared, so you are not re-authenticating per client.
+
+```js
+import { createManagementAuth } from "auth0/management";
+import { ClientsClient } from "auth0/clients";
+import { UsersClient } from "auth0/users";
+
+// Configure auth once and reuse it across clients.
+const auth = createManagementAuth({
+    domain: "{YOUR_TENANT_AND_REGION}.auth0.com",
+    clientId: "{YOUR_CLIENT_ID}",
+    clientSecret: "{YOUR_CLIENT_SECRET}",
+});
+
+// Create each sub-client once and reuse the instances throughout your app.
+export const clients = new ClientsClient(auth.clientOptions);
+export const users = new UsersClient(auth.clientOptions);
+
+await users.list({ page: 0, per_page: 10 });
+```
+
+You can also pass a static token:
+
+```js
+const auth = createManagementAuth({
+    domain: "{YOUR_TENANT_AND_REGION}.auth0.com",
+    token: "{YOUR_API_V2_TOKEN}",
+});
+```
+
+For lower-level control over the token lifecycle, `TokenProvider` is also exported from
+`auth0/management`. It performs the client credentials grant and caches the token until
+shortly before it expires:
+
+```js
+import { TokenProvider } from "auth0/management";
+import { ClientsClient } from "auth0/clients";
+
+const tokenProvider = new TokenProvider({
+    domain: "{YOUR_TENANT_AND_REGION}.auth0.com",
+    clientId: "{YOUR_CLIENT_ID}",
+    clientSecret: "{YOUR_CLIENT_SECRET}",
+    audience: "https://{YOUR_TENANT_AND_REGION}.auth0.com/api/v2/",
+});
+
+const clients = new ClientsClient({
+    baseUrl: "https://{YOUR_TENANT_AND_REGION}.auth0.com/api/v2",
+    token: () => tokenProvider.getAccessToken(),
+});
+```
+
+Request and response types for these clients live under the shared `Management` namespace and
+are imported separately with `import type { Management } from "auth0"`:
+
+```ts
+import type { Management } from "auth0";
+
+const body: Management.CreateClientRequestContent = { name: "My App" };
+const created: Management.CreateClientResponseContent = await clients.create(body);
+```
+
+Because they are TypeScript interfaces, `import type` is erased at compile time, so importing
+types from the root `auth0` entry adds nothing to your bundle and does not pull in the full
+`ManagementClient`.
+
+**Recommendations for small bundles**
+
+- Import each client as a **value** from its own entry point (`auth0/clients`, `auth0/users`,
+  and so on), not from the root `auth0`. A value import from the root pulls the full
+  `ManagementClient` and all resources into the module graph.
+- Import request and response types with `import type { Management } from "auth0"`. Types are
+  erased, so this is always free regardless of the entry point.
+- Prefer `import type` over a plain `import` for anything you only use in type positions. It
+  guarantees the import is erased and never accidentally ships runtime code (the one thing
+  that does add bytes is referencing an enum **value**, such as `OauthScope.CreateActions`).
+- Configure authentication once with `createManagementAuth` (or a single shared
+  `TokenProvider`) and reuse the returned `clientOptions` across every sub-client. Create each
+  sub-client once and reuse the instance rather than constructing new clients per request.
+
+> These smaller bundles rely on tree-shaking, so they apply when you consume the SDK as ESM
+> through a bundler. A plain CommonJS `require()` cannot tree-shake and loads the full
+> resource graph.
+
 #### UserInfo API Client
 
 This client can be used to retrieve user profile information.
