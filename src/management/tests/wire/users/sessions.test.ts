@@ -22,6 +22,7 @@ describe("SessionsClient", () => {
                     last_interacted_at: "2024-01-15T09:30:00Z",
                     clients: [{}],
                     session_metadata: { key: "value" },
+                    actor: { sub: "sub" },
                 },
             ],
             next: "next",

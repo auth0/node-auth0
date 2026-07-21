@@ -108,6 +108,11 @@ describe("ThemesClient", () => {
                 subtitle: { bold: true, size: 1.1 },
                 title: { bold: true, size: 1.1 },
             },
+            identifiers: {
+                login_display: "separate",
+                otp_autocomplete: true,
+                phone_display: { formatting: "international", masking: "hide_country_code" },
+            },
             page_background: {
                 background_color: "background_color",
                 background_image_url: "background_image_url",
@@ -977,6 +982,11 @@ describe("ThemesClient", () => {
                 subtitle: { bold: true, size: 1.1 },
                 title: { bold: true, size: 1.1 },
             },
+            identifiers: {
+                login_display: "separate",
+                otp_autocomplete: true,
+                phone_display: { formatting: "international", masking: "hide_country_code" },
+            },
             page_background: {
                 background_color: "background_color",
                 background_image_url: "background_image_url",
@@ -1129,6 +1139,11 @@ describe("ThemesClient", () => {
                 reference_text_size: 1.1,
                 subtitle: { bold: true, size: 1.1 },
                 title: { bold: true, size: 1.1 },
+            },
+            identifiers: {
+                login_display: "separate",
+                otp_autocomplete: true,
+                phone_display: { formatting: "international", masking: "hide_country_code" },
             },
             page_background: {
                 background_color: "background_color",
@@ -1421,6 +1436,11 @@ describe("ThemesClient", () => {
                 reference_text_size: 1.1,
                 subtitle: { bold: true, size: 1.1 },
                 title: { bold: true, size: 1.1 },
+            },
+            identifiers: {
+                login_display: "separate",
+                otp_autocomplete: true,
+                phone_display: { formatting: "international", masking: "hide_country_code" },
             },
             page_background: {
                 background_color: "background_color",
