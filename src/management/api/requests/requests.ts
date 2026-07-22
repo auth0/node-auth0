@@ -216,7 +216,7 @@ export interface ListClientsRequestParameters {
     is_first_party?: boolean | null;
     /** Optional filter by a comma-separated list of application types. */
     app_type?: string | null;
-    /** Optional filter by the <a href="https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-04.html">Client ID Metadata Document</a> URI for CIMD-registered clients. */
+    /** Optional filter by the <a href="https://drafts.oauth.net/draft-ietf-oauth-client-id-metadata-document/draft-ietf-oauth-client-id-metadata-document.html">Client ID Metadata Document</a> URI for CIMD-registered clients. */
     external_client_id?: string | null;
     /** Advanced Query in <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i> */
     q?: string | null;
@@ -312,6 +312,7 @@ export interface CreateClientRequestContent {
     token_quota?: Management.CreateTokenQuota;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
+    identity_assertion_authorization_grant?: Management.CreateIdentityAssertionAuthorizationGrant;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
     redirection_policy?: Management.ClientRedirectionPolicyEnum;
     express_configuration?: Management.ExpressConfiguration;
@@ -412,6 +413,7 @@ export interface UpdateClientRequestContent {
     custom_login_page?: string;
     custom_login_page_preview?: string;
     token_quota?: Management.UpdateTokenQuota | null;
+    identity_assertion_authorization_grant?: Management.UpdateIdentityAssertionAuthorizationGrant | null;
     /** Form template for WS-Federation protocol */
     form_template?: string;
     addons?: Management.ClientAddons;
@@ -548,6 +550,7 @@ export interface CreateConnectionRequestContent {
     authentication?: Management.ConnectionAuthenticationPurpose;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp;
+    cross_app_access_resource_app?: Management.CreateCrossAppAccessResourceApp;
 }
 
 /**
@@ -584,6 +587,7 @@ export interface UpdateConnectionRequestContent {
     authentication?: Management.ConnectionAuthenticationPurpose;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp;
+    cross_app_access_resource_app?: Management.UpdateCrossAppAccessResourceApp | null;
 }
 
 /**
@@ -2349,6 +2353,7 @@ export interface CreateBrandingThemeRequestContent {
     /** Display Name */
     displayName?: string;
     fonts: Management.BrandingThemeFonts;
+    identifiers?: Management.BrandingThemeIdentifiers;
     page_background: Management.BrandingThemePageBackground;
     widget: Management.BrandingThemeWidget;
 }
@@ -2434,6 +2439,7 @@ export interface UpdateBrandingThemeRequestContent {
     /** Display Name */
     displayName?: string;
     fonts: Management.BrandingThemeFonts;
+    identifiers?: Management.BrandingThemeIdentifiers;
     page_background: Management.BrandingThemePageBackground;
     widget: Management.BrandingThemeWidget;
 }
@@ -3874,6 +3880,7 @@ export interface CreateSelfServiceProfileSsoTicketRequestContent {
     provisioning_config?: Management.SelfServiceProfileSsoTicketProvisioningConfig;
     /** Indicates whether a verified domain should be used for organization discovery during authentication. */
     use_for_organization_discovery?: boolean;
+    third_party_client_access_config?: Management.ThirdPartyClientAccessConfig;
     enabled_features?: Management.SelfServiceProfileSsoTicketEnabledFeatures;
 }
 

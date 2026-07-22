@@ -1,0 +1,35 @@
+name: Deploy documentation to GitHub Pages
+
+inputs:
+    node-version:
+        required: true
+    token:
+        required: true
+
+runs:
+    using: composite
+
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with:
+              node-version: ${{ inputs.node-version }}
+              cache: "yarn"
+
+        - name: Install dependencies
+          shell: bash
+          run: yarn install --frozen-lockfile
+
+        - name: Build documentation
+          shell: bash
+          run: yarn docs:build
+
+        - name: Deploy to GitHub Pages
+          uses: peaceiris/actions-gh-pages@v4
+          with:
+              github_token: ${{ inputs.token }}
+              publish_dir: ./docs
+              publish_branch: gh-pages
