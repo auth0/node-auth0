@@ -1,5 +1,14 @@
 # Change Log
 
+## [v6.1.0](https://github.com/auth0/node-auth0/tree/v6.1.0) (2026-07-22)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.0.0...v6.1.0)
+
+**Added**
+
+- feat(management): add sub-package exports and management auth helper [\#1373](https://github.com/auth0/node-auth0/pull/1373) ([developerkunal](https://github.com/developerkunal))
+- feat: add XAA resource app, branding identifiers, session actor, and 3P SSO ticket config [\#1375](https://github.com/auth0/node-auth0/pull/1375) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v6.0.0](https://github.com/auth0/node-auth0/tree/v6.0.0) (2026-07-15)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.14.0...v6.0.0)
