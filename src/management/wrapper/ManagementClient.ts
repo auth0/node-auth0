@@ -1,8 +1,7 @@
 import { ManagementClient as FernClient } from "../Client.js";
 import * as core from "../core/index.js";
-import { TokenProvider } from "./token-provider.js";
-import { Auth0ClientTelemetry } from "../../lib/middleware/auth0-client-telemetry.js";
 import { withCustomDomainHeader } from "../request-options.js";
+import { createTelemetryHeaders, createTokenSupplier } from "./auth-helpers.js";
 
 /**
  * All supported configuration options for the ManagementClient.
@@ -22,8 +21,10 @@ export declare namespace ManagementClient {
      * @group Management API
      * @public
      */
-    export interface ManagementClientOptions
-        extends Omit<FernClient.Options, "token" | "environment" | "fetcher" | "baseUrl" | "fetch"> {
+    export interface ManagementClientOptions extends Omit<
+        FernClient.Options,
+        "token" | "environment" | "fetcher" | "baseUrl" | "fetch"
+    > {
         /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
         domain: string;
         /**
@@ -224,109 +225,5 @@ export class ManagementClient extends FernClient {
         }
 
         super(clientOptions);
-    }
-}
-
-/**
- * Type guard to determine if options use token-based authentication.
- *
- * @param _options - The management client configuration options
- * @returns True if the options contain a token property
- * @group Management API
- * @namespace ManagementClient.Utils
- * @private
- */
-function isClientOptionsWithToken(
-    _options: ManagementClientConfig,
-): _options is ManagementClient.ManagementClientOptionsWithToken {
-    return "token" in _options;
-}
-
-/**
- * Creates telemetry headers for the Management Client.
- * Adds the Auth0-Client header when telemetry is enabled.
- *
- * @param _options - The management client configuration options
- * @returns Headers object including telemetry information
- * @group Management API
- * @namespace ManagementClient.Utils
- * @private
- */
-function createTelemetryHeaders(
-    _options: ManagementClientConfig,
-): Record<string, string | core.Supplier<string | null | undefined> | null | undefined> {
-    const headers = { ...(_options.headers ?? {}) };
-
-    if (_options.telemetry !== false) {
-        const telemetry = new Auth0ClientTelemetry({
-            clientInfo: _options.clientInfo,
-        });
-
-        const auth0ClientHeader = telemetry.getAuth0ClientHeader();
-        if (auth0ClientHeader) {
-            headers["Auth0-Client"] = auth0ClientHeader;
-        }
-    }
-
-    return headers;
-}
-
-/**
- * Type guard to check if options contain client secret.
- *
- * @param _options - Client credentials configuration options
- * @returns True if the options contain a clientSecret property
- * @group Management API
- * @namespace ManagementClient.Utils
- * @private
- */
-function hasClientSecret(
-    _options: ManagementClient.ManagementClientOptionsWithClientCredentials,
-): _options is ManagementClient.ManagementClientOptionsWithClientSecret {
-    return "clientSecret" in _options;
-}
-
-/**
- * Creates a token supplier based on the authentication method.
- * Returns the provided token for token-based auth, or creates a TokenProvider
- * for client credentials (secret or assertion) authentication.
- *
- * @param _options - The management client configuration options
- * @returns A function that returns an access token
- * @group Management API
- * @namespace ManagementClient.Utils
- * @private
- */
-function createTokenSupplier(_options: ManagementClientConfig): core.Supplier<string> {
-    if (isClientOptionsWithToken(_options)) {
-        return _options.token;
-    }
-
-    // Handle client credentials with proper type checking
-    const baseOptions = {
-        ..._options,
-        audience: _options.audience ?? `https://${_options.domain}/api/v2/`,
-        clientId: _options.clientId,
-        useMTLS: _options.useMTLS,
-    };
-
-    if (hasClientSecret(_options)) {
-        // Client secret authentication
-        const tokenProviderOptions: ManagementClient.ManagementClientOptionsWithClientSecret & { audience: string } = {
-            ...baseOptions,
-            clientSecret: _options.clientSecret,
-        };
-        const tokenProvider = new TokenProvider(tokenProviderOptions);
-        return () => tokenProvider.getAccessToken();
-    } else {
-        // Client assertion authentication
-        const tokenProviderOptions: ManagementClient.ManagementClientOptionsWithClientAssertion & { audience: string } =
-            {
-                ...baseOptions,
-                clientAssertionSigningKey: _options.clientAssertionSigningKey,
-                clientAssertionSigningAlg: _options.clientAssertionSigningAlg,
-            };
-        const tokenProvider = new TokenProvider(tokenProviderOptions);
-        return () => tokenProvider.getAccessToken();
     }
 }
