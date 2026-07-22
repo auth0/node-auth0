@@ -1,0 +1,92 @@
+name: Build with Provenance
+
+# Reference template: build provenance via Sigstore-backed attestation.
+# ─────────────────────────────────────────────────────────────────────
+# Copy the `build` job below into your own workflow. Do NOT copy it into
+# unified-security-pipeline.yml — provenance must live in the same job that
+# builds and publishes the artifact so the GitHub OIDC identity honestly
+# binds to the run that produced it. Attesting from a different job or
+# workflow would be a false supply-chain claim.
+#
+# Order of operations (required)
+# ───────────────────────────────
+#   1. checkout
+#   2. <your build command>  — artifact file must exist on disk before step 3
+#   3. attest-build-provenance — computes artifact digest and signs it
+#   4. (optional) upload / publish the artifact
+#
+# Permissions (caller job must declare all three)
+# ────────────────────────────────────────────────
+#   contents: read      — checkout
+#   id-token: write     — request OIDC token; Sigstore Fulcio uses this to issue
+#                         a short-lived signing certificate bound to this workflow run
+#   attestations: write — store the signed attestation on GitHub
+#
+# Verification (consumer side)
+# ─────────────────────────────
+#   gh attestation verify <artifact-file> --repo <org>/<repo>
+#
+# npm packages — different mechanism
+# ───────────────────────────────────
+#   For packages published to the npm registry, do NOT use this action for
+#   registry-visible provenance (the npmjs.com badge). Instead, run:
+#     npm publish --provenance
+#   First publish of a new package also needs: npm publish --provenance --access public
+#   Requirements: npm >= 9.5.0, GitHub-hosted runner, id-token: write, and a
+#   matching `repository` field in package.json (case-sensitive). The npm CLI
+#   generates and signs the provenance itself (Sigstore-backed) directly to the
+#   npm registry. Under trusted publishing the --provenance flag is automatic.
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+jobs:
+  # ── Caller-owned build: produce the artifact, attest, then publish ──────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest # Use a runner that supports OIDC (Ubuntu, Windows, macOS)
+    permissions:
+      contents: read
+      id-token: write      # OIDC token for Sigstore Fulcio signing certificate
+      attestations: write  # write the signed attestation to GitHub
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      # ── Replace this block with your actual build steps ──────────────────────
+      # Examples:
+      #   Maven:   run: mvn --no-transfer-progress package -DskipTests
+      #   Go:      run: go build -o ./bin/myapp ./...
+      #   Node:    run: npm ci && npm run build
+      #             ↳ If publishing to the npm registry, use `npm publish --provenance`
+      #               instead of the attest-build-provenance step below — see note above.
+      #   .NET:    run: dotnet publish -c Release -o ./publish
+      # ─────────────────────────────────────────────────────────────────────────
+      - name: Build artifact
+        run: echo "Replace this step with your build command"
+
+      # ── Attest: must run AFTER the artifact exists on disk ───────────────────
+      # For file/path-based artifacts (JAR, binary, tarball, etc.):
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+        with:
+          # Replace with the path (or glob) to your built artifact, e.g.:
+          #   target/my-sdk-*.jar   |   dist/my-app-*.tgz   |   bin/myapp
+          subject-path: path/to/your/artifact
+
+          # ── Container image alternative (comment out subject-path above) ─────
+          # subject-name: ghcr.io/<org>/<image>   # fully-qualified image name
+          # subject-digest: sha256:<digest>        # exact digest of the pushed image
+          # push-to-registry: true                 # push attestation to the image registry
+
+      # ── Optional: upload artifact for downstream jobs / release assets ───────
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      #   with:
+      #     name: <artifact-name>
+      #     path: <artifact-path>
+      #     if-no-files-found: error
