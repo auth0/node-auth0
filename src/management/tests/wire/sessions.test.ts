@@ -30,6 +30,7 @@ describe("SessionsClient", () => {
             authentication: { methods: [{}] },
             cookie: { mode: "non-persistent" },
             session_metadata: { key: "value" },
+            actor: { sub: "sub" },
         };
 
         server.mockEndpoint().get("/sessions/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -177,6 +178,7 @@ describe("SessionsClient", () => {
             authentication: { methods: [{}] },
             cookie: { mode: "non-persistent" },
             session_metadata: { key: "value" },
+            actor: { sub: "sub" },
         };
 
         server

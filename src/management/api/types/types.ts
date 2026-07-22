@@ -1785,6 +1785,46 @@ export interface BrandingThemeFonts {
     title: Management.BrandingThemeFontTitle;
 }
 
+export interface BrandingThemeIdentifiers {
+    login_display: Management.BrandingThemeIdentifiersLoginDisplayEnum;
+    /** OTP autocomplete */
+    otp_autocomplete: boolean;
+    phone_display: Management.BrandingThemeIdentifiersPhoneDisplay;
+}
+
+/** Login display */
+export const BrandingThemeIdentifiersLoginDisplayEnum = {
+    Separate: "separate",
+    Unified: "unified",
+} as const;
+export type BrandingThemeIdentifiersLoginDisplayEnum =
+    (typeof BrandingThemeIdentifiersLoginDisplayEnum)[keyof typeof BrandingThemeIdentifiersLoginDisplayEnum];
+
+/**
+ * Phone display
+ */
+export interface BrandingThemeIdentifiersPhoneDisplay {
+    formatting: Management.BrandingThemeIdentifiersPhoneDisplayFormattingEnum;
+    masking: Management.BrandingThemeIdentifiersPhoneDisplayMaskingEnum;
+}
+
+/** Phone number formatting style */
+export const BrandingThemeIdentifiersPhoneDisplayFormattingEnum = {
+    International: "international",
+    Regional: "regional",
+} as const;
+export type BrandingThemeIdentifiersPhoneDisplayFormattingEnum =
+    (typeof BrandingThemeIdentifiersPhoneDisplayFormattingEnum)[keyof typeof BrandingThemeIdentifiersPhoneDisplayFormattingEnum];
+
+/** Phone number masking strategy */
+export const BrandingThemeIdentifiersPhoneDisplayMaskingEnum = {
+    HideCountryCode: "hide_country_code",
+    MaskDigits: "mask_digits",
+    ShowAll: "show_all",
+} as const;
+export type BrandingThemeIdentifiersPhoneDisplayMaskingEnum =
+    (typeof BrandingThemeIdentifiersPhoneDisplayMaskingEnum)[keyof typeof BrandingThemeIdentifiersPhoneDisplayMaskingEnum];
+
 export interface BrandingThemePageBackground {
     /** Background color */
     background_color: string;
@@ -2122,6 +2162,7 @@ export interface Client {
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -2552,6 +2593,7 @@ export const ClientAppTypeEnum = {
     NonInteractive: "non_interactive",
     ResourceServer: "resource_server",
     ExpressConfiguration: "express_configuration",
+    B2BIntegration: "b2b_integration",
     Rms: "rms",
     Box: "box",
     Cloudbees: "cloudbees",
@@ -2816,6 +2858,7 @@ export interface ClientGrantResponseContent {
 export const ClientGrantSubjectTypeEnum = {
     Client: "client",
     User: "user",
+    AnonymousUser: "anonymous_user",
 } as const;
 export type ClientGrantSubjectTypeEnum = (typeof ClientGrantSubjectTypeEnum)[keyof typeof ClientGrantSubjectTypeEnum];
 
@@ -3674,6 +3717,21 @@ export type ConnectionConnectionSettingsPkceEnum =
     (typeof ConnectionConnectionSettingsPkceEnum)[keyof typeof ConnectionConnectionSettingsPkceEnum];
 
 /**
+ * Cross App Access - Resource App settings that apply to this connection.
+ */
+export interface ConnectionCrossAppAccessResourceApp {
+    status: Management.ConnectionCrossAppAccessResourceAppStatusEnum;
+}
+
+/** Set to `enabled` to accept ID-JAGs from this connection's identity provider to issue access tokens to other connected applications. */
+export const ConnectionCrossAppAccessResourceAppStatusEnum = {
+    Disabled: "disabled",
+    Enabled: "enabled",
+} as const;
+export type ConnectionCrossAppAccessResourceAppStatusEnum =
+    (typeof ConnectionCrossAppAccessResourceAppStatusEnum)[keyof typeof ConnectionCrossAppAccessResourceAppStatusEnum];
+
+/**
  * Custom HTTP headers sent with token exchange requests to the identity provider's token endpoint. Provided as key-value pairs (e.g., {'X-Custom-Header': 'value'}). Auth0's User-Agent header is always included by default.
  */
 export type ConnectionCustomHeadersOAuth2 = Record<string, string>;
@@ -3969,6 +4027,7 @@ export interface ConnectionForList {
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
+    cross_app_access_resource_app?: Management.CrossAppAccessResourceApp | undefined;
 }
 
 /**
@@ -6727,6 +6786,7 @@ export interface ConnectionResponseContentOidc extends Management.ConnectionResp
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
+    cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsOidc | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -7916,6 +7976,7 @@ export interface CreateBrandingThemeResponseContent {
     /** Display Name */
     displayName: string;
     fonts: Management.BrandingThemeFonts;
+    identifiers?: Management.BrandingThemeIdentifiers | undefined;
     page_background: Management.BrandingThemePageBackground;
     /** Theme Id */
     themeId: string;
@@ -8047,6 +8108,7 @@ export interface CreateClientResponseContent {
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -8550,6 +8612,7 @@ export interface CreateConnectionRequestContentOidc extends Management.CreateCon
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
+    cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsOidc | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -8950,6 +9013,14 @@ export interface CreateConnectionResponseContent {
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
+    cross_app_access_resource_app?: Management.CrossAppAccessResourceApp | undefined;
+}
+
+/**
+ * Cross App Access - Resource App settings that apply to this connection.
+ */
+export interface CreateCrossAppAccessResourceApp {
+    status: Management.CrossAppAccessResourceAppStatusEnum;
 }
 
 export interface CreateCustomDomainResponseContent {
@@ -9683,6 +9754,14 @@ export interface CreateHookResponseContent {
  */
 export type CreateHookSecretRequestContent = Record<string, string>;
 
+/**
+ * Configuration on the use of ID-JAGs for Cross App Access.
+ */
+export interface CreateIdentityAssertionAuthorizationGrant {
+    /** If set to true, the client can exchange ID-JAGs for access tokens. */
+    active: boolean;
+}
+
 export interface CreateImportUsersResponseContent {
     /** Status of this job. */
     status: string;
@@ -10268,6 +10347,21 @@ export interface CrossAppAccessRequestingApp {
     /** Set to `true` to enable the connection as a Requesting Application for Cross App Access. */
     active: boolean;
 }
+
+/**
+ * Cross App Access - Resource App settings that apply to this connection.
+ */
+export interface CrossAppAccessResourceApp {
+    status: Management.CrossAppAccessResourceAppStatusEnum;
+}
+
+/** Set to `enabled` to accept ID-JAGs from this connection's identity provider to issue access tokens to other connected applications. */
+export const CrossAppAccessResourceAppStatusEnum = {
+    Enabled: "enabled",
+    Disabled: "disabled",
+} as const;
+export type CrossAppAccessResourceAppStatusEnum =
+    (typeof CrossAppAccessResourceAppStatusEnum)[keyof typeof CrossAppAccessResourceAppStatusEnum];
 
 /**
  * CSP directives map. Keys are directive names, values are arrays of directive values.
@@ -23529,6 +23623,7 @@ export interface GetBrandingDefaultThemeResponseContent {
     /** Display Name */
     displayName: string;
     fonts: Management.BrandingThemeFonts;
+    identifiers?: Management.BrandingThemeIdentifiers | undefined;
     page_background: Management.BrandingThemePageBackground;
     /** Theme Id */
     themeId: string;
@@ -23570,6 +23665,7 @@ export interface GetBrandingThemeResponseContent {
     /** Display Name */
     displayName: string;
     fonts: Management.BrandingThemeFonts;
+    identifiers?: Management.BrandingThemeIdentifiers | undefined;
     page_background: Management.BrandingThemePageBackground;
     /** Theme Id */
     themeId: string;
@@ -23744,6 +23840,7 @@ export interface GetClientResponseContent {
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -23810,6 +23907,7 @@ export interface GetConnectionResponseContent {
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
+    cross_app_access_resource_app?: Management.CrossAppAccessResourceApp | undefined;
 }
 
 export interface GetCustomDomainResponseContent {
@@ -24658,6 +24756,7 @@ export interface GetSessionResponseContent {
     authentication?: Management.SessionAuthenticationSignals | undefined;
     cookie?: Management.SessionCookieMetadata | undefined;
     session_metadata?: ((Management.SessionMetadata | undefined) | null) | undefined;
+    actor?: Management.SessionActorMetadata | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -25126,6 +25225,14 @@ export interface Identity {
     provider: Management.IdentityProviderEnum;
     /** connection_id of the identity. */
     connection_id?: string | undefined;
+}
+
+/**
+ * Configuration on the use of ID-JAGs for Cross App Access.
+ */
+export interface IdentityAssertionAuthorizationGrant {
+    /** If set to true, the client can exchange ID-JAGs for access tokens. */
+    active: boolean;
 }
 
 /** Identity provider name of the identity (e.g. `google-oauth2`). */
@@ -27849,6 +27956,7 @@ export interface RotateClientSecretResponseContent {
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -28287,6 +28395,19 @@ export interface SelfServiceProfileUserAttribute {
 export type SelfServiceProfileUserAttributes = (Management.SelfServiceProfileUserAttribute[] | null) | undefined;
 
 /**
+ * Additional property for session actor, can be string, boolean, or number.
+ */
+export type SessionActorClaimValue = string | boolean | number;
+
+/**
+ * The identity of the delegating party/session actor for delegated sessions. Present only on delegated sessions. Contains "sub" and up to 5 additional primitive claims.
+ */
+export interface SessionActorMetadata {
+    /** Subject identifier of the actor */
+    sub: string;
+}
+
+/**
  * Authentication signal details
  */
 export interface SessionAuthenticationSignal {
@@ -28403,6 +28524,7 @@ export interface SessionResponseContent {
     authentication?: Management.SessionAuthenticationSignals | undefined;
     cookie?: Management.SessionCookieMetadata | undefined;
     session_metadata?: ((Management.SessionMetadata | undefined) | null) | undefined;
+    actor?: Management.SessionActorMetadata | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -29129,6 +29251,14 @@ export interface TestCustomDomainResponseContent {
  */
 export type TestEventDataContent = Record<string, unknown>;
 
+/**
+ * Configuration for Third Party Client Access during the Self-Service Enterprise Configuration flow.
+ */
+export interface ThirdPartyClientAccessConfig {
+    /** Whether third-party applications can configure the connection as a domain-level connection during the Self-Service Enterprise Configuration flow. */
+    allow_configuration: boolean;
+}
+
 export interface TokenExchangeProfileResponseContent {
     /** The unique ID of the token exchange profile. */
     id?: string | undefined;
@@ -29407,6 +29537,7 @@ export interface UpdateBrandingThemeResponseContent {
     /** Display Name */
     displayName: string;
     fonts: Management.BrandingThemeFonts;
+    identifiers?: Management.BrandingThemeIdentifiers | undefined;
     page_background: Management.BrandingThemePageBackground;
     /** Theme Id */
     themeId: string;
@@ -29558,6 +29689,7 @@ export interface UpdateClientResponseContent {
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -29864,6 +29996,7 @@ export interface UpdateConnectionRequestContentOidc extends Management.Connectio
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurposeXaa | undefined;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
+    cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 
@@ -30064,6 +30197,14 @@ export interface UpdateConnectionResponseContent {
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
     cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
+    cross_app_access_resource_app?: Management.CrossAppAccessResourceApp | undefined;
+}
+
+/**
+ * Cross App Access - Resource App settings that apply to this connection.
+ */
+export interface UpdateCrossAppAccessResourceApp {
+    status: Management.CrossAppAccessResourceAppStatusEnum;
 }
 
 export interface UpdateCustomDomainResponseContent {
@@ -30308,6 +30449,14 @@ export interface UpdateHookResponseContent {
  * Hashmap of key-value pairs where the value must be a string.
  */
 export type UpdateHookSecretRequestContent = Record<string, string>;
+
+/**
+ * Configuration on the use of ID-JAGs for Cross App Access.
+ */
+export interface UpdateIdentityAssertionAuthorizationGrant {
+    /** If set to true, the client can exchange ID-JAGs for access tokens. */
+    active: boolean;
+}
 
 export type UpdateLogStreamResponseContent =
     | Management.LogStreamHttpResponseSchema
@@ -30567,6 +30716,7 @@ export interface UpdateSessionResponseContent {
     authentication?: Management.SessionAuthenticationSignals | undefined;
     cookie?: Management.SessionCookieMetadata | undefined;
     session_metadata?: ((Management.SessionMetadata | undefined) | null) | undefined;
+    actor?: Management.SessionActorMetadata | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
