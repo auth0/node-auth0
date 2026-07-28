@@ -51,7 +51,7 @@
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
         "check": "yarn format:check",
         "check:fix": "yarn format",
-        "build": "node scripts/update-version.js && yarn build:cjs && yarn build:esm",
+        "build": "yarn build:cjs && yarn build:esm",
         "build:cjs": "tsc --project ./tsconfig.cjs.json",
         "build:esm": "tsc --project ./tsconfig.esm.json && node scripts/rename-to-esm-files.js dist/esm",
         "test": "jest --config jest.config.mjs",
