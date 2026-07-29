@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.14.1](https://github.com/auth0/node-auth0/tree/v5.14.1) (2026-07-29)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.14.0...v5.14.1)
+
+**Fixed**
+
+- fix: correct SDK_VERSION to match npm package version in Auth0-Client telemetry header
+
 ## [v5.14.0](https://github.com/auth0/node-auth0/tree/v5.14.0) (2026-07-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.13.0...v5.14.0)
