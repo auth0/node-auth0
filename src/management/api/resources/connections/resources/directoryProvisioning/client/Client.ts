@@ -586,7 +586,8 @@ export class DirectoryProvisioningClient {
      * @example
      *     await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
      *         from: "from",
-     *         take: 1
+     *         take: 1,
+     *         q: "q"
      *     })
      */
     public async listSynchronizedGroups(
@@ -598,10 +599,11 @@ export class DirectoryProvisioningClient {
             async (
                 request: Management.ListSynchronizedGroupsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListSynchronizedGroupsResponseContent>> => {
-                const { from: from_, take = 50 } = request;
+                const { from: from_, take = 50, q } = request;
                 const _queryParams: Record<string, unknown> = {
                     from: from_,
                     take,
+                    q,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -683,6 +685,97 @@ export class DirectoryProvisioningClient {
                 return list(core.setObjectProperty(request, "from", response?.next));
             },
         });
+    }
+
+    /**
+     * Add synchronized group selections to a directory provisioning configuration.
+     *
+     * @param {string} id - The id of the connection to add synchronized groups to
+     * @param {Management.AddSynchronizedGroupsRequestContent} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+     *         groups: [{
+     *                 id: "id"
+     *             }]
+     *     })
+     */
+    public addSynchronizedGroupSelections(
+        id: string,
+        request: Management.AddSynchronizedGroupsRequestContent,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__addSynchronizedGroupSelections(id, request, requestOptions));
+    }
+
+    private async __addSynchronizedGroupSelections(
+        id: string,
+        request: Management.AddSynchronizedGroupsRequestContent,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<void>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/connections/{id}/directory-provisioning/synchronized-groups",
+        );
     }
 
     /**
@@ -775,6 +868,99 @@ export class DirectoryProvisioningClient {
             _response.error,
             _response.rawResponse,
             "PUT",
+            "/connections/{id}/directory-provisioning/synchronized-groups",
+        );
+    }
+
+    /**
+     * Delete synchronized group selections for a directory provisioning configuration
+     *
+     * @param {string} id - The id of the connection to delete synchronized group selections for
+     * @param {Management.DeleteSynchronizedGroupsRequestContent} request
+     * @param {DirectoryProvisioningClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
+     *         groups: [{
+     *                 id: "id"
+     *             }]
+     *     })
+     */
+    public deleteSynchronizedGroupSelections(
+        id: string,
+        request: Management.DeleteSynchronizedGroupsRequestContent,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(
+            this.__deleteSynchronizedGroupSelections(id, request, requestOptions),
+        );
+    }
+
+    private async __deleteSynchronizedGroupSelections(
+        id: string,
+        request: Management.DeleteSynchronizedGroupsRequestContent,
+        requestOptions?: DirectoryProvisioningClient.RequestOptions,
+    ): Promise<core.WithRawResponse<void>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
             "/connections/{id}/directory-provisioning/synchronized-groups",
         );
     }

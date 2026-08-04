@@ -9,7 +9,14 @@ describe("FactorsClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = [{ enabled: true, trial_expired: true, name: "push-notification" }];
+        const rawResponseBody = [
+            {
+                enabled: true,
+                trial_expired: true,
+                name: "push-notification",
+                settings: { otp_length: 1, otp_expiration_time: 1 },
+            },
+        ];
 
         server.mockEndpoint().get("/guardian/factors").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 

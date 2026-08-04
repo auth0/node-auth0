@@ -35,6 +35,7 @@ export class OrganizationsClient {
      *
      * @example
      *     await client.clientGrants.organizations.list("id", {
+     *         include_totals: true,
      *         from: "from",
      *         take: 1
      *     })
@@ -48,8 +49,9 @@ export class OrganizationsClient {
             async (
                 request: Management.ListClientGrantOrganizationsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListClientGrantOrganizationsPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
+                const { include_totals: includeTotals = true, from: from_, take = 50 } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                 };

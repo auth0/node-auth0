@@ -1,4 +1,5 @@
 export * as clientGrants from "./clientGrants/index.js";
+export * as clients from "./clients/index.js";
 export * as connections from "./connections/index.js";
 export * as discoveryDomains from "./discoveryDomains/index.js";
 export * as enabledConnections from "./enabledConnections/index.js";

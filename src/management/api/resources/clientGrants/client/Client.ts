@@ -40,6 +40,7 @@ export class ClientGrantsClient {
      *
      * @example
      *     await client.clientGrants.list({
+     *         include_totals: true,
      *         from: "from",
      *         take: 1,
      *         audience: "audience",
@@ -58,6 +59,7 @@ export class ClientGrantsClient {
                 request: Management.ListClientGrantsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListClientGrantPaginatedResponseContent>> => {
                 const {
+                    include_totals: includeTotals = true,
                     from: from_,
                     take = 50,
                     audience,
@@ -67,6 +69,7 @@ export class ClientGrantsClient {
                     default_for: defaultFor,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                     audience,

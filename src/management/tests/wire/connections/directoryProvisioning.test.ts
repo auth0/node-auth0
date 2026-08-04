@@ -740,7 +740,10 @@ describe("DirectoryProvisioningClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { groups: [{ id: "id" }], next: "next" };
+        const rawResponseBody = {
+            groups: [{ id: "id", name: "name", email: "email", direct_members_count: 1 }],
+            next: "next",
+        };
 
         server
             .mockEndpoint({ once: false })
@@ -754,6 +757,7 @@ describe("DirectoryProvisioningClient", () => {
         const page = await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
             from: "from",
             take: 1,
+            q: "q",
         });
 
         expect(expected.groups).toEqual(page.data);
@@ -854,6 +858,174 @@ describe("DirectoryProvisioningClient", () => {
 
         await expect(async () => {
             return await client.connections.directoryProvisioning.listSynchronizedGroups("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("addSynchronizedGroupSelections (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "id" }] };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .build();
+
+        const response = await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+            groups: [
+                {
+                    id: "id",
+                },
+            ],
+        });
+        expect(response).toEqual(undefined);
+    });
+
+    test("addSynchronizedGroupSelections (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("addSynchronizedGroupSelections (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("addSynchronizedGroupSelections (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("addSynchronizedGroupSelections (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("addSynchronizedGroupSelections (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
@@ -1042,6 +1214,174 @@ describe("DirectoryProvisioningClient", () => {
 
         await expect(async () => {
             return await client.connections.directoryProvisioning.set("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("deleteSynchronizedGroupSelections (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "id" }] };
+
+        server
+            .mockEndpoint()
+            .delete("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .build();
+
+        const response = await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
+            groups: [
+                {
+                    id: "id",
+                },
+            ],
+        });
+        expect(response).toEqual(undefined);
+    });
+
+    test("deleteSynchronizedGroupSelections (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("deleteSynchronizedGroupSelections (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("deleteSynchronizedGroupSelections (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("deleteSynchronizedGroupSelections (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
+                groups: [
+                    {
+                        id: "x",
+                    },
+                    {
+                        id: "x",
+                    },
+                ],
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("deleteSynchronizedGroupSelections (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { groups: [{ id: "x" }, { id: "x" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/connections/id/directory-provisioning/synchronized-groups")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
                 groups: [
                     {
                         id: "x",

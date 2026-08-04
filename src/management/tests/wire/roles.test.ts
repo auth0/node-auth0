@@ -13,7 +13,7 @@ describe("RolesClient", () => {
             start: 1.1,
             limit: 1.1,
             total: 1.1,
-            roles: [{ id: "id", name: "name", description: "description" }],
+            roles: [{ id: "id", name: "name", description: "description", type: "tenant", owner_id: "owner_id" }],
         };
 
         server
@@ -30,6 +30,8 @@ describe("RolesClient", () => {
             page: 1,
             include_totals: true,
             name_filter: "name_filter",
+            type: "tenant",
+            owner_id: "owner_id",
         });
 
         expect(expected.roles).toEqual(page.data);
@@ -118,7 +120,13 @@ describe("RolesClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
-        const rawResponseBody = { id: "id", name: "name", description: "description" };
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            type: "tenant",
+            owner_id: "owner_id",
+        };
 
         server
             .mockEndpoint()
@@ -249,7 +257,13 @@ describe("RolesClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { id: "id", name: "name", description: "description" };
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            type: "tenant",
+            owner_id: "owner_id",
+        };
 
         server.mockEndpoint().get("/roles/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -401,7 +415,13 @@ describe("RolesClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
-        const rawResponseBody = { id: "id", name: "name", description: "description" };
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            type: "tenant",
+            owner_id: "owner_id",
+        };
 
         server
             .mockEndpoint()

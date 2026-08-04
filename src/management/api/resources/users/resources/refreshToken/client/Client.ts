@@ -36,6 +36,7 @@ export class RefreshTokenClient {
      *
      * @example
      *     await client.users.refreshToken.list("user_id", {
+     *         include_totals: true,
      *         from: "from",
      *         take: 1
      *     })
@@ -51,8 +52,9 @@ export class RefreshTokenClient {
             async (
                 request: Management.ListRefreshTokensRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListRefreshTokensPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
+                const { include_totals: includeTotals = true, from: from_, take = 50 } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                 };

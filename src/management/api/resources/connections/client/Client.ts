@@ -81,6 +81,7 @@ export class ConnectionsClient {
      *
      * @example
      *     await client.connections.list({
+     *         include_totals: true,
      *         from: "from",
      *         take: 1,
      *         strategy: ["ad"],
@@ -97,8 +98,17 @@ export class ConnectionsClient {
             async (
                 request: Management.ListConnectionsQueryParameters,
             ): Promise<core.WithRawResponse<Management.ListConnectionsCheckpointPaginatedResponseContent>> => {
-                const { from: from_, take = 50, strategy, name, fields, include_fields: includeFields } = request;
+                const {
+                    include_totals: includeTotals = true,
+                    from: from_,
+                    take = 50,
+                    strategy,
+                    name,
+                    fields,
+                    include_fields: includeFields,
+                } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                     strategy: Array.isArray(strategy)

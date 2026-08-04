@@ -23,17 +23,6 @@
             },
             "default": "./dist/cjs/index.js"
         },
-        "./management": {
-            "import": {
-                "types": "./dist/esm/management/index.d.mts",
-                "default": "./dist/esm/management/index.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/management/index.d.ts",
-                "default": "./dist/cjs/management/index.js"
-            },
-            "default": "./dist/cjs/management/index.js"
-        },
         "./actions": {
             "import": {
                 "types": "./dist/esm/management/api/resources/actions/exports.d.mts",
@@ -44,6 +33,17 @@
                 "default": "./dist/cjs/management/api/resources/actions/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/actions/exports.js"
+        },
+        "./agents": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/agents/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/agents/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/agents/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/agents/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/agents/exports.js"
         },
         "./branding": {
             "import": {
@@ -1079,6 +1079,17 @@
             },
             "default": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.js"
         },
+        "./organizations/clients": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/clients/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/clients/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/clients/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/clients/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/clients/exports.js"
+        },
         "./organizations/connections": {
             "import": {
                 "types": "./dist/esm/management/api/resources/organizations/resources/connections/exports.d.mts",
@@ -1221,6 +1232,17 @@
                 "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/members/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/members/exports.js"
+        },
+        "./organizations/roles/groups": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/roles/resources/groups/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/roles/resources/groups/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/groups/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/groups/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/groups/exports.js"
         },
         "./prompts/rendering": {
             "import": {
@@ -1629,6 +1651,17 @@
                 "types": "./legacy/exports/index.d.ts",
                 "default": "./legacy/exports/index.js"
             }
+        },
+        "./management": {
+            "import": {
+                "types": "./dist/esm/management/index.d.mts",
+                "default": "./dist/esm/management/index.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/index.d.ts",
+                "default": "./dist/cjs/management/index.js"
+            },
+            "default": "./dist/cjs/management/index.js"
         }
     },
     "files": [

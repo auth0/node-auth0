@@ -13,7 +13,7 @@ describe("RolesClient", () => {
             start: 1.1,
             limit: 1.1,
             total: 1.1,
-            roles: [{ id: "id", name: "name", description: "description" }],
+            roles: [{ id: "id", name: "name", description: "description", type: "tenant", owner_id: "owner_id" }],
         };
 
         server

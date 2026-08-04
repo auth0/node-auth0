@@ -58,7 +58,9 @@ export class RolesClient {
      *         per_page: 1,
      *         page: 1,
      *         include_totals: true,
-     *         name_filter: "name_filter"
+     *         name_filter: "name_filter",
+     *         type: "tenant",
+     *         owner_id: "owner_id"
      *     })
      */
     public async list(
@@ -74,12 +76,16 @@ export class RolesClient {
                     page = 0,
                     include_totals: includeTotals = true,
                     name_filter: nameFilter,
+                    type: type_,
+                    owner_id: ownerId,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
                     per_page: perPage,
                     page,
                     include_totals: includeTotals,
                     name_filter: nameFilter,
+                    type: type_ !== undefined ? type_ : undefined,
+                    owner_id: ownerId,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(

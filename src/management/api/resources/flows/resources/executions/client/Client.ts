@@ -34,6 +34,7 @@ export class ExecutionsClient {
      *
      * @example
      *     await client.flows.executions.list("flow_id", {
+     *         include_totals: true,
      *         from: "from",
      *         take: 1
      *     })
@@ -47,8 +48,9 @@ export class ExecutionsClient {
             async (
                 request: Management.ListFlowExecutionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListFlowExecutionsPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
+                const { include_totals: includeTotals = true, from: from_, take = 50 } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                 };

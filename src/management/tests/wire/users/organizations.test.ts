@@ -20,6 +20,7 @@ describe("OrganizationsClient", () => {
                     display_name: "display_name",
                     token_quota: { client_credentials: {} },
                     third_party_client_access: "block",
+                    is_app_entitlement_active: true,
                 },
             ],
         };

@@ -35,6 +35,7 @@ describe("ExecutionsClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.flows.executions.list("flow_id", {
+            include_totals: true,
             from: "from",
             take: 1,
         });

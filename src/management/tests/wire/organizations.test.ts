@@ -18,6 +18,7 @@ describe("OrganizationsClient", () => {
                     display_name: "display_name",
                     token_quota: { client_credentials: {} },
                     third_party_client_access: "block",
+                    is_app_entitlement_active: true,
                 },
             ],
         };
@@ -32,9 +33,11 @@ describe("OrganizationsClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.organizations.list({
+            include_totals: true,
             from: "from",
             take: 1,
             sort: "sort",
+            include_client_association_for: "include_client_association_for",
         });
 
         expect(expected.organizations).toEqual(page.data);
@@ -107,6 +110,8 @@ describe("OrganizationsClient", () => {
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             third_party_client_access: "block",
+            is_app_entitlement_active: true,
+            client: { use_for_member_access: true },
             enabled_connections: [
                 {
                     connection_id: "connection_id",
@@ -254,6 +259,8 @@ describe("OrganizationsClient", () => {
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             third_party_client_access: "block",
+            is_app_entitlement_active: true,
+            client: { use_for_member_access: true },
         };
 
         server
@@ -375,6 +382,8 @@ describe("OrganizationsClient", () => {
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             third_party_client_access: "block",
+            is_app_entitlement_active: true,
+            client: { use_for_member_access: true },
         };
 
         server.mockEndpoint().get("/organizations/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -565,6 +574,8 @@ describe("OrganizationsClient", () => {
             metadata: { key: "value" },
             token_quota: { client_credentials: { enforce: true, per_day: 1, per_hour: 1 } },
             third_party_client_access: "block",
+            is_app_entitlement_active: true,
+            client: { use_for_member_access: true },
         };
 
         server

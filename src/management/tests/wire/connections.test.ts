@@ -39,6 +39,7 @@ describe("ConnectionsClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.connections.list({
+            include_totals: true,
             from: "from",
             take: 1,
             strategy: ["ad"],
@@ -121,7 +122,7 @@ describe("ConnectionsClient", () => {
             show_as_button: true,
             metadata: { key: "value" },
             authentication: { active: true },
-            connected_accounts: { active: true, cross_app_access: true },
+            connected_accounts: { active: true, cross_app_access: true, allow_missing_user_id: true },
             cross_app_access_requesting_app: { active: true },
             cross_app_access_resource_app: { status: "enabled" },
         };
@@ -273,7 +274,7 @@ describe("ConnectionsClient", () => {
             show_as_button: true,
             metadata: { key: "value" },
             authentication: { active: true },
-            connected_accounts: { active: true, cross_app_access: true },
+            connected_accounts: { active: true, cross_app_access: true, allow_missing_user_id: true },
             cross_app_access_requesting_app: { active: true },
             cross_app_access_resource_app: { status: "enabled" },
         };
@@ -430,7 +431,7 @@ describe("ConnectionsClient", () => {
             show_as_button: true,
             metadata: { key: "value" },
             authentication: { active: true },
-            connected_accounts: { active: true, cross_app_access: true },
+            connected_accounts: { active: true, cross_app_access: true, allow_missing_user_id: true },
             cross_app_access_requesting_app: { active: true },
             cross_app_access_resource_app: { status: "enabled" },
         };

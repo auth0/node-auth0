@@ -38,6 +38,7 @@ describe("SessionsClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.users.sessions.list("user_id", {
+            include_totals: true,
             from: "from",
             take: 1,
         });
