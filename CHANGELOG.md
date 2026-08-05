@@ -1,5 +1,13 @@
 # Change Log
 
+## [v6.2.0](https://github.com/auth0/node-auth0/tree/v6.2.0) (2026-08-05)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.1.0...v6.2.0)
+
+**Added**
+
+- feat: add org-level roles, Google Workspace groups GA, org-to-app entitlement, and agents support [\#1385](https://github.com/auth0/node-auth0/pull/1385) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v6.1.0](https://github.com/auth0/node-auth0/tree/v6.1.0) (2026-07-22)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v6.0.0...v6.1.0)
