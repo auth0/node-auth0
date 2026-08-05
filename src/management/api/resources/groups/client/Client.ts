@@ -53,6 +53,7 @@ export class GroupsClient {
      *         search: "search",
      *         fields: "fields",
      *         include_fields: true,
+     *         include_totals: true,
      *         from: "from",
      *         take: 1
      *     })
@@ -72,6 +73,7 @@ export class GroupsClient {
                     search,
                     fields,
                     include_fields: includeFields,
+                    include_totals: includeTotals = true,
                     from: from_,
                     take = 50,
                 } = request;
@@ -82,6 +84,7 @@ export class GroupsClient {
                     search,
                     fields,
                     include_fields: includeFields,
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                 };

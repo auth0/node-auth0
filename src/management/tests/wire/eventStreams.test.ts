@@ -635,14 +635,16 @@ describe("EventStreamsClient", () => {
             event_stream_id: "event_stream_id",
             status: "failed",
             event_type: "connection.created",
-            attempts: [{ status: "failed", timestamp: "2024-01-15T09:30:00Z", error_message: "error_message" }],
+            attempts: [
+                { status: "failed", timestamp: "2024-01-15T09:30:00Z", error_message: "error_message", duration: 1.1 },
+            ],
             event: {
                 id: "id",
                 source: "source",
                 specversion: "specversion",
                 type: "type",
                 time: "2024-01-15T09:30:00Z",
-                data: "data",
+                data: { key: "value" },
             },
         };
 

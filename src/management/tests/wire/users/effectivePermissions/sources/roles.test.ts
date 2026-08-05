@@ -10,7 +10,16 @@ describe("RolesClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            roles: [{ id: "id", name: "name", description: "description", sources: ["direct"] }],
+            roles: [
+                {
+                    id: "id",
+                    name: "name",
+                    description: "description",
+                    type: "tenant",
+                    owner_id: "owner_id",
+                    sources: ["direct"],
+                },
+            ],
             next: "next",
         };
 

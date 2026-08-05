@@ -265,6 +265,28 @@ describe("EnabledConnectionsClient", () => {
             .post("/organizations/id/enabled_connections")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizations.enabledConnections.add("id", {
+                connection_id: "connection_id",
+            });
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("add (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { connection_id: "connection_id" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/organizations/id/enabled_connections")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();

@@ -39,6 +39,7 @@ export class GroupsClient {
      *     await client.users.groups.get("id", {
      *         fields: "fields",
      *         include_fields: true,
+     *         include_totals: true,
      *         from: "from",
      *         take: 1
      *     })
@@ -52,10 +53,17 @@ export class GroupsClient {
             async (
                 request: Management.GetUserGroupsRequestParameters,
             ): Promise<core.WithRawResponse<Management.GetUserGroupsPaginatedResponseContent>> => {
-                const { fields, include_fields: includeFields, from: from_, take = 50 } = request;
+                const {
+                    fields,
+                    include_fields: includeFields,
+                    include_totals: includeTotals = true,
+                    from: from_,
+                    take = 50,
+                } = request;
                 const _queryParams: Record<string, unknown> = {
                     fields,
                     include_fields: includeFields,
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                 };

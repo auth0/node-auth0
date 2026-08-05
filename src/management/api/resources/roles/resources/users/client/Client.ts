@@ -25,6 +25,8 @@ export class UsersClient {
     /**
      * Retrieve list of users associated with a specific role. For Dashboard instructions, review [View Users Assigned to Roles](https://auth0.com/docs/manage-users/access-control/configure-core-rbac/roles/view-users-assigned-to-roles).
      *
+     * **Note**: Returns only users with direct role assignments. For groups assigned to this role, use `GET /api/v2/roles/{id}/groups`.
+     *
      * This endpoint supports two types of pagination:
      *
      * - Offset pagination
@@ -53,6 +55,7 @@ export class UsersClient {
      *
      * @example
      *     await client.roles.users.list("id", {
+     *         include_totals: true,
      *         from: "from",
      *         take: 1
      *     })
@@ -66,8 +69,9 @@ export class UsersClient {
             async (
                 request: Management.ListRoleUsersRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListRoleUsersPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
+                const { include_totals: includeTotals = true, from: from_, take = 50 } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                 };

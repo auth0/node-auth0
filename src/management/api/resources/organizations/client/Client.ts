@@ -9,6 +9,7 @@ import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCode
 import * as errors from "../../../../errors/index.js";
 import * as Management from "../../../index.js";
 import { ClientGrantsClient } from "../resources/clientGrants/client/Client.js";
+import { ClientsClient } from "../resources/clients/client/Client.js";
 import { ConnectionsClient } from "../resources/connections/client/Client.js";
 import { DiscoveryDomainsClient } from "../resources/discoveryDomains/client/Client.js";
 import { EnabledConnectionsClient } from "../resources/enabledConnections/client/Client.js";
@@ -26,6 +27,7 @@ export declare namespace OrganizationsClient {
 export class OrganizationsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<OrganizationsClient.Options>;
     protected _clientGrants: ClientGrantsClient | undefined;
+    protected _clients: ClientsClient | undefined;
     protected _connections: ConnectionsClient | undefined;
     protected _discoveryDomains: DiscoveryDomainsClient | undefined;
     protected _enabledConnections: EnabledConnectionsClient | undefined;
@@ -40,6 +42,10 @@ export class OrganizationsClient {
 
     public get clientGrants(): ClientGrantsClient {
         return (this._clientGrants ??= new ClientGrantsClient(this._options));
+    }
+
+    public get clients(): ClientsClient {
+        return (this._clients ??= new ClientsClient(this._options));
     }
 
     public get connections(): ConnectionsClient {
@@ -99,9 +105,11 @@ export class OrganizationsClient {
      *
      * @example
      *     await client.organizations.list({
+     *         include_totals: true,
      *         from: "from",
      *         take: 1,
-     *         sort: "sort"
+     *         sort: "sort",
+     *         include_client_association_for: "include_client_association_for"
      *     })
      */
     public async list(
@@ -112,11 +120,19 @@ export class OrganizationsClient {
             async (
                 request: Management.ListOrganizationsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListOrganizationsPaginatedResponseContent>> => {
-                const { from: from_, take = 50, sort } = request;
+                const {
+                    include_totals: includeTotals = true,
+                    from: from_,
+                    take = 50,
+                    sort,
+                    include_client_association_for: includeClientAssociationFor,
+                } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                     sort,
+                    include_client_association_for: includeClientAssociationFor,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(

@@ -25,6 +25,8 @@ export class PermissionsClient {
     /**
      * Retrieve all permissions associated with the user.
      *
+     * **Note**: Returns only permissions from direct assignments and directly assigned roles. For permissions a user has via group-based role assignments, use `GET /api/v2/users/{id}/effective-permissions`.
+     *
      * @param {string} id - ID of the user to retrieve the permissions for.
      * @param {Management.ListUserPermissionsRequestParameters} request
      * @param {PermissionsClient.RequestOptions} requestOptions - Request-specific configuration.

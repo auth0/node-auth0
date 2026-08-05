@@ -104,6 +104,47 @@ export interface TestActionRequestContent {
 
 /**
  * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListAgentsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name"
+ *     }
+ */
+export interface CreateAgentRequestContent {
+    /** The agent name. Cannot contain <, >, or null bytes. */
+    name: string;
+    /** Optional client ID to associate with the agent */
+    client_id?: string;
+    /** Optional external identifier for the agent. Immutable after creation. Must be unique within the tenant. */
+    external_agent_id?: string;
+    metadata?: Management.AgentMetadata;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface PatchAgentRequestParameters {
+    /** The agent name. Cannot contain <, >, or null bytes. */
+    name?: string;
+    /** Arbitrary key-value metadata for the agent. Pass null to clear all metadata. */
+    metadata?: Record<string, unknown> | null;
+}
+
+/**
+ * @example
  *     {}
  */
 export interface UpdateBrandingRequestContent {
@@ -118,6 +159,7 @@ export interface UpdateBrandingRequestContent {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1,
  *         audience: "audience",
@@ -128,6 +170,8 @@ export interface UpdateBrandingRequestContent {
  *     }
  */
 export interface ListClientGrantsRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -501,6 +545,7 @@ export interface UpdateConnectionProfileRequestContent {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1,
  *         strategy: ["ad"],
@@ -510,6 +555,8 @@ export interface UpdateConnectionProfileRequestContent {
  *     }
  */
 export interface ListConnectionsQueryParameters {
+    /** true if a query summary must be included in the result, false otherwise. Not returned when using checkpoint pagination. Default <code>false</code>. */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -1010,6 +1057,7 @@ export interface DeleteUserGrantByUserIdRequestParameters {
  *         search: "search",
  *         fields: "fields",
  *         include_fields: true,
+ *         include_totals: true,
  *         from: "from",
  *         take: 1
  *     }
@@ -1027,6 +1075,8 @@ export interface ListGroupsRequestParameters {
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean | null;
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -1226,18 +1276,24 @@ export interface UpdateNetworkAclRequestContent {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1,
- *         sort: "sort"
+ *         sort: "sort",
+ *         include_client_association_for: "include_client_association_for"
  *     }
  */
 export interface ListOrganizationsRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
     take?: number | null;
     /** Field to sort by. Use <code>field:order</code> where order is <code>1</code> for ascending and <code>-1</code> for descending. e.g. <code>created_at:1</code>. We currently support sorting by the following fields: <code>name</code>, <code>display_name</code> and <code>created_at</code>. */
     sort?: string | null;
+    /** Client ID. When set, each returned organization that has an association with this client gains a <code>client</code> object describing it; organizations without one omit the field. */
+    include_client_association_for?: string | null;
 }
 
 /**
@@ -1257,6 +1313,8 @@ export interface CreateOrganizationRequestContent {
     enabled_connections?: Management.ConnectionForOrganization[];
     token_quota?: Management.CreateTokenQuota;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean;
 }
 
 /**
@@ -1272,6 +1330,8 @@ export interface UpdateOrganizationRequestContent {
     metadata?: Management.OrganizationMetadata;
     token_quota?: Management.UpdateTokenQuota | null;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean;
 }
 
 /**
@@ -1500,7 +1560,9 @@ export interface UpdateResourceServerRequestContent {
  *         per_page: 1,
  *         page: 1,
  *         include_totals: true,
- *         name_filter: "name_filter"
+ *         name_filter: "name_filter",
+ *         type: "tenant",
+ *         owner_id: "owner_id"
  *     }
  */
 export interface ListRolesRequestParameters {
@@ -1512,6 +1574,10 @@ export interface ListRolesRequestParameters {
     include_totals?: boolean | null;
     /** Optional filter on name (case-insensitive). */
     name_filter?: string | null;
+    /** Optional filter on the type of the role */
+    type?: Management.RoleTypeEnum | null;
+    /** Filter organization-level roles by owner ID. Required when type is "organization". */
+    owner_id?: string | null;
 }
 
 /**
@@ -1525,6 +1591,10 @@ export interface CreateRoleRequestContent {
     name: string;
     /** Description of the role. */
     description?: string;
+    /** The type of the role. Defaults to tenant. */
+    type?: Management.RoleTypeEnum;
+    /** The ID of the organization that owns this role. Required when type is "organization". */
+    owner_id?: string;
 }
 
 /**
@@ -2544,11 +2614,14 @@ export interface CreatePhoneTemplateTestNotificationRequestContent {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1
  *     }
  */
 export interface ListClientGrantOrganizationsRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -2628,7 +2701,8 @@ export interface ListDirectoryProvisioningsRequestParameters {
  * @example
  *     {
  *         from: "from",
- *         take: 1
+ *         take: 1,
+ *         q: "q"
  *     }
  */
 export interface ListSynchronizedGroupsRequestParameters {
@@ -2636,6 +2710,21 @@ export interface ListSynchronizedGroupsRequestParameters {
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
     take?: number | null;
+    /** Query in <a target='_new' href ='https://lucene.apache.org/core/2_9_4/queryparsersyntax.html'>Lucene query string syntax</a>. Only prefix search on "name" or "email" fields are allowed, with a single wildcard suffix. Operators, modifiers, and groupings are not allowed. Terms are treated as case-insensitive. Example query: "name:engineering*". */
+    q?: string | null;
+}
+
+/**
+ * @example
+ *     {
+ *         groups: [{
+ *                 id: "id"
+ *             }]
+ *     }
+ */
+export interface AddSynchronizedGroupsRequestContent {
+    /** Array of Google Workspace Directory group objects to synchronize. */
+    groups: Management.SynchronizedGroupPayload[];
 }
 
 /**
@@ -2649,6 +2738,19 @@ export interface ListSynchronizedGroupsRequestParameters {
 export interface ReplaceSynchronizedGroupsRequestContent {
     /** Array of Google Workspace Directory group objects to synchronize. */
     groups: Management.SynchronizedGroupPayload[];
+}
+
+/**
+ * @example
+ *     {
+ *         groups: [{
+ *                 id: "id"
+ *             }]
+ *     }
+ */
+export interface DeleteSynchronizedGroupsRequestContent {
+    /** Array of groups to remove from the selection set. */
+    groups: Management.SynchronizedGroupSelectionId[];
 }
 
 /**
@@ -2806,11 +2908,14 @@ export interface CreateEventStreamRedeliveryRequestContent {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1
  *     }
  */
 export interface ListFlowExecutionsRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -3279,6 +3384,54 @@ export interface AssociateOrganizationClientGrantRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationClientsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. Values greater than the maximum of 100 are capped at 100. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         clients: [{
+ *                 client_id: "client_id",
+ *                 use_for_member_access: true
+ *             }]
+ *     }
+ */
+export interface CreateOrganizationClientsRequestContent {
+    /** List of clients to associate with the organization. */
+    clients: Management.CreateOrganizationClientRequestItem[];
+}
+
+/**
+ * @example
+ *     {
+ *         clients: ["clients"]
+ *     }
+ */
+export interface DeleteOrganizationClientsRequestContent {
+    /** List of client IDs to disassociate from the organization. */
+    clients: string[];
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateOrganizationClientRequestContent {
+    /** Whether this client is used for member access to the organization. */
+    use_for_member_access?: boolean;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
@@ -3493,6 +3646,7 @@ export interface GetOrganizationInvitationRequestParameters {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1,
  *         fields: "fields",
@@ -3500,6 +3654,8 @@ export interface GetOrganizationInvitationRequestParameters {
  *     }
  */
 export interface ListOrganizationMembersRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -3675,6 +3831,20 @@ export interface ListOrganizationRoleMembersRequestParameters {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationRoleGroupsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
  *         fields: "fields",
  *         include_fields: true,
  *         page: 1,
@@ -3840,11 +4010,14 @@ export interface DeleteRolePermissionsRequestContent {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1
  *     }
  */
 export interface ListRoleUsersRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -4098,6 +4271,7 @@ export interface ListUserEffectiveRolesRequestParameters {
  *     {
  *         fields: "fields",
  *         include_fields: true,
+ *         include_totals: true,
  *         from: "from",
  *         take: 1
  *     }
@@ -4107,6 +4281,8 @@ export interface GetUserGroupsRequestParameters {
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean | null;
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -4266,11 +4442,14 @@ export interface DeleteUserRolesRequestContent {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1
  *     }
  */
 export interface ListRefreshTokensRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** An optional cursor from which to start the selection (exclusive). */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */
@@ -4280,11 +4459,14 @@ export interface ListRefreshTokensRequestParameters {
 /**
  * @example
  *     {
+ *         include_totals: true,
  *         from: "from",
  *         take: 1
  *     }
  */
 export interface ListUserSessionsRequestParameters {
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    include_totals?: boolean | null;
     /** An optional cursor from which to start the selection (exclusive). */
     from?: string | null;
     /** Number of results per page. Defaults to 50. */

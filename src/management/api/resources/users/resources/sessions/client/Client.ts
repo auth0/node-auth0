@@ -36,6 +36,7 @@ export class SessionsClient {
      *
      * @example
      *     await client.users.sessions.list("user_id", {
+     *         include_totals: true,
      *         from: "from",
      *         take: 1
      *     })
@@ -49,8 +50,9 @@ export class SessionsClient {
             async (
                 request: Management.ListUserSessionsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListUserSessionsPaginatedResponseContent>> => {
-                const { from: from_, take = 50 } = request;
+                const { include_totals: includeTotals = true, from: from_, take = 50 } = request;
                 const _queryParams: Record<string, unknown> = {
+                    include_totals: includeTotals,
                     from: from_,
                     take,
                 };

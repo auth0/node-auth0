@@ -38,6 +38,7 @@ describe("ClientGrantsClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.clientGrants.list({
+            include_totals: true,
             from: "from",
             take: 1,
             audience: "audience",

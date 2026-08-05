@@ -16,6 +16,18 @@ export const OauthScope = {
      * Delete Actions */
     DeleteActions: "delete:actions",
     /**
+     * Create Agents */
+    CreateAgents: "create:agents",
+    /**
+     * Read Agents */
+    ReadAgents: "read:agents",
+    /**
+     * Update Agents */
+    UpdateAgents: "update:agents",
+    /**
+     * Delete Agents */
+    DeleteAgents: "delete:agents",
+    /**
      * Read Anomaly Blocks */
     ReadAnomalyBlocks: "read:anomaly_blocks",
     /**
@@ -711,21 +723,20 @@ export const OauthScope = {
     /**
      * Delete Vdcs Templates */
     DeleteVdcsTemplates: "delete:vdcs_templates",
+    /**
+     * Create Organization Client Associations */
+    CreateOrganizationClients: "create:organization_clients",
+    /**
+     * Read Organization Client Associations */
+    ReadOrganizationClients: "read:organization_clients",
+    /**
+     * Update Organization Client Associations */
+    UpdateOrganizationClients: "update:organization_clients",
+    /**
+     * Delete Organization Client Associations */
+    DeleteOrganizationClients: "delete:organization_clients",
 } as const;
 export type OauthScope = (typeof OauthScope)[keyof typeof OauthScope];
-
-export interface NotFoundErrorBody {
-    message: string;
-    statusCode: string;
-    error: NotFoundErrorBody.Error_;
-}
-
-export namespace NotFoundErrorBody {
-    export const Error_ = {
-        NotFound: "Not Found",
-    } as const;
-    export type Error_ = (typeof Error_)[keyof typeof Error_];
-}
 
 export interface TooManyRequestsErrorBody {
     message: string;
@@ -736,6 +747,19 @@ export interface TooManyRequestsErrorBody {
 export namespace TooManyRequestsErrorBody {
     export const Error_ = {
         TooManyRequests: "Too Many Requests",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
+export interface NotFoundErrorBody {
+    message: string;
+    statusCode: string;
+    error: NotFoundErrorBody.Error_;
+}
+
+export namespace NotFoundErrorBody {
+    export const Error_ = {
+        NotFound: "Not Found",
     } as const;
     export type Error_ = (typeof Error_)[keyof typeof Error_];
 }
@@ -1206,6 +1230,7 @@ export type AculContextConfigurationItem =
 export const AculContextEnum = {
     BrandingSettings: "branding.settings",
     BrandingThemesDefault: "branding.themes.default",
+    CountryCodes: "country_codes",
     ClientLogoUri: "client.logo_uri",
     ClientDescription: "client.description",
     OrganizationDisplayName: "organization.display_name",
@@ -1322,6 +1347,25 @@ export interface AddOrganizationConnectionResponseContent {
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
     is_signup_enabled?: boolean | undefined;
     connection?: Management.OrganizationConnectionInformation | undefined;
+}
+
+/**
+ * Arbitrary key-value metadata for the agent
+ */
+export type AgentMetadata = Record<string, unknown>;
+
+export interface AgentResponseContent {
+    /** The agent ID */
+    agent_id: string;
+    /** The agent name */
+    name: string;
+    /** When the agent was created */
+    created_at: string;
+    /** When the agent was last updated */
+    updated_at: string;
+    /** External identifier for the agent, if set. Omitted when not set. */
+    external_agent_id?: string | undefined;
+    metadata: Management.AgentMetadata;
 }
 
 /**
@@ -3274,6 +3318,22 @@ export interface ClientTokenVaultPrivilegedAccessWithPublicKey {
     grants?: Management.TokenVaultPrivilegedAccessGrant[] | undefined;
 }
 
+/**
+ * Conflict
+ */
+export interface ConflictSchema {
+    message: string;
+    statusCode: string;
+    error: ConflictSchema.Error_;
+}
+
+export namespace ConflictSchema {
+    export const Error_ = {
+        Conflict: "Conflict",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
 export interface ConnectedAccount {
     /** The unique identifier for the connected account. */
     id: string;
@@ -3689,6 +3749,8 @@ export type ConnectionConfiguration = Record<string, string>;
 export interface ConnectionConnectedAccountsPurpose {
     active: boolean;
     cross_app_access?: boolean | undefined;
+    /** When true, allows storing a connected account without an upstream identity provider user id. At most one such connected account is allowed per user per connection. Default false preserves the strict behaviour (an upstream user id is required). */
+    allow_missing_user_id?: boolean | undefined;
 }
 
 /**
@@ -3697,6 +3759,8 @@ export interface ConnectionConnectedAccountsPurpose {
 export interface ConnectionConnectedAccountsPurposeXaa {
     cross_app_access?: boolean | undefined;
     active: boolean;
+    /** When true, allows storing a connected account without an upstream identity provider user id. At most one such connected account is allowed per user per connection. Default false preserves the strict behaviour (an upstream user id is required). */
+    allow_missing_user_id?: boolean | undefined;
 }
 
 /**
@@ -9928,6 +9992,15 @@ export interface CreateOrganizationAllConnectionResponseContent {
     connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
+export interface CreateOrganizationClientRequestItem {
+    /** The identifier of the client to associate. */
+    client_id: string;
+    /** Whether this client is used for member access to the organization. */
+    use_for_member_access: boolean;
+}
+
+export type CreateOrganizationClientsResponseContent = Management.OrganizationClient[];
+
 export interface CreateOrganizationDiscoveryDomainResponseContent {
     /** Organization discovery domain identifier. */
     id: string;
@@ -9978,6 +10051,9 @@ export interface CreateOrganizationResponseContent {
     metadata?: Management.OrganizationMetadata | undefined;
     token_quota?: Management.TokenQuota | undefined;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean | undefined;
+    client?: Management.OrganizationClientAssociation | undefined;
     enabled_connections?: Management.OrganizationEnabledConnection[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -10074,6 +10150,9 @@ export interface CreateRoleResponseContent {
     name?: string | undefined;
     /** Description of this role. */
     description?: string | undefined;
+    type?: Management.RoleTypeEnum | undefined;
+    /** The id of the entity that owns this role, such as an organization id. */
+    owner_id?: string | undefined;
 }
 
 export interface CreateRuleResponseContent {
@@ -11112,8 +11191,7 @@ export interface EventStreamCloudEvent {
     type?: string | undefined;
     /** Timestamp at which the event was generated */
     time?: string | undefined;
-    /** Event contents encoded as a string. */
-    data?: string | undefined;
+    data?: Management.EventStreamCloudEventData | undefined;
 }
 
 /**
@@ -15966,6 +16044,11 @@ export interface EventStreamCloudEventContextTenant {
     tenant_id: string;
 }
 
+/**
+ * Event contents.
+ */
+export type EventStreamCloudEventData = Record<string, unknown>;
+
 /** Machine-readable error code. */
 export const EventStreamCloudEventErrorCodeEnum = {
     InvalidCursor: "invalid_cursor",
@@ -19434,6 +19517,8 @@ export interface EventStreamDeliveryAttempt {
     timestamp: string;
     /** Delivery error message, if applicable */
     error_message?: string | undefined;
+    /** Duration of the delivery attempt in milliseconds */
+    duration?: number | undefined;
 }
 
 /** Type of event */
@@ -24467,8 +24552,19 @@ export interface GetOrganizationByNameResponseContent {
     metadata?: Management.OrganizationMetadata | undefined;
     token_quota?: Management.TokenQuota | undefined;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean | undefined;
+    client?: Management.OrganizationClientAssociation | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface GetOrganizationClientResponseContent {
+    /** The identifier of the client associated with the organization. */
+    client_id: string;
+    /** Whether this client is used for member access to the organization. */
+    use_for_member_access: boolean;
+    client: Management.OrganizationClientMetadata;
 }
 
 export interface GetOrganizationConnectionResponseContent {
@@ -24547,6 +24643,9 @@ export interface GetOrganizationResponseContent {
     metadata?: Management.OrganizationMetadata | undefined;
     token_quota?: Management.TokenQuota | undefined;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean | undefined;
+    client?: Management.OrganizationClientAssociation | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -24673,6 +24772,9 @@ export interface GetRoleResponseContent {
     name?: string | undefined;
     /** Description of this role. */
     description?: string | undefined;
+    type?: Management.RoleTypeEnum | undefined;
+    /** The id of the entity that owns this role, such as an organization id. */
+    owner_id?: string | undefined;
 }
 
 export interface GetRuleResponseContent {
@@ -25140,6 +25242,7 @@ export interface GuardianFactor {
     /** Whether trial limits have been exceeded. */
     trial_expired?: boolean | undefined;
     name?: Management.GuardianFactorNameEnum | undefined;
+    settings?: Management.GuardianFactorSettings | undefined;
 }
 
 /** Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`. */
@@ -25161,6 +25264,18 @@ export const GuardianFactorPhoneFactorMessageTypeEnum = {
 } as const;
 export type GuardianFactorPhoneFactorMessageTypeEnum =
     (typeof GuardianFactorPhoneFactorMessageTypeEnum)[keyof typeof GuardianFactorPhoneFactorMessageTypeEnum];
+
+/**
+ * Factor-specific settings. Only returned when include_settings=true.
+ */
+export interface GuardianFactorSettings {
+    /** The length of the OTP code. */
+    otp_length?: number | undefined;
+    /** The OTP expiration time in seconds. */
+    otp_expiration_time?: number | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
 
 export const GuardianFactorsProviderPushNotificationProviderDataEnum = {
     Guardian: "guardian",
@@ -25525,6 +25640,12 @@ export interface ListAculsResponseContentItem {
     [key: string]: any;
 }
 
+export interface ListAgentsResponseContent {
+    agents: Management.AgentResponseContent[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. Omitted when there are no further results. */
+    next?: string | undefined;
+}
+
 export interface ListBrandingPhoneProvidersResponseContent {
     providers?: Management.PhoneProviderSchemaMasked[] | undefined;
 }
@@ -25597,6 +25718,13 @@ export interface ListEncryptionKeyOffsetPaginatedResponseContent {
     total?: number | undefined;
     /** Encryption keys. */
     keys?: Management.EncryptionKey[] | undefined;
+}
+
+export interface ListEventStreamDeliveriesResponseContent {
+    /** List of event stream deliveries */
+    deliveries: Management.EventStreamDelivery[];
+    /** The cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
 }
 
 export interface ListEventStreamsResponseContent {
@@ -25693,6 +25821,13 @@ export interface ListOrganizationClientGrantsOffsetPaginatedResponseContent {
     client_grants?: Management.OrganizationClientGrant[] | undefined;
 }
 
+export interface ListOrganizationClientsResponseContent {
+    /** The list of clients associated with the organization. */
+    clients: Management.OrganizationClient[];
+    /** An opaque token that, when present, can be passed as the `from` query parameter to retrieve the next page of results. */
+    next?: string | undefined;
+}
+
 export interface ListOrganizationConnectionsOffsetPaginatedResponseContent {
     start?: number | undefined;
     limit?: number | undefined;
@@ -25747,6 +25882,15 @@ export interface ListOrganizationMembersPaginatedResponseContent {
     members?: Management.OrganizationMember[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+/**
+ * Checkpoint paginated list of groups assigned to a role within an organization.
+ */
+export interface ListOrganizationRoleGroupsResponseContent {
+    groups: Management.RoleGroup[];
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
 }
 
 export interface ListOrganizationRoleMembersResponseContent {
@@ -26728,6 +26872,22 @@ export interface NetworkAclsResponseContent {
     [key: string]: any;
 }
 
+/**
+ * Not Found
+ */
+export interface NotFoundSchema {
+    message: string;
+    statusCode: string;
+    error: NotFoundSchema.Error_;
+}
+
+export namespace NotFoundSchema {
+    export const Error_ = {
+        NotFound: "Not Found",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
 export interface Organization {
     /** Organization identifier. */
     id?: string | undefined;
@@ -26739,6 +26899,9 @@ export interface Organization {
     metadata?: Management.OrganizationMetadata | undefined;
     token_quota?: Management.TokenQuota | undefined;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean | undefined;
+    client?: Management.OrganizationClientAssociation | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -26799,6 +26962,22 @@ export interface OrganizationBrandingColors {
     page_background: string;
 }
 
+export interface OrganizationClient {
+    /** The identifier of the client associated with the organization. */
+    client_id: string;
+    /** Whether this client is used for member access to the organization. */
+    use_for_member_access: boolean;
+    client: Management.OrganizationClientMetadata;
+}
+
+/**
+ * The organization's association with the client passed in the <code>include_client_association_for</code> query parameter.
+ */
+export interface OrganizationClientAssociation {
+    /** Whether this client is used for member access to the organization. */
+    use_for_member_access?: boolean | undefined;
+}
+
 export interface OrganizationClientGrant {
     /** ID of the client grant. */
     id?: string | undefined;
@@ -26812,6 +26991,32 @@ export interface OrganizationClientGrant {
     /** If enabled, any organization can be used with this grant. If disabled (default), the grant must be explicitly assigned to the desired organizations. */
     allow_any_organization?: boolean | undefined;
 }
+
+/**
+ * Metadata about the associated client.
+ */
+export interface OrganizationClientMetadata {
+    /** The name of the client. */
+    name?: string | undefined;
+    /** The type of the client application. */
+    app_type?: string | undefined;
+    /** The URI of the client logo. */
+    logo_uri?: (string | null) | undefined;
+    /** Whether this client is a first-party client (true) or not (false). */
+    is_first_party?: boolean | undefined;
+    /** The grant types enabled for the client. */
+    grant_types?: string[] | undefined;
+    organization_usage?: Management.OrganizationClientMetadataOrganizationUsageEnum | undefined;
+}
+
+/** Whether organizations may be used with the client. */
+export const OrganizationClientMetadataOrganizationUsageEnum = {
+    Deny: "deny",
+    Allow: "allow",
+    Require: "require",
+} as const;
+export type OrganizationClientMetadataOrganizationUsageEnum =
+    (typeof OrganizationClientMetadataOrganizationUsageEnum)[keyof typeof OrganizationClientMetadataOrganizationUsageEnum];
 
 export interface OrganizationConnection {
     /** ID of the connection. */
@@ -27817,6 +28022,33 @@ export interface Role {
     name?: string | undefined;
     /** Description of this role. */
     description?: string | undefined;
+    type?: Management.RoleTypeEnum | undefined;
+    /** The id of the entity that owns this role, such as an organization id. */
+    owner_id?: string | undefined;
+}
+
+/**
+ * A group assigned to a role in the context of an organization.
+ */
+export interface RoleGroup {
+    /** Unique identifier for the group (service-generated). */
+    id: string;
+    /** Name of the group. Must be unique within its connection. Must contain between 1 and 128 printable ASCII characters. */
+    name: string;
+    /** External identifier for the group, often used for SCIM synchronization. Max length of 256 characters. */
+    external_id?: string | undefined;
+    /** Identifier for the connection this group belongs to (if a connection group). */
+    connection_id?: string | undefined;
+    /** Identifier for the organization this group belongs to (if an organization group). */
+    organization_id?: (string | null) | undefined;
+    /** Identifier for the tenant this group belongs to. */
+    tenant_name?: string | undefined;
+    /** Description of the group. */
+    description?: (string | null) | undefined;
+    /** Timestamp of when the group was created. */
+    created_at?: string | undefined;
+    /** Timestamp of when the group was last updated. */
+    updated_at?: string | undefined;
 }
 
 export interface RoleMember {
@@ -27829,6 +28061,13 @@ export interface RoleMember {
     /** Email address of this user. */
     email?: string | undefined;
 }
+
+/** The type of the role */
+export const RoleTypeEnum = {
+    Tenant: "tenant",
+    Organization: "organization",
+} as const;
+export type RoleTypeEnum = (typeof RoleTypeEnum)[keyof typeof RoleTypeEnum];
 
 export interface RoleUser {
     /** ID of this user. */
@@ -28330,6 +28569,8 @@ export interface SelfServiceProfileSsoTicketEnabledOrganization {
 export interface SelfServiceProfileSsoTicketGoogleWorkspaceConfig {
     /** Whether to enable Google Workspace Directory Sync for users during the self-service flow. */
     sync_users: boolean;
+    /** Whether to enable Google Workspace Directory Sync for groups during the self-service flow. */
+    sync_groups?: boolean | undefined;
 }
 
 /** The protocol used to connect to the the default application */
@@ -28939,6 +29180,17 @@ export const SynchronizeGroupsEnum = {
 export type SynchronizeGroupsEnum = (typeof SynchronizeGroupsEnum)[keyof typeof SynchronizeGroupsEnum];
 
 export interface SynchronizedGroupPayload {
+    /** Google Workspace Directory group ID. */
+    id: string;
+    /** Google Workspace Directory group name. */
+    name?: string | undefined;
+    /** Google Workspace Directory group email. */
+    email?: string | undefined;
+    /** Number of direct members in the Google Workspace Directory group. */
+    direct_members_count?: number | undefined;
+}
+
+export interface SynchronizedGroupSelectionId {
     /** Google Workspace Directory group ID. */
     id: string;
 }
@@ -30499,6 +30751,14 @@ export interface UpdateOrganizationAllConnectionResponseContent {
     connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
+export interface UpdateOrganizationClientResponseContent {
+    /** The identifier of the client associated with the organization. */
+    client_id: string;
+    /** Whether this client is used for member access to the organization. */
+    use_for_member_access: boolean;
+    client?: Management.OrganizationClientMetadata | undefined;
+}
+
 export interface UpdateOrganizationConnectionResponseContent {
     /** ID of the connection. */
     connection_id?: string | undefined;
@@ -30536,6 +30796,9 @@ export interface UpdateOrganizationResponseContent {
     metadata?: Management.OrganizationMetadata | undefined;
     token_quota?: Management.TokenQuota | undefined;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean | undefined;
+    client?: Management.OrganizationClientAssociation | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -30643,6 +30906,9 @@ export interface UpdateRoleResponseContent {
     name?: string | undefined;
     /** Description of this role. */
     description?: string | undefined;
+    type?: Management.RoleTypeEnum | undefined;
+    /** The id of the entity that owns this role, such as an organization id. */
+    owner_id?: string | undefined;
 }
 
 export interface UpdateRuleResponseContent {
@@ -31192,6 +31458,9 @@ export interface UserEffectivePermissionRoleSourceResponseContent {
     name?: string | undefined;
     /** Description of this role. */
     description?: string | undefined;
+    type?: Management.RoleTypeEnum | undefined;
+    /** The id of the entity that owns this role, such as an organization id. */
+    owner_id?: string | undefined;
     /** List of sources where this role is coming from. */
     sources?: Management.UserEffectivePermissionRoleSourceEnum[] | undefined;
 }

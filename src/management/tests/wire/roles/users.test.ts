@@ -24,6 +24,7 @@ describe("UsersClient", () => {
 
         const expected = rawResponseBody;
         const page = await client.roles.users.list("id", {
+            include_totals: true,
             from: "from",
             take: 1,
         });

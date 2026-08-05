@@ -9,33 +9,29 @@ describe("DeliveriesClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = [
-            {
-                id: "id",
-                event_stream_id: "event_stream_id",
-                status: "failed",
-                event_type: "connection.created",
-                attempts: [{ status: "failed", timestamp: "2024-01-15T09:30:00Z" }],
-                event: {
+        const rawResponseBody = {
+            deliveries: [
+                {
                     id: "id",
-                    source: "source",
-                    specversion: "specversion",
-                    type: "type",
-                    time: "2024-01-15T09:30:00Z",
-                    data: "data",
+                    event_stream_id: "event_stream_id",
+                    status: "failed",
+                    event_type: "connection.created",
+                    attempts: [{ status: "failed", timestamp: "2024-01-15T09:30:00Z" }],
                 },
-            },
-        ];
+            ],
+            next: "next",
+        };
 
         server
-            .mockEndpoint()
+            .mockEndpoint({ once: false })
             .get("/event-streams/id/deliveries")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.eventStreams.deliveries.list("id", {
+        const expected = rawResponseBody;
+        const page = await client.eventStreams.deliveries.list("id", {
             statuses: "statuses",
             event_types: "event_types",
             date_from: "date_from",
@@ -43,7 +39,11 @@ describe("DeliveriesClient", () => {
             from: "from",
             take: 1,
         });
-        expect(response).toEqual(rawResponseBody);
+
+        expect(expected.deliveries).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.deliveries).toEqual(nextPage.data);
     });
 
     test("list (2)", async () => {
@@ -150,14 +150,16 @@ describe("DeliveriesClient", () => {
             event_stream_id: "event_stream_id",
             status: "failed",
             event_type: "connection.created",
-            attempts: [{ status: "failed", timestamp: "2024-01-15T09:30:00Z", error_message: "error_message" }],
+            attempts: [
+                { status: "failed", timestamp: "2024-01-15T09:30:00Z", error_message: "error_message", duration: 1.1 },
+            ],
             event: {
                 id: "id",
                 source: "source",
                 specversion: "specversion",
                 type: "type",
                 time: "2024-01-15T09:30:00Z",
-                data: "data",
+                data: { key: "value" },
             },
         };
 

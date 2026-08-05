@@ -1,4 +1,5 @@
 export * as actions from "./actions/index.js";
+export * as agents from "./agents/index.js";
 export * as anomaly from "./anomaly/index.js";
 export * as attackProtection from "./attackProtection/index.js";
 export * as branding from "./branding/index.js";

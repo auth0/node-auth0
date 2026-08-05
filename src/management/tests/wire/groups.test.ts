@@ -43,6 +43,7 @@ describe("GroupsClient", () => {
             search: "search",
             fields: "fields",
             include_fields: true,
+            include_totals: true,
             from: "from",
             take: 1,
         });

@@ -4,6 +4,7 @@ import type { BaseClientOptions } from "../../../../../../BaseClient.js";
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../../../BaseClient.js";
 import * as core from "../../../../../../core/index.js";
 import * as environments from "../../../../../../environments.js";
+import { GroupsClient } from "../resources/groups/client/Client.js";
 import { MembersClient } from "../resources/members/client/Client.js";
 
 export declare namespace RolesClient {
@@ -13,6 +14,7 @@ export declare namespace RolesClient {
 export class RolesClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<RolesClient.Options>;
     protected _members: MembersClient | undefined;
+    protected _groups: GroupsClient | undefined;
 
     constructor(options: RolesClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -20,5 +22,9 @@ export class RolesClient {
 
     public get members(): MembersClient {
         return (this._members ??= new MembersClient(this._options));
+    }
+
+    public get groups(): GroupsClient {
+        return (this._groups ??= new GroupsClient(this._options));
     }
 }
