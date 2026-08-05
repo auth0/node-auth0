@@ -506,6 +506,351 @@ await client.actions.test("id", {
 </dl>
 </details>
 
+## Agents
+
+<details><summary><code>client.agents.<a href="/src/management/api/resources/agents/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.AgentResponseContent, Management.ListAgentsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get agents
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.agents.list({
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.agents.list({
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListAgentsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `AgentsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/management/api/resources/agents/client/Client.ts">create</a>({ ...params }) -> Management.AgentResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create an agent
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.create({
+    name: "name",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateAgentRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `AgentsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/management/api/resources/agents/client/Client.ts">read</a>(id) -> Management.AgentResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get an agent
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.read("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The agent ID
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `AgentsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/management/api/resources/agents/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an agent
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The agent ID
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `AgentsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/management/api/resources/agents/client/Client.ts">update</a>(id, { ...params }) -> Management.AgentResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an agent
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The agent ID
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.PatchAgentRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `AgentsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Branding
 
 <details><summary><code>client.branding.<a href="/src/management/api/resources/branding/client/Client.ts">get</a>() -> Management.GetBrandingResponseContent</code></summary>
@@ -657,6 +1002,7 @@ Retrieve a list of [client grants](https://auth0.com/docs/get-started/applicatio
 
 ```typescript
 const pageableResponse = await client.clientGrants.list({
+    include_totals: true,
     from: "from",
     take: 1,
     audience: "audience",
@@ -671,6 +1017,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.clientGrants.list({
+    include_totals: true,
     from: "from",
     take: 1,
     audience: "audience",
@@ -2140,6 +2487,7 @@ To search by checkpoint, use the following parameters:
 
 ```typescript
 const pageableResponse = await client.connections.list({
+    include_totals: true,
     from: "from",
     take: 1,
     strategy: ["ad"],
@@ -2153,6 +2501,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.connections.list({
+    include_totals: true,
     from: "from",
     take: 1,
     strategy: ["ad"],
@@ -4907,6 +5256,7 @@ const pageableResponse = await client.groups.list({
     search: "search",
     fields: "fields",
     include_fields: true,
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -4922,6 +5272,7 @@ let page = await client.groups.list({
     search: "search",
     fields: "fields",
     include_fields: true,
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -7005,9 +7356,11 @@ To search by checkpoint, use the following parameters:
 
 ```typescript
 const pageableResponse = await client.organizations.list({
+    include_totals: true,
     from: "from",
     take: 1,
     sort: "sort",
+    include_client_association_for: "include_client_association_for",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -7015,9 +7368,11 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.organizations.list({
+    include_totals: true,
     from: "from",
     take: 1,
     sort: "sort",
+    include_client_association_for: "include_client_association_for",
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -8540,6 +8895,8 @@ const pageableResponse = await client.roles.list({
     page: 1,
     include_totals: true,
     name_filter: "name_filter",
+    type: "tenant",
+    owner_id: "owner_id",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -8551,6 +8908,8 @@ let page = await client.roles.list({
     page: 1,
     include_totals: true,
     name_filter: "name_filter",
+    type: "tenant",
+    owner_id: "owner_id",
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -15706,6 +16065,7 @@ await client.branding.phone.templates.test("id", {
 
 ```typescript
 const pageableResponse = await client.clientGrants.organizations.list("id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -15715,6 +16075,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.clientGrants.organizations.list("id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -16728,6 +17089,7 @@ Retrieve the configured synchronized groups for a connection directory provision
 const pageableResponse = await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
     from: "from",
     take: 1,
+    q: "q",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -16737,6 +17099,7 @@ for await (const item of pageableResponse) {
 let page = await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
     from: "from",
     take: 1,
+    q: "q",
 });
 while (page.hasNextPage()) {
     page = page.getNextPage();
@@ -16768,6 +17131,83 @@ const response = page.response;
 <dd>
 
 **request:** `Management.ListSynchronizedGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">addSynchronizedGroupSelections</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add synchronized group selections to a directory provisioning configuration.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
+    groups: [
+        {
+            id: "id",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to add synchronized groups to
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.AddSynchronizedGroupsRequestContent`
 
 </dd>
 </dl>
@@ -16845,6 +17285,83 @@ await client.connections.directoryProvisioning.set("id", {
 <dd>
 
 **request:** `Management.ReplaceSynchronizedGroupsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DirectoryProvisioningClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.connections.directoryProvisioning.<a href="/src/management/api/resources/connections/resources/directoryProvisioning/client/Client.ts">deleteSynchronizedGroupSelections</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete synchronized group selections for a directory provisioning configuration
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
+    groups: [
+        {
+            id: "id",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The id of the connection to delete synchronized group selections for
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.DeleteSynchronizedGroupsRequestContent`
 
 </dd>
 </dl>
@@ -18289,7 +18806,7 @@ await client.emails.provider.update();
 
 ## EventStreams Deliveries
 
-<details><summary><code>client.eventStreams.deliveries.<a href="/src/management/api/resources/eventStreams/resources/deliveries/client/Client.ts">list</a>(id, { ...params }) -> Management.EventStreamDelivery[]</code></summary>
+<details><summary><code>client.eventStreams.deliveries.<a href="/src/management/api/resources/eventStreams/resources/deliveries/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.EventStreamDelivery, Management.ListEventStreamDeliveriesResponseContent&gt;</code></summary>
 <dl>
 <dd>
 
@@ -18302,7 +18819,7 @@ await client.emails.provider.update();
 <dd>
 
 ```typescript
-await client.eventStreams.deliveries.list("id", {
+const pageableResponse = await client.eventStreams.deliveries.list("id", {
     statuses: "statuses",
     event_types: "event_types",
     date_from: "date_from",
@@ -18310,6 +18827,25 @@ await client.eventStreams.deliveries.list("id", {
     from: "from",
     take: 1,
 });
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.eventStreams.deliveries.list("id", {
+    statuses: "statuses",
+    event_types: "event_types",
+    date_from: "date_from",
+    date_to: "date_to",
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
 ```
 
 </dd>
@@ -18538,6 +19074,7 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 
 ```typescript
 const pageableResponse = await client.flows.executions.list("flow_id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -18547,6 +19084,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.flows.executions.list("flow_id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -23163,6 +23701,403 @@ await client.organizations.clientGrants.delete("id", "grant_id");
 </dl>
 </details>
 
+## Organizations Clients
+
+<details><summary><code>client.organizations.clients.<a href="/src/management/api/resources/organizations/resources/clients/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationClient, Management.ListOrganizationClientsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all clients associated with an organization, using checkpoint pagination.
+
+<ul>
+  <li>
+    <b>Note</b>: The first time you call this endpoint, omit the <code>from</code> parameter. If there are more results, a <code>next</code> value is included in the response. You can use this for subsequent API calls. When <code>next</code> is no longer included in the response, no further results are remaining.
+  </li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.clients.list("id", {
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.clients.list("id", {
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationClientsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.clients.<a href="/src/management/api/resources/organizations/resources/clients/client/Client.ts">create</a>(id, { ...params }) -> Management.CreateOrganizationClientsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Associate one or more clients with an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.clients.create("id", {
+    clients: [
+        {
+            client_id: "client_id",
+            use_for_member_access: true,
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateOrganizationClientsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.clients.<a href="/src/management/api/resources/organizations/resources/clients/client/Client.ts">delete</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove one or more client associations from an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.clients.delete("id", {
+    clients: ["clients"],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.DeleteOrganizationClientsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.clients.<a href="/src/management/api/resources/organizations/resources/clients/client/Client.ts">get</a>(id, client_id) -> Management.GetOrganizationClientResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific client association for an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.clients.get("id", "client_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**client_id:** `string` — ID of the client association to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.clients.<a href="/src/management/api/resources/organizations/resources/clients/client/Client.ts">update</a>(id, client_id, { ...params }) -> Management.UpdateOrganizationClientResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an organization client association.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.clients.update("id", "client_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**client_id:** `string` — ID of the client association to update.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateOrganizationClientRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Organizations Connections
 
 <details><summary><code>client.organizations.connections.<a href="/src/management/api/resources/organizations/resources/connections/client/Client.ts">list</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationAllConnectionPost, Management.ListOrganizationAllConnectionsOffsetPaginatedResponseContent&gt;</code></summary>
@@ -24646,7 +25581,7 @@ List organization members.
 This endpoint is subject to eventual consistency. New users may not be immediately included in the response and deleted users may not be immediately removed from it.
 
 - Use the `fields` parameter to optionally define the specific member details retrieved. If `fields` is left blank, all fields (except roles) are returned.
-- Member roles are not sent by default. Use `fields=roles` to retrieve the roles assigned to each listed member. To use this parameter, you must include the `read:organization_member_roles` scope in the token.
+- Member roles are not sent by default. Use `fields=roles` to retrieve the roles assigned to each listed member. To use this parameter, you must include the `read:organization_member_roles` scope in the token. Only directly assigned roles are returned. To also include group-based role assignments, use `GET /api/v2/organizations/{id}/members/{user_id}/effective-roles`.
 
 This endpoint supports two types of pagination:
 
@@ -24674,6 +25609,7 @@ To search by checkpoint, use the following parameters: - from: Optional id from 
 
 ```typescript
 const pageableResponse = await client.organizations.members.list("id", {
+    include_totals: true,
     from: "from",
     take: 1,
     fields: "fields",
@@ -24685,6 +25621,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.organizations.members.list("id", {
+    include_totals: true,
     from: "from",
     take: 1,
     fields: "fields",
@@ -25340,6 +26277,8 @@ Retrieve detailed list of roles assigned to a given user within the context of a
 
 Users can be members of multiple Organizations with unique roles assigned for each membership. This action only returns the roles associated with the specified Organization; any roles assigned to the user within other Organizations are not included.
 
+**Note**: Returns only direct role assignments for this member. To also include group-based role assignments, use `GET /api/v2/organizations/{id}/members/{user_id}/effective-roles`.
+
 </dd>
 </dl>
 </dd>
@@ -25708,6 +26647,11 @@ const response = page.response;
 
 List the organization members assigned a specific role within the context of an organization.
 
+<ul>
+  <li>
+    <b>Note</b>: Returns only members with direct role assignments. For groups assigned to this role within the organization, use <code>GET /api/v2/organizations/{organization_id}/roles/{role_id}/groups</code>.
+  </li>
+</ul>
 </dd>
 </dl>
 </dd>
@@ -25785,6 +26729,105 @@ const response = page.response;
 <dd>
 
 **requestOptions:** `MembersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Organizations Roles Groups
+
+<details><summary><code>client.organizations.roles.groups.<a href="/src/management/api/resources/organizations/resources/roles/resources/groups/client/Client.ts">list</a>(organization_id, role_id, { ...params }) -> core.Page&lt;Management.RoleGroup, Management.ListOrganizationRoleGroupsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the list of groups assigned to a role in the context of an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.roles.groups.list("organization_id", "role_id", {
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.roles.groups.list("organization_id", "role_id", {
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organization_id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**role_id:** `string` — ID of the role.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.ListOrganizationRoleGroupsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GroupsClient.RequestOptions`
 
 </dd>
 </dl>
@@ -27148,6 +28191,8 @@ await client.roles.permissions.delete("id", {
 
 Retrieve list of users associated with a specific role. For Dashboard instructions, review [View Users Assigned to Roles](https://auth0.com/docs/manage-users/access-control/configure-core-rbac/roles/view-users-assigned-to-roles).
 
+**Note**: Returns only users with direct role assignments. For groups assigned to this role, use `GET /api/v2/roles/{id}/groups`.
+
 This endpoint supports two types of pagination:
 
 - Offset pagination
@@ -27179,6 +28224,7 @@ To search by checkpoint, use the following parameters:
 
 ```typescript
 const pageableResponse = await client.roles.users.list("id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -27188,6 +28234,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.roles.users.list("id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -28710,6 +29757,7 @@ List all groups to which this user belongs.
 const pageableResponse = await client.users.groups.get("id", {
     fields: "fields",
     include_fields: true,
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -28721,6 +29769,7 @@ for await (const item of pageableResponse) {
 let page = await client.users.groups.get("id", {
     fields: "fields",
     include_fields: true,
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -29299,6 +30348,8 @@ const response = page.response;
 
 Retrieve all permissions associated with the user.
 
+**Note**: Returns only permissions from direct assignments and directly assigned roles. For permissions a user has via group-based role assignments, use `GET /api/v2/users/{id}/effective-permissions`.
+
 </dd>
 </dl>
 </dd>
@@ -29626,6 +30677,8 @@ Retrieve detailed list of all user roles currently assigned to a user.
 
 **Note**: This action retrieves all roles assigned to a user in the context of your whole tenant. To retrieve Organization-specific roles, use the following endpoint: [Get user roles assigned to an Organization member](https://auth0.com/docs/api/management/v2/organizations/get-organization-member-roles).
 
+**Note**: Returns only direct role assignments. To also include group-based role assignments, use `GET /api/v2/users/{id}/effective-roles`.
+
 </dd>
 </dl>
 </dd>
@@ -29884,6 +30937,7 @@ Retrieve details for a user's refresh tokens.
 
 ```typescript
 const pageableResponse = await client.users.refreshToken.list("user_id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -29893,6 +30947,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.users.refreshToken.list("user_id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -30038,6 +31093,7 @@ Retrieve details for a user's sessions.
 
 ```typescript
 const pageableResponse = await client.users.sessions.list("user_id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });
@@ -30047,6 +31103,7 @@ for await (const item of pageableResponse) {
 
 // Or you can manually iterate page-by-page
 let page = await client.users.sessions.list("user_id", {
+    include_totals: true,
     from: "from",
     take: 1,
 });

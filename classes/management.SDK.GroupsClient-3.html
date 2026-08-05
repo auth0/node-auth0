@@ -1,5 +1,5 @@
-<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>GroupsClient | Auth0 Node.js SDK - v6.1.0</title><meta name="description" content="Documentation for Auth0 Node.js SDK"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
-<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Auth0 Node.js SDK - v6.1.0</a>
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>GroupsClient | Auth0 Node.js SDK - v6.2.0</title><meta name="description" content="Documentation for Auth0 Node.js SDK"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Auth0 Node.js SDK - v6.2.0</a>
 <div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
 <ul role="listbox" id="tsd-search-results"></ul>
 <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
@@ -23,9 +23,7 @@
 </div></section>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading tsd-anchor-link" id="methods">Methods<a href="#methods" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<div class="tsd-index-list"><a href="#get" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get</span></a>
-<a href="#create" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>create</span></a>
-<a href="#delete" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>delete</span></a>
+<div class="tsd-index-list"><a href="#list" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>list</span></a>
 </div></section>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading tsd-anchor-link" id="properties">Properties<a href="#properties" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
@@ -49,24 +47,27 @@
 <h2 class="tsd-anchor-link" id="methods-1">Methods<a href="#methods-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2></summary>
 <section>
 <section class="tsd-panel tsd-member">
-<h3 class="tsd-anchor-link" id="get"><span>get</span><a href="#get" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h3 class="tsd-anchor-link" id="list"><span>list</span><a href="#list" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <ul class="tsd-signatures">
 <li class="">
-<div class="tsd-signature tsd-anchor-link" id="get-1"><span class="tsd-kind-call-signature">get</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">request</span><span class="tsd-signature-symbol">?:</span> <a href="../interfaces/management.Management.ListRoleGroupsParameters.html" class="tsd-signature-type tsd-kind-interface">ListRoleGroupsParameters</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">requestOptions</span><span class="tsd-signature-symbol">?:</span> <a href="../modules/management.SDK.GroupsClient-3.html" class="tsd-signature-type tsd-kind-namespace">GroupsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/management.SDK.GroupsClient.RequestOptions-3.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Page.html" class="tsd-signature-type tsd-kind-interface">Page</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Management.Group.html" class="tsd-signature-type tsd-kind-interface">Group</a><span class="tsd-signature-symbol">,</span> <a href="../interfaces/management.Management.ListRoleGroupsResponseContent.html" class="tsd-signature-type tsd-kind-interface">ListRoleGroupsResponseContent</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><a href="#get-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-signature tsd-anchor-link" id="list-1"><span class="tsd-kind-call-signature">list</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">organization_id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">role_id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">request</span><span class="tsd-signature-symbol">?:</span> <a href="../interfaces/management.Management.ListOrganizationRoleGroupsRequestParameters.html" class="tsd-signature-type tsd-kind-interface">ListOrganizationRoleGroupsRequestParameters</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">requestOptions</span><span class="tsd-signature-symbol">?:</span> <a href="../modules/management.SDK.GroupsClient-3.html" class="tsd-signature-type tsd-kind-namespace">GroupsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/management.SDK.GroupsClient.RequestOptions-3.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Page.html" class="tsd-signature-type tsd-kind-interface">Page</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Management.RoleGroup.html" class="tsd-signature-type tsd-kind-interface">RoleGroup</a><span class="tsd-signature-symbol">,</span> <a href="../interfaces/management.Management.ListOrganizationRoleGroupsResponseContent.html" class="tsd-signature-type tsd-kind-interface">ListOrganizationRoleGroupsResponseContent</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><a href="#list-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
 <div class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Lists the groups to which the specified role is assigned.</p>
+<div class="tsd-comment tsd-typography"><p>Retrieve the list of groups assigned to a role in the context of an organization.</p>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></span>
-<div class="tsd-comment tsd-typography"><p>Unique identifier for the role (service-generated).</p>
+<li><span><span class="tsd-kind-parameter">organization_id</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>ID of the organization.</p>
 </div></li>
-<li><span><span class="tsd-kind-parameter">request</span>: <a href="../interfaces/management.Management.ListRoleGroupsParameters.html" class="tsd-signature-type tsd-kind-interface">ListRoleGroupsParameters</a><span class="tsd-signature-symbol"> = {}</span></span></li>
+<li><span><span class="tsd-kind-parameter">role_id</span>: <span class="tsd-signature-type">string</span></span>
+<div class="tsd-comment tsd-typography"><p>ID of the role.</p>
+</div></li>
+<li><span><span class="tsd-kind-parameter">request</span>: <a href="../interfaces/management.Management.ListOrganizationRoleGroupsRequestParameters.html" class="tsd-signature-type tsd-kind-interface">ListOrganizationRoleGroupsRequestParameters</a><span class="tsd-signature-symbol"> = {}</span></span></li>
 <li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">requestOptions</span>: <a href="../modules/management.SDK.GroupsClient-3.html" class="tsd-signature-type tsd-kind-namespace">GroupsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/management.SDK.GroupsClient.RequestOptions-3.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a></span>
 <div class="tsd-comment tsd-typography"><p>Request-specific configuration.</p>
 </div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Page.html" class="tsd-signature-type tsd-kind-interface">Page</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Management.Group.html" class="tsd-signature-type tsd-kind-interface">Group</a><span class="tsd-signature-symbol">,</span> <a href="../interfaces/management.Management.ListRoleGroupsResponseContent.html" class="tsd-signature-type tsd-kind-interface">ListRoleGroupsResponseContent</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Page.html" class="tsd-signature-type tsd-kind-interface">Page</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/management.Management.RoleGroup.html" class="tsd-signature-type tsd-kind-interface">RoleGroup</a><span class="tsd-signature-symbol">,</span> <a href="../interfaces/management.Management.ListOrganizationRoleGroupsResponseContent.html" class="tsd-signature-type tsd-kind-interface">ListOrganizationRoleGroupsResponseContent</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-throws">
 <h4 class="tsd-anchor-link" id="throws">Throws<a href="#throws" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
@@ -84,87 +85,7 @@
 <h4 class="tsd-anchor-link" id="throws-4">Throws<a href="#throws-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
 </div>
 <div class="tsd-tag-example">
-<h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">roles</span><span class="hl-1">.</span><span class="hl-4">groups</span><span class="hl-1">.</span><span class="hl-0">get</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-4">from:</span><span class="hl-1"> </span><span class="hl-2">&quot;from&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">take:</span><span class="hl-1"> </span><span class="hl-8">1</span><br/><span class="hl-1">    })</span>
-</code><button type="button">Copy</button></pre>
-
-</div></div></div></li></ul></section>
-<section class="tsd-panel tsd-member">
-<h3 class="tsd-anchor-link" id="create"><span>create</span><a href="#create" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="">
-<div class="tsd-signature tsd-anchor-link" id="create-1"><span class="tsd-kind-call-signature">create</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">request</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/management.Management.AssignRoleGroupsRequestContent.html" class="tsd-signature-type tsd-kind-interface">AssignRoleGroupsRequestContent</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">requestOptions</span><span class="tsd-signature-symbol">?:</span> <a href="../modules/management.SDK.GroupsClient-3.html" class="tsd-signature-type tsd-kind-namespace">GroupsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/management.SDK.GroupsClient.RequestOptions-3.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="management.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#create-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
-<div class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Assign one or more groups to a specified role.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></span>
-<div class="tsd-comment tsd-typography"><p>Unique identifier for the role (service-generated).</p>
-</div></li>
-<li><span><span class="tsd-kind-parameter">request</span>: <a href="../interfaces/management.Management.AssignRoleGroupsRequestContent.html" class="tsd-signature-type tsd-kind-interface">AssignRoleGroupsRequestContent</a></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">requestOptions</span>: <a href="../modules/management.SDK.GroupsClient-3.html" class="tsd-signature-type tsd-kind-namespace">GroupsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/management.SDK.GroupsClient.RequestOptions-3.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a></span>
-<div class="tsd-comment tsd-typography"><p>Request-specific configuration.</p>
-</div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="management.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
-<div class="tsd-comment tsd-typography">
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-5">Throws<a href="#throws-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-6">Throws<a href="#throws-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-7">Throws<a href="#throws-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-8">Throws<a href="#throws-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-9">Throws<a href="#throws-9" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
-</div>
-<div class="tsd-tag-example">
-<h4 class="tsd-anchor-link" id="example-1">Example<a href="#example-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">roles</span><span class="hl-1">.</span><span class="hl-4">groups</span><span class="hl-1">.</span><span class="hl-0">create</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-4">groups:</span><span class="hl-1"> [</span><span class="hl-2">&quot;groups&quot;</span><span class="hl-1">]</span><br/><span class="hl-1">    })</span>
-</code><button type="button">Copy</button></pre>
-
-</div></div></div></li></ul></section>
-<section class="tsd-panel tsd-member">
-<h3 class="tsd-anchor-link" id="delete"><span>delete</span><a href="#delete" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<ul class="tsd-signatures">
-<li class="">
-<div class="tsd-signature tsd-anchor-link" id="delete-1"><span class="tsd-kind-call-signature">delete</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">request</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/management.Management.DeleteRoleGroupsRequestContent.html" class="tsd-signature-type tsd-kind-interface">DeleteRoleGroupsRequestContent</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">requestOptions</span><span class="tsd-signature-symbol">?:</span> <a href="../modules/management.SDK.GroupsClient-3.html" class="tsd-signature-type tsd-kind-namespace">GroupsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/management.SDK.GroupsClient.RequestOptions-3.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="management.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><a href="#delete-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
-<div class="tsd-description">
-<div class="tsd-comment tsd-typography"><p>Unassign one or more groups from a specified role.</p>
-</div>
-<div class="tsd-parameters">
-<h4 class="tsd-parameters-title">Parameters</h4>
-<ul class="tsd-parameter-list">
-<li><span><span class="tsd-kind-parameter">id</span>: <span class="tsd-signature-type">string</span></span>
-<div class="tsd-comment tsd-typography"><p>Unique identifier for the role (service-generated).</p>
-</div></li>
-<li><span><span class="tsd-kind-parameter">request</span>: <a href="../interfaces/management.Management.DeleteRoleGroupsRequestContent.html" class="tsd-signature-type tsd-kind-interface">DeleteRoleGroupsRequestContent</a></span></li>
-<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">requestOptions</span>: <a href="../modules/management.SDK.GroupsClient-3.html" class="tsd-signature-type tsd-kind-namespace">GroupsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/management.SDK.GroupsClient.RequestOptions-3.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a></span>
-<div class="tsd-comment tsd-typography"><p>Request-specific configuration.</p>
-</div></li></ul></div>
-<h4 class="tsd-returns-title">Returns <a href="management.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
-<div class="tsd-comment tsd-typography">
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-10">Throws<a href="#throws-10" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-11">Throws<a href="#throws-11" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-12">Throws<a href="#throws-12" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-13">Throws<a href="#throws-13" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
-</div>
-<div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-14">Throws<a href="#throws-14" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="management.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
-</div>
-<div class="tsd-tag-example">
-<h4 class="tsd-anchor-link" id="example-2">Example<a href="#example-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">roles</span><span class="hl-1">.</span><span class="hl-4">groups</span><span class="hl-1">.</span><span class="hl-0">delete</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-4">groups:</span><span class="hl-1"> [</span><span class="hl-2">&quot;groups&quot;</span><span class="hl-1">]</span><br/><span class="hl-1">    })</span>
+<h4 class="tsd-anchor-link" id="example">Example<a href="#example" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">organizations</span><span class="hl-1">.</span><span class="hl-4">roles</span><span class="hl-1">.</span><span class="hl-4">groups</span><span class="hl-1">.</span><span class="hl-0">list</span><span class="hl-1">(</span><span class="hl-2">&quot;organization_id&quot;</span><span class="hl-1">, </span><span class="hl-2">&quot;role_id&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-4">from:</span><span class="hl-1"> </span><span class="hl-2">&quot;from&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">take:</span><span class="hl-1"> </span><span class="hl-8">1</span><br/><span class="hl-1">    })</span>
 </code><button type="button">Copy</button></pre>
 
 </div></div></div></li></ul></section></section></details>
@@ -191,11 +112,11 @@
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Constructors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Constructors</summary>
 <div><a href="#constructor"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Constructor"><use href="../assets/icons.svg#icon-512"></use></svg><span>constructor</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
-<div><a href="#get"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get</span></a><a href="#create"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>create</span></a><a href="#delete"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>delete</span></a></div></details>
+<div><a href="#list"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>list</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Properties</summary>
 <div><a href="#_options" class="tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>_<wbr/>options</span></a></div></details></div></details></div>
 <div class="site-menu">
-<nav class="tsd-navigation"><a href="../modules.html">Auth0 Node.js SDK - v6.1.0</a>
+<nav class="tsd-navigation"><a href="../modules.html">Auth0 Node.js SDK - v6.2.0</a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
 <li>Loading...</li></ul></nav></div></div></div><footer></footer>
 <div class="overlay"></div></body></html>
