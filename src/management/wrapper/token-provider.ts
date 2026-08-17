@@ -1,4 +1,4 @@
-import { AuthClient, TokenResponse } from "@auth0/auth0-auth-js";
+import { AuthClient, type AuthClientOptions, TokenResponse } from "@auth0/auth0-auth-js";
 import type { ManagementClient } from "./ManagementClient.js";
 import { generateClientInfo } from "../../utils.js";
 
@@ -16,7 +16,7 @@ export class TokenProvider {
         private readonly options: ManagementClient.ManagementClientOptionsWithClientCredentials & { audience: string },
     ) {
         // Map node-auth0 options → AuthClient options
-        const authClientOptions: any = {
+        const authClientOptions: AuthClientOptions = {
             domain: options.domain,
             clientId: options.clientId,
         };
@@ -40,6 +40,7 @@ export class TokenProvider {
         if (options.useMTLS) {
             authClientOptions.useMtls = true;
             // After U7, options.fetch is accessible. Forward to customFetch.
+            // Cast required: fetch is inherited from FernClient.Options via namespace indirection
             if ((options as any).fetch) {
                 authClientOptions.customFetch = (options as any).fetch;
             }
@@ -47,21 +48,23 @@ export class TokenProvider {
 
         // Telemetry: preserve node-auth0 identity
         if (options.telemetry === false) {
-            authClientOptions.telemetry = false;
+            authClientOptions.telemetry = { enabled: false };
         } else if (options.clientInfo) {
             // Forward custom clientInfo to auth0-auth-js
+            // Note: clientInfo.version may be unknown-typed, coerce to string
+            const nodeAuth0Info = generateClientInfo();
             authClientOptions.telemetry = {
+                enabled: true,
                 name: options.clientInfo.name,
-                version: (options.clientInfo as any).version || "unknown",
-                env: (options.clientInfo as any).env,
+                version: String(options.clientInfo.version ?? nodeAuth0Info.version),
             };
         } else {
             // Default: node-auth0 identity
             const nodeAuth0Info = generateClientInfo();
             authClientOptions.telemetry = {
+                enabled: true,
                 name: nodeAuth0Info.name, // "node-auth0"
                 version: nodeAuth0Info.version, // SDK_VERSION
-                env: nodeAuth0Info.env, // { node: "vXX.Y.Z" } or runtime
             };
         }
 
@@ -83,7 +86,7 @@ export class TokenProvider {
             });
 
             // CRITICAL: auth0-auth-js returns expiresAt in ABSOLUTE Unix seconds, NOT relative expires_in
-            // Convert seconds → ms for Date.now() comparison
+            // expiresAt is absolute Unix timestamp in seconds - convert to milliseconds for Date.now() comparison
             this.expiresAt = tokenResponse.expiresAt * 1000;
             this.accessToken = tokenResponse.accessToken;
         }
