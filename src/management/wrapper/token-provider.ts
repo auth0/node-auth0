@@ -4,6 +4,13 @@ import { generateClientInfo } from "../../utils.js";
 
 const LEEWAY = 10 * 1000; // 10s refresh-ahead in ms
 
+/**
+ * TokenProvider handles Management API token acquisition by delegating to @auth0/auth0-auth-js.
+ * It performs client credentials grant and caches the token until shortly before expiry.
+ *
+ * CRITICAL: @auth0/auth0-auth-js returns expiresAt as an absolute Unix timestamp in seconds.
+ * This class converts it to milliseconds for comparison with Date.now().
+ */
 export class TokenProvider {
     private authClient: AuthClient;
     private expiresAt = 0; // Absolute timestamp in ms (Date.now() scale)

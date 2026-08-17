@@ -34,19 +34,21 @@ npm install auth0
 
 ### Configure the SDK
 
-#### Authentication API Client
+#### Authentication
 
-This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
+For authentication operations (OAuth flows, token management, user sign-up), use [`@auth0/auth0-auth-js`](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js). As of v7, node-auth0 no longer ships `AuthenticationClient` in its main entrypoint. The authentication layer has been separated into a dedicated package.
 
 ```js
-import { AuthenticationClient } from "auth0";
+import { AuthClient } from "@auth0/auth0-auth-js";
 
-const auth0 = new AuthenticationClient({
+const auth = new AuthClient({
     domain: "{YOUR_TENANT_AND REGION}.auth0.com",
     clientId: "{YOUR_CLIENT_ID}",
     clientSecret: "{OPTIONAL_CLIENT_SECRET}",
 });
 ```
+
+See the [auth0-auth-js documentation](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js) for full API reference.
 
 #### Management API Client
 
@@ -169,24 +171,29 @@ types from the root `auth0` entry adds nothing to your bundle and does not pull 
 > through a bundler. A plain CommonJS `require()` cannot tree-shake and loads the full
 > resource graph.
 
-#### UserInfo API Client
+#### User Profile Information
 
-This client can be used to retrieve user profile information.
+To retrieve user profile information, use the `getUserInfo` method from `@auth0/auth0-auth-js`:
 
 ```js
-import { UserInfoClient } from "auth0";
+import { AuthClient } from "@auth0/auth0-auth-js";
 
-const userInfo = new UserInfoClient({
+const auth = new AuthClient({
     domain: "{YOUR_TENANT_AND REGION}.auth0.com",
+    clientId: "{YOUR_CLIENT_ID}",
 });
 
 // Get user info with an access token
-const userProfile = await userInfo.getUserInfo(accessToken);
+const userProfile = await auth.getUserInfo(accessToken);
 ```
+
+As of v7, node-auth0 no longer ships `UserInfoClient`. Use `AuthClient.getUserInfo()` from `@auth0/auth0-auth-js` instead.
 
 ## Legacy Usage
 
 If you are migrating from the legacy `node-auth0` package (v4.x) or need to maintain compatibility with legacy code, you can use the legacy export which provides the `node-auth0` v4.x API interface.
+
+**Note:** The legacy entrypoint still includes `AuthenticationClient` from the v4.x API. This is separate from the v7 main entrypoint, which no longer ships authentication clients.
 
 ### Installing Legacy Version
 
@@ -202,7 +209,7 @@ const { ManagementClient, AuthenticationClient } = require("auth0/legacy");
 
 ### Legacy Configuration
 
-The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current v6 API:
+The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current API:
 
 #### Legacy Management Client
 
@@ -345,6 +352,65 @@ try {
 }
 ```
 
+## Migrating from v6 to v7
+
+Version 7.0.0 removes authentication clients from the main entrypoint. The authentication layer has been separated into [`@auth0/auth0-auth-js`](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js).
+
+### Install the authentication package
+
+```bash
+npm install @auth0/auth0-auth-js
+```
+
+### Update imports
+
+```js
+// v6
+import { AuthenticationClient, UserInfoClient } from "auth0";
+
+// v7
+import { AuthClient } from "@auth0/auth0-auth-js";
+```
+
+### Method mapping
+
+| v6 (node-auth0)                                     | v7 (@auth0/auth0-auth-js)                     |
+| --------------------------------------------------- | --------------------------------------------- |
+| `authenticationClient.authorizationCodeGrant(...)`  | `authClient.getTokenByCode(...)`              |
+| `authenticationClient.clientCredentialsGrant(...)`  | `authClient.getTokenByClientCredentials(...)` |
+| `authenticationClient.refreshTokenGrant(...)`       | `authClient.getTokenByRefreshToken(...)`      |
+| `authenticationClient.passwordGrant(...)`           | `authClient.getTokenByPassword(...)`          |
+| `authenticationClient.revokeRefreshToken(...)`      | `authClient.revokeToken(...)`                 |
+| `authenticationClient.database.signUp(...)`         | `authClient.signUp(...)`                      |
+| `authenticationClient.database.changePassword(...)` | `authClient.changePassword(...)`              |
+| `authenticationClient.passwordless.*`               | `authClient.passwordless.*` (sub-client)      |
+| `userInfoClient.getUserInfo(accessToken)`           | `authClient.getUserInfo(accessToken)`         |
+
+### mTLS configuration
+
+If you use mTLS, you must now provide an explicit `customFetch` option:
+
+```js
+import { AuthClient } from "@auth0/auth0-auth-js";
+import https from "https";
+import fetch from "node-fetch";
+
+const agent = new https.Agent({
+    cert: fs.readFileSync("client-cert.pem"),
+    key: fs.readFileSync("client-key.pem"),
+});
+
+const auth = new AuthClient({
+    domain: "your-tenant.auth0.com",
+    clientId: "YOUR_CLIENT_ID",
+    clientSecret: "YOUR_CLIENT_SECRET",
+    useMtls: true,
+    customFetch: (url, init) => fetch(url, { ...init, agent }),
+});
+```
+
+See the [auth0-auth-js documentation](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js) for complete API details.
+
 ## Request and Response Types
 
 The SDK exports all request and response types as TypeScript interfaces. You can import them directly:
@@ -375,8 +441,6 @@ const actions = await client.actions.list(listParams);
 ### Key Classes
 
 - **ManagementClient** - for Auth0 Management API operations
-- **AuthenticationClient** - for Auth0 Authentication API operations
-- **UserInfoClient** - for retrieving user profile information
 
 ## Exception Handling
 
