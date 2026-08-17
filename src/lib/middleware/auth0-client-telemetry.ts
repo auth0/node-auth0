@@ -1,5 +1,5 @@
 import { generateClientInfo } from "../../utils.js";
-import { Middleware, ClientOptions, FetchParams, RequestContext } from "../runtime.js";
+import { Middleware, ClientOptions, FetchParams, RequestContext } from "../models.js";
 import { base64url } from "jose";
 
 /**
