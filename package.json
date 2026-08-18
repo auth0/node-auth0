@@ -1057,6 +1057,17 @@
             },
             "default": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.js"
         },
+        "./keys/networkAcls": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/keys/resources/networkAcls/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/keys/resources/networkAcls/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.js"
+        },
         "./keys/signing": {
             "import": {
                 "types": "./dist/esm/management/api/resources/keys/resources/signing/exports.d.mts",
