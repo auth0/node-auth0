@@ -16,7 +16,13 @@ export class TokenProvider {
     constructor(
         private readonly options: ManagementClient.ManagementClientOptionsWithClientCredentials & { audience: string },
     ) {
-        this.authenticationClient = new AuthenticationClient({ ...options, headers: undefined });
+        const stringHeaders = options.headers
+            ? (Object.fromEntries(Object.entries(options.headers).filter(([, v]) => typeof v === "string")) as Record<
+                  string,
+                  string
+              >)
+            : undefined;
+        this.authenticationClient = new AuthenticationClient({ ...options, headers: stringHeaders });
     }
 
     public async getAccessToken() {
