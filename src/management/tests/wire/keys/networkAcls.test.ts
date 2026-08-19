@@ -4,46 +4,28 @@ import * as Management from "../../../api/index";
 import { ManagementClient } from "../../../Client";
 import { mockServerPool } from "../../mock-server/MockServerPool";
 
-describe("ExecutionsClient", () => {
+describe("NetworkAclsClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            next: "next",
-            executions: [
+            keys: [
                 {
                     id: "id",
-                    trace_id: "trace_id",
-                    journey_id: "journey_id",
-                    status: "status",
-                    created_at: "2024-01-15T09:30:00Z",
-                    updated_at: "2024-01-15T09:30:00Z",
-                    started_at: "2024-01-15T09:30:00Z",
-                    ended_at: "2024-01-15T09:30:00Z",
+                    name: "name",
+                    alg: "hmac-sha256",
+                    fingerprint: "fingerprint",
+                    created_at: "created_at",
+                    updated_at: "updated_at",
                 },
             ],
         };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/flows/flow_id/executions")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/keys/network-acls").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const expected = rawResponseBody;
-        const page = await client.flows.executions.list("flow_id", {
-            include_totals: true,
-            from: "from",
-            take: 1,
-        });
-
-        expect(expected.executions).toEqual(page.data);
-        expect(page.hasNextPage()).toBe(true);
-        const nextPage = await page.getNextPage();
-        expect(expected.executions).toEqual(nextPage.data);
+        const response = await client.keys.networkAcls.list();
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("list (2)", async () => {
@@ -52,16 +34,10 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint()
-            .get("/flows/flow_id/executions")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/keys/network-acls").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.flows.executions.list("flow_id");
+            return await client.keys.networkAcls.list();
         }).rejects.toThrow(Management.BadRequestError);
     });
 
@@ -71,16 +47,10 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint()
-            .get("/flows/flow_id/executions")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/keys/network-acls").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.flows.executions.list("flow_id");
+            return await client.keys.networkAcls.list();
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -90,16 +60,10 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint()
-            .get("/flows/flow_id/executions")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/keys/network-acls").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.flows.executions.list("flow_id");
+            return await client.keys.networkAcls.list();
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
@@ -109,16 +73,10 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint()
-            .get("/flows/flow_id/executions")
-            .respondWith()
-            .statusCode(404)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/keys/network-acls").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.flows.executions.list("flow_id");
+            return await client.keys.networkAcls.list();
         }).rejects.toThrow(Management.NotFoundError);
     });
 
@@ -128,16 +86,160 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
+        server.mockEndpoint().get("/keys/network-acls").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.keys.networkAcls.list();
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("create (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name", alg: "hmac-sha256", value: "value" };
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            alg: "hmac-sha256",
+            fingerprint: "fingerprint",
+            created_at: "created_at",
+            updated_at: "updated_at",
+        };
+
         server
             .mockEndpoint()
-            .get("/flows/flow_id/executions")
+            .post("/keys/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.keys.networkAcls.create({
+            name: "name",
+            alg: "hmac-sha256",
+            value: "value",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("create (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name", alg: "hmac-sha256", value: "value" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/keys/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.networkAcls.create({
+                name: "name",
+                alg: "hmac-sha256",
+                value: "value",
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("create (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name", alg: "hmac-sha256", value: "value" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/keys/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.networkAcls.create({
+                name: "name",
+                alg: "hmac-sha256",
+                value: "value",
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("create (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name", alg: "hmac-sha256", value: "value" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/keys/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.networkAcls.create({
+                name: "name",
+                alg: "hmac-sha256",
+                value: "value",
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("create (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name", alg: "hmac-sha256", value: "value" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/keys/network-acls")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.keys.networkAcls.create({
+                name: "name",
+                alg: "hmac-sha256",
+                value: "value",
+            });
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("create (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name", alg: "hmac-sha256", value: "value" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/keys/network-acls")
+            .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.flows.executions.list("flow_id");
+            return await client.keys.networkAcls.create({
+                name: "name",
+                alg: "hmac-sha256",
+                value: "value",
+            });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
@@ -147,27 +249,22 @@ describe("ExecutionsClient", () => {
 
         const rawResponseBody = {
             id: "id",
-            trace_id: "trace_id",
-            journey_id: "journey_id",
-            status: "status",
-            debug: { key: "value" },
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-            started_at: "2024-01-15T09:30:00Z",
-            ended_at: "2024-01-15T09:30:00Z",
+            name: "name",
+            alg: "hmac-sha256",
+            fingerprint: "fingerprint",
+            created_at: "created_at",
+            updated_at: "updated_at",
         };
 
         server
             .mockEndpoint()
-            .get("/flows/flow_id/executions/execution_id")
+            .get("/keys/network-acls/id")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.flows.executions.get("flow_id", "execution_id", {
-            hydrate: ["debug"],
-        });
+        const response = await client.keys.networkAcls.get("id");
         expect(response).toEqual(rawResponseBody);
     });
 
@@ -179,14 +276,14 @@ describe("ExecutionsClient", () => {
 
         server
             .mockEndpoint()
-            .get("/flows/flow_id/executions/execution_id")
+            .get("/keys/network-acls/id")
             .respondWith()
             .statusCode(400)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.flows.executions.get("flow_id", "execution_id");
+            return await client.keys.networkAcls.get("id");
         }).rejects.toThrow(Management.BadRequestError);
     });
 
@@ -198,14 +295,14 @@ describe("ExecutionsClient", () => {
 
         server
             .mockEndpoint()
-            .get("/flows/flow_id/executions/execution_id")
+            .get("/keys/network-acls/id")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.flows.executions.get("flow_id", "execution_id");
+            return await client.keys.networkAcls.get("id");
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -217,14 +314,14 @@ describe("ExecutionsClient", () => {
 
         server
             .mockEndpoint()
-            .get("/flows/flow_id/executions/execution_id")
+            .get("/keys/network-acls/id")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.flows.executions.get("flow_id", "execution_id");
+            return await client.keys.networkAcls.get("id");
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
@@ -236,14 +333,14 @@ describe("ExecutionsClient", () => {
 
         server
             .mockEndpoint()
-            .get("/flows/flow_id/executions/execution_id")
+            .get("/keys/network-acls/id")
             .respondWith()
             .statusCode(404)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.flows.executions.get("flow_id", "execution_id");
+            return await client.keys.networkAcls.get("id");
         }).rejects.toThrow(Management.NotFoundError);
     });
 
@@ -255,100 +352,14 @@ describe("ExecutionsClient", () => {
 
         server
             .mockEndpoint()
-            .get("/flows/flow_id/executions/execution_id")
+            .get("/keys/network-acls/id")
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.flows.executions.get("flow_id", "execution_id");
-        }).rejects.toThrow(Management.TooManyRequestsError);
-    });
-
-    test("delete (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        server.mockEndpoint().delete("/flows/flow_id/executions/execution_id").respondWith().statusCode(200).build();
-
-        const response = await client.flows.executions.delete("flow_id", "execution_id");
-        expect(response).toEqual(undefined);
-    });
-
-    test("delete (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/flows/flow_id/executions/execution_id")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.flows.executions.delete("flow_id", "execution_id");
-        }).rejects.toThrow(Management.BadRequestError);
-    });
-
-    test("delete (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/flows/flow_id/executions/execution_id")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.flows.executions.delete("flow_id", "execution_id");
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("delete (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/flows/flow_id/executions/execution_id")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.flows.executions.delete("flow_id", "execution_id");
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("delete (5)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/flows/flow_id/executions/execution_id")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.flows.executions.delete("flow_id", "execution_id");
+            return await client.keys.networkAcls.get("id");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 });

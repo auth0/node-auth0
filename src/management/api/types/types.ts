@@ -735,21 +735,14 @@ export const OauthScope = {
     /**
      * Delete Organization Client Associations */
     DeleteOrganizationClients: "delete:organization_clients",
+    /**
+     * Create Network ACL Keys */
+    CreateNetworkAclKeys: "create:network_acl_keys",
+    /**
+     * Read Network ACL Keys */
+    ReadNetworkAclKeys: "read:network_acl_keys",
 } as const;
 export type OauthScope = (typeof OauthScope)[keyof typeof OauthScope];
-
-export interface TooManyRequestsErrorBody {
-    message: string;
-    statusCode: string;
-    error: TooManyRequestsErrorBody.Error_;
-}
-
-export namespace TooManyRequestsErrorBody {
-    export const Error_ = {
-        TooManyRequests: "Too Many Requests",
-    } as const;
-    export type Error_ = (typeof Error_)[keyof typeof Error_];
-}
 
 export interface NotFoundErrorBody {
     message: string;
@@ -760,6 +753,19 @@ export interface NotFoundErrorBody {
 export namespace NotFoundErrorBody {
     export const Error_ = {
         NotFound: "Not Found",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
+export interface TooManyRequestsErrorBody {
+    message: string;
+    statusCode: string;
+    error: TooManyRequestsErrorBody.Error_;
+}
+
+export namespace TooManyRequestsErrorBody {
+    export const Error_ = {
+        TooManyRequests: "Too Many Requests",
     } as const;
     export type Error_ = (typeof Error_)[keyof typeof Error_];
 }
@@ -2977,6 +2983,21 @@ export const ClientMyOrganizationConfigurationAllowedStrategiesEnum = {
 export type ClientMyOrganizationConfigurationAllowedStrategiesEnum =
     (typeof ClientMyOrganizationConfigurationAllowedStrategiesEnum)[keyof typeof ClientMyOrganizationConfigurationAllowedStrategiesEnum];
 
+/** A valid third-party client access value for the My Organization Configuration. */
+export const ClientMyOrganizationConfigurationThirdPartyClientAccessAllowedValuesEnum = {
+    Allow: "allow",
+    Block: "block",
+} as const;
+export type ClientMyOrganizationConfigurationThirdPartyClientAccessAllowedValuesEnum =
+    (typeof ClientMyOrganizationConfigurationThirdPartyClientAccessAllowedValuesEnum)[keyof typeof ClientMyOrganizationConfigurationThirdPartyClientAccessAllowedValuesEnum];
+
+/** The default third-party client access value for the My Organization Configuration. */
+export const ClientMyOrganizationConfigurationThirdPartyClientAccessDefaultValueEnum = {
+    Block: "block",
+} as const;
+export type ClientMyOrganizationConfigurationThirdPartyClientAccessDefaultValueEnum =
+    (typeof ClientMyOrganizationConfigurationThirdPartyClientAccessDefaultValueEnum)[keyof typeof ClientMyOrganizationConfigurationThirdPartyClientAccessDefaultValueEnum];
+
 /** The deletion behavior for this client. */
 export const ClientMyOrganizationDeletionBehaviorEnum = {
     Allow: "allow",
@@ -2995,6 +3016,7 @@ export interface ClientMyOrganizationPatchConfiguration {
     user_attribute_profile_id?: string | undefined;
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
+    third_party_client_access?: Management.ClientMyOrganizationThirdPartyClientAccessConfiguration | undefined;
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
     /** The client ID this client uses while creating invitations through My Organization API. */
     invitation_landing_client_id?: string | undefined;
@@ -3010,6 +3032,7 @@ export interface ClientMyOrganizationPostConfiguration {
     user_attribute_profile_id?: string | undefined;
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
+    third_party_client_access?: Management.ClientMyOrganizationThirdPartyClientAccessConfiguration | undefined;
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
     /** The client ID this client uses while creating invitations through My Organization API. */
     invitation_landing_client_id?: string | undefined;
@@ -3025,9 +3048,19 @@ export interface ClientMyOrganizationResponseConfiguration {
     user_attribute_profile_id?: string | undefined;
     /** The allowed connection strategies for the My Organization Configuration. */
     allowed_strategies: Management.ClientMyOrganizationConfigurationAllowedStrategiesEnum[];
+    third_party_client_access?: Management.ClientMyOrganizationThirdPartyClientAccessConfiguration | undefined;
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
     /** The client ID this client uses while creating invitations through My Organization API. */
     invitation_landing_client_id?: string | undefined;
+}
+
+/**
+ * The third-party client access configuration for the My Organization Configuration.
+ */
+export interface ClientMyOrganizationThirdPartyClientAccessConfiguration {
+    default_value: Management.ClientMyOrganizationConfigurationThirdPartyClientAccessDefaultValueEnum;
+    /** The allowed third-party client access values for the My Organization Configuration. */
+    allowed_values: Management.ClientMyOrganizationConfigurationThirdPartyClientAccessAllowedValuesEnum[];
 }
 
 /**
@@ -4880,6 +4913,7 @@ export interface ConnectionOptionsCommonOidc {
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     userinfo_endpoint?: Management.ConnectionUserinfoEndpoint | undefined;
+    useOauthSpecScope?: Management.ConnectionUseOauthSpecScope | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -6087,6 +6121,7 @@ export interface ConnectionProfile {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
 /**
@@ -6098,6 +6133,43 @@ export type ConnectionProfileBitbucket = boolean;
  * Connection profile configuration.
  */
 export interface ConnectionProfileConfig {}
+
+/**
+ * Controls whether organization admins may enable Cross App Access (XAA) on their Identity Providers.
+ */
+export interface ConnectionProfileCrossAppAccessResourceApp {
+    status: Management.ConnectionProfileCrossAppAccessResourceAppStatus;
+}
+
+/**
+ * The Cross App Access resource app status configuration.
+ */
+export interface ConnectionProfileCrossAppAccessResourceAppStatus {
+    default_value: Management.ConnectionProfileCrossAppAccessResourceAppStatusDefaultValueEnum;
+    allowed_values?: Management.ConnectionProfileCrossAppAccessResourceAppStatusAllowedValuesEnum | undefined;
+}
+
+/**
+ * The allowed Cross App Access resource app status values.
+ */
+export type ConnectionProfileCrossAppAccessResourceAppStatusAllowedValuesEnum =
+    Management.ConnectionProfileCrossAppAccessResourceAppStatusValueEnum[];
+
+/** The default Cross App Access resource app status. */
+export const ConnectionProfileCrossAppAccessResourceAppStatusDefaultValueEnum = {
+    Enabled: "enabled",
+    Disabled: "disabled",
+} as const;
+export type ConnectionProfileCrossAppAccessResourceAppStatusDefaultValueEnum =
+    (typeof ConnectionProfileCrossAppAccessResourceAppStatusDefaultValueEnum)[keyof typeof ConnectionProfileCrossAppAccessResourceAppStatusDefaultValueEnum];
+
+/** A Cross App Access resource app status value. */
+export const ConnectionProfileCrossAppAccessResourceAppStatusValueEnum = {
+    Enabled: "enabled",
+    Disabled: "disabled",
+} as const;
+export type ConnectionProfileCrossAppAccessResourceAppStatusValueEnum =
+    (typeof ConnectionProfileCrossAppAccessResourceAppStatusValueEnum)[keyof typeof ConnectionProfileCrossAppAccessResourceAppStatusValueEnum];
 
 /**
  * Enabled features for the connection profile.
@@ -6239,6 +6311,7 @@ export interface ConnectionPropertiesOptions {
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
+    useOauthSpecScope?: Management.ConnectionUseOauthSpecScope | undefined;
     discovery_url?: ((Management.ConnectionsDiscoveryUrl | undefined) | null) | undefined;
     oidc_metadata?: (Management.ConnectionsOidcMetadata | null) | undefined;
     /** Accepts any additional properties */
@@ -7772,6 +7845,11 @@ export interface ConnectionUpstreamValue {
 export type ConnectionUseCommonEndpointAzureAd = boolean;
 
 /**
+ * When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint
+ */
+export type ConnectionUseOauthSpecScope = boolean;
+
+/**
  * The URL of the OAuth 1.0a user-authorization endpoint. This endpoint is used to redirect users to the provider's site to authorize the temporary request token obtained from the request-token endpoint during the OAuth 1.0a authentication flow.
  */
 export type ConnectionUserAuthorizationUrloAuth1 = Management.ConnectionHttpsUrlWithHttpFallback255;
@@ -8207,6 +8285,7 @@ export interface CreateConnectionProfileResponseContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
 /**
@@ -9841,6 +9920,20 @@ export interface CreateImportUsersResponseContent {
     external_id?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface CreateKeysNetworkAclsResponseContent {
+    /** Auth0-generated identifier for the key. Used to reference the key from a Network ACL and to identify it in Tenant Logs. */
+    id: string;
+    /** Customer-supplied label with no cryptographic meaning. */
+    name: string;
+    alg: Management.NetworkAclKeyAlgorithmEnum;
+    /** Fingerprint of the key material, determined by the algorithm specified. Currently only HMAC-SHA256 is supported. */
+    fingerprint: string;
+    /** Time when the key was created. */
+    created_at: string;
+    /** Time when the key was last updated. */
+    updated_at: string;
 }
 
 export interface CreateLogStreamDatadogRequestBody {
@@ -20767,7 +20860,7 @@ export namespace FlowActionFlowMapValue {
 export interface FlowActionFlowMapValueParams {
     input: Management.FlowActionFlowMapValueParamsInput;
     cases?: Management.FlowActionFlowMapValueParamsCases | undefined;
-    fallback?: Management.FlowActionFlowMapValueParamsFallback | undefined;
+    fallback?: (Management.FlowActionFlowMapValueParamsFallback | null) | undefined;
 }
 
 export type FlowActionFlowMapValueParamsCases = Record<string, unknown>;
@@ -23680,6 +23773,11 @@ export interface GetAculResponseContent {
     [key: string]: any;
 }
 
+export interface GetAllKeysNetworkAclsResponseContent {
+    /** The tenant's Network ACL Keys. */
+    keys: Management.NetworkAclKey[];
+}
+
 export interface GetAttackProtectionCaptchaResponseContent {
     active_provider_id?: string | undefined;
     arkose?: Management.AttackProtectionCaptchaArkoseResponseContent | undefined;
@@ -23960,6 +24058,7 @@ export interface GetConnectionProfileResponseContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
 export interface GetConnectionProfileTemplateResponseContent {
@@ -24691,9 +24790,9 @@ export interface GetRefreshTokenResponseContent {
     id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
     user_id?: string | undefined;
-    created_at?: Management.RefreshTokenDate | undefined;
-    idle_expires_at?: Management.RefreshTokenDate | undefined;
-    expires_at?: Management.RefreshTokenDate | undefined;
+    created_at?: (Management.RefreshTokenDate | null) | undefined;
+    idle_expires_at?: (Management.RefreshTokenDate | null) | undefined;
+    expires_at?: (Management.RefreshTokenDate | null) | undefined;
     device?: Management.RefreshTokenDevice | undefined;
     /** ID of the client application granted with this refresh token */
     client_id?: string | undefined;
@@ -24703,7 +24802,7 @@ export interface GetRefreshTokenResponseContent {
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[] | undefined;
     refresh_token_metadata?: ((Management.RefreshTokenMetadata | undefined) | null) | undefined;
-    last_exchanged_at?: Management.RefreshTokenDate | undefined;
+    last_exchanged_at?: (Management.RefreshTokenDate | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -24846,12 +24945,12 @@ export interface GetSessionResponseContent {
     id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
     user_id?: string | undefined;
-    created_at?: Management.SessionDate | undefined;
-    updated_at?: Management.SessionDate | undefined;
-    authenticated_at?: Management.SessionDate | undefined;
-    idle_expires_at?: Management.SessionDate | undefined;
-    expires_at?: Management.SessionDate | undefined;
-    last_interacted_at?: Management.SessionDate | undefined;
+    created_at?: (Management.SessionDate | null) | undefined;
+    updated_at?: (Management.SessionDate | null) | undefined;
+    authenticated_at?: (Management.SessionDate | null) | undefined;
+    idle_expires_at?: (Management.SessionDate | null) | undefined;
+    expires_at?: (Management.SessionDate | null) | undefined;
+    last_interacted_at?: (Management.SessionDate | null) | undefined;
     device?: Management.SessionDeviceMetadata | undefined;
     /** List of client details for the session */
     clients?: Management.SessionClientMetadata[] | undefined;
@@ -26827,6 +26926,26 @@ export type NetworkAclActionLogEnum = boolean;
  */
 export type NetworkAclActionRedirectEnum = boolean;
 
+export interface NetworkAclKey {
+    /** Generated identifier for the key. Used to reference the key from a Network ACL and to identify it in Tenant Logs. */
+    id: string;
+    /** User supplied label for the key. */
+    name: string;
+    alg: Management.NetworkAclKeyAlgorithmEnum;
+    /** Fingerprint of the key material, determined by the algorithm specified. Currently only HMAC-SHA256 is supported. */
+    fingerprint: string;
+    /** Time when the key was created. */
+    created_at: string;
+    /** Time when the key was last updated. */
+    updated_at: string;
+}
+
+/** Signing algorithm used to verify the signature. Currently only HMAC-SHA256 is supported. */
+export const NetworkAclKeyAlgorithmEnum = {
+    HmacSha256: "hmac-sha256",
+} as const;
+export type NetworkAclKeyAlgorithmEnum = (typeof NetworkAclKeyAlgorithmEnum)[keyof typeof NetworkAclKeyAlgorithmEnum];
+
 export interface NetworkAclMatch {
     asns?: number[] | undefined;
     auth0_managed?: string[] | undefined;
@@ -26846,8 +26965,14 @@ export interface NetworkAclRule {
     action: Management.NetworkAclAction;
     match?: Management.NetworkAclMatch | undefined;
     not_match?: Management.NetworkAclMatch | undefined;
+    match_all?: Management.NetworkAclRuleMatchAllEnum | undefined;
     scope: Management.NetworkAclRuleScopeEnum;
 }
+
+/**
+ * When true, the rule unconditionally matches all traffic regardless of any other signals. Mutually exclusive with `match` and `not_match`.
+ */
+export type NetworkAclRuleMatchAllEnum = boolean;
 
 /** Identifies the origin of the request as the Management API (management), Authentication API (authentication), Dynamic Client Registration API (dynamic_client_registration), or any (tenant) */
 export const NetworkAclRuleScopeEnum = {
@@ -27759,9 +27884,9 @@ export interface RefreshTokenResponseContent {
     id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
     user_id?: string | undefined;
-    created_at?: Management.RefreshTokenDate | undefined;
-    idle_expires_at?: Management.RefreshTokenDate | undefined;
-    expires_at?: Management.RefreshTokenDate | undefined;
+    created_at?: (Management.RefreshTokenDate | null) | undefined;
+    idle_expires_at?: (Management.RefreshTokenDate | null) | undefined;
+    expires_at?: (Management.RefreshTokenDate | null) | undefined;
     device?: Management.RefreshTokenDevice | undefined;
     /** ID of the client application granted with this refresh token */
     client_id?: string | undefined;
@@ -27771,7 +27896,7 @@ export interface RefreshTokenResponseContent {
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[] | undefined;
     refresh_token_metadata?: ((Management.RefreshTokenMetadata | undefined) | null) | undefined;
-    last_exchanged_at?: Management.RefreshTokenDate | undefined;
+    last_exchanged_at?: (Management.RefreshTokenDate | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -28654,7 +28779,7 @@ export interface SessionActorMetadata {
 export interface SessionAuthenticationSignal {
     /** One of: "federated", "passkey", "pwd", "sms", "email", "mfa", "mock" or a custom method denoted by a URL */
     name?: string | undefined;
-    timestamp?: Management.SessionDate | undefined;
+    timestamp?: (Management.SessionDate | null) | undefined;
     /** A specific MFA factor. Only present when "name" is set to "mfa" */
     type?: string | undefined;
     /** Accepts any additional properties */
@@ -28753,12 +28878,12 @@ export interface SessionResponseContent {
     id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
     user_id?: string | undefined;
-    created_at?: Management.SessionDate | undefined;
-    updated_at?: Management.SessionDate | undefined;
-    authenticated_at?: Management.SessionDate | undefined;
-    idle_expires_at?: Management.SessionDate | undefined;
-    expires_at?: Management.SessionDate | undefined;
-    last_interacted_at?: Management.SessionDate | undefined;
+    created_at?: (Management.SessionDate | null) | undefined;
+    updated_at?: (Management.SessionDate | null) | undefined;
+    authenticated_at?: (Management.SessionDate | null) | undefined;
+    idle_expires_at?: (Management.SessionDate | null) | undefined;
+    expires_at?: (Management.SessionDate | null) | undefined;
+    last_interacted_at?: (Management.SessionDate | null) | undefined;
     device?: Management.SessionDeviceMetadata | undefined;
     /** List of client details for the session */
     clients?: Management.SessionClientMetadata[] | undefined;
@@ -30006,6 +30131,7 @@ export interface UpdateConnectionOptions {
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
+    useOauthSpecScope?: Management.ConnectionUseOauthSpecScope | undefined;
     discovery_url?: ((Management.ConnectionsDiscoveryUrl | undefined) | null) | undefined;
     oidc_metadata?: (Management.ConnectionsOidcMetadata | null) | undefined;
     /** Accepts any additional properties */
@@ -30020,6 +30146,7 @@ export interface UpdateConnectionProfileResponseContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
 /**
@@ -30833,9 +30960,9 @@ export interface UpdateRefreshTokenResponseContent {
     id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
     user_id?: string | undefined;
-    created_at?: Management.RefreshTokenDate | undefined;
-    idle_expires_at?: Management.RefreshTokenDate | undefined;
-    expires_at?: Management.RefreshTokenDate | undefined;
+    created_at?: (Management.RefreshTokenDate | null) | undefined;
+    idle_expires_at?: (Management.RefreshTokenDate | null) | undefined;
+    expires_at?: (Management.RefreshTokenDate | null) | undefined;
     device?: Management.RefreshTokenDevice | undefined;
     /** ID of the client application granted with this refresh token */
     client_id?: string | undefined;
@@ -30845,7 +30972,7 @@ export interface UpdateRefreshTokenResponseContent {
     /** A list of the resource server IDs associated to this refresh-token and their granted scopes */
     resource_servers?: Management.RefreshTokenResourceServer[] | undefined;
     refresh_token_metadata?: ((Management.RefreshTokenMetadata | undefined) | null) | undefined;
-    last_exchanged_at?: Management.RefreshTokenDate | undefined;
+    last_exchanged_at?: (Management.RefreshTokenDate | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -30970,12 +31097,12 @@ export interface UpdateSessionResponseContent {
     id?: string | undefined;
     /** ID of the user which can be used when interacting with other APIs. */
     user_id?: string | undefined;
-    created_at?: Management.SessionDate | undefined;
-    updated_at?: Management.SessionDate | undefined;
-    authenticated_at?: Management.SessionDate | undefined;
-    idle_expires_at?: Management.SessionDate | undefined;
-    expires_at?: Management.SessionDate | undefined;
-    last_interacted_at?: Management.SessionDate | undefined;
+    created_at?: (Management.SessionDate | null) | undefined;
+    updated_at?: (Management.SessionDate | null) | undefined;
+    authenticated_at?: (Management.SessionDate | null) | undefined;
+    idle_expires_at?: (Management.SessionDate | null) | undefined;
+    expires_at?: (Management.SessionDate | null) | undefined;
+    last_interacted_at?: (Management.SessionDate | null) | undefined;
     device?: Management.SessionDeviceMetadata | undefined;
     /** List of client details for the session */
     clients?: Management.SessionClientMetadata[] | undefined;
