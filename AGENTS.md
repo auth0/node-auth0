@@ -471,3 +471,52 @@ AUTH0_CLIENT_ID=your-test-client-id
 AUTH0_CLIENT_SECRET=your-test-client-secret
 AUTH0_M2M_TOKEN=your-machine-to-machine-token
 ```
+
+## Beta Track Releases
+
+> Applies only when working on the `beta` branch.
+
+This SDK ships two tracks from one npm package (`auth0`):
+
+- **Stable** (`master`): EA/GA endpoints only. Released by a maintainer via a `release/*` branch.
+- **Beta** (`beta`): a superset of stable plus beta-only endpoints. Released automatically when a PR is merged into `beta`.
+
+The `beta` branch is **regenerated** from the stable spec plus the beta-only spec files; it is never produced by merging `master` into `beta`. It receives one combined regeneration PR (stable + beta) as a single squash commit. The beta-only versus stable-mirrored split cannot be detected from code or file paths, so it must be recorded in the squash commit message.
+
+### Versioning
+
+Beta = the next stable minor + `-beta.N`, derived from git tags. Latest stable `v6.3.0` → beta `v6.4.0-beta.N`; `-beta.N` auto-increments; once stable `v6.4.0` ships, beta rolls to `v6.5.0-beta.1`. No state file.
+
+### When merging a beta regeneration PR
+
+Squash and merge with a commit message that marks each group:
+
+```
+Regenerate SDK (stable + beta) (#<pr-number>)
+
+<!-- BETA -->
+- feat: add `Management.Sandbox` preview API (Beta)
+<!-- /BETA -->
+
+<!-- STABLE -->
+- feat: add tenant security headers configuration
+<!-- /STABLE -->
+```
+
+- Beta-only changes go inside the `BETA` markers; stable-mirrored changes go inside the `STABLE` markers.
+- The `<!-- ... -->` markers are HTML comments and stay invisible in GitHub's rendered view.
+- Omitting a section renders a "No ... changes in this release." note; omitting both falls back to the raw commit subject. Always prefer the structured form.
+- Everything reaches `beta` through a PR. Never push directly to `beta` (a direct push will not trigger a release).
+
+### Do not hand-edit release files on `beta`
+
+The Beta Auto-Release workflow (`.github/workflows/beta-autorelease.yml`) owns versioning. When a PR is merged into `beta` it computes the next `vX.Y.0-beta.N`, aborts if that tag already exists, stamps `.version`, `package.json`, `src/management/version.ts`, and `CHANGELOG.md`, creates the release commit **through the GitHub API** (so it is signed/Verified, no GPG key), publishes to npm with `--tag beta`, tags it, and publishes a GitHub prerelease. Never manually bump these files on `beta`.
+
+### Hand-written code
+
+Code outside of the Fern-generated directories is hand-written and is **not** regenerated on `beta`. A fix on `master` does not reach `beta` automatically, so hand-written changes must be PR'd to **both** `master` and `beta`.
+
+### Important notes for agents on the `beta` branch
+
+- Never hand-edit `.version`, `package.json` (version field), `src/management/version.ts`, or `CHANGELOG.md`; mark beta vs. stable changes in the squash commit message instead (see above).
+- Do not merge `master` into `beta`; the branch is always regenerated from scratch.

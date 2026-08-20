@@ -1,0 +1,280 @@
+name: Beta Auto-Release
+
+#
+# Publishes a beta prerelease whenever a PR is merged into the `beta` branch
+# (every fern-bot regeneration PR or human PR). The version is computed from
+# the existing git tags by the compute-next-version action, the version files
+# are stamped, a CHANGELOG.md entry is generated from the merged squash-commit
+# message, the package is built and published to npm with the `beta` dist-tag,
+# the commit is tagged, and a GitHub prerelease is created.
+#
+# Triggering on `pull_request: closed` (merged) rather than `push` means:
+#   - the bot's own "Release ..." commit cannot re-trigger the workflow, so no
+#     infinite-loop guard is needed (a PR merges exactly once);
+#   - two PRs merging in quick succession each get their own run with their own
+#     computed version, instead of racing on the same `push` event.
+# All inflow to `beta` goes through PRs, so nothing is missed.
+#
+# This runs on the `beta` branch, so CHANGELOG.md here is the beta track's
+# own changelog and never collides with the stable changelog on `master`.
+#
+# `workflow_dispatch` is kept only as a manual backup; it is not used in the
+# normal hands-off flow.
+#
+# Security notes:
+#   - This uses `pull_request` (NOT `pull_request_target`). PRs from forks run
+#     with a read-only token and no access to secrets, so a malicious fork PR
+#     cannot reach the release credentials. All real inflow (fern-bot, org
+#     members) comes from same-repo branches, which do have the needed access.
+#   - The workflow never executes checked-out PR code; it only reads the merge
+#     commit message and stamps files. Untrusted text is handled via shell
+#     variables/`env:`, never interpolated into `run:` via `${{ }}`.
+#   - Permissions default to none and are granted minimally at the job level.
+#
+
+on:
+    pull_request:
+        branches: [beta]
+        types: [closed]
+    workflow_dispatch:
+
+# Serialize releases so concurrent merges cut versions one at a time and the
+# push-back to `beta` never races.
+concurrency:
+    group: beta-release
+    cancel-in-progress: false
+
+# Least privilege: grant nothing by default; the job opts into exactly what it
+# needs (pushing the release commit/tag, creating the GitHub release, and
+# publishing to npm with provenance).
+permissions: {}
+
+jobs:
+    beta-release:
+        # Run for a genuinely merged PR into beta, or a manual dispatch on beta.
+        if: >-
+            github.repository == 'auth0/node-auth0' &&
+            (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch')
+        runs-on: ubuntu-latest
+        environment: release
+        permissions:
+            contents: write
+            id-token: write # For publishing to npm using --provenance
+
+        steps:
+            # Checkout the code
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  ref: beta
+
+            # Compute the next beta version from the existing git tags
+            - id: get_version
+              uses: ./.github/actions/compute-next-version
+              with:
+                  track: beta
+
+            # Defense in depth: refuse to proceed if the computed tag already
+            # exists, so a re-run can never overwrite a published release or
+            # create a duplicate release commit.
+            - id: tag_exists
+              uses: ./.github/actions/tag-exists
+              with:
+                  tag: ${{ steps.get_version.outputs.version }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - if: steps.tag_exists.outputs.exists == 'true'
+              shell: bash
+              run: |
+                  echo "::error::Tag ${{ steps.get_version.outputs.version }} already exists; aborting to avoid overwriting a published release."
+                  exit 1
+
+            # Build the release notes from the structured squash-commit message
+            # of the merged regeneration PR. The combined beta PR mixes
+            # stable-mirrored and beta-only changes in one squash commit, so the
+            # author marks them at merge time:
+            #
+            #   <!-- BETA -->
+            #   - feat: add Sandbox preview API (Beta)
+            #   <!-- /BETA -->
+            #   <!-- STABLE -->
+            #   - feat: add tenant security headers
+            #   <!-- /STABLE -->
+            #
+            # We render a self-contained entry with a "Beta" section and a
+            # "Stable (from master)" section. If the markers are absent we fall
+            # back to the raw commit subject so the release never produces empty
+            # notes.
+            - id: notes
+              name: Generate release notes
+              shell: bash
+              run: |
+                  MSG=$(git log -1 --pretty='%B' HEAD)
+
+                  extract() { # $1=open marker  $2=close marker
+                    printf '%s\n' "${MSG}" | awk -v o="$1" -v c="$2" '
+                      $0 ~ o {grab=1; next}
+                      $0 ~ c {grab=0}
+                      grab {print}
+                    ' | sed '/^[[:space:]]*$/d'
+                  }
+
+                  BETA_SECTION=$(extract '<!-- BETA -->' '<!-- /BETA -->')
+                  STABLE_SECTION=$(extract '<!-- STABLE -->' '<!-- /STABLE -->')
+
+                  # Use an unpredictable heredoc delimiter so untrusted
+                  # commit-message content cannot forge the terminator and inject
+                  # extra step outputs.
+                  DELIM="RELEASE_NOTES_$(openssl rand -hex 16)"
+                  {
+                    echo "RELEASE_NOTES<<${DELIM}"
+                    if [ -z "${BETA_SECTION}" ] && [ -z "${STABLE_SECTION}" ]; then
+                      # No structured markers: fall back to the commit subject.
+                      echo "**Beta**"
+                      echo "- $(printf '%s\n' "${MSG}" | head -1)"
+                    else
+                      echo "**Beta**"
+                      if [ -n "${BETA_SECTION}" ]; then
+                        echo "${BETA_SECTION}"
+                      else
+                        echo "- No beta-only changes in this release."
+                      fi
+                      echo ""
+                      echo "**Stable (from master)**"
+                      if [ -n "${STABLE_SECTION}" ]; then
+                        echo "${STABLE_SECTION}"
+                      else
+                        echo "- No stable changes in this release."
+                      fi
+                    fi
+                    echo "${DELIM}"
+                  } >> "$GITHUB_OUTPUT"
+              env:
+                  VERSION: ${{ steps.get_version.outputs.version }}
+
+            # Stamp the version into .version, package.json,
+            # src/management/version.ts, and prepend a CHANGELOG.md entry.
+            # This only edits files on disk; the commit is created separately
+            # through the GitHub API (later step) so GitHub signs it server-side.
+            - name: Stamp version files and changelog
+              shell: bash
+              run: |
+                  # .version stores the full vX.Y.Z-beta.N string
+                  echo "${VERSION}" > .version
+
+                  # package.json and version.ts use the bare version without
+                  # the leading 'v' (npm semver convention)
+                  PKG_VERSION="${VERSION#v}"
+                  sed -i -E 's/^(    "version": ")[^"]*(",)$/\1'"${PKG_VERSION}"'\2/' package.json
+
+                  # src/management/version.ts embeds the version at runtime
+                  sed -i -E 's/export const SDK_VERSION = "[^"]*";/export const SDK_VERSION = "'"${PKG_VERSION}"'";/' src/management/version.ts
+
+                  DATE=$(date -u +%Y-%m-%d)
+                  [ -f CHANGELOG.md ] || printf '# Change Log\n\n' > CHANGELOG.md
+                  {
+                    head -2 CHANGELOG.md
+                    echo "## [${VERSION}](https://github.com/auth0/node-auth0/tree/${VERSION}) (${DATE})"
+                    echo ""
+                    echo "${RELEASE_NOTES}"
+                    echo ""
+                    tail -n +3 CHANGELOG.md
+                  } > CHANGELOG.md.tmp
+                  mv CHANGELOG.md.tmp CHANGELOG.md
+              env:
+                  VERSION: ${{ steps.get_version.outputs.version }}
+                  RELEASE_NOTES: ${{ steps.notes.outputs.RELEASE_NOTES }}
+
+            # Build and publish to npm BEFORE creating the release commit so
+            # that the built artifacts carry the stamped package.json version.
+            # If publish fails we have not yet created a release commit, keeping
+            # the beta branch clean.
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22.23.1
+                  cache: yarn
+                  registry-url: https://registry.npmjs.org
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Update npm to latest
+              run: npm install -g npm@^11
+
+            - name: Build package
+              run: yarn build
+
+            - name: Validate package
+              run: yarn lint:package
+
+            - name: Publish to npm with beta dist-tag
+              run: npm publish --provenance --tag beta
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+            # Create the release commit through the GitHub API. Commits created
+            # via the API are signed by GitHub's web-flow key server-side, so
+            # the release commit shows as "Verified", with no GPG key to manage.
+            # The commit is built from blobs/tree/commit and the `beta` ref is
+            # fast-forwarded to it.
+            - id: stamp
+              name: Create signed release commit
+              uses: actions/github-script@v7
+              env:
+                  VERSION: ${{ steps.get_version.outputs.version }}
+              with:
+                  script: |
+                      const fs = require('fs');
+                      const { owner, repo } = context.repo;
+                      const branch = 'beta';
+                      const version = process.env.VERSION;
+                      const files = ['.version', 'package.json', 'src/management/version.ts', 'CHANGELOG.md'];
+
+                      // Current tip of beta = parent of the new commit.
+                      const ref = await github.rest.git.getRef({
+                        owner, repo, ref: `heads/${branch}`,
+                      });
+                      const parentSha = ref.data.object.sha;
+                      const parentCommit = await github.rest.git.getCommit({
+                        owner, repo, commit_sha: parentSha,
+                      });
+
+                      // Upload each changed file as a blob and assemble a tree.
+                      const tree = [];
+                      for (const path of files) {
+                        const blob = await github.rest.git.createBlob({
+                          owner, repo,
+                          content: fs.readFileSync(path, 'utf8'),
+                          encoding: 'utf-8',
+                        });
+                        tree.push({ path, mode: '100644', type: 'blob', sha: blob.data.sha });
+                      }
+                      const newTree = await github.rest.git.createTree({
+                        owner, repo, base_tree: parentCommit.data.tree.sha, tree,
+                      });
+
+                      // Create the commit (GitHub signs this) and move beta to it.
+                      const commit = await github.rest.git.createCommit({
+                        owner, repo,
+                        message: `Release ${version}`,
+                        tree: newTree.data.sha,
+                        parents: [parentSha],
+                      });
+                      await github.rest.git.updateRef({
+                        owner, repo, ref: `heads/${branch}`, sha: commit.data.sha,
+                      });
+
+                      core.setOutput('SHA', commit.data.sha);
+                      core.notice(`Created signed release commit ${commit.data.sha} for ${version}`);
+
+            # Create the GitHub prerelease. action-gh-release creates the tag at
+            # the signed commit, so the tag points at the verified release commit.
+            - uses: ./.github/actions/release-create
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  name: ${{ steps.get_version.outputs.version }}
+                  body: ${{ steps.notes.outputs.RELEASE_NOTES }}
+                  tag: ${{ steps.get_version.outputs.version }}
+                  commit: ${{ steps.stamp.outputs.SHA }}
+                  prerelease: "true"
