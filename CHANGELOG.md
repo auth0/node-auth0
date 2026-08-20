@@ -1,5 +1,13 @@
 # Change Log
 
+## [v6.3.0](https://github.com/auth0/node-auth0/tree/v6.3.0) (2026-08-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.2.0...v6.3.0)
+
+**Added**
+
+- feat: add Network ACL Keys, 3P client access, and XAA connection profile support [\#1391](https://github.com/auth0/node-auth0/pull/1391) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v6.2.0](https://github.com/auth0/node-auth0/tree/v6.2.0) (2026-08-05)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v6.1.0...v6.2.0)
