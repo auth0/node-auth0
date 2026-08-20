@@ -144,30 +144,6 @@ describe("TokenProvider", () => {
         expect(headerSpy).toHaveBeenCalled();
     });
 
-    it("should not throw when headers contain non-string values (supplier functions filtered out)", async () => {
-        const domain = "supplier-headers-test.auth0.com";
-
-        const supplierSpy = jest.fn().mockReturnValue({
-            access_token: "my-access-token",
-            expires_in: 86400,
-            token_type: "Bearer",
-        });
-
-        nock(`https://${domain}`).post("/oauth/token").reply(200, supplierSpy);
-
-        const tp = new TokenProvider({
-            ...opts,
-            domain,
-            headers: {
-                "User-Agent": "plain-string",
-                "X-Dynamic": () => "supplier-value",
-            } as any,
-        });
-
-        await expect(tp.getAccessToken()).resolves.toBe("my-access-token");
-        expect(supplierSpy).toHaveBeenCalled();
-    });
-
     it.skip("should use a custom fetch", async () => {
         const customFetch = jest
             .fn<FetchAPI>()
