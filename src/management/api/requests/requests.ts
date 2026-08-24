@@ -527,6 +527,7 @@ export interface CreateConnectionProfileRequestContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures;
     connection_config?: Management.ConnectionProfileConfig;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp;
 }
 
 /**
@@ -540,6 +541,7 @@ export interface UpdateConnectionProfileRequestContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures;
     connection_config?: Management.ConnectionProfileConfig;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp;
 }
 
 /**
@@ -670,7 +672,7 @@ export interface CreateCustomDomainRequestContent {
     type: Management.CustomDomainProvisioningTypeEnum;
     verification_method?: Management.CustomDomainVerificationMethodEnum;
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
-    custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
+    custom_client_ip_header?: (Management.CustomDomainCustomClientIpHeader | undefined) | null;
     domain_metadata?: Management.DomainMetadata;
     /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. If not provided, the full domain will be used. */
     relying_party_identifier?: string;
@@ -694,7 +696,7 @@ export interface SetDefaultCustomDomainRequestContent {
 export interface UpdateCustomDomainRequestContent {
     /** recommended includes TLS 1.2 */
     tls_policy?: Management.CustomDomainTlsPolicyEnum;
-    custom_client_ip_header?: Management.CustomDomainCustomClientIpHeader | undefined;
+    custom_client_ip_header?: (Management.CustomDomainCustomClientIpHeader | undefined) | null;
     domain_metadata?: Management.DomainMetadata;
     /** Relying Party ID (rpId) to be used for Passkeys on this custom domain. Set to null to remove the rpId and fall back to using the full domain. */
     relying_party_identifier?: string | null;
@@ -1002,13 +1004,13 @@ export interface GetFormRequestParameters {
  */
 export interface UpdateFormRequestContent {
     name?: string;
-    messages?: Management.FormMessagesNullable | undefined;
-    languages?: Management.FormLanguagesNullable | undefined;
-    translations?: Management.FormTranslationsNullable | undefined;
-    nodes?: Management.FormNodeListNullable | undefined;
-    start?: Management.FormStartNodeNullable | undefined;
-    ending?: Management.FormEndingNodeNullable | undefined;
-    style?: Management.FormStyleNullable | undefined;
+    messages?: (Management.FormMessagesNullable | undefined) | null;
+    languages?: (Management.FormLanguagesNullable | undefined) | null;
+    translations?: (Management.FormTranslationsNullable | undefined) | null;
+    nodes?: (Management.FormNodeListNullable | undefined) | null;
+    start?: (Management.FormStartNodeNullable | undefined) | null;
+    ending?: (Management.FormEndingNodeNullable | undefined) | null;
+    style?: (Management.FormStyleNullable | undefined) | null;
 }
 
 /**
@@ -1737,7 +1739,7 @@ export interface UpdateSelfServiceProfileRequestContent {
     /** The name of the self-service Profile. */
     name?: string;
     description?: (Management.SelfServiceProfileDescription | undefined) | null;
-    branding?: Management.SelfServiceProfileBranding | undefined;
+    branding?: (Management.SelfServiceProfileBranding | undefined) | null;
     /** List of IdP strategies that will be shown to users during the Self-Service Enterprise Configuration flow. Possible values: [`oidc`, `samlp`, `waad`, `google-apps`, `adfs`, `okta`, `auth0-samlp`, `okta-samlp`, `keycloak-samlp`, `pingfederate`] */
     allowed_strategies?: Management.SelfServiceProfileAllowedStrategyEnum[];
     user_attributes?: (Management.SelfServiceProfileUserAttributes | undefined) | null;
@@ -1911,7 +1913,7 @@ export interface CreateUserAttributeProfileRequestContent {
  */
 export interface UpdateUserAttributeProfileRequestContent {
     name?: Management.UserAttributeProfileName;
-    user_id?: Management.UserAttributeProfilePatchUserId | undefined;
+    user_id?: (Management.UserAttributeProfilePatchUserId | undefined) | null;
     user_attributes?: Management.UserAttributeProfileUserAttributes;
 }
 
@@ -3342,6 +3344,22 @@ export interface CreateEncryptionKeyRequestContent {
 export interface ImportEncryptionKeyRequestContent {
     /** Base64 encoded ciphertext of key material wrapped by public wrapping key. */
     wrapped_key: string;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         alg: "hmac-sha256",
+ *         value: "value"
+ *     }
+ */
+export interface CreateKeysNetworkAclsRequestContent {
+    /** Customer-supplied label with no cryptographic meaning. Must be unique across all Network ACL keys for the tenant. */
+    name: string;
+    alg: Management.NetworkAclKeyAlgorithmEnum;
+    /** Base64-encoded raw key material. Constraints on the decoded value depend on the algorithm specified. Currently only HMAC-SHA256 is supported. */
+    value: string;
 }
 
 /**

@@ -1,20 +1,12 @@
 # Change Log
 
-## [v7.0.0](https://github.com/auth0/node-auth0/tree/v7.0.0) (2026-08-17)
+## [v6.3.0](https://github.com/auth0/node-auth0/tree/v6.3.0) (2026-08-19)
 
-[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.2.0...v7.0.0)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.2.0...v6.3.0)
 
-**⚠️ BREAKING CHANGES**
+**Added**
 
-- **Removed `AuthenticationClient` and `UserInfoClient` from main entrypoint**: The authentication layer has been separated into [`@auth0/auth0-auth-js`](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js). Use `AuthClient` from `@auth0/auth0-auth-js` for authentication operations, OAuth flows, token management, and user profile retrieval.
-- **Management token acquisition now uses `@auth0/auth0-auth-js` internally**: The `TokenProvider` class delegates to `@auth0/auth0-auth-js` for client credentials grant. Token expiration handling now uses absolute Unix timestamps (converted from seconds to milliseconds).
-- **mTLS requires explicit `customFetch` option**: When using `useMtls: true` with `@auth0/auth0-auth-js`, you must provide a `customFetch` function that configures the HTTPS agent with client certificates.
-
-**Migration Guide**
-
-See the [Migrating from v6 to v7](https://github.com/auth0/node-auth0/blob/master/README.md#migrating-from-v6-to-v7) section in the README for detailed upgrade instructions, including method mappings and mTLS configuration examples.
-
-The legacy entrypoint (`auth0/legacy`) continues to ship the v4.x API including `AuthenticationClient` for backward compatibility.
+- feat: add Network ACL Keys, 3P client access, and XAA connection profile support [\#1391](https://github.com/auth0/node-auth0/pull/1391) ([fern-api[bot]](https://github.com/apps/fern-api))
 
 ## [v6.2.0](https://github.com/auth0/node-auth0/tree/v6.2.0) (2026-08-05)
 
