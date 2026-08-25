@@ -1,122 +1,141 @@
 import { jest } from "@jest/globals";
-import type { TokenResponse } from "@auth0/auth0-auth-js";
 
-// Mock @auth0/auth0-auth-js module BEFORE imports
-const mockGetTokenByClientCredentials = jest.fn<() => Promise<TokenResponse>>();
-const MockAuthClient = jest.fn().mockImplementation(() => ({
-    getTokenByClientCredentials: mockGetTokenByClientCredentials,
+// Mock jose BEFORE imports
+const mockImportPKCS8 = jest.fn<() => Promise<{ type: string }>>().mockResolvedValue({ type: "fake-key" });
+const mockSign = jest.fn<() => Promise<string>>().mockResolvedValue("mock-client-assertion-jwt");
+
+const MockSignJWT = jest.fn().mockImplementation(() => ({
+    setProtectedHeader: jest.fn().mockReturnThis(),
+    setIssuedAt: jest.fn().mockReturnThis(),
+    setIssuer: jest.fn().mockReturnThis(),
+    setSubject: jest.fn().mockReturnThis(),
+    setAudience: jest.fn().mockReturnThis(),
+    setExpirationTime: jest.fn().mockReturnThis(),
+    setJti: jest.fn().mockReturnThis(),
+    sign: mockSign,
 }));
 
-class MockTokenByClientCredentialsError extends Error {
-    constructor(
-        public error: string,
-        public errorDescription: string,
-        public statusCode?: number,
-    ) {
-        super(errorDescription);
-        this.name = "TokenByClientCredentialsError";
-    }
-}
-
-jest.mock("@auth0/auth0-auth-js", () => ({
-    AuthClient: MockAuthClient,
-    TokenByClientCredentialsError: MockTokenByClientCredentialsError,
+jest.mock("jose", () => ({
+    importPKCS8: mockImportPKCS8,
+    SignJWT: MockSignJWT,
+    base64url: {
+        encode: (input: Uint8Array | string) => {
+            const bytes = typeof input === "string" ? new TextEncoder().encode(input) : input;
+            return Buffer.from(bytes).toString("base64url");
+        },
+    },
 }));
 
 // NOW import TokenProvider (after mock setup)
 import { TokenProvider } from "../../wrapper/token-provider.js";
 
-describe("TokenProvider (auth0-auth-js)", () => {
+const DOMAIN = "test-domain.auth0.com";
+const TOKEN_URL = `https://${DOMAIN}/oauth/token`;
+const AUDIENCE = `https://${DOMAIN}/api/v2/`;
+
+/** Build a minimal Response-like object that satisfies the TokenProvider fetch contract */
+function makeOkResponse(body: { access_token: string; expires_in: number }) {
+    return {
+        ok: true,
+        status: 200,
+        statusText: "OK",
+        json: async () => body,
+        text: async () => JSON.stringify(body),
+    } as unknown as Response;
+}
+
+function makeErrorResponse(status: number, text: string) {
+    return {
+        ok: false,
+        status,
+        statusText: text,
+        json: async () => {
+            throw new Error("not json");
+        },
+        text: async () => text,
+    } as unknown as Response;
+}
+
+describe("TokenProvider (raw fetch + jose)", () => {
     const opts = {
-        domain: "test-domain.auth0.com",
+        domain: DOMAIN,
         clientId: "test-client-id",
         clientSecret: "test-client-secret",
-        audience: "https://test-domain.auth0.com/api/v2/",
+        audience: AUDIENCE,
     };
 
+    let fetchSpy: jest.MockedFunction<typeof fetch>;
+
     beforeEach(() => {
-        mockGetTokenByClientCredentials.mockReset();
-        MockAuthClient.mockClear();
+        fetchSpy = jest
+            .spyOn(globalThis, "fetch")
+            .mockImplementation(() =>
+                Promise.reject(new Error("fetch not mocked for this test")),
+            ) as unknown as jest.MockedFunction<typeof fetch>;
+        mockImportPKCS8.mockClear();
+        mockSign.mockClear();
+        MockSignJWT.mockClear();
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        jest.restoreAllMocks();
         jest.useRealTimers();
     });
 
     describe("TC-2.1 — Token Acquired (Client-Secret)", () => {
         it("should get an access token with client-secret credentials", async () => {
-            mockGetTokenByClientCredentials.mockResolvedValue({
-                accessToken: "mock-access-token",
-                expiresAt: Math.floor(Date.now() / 1000) + 86400, // Absolute Unix seconds, +1 day
-                tokenType: "Bearer",
-            });
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "mock-access-token", expires_in: 86400 }));
 
             const tp = new TokenProvider(opts);
             const token = await tp.getAccessToken();
 
             expect(token).toBe("mock-access-token");
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledTimes(1);
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledWith({
-                audience: opts.audience,
-            });
-            // Verify AuthClient constructed with correct credentials
-            expect(MockAuthClient).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    domain: opts.domain,
-                    clientId: opts.clientId,
-                    clientSecret: opts.clientSecret,
-                }),
-            );
+            expect(fetchSpy).toHaveBeenCalledTimes(1);
+            expect(fetchSpy).toHaveBeenCalledWith(TOKEN_URL, expect.objectContaining({ method: "POST" }));
+
+            // Verify body contains correct client_secret params
+            const callBody = (fetchSpy.mock.calls[0][1] as RequestInit).body as string;
+            const params = new URLSearchParams(callBody);
+            expect(params.get("grant_type")).toBe("client_credentials");
+            expect(params.get("client_id")).toBe(opts.clientId);
+            expect(params.get("client_secret")).toBe(opts.clientSecret);
+            expect(params.get("audience")).toBe(opts.audience);
         });
     });
 
     describe("TC-2.2 — Token Acquired (Client-Assertion)", () => {
         it("should get an access token with client-assertion credentials", async () => {
             const optsAssertion = {
-                domain: "test-domain.auth0.com",
+                domain: DOMAIN,
                 clientId: "test-client-id",
                 clientAssertionSigningKey: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...",
                 clientAssertionSigningAlg: "RS256" as const,
-                audience: "https://test-domain.auth0.com/api/v2/",
+                audience: AUDIENCE,
             };
 
-            mockGetTokenByClientCredentials.mockResolvedValue({
-                accessToken: "mock-assertion-token",
-                expiresAt: Math.floor(Date.now() / 1000) + 3600,
-                tokenType: "Bearer",
-            });
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "mock-assertion-token", expires_in: 3600 }));
 
             const tp = new TokenProvider(optsAssertion);
             const token = await tp.getAccessToken();
 
             expect(token).toBe("mock-assertion-token");
-            // Verify AuthClient constructed with assertion credentials (no secret)
-            expect(MockAuthClient).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    domain: optsAssertion.domain,
-                    clientId: optsAssertion.clientId,
-                    clientAssertionSigningKey: optsAssertion.clientAssertionSigningKey,
-                    clientAssertionSigningAlg: optsAssertion.clientAssertionSigningAlg,
-                }),
+            expect(mockImportPKCS8).toHaveBeenCalledWith(
+                optsAssertion.clientAssertionSigningKey,
+                optsAssertion.clientAssertionSigningAlg,
             );
-            expect(MockAuthClient).toHaveBeenCalledWith(
-                expect.not.objectContaining({
-                    clientSecret: expect.anything(),
-                }),
-            );
+            expect(MockSignJWT).toHaveBeenCalled();
+            expect(mockSign).toHaveBeenCalled();
+
+            const callBody = (fetchSpy.mock.calls[0][1] as RequestInit).body as string;
+            const params = new URLSearchParams(callBody);
+            expect(params.get("client_assertion")).toBe("mock-client-assertion-jwt");
+            expect(params.get("client_assertion_type")).toBe("urn:ietf:params:oauth:client-assertion-type:jwt-bearer");
         });
     });
 
     describe("TC-2.3 — Cache Hit", () => {
         it("should return cached token on second call within validity", async () => {
-            const expiresAt = Math.floor(Date.now() / 1000) + 3600; // +1 hour
-
-            mockGetTokenByClientCredentials.mockResolvedValue({
-                accessToken: "cached-token",
-                expiresAt,
-                tokenType: "Bearer",
-            });
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "cached-token", expires_in: 3600 }));
 
             const tp = new TokenProvider(opts);
             const token1 = await tp.getAccessToken();
@@ -124,7 +143,7 @@ describe("TokenProvider (auth0-auth-js)", () => {
 
             expect(token1).toBe("cached-token");
             expect(token2).toBe("cached-token");
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledTimes(1); // single request
+            expect(fetchSpy).toHaveBeenCalledTimes(1); // single request
         });
     });
 
@@ -134,19 +153,10 @@ describe("TokenProvider (auth0-auth-js)", () => {
             let currentTime = 1000000000000; // Fixed start time in ms
             Date.now = jest.fn(() => currentTime);
 
-            const expiresAtFirst = Math.floor(currentTime / 1000) + 3600; // +1 hour in Unix seconds
-
-            mockGetTokenByClientCredentials
-                .mockResolvedValueOnce({
-                    accessToken: "token-1",
-                    expiresAt: expiresAtFirst,
-                    tokenType: "Bearer",
-                })
-                .mockResolvedValueOnce({
-                    accessToken: "token-2",
-                    expiresAt: Math.floor((currentTime + 3600 * 1000) / 1000) + 3600, // New expiry
-                    tokenType: "Bearer",
-                });
+            // First response: expires in 3600s
+            fetchSpy
+                .mockResolvedValueOnce(makeOkResponse({ access_token: "token-1", expires_in: 3600 }))
+                .mockResolvedValueOnce(makeOkResponse({ access_token: "token-2", expires_in: 3600 }));
 
             const tp = new TokenProvider(opts);
 
@@ -155,18 +165,12 @@ describe("TokenProvider (auth0-auth-js)", () => {
             expect(token1).toBe("token-1");
 
             // Advance time to 5s before expiry (within 10s LEEWAY)
-            currentTime += (3600 - 5) * 1000; // Now: expiresAt - 5s in ms
+            // expiresAt = currentTime + 3600 * 1000; LEEWAY check: Date.now() > expiresAt - 10000
+            currentTime += (3600 - 5) * 1000;
 
-            // Second call → should refresh (within LEEWAY)
             const token2 = await tp.getAccessToken();
-
             expect(token2).toBe("token-2");
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledTimes(2); // refresh triggered
-
-            // Verify boundary: expiresAt (Unix seconds) converted to ms correctly
-            const timeAtSecondCall = currentTime / 1000; // Unix seconds
-            const leewaySeconds = 10;
-            expect(timeAtSecondCall).toBeGreaterThan(expiresAtFirst - leewaySeconds); // Within LEEWAY window
+            expect(fetchSpy).toHaveBeenCalledTimes(2);
 
             Date.now = originalDateNow;
         });
@@ -174,11 +178,7 @@ describe("TokenProvider (auth0-auth-js)", () => {
 
     describe("TC-2.5 — In-Flight Dedup", () => {
         it("should deduplicate concurrent calls to single request", async () => {
-            mockGetTokenByClientCredentials.mockResolvedValue({
-                accessToken: "shared-token",
-                expiresAt: Math.floor(Date.now() / 1000) + 3600,
-                tokenType: "Bearer",
-            });
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "shared-token", expires_in: 3600 }));
 
             const tp = new TokenProvider(opts);
 
@@ -191,41 +191,37 @@ describe("TokenProvider (auth0-auth-js)", () => {
             expect(token1).toBe("shared-token");
             expect(token2).toBe("shared-token");
             expect(token3).toBe("shared-token");
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledTimes(1); // single request for 3 concurrent calls
+            expect(fetchSpy).toHaveBeenCalledTimes(1); // single request for 3 concurrent calls
         });
     });
 
     describe("TC-2.6 — Error Path", () => {
-        it("should propagate TokenByClientCredentialsError", async () => {
-            mockGetTokenByClientCredentials.mockRejectedValue(
-                new MockTokenByClientCredentialsError("invalid_client", "Client authentication failed", 401),
-            );
+        it("should throw on non-2xx response", async () => {
+            fetchSpy.mockResolvedValue(makeErrorResponse(401, "Client authentication failed"));
 
             const tp = new TokenProvider(opts);
 
-            await expect(tp.getAccessToken()).rejects.toThrow("Client authentication failed");
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledTimes(1);
+            await expect(tp.getAccessToken()).rejects.toThrow(/token request failed \(401\)/);
+            expect(fetchSpy).toHaveBeenCalledTimes(1);
         });
     });
 
     describe("TC-2.7 — Error Not Cached", () => {
         it("should retry after failed request (no error caching)", async () => {
-            mockGetTokenByClientCredentials.mockRejectedValueOnce(new Error("Network timeout")).mockResolvedValueOnce({
-                accessToken: "retry-success-token",
-                expiresAt: Math.floor(Date.now() / 1000) + 3600,
-                tokenType: "Bearer",
-            });
+            fetchSpy
+                .mockResolvedValueOnce(makeErrorResponse(500, "Internal Server Error"))
+                .mockResolvedValueOnce(makeOkResponse({ access_token: "retry-success-token", expires_in: 3600 }));
 
             const tp = new TokenProvider(opts);
 
             // First call fails
-            await expect(tp.getAccessToken()).rejects.toThrow("Network timeout");
+            await expect(tp.getAccessToken()).rejects.toThrow(/token request failed \(500\)/);
 
             // Second call succeeds
             const token = await tp.getAccessToken();
 
             expect(token).toBe("retry-success-token");
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledTimes(2); // retry issued
+            expect(fetchSpy).toHaveBeenCalledTimes(2); // retry issued
         });
     });
 
@@ -235,19 +231,9 @@ describe("TokenProvider (auth0-auth-js)", () => {
             let currentTime = 1000000000000;
             Date.now = jest.fn(() => currentTime);
 
-            const expiresAtFirst = Math.floor(currentTime / 1000) + 86400; // +1 day
-
-            mockGetTokenByClientCredentials
-                .mockResolvedValueOnce({
-                    accessToken: "token-1",
-                    expiresAt: expiresAtFirst,
-                    tokenType: "Bearer",
-                })
-                .mockResolvedValueOnce({
-                    accessToken: "token-2",
-                    expiresAt: Math.floor((currentTime + 86400 * 1000 + 20 * 1000) / 1000) + 86400,
-                    tokenType: "Bearer",
-                });
+            fetchSpy
+                .mockResolvedValueOnce(makeOkResponse({ access_token: "token-1", expires_in: 86400 }))
+                .mockResolvedValueOnce(makeOkResponse({ access_token: "token-2", expires_in: 86400 }));
 
             const tp = new TokenProvider(opts);
             const token1 = await tp.getAccessToken();
@@ -259,50 +245,46 @@ describe("TokenProvider (auth0-auth-js)", () => {
 
             expect(token1).toBe("token-1");
             expect(token2).toBe("token-2");
-            expect(mockGetTokenByClientCredentials).toHaveBeenCalledTimes(2);
+            expect(fetchSpy).toHaveBeenCalledTimes(2);
 
             Date.now = originalDateNow;
         });
     });
 
     describe("TC-2.9 — mTLS: customFetch forwarded when fetch provided", () => {
-        it("should pass options.fetch as customFetch to AuthClient when useMTLS=true", async () => {
-            const mockFetch = jest.fn() as unknown as typeof fetch;
+        it("should call the custom fetch function when useMTLS=true and fetch is provided", async () => {
+            const mockCustomFetch = jest
+                .fn<typeof fetch>()
+                .mockResolvedValue(makeOkResponse({ access_token: "mtls-token", expires_in: 3600 }));
+
             const mtlsOpts = {
-                domain: "test-domain.auth0.com",
+                domain: DOMAIN,
                 clientId: "test-client-id",
                 clientSecret: "test-client-secret",
-                audience: "https://test-domain.auth0.com/api/v2/",
+                audience: AUDIENCE,
                 useMTLS: true,
-                fetch: mockFetch,
+                fetch: mockCustomFetch,
             };
-
-            mockGetTokenByClientCredentials.mockResolvedValue({
-                accessToken: "mtls-token",
-                expiresAt: Math.floor(Date.now() / 1000) + 3600,
-                tokenType: "Bearer",
-            });
 
             const tp = new TokenProvider(mtlsOpts as any);
             const token = await tp.getAccessToken();
 
             expect(token).toBe("mtls-token");
-            expect(MockAuthClient).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    useMtls: true,
-                    customFetch: mockFetch,
-                }),
-            );
+            // Custom fetch was called, not the global one
+            expect(mockCustomFetch).toHaveBeenCalledTimes(1);
+            expect(mockCustomFetch).toHaveBeenCalledWith(TOKEN_URL, expect.objectContaining({ method: "POST" }));
+            // Global fetch should NOT have been called
+            expect(fetchSpy).not.toHaveBeenCalled();
         });
     });
 
     describe("TC-2.10 — mTLS: throw at construction when no fetch provided", () => {
         it("should throw a descriptive error at construction time when useMTLS=true and fetch is absent", () => {
             const mtlsOptsNoFetch = {
-                domain: "test-domain.auth0.com",
+                domain: DOMAIN,
                 clientId: "test-client-id",
                 clientSecret: "test-client-secret",
-                audience: "https://test-domain.auth0.com/api/v2/",
+                audience: AUDIENCE,
                 useMTLS: true,
                 // no fetch
             };
@@ -310,8 +292,39 @@ describe("TokenProvider (auth0-auth-js)", () => {
             expect(() => new TokenProvider(mtlsOptsNoFetch as any)).toThrow(
                 "ManagementClient: useMTLS requires a custom fetch implementation.",
             );
-            // AuthClient should NOT have been constructed
-            expect(MockAuthClient).not.toHaveBeenCalled();
+            // Global fetch should NOT have been called (error thrown at construction)
+            expect(fetchSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("TC-2.11 — domain validation: throw at construction for invalid domain", () => {
+        it("should throw when domain contains a slash", () => {
+            expect(() => new TokenProvider({ ...opts, domain: "tenant.auth0.com/path" } as any)).toThrow(
+                /invalid domain/,
+            );
+        });
+
+        it("should throw when domain contains a query string", () => {
+            expect(() => new TokenProvider({ ...opts, domain: "tenant.auth0.com?foo=bar" } as any)).toThrow(
+                /invalid domain/,
+            );
+        });
+    });
+
+    describe("TC-2.12 — mTLS + clientAssertion: throw at construction (mutually exclusive)", () => {
+        it("should throw when both useMTLS and clientAssertionSigningKey are provided", () => {
+            const mockCustomFetch = jest.fn<typeof fetch>();
+            expect(
+                () =>
+                    new TokenProvider({
+                        domain: DOMAIN,
+                        clientId: "test-client-id",
+                        clientAssertionSigningKey: "-----BEGIN PRIVATE KEY-----\nfake",
+                        audience: AUDIENCE,
+                        useMTLS: true,
+                        fetch: mockCustomFetch,
+                    } as any),
+            ).toThrow(/mutually exclusive/);
         });
     });
 });
