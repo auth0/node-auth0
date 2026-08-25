@@ -46,11 +46,16 @@ export class TokenProvider {
         // Forward node-auth0's fetch option (preserved by U7)
         if (options.useMTLS) {
             authClientOptions.useMtls = true;
-            // After U7, options.fetch is accessible. Forward to customFetch.
-            // Cast required: fetch is inherited from FernClient.Options via namespace indirection
-            if ((options as any).fetch) {
-                authClientOptions.customFetch = (options as any).fetch;
+            // options.fetch is typed on BaseClientOptions (not in the Omit list).
+            // auth0-auth-js requires customFetch when useMtls=true — throw if absent.
+            const { fetch: customFetch } = options as typeof options & { fetch?: typeof fetch };
+            if (!customFetch) {
+                throw new Error(
+                    "ManagementClient: useMTLS requires a custom fetch implementation. " +
+                        "Provide a `fetch` option configured with your mTLS client certificate.",
+                );
             }
+            authClientOptions.customFetch = customFetch;
         }
 
         // Telemetry: preserve node-auth0 identity
@@ -65,14 +70,24 @@ export class TokenProvider {
                 name: options.clientInfo.name,
                 version: String(options.clientInfo.version ?? nodeAuth0Info.version),
             };
+            // NOTE: auth0-auth-js TelemetryConfig does not support env fields.
+            // The runtime fingerprint (env.node / env.cloudflare-workers) present in the
+            // original node-auth0 Auth0-Client header is intentionally omitted here.
+            // This is a known, accepted delta vs the pre-v7 token request telemetry shape.
         } else {
-            // Default: node-auth0 identity
+            // Default: advertise node-auth0 identity on the internal Management token request.
+            // This preserves pre-v7 Auth0-Client header attribution. auth0-auth-js is an
+            // implementation detail; callers and tenant analytics should see node-auth0.
             const nodeAuth0Info = generateClientInfo();
             authClientOptions.telemetry = {
                 enabled: true,
                 name: nodeAuth0Info.name, // "node-auth0"
                 version: nodeAuth0Info.version, // SDK_VERSION
             };
+            // NOTE: auth0-auth-js TelemetryConfig does not support env fields.
+            // The runtime fingerprint (env.node / env.cloudflare-workers) present in the
+            // original node-auth0 Auth0-Client header is intentionally omitted here.
+            // This is a known, accepted delta vs the pre-v7 token request telemetry shape.
         }
 
         this.authClient = new AuthClient(authClientOptions);

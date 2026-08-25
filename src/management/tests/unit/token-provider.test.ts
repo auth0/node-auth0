@@ -264,4 +264,54 @@ describe("TokenProvider (auth0-auth-js)", () => {
             Date.now = originalDateNow;
         });
     });
+
+    describe("TC-2.9 — mTLS: customFetch forwarded when fetch provided", () => {
+        it("should pass options.fetch as customFetch to AuthClient when useMTLS=true", async () => {
+            const mockFetch = jest.fn() as unknown as typeof fetch;
+            const mtlsOpts = {
+                domain: "test-domain.auth0.com",
+                clientId: "test-client-id",
+                clientSecret: "test-client-secret",
+                audience: "https://test-domain.auth0.com/api/v2/",
+                useMTLS: true,
+                fetch: mockFetch,
+            };
+
+            mockGetTokenByClientCredentials.mockResolvedValue({
+                accessToken: "mtls-token",
+                expiresAt: Math.floor(Date.now() / 1000) + 3600,
+                tokenType: "Bearer",
+            });
+
+            const tp = new TokenProvider(mtlsOpts as any);
+            const token = await tp.getAccessToken();
+
+            expect(token).toBe("mtls-token");
+            expect(MockAuthClient).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    useMtls: true,
+                    customFetch: mockFetch,
+                }),
+            );
+        });
+    });
+
+    describe("TC-2.10 — mTLS: throw at construction when no fetch provided", () => {
+        it("should throw a descriptive error at construction time when useMTLS=true and fetch is absent", () => {
+            const mtlsOptsNoFetch = {
+                domain: "test-domain.auth0.com",
+                clientId: "test-client-id",
+                clientSecret: "test-client-secret",
+                audience: "https://test-domain.auth0.com/api/v2/",
+                useMTLS: true,
+                // no fetch
+            };
+
+            expect(() => new TokenProvider(mtlsOptsNoFetch as any)).toThrow(
+                "ManagementClient: useMTLS requires a custom fetch implementation.",
+            );
+            // AuthClient should NOT have been constructed
+            expect(MockAuthClient).not.toHaveBeenCalled();
+        });
+    });
 });
