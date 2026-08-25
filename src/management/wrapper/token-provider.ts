@@ -76,10 +76,18 @@ export class TokenProvider {
             body.set("client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer");
         }
 
-        // Build Auth0-Client telemetry header
-        const headers: Record<string, string> = {
-            "Content-Type": "application/x-www-form-urlencoded",
-        };
+        // Build request headers. Start with user-supplied plain-string headers so they can be
+        // overridden by SDK-controlled values (Content-Type, Auth0-Client) set below.
+        // Supplier-function headers (Fern's Supplier<string | null | undefined> type) are skipped —
+        // they require async resolution and are not supported on the token endpoint path.
+        const userHeaders = this.options.headers ?? {};
+        const headers: Record<string, string> = {};
+        for (const [key, value] of Object.entries(userHeaders)) {
+            if (typeof value === "string") {
+                headers[key] = value;
+            }
+        }
+        headers["Content-Type"] = "application/x-www-form-urlencoded";
         const telemetryHeader = this.buildTelemetryHeader();
         if (telemetryHeader) {
             headers["Auth0-Client"] = telemetryHeader;

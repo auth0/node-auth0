@@ -327,4 +327,57 @@ describe("TokenProvider (raw fetch + jose)", () => {
             ).toThrow(/mutually exclusive/);
         });
     });
+
+    describe("TC-2.13 — custom headers forwarded to token request", () => {
+        it("should forward plain-string headers from options.headers to the token fetch", async () => {
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "header-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider({
+                ...opts,
+                headers: {
+                    "User-Agent": "my-app/1.0",
+                    "X-Custom": "value",
+                },
+            } as any);
+            await tp.getAccessToken();
+
+            const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+            expect(callHeaders["User-Agent"]).toBe("my-app/1.0");
+            expect(callHeaders["X-Custom"]).toBe("value");
+            // SDK headers still present
+            expect(callHeaders["Content-Type"]).toBe("application/x-www-form-urlencoded");
+        });
+
+        it("should silently skip supplier-function headers", async () => {
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "header-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider({
+                ...opts,
+                headers: {
+                    "User-Agent": "my-app/1.0",
+                    "X-Supplier": () => "dynamic-value",
+                },
+            } as any);
+            await tp.getAccessToken();
+
+            const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+            expect(callHeaders["User-Agent"]).toBe("my-app/1.0");
+            expect(callHeaders["X-Supplier"]).toBeUndefined();
+        });
+
+        it("SDK-controlled headers should override user-supplied headers with same name", async () => {
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "header-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider({
+                ...opts,
+                headers: {
+                    "Content-Type": "text/plain", // should be overridden
+                },
+            } as any);
+            await tp.getAccessToken();
+
+            const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+            expect(callHeaders["Content-Type"]).toBe("application/x-www-form-urlencoded");
+        });
+    });
 });
