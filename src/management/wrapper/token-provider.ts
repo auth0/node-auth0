@@ -85,7 +85,10 @@ export class TokenProvider {
             headers["Auth0-Client"] = telemetryHeader;
         }
 
-        // Use custom fetch for mTLS, else global fetch
+        // Use custom fetch for mTLS, else global fetch.
+        // `fetch` is defined on BaseClientOptions (src/management/BaseClient.ts) which is Fern-generated.
+        // If that file is regenerated, verify `fetch?: typeof fetch` is still present — token acquisition
+        // for mTLS depends on it being forwarded here.
         const { fetch: customFetch } = this.options as typeof this.options & { fetch?: typeof fetch };
         const fetcher = customFetch ?? fetch;
 
