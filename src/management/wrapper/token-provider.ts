@@ -1,53 +1,32 @@
-import { AuthClient, type AuthClientOptions, TokenResponse } from "@auth0/auth0-auth-js";
+import { base64url, importPKCS8, SignJWT } from "jose";
 import type { ManagementClient } from "./ManagementClient.js";
 import { generateClientInfo } from "../../utils.js";
 
 const LEEWAY = 10 * 1000; // 10s refresh-ahead in ms
 
-/**
- * TokenProvider handles Management API token acquisition by delegating to @auth0/auth0-auth-js.
- * It performs client credentials grant and caches the token until shortly before expiry.
- *
- * CRITICAL: @auth0/auth0-auth-js returns expiresAt as an absolute Unix timestamp in seconds.
- * This class converts it to milliseconds for comparison with Date.now().
- */
+interface TokenResult {
+    accessToken: string;
+    expiresAt: number; // absolute ms (Date.now() scale)
+}
+
 export class TokenProvider {
-    private authClient: AuthClient;
-    private expiresAt = 0; // Absolute timestamp in ms (Date.now() scale)
+    private expiresAt = 0;
     private accessToken = "";
-    private pending: Promise<TokenResponse> | undefined;
+    private pending: Promise<TokenResult> | undefined;
 
     constructor(options: ManagementClient.ManagementClientOptionsWithClientSecret & { audience: string });
     constructor(options: ManagementClient.ManagementClientOptionsWithClientAssertion & { audience: string });
     constructor(
         private readonly options: ManagementClient.ManagementClientOptionsWithClientCredentials & { audience: string },
     ) {
-        // Map node-auth0 options → AuthClient options
-        const authClientOptions: AuthClientOptions = {
-            domain: options.domain,
-            clientId: options.clientId,
-        };
-
-        // Client-secret branch
-        if ("clientSecret" in options) {
-            authClientOptions.clientSecret = options.clientSecret;
+        // Validate domain: must be a bare hostname, no slashes or query strings.
+        if (/[/?#]/.test(options.domain)) {
+            throw new Error(
+                `ManagementClient: invalid domain "${options.domain}". Provide a bare hostname, e.g. "tenant.auth0.com".`,
+            );
         }
 
-        // Client-assertion branch
-        if ("clientAssertionSigningKey" in options) {
-            authClientOptions.clientAssertionSigningKey = options.clientAssertionSigningKey;
-            if (options.clientAssertionSigningAlg) {
-                authClientOptions.clientAssertionSigningAlg = options.clientAssertionSigningAlg;
-            }
-        }
-
-        // mTLS: useMTLS (node-auth0) → useMtls (auth0-auth-js casing)
-        // auth0-auth-js requires customFetch when useMtls=true
-        // Forward node-auth0's fetch option (preserved by U7)
         if (options.useMTLS) {
-            authClientOptions.useMtls = true;
-            // options.fetch is typed on BaseClientOptions (not in the Omit list).
-            // auth0-auth-js requires customFetch when useMtls=true — throw if absent.
             const { fetch: customFetch } = options as typeof options & { fetch?: typeof fetch };
             if (!customFetch) {
                 throw new Error(
@@ -55,64 +34,117 @@ export class TokenProvider {
                         "Provide a `fetch` option configured with your mTLS client certificate.",
                 );
             }
-            authClientOptions.customFetch = customFetch;
+            // mTLS uses TLS client certificate as the auth method (tls_client_auth).
+            // Combining useMTLS with clientAssertionSigningKey is a misconfiguration —
+            // the two auth methods are mutually exclusive on Auth0's token endpoint.
+            if ("clientAssertionSigningKey" in options) {
+                throw new Error(
+                    "ManagementClient: useMTLS and clientAssertionSigningKey are mutually exclusive. " +
+                        "Use one client authentication method.",
+                );
+            }
         }
-
-        // Telemetry: preserve node-auth0 identity
-        if (options.telemetry === false) {
-            authClientOptions.telemetry = { enabled: false };
-        } else if (options.clientInfo) {
-            // Forward custom clientInfo to auth0-auth-js
-            // Note: clientInfo.version may be unknown-typed, coerce to string
-            const nodeAuth0Info = generateClientInfo();
-            authClientOptions.telemetry = {
-                enabled: true,
-                name: options.clientInfo.name,
-                version: String(options.clientInfo.version ?? nodeAuth0Info.version),
-            };
-            // NOTE: auth0-auth-js TelemetryConfig does not support env fields.
-            // The runtime fingerprint (env.node / env.cloudflare-workers) present in the
-            // original node-auth0 Auth0-Client header is intentionally omitted here.
-            // This is a known, accepted delta vs the pre-v7 token request telemetry shape.
-        } else {
-            // Default: advertise node-auth0 identity on the internal Management token request.
-            // This preserves pre-v7 Auth0-Client header attribution. auth0-auth-js is an
-            // implementation detail; callers and tenant analytics should see node-auth0.
-            const nodeAuth0Info = generateClientInfo();
-            authClientOptions.telemetry = {
-                enabled: true,
-                name: nodeAuth0Info.name, // "node-auth0"
-                version: nodeAuth0Info.version, // SDK_VERSION
-            };
-            // NOTE: auth0-auth-js TelemetryConfig does not support env fields.
-            // The runtime fingerprint (env.node / env.cloudflare-workers) present in the
-            // original node-auth0 Auth0-Client header is intentionally omitted here.
-            // This is a known, accepted delta vs the pre-v7 token request telemetry shape.
-        }
-
-        this.authClient = new AuthClient(authClientOptions);
     }
 
     public async getAccessToken(): Promise<string> {
-        // Cache logic preserved: refresh within LEEWAY of expiry
         if (!this.accessToken || Date.now() > this.expiresAt - LEEWAY) {
-            // In-flight dedup: share pending promise across concurrent calls
-            this.pending =
-                this.pending ||
-                this.authClient.getTokenByClientCredentials({
-                    audience: this.options.audience,
-                });
-
-            const tokenResponse = await this.pending.finally(() => {
+            this.pending = this.pending || this.fetchToken();
+            const result = await this.pending.finally(() => {
                 delete this.pending;
             });
+            this.expiresAt = result.expiresAt;
+            this.accessToken = result.accessToken;
+        }
+        return this.accessToken;
+    }
 
-            // CRITICAL: auth0-auth-js returns expiresAt in ABSOLUTE Unix seconds, NOT relative expires_in
-            // expiresAt is absolute Unix timestamp in seconds - convert to milliseconds for Date.now() comparison
-            this.expiresAt = tokenResponse.expiresAt * 1000;
-            this.accessToken = tokenResponse.accessToken;
+    private async fetchToken(): Promise<TokenResult> {
+        const { domain, clientId, audience } = this.options;
+        const tokenUrl = `https://${domain}/oauth/token`;
+
+        const body = new URLSearchParams({
+            grant_type: "client_credentials",
+            client_id: clientId,
+            audience,
+        });
+
+        if ("clientSecret" in this.options) {
+            body.set("client_secret", this.options.clientSecret);
+        } else if ("clientAssertionSigningKey" in this.options) {
+            const assertion = await this.buildClientAssertion(domain, clientId);
+            body.set("client_assertion", assertion);
+            body.set("client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer");
         }
 
-        return this.accessToken;
+        // Build Auth0-Client telemetry header
+        const headers: Record<string, string> = {
+            "Content-Type": "application/x-www-form-urlencoded",
+        };
+        const telemetryHeader = this.buildTelemetryHeader();
+        if (telemetryHeader) {
+            headers["Auth0-Client"] = telemetryHeader;
+        }
+
+        // Use custom fetch for mTLS, else global fetch
+        const { fetch: customFetch } = this.options as typeof this.options & { fetch?: typeof fetch };
+        const fetcher = customFetch ?? fetch;
+
+        const response = await fetcher(tokenUrl, {
+            method: "POST",
+            headers,
+            body: body.toString(),
+        });
+
+        if (!response.ok) {
+            const text = await response.text().catch(() => response.statusText);
+            throw new Error(`ManagementClient: token request failed (${response.status}): ${text}`);
+        }
+
+        const json = (await response.json()) as { access_token: string; expires_in: number };
+        return {
+            accessToken: json.access_token,
+            expiresAt: Date.now() + json.expires_in * 1000,
+        };
+    }
+
+    private async buildClientAssertion(domain: string, clientId: string): Promise<string> {
+        const { clientAssertionSigningKey, clientAssertionSigningAlg = "RS256" } = this
+            .options as ManagementClient.ManagementClientOptionsWithClientAssertion & { audience: string };
+
+        const key =
+            typeof clientAssertionSigningKey === "string"
+                ? await importPKCS8(clientAssertionSigningKey, clientAssertionSigningAlg)
+                : clientAssertionSigningKey;
+
+        const now = Math.floor(Date.now() / 1000);
+        return new SignJWT({})
+            .setProtectedHeader({ alg: clientAssertionSigningAlg })
+            .setIssuedAt(now)
+            .setIssuer(clientId)
+            .setSubject(clientId)
+            .setAudience(`https://${domain}/`)
+            .setExpirationTime(now + 180) // 3 min lifetime
+            .setJti(crypto.randomUUID())
+            .sign(key);
+    }
+
+    private buildTelemetryHeader(): string | null {
+        const opts = this.options as typeof this.options & {
+            telemetry?: boolean;
+            clientInfo?: { name: string; version?: unknown };
+        };
+        if (opts.telemetry === false) return null;
+
+        const nodeAuth0Info = generateClientInfo();
+        const info = opts.clientInfo
+            ? { name: opts.clientInfo.name, version: String(opts.clientInfo.version ?? nodeAuth0Info.version) }
+            : { name: nodeAuth0Info.name, version: nodeAuth0Info.version };
+
+        // NOTE: auth0-auth-js TelemetryConfig does not support env fields.
+        // The runtime fingerprint (env.node / env.cloudflare-workers) present in the
+        // original node-auth0 Auth0-Client header is intentionally omitted here.
+        // This is a known, accepted delta vs the pre-v7 token request telemetry shape.
+        // Use jose's base64url encoder for runtime portability (Buffer is Node-only).
+        return base64url.encode(new TextEncoder().encode(JSON.stringify(info)));
     }
 }

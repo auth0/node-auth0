@@ -1710,7 +1710,6 @@
         "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
     },
     "dependencies": {
-        "@auth0/auth0-auth-js": "^1.12.1",
         "jose": "^5.0.0",
         "auth0-legacy": "npm:auth0@^4.37.1"
     },
