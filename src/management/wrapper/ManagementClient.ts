@@ -123,8 +123,6 @@ export declare namespace ManagementClient {
         clientAssertionSigningKey: string;
         /** Algorithm for signing the client assertion. Defaults to RS256 */
         clientAssertionSigningAlg?: string;
-        /** Enable mTLS for token endpoint calls */
-        useMTLS?: boolean;
     }
 
     /**
