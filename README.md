@@ -173,21 +173,19 @@ types from the root `auth0` entry adds nothing to your bundle and does not pull 
 
 #### User Profile Information
 
-As of v7, node-auth0 no longer ships `UserInfoClient`. To retrieve user profile information, call the `/userinfo` endpoint directly with the access token, or read the ID token claims from `TokenResponse.claims` when using `@auth0/auth0-auth-js` for authentication.
+As of v7, node-auth0 no longer ships `UserInfoClient`. Use `authClient.getUserInfo` from `@auth0/auth0-auth-js` instead.
 
 ```js
-// Option 1: read claims from the token response (requires openid scope)
-const tokenResponse = await authClient.getTokenByCode(redirectUrl);
-const claims = tokenResponse.claims; // IDTokenClaims | undefined
+import { AuthClient } from "@auth0/auth0-auth-js";
 
-// Option 2: call /userinfo directly
-const response = await fetch(`https://${domain}/userinfo`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-});
-const userProfile = await response.json();
+const auth = new AuthClient({ domain: "...", clientId: "..." });
+
+// Requires a default OIDC token (openid scope, no explicit audience).
+// If your app uses MRRT, request https://{domain}/userinfo as the audience.
+const profile = await auth.getUserInfo({ accessToken });
 ```
 
-Note: `/userinfo` requires a default OIDC token (`openid` scope, no explicit `audience`). Tokens issued with a custom audience (Management API, etc.) are not accepted by this endpoint.
+Note: tokens issued with a custom `audience` (e.g. the Management API) are rejected by `/userinfo`. Use a token obtained without an explicit audience, or request `https://{domain}/userinfo` as the audience when using MRRT.
 
 ## Legacy Usage
 
@@ -374,20 +372,20 @@ import { AuthClient } from "@auth0/auth0-auth-js";
 
 ### Method mapping
 
-| v6 (node-auth0)                                         | v7 (@auth0/auth0-auth-js)                                                                                                                               |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `authenticationClient.authorizationCodeGrant(...)`      | `authClient.getTokenByCode(...)`                                                                                                                        |
-| `authenticationClient.clientCredentialsGrant(...)`      | `authClient.getTokenByClientCredentials(...)`                                                                                                           |
-| `authenticationClient.refreshTokenGrant(...)`           | `authClient.getTokenByRefreshToken(...)`                                                                                                                |
-| `authenticationClient.passwordGrant(...)`               | `authClient.getTokenByPassword(...)`                                                                                                                    |
-| `authenticationClient.revokeRefreshToken(...)`          | `authClient.revokeToken(...)`                                                                                                                           |
-| `authenticationClient.database.signUp(...)`             | `authClient.database.signUp(...)`                                                                                                                       |
-| `authenticationClient.database.changePassword(...)`     | `authClient.database.changePassword(...)`                                                                                                               |
-| `authenticationClient.passwordless.sendEmail(...)`      | `authClient.passwordless.sendEmail(...)`                                                                                                                |
-| `authenticationClient.passwordless.sendSMS(...)`        | `authClient.passwordless.sendSms(...)`                                                                                                                  |
-| `authenticationClient.passwordless.loginWithEmail(...)` | `authClient.passwordless.challengeWithEmail(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })`               |
-| `authenticationClient.passwordless.loginWithSMS(...)`   | `authClient.passwordless.challengeWithPhoneNumber(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })`         |
-| `userInfoClient.getUserInfo(accessToken)`               | Not available — `@auth0/auth0-auth-js` does not expose a `/userinfo` method; call the endpoint directly or use token claims from `TokenResponse.claims` |
+| v6 (node-auth0)                                         | v7 (@auth0/auth0-auth-js)                                                                                                                       |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `authenticationClient.authorizationCodeGrant(...)`      | `authClient.getTokenByCode(...)`                                                                                                                |
+| `authenticationClient.clientCredentialsGrant(...)`      | `authClient.getTokenByClientCredentials(...)`                                                                                                   |
+| `authenticationClient.refreshTokenGrant(...)`           | `authClient.getTokenByRefreshToken(...)`                                                                                                        |
+| `authenticationClient.passwordGrant(...)`               | `authClient.getTokenByPassword(...)`                                                                                                            |
+| `authenticationClient.revokeRefreshToken(...)`          | `authClient.revokeToken(...)`                                                                                                                   |
+| `authenticationClient.database.signUp(...)`             | `authClient.database.signUp(...)`                                                                                                               |
+| `authenticationClient.database.changePassword(...)`     | `authClient.database.changePassword(...)`                                                                                                       |
+| `authenticationClient.passwordless.sendEmail(...)`      | `authClient.passwordless.sendEmail(...)`                                                                                                        |
+| `authenticationClient.passwordless.sendSMS(...)`        | `authClient.passwordless.sendSms(...)`                                                                                                          |
+| `authenticationClient.passwordless.loginWithEmail(...)` | `authClient.passwordless.challengeWithEmail(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })`       |
+| `authenticationClient.passwordless.loginWithSMS(...)`   | `authClient.passwordless.challengeWithPhoneNumber(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })` |
+| `userInfoClient.getUserInfo(accessToken)`               | `authClient.getUserInfo({ accessToken })` (see note on audience above)                                                                          |
 
 ### Error handling
 
