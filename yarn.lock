@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@auth0/auth0-auth-js@^1.12.1":
-  version "1.12.1"
-  resolved "https://a0us.jfrog.io/artifactory/api/npm/npm/@auth0/auth0-auth-js/-/auth0-auth-js-1.12.1.tgz#cb0e644c31dfdfe1e6707ae9d59a33dbe4a5c4f2"
-  integrity sha512-YgYOAGmfwO40YOYkYSW7XvE6b+qkdlXdpzBshvOjCioygesUxIw2qRerilW1/8XQV41mnFvQIPnsTdEOHN9BeA==
-  dependencies:
-    jose "^6.0.8"
-    openid-client "^6.8.0"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.29.7":
   version "7.29.7"
