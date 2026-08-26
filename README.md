@@ -36,7 +36,7 @@ npm install auth0
 
 #### Authentication
 
-For authentication operations (OAuth flows, token management, user sign-up), use [`@auth0/auth0-auth-js`](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js). As of v7, node-auth0 no longer ships `AuthenticationClient` in its main entrypoint. The authentication layer has been separated into a dedicated package.
+For authentication operations (OAuth flows, token management, user sign-up), use [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js). As of v7, node-auth0 no longer ships `AuthenticationClient` in its main entrypoint. The authentication layer has been separated into a dedicated package.
 
 ```js
 import { AuthClient } from "@auth0/auth0-auth-js";
@@ -48,7 +48,7 @@ const auth = new AuthClient({
 });
 ```
 
-See the [auth0-auth-js documentation](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js) for full API reference.
+See the [auth0-auth-js documentation](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) for full API reference.
 
 #### Management API Client
 
@@ -173,21 +173,21 @@ types from the root `auth0` entry adds nothing to your bundle and does not pull 
 
 #### User Profile Information
 
-To retrieve user profile information, use the `getUserInfo` method from `@auth0/auth0-auth-js`:
+As of v7, node-auth0 no longer ships `UserInfoClient`. To retrieve user profile information, call the `/userinfo` endpoint directly with the access token, or read the ID token claims from `TokenResponse.claims` when using `@auth0/auth0-auth-js` for authentication.
 
 ```js
-import { AuthClient } from "@auth0/auth0-auth-js";
+// Option 1: read claims from the token response (requires openid scope)
+const tokenResponse = await authClient.getTokenByCode(redirectUrl);
+const claims = tokenResponse.claims; // IDTokenClaims | undefined
 
-const auth = new AuthClient({
-    domain: "{YOUR_TENANT_AND REGION}.auth0.com",
-    clientId: "{YOUR_CLIENT_ID}",
+// Option 2: call /userinfo directly
+const response = await fetch(`https://${domain}/userinfo`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
 });
-
-// Get user info with an access token
-const userProfile = await auth.getUserInfo(accessToken);
+const userProfile = await response.json();
 ```
 
-As of v7, node-auth0 no longer ships `UserInfoClient`. Use `AuthClient.getUserInfo()` from `@auth0/auth0-auth-js` instead.
+Note: `/userinfo` requires a default OIDC token (`openid` scope, no explicit `audience`). Tokens issued with a custom audience (Management API, etc.) are not accepted by this endpoint.
 
 ## Legacy Usage
 
@@ -354,7 +354,7 @@ try {
 
 ## Migrating from v6 to v7
 
-Version 7.0.0 removes authentication clients from the main entrypoint. The authentication layer has been separated into [`@auth0/auth0-auth-js`](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js).
+Version 7.0.0 removes authentication clients from the main entrypoint. The authentication layer has been separated into [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js).
 
 ### Install the authentication package
 
@@ -374,42 +374,73 @@ import { AuthClient } from "@auth0/auth0-auth-js";
 
 ### Method mapping
 
-| v6 (node-auth0)                                     | v7 (@auth0/auth0-auth-js)                     |
-| --------------------------------------------------- | --------------------------------------------- |
-| `authenticationClient.authorizationCodeGrant(...)`  | `authClient.getTokenByCode(...)`              |
-| `authenticationClient.clientCredentialsGrant(...)`  | `authClient.getTokenByClientCredentials(...)` |
-| `authenticationClient.refreshTokenGrant(...)`       | `authClient.getTokenByRefreshToken(...)`      |
-| `authenticationClient.passwordGrant(...)`           | `authClient.getTokenByPassword(...)`          |
-| `authenticationClient.revokeRefreshToken(...)`      | `authClient.revokeToken(...)`                 |
-| `authenticationClient.database.signUp(...)`         | `authClient.signUp(...)`                      |
-| `authenticationClient.database.changePassword(...)` | `authClient.changePassword(...)`              |
-| `authenticationClient.passwordless.*`               | `authClient.passwordless.*` (sub-client)      |
-| `userInfoClient.getUserInfo(accessToken)`           | `authClient.getUserInfo(accessToken)`         |
+| v6 (node-auth0)                                         | v7 (@auth0/auth0-auth-js)                                                                                                                               |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `authenticationClient.authorizationCodeGrant(...)`      | `authClient.getTokenByCode(...)`                                                                                                                        |
+| `authenticationClient.clientCredentialsGrant(...)`      | `authClient.getTokenByClientCredentials(...)`                                                                                                           |
+| `authenticationClient.refreshTokenGrant(...)`           | `authClient.getTokenByRefreshToken(...)`                                                                                                                |
+| `authenticationClient.passwordGrant(...)`               | `authClient.getTokenByPassword(...)`                                                                                                                    |
+| `authenticationClient.revokeRefreshToken(...)`          | `authClient.revokeToken(...)`                                                                                                                           |
+| `authenticationClient.database.signUp(...)`             | `authClient.database.signUp(...)`                                                                                                                       |
+| `authenticationClient.database.changePassword(...)`     | `authClient.database.changePassword(...)`                                                                                                               |
+| `authenticationClient.passwordless.sendEmail(...)`      | `authClient.passwordless.sendEmail(...)`                                                                                                                |
+| `authenticationClient.passwordless.sendSMS(...)`        | `authClient.passwordless.sendSms(...)`                                                                                                                  |
+| `authenticationClient.passwordless.loginWithEmail(...)` | `authClient.passwordless.challengeWithEmail(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })`               |
+| `authenticationClient.passwordless.loginWithSMS(...)`   | `authClient.passwordless.challengeWithPhoneNumber(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })`         |
+| `userInfoClient.getUserInfo(accessToken)`               | Not available — `@auth0/auth0-auth-js` does not expose a `/userinfo` method; call the endpoint directly or use token claims from `TokenResponse.claims` |
 
-### mTLS configuration
+### Error handling
 
-If you use mTLS, you must now provide an explicit `customFetch` option:
+`AuthApiError` has been removed. Token acquisition and all Management API calls now throw `ManagementError`.
 
-```js
-import { AuthClient } from "@auth0/auth0-auth-js";
-import https from "https";
-import fetch from "node-fetch";
+**Before (v6):**
 
-const agent = new https.Agent({
-    cert: fs.readFileSync("client-cert.pem"),
-    key: fs.readFileSync("client-key.pem"),
-});
+```typescript
+import { AuthApiError } from "@auth0/node-auth0";
 
-const auth = new AuthClient({
-    domain: "your-tenant.auth0.com",
-    clientId: "YOUR_CLIENT_ID",
-    clientSecret: "YOUR_CLIENT_SECRET",
-    useMtls: true,
-    customFetch: (url, init) => fetch(url, { ...init, agent }),
+try {
+    await client.oauth.clientCredentialsGrant(params);
+} catch (e) {
+    if (e instanceof AuthApiError && e.error === "invalid_client") {
+        // handle
+    }
+}
+```
+
+**After (v7):**
+
+```typescript
+import { ManagementError } from "@auth0/node-auth0";
+
+try {
+    await managementClient.someMethod(params);
+} catch (e) {
+    if (e instanceof ManagementError && e.statusCode === 401) {
+        const body = e.body as { error?: string };
+        if (body.error === "invalid_client") {
+            // handle
+        }
+    }
+}
+```
+
+### mTLS (ManagementClient)
+
+`useMTLS: true` now requires an explicit `fetch` option pre-configured with your mTLS client certificate. The token endpoint uses `mtls.{domain}` automatically when `useMTLS` is set.
+
+```typescript
+const client = new ManagementClient({
+    domain: "tenant.auth0.com",
+    clientId: "...",
+    clientSecret: "...",
+    useMTLS: true,
+    fetch: createMtlsFetch({ cert, key }), // your mTLS-capable fetch
 });
 ```
 
-See the [auth0-auth-js documentation](https://github.com/auth0/node-auth0/tree/main/packages/auth0-auth-js) for complete API details.
+`useMTLS` is not supported with `clientAssertionSigningKey` — these authentication methods are mutually exclusive and throw at construction.
+
+See the [auth0-auth-js documentation](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) for complete API details.
 
 ## Request and Response Types
 
