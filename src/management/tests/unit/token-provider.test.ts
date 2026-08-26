@@ -28,6 +28,7 @@ jest.mock("jose", () => ({
 
 // NOW import TokenProvider (after mock setup)
 import { TokenProvider } from "../../wrapper/token-provider.js";
+import { ManagementError } from "../../errors/ManagementError.js";
 
 const DOMAIN = "test-domain.auth0.com";
 const TOKEN_URL = `https://${DOMAIN}/oauth/token`;
@@ -44,15 +45,14 @@ function makeOkResponse(body: { access_token: string; expires_in: number }) {
     } as unknown as Response;
 }
 
-function makeErrorResponse(status: number, text: string) {
+function makeErrorResponse(status: number, errorCode: string, description: string) {
+    const body = JSON.stringify({ error: errorCode, error_description: description });
     return {
         ok: false,
         status,
-        statusText: text,
-        json: async () => {
-            throw new Error("not json");
-        },
-        text: async () => text,
+        statusText: description,
+        json: async () => JSON.parse(body),
+        text: async () => body,
     } as unknown as Response;
 }
 
@@ -196,12 +196,14 @@ describe("TokenProvider (raw fetch + jose)", () => {
     });
 
     describe("TC-2.6 — Error Path", () => {
-        it("should throw on non-2xx response", async () => {
-            fetchSpy.mockResolvedValue(makeErrorResponse(401, "Client authentication failed"));
+        it("should throw ManagementError on non-2xx response", async () => {
+            fetchSpy.mockResolvedValue(makeErrorResponse(401, "invalid_client", "Client authentication failed"));
 
             const tp = new TokenProvider(opts);
 
-            await expect(tp.getAccessToken()).rejects.toThrow(/token request failed \(401\)/);
+            const err = await tp.getAccessToken().catch((e) => e);
+            expect(err).toBeInstanceOf(ManagementError);
+            expect(err.statusCode).toBe(401);
             expect(fetchSpy).toHaveBeenCalledTimes(1);
         });
     });
@@ -209,13 +211,15 @@ describe("TokenProvider (raw fetch + jose)", () => {
     describe("TC-2.7 — Error Not Cached", () => {
         it("should retry after failed request (no error caching)", async () => {
             fetchSpy
-                .mockResolvedValueOnce(makeErrorResponse(500, "Internal Server Error"))
+                .mockResolvedValueOnce(makeErrorResponse(500, "server_error", "Internal Server Error"))
                 .mockResolvedValueOnce(makeOkResponse({ access_token: "retry-success-token", expires_in: 3600 }));
 
             const tp = new TokenProvider(opts);
 
             // First call fails
-            await expect(tp.getAccessToken()).rejects.toThrow(/token request failed \(500\)/);
+            const err = await tp.getAccessToken().catch((e) => e);
+            expect(err).toBeInstanceOf(ManagementError);
+            expect(err.statusCode).toBe(500);
 
             // Second call succeeds
             const token = await tp.getAccessToken();
@@ -272,7 +276,10 @@ describe("TokenProvider (raw fetch + jose)", () => {
             expect(token).toBe("mtls-token");
             // Custom fetch was called, not the global one
             expect(mockCustomFetch).toHaveBeenCalledTimes(1);
-            expect(mockCustomFetch).toHaveBeenCalledWith(TOKEN_URL, expect.objectContaining({ method: "POST" }));
+            expect(mockCustomFetch).toHaveBeenCalledWith(
+                `https://mtls.${DOMAIN}/oauth/token`,
+                expect.objectContaining({ method: "POST" }),
+            );
             // Global fetch should NOT have been called
             expect(fetchSpy).not.toHaveBeenCalled();
         });
@@ -342,10 +349,10 @@ describe("TokenProvider (raw fetch + jose)", () => {
             await tp.getAccessToken();
 
             const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
-            expect(callHeaders["User-Agent"]).toBe("my-app/1.0");
-            expect(callHeaders["X-Custom"]).toBe("value");
+            expect(callHeaders["user-agent"]).toBe("my-app/1.0");
+            expect(callHeaders["x-custom"]).toBe("value");
             // SDK headers still present
-            expect(callHeaders["Content-Type"]).toBe("application/x-www-form-urlencoded");
+            expect(callHeaders["content-type"]).toBe("application/x-www-form-urlencoded");
         });
 
         it("should silently skip supplier-function headers", async () => {
@@ -361,8 +368,8 @@ describe("TokenProvider (raw fetch + jose)", () => {
             await tp.getAccessToken();
 
             const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
-            expect(callHeaders["User-Agent"]).toBe("my-app/1.0");
-            expect(callHeaders["X-Supplier"]).toBeUndefined();
+            expect(callHeaders["user-agent"]).toBe("my-app/1.0");
+            expect(callHeaders["x-supplier"]).toBeUndefined();
         });
 
         it("SDK-controlled headers should override user-supplied headers with same name", async () => {
@@ -377,7 +384,53 @@ describe("TokenProvider (raw fetch + jose)", () => {
             await tp.getAccessToken();
 
             const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
-            expect(callHeaders["Content-Type"]).toBe("application/x-www-form-urlencoded");
+            expect(callHeaders["content-type"]).toBe("application/x-www-form-urlencoded");
+        });
+    });
+
+    describe("TC-2.14 — header case normalization: lowercase user key overridden by SDK", () => {
+        it("should normalize lowercase user header key and let SDK value win", async () => {
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "norm-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider({
+                ...opts,
+                headers: { "content-type": "text/plain" }, // lowercase, SDK must win
+            } as any);
+            await tp.getAccessToken();
+
+            const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+            const ctKeys = Object.keys(callHeaders).filter((k) => k.toLowerCase() === "content-type");
+            expect(ctKeys).toHaveLength(1);
+            expect(callHeaders[ctKeys[0]]).toBe("application/x-www-form-urlencoded");
+        });
+    });
+
+    describe("TC-2.15 — typed error carries statusCode and OAuth error body", () => {
+        it("should throw ManagementError with statusCode and body.error on 401", async () => {
+            fetchSpy.mockResolvedValue(makeErrorResponse(401, "invalid_client", "Client authentication failed."));
+
+            const tp = new TokenProvider(opts);
+            const err = await tp.getAccessToken().catch((e) => e);
+
+            expect(err).toBeInstanceOf(ManagementError);
+            expect(err.statusCode).toBe(401);
+            expect((err.body as { error: string }).error).toBe("invalid_client");
+            expect((err.body as { error_description: string }).error_description).toBe("Client authentication failed.");
+        });
+    });
+
+    describe("TC-2.16 — token request timeout throws ManagementError", () => {
+        it("should throw ManagementError with statusCode 408 on AbortSignal timeout", async () => {
+            const abortError = Object.assign(new Error("The operation was aborted."), {
+                name: "TimeoutError",
+            });
+            fetchSpy.mockRejectedValue(abortError);
+
+            const tp = new TokenProvider(opts);
+            const err = await tp.getAccessToken().catch((e) => e);
+
+            expect(err).toBeInstanceOf(ManagementError);
+            expect(err.statusCode).toBe(408);
         });
     });
 });
