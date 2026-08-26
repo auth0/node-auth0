@@ -1,6 +1,7 @@
 import { base64url, importPKCS8, SignJWT } from "jose";
 import type { ManagementClient } from "./ManagementClient.js";
 import { generateClientInfo } from "../../utils.js";
+import { ManagementError } from "../errors/ManagementError.js";
 
 const LEEWAY = 10 * 1000; // 10s refresh-ahead in ms
 
@@ -26,7 +27,7 @@ export class TokenProvider {
             );
         }
 
-        if (options.useMTLS) {
+        if ((options as ManagementClient.ManagementClientOptionsWithClientSecret).useMTLS) {
             const { fetch: customFetch } = options as typeof options & { fetch?: typeof fetch };
             if (!customFetch) {
                 throw new Error(
@@ -60,7 +61,9 @@ export class TokenProvider {
 
     private async fetchToken(): Promise<TokenResult> {
         const { domain, clientId, audience } = this.options;
-        const tokenUrl = `https://${domain}/oauth/token`;
+        const tokenUrl = (this.options as ManagementClient.ManagementClientOptionsWithClientSecret).useMTLS
+            ? `https://mtls.${domain}/oauth/token`
+            : `https://${domain}/oauth/token`;
 
         const body = new URLSearchParams({
             grant_type: "client_credentials",
@@ -84,13 +87,13 @@ export class TokenProvider {
         const headers: Record<string, string> = {};
         for (const [key, value] of Object.entries(userHeaders)) {
             if (typeof value === "string") {
-                headers[key] = value;
+                headers[key.toLowerCase()] = value;
             }
         }
-        headers["Content-Type"] = "application/x-www-form-urlencoded";
+        headers["content-type"] = "application/x-www-form-urlencoded";
         const telemetryHeader = this.buildTelemetryHeader();
         if (telemetryHeader) {
-            headers["Auth0-Client"] = telemetryHeader;
+            headers["auth0-client"] = telemetryHeader;
         }
 
         // Use custom fetch for mTLS, else global fetch.
@@ -100,15 +103,32 @@ export class TokenProvider {
         const { fetch: customFetch } = this.options as typeof this.options & { fetch?: typeof fetch };
         const fetcher = customFetch ?? fetch;
 
-        const response = await fetcher(tokenUrl, {
-            method: "POST",
-            headers,
-            body: body.toString(),
-        });
+        let response: Response;
+        try {
+            response = await fetcher(tokenUrl, {
+                method: "POST",
+                headers,
+                body: body.toString(),
+                signal: AbortSignal.timeout(10_000),
+            });
+        } catch (err: unknown) {
+            if (err instanceof Error && err.name === "TimeoutError") {
+                throw new ManagementError({
+                    message: "ManagementClient: token request timed out",
+                    statusCode: 408,
+                });
+            }
+            throw err;
+        }
 
         if (!response.ok) {
-            const text = await response.text().catch(() => response.statusText);
-            throw new Error(`ManagementClient: token request failed (${response.status}): ${text}`);
+            let errorBody: unknown;
+            try {
+                errorBody = await response.json();
+            } catch {
+                errorBody = await response.text().catch(() => response.statusText);
+            }
+            throw new ManagementError({ statusCode: response.status, body: errorBody });
         }
 
         const json = (await response.json()) as { access_token: string; expires_in: number };
