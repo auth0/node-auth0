@@ -3,4 +3,5 @@ node_modules
 /dist
 /docs
 /coverage
-*.lcov.forge/
+*.lcov
+.forge/
