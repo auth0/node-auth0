@@ -112,7 +112,10 @@ export class TokenProvider {
                 signal: AbortSignal.timeout(10_000),
             });
         } catch (err: unknown) {
-            if (err instanceof Error && err.name === "TimeoutError") {
+            // Built-in fetch aborts with a "TimeoutError"; node-fetch (used on the mTLS path with a
+            // custom fetch) aborts with an "AbortError". Match both so a token-request timeout maps
+            // to a 408 regardless of the underlying fetch implementation.
+            if (err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError")) {
                 throw new ManagementError({
                     message: "ManagementClient: token request timed out",
                     statusCode: 408,
@@ -122,13 +125,21 @@ export class TokenProvider {
         }
 
         if (!response.ok) {
+            // Read the body exactly once. `response.json()` followed by `response.text()` throws
+            // "Body has already been read", which would swallow non-JSON error payloads (e.g. proxy
+            // or WAF 502s). Read text, then attempt to parse it as JSON.
+            const raw = await response.text().catch(() => "");
             let errorBody: unknown;
             try {
-                errorBody = await response.json();
+                errorBody = raw ? JSON.parse(raw) : response.statusText;
             } catch {
-                errorBody = await response.text().catch(() => response.statusText);
+                errorBody = raw || response.statusText;
             }
-            throw new ManagementError({ statusCode: response.status, body: errorBody });
+            throw new ManagementError({
+                message: "ManagementClient: token request failed",
+                statusCode: response.status,
+                body: errorBody,
+            });
         }
 
         const json = (await response.json()) as { access_token: string; expires_in: number };
