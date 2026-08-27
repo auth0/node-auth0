@@ -420,7 +420,7 @@ describe("TokenProvider (raw fetch + jose)", () => {
     });
 
     describe("TC-2.16 — token request timeout throws ManagementError", () => {
-        it("should throw ManagementError with statusCode 408 on AbortSignal timeout", async () => {
+        it("should throw ManagementError with statusCode 408 on AbortSignal timeout (TimeoutError)", async () => {
             const abortError = Object.assign(new Error("The operation was aborted."), {
                 name: "TimeoutError",
             });
@@ -431,6 +431,43 @@ describe("TokenProvider (raw fetch + jose)", () => {
 
             expect(err).toBeInstanceOf(ManagementError);
             expect(err.statusCode).toBe(408);
+        });
+
+        it("should throw ManagementError with statusCode 408 when the custom fetch aborts (AbortError)", async () => {
+            // node-fetch (mTLS path) rejects with an AbortError, not a TimeoutError.
+            const abortError = Object.assign(new Error("The operation was aborted."), {
+                name: "AbortError",
+            });
+            fetchSpy.mockRejectedValue(abortError);
+
+            const tp = new TokenProvider(opts);
+            const err = await tp.getAccessToken().catch((e) => e);
+
+            expect(err).toBeInstanceOf(ManagementError);
+            expect(err.statusCode).toBe(408);
+        });
+    });
+
+    describe("TC-2.17 — non-JSON error body preserved and message set", () => {
+        it("should keep the raw text body when the error response is not JSON", async () => {
+            const nonJson = {
+                ok: false,
+                status: 502,
+                statusText: "Bad Gateway",
+                json: async () => {
+                    throw new Error("Unexpected token < in JSON");
+                },
+                text: async () => "<html><body>502 Bad Gateway</body></html>",
+            } as unknown as Response;
+            fetchSpy.mockResolvedValue(nonJson);
+
+            const tp = new TokenProvider(opts);
+            const err = await tp.getAccessToken().catch((e) => e);
+
+            expect(err).toBeInstanceOf(ManagementError);
+            expect(err.statusCode).toBe(502);
+            expect(err.body).toBe("<html><body>502 Bad Gateway</body></html>");
+            expect(err.message).toContain("token request failed");
         });
     });
 });

@@ -372,20 +372,20 @@ import { AuthClient } from "@auth0/auth0-auth-js";
 
 ### Method mapping
 
-| v6 (node-auth0)                                         | v7 (@auth0/auth0-auth-js)                                                                                                                       |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `authenticationClient.authorizationCodeGrant(...)`      | `authClient.getTokenByCode(...)`                                                                                                                |
-| `authenticationClient.clientCredentialsGrant(...)`      | `authClient.getTokenByClientCredentials(...)`                                                                                                   |
-| `authenticationClient.refreshTokenGrant(...)`           | `authClient.getTokenByRefreshToken(...)`                                                                                                        |
-| `authenticationClient.passwordGrant(...)`               | `authClient.getTokenByPassword(...)`                                                                                                            |
-| `authenticationClient.revokeRefreshToken(...)`          | `authClient.revokeToken(...)`                                                                                                                   |
-| `authenticationClient.database.signUp(...)`             | `authClient.database.signUp(...)`                                                                                                               |
-| `authenticationClient.database.changePassword(...)`     | `authClient.database.changePassword(...)`                                                                                                       |
-| `authenticationClient.passwordless.sendEmail(...)`      | `authClient.passwordless.sendEmail(...)`                                                                                                        |
-| `authenticationClient.passwordless.sendSMS(...)`        | `authClient.passwordless.sendSms(...)`                                                                                                          |
-| `authenticationClient.passwordless.loginWithEmail(...)` | `authClient.passwordless.challengeWithEmail(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })`       |
-| `authenticationClient.passwordless.loginWithSMS(...)`   | `authClient.passwordless.challengeWithPhoneNumber(...)` then `authClient.passwordless.getTokenByPasswordlessDbConnection({ authSession, otp })` |
-| `userInfoClient.getUserInfo(accessToken)`               | `authClient.getUserInfo({ accessToken })` (see note on audience above)                                                                          |
+| v6 (node-auth0)                                         | v7 (@auth0/auth0-auth-js)                                              |
+| ------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `authenticationClient.authorizationCodeGrant(...)`      | `authClient.getTokenByCode(...)`                                       |
+| `authenticationClient.clientCredentialsGrant(...)`      | `authClient.getTokenByClientCredentials(...)`                          |
+| `authenticationClient.refreshTokenGrant(...)`           | `authClient.getTokenByRefreshToken(...)`                               |
+| `authenticationClient.passwordGrant(...)`               | `authClient.getTokenByPassword(...)`                                   |
+| `authenticationClient.revokeRefreshToken(...)`          | `authClient.revokeToken(...)`                                          |
+| `authenticationClient.database.signUp(...)`             | `authClient.database.signUp(...)`                                      |
+| `authenticationClient.database.changePassword(...)`     | `authClient.database.changePassword(...)`                              |
+| `authenticationClient.passwordless.sendEmail(...)`      | `authClient.passwordless.sendEmail(...)`                               |
+| `authenticationClient.passwordless.sendSMS(...)`        | `authClient.passwordless.sendSms(...)`                                 |
+| `authenticationClient.passwordless.loginWithEmail(...)` | `authClient.getTokenByPasswordlessEmail(...)`                          |
+| `authenticationClient.passwordless.loginWithSMS(...)`   | `authClient.getTokenByPasswordlessSms(...)`                            |
+| `userInfoClient.getUserInfo(accessToken)`               | `authClient.getUserInfo({ accessToken })` (see note on audience above) |
 
 ### Error handling
 
@@ -394,7 +394,7 @@ import { AuthClient } from "@auth0/auth0-auth-js";
 **Before (v6):**
 
 ```typescript
-import { AuthApiError } from "@auth0/node-auth0";
+import { AuthApiError } from "auth0";
 
 try {
     await client.oauth.clientCredentialsGrant(params);
@@ -408,7 +408,7 @@ try {
 **After (v7):**
 
 ```typescript
-import { ManagementError } from "@auth0/node-auth0";
+import { ManagementError } from "auth0";
 
 try {
     await managementClient.someMethod(params);
