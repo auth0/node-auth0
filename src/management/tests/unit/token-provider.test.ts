@@ -318,20 +318,35 @@ describe("TokenProvider (raw fetch + jose)", () => {
         });
     });
 
-    describe("TC-2.12 — mTLS + clientAssertion: throw at construction (mutually exclusive)", () => {
-        it("should throw when both useMTLS and clientAssertionSigningKey are provided", () => {
-            const mockCustomFetch = jest.fn<typeof fetch>();
-            expect(
-                () =>
-                    new TokenProvider({
-                        domain: DOMAIN,
-                        clientId: "test-client-id",
-                        clientAssertionSigningKey: "-----BEGIN PRIVATE KEY-----\nfake",
-                        audience: AUDIENCE,
-                        useMTLS: true,
-                        fetch: mockCustomFetch,
-                    } as any),
-            ).toThrow(/mutually exclusive/);
+    describe("TC-2.12 — mTLS + clientAssertion: allowed (RFC 8705 cert-bound token)", () => {
+        it("should NOT throw when both useMTLS and clientAssertionSigningKey are provided, and hit the mtls alias", async () => {
+            // mTLS is a transport-layer concern independent of the auth method. private_key_jwt with a
+            // TLS client certificate is a valid RFC 8705 setup and was supported in v6, so it must not throw.
+            const mockCustomFetch = jest
+                .fn<typeof fetch>()
+                .mockResolvedValue(makeOkResponse({ access_token: "mtls-assertion-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider({
+                domain: DOMAIN,
+                clientId: "test-client-id",
+                clientAssertionSigningKey: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...",
+                clientAssertionSigningAlg: "RS256" as const,
+                audience: AUDIENCE,
+                useMTLS: true,
+                fetch: mockCustomFetch,
+            } as any);
+
+            const token = await tp.getAccessToken();
+
+            expect(token).toBe("mtls-assertion-token");
+            // Certificate-bound token issued via the mTLS alias, authenticating with client_assertion.
+            expect(mockCustomFetch).toHaveBeenCalledWith(
+                `https://mtls.${DOMAIN}/oauth/token`,
+                expect.objectContaining({ method: "POST" }),
+            );
+            const callBody = (mockCustomFetch.mock.calls[0][1] as RequestInit).body as string;
+            const params = new URLSearchParams(callBody);
+            expect(params.get("client_assertion")).toBe("mock-client-assertion-jwt");
         });
     });
 
