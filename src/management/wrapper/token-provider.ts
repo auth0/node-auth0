@@ -27,7 +27,7 @@ export class TokenProvider {
             );
         }
 
-        if ((options as ManagementClient.ManagementClientOptionsWithClientSecret).useMTLS) {
+        if (options.useMTLS) {
             const { fetch: customFetch } = options as typeof options & { fetch?: typeof fetch };
             if (!customFetch) {
                 throw new Error(
@@ -35,15 +35,10 @@ export class TokenProvider {
                         "Provide a `fetch` option configured with your mTLS client certificate.",
                 );
             }
-            // mTLS uses TLS client certificate as the auth method (tls_client_auth).
-            // Combining useMTLS with clientAssertionSigningKey is a misconfiguration —
-            // the two auth methods are mutually exclusive on Auth0's token endpoint.
-            if ("clientAssertionSigningKey" in options) {
-                throw new Error(
-                    "ManagementClient: useMTLS and clientAssertionSigningKey are mutually exclusive. " +
-                        "Use one client authentication method.",
-                );
-            }
+            // mTLS (RFC 8705) is a transport-layer concern independent of the client authentication
+            // method. It combines with both `clientSecret` and `clientAssertionSigningKey`: the TLS
+            // client certificate yields a certificate-bound token regardless of how the client
+            // authenticates. v6 supported this, so no auth-method restriction is imposed here.
         }
     }
 
@@ -61,9 +56,7 @@ export class TokenProvider {
 
     private async fetchToken(): Promise<TokenResult> {
         const { domain, clientId, audience } = this.options;
-        const tokenUrl = (this.options as ManagementClient.ManagementClientOptionsWithClientSecret).useMTLS
-            ? `https://mtls.${domain}/oauth/token`
-            : `https://${domain}/oauth/token`;
+        const tokenUrl = this.options.useMTLS ? `https://mtls.${domain}/oauth/token` : `https://${domain}/oauth/token`;
 
         const body = new URLSearchParams({
             grant_type: "client_credentials",

@@ -123,6 +123,15 @@ export declare namespace ManagementClient {
         clientAssertionSigningKey: string;
         /** Algorithm for signing the client assertion. Defaults to RS256 */
         clientAssertionSigningAlg?: string;
+        /**
+         * Enable mTLS for token endpoint calls.
+         *
+         * mTLS (RFC 8705) is a transport-layer concern that is independent of the client
+         * authentication method: a client authenticating with `private_key_jwt` can still present a
+         * TLS client certificate to obtain a certificate-bound access token. This mirrors v6, which
+         * added the `mtls.` endpoint alias from `useMTLS` alone regardless of the auth method.
+         */
+        useMTLS?: boolean;
     }
 
     /**

@@ -436,7 +436,7 @@ const client = new ManagementClient({
 });
 ```
 
-`useMTLS` is not supported with `clientAssertionSigningKey` — these authentication methods are mutually exclusive and throw at construction.
+`useMTLS` works with both `clientSecret` and `clientAssertionSigningKey`. mTLS (RFC 8705) is a transport-layer concern that is independent of the client authentication method: the TLS client certificate yields a certificate-bound access token regardless of how the client authenticates. When `useMTLS` is set, an explicit `fetch` option configured with your client certificate is required.
 
 See the [auth0-auth-js documentation](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) for complete API details.
 
