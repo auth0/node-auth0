@@ -273,7 +273,7 @@ const tokens = await authClient.getTokenByClientCredentials(
 );
 ```
 
-`@auth0/auth0-server-js` re-exports `RequestOptions` from `@auth0/auth0-auth-js`, so you can import it from either package. Note that server-js does **not** re-export `ApiResponse` or `FullResponseOption`; those types are defined separately in each package.
+`@auth0/auth0-server-js` re-exports `RequestOptions`, `ApiResponse`, and `FullResponseOption` from `@auth0/auth0-auth-js`, so you can import any of them from either package.
 
 **Arity rule:** MFA methods (`authClient.mfa.*`) take `requestOptions` as the 2nd argument; store-first methods (session-owning methods on `serverClient`) take it as the 3rd argument after the store context; cache hits ignore it entirely.
 
@@ -333,13 +333,13 @@ const authClient = new AuthClient({ domain, clientId, clientSecret });
 // `callbackUrl` is a URL object for the full incoming request URL,
 // e.g. new URL(req.url, `https://${req.headers.host}`)
 const tokens = await authClient.getTokenByCode(callbackUrl, {
-    // options; e.g. expectedState if you manage state yourself
+    // options; e.g. codeVerifier (PKCE) or organization
 });
 const accessToken = tokens.accessToken;
 const expiresAt = tokens.expiresAt; // absolute Unix seconds
 ```
 
-> If your code manually parses `req.query.code`, that parsing is now the SDK's job. Delete it and hand the SDK the full URL. If you were tracking `state` in a cookie, pass it via the options so the SDK can validate it. If the node-auth0 code read `resp.headers.get(...)` on success, see [Reading HTTP response metadata](#reading-http-response-metadata-fullresponse). Error-path metadata remains accessible on the typed error.
+> If your code manually parses `req.query.code`, that parsing is now the SDK's job. Delete it and hand the SDK the full URL — the SDK reads `code` and `state` from the URL and validates `state` against the value it persisted when it built the authorization URL. (`getTokenByCode` options are `codeVerifier` and `organization`; there is no `expectedState` parameter — that lives on `getTokenByMagicLinkCode`.) If the node-auth0 code read `resp.headers.get(...)` on success, see [Reading HTTP response metadata](#reading-http-response-metadata-fullresponse). Error-path metadata remains accessible on the typed error.
 
 #### `oauth.authorizationCodeGrantWithPKCE` → `getTokenByCode` (with verifier)
 
@@ -415,7 +415,7 @@ await auth0.oauth.revokeRefreshToken({ token: rt });
 await authClient.revokeToken({ token: rt });
 ```
 
-> **Session apps:** if you are migrating to server-js and this revoke was part of logout, use `serverClient.revokeRefreshToken()` (it reads the refresh token from the session) instead of the low-level `revokeToken`.
+> **Session apps:** if you are migrating to server-js and this revoke was part of logout, use `serverClient.revokeRefreshToken()` (by default it reads the refresh token from the session; you can also pass an explicit `{ token }` in its options) instead of the low-level `revokeToken`.
 
 #### `oauth.tokenForConnection` → `exchangeToken` (Token Vault)
 
@@ -580,8 +580,8 @@ const authReqId = resp.auth_req_id;
 // after
 const { authReqId, expiresIn, interval } = await authClient.initiateBackchannelAuthentication({
     bindingMessage: "ABC123",
-    scope: "openid",
-    loginHint: "auth0|123",
+    loginHint: { sub: "auth0|123" }, // login_hint is an object with `sub`, not a bare string
+    authorizationParams: { scope: "openid" }, // scope goes here, NOT as a top-level key
 });
 ```
 
@@ -746,6 +746,8 @@ const message = await authClient.database.changePassword({ email, connection });
 console.log(message);
 ```
 
+> `changePassword` requires `connection` plus at least one of `email` or `username` — either identifier is accepted, not `email` alone.
+
 #### Reading HTTP response metadata (fullResponse)
 
 > The `fullResponse` envelope and per-request `RequestOptions` landed **after** the `1.12.1` npm release and are not in the published tarball yet. Use the [pre-release path](#the-requestoptions--fullresponse-caveat) if you depend on them.
@@ -790,7 +792,7 @@ const rateLimit = sendResp.headers.get("x-ratelimit-remaining");
 Caveats:
 
 - Pass `fullResponse: true` as a literal, not a variable. Using spread — `{ ...opts, fullResponse: true }` — widens `true` to `boolean`, causing TypeScript overload resolution to fall back to the bare return type. Fix: pass `{ ...opts, fullResponse: true as const }` or include `fullResponse` as an inline literal in the options object.
-- Performance: when `fullResponse: true` is requested on a **token** method and a cached token is still valid, the cache is bypassed to force a token-endpoint round-trip. The HTTP Response can only come from a live network call, so repeated calls with this flag on a hot cache trigger repeated exchanges. The non-token methods (`signUp`, `changePassword`, `sendEmail`, `sendSms`) hit the network on every call regardless, so `fullResponse` does not change their cost.
+- Performance: `@auth0/auth0-auth-js` does not cache tokens — every `AuthClient` grant method performs a live token-endpoint round-trip regardless of `fullResponse`, so the flag adds no extra network cost at this layer. (Token caching and reuse live in `@auth0/auth0-server-js`'s session store, not in the auth-js `AuthClient`.) The only in-memory cache in auth-js is for OIDC discovery / JWKS metadata, which is unrelated to `fullResponse`.
 - Reserved headers: a caller `Authorization` header is ignored and the telemetry `Auth0-Client` header always wins; `RequestOptions.headers` cannot override them.
 - Per-request `customFetch` replaces the base transport for that call but does not inherit mTLS; if you rely on mTLS the supplied fetch must itself be mTLS-capable.
 
@@ -973,7 +975,7 @@ try {
 }
 ```
 
-> After detecting `mfa_required`, the MFA enroll/challenge/verify flow that node-auth0 handled ad hoc now lives on `authClient.mfa.*` (`listAuthenticators`, `enrollAuthenticator`, `challengeAuthenticator`, `verify`). In server-js, `serverClient.mfa.verify()` also persists the resulting tokens to the session.
+> After detecting `mfa_required`, the MFA enroll/challenge/verify flow that node-auth0 handled ad hoc now lives on `authClient.mfa.*` (`listAuthenticators`, `enrollAuthenticator`, `challengeAuthenticator`, `verify`, and `deleteAuthenticator`). In server-js, `serverClient.mfa.verify()` also persists the resulting tokens to the session.
 
 #### ID-token validation types
 
@@ -1005,7 +1007,7 @@ node-auth0 exposed none of this; you built equivalents by hand. You are swapping
 - `CookieTransactionStore` — transaction store backed entirely by a cookie. Good default.
 - `StatelessStateStore` — session lives encrypted in the cookie. No server-side storage; good for serverless / horizontally-scaled deployments with small sessions.
 - `StatefulStateStore` — session lives server-side; the cookie holds an id. Use for large sessions or when you need server-side revocation.
-- `AbstractTransactionStore` / `AbstractSessionStore` — extend these to back a store with your own storage (Redis, Postgres, etc.).
+- `AbstractTransactionStore` / `AbstractStateStore` — extend these to back a store with your own storage (Redis, Postgres, etc.). These are the exported base-class names.
 
 All stores accept a `CookieHandler` so they can integrate with any framework's cookie API. The `storeOptions` generic (`TStoreOptions`) is how you thread per-request context (like the framework `req`/`res`) into store reads/writes — every ServerClient method takes an optional trailing `storeOptions` argument for exactly this.
 
@@ -1105,7 +1107,7 @@ app.get("/logout", async (req, res) => {
 });
 ```
 
-`logout` clears the session from the state store and returns the Auth0 `/v2/logout` URL. If you also revoked the refresh token on logout (via `oauth.revokeRefreshToken`), call `serverClient.revokeRefreshToken({ req, res })` before redirecting — it reads the refresh token from the session, so you do not handle the raw token yourself.
+`logout` clears the session from the state store and returns the Auth0 `/v2/logout` URL. If you also revoked the refresh token on logout (via `oauth.revokeRefreshToken`), call `serverClient.revokeRefreshToken({ req, res })` before redirecting — by default it reads the refresh token from the session, so you do not handle the raw token yourself (it also accepts an explicit `{ token }` if you need to revoke a specific one).
 
 ### Non-redirect logins that establish a session
 
