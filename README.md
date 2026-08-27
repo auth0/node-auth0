@@ -15,6 +15,7 @@
 - [SDK Documentation](http://auth0.github.io/node-auth0/) - explore the SDK documentation
 - [API Reference](https://github.com/auth0/node-auth0/blob/master/reference.md) - full reference for this library
 - [v6 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v6_MIGRATION_GUIDE.md) - upgrade from v5 to v6
+- [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) - upgrade from v6 to v7
 
 ## Getting Started
 
