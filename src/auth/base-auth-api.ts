@@ -2,7 +2,7 @@ import { ResponseError } from "../lib/errors.js";
 import { BaseAPI, ClientOptions, InitOverrideFunction, JSONApiResponse, RequestOpts } from "../lib/runtime.js";
 import { AddClientAuthenticationPayload, addClientAuthentication } from "./client-authentication.js";
 import { IDTokenValidator } from "./id-token-validator.js";
-import { GrantOptions, TokenSet } from "./oauth.js";
+import { AuthorizationDetails, GrantOptions, TokenSet } from "./oauth.js";
 import { Auth0ClientTelemetry } from "../lib/middleware/auth0-client-telemetry.js";
 
 export interface AuthenticationClientOptions extends ClientOptions {
@@ -114,14 +114,14 @@ export class BaseAuthAPI extends BaseAPI {
  * @private
  * Perform an OAuth 2.0 grant.
  */
-export async function grant(
+export async function grant<TAuthorizationDetails extends AuthorizationDetails = AuthorizationDetails>(
     grantType: string,
     bodyParameters: Record<string, any>,
     { idTokenValidateOptions, initOverrides }: GrantOptions = {},
     clientId: string,
     idTokenValidator: IDTokenValidator,
     request: (context: RequestOpts, initOverrides?: RequestInit | InitOverrideFunction) => Promise<Response>,
-): Promise<JSONApiResponse<TokenSet>> {
+): Promise<JSONApiResponse<TokenSet<TAuthorizationDetails>>> {
     const response = await request(
         {
             path: "/oauth/token",
@@ -138,7 +138,7 @@ export async function grant(
         initOverrides,
     );
 
-    const res: JSONApiResponse<TokenSet> = await JSONApiResponse.fromResponse(response);
+    const res: JSONApiResponse<TokenSet<TAuthorizationDetails>> = await JSONApiResponse.fromResponse(response);
     if (res.data.id_token) {
         await idTokenValidator.validate(res.data.id_token, idTokenValidateOptions);
     }
