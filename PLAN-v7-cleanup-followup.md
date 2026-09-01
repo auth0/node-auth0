@@ -27,12 +27,14 @@ Auth-separation orphaned these. Two sub-cases: delete-outright vs keep-class-dro
 - Tests importing it: none.
 - Action: delete class from `errors.ts`. Export drops automatically (was `export *`).
 
-### A2. `TimeoutError` — KEEP class, REMOVE from public export
+### A2. `TimeoutError` — KEEP class, KEEP exported (DECIDED: lite-mode)
 
 - Def: `src/lib/errors.ts:19-24`.
 - **Still used internally**: `src/lib/retry.ts:1` import, `:93` `if (e instanceof TimeoutError) throw e`. retry.ts is live (BaseClient). Do NOT delete class.
 - Tests: `token-provider.test.ts:438` only checks string `"TimeoutError"` (err.name), does not import the class. No break.
-- Action: change `export class TimeoutError` -> `class TimeoutError` in errors.ts, keep it. But note: `src/index.ts:2` uses `export *`; to stop re-exporting a single symbol we must switch that barrel from `export *` to a named re-export list (see A5).
+- **RESOLVED**: kept `TimeoutError` publicly exported. It is a real, still-thrown error type, so leaving
+  it on the entrypoint is harmless and honest. The earlier idea of hiding it (named re-export) was
+  dropped in lite execution to avoid barrel churn. A5 is therefore SKIPPED. No doc claims it was removed.
 
 ### A3. `FetchError` — DELETE class
 

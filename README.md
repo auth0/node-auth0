@@ -422,6 +422,8 @@ try {
 }
 ```
 
+The low-level HTTP wrapper types `ResponseError`, `FetchError`, and `JSONApiResponse` are also no longer exported. Management API calls now throw `ManagementError` (catch that instead of `ResponseError`/`FetchError`), and responses return the data directly rather than wrapped in `JSONApiResponse`.
+
 ### Custom fetch (ManagementClient)
 
 `ManagementClient` accepts a `fetch` option to supply your own fetch implementation. It is used for every Management API request (and for token acquisition on the client-credentials path). Use it for platforms without a built-in `fetch`, or to route requests through a custom transport such as an mTLS-capable agent or a proxy.
