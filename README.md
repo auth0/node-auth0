@@ -422,6 +422,21 @@ try {
 }
 ```
 
+### Custom fetch (ManagementClient)
+
+`ManagementClient` accepts a `fetch` option to supply your own fetch implementation. It is used for every Management API request (and for token acquisition on the client-credentials path). Use it for platforms without a built-in `fetch`, or to route requests through a custom transport such as an mTLS-capable agent or a proxy.
+
+```typescript
+const client = new ManagementClient({
+    domain: "tenant.auth0.com",
+    clientId: "...",
+    clientSecret: "...",
+    fetch: (url, init) => myFetch(url, init), // your fetch implementation
+});
+```
+
+The related `fetcher` option is intentionally not exposed on `ManagementClient`; use `fetch` to customize the transport.
+
 ### mTLS (ManagementClient)
 
 `useMTLS: true` now requires an explicit `fetch` option pre-configured with your mTLS client certificate. The token endpoint uses `mtls.{domain}` automatically when `useMTLS` is set.

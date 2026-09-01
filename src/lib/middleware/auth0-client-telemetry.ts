@@ -1,13 +1,12 @@
 import { generateClientInfo } from "../../utils.js";
-import { Middleware, ClientOptions, FetchParams, RequestContext } from "../models.js";
+import { ClientOptions } from "../models.js";
 import { base64url } from "jose";
 
 /**
- * Handles Auth0 client telemetry functionality. Can be used both as middleware
- * for automatic header injection and as a standalone utility for manual telemetry header generation.
+ * Generates the Auth0-Client telemetry header value.
  * @private
  */
-export class Auth0ClientTelemetry implements Middleware {
+export class Auth0ClientTelemetry {
     clientInfo: { name: string; [key: string]: unknown };
 
     constructor(options: ClientOptions) {
@@ -16,28 +15,11 @@ export class Auth0ClientTelemetry implements Middleware {
 
     /**
      * Get the Auth0-Client header value for telemetry.
-     * This method can be used when you need to manually add telemetry headers
-     * instead of using the middleware system.
      */
     getAuth0ClientHeader(): string | undefined {
         if ("string" === typeof this.clientInfo.name && this.clientInfo.name.length > 0) {
             return base64url.encode(JSON.stringify(this.clientInfo));
         }
         return undefined;
-    }
-
-    async pre?(context: RequestContext): Promise<FetchParams | void> {
-        const headerValue = this.getAuth0ClientHeader();
-        if (headerValue) {
-            context.init.headers = {
-                ...context.init.headers,
-                "Auth0-Client": headerValue,
-            };
-        }
-
-        return {
-            url: context.url,
-            init: context.init,
-        };
     }
 }
