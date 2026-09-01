@@ -78,20 +78,6 @@ export interface ApiResponse<T> {
     statusText: string;
 }
 
-export class JSONApiResponse<T> implements ApiResponse<T> {
-    constructor(
-        public data: T,
-        public headers: Headers,
-        readonly status: number,
-        readonly statusText: string,
-    ) {}
-
-    static async fromResponse<T = unknown>(raw: Response) {
-        const value = (await raw.json()) as T;
-        return new JSONApiResponse<T>(value, raw.headers, raw.status, raw.statusText);
-    }
-}
-
 export class VoidApiResponse implements ApiResponse<undefined> {
     public data: undefined;
     constructor(
