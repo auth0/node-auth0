@@ -56,6 +56,25 @@ describe("OrganizationsClient", () => {
             .mockEndpoint({ once: false })
             .get("/users/id/organizations")
             .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.organizations.list("id");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/users/id/organizations")
+            .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
             .build();
@@ -65,7 +84,7 @@ describe("OrganizationsClient", () => {
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
-    test("list (3)", async () => {
+    test("list (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -84,7 +103,7 @@ describe("OrganizationsClient", () => {
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
-    test("list (4)", async () => {
+    test("list (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -103,7 +122,7 @@ describe("OrganizationsClient", () => {
         }).rejects.toThrow(Management.NotFoundError);
     });
 
-    test("list (5)", async () => {
+    test("list (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 

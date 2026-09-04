@@ -6,4 +6,5 @@ export * as enabledConnections from "./enabledConnections/index.js";
 export * as groups from "./groups/index.js";
 export * as invitations from "./invitations/index.js";
 export * as members from "./members/index.js";
+export * as organizationTemplate from "./organizationTemplate/index.js";
 export * as roles from "./roles/index.js";

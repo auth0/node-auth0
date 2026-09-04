@@ -26,6 +26,7 @@ import { LogsClient } from "./api/resources/logs/client/Client.js";
 import { LogStreamsClient } from "./api/resources/logStreams/client/Client.js";
 import { NetworkAclsClient } from "./api/resources/networkAcls/client/Client.js";
 import { OrganizationsClient } from "./api/resources/organizations/client/Client.js";
+import { OrganizationTemplatesClient } from "./api/resources/organizationTemplates/client/Client.js";
 import { PromptsClient } from "./api/resources/prompts/client/Client.js";
 import { RateLimitPoliciesClient } from "./api/resources/rateLimitPolicies/client/Client.js";
 import { RefreshTokensClient } from "./api/resources/refreshTokens/client/Client.js";
@@ -80,6 +81,7 @@ export class ManagementClient {
     protected _logStreams: LogStreamsClient | undefined;
     protected _logs: LogsClient | undefined;
     protected _networkAcls: NetworkAclsClient | undefined;
+    protected _organizationTemplates: OrganizationTemplatesClient | undefined;
     protected _organizations: OrganizationsClient | undefined;
     protected _prompts: PromptsClient | undefined;
     protected _rateLimitPolicies: RateLimitPoliciesClient | undefined;
@@ -192,6 +194,10 @@ export class ManagementClient {
 
     public get networkAcls(): NetworkAclsClient {
         return (this._networkAcls ??= new NetworkAclsClient(this._options));
+    }
+
+    public get organizationTemplates(): OrganizationTemplatesClient {
+        return (this._organizationTemplates ??= new OrganizationTemplatesClient(this._options));
     }
 
     public get organizations(): OrganizationsClient {

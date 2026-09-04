@@ -4,42 +4,53 @@ import * as Management from "../../api/index";
 import { ManagementClient } from "../../Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
-describe("ConnectionProfilesClient", () => {
+describe("OrganizationTemplatesClient", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             next: "next",
-            connection_profiles: [
+            organization_templates: [
                 {
                     id: "id",
                     name: "name",
-                    connection_name_prefix_template: "connection_name_prefix_template",
-                    enabled_features: ["scim"],
-                    cross_app_access_resource_app: { status: { default_value: "enabled" } },
+                    is_default: true,
+                    organization_deletion_behavior: "allow",
+                    connection_deletion_behavior: "allow",
+                    enforce_permission_ceiling: true,
+                    enforce_self_assignment_restriction: true,
+                    connection_profile_id: "connection_profile_id",
+                    user_attribute_profile_id: "user_attribute_profile_id",
+                    allowed_strategies: ["adfs"],
+                    invitation_landing_client_id: "invitation_landing_client_id",
+                    admin_roles_assignment: ["admin_roles_assignment"],
+                    use_for_organization_discovery: { default_value: true },
+                    role_visibility_policy: { default_value: "write" },
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
                 },
             ],
         };
 
         server
             .mockEndpoint({ once: false })
-            .get("/connection-profiles")
+            .get("/organization-templates")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
         const expected = rawResponseBody;
-        const page = await client.connectionProfiles.list({
+        const page = await client.organizationTemplates.list({
             from: "from",
             take: 1,
         });
 
-        expect(expected.connection_profiles).toEqual(page.data);
+        expect(expected.organization_templates).toEqual(page.data);
         expect(page.hasNextPage()).toBe(true);
         const nextPage = await page.getNextPage();
-        expect(expected.connection_profiles).toEqual(nextPage.data);
+        expect(expected.organization_templates).toEqual(nextPage.data);
     });
 
     test("list (2)", async () => {
@@ -50,14 +61,14 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles")
+            .get("/organization-templates")
             .respondWith()
             .statusCode(400)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.list();
+            return await client.organizationTemplates.list();
         }).rejects.toThrow(Management.BadRequestError);
     });
 
@@ -69,14 +80,14 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles")
+            .get("/organization-templates")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.list();
+            return await client.organizationTemplates.list();
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -88,14 +99,14 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles")
+            .get("/organization-templates")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.list();
+            return await client.organizationTemplates.list();
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
@@ -107,52 +118,59 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles")
+            .get("/organization-templates")
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.list();
+            return await client.organizationTemplates.list();
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "name" };
+        const rawRequestBody = {
+            name: "name",
+            organization_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+        };
         const rawResponseBody = {
             id: "id",
             name: "name",
-            organization: { show_as_button: "none", assign_membership_on_login: "none" },
-            connection_name_prefix_template: "connection_name_prefix_template",
-            enabled_features: ["scim"],
-            strategy_overrides: {
-                pingfederate: { enabled_features: ["scim"] },
-                ad: { enabled_features: ["scim"] },
-                adfs: { enabled_features: ["scim"] },
-                waad: { enabled_features: ["scim"] },
-                "google-apps": { enabled_features: ["scim"] },
-                okta: { enabled_features: ["scim"] },
-                oidc: { enabled_features: ["scim"] },
-                samlp: { enabled_features: ["scim"] },
-            },
-            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
-            cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
+            is_default: true,
+            organization_deletion_behavior: "allow",
+            connection_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+            connection_profile_id: "connection_profile_id",
+            user_attribute_profile_id: "user_attribute_profile_id",
+            allowed_strategies: ["adfs"],
+            invitation_landing_client_id: "invitation_landing_client_id",
+            admin_roles_assignment: ["admin_roles_assignment"],
+            use_for_organization_discovery: { default_value: true, allowed_values: [true] },
+            role_visibility_policy: { default_value: "write", overrides: [{ role_id: "role_id", access: "write" }] },
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
         };
 
         server
             .mockEndpoint()
-            .post("/connection-profiles")
+            .post("/organization-templates")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.connectionProfiles.create({
+        const response = await client.organizationTemplates.create({
             name: "name",
+            organization_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -160,12 +178,17 @@ describe("ConnectionProfilesClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "x" };
+        const rawRequestBody = {
+            name: "x",
+            organization_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+        };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/connection-profiles")
+            .post("/organization-templates")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(400)
@@ -173,8 +196,11 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.create({
+            return await client.organizationTemplates.create({
                 name: "x",
+                organization_deletion_behavior: "allow",
+                enforce_permission_ceiling: true,
+                enforce_self_assignment_restriction: true,
             });
         }).rejects.toThrow(Management.BadRequestError);
     });
@@ -182,12 +208,17 @@ describe("ConnectionProfilesClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "x" };
+        const rawRequestBody = {
+            name: "x",
+            organization_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+        };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/connection-profiles")
+            .post("/organization-templates")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -195,8 +226,11 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.create({
+            return await client.organizationTemplates.create({
                 name: "x",
+                organization_deletion_behavior: "allow",
+                enforce_permission_ceiling: true,
+                enforce_self_assignment_restriction: true,
             });
         }).rejects.toThrow(Management.UnauthorizedError);
     });
@@ -204,12 +238,17 @@ describe("ConnectionProfilesClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "x" };
+        const rawRequestBody = {
+            name: "x",
+            organization_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+        };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/connection-profiles")
+            .post("/organization-templates")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(403)
@@ -217,8 +256,11 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.create({
+            return await client.organizationTemplates.create({
                 name: "x",
+                organization_deletion_behavior: "allow",
+                enforce_permission_ceiling: true,
+                enforce_self_assignment_restriction: true,
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });
@@ -226,12 +268,17 @@ describe("ConnectionProfilesClient", () => {
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "x" };
+        const rawRequestBody = {
+            name: "x",
+            organization_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+        };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/connection-profiles")
+            .post("/organization-templates")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(409)
@@ -239,8 +286,11 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.create({
+            return await client.organizationTemplates.create({
                 name: "x",
+                organization_deletion_behavior: "allow",
+                enforce_permission_ceiling: true,
+                enforce_self_assignment_restriction: true,
             });
         }).rejects.toThrow(Management.ConflictError);
     });
@@ -248,12 +298,17 @@ describe("ConnectionProfilesClient", () => {
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "x" };
+        const rawRequestBody = {
+            name: "x",
+            organization_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+        };
         const rawResponseBody = { key: "value" };
 
         server
             .mockEndpoint()
-            .post("/connection-profiles")
+            .post("/organization-templates")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
@@ -261,188 +316,12 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.create({
+            return await client.organizationTemplates.create({
                 name: "x",
+                organization_deletion_behavior: "allow",
+                enforce_permission_ceiling: true,
+                enforce_self_assignment_restriction: true,
             });
-        }).rejects.toThrow(Management.TooManyRequestsError);
-    });
-
-    test("listTemplates (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { connection_profile_templates: [{ id: "id", display_name: "display_name" }] };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.connectionProfiles.listTemplates();
-        expect(response).toEqual(rawResponseBody);
-    });
-
-    test("listTemplates (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.listTemplates();
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("listTemplates (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.listTemplates();
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("listTemplates (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.listTemplates();
-        }).rejects.toThrow(Management.TooManyRequestsError);
-    });
-
-    test("getTemplate (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = {
-            id: "id",
-            display_name: "display_name",
-            template: {
-                name: "name",
-                organization: { show_as_button: "none", assign_membership_on_login: "none" },
-                connection_name_prefix_template: "connection_name_prefix_template",
-                enabled_features: ["scim"],
-                provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
-            },
-        };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates/id")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.connectionProfiles.getTemplate("id");
-        expect(response).toEqual(rawResponseBody);
-    });
-
-    test("getTemplate (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates/id")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.getTemplate("id");
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("getTemplate (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates/id")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.getTemplate("id");
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("getTemplate (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates/id")
-            .respondWith()
-            .statusCode(404)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.getTemplate("id");
-        }).rejects.toThrow(Management.NotFoundError);
-    });
-
-    test("getTemplate (5)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .get("/connection-profiles/templates/id")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.getTemplate("id");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
@@ -453,32 +332,31 @@ describe("ConnectionProfilesClient", () => {
         const rawResponseBody = {
             id: "id",
             name: "name",
-            organization: { show_as_button: "none", assign_membership_on_login: "none" },
-            connection_name_prefix_template: "connection_name_prefix_template",
-            enabled_features: ["scim"],
-            strategy_overrides: {
-                pingfederate: { enabled_features: ["scim"] },
-                ad: { enabled_features: ["scim"] },
-                adfs: { enabled_features: ["scim"] },
-                waad: { enabled_features: ["scim"] },
-                "google-apps": { enabled_features: ["scim"] },
-                okta: { enabled_features: ["scim"] },
-                oidc: { enabled_features: ["scim"] },
-                samlp: { enabled_features: ["scim"] },
-            },
-            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
-            cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
+            is_default: true,
+            organization_deletion_behavior: "allow",
+            connection_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+            connection_profile_id: "connection_profile_id",
+            user_attribute_profile_id: "user_attribute_profile_id",
+            allowed_strategies: ["adfs"],
+            invitation_landing_client_id: "invitation_landing_client_id",
+            admin_roles_assignment: ["admin_roles_assignment"],
+            use_for_organization_discovery: { default_value: true, allowed_values: [true] },
+            role_visibility_policy: { default_value: "write", overrides: [{ role_id: "role_id", access: "write" }] },
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
         };
 
         server
             .mockEndpoint()
-            .get("/connection-profiles/id")
+            .get("/organization-templates/id")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.connectionProfiles.get("id");
+        const response = await client.organizationTemplates.get("id");
         expect(response).toEqual(rawResponseBody);
     });
 
@@ -490,14 +368,14 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles/id")
+            .get("/organization-templates/id")
             .respondWith()
             .statusCode(401)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.get("id");
+            return await client.organizationTemplates.get("id");
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -509,14 +387,14 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles/id")
+            .get("/organization-templates/id")
             .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.get("id");
+            return await client.organizationTemplates.get("id");
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
@@ -528,14 +406,14 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles/id")
+            .get("/organization-templates/id")
             .respondWith()
             .statusCode(404)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.get("id");
+            return await client.organizationTemplates.get("id");
         }).rejects.toThrow(Management.NotFoundError);
     });
 
@@ -547,81 +425,14 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .get("/connection-profiles/id")
+            .get("/organization-templates/id")
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.get("id");
-        }).rejects.toThrow(Management.TooManyRequestsError);
-    });
-
-    test("delete (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        server.mockEndpoint().delete("/connection-profiles/id").respondWith().statusCode(200).build();
-
-        const response = await client.connectionProfiles.delete("id");
-        expect(response).toEqual(undefined);
-    });
-
-    test("delete (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/connection-profiles/id")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.delete("id");
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("delete (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/connection-profiles/id")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.delete("id");
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("delete (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/connection-profiles/id")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.connectionProfiles.delete("id");
+            return await client.organizationTemplates.get("id");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
@@ -632,33 +443,32 @@ describe("ConnectionProfilesClient", () => {
         const rawResponseBody = {
             id: "id",
             name: "name",
-            organization: { show_as_button: "none", assign_membership_on_login: "none" },
-            connection_name_prefix_template: "connection_name_prefix_template",
-            enabled_features: ["scim"],
-            strategy_overrides: {
-                pingfederate: { enabled_features: ["scim"] },
-                ad: { enabled_features: ["scim"] },
-                adfs: { enabled_features: ["scim"] },
-                waad: { enabled_features: ["scim"] },
-                "google-apps": { enabled_features: ["scim"] },
-                okta: { enabled_features: ["scim"] },
-                oidc: { enabled_features: ["scim"] },
-                samlp: { enabled_features: ["scim"] },
-            },
-            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
-            cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
+            is_default: true,
+            organization_deletion_behavior: "allow",
+            connection_deletion_behavior: "allow",
+            enforce_permission_ceiling: true,
+            enforce_self_assignment_restriction: true,
+            connection_profile_id: "connection_profile_id",
+            user_attribute_profile_id: "user_attribute_profile_id",
+            allowed_strategies: ["adfs"],
+            invitation_landing_client_id: "invitation_landing_client_id",
+            admin_roles_assignment: ["admin_roles_assignment"],
+            use_for_organization_discovery: { default_value: true, allowed_values: [true] },
+            role_visibility_policy: { default_value: "write", overrides: [{ role_id: "role_id", access: "write" }] },
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
         };
 
         server
             .mockEndpoint()
-            .patch("/connection-profiles/id")
+            .patch("/organization-templates/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.connectionProfiles.update("id");
+        const response = await client.organizationTemplates.update("id");
         expect(response).toEqual(rawResponseBody);
     });
 
@@ -670,7 +480,7 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/connection-profiles/id")
+            .patch("/organization-templates/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(400)
@@ -678,7 +488,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.update("id");
+            return await client.organizationTemplates.update("id");
         }).rejects.toThrow(Management.BadRequestError);
     });
 
@@ -690,7 +500,7 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/connection-profiles/id")
+            .patch("/organization-templates/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(401)
@@ -698,7 +508,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.update("id");
+            return await client.organizationTemplates.update("id");
         }).rejects.toThrow(Management.UnauthorizedError);
     });
 
@@ -710,7 +520,7 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/connection-profiles/id")
+            .patch("/organization-templates/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(403)
@@ -718,7 +528,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.update("id");
+            return await client.organizationTemplates.update("id");
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
@@ -730,7 +540,7 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/connection-profiles/id")
+            .patch("/organization-templates/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(404)
@@ -738,7 +548,7 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.update("id");
+            return await client.organizationTemplates.update("id");
         }).rejects.toThrow(Management.NotFoundError);
     });
 
@@ -750,7 +560,7 @@ describe("ConnectionProfilesClient", () => {
 
         server
             .mockEndpoint()
-            .patch("/connection-profiles/id")
+            .patch("/organization-templates/id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
@@ -758,7 +568,109 @@ describe("ConnectionProfilesClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.connectionProfiles.update("id");
+            return await client.organizationTemplates.update("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("listOrganizations (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { next: "next", organizations: [{ id: "id" }] };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/organization-templates/id/organizations")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = rawResponseBody;
+        const page = await client.organizationTemplates.listOrganizations("id", {
+            from: "from",
+            take: 1,
+        });
+
+        expect(expected.organizations).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.organizations).toEqual(nextPage.data);
+    });
+
+    test("listOrganizations (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organization-templates/id/organizations")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizationTemplates.listOrganizations("id");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("listOrganizations (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organization-templates/id/organizations")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizationTemplates.listOrganizations("id");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("listOrganizations (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organization-templates/id/organizations")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizationTemplates.listOrganizations("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("listOrganizations (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/organization-templates/id/organizations")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.organizationTemplates.listOrganizations("id");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 });
