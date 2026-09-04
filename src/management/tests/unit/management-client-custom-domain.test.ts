@@ -186,6 +186,7 @@ describe("ManagementClient with custom domain header", () => {
                 clientId: "test-client-id",
                 clientSecret: "test-client-secret",
                 useMTLS: true,
+                fetch: jest.fn() as unknown as typeof fetch,
                 withCustomDomainHeader: "auth.example.com",
             };
 

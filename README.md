@@ -34,19 +34,21 @@ npm install auth0
 
 ### Configure the SDK
 
-#### Authentication API Client
+#### Authentication
 
-This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
+For authentication operations (OAuth flows, token management, user sign-up), use [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js). As of v7, node-auth0 no longer ships `AuthenticationClient` in its main entrypoint. The authentication layer has been separated into a dedicated package.
 
 ```js
-import { AuthenticationClient } from "auth0";
+import { AuthClient } from "@auth0/auth0-auth-js";
 
-const auth0 = new AuthenticationClient({
+const auth = new AuthClient({
     domain: "{YOUR_TENANT_AND REGION}.auth0.com",
     clientId: "{YOUR_CLIENT_ID}",
     clientSecret: "{OPTIONAL_CLIENT_SECRET}",
 });
 ```
+
+See the [auth0-auth-js documentation](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) for full API reference.
 
 #### Management API Client
 
@@ -169,24 +171,27 @@ types from the root `auth0` entry adds nothing to your bundle and does not pull 
 > through a bundler. A plain CommonJS `require()` cannot tree-shake and loads the full
 > resource graph.
 
-#### UserInfo API Client
+#### User Profile Information
 
-This client can be used to retrieve user profile information.
+As of v7, node-auth0 no longer ships `UserInfoClient`. Use `authClient.getUserInfo` from `@auth0/auth0-auth-js` instead.
 
 ```js
-import { UserInfoClient } from "auth0";
+import { AuthClient } from "@auth0/auth0-auth-js";
 
-const userInfo = new UserInfoClient({
-    domain: "{YOUR_TENANT_AND REGION}.auth0.com",
-});
+const auth = new AuthClient({ domain: "...", clientId: "..." });
 
-// Get user info with an access token
-const userProfile = await userInfo.getUserInfo(accessToken);
+// Requires a default OIDC token (openid scope, no explicit audience).
+// If your app uses MRRT, request https://{domain}/userinfo as the audience.
+const profile = await auth.getUserInfo({ accessToken });
 ```
+
+Note: tokens issued with a custom `audience` (e.g. the Management API) are rejected by `/userinfo`. Use a token obtained without an explicit audience, or request `https://{domain}/userinfo` as the audience when using MRRT.
 
 ## Legacy Usage
 
 If you are migrating from the legacy `node-auth0` package (v4.x) or need to maintain compatibility with legacy code, you can use the legacy export which provides the `node-auth0` v4.x API interface.
+
+**Note:** The legacy entrypoint still includes `AuthenticationClient` from the v4.x API. This is separate from the v7 main entrypoint, which no longer ships authentication clients.
 
 ### Installing Legacy Version
 
@@ -202,7 +207,7 @@ const { ManagementClient, AuthenticationClient } = require("auth0/legacy");
 
 ### Legacy Configuration
 
-The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current v6 API:
+The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current API:
 
 #### Legacy Management Client
 
@@ -345,6 +350,96 @@ try {
 }
 ```
 
+## Migrating from v6 to v7
+
+Version 7.0.0 removes authentication clients from the main entrypoint. The authentication layer has been separated into [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js).
+
+### Install the authentication package
+
+```bash
+npm install @auth0/auth0-auth-js
+```
+
+### Update imports
+
+```js
+// v6
+import { AuthenticationClient, UserInfoClient } from "auth0";
+
+// v7
+import { AuthClient } from "@auth0/auth0-auth-js";
+```
+
+### Method mapping
+
+| v6 (node-auth0)                                         | v7 (@auth0/auth0-auth-js)                                              |
+| ------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `authenticationClient.authorizationCodeGrant(...)`      | `authClient.getTokenByCode(...)`                                       |
+| `authenticationClient.clientCredentialsGrant(...)`      | `authClient.getTokenByClientCredentials(...)`                          |
+| `authenticationClient.refreshTokenGrant(...)`           | `authClient.getTokenByRefreshToken(...)`                               |
+| `authenticationClient.passwordGrant(...)`               | `authClient.getTokenByPassword(...)`                                   |
+| `authenticationClient.revokeRefreshToken(...)`          | `authClient.revokeToken(...)`                                          |
+| `authenticationClient.database.signUp(...)`             | `authClient.database.signUp(...)`                                      |
+| `authenticationClient.database.changePassword(...)`     | `authClient.database.changePassword(...)`                              |
+| `authenticationClient.passwordless.sendEmail(...)`      | `authClient.passwordless.sendEmail(...)`                               |
+| `authenticationClient.passwordless.sendSMS(...)`        | `authClient.passwordless.sendSms(...)`                                 |
+| `authenticationClient.passwordless.loginWithEmail(...)` | `authClient.getTokenByPasswordlessEmail(...)`                          |
+| `authenticationClient.passwordless.loginWithSMS(...)`   | `authClient.getTokenByPasswordlessSms(...)`                            |
+| `userInfoClient.getUserInfo(accessToken)`               | `authClient.getUserInfo({ accessToken })` (see note on audience above) |
+
+### Error handling
+
+`AuthApiError` has been removed. Token acquisition and all Management API calls now throw `ManagementError`.
+
+**Before (v6):**
+
+```typescript
+import { AuthApiError } from "auth0";
+
+try {
+    await client.oauth.clientCredentialsGrant(params);
+} catch (e) {
+    if (e instanceof AuthApiError && e.error === "invalid_client") {
+        // handle
+    }
+}
+```
+
+**After (v7):**
+
+```typescript
+import { ManagementError } from "auth0";
+
+try {
+    await managementClient.someMethod(params);
+} catch (e) {
+    if (e instanceof ManagementError && e.statusCode === 401) {
+        const body = e.body as { error?: string };
+        if (body.error === "invalid_client") {
+            // handle
+        }
+    }
+}
+```
+
+### mTLS (ManagementClient)
+
+`useMTLS: true` now requires an explicit `fetch` option pre-configured with your mTLS client certificate. The token endpoint uses `mtls.{domain}` automatically when `useMTLS` is set.
+
+```typescript
+const client = new ManagementClient({
+    domain: "tenant.auth0.com",
+    clientId: "...",
+    clientSecret: "...",
+    useMTLS: true,
+    fetch: createMtlsFetch({ cert, key }), // your mTLS-capable fetch
+});
+```
+
+`useMTLS` works with both `clientSecret` and `clientAssertionSigningKey`. mTLS (RFC 8705) is a transport-layer concern that is independent of the client authentication method: the TLS client certificate yields a certificate-bound access token regardless of how the client authenticates. When `useMTLS` is set, an explicit `fetch` option configured with your client certificate is required.
+
+See the [auth0-auth-js documentation](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) for complete API details.
+
 ## Request and Response Types
 
 The SDK exports all request and response types as TypeScript interfaces. You can import them directly:
@@ -375,8 +470,6 @@ const actions = await client.actions.list(listParams);
 ### Key Classes
 
 - **ManagementClient** - for Auth0 Management API operations
-- **AuthenticationClient** - for Auth0 Authentication API operations
-- **UserInfoClient** - for retrieving user profile information
 
 ## Exception Handling
 

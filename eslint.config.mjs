@@ -168,7 +168,6 @@ export default [
             "*.config.mjs",
             "scripts/",
             "tests/data/",
-            "tests/auth/fixtures/",
             "**/*.d.ts",
             "**/*.d.mts",
             // Generated API files - these are auto-generated and should not be linted
