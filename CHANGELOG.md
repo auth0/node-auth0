@@ -1,5 +1,17 @@
 # Change Log
 
+## [v6.4.0](https://github.com/auth0/node-auth0/tree/v6.4.0) (2026-09-04)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.3.0...v6.4.0)
+
+**Added**
+
+- feat: SDK regeneration - Network ACL HMAC keys, B2B Integration EA, Organization Templates, and EventStream consolidation [\#1400](https://github.com/auth0/node-auth0/pull/1400) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Fixed**
+
+- fix: forward plain-string headers to token fetch request [\#1392](https://github.com/auth0/node-auth0/pull/1392) ([ankita10119](https://github.com/ankita10119))
+
 ## [v6.3.0](https://github.com/auth0/node-auth0/tree/v6.3.0) (2026-08-19)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v6.2.0...v6.3.0)
