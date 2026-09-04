@@ -246,6 +246,29 @@ describe("ConnectionsClient", () => {
             .post("/connections")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.create({
+                name: "name",
+                strategy: "ad",
+            });
+        }).rejects.toThrow(Management.UnprocessableEntityError);
+    });
+
+    test("create (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name", strategy: "ad" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -550,6 +573,26 @@ describe("ConnectionsClient", () => {
     });
 
     test("update (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/connections/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.update("id");
+        }).rejects.toThrow(Management.UnprocessableEntityError);
+    });
+
+    test("update (8)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};

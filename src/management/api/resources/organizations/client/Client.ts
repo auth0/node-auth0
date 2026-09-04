@@ -16,6 +16,7 @@ import { EnabledConnectionsClient } from "../resources/enabledConnections/client
 import { GroupsClient } from "../resources/groups/client/Client.js";
 import { InvitationsClient } from "../resources/invitations/client/Client.js";
 import { MembersClient } from "../resources/members/client/Client.js";
+import { OrganizationTemplateClient } from "../resources/organizationTemplate/client/Client.js";
 import { RolesClient } from "../resources/roles/client/Client.js";
 
 export declare namespace OrganizationsClient {
@@ -33,6 +34,7 @@ export class OrganizationsClient {
     protected _enabledConnections: EnabledConnectionsClient | undefined;
     protected _invitations: InvitationsClient | undefined;
     protected _members: MembersClient | undefined;
+    protected _organizationTemplate: OrganizationTemplateClient | undefined;
     protected _groups: GroupsClient | undefined;
     protected _roles: RolesClient | undefined;
 
@@ -66,6 +68,10 @@ export class OrganizationsClient {
 
     public get members(): MembersClient {
         return (this._members ??= new MembersClient(this._options));
+    }
+
+    public get organizationTemplate(): OrganizationTemplateClient {
+        return (this._organizationTemplate ??= new OrganizationTemplateClient(this._options));
     }
 
     public get groups(): GroupsClient {
