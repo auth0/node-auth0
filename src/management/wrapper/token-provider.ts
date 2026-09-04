@@ -16,7 +16,10 @@ export class TokenProvider {
     constructor(
         private readonly options: ManagementClient.ManagementClientOptionsWithClientCredentials & { audience: string },
     ) {
-        this.authenticationClient = new AuthenticationClient({ ...options, headers: undefined });
+        this.authenticationClient = new AuthenticationClient({
+            ...options,
+            headers: options.headers as Record<string, string>,
+        });
     }
 
     public async getAccessToken() {

@@ -122,6 +122,28 @@ describe("TokenProvider", () => {
         expect(spy).toHaveBeenCalledTimes(1);
     });
 
+    it("should forward plain string headers to the token fetch request", async () => {
+        const domain = "headers-test.auth0.com";
+        const customUserAgent = "my-custom-sdk/1.0";
+
+        const headerSpy = jest.fn().mockReturnValue({
+            access_token: "my-access-token",
+            expires_in: 86400,
+            token_type: "Bearer",
+        });
+
+        nock(`https://${domain}`).post("/oauth/token").matchHeader("user-agent", customUserAgent).reply(200, headerSpy);
+
+        const tp = new TokenProvider({
+            ...opts,
+            domain,
+            headers: { "User-Agent": customUserAgent },
+        });
+
+        expect(await tp.getAccessToken()).toBe("my-access-token");
+        expect(headerSpy).toHaveBeenCalled();
+    });
+
     it.skip("should use a custom fetch", async () => {
         const customFetch = jest
             .fn<FetchAPI>()
