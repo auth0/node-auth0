@@ -9,207 +9,44 @@ import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStat
 import * as errors from "../../../../../../errors/index.js";
 import * as Management from "../../../../../index.js";
 
-export declare namespace NetworkAclsClient {
+export declare namespace OrganizationTemplateClient {
     export type Options = BaseClientOptions;
 
     export interface RequestOptions extends BaseRequestOptions {}
 }
 
-export class NetworkAclsClient {
-    protected readonly _options: NormalizedClientOptionsWithAuth<NetworkAclsClient.Options>;
+export class OrganizationTemplateClient {
+    protected readonly _options: NormalizedClientOptionsWithAuth<OrganizationTemplateClient.Options>;
 
-    constructor(options: NetworkAclsClient.Options) {
+    constructor(options: OrganizationTemplateClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
     /**
-     * Retrieve all keys used to verify HTTP Message Signatures on Network ACL rules, ordered by creation time descending.
+     * Retrieve the organization template assigned to a specific organization. Returns the template object if one is explicitly assigned, or a 404 if no template is assigned.
      *
-     * @param {NetworkAclsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - ID of the organization.
+     * @param {OrganizationTemplateClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.keys.networkAcls.list()
-     */
-    public list(
-        requestOptions?: NetworkAclsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetAllKeysNetworkAclsResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
-    }
-
-    private async __list(
-        requestOptions?: NetworkAclsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetAllKeysNetworkAclsResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "keys/network-acls",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.GetAllKeysNetworkAclsResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/keys/network-acls");
-    }
-
-    /**
-     * Create a new key used to verify HTTP Message Signatures on Network ACL rules.
-     *
-     * @param {Management.CreateKeysNetworkAclsRequestContent} request
-     * @param {NetworkAclsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.keys.networkAcls.create({
-     *         name: "name",
-     *         alg: "hmac-sha256",
-     *         value: "value"
-     *     })
-     */
-    public create(
-        request: Management.CreateKeysNetworkAclsRequestContent,
-        requestOptions?: NetworkAclsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateKeysNetworkAclsResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
-    }
-
-    private async __create(
-        request: Management.CreateKeysNetworkAclsRequestContent,
-        requestOptions?: NetworkAclsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateKeysNetworkAclsResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                "keys/network-acls",
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: request,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.CreateKeysNetworkAclsResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/keys/network-acls");
-    }
-
-    /**
-     * Retrieve a specific key used to verify HTTP Message Signatures on Network ACL rules.
-     *
-     * @param {string} id - ID of the Network ACL Key to retrieve.
-     * @param {NetworkAclsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.keys.networkAcls.get("id")
+     *     await client.organizations.organizationTemplate.get("id")
      */
     public get(
         id: string,
-        requestOptions?: NetworkAclsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.NetworkAclKey> {
+        requestOptions?: OrganizationTemplateClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.OrganizationTemplate> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
-        requestOptions?: NetworkAclsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.NetworkAclKey>> {
+        requestOptions?: OrganizationTemplateClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.OrganizationTemplate>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -221,7 +58,7 @@ export class NetworkAclsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/network-acls/${core.url.encodePathParam(id)}`,
+                `organizations/${core.url.encodePathParam(id)}/organization-templates`,
             ),
             method: "GET",
             headers: _headers,
@@ -233,13 +70,11 @@ export class NetworkAclsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Management.NetworkAclKey, rawResponse: _response.rawResponse };
+            return { data: _response.body as Management.OrganizationTemplate, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
@@ -257,31 +92,41 @@ export class NetworkAclsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/keys/network-acls/{id}");
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "GET",
+            "/organizations/{id}/organization-templates",
+        );
     }
 
     /**
-     * Delete a key used to verify HTTP Message Signatures on Network ACL rules
+     * Assign an Organization Template to an organization.
      *
-     * @param {string} id - ID of the Network ACL Key to delete.
-     * @param {NetworkAclsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - The ID of the organization.
+     * @param {string} template_id - The ID of the organization template to assign.
+     * @param {OrganizationTemplateClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.keys.networkAcls.delete("id")
+     *     await client.organizations.organizationTemplate.assignOrganizationTemplate("id", "template_id")
      */
-    public delete(id: string, requestOptions?: NetworkAclsClient.RequestOptions): core.HttpResponsePromise<void> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(id, requestOptions));
+    public assignOrganizationTemplate(
+        id: string,
+        template_id: string,
+        requestOptions?: OrganizationTemplateClient.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(this.__assignOrganizationTemplate(id, template_id, requestOptions));
     }
 
-    private async __delete(
+    private async __assignOrganizationTemplate(
         id: string,
-        requestOptions?: NetworkAclsClient.RequestOptions,
+        template_id: string,
+        requestOptions?: OrganizationTemplateClient.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -294,7 +139,90 @@ export class NetworkAclsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/network-acls/${core.url.encodePathParam(id)}`,
+                `organizations/${core.url.encodePathParam(id)}/organization-templates/${core.url.encodePathParam(template_id)}`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: undefined, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 429:
+                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.ManagementError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "PUT",
+            "/organizations/{id}/organization-templates/{template_id}",
+        );
+    }
+
+    /**
+     * Remove an Organization Template assignment from an organization.
+     *
+     * @param {string} id - The ID of the organization.
+     * @param {string} template_id - The ID of the organization template to unassign.
+     * @param {OrganizationTemplateClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     *
+     * @example
+     *     await client.organizations.organizationTemplate.unassignOrganizationTemplate("id", "template_id")
+     */
+    public unassignOrganizationTemplate(
+        id: string,
+        template_id: string,
+        requestOptions?: OrganizationTemplateClient.RequestOptions,
+    ): core.HttpResponsePromise<void> {
+        return core.HttpResponsePromise.fromPromise(
+            this.__unassignOrganizationTemplate(id, template_id, requestOptions),
+        );
+    }
+
+    private async __unassignOrganizationTemplate(
+        id: string,
+        template_id: string,
+        requestOptions?: OrganizationTemplateClient.RequestOptions,
+    ): Promise<core.WithRawResponse<void>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ManagementEnvironment.Default,
+                `organizations/${core.url.encodePathParam(id)}/organization-templates/${core.url.encodePathParam(template_id)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -317,8 +245,6 @@ export class NetworkAclsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -330,6 +256,11 @@ export class NetworkAclsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/keys/network-acls/{id}");
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/organizations/{id}/organization-templates/{template_id}",
+        );
     }
 }

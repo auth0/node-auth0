@@ -254,6 +254,17 @@
             },
             "default": "./dist/cjs/management/api/resources/networkAcls/exports.js"
         },
+        "./organizationTemplates": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizationTemplates/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizationTemplates/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizationTemplates/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizationTemplates/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizationTemplates/exports.js"
+        },
         "./organizations": {
             "import": {
                 "types": "./dist/esm/management/api/resources/organizations/exports.d.mts",
@@ -1155,6 +1166,17 @@
                 "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
+        },
+        "./organizations/organizationTemplate": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
         },
         "./organizations/groups": {
             "import": {
