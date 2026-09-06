@@ -1,8 +1,8 @@
 # Migrating the other authentication flows
 
-This is the incremental part of the [Authentication Migration Guide](./index.md). Start with the guide's P0 sections (OIDC token grants and the four cross-cutting breaking changes) before you touch anything here. Everything below builds on those changes, so apply them to every rewrite on this page too.
+This is the incremental part of the [Authentication Migration Guide](./index.md). Start with the guide's [OIDC token grants](./index.md#oidc-token-grants) and cross-cutting breaking changes before you touch anything here. Everything below builds on those changes, so apply them to every rewrite on this page too.
 
-> **Migrating with an AI agent?** Point it at the Auth0 migration skill (the `auth0` skill in [`auth0/agent-skills`](https://github.com/auth0/agent-skills), migration intent `migrate-node-auth0`). It encodes these mappings and a verify loop so smaller models follow them exactly.
+> **Migrating with an AI agent?** Point it at the Auth0 migration skill (the `auth0` skill in [`auth0/agent-skills`](https://github.com/auth0/agent-skills), migration intent `migrate-node-auth0`).
 
 Migrate one flow at a time. Only the flows your app actually uses need attention; skip the rest.
 
@@ -58,7 +58,7 @@ const message = resp.data; // plain-text confirmation
 const message = await authClient.database.changePassword({ email, connection: "Username-Password-Authentication" });
 ```
 
-> `changePassword` requires `connection` plus at least one of `email` or `username` — either identifier is accepted, not `email` alone.
+> `changePassword` requires `connection` plus at least one of `email` or `username`: either identifier is accepted, not `email` alone.
 
 ## Passwordless
 
@@ -174,8 +174,8 @@ The standalone `UserInfoClient` from node-auth0 does not exist in the new SDK. C
 
 | Your intent | Replacement |
 | --- | --- |
-| Wanted user profile claims right after login | Read `TokenResponse.claims` from the grant result — the SDK already decodes the ID token. No extra `/userinfo` round-trip needed. **Preferred.** |
-| Wanted a live `/userinfo` response for an arbitrary access token (auth-js, when [PR #228](https://github.com/auth0/auth0-auth-js/pull/228) merges) | `await authClient.getUserInfo({ accessToken })` — direct method on `AuthClient`. |
+| Wanted user profile claims right after login | Read `TokenResponse.claims` from the grant result; the SDK already decodes the ID token. No extra `/userinfo` round-trip needed. **Preferred.** |
+| Wanted a live `/userinfo` response for an arbitrary access token (auth-js, when [PR #228](https://github.com/auth0/auth0-auth-js/pull/228) merges) | `await authClient.getUserInfo({ accessToken })`, a direct method on `AuthClient`. |
 | Wanted the profile in a server-rendered app with a session | `await serverClient.getUser()` returns the stored user claims from the session. |
 | Genuinely needs a raw `/userinfo` fetch on older SDK versions | Call the `/userinfo` endpoint directly with `fetch`. The endpoint is in the tenant's server metadata (`getServerMetadata()`). |
 
@@ -188,21 +188,21 @@ const resp = await userInfo.getUserInfo(accessToken);
 const profile = resp.data; // { sub, name, email, ... }
 ```
 
-**After — preferred, use the claims you already have:**
+**After (preferred): use the claims you already have:**
 
 ```ts
 const tokens = await authClient.getTokenByCode(callbackUrl, {});
 const profile = tokens.claims; // { sub, name, email, ... } decoded from the id_token
 ```
 
-**After — direct method (auth0-auth-js, when [PR #228](https://github.com/auth0/auth0-auth-js/pull/228) merges), when you only have an access token:**
+**After (direct method, auth0-auth-js, when [PR #228](https://github.com/auth0/auth0-auth-js/pull/228) merges): when you only have an access token:**
 
 ```ts
 // Takes an options object: { accessToken, expectedSubject? }
 const profile = await authClient.getUserInfo({ accessToken });
 ```
 
-**After — raw fetch fallback (older SDK versions):**
+**After (raw fetch fallback, older SDK versions):**
 
 ```ts
 const metadata = await authClient.getServerMetadata();
@@ -238,8 +238,8 @@ The complete node-auth0 → new SDK map, including the OIDC methods covered in t
 | `backchannel.backchannelGrant` | `authClient.backchannelAuthenticationGrant({ authReqId })` | auth-js |
 | `tokenExchange.exchangeToken` | `authClient.exchangeToken({ subjectTokenType, subjectToken, audience })` | auth-js |
 | `UserInfoClient.getUserInfo` | `TokenResponse.claims` (preferred) / `authClient.getUserInfo({ accessToken })` (auth-js, when [PR #228](https://github.com/auth0/auth0-auth-js/pull/228) merges) / `serverClient.getUser()` / raw `/userinfo` fetch | auth-js / server-js |
-| (no equivalent) — build `/authorize` URL | `authClient.buildAuthorizationUrl({ ... })` | auth-js |
-| (no equivalent) — build `/v2/logout` URL | `authClient.buildLogoutUrl({ returnTo })` | auth-js |
-| `ManagementClient.*` | **not migrated — stays on `auth0`** | — |
+| (no equivalent): build `/authorize` URL | `authClient.buildAuthorizationUrl({ ... })` | auth-js |
+| (no equivalent): build `/v2/logout` URL | `authClient.buildLogoutUrl({ returnTo })` | auth-js |
+| `ManagementClient.*` | **not migrated, stays on `auth0`** | n/a |
 
 When you finish a flow, return to the [verification checklist](./index.md#verification-checklist) and confirm the four cross-cutting changes for every call site you touched.
