@@ -1,5 +1,5 @@
 {
-    "entryPoints": ["src/management/index.ts", "src/auth/index.ts", "src/userinfo/index.ts", "src/lib/index.ts"],
+    "entryPoints": ["src/index.ts", "src/management/index.ts"],
     "entryPointStrategy": "resolve",
     "out": "docs",
     "name": "Auth0 Node.js SDK",
