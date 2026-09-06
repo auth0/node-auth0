@@ -46,7 +46,7 @@ const auth = new AuthClient({ domain, clientId, clientSecret });
 const tokens = await auth.getTokenByClientCredentials({ audience });
 ```
 
-The complete method-by-method mapping, the four cross-cutting behavior changes (return shape, casing, token expiry, error model), and the session-app wiring are documented in the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/blob/master/AUTH_MIGRATION_GUIDE.md). This guide does not repeat that detail.
+The complete method-by-method mapping, the four cross-cutting behavior changes (return shape, casing, token expiry, error model), and the session-app wiring are documented in the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/tree/master/auth-migration). This guide does not repeat that detail.
 
 If you need the old clients unchanged as a stopgap, they still ship from the [legacy entrypoint](#staying-on-the-legacy-entrypoint).
 
@@ -123,7 +123,7 @@ The `uuid` package is no longer a dependency. If your project imported `uuid` tr
 
 ## Migrating authentication code
 
-If your app calls `AuthenticationClient` or `UserInfoClient`, follow the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/blob/master/AUTH_MIGRATION_GUIDE.md). Start with its P0 OIDC section; the incremental flow and session pages live in the guide's [`migration/`](https://github.com/auth0/node-auth0/tree/master/migration) directory. It covers:
+If your app calls `AuthenticationClient` or `UserInfoClient`, follow the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/tree/master/auth-migration). Start with [`auth-migration/index.md`](https://github.com/auth0/node-auth0/blob/master/auth-migration/index.md) for the P0 OIDC section; the incremental flow, session, and troubleshooting pages live in the same [`auth-migration/`](https://github.com/auth0/node-auth0/tree/master/auth-migration) directory. It covers:
 
 - Choosing between `@auth0/auth0-auth-js` (stateless token grants) and `@auth0/auth0-server-js` (server-managed sessions).
 - The complete method-by-method API mapping for `.oauth`, `.database`, `.passwordless`, `.backchannel`, `.tokenExchange`, and `UserInfoClient`.
