@@ -16,7 +16,7 @@ This guide covers **only the Authentication API layer** — `AuthenticationClien
 - [Choosing your target SDK](#choosing-your-target-sdk)
 - [Prerequisites](#prerequisites)
 - [Installation and constructor mapping](#installation-and-constructor-mapping)
-- [P0: OIDC token grants](#p0-oidc-token-grants)
+- [OIDC token grants](#oidc-token-grants)
 - [Cross-cutting breaking changes](#cross-cutting-breaking-changes)
     - [1. Return shape](#1-return-shape)
     - [2. Casing](#2-casing)
@@ -37,7 +37,7 @@ The work falls into three phases:
 | Phase | What you do | Where |
 | --- | --- | --- |
 | **Before** — orient and set up | Pick your target SDK, check prerequisites, install the package, map constructor options. | [Choosing your target SDK](#choosing-your-target-sdk), [Prerequisites](#prerequisites), [Installation and constructor mapping](#installation-and-constructor-mapping) |
-| **During** — rewrite call sites | Rewrite the OIDC token grants (P0, in this file), then the other flows and the session layer as needed. Apply the four cross-cutting breaking changes to every call site. | [P0: OIDC token grants](#p0-oidc-token-grants), [Cross-cutting breaking changes](#cross-cutting-breaking-changes), [`authentication-flows.md`](./authentication-flows.md), [`server-side-sessions.md`](./server-side-sessions.md) |
+| **During** — rewrite call sites | Rewrite the OIDC token grants (P0, in this file), then the other flows and the session layer as needed. Apply the four cross-cutting breaking changes to every call site. | [OIDC token grants](#oidc-token-grants), [Cross-cutting breaking changes](#cross-cutting-breaking-changes), [`authentication-flows.md`](./authentication-flows.md), [`server-side-sessions.md`](./server-side-sessions.md) |
 | **After** — verify | Run the build-until-green checklist; confirm no residue and that `ManagementClient` code is untouched. | [Verification checklist](#verification-checklist) |
 
 Priority order, if you want one: **P0** (OIDC grants + cross-cutting changes — the whole job for most apps) → **P1** ([other flows](./authentication-flows.md), only the ones you use) → **P2** ([session apps](./server-side-sessions.md), only if you want the SDK to own sessions). Stuck? See [`troubleshooting.md`](./troubleshooting.md).
@@ -272,7 +272,7 @@ Common patterns:
 - **Agent (Node.js dispatcher):** wrap `customFetch` to inject the agent into the underlying HTTP transport.
 - **Retry / middleware:** compose behavior in a `customFetch` wrapper passed either at construction or per request.
 
-## P0: OIDC token grants
+## OIDC token grants
 
 This is the core of the migration and, for most apps, the whole of it. These are the `AuthenticationClient.oauth.*` grants that drive OpenID Connect login and machine-to-machine token acquisition. All of them move onto the `AuthClient` instance directly (not a sub-client).
 
