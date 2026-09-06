@@ -2,6 +2,8 @@
 
 A guide to migrating the Auth0 Node.js SDK from `6.x` to `7.x`.
 
+> **Migrating with an AI agent?** Point it at the Auth0 migration skill first. The skill lives in [`auth0/agent-skills`](https://github.com/auth0/agent-skills) as the `auth0` skill (migration intent: `migrate-node-auth0`). It encodes the authentication-layer rewrite rules and a verify loop, so even a smaller model follows them exactly. This guide is the human-facing companion.
+
 - [Overall changes](#overall-changes)
 - [Breaking changes](#breaking-changes)
     - [Authentication API removed from the main entrypoint](#authentication-api-removed-from-the-main-entrypoint)
@@ -121,7 +123,7 @@ The `uuid` package is no longer a dependency. If your project imported `uuid` tr
 
 ## Migrating authentication code
 
-If your app calls `AuthenticationClient` or `UserInfoClient`, follow the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/blob/master/AUTH_MIGRATION_GUIDE.md). It covers:
+If your app calls `AuthenticationClient` or `UserInfoClient`, follow the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/blob/master/AUTH_MIGRATION_GUIDE.md). Start with its P0 OIDC section; the incremental flow and session pages live in the guide's [`migration/`](https://github.com/auth0/node-auth0/tree/master/migration) directory. It covers:
 
 - Choosing between `@auth0/auth0-auth-js` (stateless token grants) and `@auth0/auth0-server-js` (server-managed sessions).
 - The complete method-by-method API mapping for `.oauth`, `.database`, `.passwordless`, `.backchannel`, `.tokenExchange`, and `UserInfoClient`.
