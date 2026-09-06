@@ -9,7 +9,7 @@ This page is part of the [Authentication Migration Guide](./index.md). Read it o
 - [Mental model](#mental-model)
 - [Store setup](#store-setup)
 - [The redirect-login lifecycle](#the-redirect-login-lifecycle)
-- [Non-redirect logins that establish a session](#non-redirect-logins-that-establish-a-session)
+- [Logins without a browser redirect](#logins-without-a-browser-redirect)
 - [Backchannel logout](#backchannel-logout)
 
 ## Mental model
@@ -131,9 +131,9 @@ app.get("/logout", async (req, res) => {
 
 `logout` clears the session from the state store and returns the Auth0 `/v2/logout` URL. If you also revoked the refresh token on logout (via `oauth.revokeRefreshToken`), call `serverClient.revokeRefreshToken({ req, res })` before redirecting; by default it reads the refresh token from the session, so you do not handle the raw token yourself (it also accepts an explicit `{ token }` if you need to revoke a specific one).
 
-## Non-redirect logins that establish a session
+## Logins without a browser redirect
 
-If you used node-auth0 for a non-redirect login (password grant, passwordless, CIBA, custom token exchange) *and* want a server-js session out of it, use the ServerClient methods that both authenticate and write the session, rather than the low-level auth-js grants:
+Some logins do not use a browser redirect: the password grant, passwordless, CIBA, and custom token exchange. If you used node-auth0 for one of these *and* want a server-js session out of it, use the ServerClient methods that both authenticate and write the session, rather than the low-level auth-js grants:
 
 | Flow | ServerClient method |
 | --- | --- |

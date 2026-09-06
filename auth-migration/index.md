@@ -42,12 +42,12 @@ Suggested order: start with the OIDC grants and cross-cutting changes (the whole
 
 ## Overview
 
-node-auth0's `AuthenticationClient` is a **stateless HTTP client**. Every method is a single call to an Auth0 Authentication API endpoint that returns a response object. It has no notion of a logged-in user, no session, no cookie, no token store, and no automatic refresh. Anything stateful in a node-auth0 app (persisting tokens, deciding when to refresh, tracking the login across requests) was written by you *around* node-auth0.
+node-auth0's `AuthenticationClient` is a stateless HTTP client. Every method is a single call to an Auth0 Authentication API endpoint that returns a response object. It has no notion of a logged-in user, no session, no cookie, no token store, and no automatic refresh. Anything stateful in a node-auth0 app (persisting tokens, deciding when to refresh, tracking the login across requests) was written by you *around* node-auth0.
 
 The modern stack splits those two concerns into two packages:
 
-- **`@auth0/auth0-auth-js`** is the stateless token layer. It is the direct successor to `AuthenticationClient`: the same "one method equals one API call equals one result" model, with modern ergonomics (camelCase, typed errors, direct return values, per-request options).
-- **`@auth0/auth0-server-js`** is a stateful session layer built on top of auth0-auth-js. It owns the login redirect flow, a pluggable state/transaction store, cookie handling, automatic token refresh, and logout. It is the successor to the *session code you hand-rolled*, not to `AuthenticationClient` itself.
+- `@auth0/auth0-auth-js` is the stateless token layer. It is the direct successor to `AuthenticationClient`: the same "one method equals one API call equals one result" model, with modern ergonomics (camelCase, typed errors, direct return values, per-request options).
+- `@auth0/auth0-server-js` is a stateful session layer built on top of auth0-auth-js. It owns the login redirect flow, a pluggable state/transaction store, cookie handling, automatic token refresh, and logout. It is the successor to the *session code you hand-rolled*, not to `AuthenticationClient` itself.
 
 ### Who this is for
 
@@ -55,42 +55,42 @@ You are running a Node.js backend that imports the `auth0` package and calls `Au
 
 ### Scope
 
-**In scope:**
+In scope:
 
 - `AuthenticationClient` and its sub-clients: `.oauth`, `.database`, `.passwordless`, `.backchannel`, `.tokenExchange`
 - `UserInfoClient`
 - The auth error types (`AuthApiError`) and token-validation types (`IDTokenValidateOptions`, `IdTokenValidatorError`)
 
-**Out of scope, do not touch:**
+Out of scope, do not touch:
 
-- `ManagementClient` (Management API v2). It is **not** being migrated and stays on the `auth0` package.
+- `ManagementClient` (Management API v2). It is not being migrated and stays on the `auth0` package.
 - Application routes, view/controller logic, database code, and any non-auth use of the `auth0` package.
 
 > If a file uses `ManagementClient`, leave that code alone. Only rewrite the `AuthenticationClient` / `UserInfoClient` parts.
 
 ## Choosing your target SDK
 
-The routing question is: **do you want to keep owning your session, or hand that responsibility to the SDK?**
+The routing question is: do you want to keep owning your session, or hand that responsibility to the SDK?
 
 ### Decision table
 
 | If your code… | Migrate to | Why |
 | --- | --- | --- |
-| Only performs token grants / DB signup / passwordless / userinfo and manages its own session (or is a machine-to-machine service backend) | **`@auth0/auth0-auth-js`** | Direct, near 1:1 replacement for `AuthenticationClient`. Same stateless model. |
-| Wants the SDK to own the login redirect flow, session storage, cookies, token refresh, and logout (a server-rendered web app) | **`@auth0/auth0-server-js`** | Adds a session layer node-auth0 never had. This is a rewrite of the session handling, not a method-for-method port. |
+| Only performs token grants / DB signup / passwordless / userinfo and manages its own session (or is a machine-to-machine service backend) | `@auth0/auth0-auth-js` | Direct, near 1:1 replacement for `AuthenticationClient`. Same stateless model. |
+| Wants the SDK to own the login redirect flow, session storage, cookies, token refresh, and logout (a server-rendered web app) | `@auth0/auth0-server-js` | Adds a session layer node-auth0 never had. This is a rewrite of the session handling, not a method-for-method port. |
 
-**Default recommendation:** start with **`@auth0/auth0-auth-js`** for a faithful parity migration. Choose **`@auth0/auth0-server-js`** only when you currently hand-roll session/cookie/refresh logic around node-auth0 and would benefit from the SDK owning it.
+**Default recommendation:** start with `@auth0/auth0-auth-js` for a faithful parity migration. Choose `@auth0/auth0-server-js` only when you currently hand-roll session/cookie/refresh logic around node-auth0 and would benefit from the SDK owning it.
 
 ### Signals
 
-Signals that point to **auth0-auth-js**:
+Signals that point to auth0-auth-js:
 
 - Predominant use is `clientCredentialsGrant` (machine-to-machine). There is no user, so there is no session to own.
 - The app already has a session framework it is happy with and only calls node-auth0 for token grants.
 - The app is an API, worker, or CLI, not a browser-facing web server.
 - You want the smallest, most mechanical, lowest-risk migration.
 
-Signals that point to **auth0-server-js**:
+Signals that point to auth0-server-js:
 
 - The app performs a browser redirect login and reads `req.session.user` (or equivalent) on later requests.
 - You wrote refresh-on-expiry logic, a token cache, or logout-with-revocation by hand.
@@ -105,20 +105,20 @@ A single app can use both: auth0-server-js for the user-facing login/session, an
 
 ### Node.js version
 
-Both target SDKs require **Node.js 20 LTS or newer**. Verify the project's runtime before installing.
+Both target SDKs need Node.js 20 LTS or newer. Verify the project's runtime before installing.
 
 ### SDK versions
 
 - `@auth0/auth0-auth-js` >= `1.12.1`
 - `@auth0/auth0-server-js` >= `1.12.1`
 
-Both are published on npm: `@auth0/auth0-auth-js@1.12.1` and `@auth0/auth0-server-js@1.12.1` are the current `latest`. Plain token-grant migrations work against the published `1.12.1`.
+Both are published on npm: `@auth0/auth0-auth-js@1.12.1` and `@auth0/auth0-server-js@1.12.1` are the current `latest`. Plain token grant migrations work against the published `1.12.1`.
 
 ### The RequestOptions / fullResponse caveat
 
-The per-request options surface (`signal`, `headers`, per-call `customFetch` in `RequestOptions`) and the `fullResponse` envelope landed **after** the `1.12.1` npm release and are **not in the published tarball yet**. If your migration depends on those APIs, install from the local-tarball / pre-release path until the next release cuts. A plain token-grant migration that does not read HTTP response metadata on success needs none of this and works against `1.12.1` as published.
+The per-request options surface (`signal`, `headers`, per-request `customFetch` in `RequestOptions`) and the `fullResponse` envelope landed after the `1.12.1` npm release and are not in the published tarball yet. If your migration depends on those APIs, install from the pre-release path (the local tarball, before the next npm release cuts). A plain token grant migration that does not read HTTP response metadata on success needs none of this and works against `1.12.1` as published.
 
-This guide flags each place where `RequestOptions` or `fullResponse` applies, so you can tell which parts need the pre-release path.
+This guide flags each place where `RequestOptions` or `fullResponse` applies, so you can tell which parts need it.
 
 ## Installation and constructor mapping
 
@@ -217,8 +217,8 @@ Option-by-option:
 | `useMTLS` | `useMtls` | Renamed (casing). |
 | `fetch` | `customFetch` | Renamed. |
 | `telemetry: boolean` | `telemetry: TelemetryConfig` | Now a structured object. |
-| `headers` (global) | per-call `RequestOptions.headers` | Moved to per-request options; set per call site rather than globally. |
-| `timeoutDuration` | per-call `RequestOptions.signal` | Use an `AbortSignal.timeout(ms)` on the call. |
+| `headers` (global) | per-request `RequestOptions.headers` | Moved to per-request options; set per call site rather than globally. |
+| `timeoutDuration` | per-request `RequestOptions.signal` | Use an `AbortSignal.timeout(ms)` on the call. |
 | `retry` | configure via `customFetch` | Wrap your fetch with retry if needed. |
 | `agent` | configure via `customFetch` | Set the dispatcher inside your custom fetch. |
 | `middleware` | `customFetch` | Compose behavior in the fetch wrapper. |
@@ -227,7 +227,7 @@ Option-by-option:
 
 ### ServerClient options
 
-`ServerClient` wraps an `AuthClient` and adds the session machinery. It shares the auth options and **adds required stores**. This constructor and the stores it needs are covered in [`server-side-sessions.md`](./server-side-sessions.md); reach for it only when you route to server-js.
+`ServerClient` wraps an `AuthClient` and adds the session machinery. It shares the auth options and adds required stores. This constructor and the stores it needs are covered in [`server-side-sessions.md`](./server-side-sessions.md); reach for it only when you route to server-js.
 
 ### Global config to per-request options
 
@@ -247,14 +247,14 @@ const tokens = await authClient.getTokenByClientCredentials(
 
 `@auth0/auth0-server-js` re-exports `RequestOptions`, `ApiResponse`, and `FullResponseOption` from `@auth0/auth0-auth-js`, so you can import any of them from either package.
 
-**Arity rule:** MFA methods (`authClient.mfa.*`) take `requestOptions` as the 2nd argument; store-first methods (session-owning methods on `serverClient`) take it as the 3rd argument after the store context; cache hits ignore it entirely.
+Arity rule: MFA methods (`authClient.mfa.*`) take `requestOptions` as the 2nd argument; store-first methods (session-owning methods on `serverClient`) take it as the 3rd argument after the store context; cache hits ignore it entirely.
 
 Common patterns:
 
-- **Global headers:** apply via `RequestOptions.headers` on each call that needs it, or wrap `customFetch` once to inject it everywhere.
-- **Timeout:** replace `timeoutDuration: 10000` with `signal: AbortSignal.timeout(10000)` on the call.
-- **Agent (Node.js dispatcher):** wrap `customFetch` to inject the agent into the underlying HTTP transport.
-- **Retry / middleware:** compose behavior in a `customFetch` wrapper passed either at construction or per request.
+- Global headers: apply via `RequestOptions.headers` on each call that needs it, or wrap `customFetch` once to inject it everywhere.
+- Timeout: replace `timeoutDuration: 10000` with `signal: AbortSignal.timeout(10000)` on the call.
+- Agent (Node.js dispatcher): wrap `customFetch` to inject the agent into the underlying HTTP transport.
+- Retry / middleware: compose behavior in a `customFetch` wrapper passed either at construction or per request.
 
 ## OIDC token grants
 
@@ -267,12 +267,12 @@ Naming conventions used throughout:
 | node-auth0 | new SDKs |
 | --- | --- |
 | Params and response fields use the snake_case wire shape: `client_id`, `refresh_token`, `access_token`, `expires_in`, `phone_number` | camelCase: `clientId`, `refreshToken`, `accessToken`, `expiresAt`, `phoneNumber` |
-| Methods take a `bodyParameters` object (+ optional `initOverrides`) | Methods take a single `options` object (+ optional trailing `RequestOptions` for per-call `signal`, `headers`, `customFetch`) |
+| Methods take a `bodyParameters` object (+ optional `initOverrides`) | Methods take a single `options` object (+ optional trailing `RequestOptions` for per-request `signal`, `headers`, `customFetch`) |
 | Every method returns a `JSONApiResponse<T>` / `VoidApiResponse` / `TextApiResponse` wrapper | Methods return the domain object directly (`TokenResponse`, `SignUpResult`, `string`, `void`) |
 
 ### `oauth.authorizationCodeGrant` → `getTokenByCode`
 
-The single most important semantic change in the whole migration. In node-auth0 you pass the raw authorization `code` (and `redirect_uri`) that you extracted from the callback query string yourself. In auth0-auth-js you pass the **entire callback `URL`**; the SDK extracts `code` and validates `state` for you, and `redirect_uri` comes from the `AuthClient` config / `authorizationParams`.
+The single most important semantic change in the whole migration. In node-auth0 you pass the raw authorization `code` (and `redirect_uri`) that you extracted from the callback query string yourself. In auth0-auth-js you pass the entire callback `URL`; the SDK extracts `code` and validates `state` for you, and `redirect_uri` comes from the `AuthClient` config / `authorizationParams`.
 
 **Before (node-auth0):**
 
@@ -383,7 +383,7 @@ await auth0.oauth.revokeRefreshToken({ token: rt });
 await authClient.revokeToken({ token: rt });
 ```
 
-> **Session apps:** if you are migrating to server-js and this revoke was part of logout, use `serverClient.revokeRefreshToken()` (by default it reads the refresh token from the session; you can also pass an explicit `{ token }` in its options) instead of the low-level `revokeToken`.
+> **Session apps:** if you are migrating to server-js and this revoke was part of logout, use `serverClient.revokeRefreshToken()` instead of the low-level `revokeToken`. By default it reads the refresh token from the session; you can also pass an explicit `{ token }` in its options.
 
 ### Build the authorization and logout URLs
 
@@ -397,17 +397,17 @@ const { authorizationUrl, codeVerifier } = await authClient.buildAuthorizationUr
 const logoutUrl = await authClient.buildLogoutUrl({ returnTo: "https://app.example.com" });
 ```
 
-> **Pushed Authorization Requests (PAR):** there is no standalone PAR method. Pass `pushedAuthorizationRequests: true` to `buildAuthorizationUrl`: the SDK performs the PAR POST and returns an authorization URL that references the resulting `request_uri`. Requires the tenant to expose a `pushed_authorization_request_endpoint`; the SDK throws if PAR is requested but unsupported. This replaces node-auth0's `oauth.pushedAuthorization`.
+> Pushed Authorization Requests (PAR): there is no standalone PAR method. Pass `pushedAuthorizationRequests: true` to `buildAuthorizationUrl`: the SDK performs the PAR POST and returns an authorization URL that references the resulting `request_uri`. Requires the tenant to expose a `pushed_authorization_request_endpoint`; the SDK throws if PAR is requested but unsupported. This replaces node-auth0's `oauth.pushedAuthorization`.
 
 Once the OIDC grants are rewritten and the [cross-cutting breaking changes](#cross-cutting-breaking-changes) are applied, run the [verification checklist](#verification-checklist). If your app also uses database, passwordless, CIBA, token exchange, or `UserInfoClient`, continue with [`authentication-flows.md`](./authentication-flows.md). If you want the SDK to own sessions, see [`server-side-sessions.md`](./server-side-sessions.md).
 
 ### Optional: migrate only OIDC while staying on v6
 
-You do not have to migrate everything at once, and you do not have to wait for v7. node-auth0 v6 still ships `AuthenticationClient` alongside `ManagementClient`, so you can move your OIDC login and token-grant code off `AuthenticationClient` to `@auth0/auth0-auth-js` **now**, incrementally, while the rest of the app keeps using `auth0` v6 unchanged.
+You do not have to migrate everything at once, and you do not have to wait for v7. node-auth0 v6 still ships `AuthenticationClient` alongside `ManagementClient`, so you can move your OIDC login and token grant code off `AuthenticationClient` to `@auth0/auth0-auth-js` now, incrementally, while the rest of the app keeps using `auth0` v6 unchanged.
 
 A common and fully supported end state:
 
-- OIDC / token-grant code: migrated to `@auth0/auth0-auth-js` (the grants covered in this section).
+- OIDC / token grant code: migrated to `@auth0/auth0-auth-js` (the grants covered in this section).
 - Other auth flows you have not gotten to yet: still on `AuthenticationClient` from `auth0` v6.
 - Management API: still on `ManagementClient` from `auth0` (never migrates).
 
@@ -430,16 +430,16 @@ node-auth0 wraps most Authentication API results in a response envelope:
 - `VoidApiResponse`: same envelope, `.data` is `undefined` (used by `sendEmail`, `revokeRefreshToken`, …).
 - `TextApiResponse`: `.data` is a `string` (used by `database.changePassword`).
 
-**Exception:** `backchannel.authorize`, `backchannel.backchannelGrant`, and `tokenExchange.exchangeToken` return domain objects directly (no `.data` wrapper) in node-auth0.
+Exception: `backchannel.authorize`, `backchannel.backchannelGrant`, and `tokenExchange.exchangeToken` return domain objects directly (no `.data` wrapper) in node-auth0.
 
-The new SDKs **drop the envelope** and return the domain object directly:
+The new SDKs drop the envelope and return the domain object directly:
 
 - Token grants return a `TokenResponse` instance.
 - `database.signUp` returns a `SignUpResult` object.
 - `database.changePassword` returns a `string`.
 - `sendEmail` / `sendSms` / `revokeToken` return `void`.
 
-HTTP metadata (status code, response headers such as `x-request-id`, `retry-after`, rate-limit headers) is available through the per-operation error objects on failure paths. On **success paths**, metadata is available via the opt-in `fullResponse` envelope (see below). It is no longer on the bare success value by default.
+HTTP metadata (status code, response headers such as `x-request-id`, `retry-after`, rate-limit headers) is available through the typed error objects on failure paths. On success paths, metadata is available via the opt-in `fullResponse` envelope (see below). It is no longer on the bare success value by default.
 
 The rewrite: delete `.data` indirection on every success path:
 
@@ -468,9 +468,9 @@ console.log(message);
 
 #### Reading HTTP response metadata (fullResponse)
 
-> The `fullResponse` envelope and per-request `RequestOptions` landed **after** the `1.12.1` npm release and are not in the published tarball yet. Use the [pre-release path](#the-requestoptions--fullresponse-caveat) if you depend on them.
+> The `fullResponse` envelope and the per-request `RequestOptions` are not in the published `1.12.1` tarball yet. See the [pre-release path](#the-requestoptions--fullresponse-caveat).
 
-When your node-auth0 code reads HTTP response metadata (status, headers) on a **success path**, migrate to the opt-in envelope rather than dropping the read. This is most common when you track rate limits, log request IDs, or check retry-after headers for dashboard telemetry.
+When your node-auth0 code reads HTTP response metadata (status, headers) on a success path, migrate to the opt-in envelope rather than dropping the read. This is most common when you track rate limits, log request IDs, or check retry-after headers for dashboard telemetry.
 
 ```ts
 // before (node-auth0): metadata on the success envelope
@@ -512,19 +512,19 @@ Caveats:
 - Pass `fullResponse: true` as a literal, not a variable. Using spread (`{ ...opts, fullResponse: true }`) widens `true` to `boolean`, causing TypeScript overload resolution to fall back to the bare return type. Fix: pass `{ ...opts, fullResponse: true as const }` or include `fullResponse` as an inline literal in the options object.
 - Performance: `@auth0/auth0-auth-js` does not cache tokens: every `AuthClient` grant method performs a live token-endpoint round-trip regardless of `fullResponse`, so the flag adds no extra network cost at this layer. (Token caching and reuse live in `@auth0/auth0-server-js`'s session store, not in the auth-js `AuthClient`.) The only in-memory cache in auth-js is for OIDC discovery / JWKS metadata, which is unrelated to `fullResponse`.
 - Reserved headers: a caller `Authorization` header is ignored and the telemetry `Auth0-Client` header always wins; `RequestOptions.headers` cannot override them.
-- Per-request `customFetch` replaces the base transport for that call but does not inherit mutual TLS (mTLS); if you rely on mTLS the supplied fetch must itself be mTLS-capable.
+- Per-request `customFetch` replaces the base transport for that call but does not inherit mutual TLS (mTLS). If you rely on mTLS, the supplied fetch must itself be mTLS-capable.
 
 Default to the bare return type. Reach for `fullResponse` only where you actually consumed response metadata on success: rate-limit dashboards, request-id logging for support investigations, or retry-after handling. `MissingCapturedResponseError` is an internal-bug sentinel; you do not normally catch it.
 
 Gotchas:
 
 - **Void methods.** Code that did `const r = await auth0.passwordless.sendEmail(...)` and then checked `r.status === 200` must drop that check: by default the method returns `void` and throws on failure. Rely on the thrown error instead (see [Error model](#4-error-model)).
-- **Header reads.** Any code reading `resp.headers.get('x-ratelimit-remaining')` on a **success** path needs the opt-in `fullResponse` envelope. Error paths still surface metadata on the typed error. Search your code for `.headers` on response values.
+- **Header reads.** Any code reading `resp.headers.get('x-ratelimit-remaining')` on a success path needs the opt-in `fullResponse` envelope. Error paths still surface metadata on the typed error. Search your code for `.headers` on response values.
 - **Do not hand-roll a compatibility shim.** Resist reintroducing a custom `{ data, status }` shape to minimize downstream diff. Let the domain object flow through; the SDK's opt-in `fullResponse` envelope is the sanctioned channel when you genuinely need the HTTP Response.
 
 ### 2. Casing
 
-node-auth0's public API exposes the **snake_case wire shape** verbatim, on both inputs and outputs. The new SDKs use **camelCase** for the public API and only translate to snake_case at the HTTP boundary internally.
+node-auth0's public API exposes the snake_case wire shape verbatim, on both inputs and outputs. The new SDKs use camelCase for the public API and only translate to snake_case at the HTTP boundary internally.
 
 Input parameters, field map:
 
@@ -551,7 +551,7 @@ Output fields, `TokenResponse` field map:
 | `refresh_token` | `refreshToken` |
 | `id_token` | `idToken` |
 | `token_type` | `tokenType` |
-| `expires_in` (relative) | `expiresAt` (**absolute, see below**) |
+| `expires_in` (relative) | `expiresAt` (absolute, see below) |
 | `scope` | `scope` |
 | (none): had to decode id_token yourself | `claims` (already-decoded ID token claims) |
 | `authorization_details` | `authorizationDetails` |
@@ -576,8 +576,8 @@ const idToken = tokens.idToken;
 
 **This is the highest-risk change in the migration. It is silent, it compiles, and it corrupts session lifetimes.**
 
-- node-auth0 `TokenSet.expires_in` = the token's **lifetime in seconds relative to now** (e.g. `86400` for a 24-hour token). This is the raw OAuth `expires_in` from the wire.
-- new SDK `TokenResponse.expiresAt` = an **absolute Unix timestamp in seconds** (e.g. `1786000000`) computed by the SDK as roughly `now + expires_in`.
+- node-auth0 `TokenSet.expires_in` = the token's lifetime in seconds relative to now (e.g. `86400` for a 24-hour token). This is the raw OAuth `expires_in` from the wire.
+- new SDK `TokenResponse.expiresAt` = an absolute Unix timestamp in seconds (e.g. `1786000000`) computed by the SDK as roughly `now + expires_in`.
 
 Existing node-auth0 code almost always converts the relative value to an absolute deadline itself:
 
@@ -595,7 +595,7 @@ const tokens = await authClient.getTokenByRefreshToken({ refreshToken: rt });
 const expiresAtMs = Date.now() + tokens.expiresAt * 1000; // ~ now + (now + lifetime) → far future
 ```
 
-The stored deadline lands decades in the future, so the token is treated as valid long after it has actually expired, producing 401s in production that the app never proactively refreshes.
+The stored deadline lands decades in the future, so the token is treated as valid long after it has actually expired. The app does not refresh it, so production 401s follow.
 
 The rewrite: `expiresAt` is *already* the deadline. Do not add `Date.now()`:
 
@@ -637,7 +637,7 @@ class AuthApiError extends Error {
 }
 ```
 
-The new SDKs throw **typed, per-operation error classes**: `TokenByCodeError`, `TokenByRefreshTokenError`, `TokenByClientCredentialsError`, `TokenByPasswordError`, `TokenExchangeError`, `TokenRevocationError`, `PasswordlessStartError`, `PasswordlessChallengeError`, `PasswordlessDbGetTokenError`, `MfaEnrollmentError`, and so on. Each carries a structured `.cause` (the underlying OAuth2 error) rather than flat `error` / `error_description` strings.
+The new SDKs throw typed, operation-specific error classes: `TokenByCodeError`, `TokenByRefreshTokenError`, `TokenByClientCredentialsError`, `TokenByPasswordError`, `TokenExchangeError`, `TokenRevocationError`, `PasswordlessStartError`, `PasswordlessChallengeError`, `PasswordlessDbGetTokenError`, `MfaEnrollmentError`, and so on. Each carries a structured `.cause` (the underlying OAuth2 error) rather than flat `error` / `error_description` strings.
 
 The rewrite: generic catch:
 
@@ -662,7 +662,7 @@ try {
 }
 ```
 
-Import the specific error class for the operation you are calling. If you had one broad `catch (e instanceof AuthApiError)` around several different operations, either widen to catch each operation's error type or check the shared base behavior, but prefer the specific type per call site, since it documents which operation can fail.
+Import the specific error class for the operation you are calling. If you had one broad `catch (e instanceof AuthApiError)` around several different operations, either widen to catch each operation's error type or check the shared base behavior. Prefer the specific type per call site, since it documents which operation can fail.
 
 #### MFA detection: use the type guard, not the string
 

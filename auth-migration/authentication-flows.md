@@ -44,7 +44,7 @@ const result = await authClient.database.signUp({
 const userId = result.id;
 ```
 
-> **ID normalization is preserved.** node-auth0 mapped the server's `_id | user_id | id` onto a single `id`. The new SDK does the same, so `result.id` is always present. Do not add your own `_id` fallback.
+> ID normalization is preserved: node-auth0 mapped the server's `_id | user_id | id` onto a single `id`. The new SDK does the same, so `result.id` is always present. Do not add your own `_id` fallback.
 
 ### `database.changePassword` → `authClient.database.changePassword`
 
@@ -73,7 +73,7 @@ await auth0.passwordless.sendEmail({ email, send: "code" });
 await authClient.passwordless.sendEmail({ email, send: "code" });
 ```
 
-> **Default changed.** node-auth0 defaulted `send` to `'link'` (magic link). The new SDK defaults `send` to `'code'` (one-time password). If you relied on the implicit default to send magic links, set `send: 'link'` explicitly.
+> Default changed: node-auth0 defaulted `send` to `'link'` (magic link). The new SDK defaults `send` to `'code'` (one-time password). If you relied on the implicit default to send magic links, set `send: 'link'` explicitly.
 
 ### `passwordless.sendSMS` → `authClient.passwordless.sendSms`
 
@@ -108,7 +108,7 @@ const resp = await auth0.passwordless.loginWithSMS({ phone_number, code });
 const tokens = await authClient.getTokenByPasswordlessSms({ phoneNumber, code });
 ```
 
-> **Session apps:** `@auth0/auth0-server-js` exposes `startPasswordless` / `completePasswordless` / `completePasswordlessMagicLink`, which both send the code and establish a session. Use those instead of the two-step auth-js flow when the SDK owns the session. See [Migrating session apps](./server-side-sessions.md).
+> Session apps: `@auth0/auth0-server-js` exposes `startPasswordless` / `completePasswordless` / `completePasswordlessMagicLink`, which both send the code and establish a session. Use those instead of the two-step auth-js flow when the SDK owns the session. See [Migrating session apps](./server-side-sessions.md).
 
 ## Backchannel authentication (CIBA)
 
@@ -141,9 +141,9 @@ const resp = await auth0.backchannel.backchannelGrant({ auth_req_id: authReqId }
 const tokens = await authClient.backchannelAuthenticationGrant({ authReqId });
 ```
 
-> **One-shot convenience:** `authClient.backchannelAuthentication({ ... })` initiates and polls to completion, returning a `TokenResponse`. Use it if your code did the initiate-then-poll loop by hand.
+> One-shot convenience: `authClient.backchannelAuthentication({ ... })` initiates and polls to completion, returning a `TokenResponse`. Use it if your code did the initiate-then-poll loop by hand.
 >
-> **Session apps:** `@auth0/auth0-server-js` exposes `loginBackchannel(...)`, which runs CIBA and establishes a session in one call. See [Migrating session apps](./server-side-sessions.md).
+> Session apps: for CIBA that also establishes a session, see [Migrating session apps](./server-side-sessions.md).
 
 ## Token exchange (RFC 8693)
 
@@ -166,7 +166,7 @@ const tokens = await authClient.exchangeToken({
 
 > `exchangeToken` is overloaded: a custom-exchange profile shape (`subjectTokenType` + `subjectToken` + `audience`) and a Token Vault shape (`connection` present). Presence of `connection` routes to the vault path. The custom-exchange profile is the RFC 8693 replacement for `tokenExchange.exchangeToken`.
 >
-> **Session apps:** `@auth0/auth0-server-js` exposes `loginWithCustomTokenExchange` (exchange, then establish a session) and `customTokenExchange` (exchange, then return tokens with no session).
+> Session apps: `@auth0/auth0-server-js` exposes `loginWithCustomTokenExchange` (exchange, then establish a session) and `customTokenExchange` (exchange, then return tokens with no session).
 
 ## UserInfoClient
 
@@ -195,7 +195,7 @@ const tokens = await authClient.getTokenByCode(callbackUrl, {});
 const profile = tokens.claims; // { sub, name, email, ... } decoded from the id_token
 ```
 
-**After (direct method, auth0-auth-js, when [PR #228](https://github.com/auth0/auth0-auth-js/pull/228) merges): when you only have an access token:**
+**After (direct method):** auth0-auth-js, when [PR #228](https://github.com/auth0/auth0-auth-js/pull/228) merges, for when you only have an access token:
 
 ```ts
 // Takes an options object: { accessToken, expectedSubject? }
