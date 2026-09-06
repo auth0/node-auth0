@@ -9,7 +9,7 @@ This guide covers **only the Authentication API layer** — `AuthenticationClien
 ## Contents
 
 - [How to use this guide](#how-to-use-this-guide)
-- [Migrating only OIDC, while staying on v6](#migrating-only-oidc-while-staying-on-v6)
+- [Optional: migrate only OIDC while staying on v6](#optional-migrate-only-oidc-while-staying-on-v6)
 - [Overview](#overview)
     - [Who this is for](#who-this-is-for)
     - [Scope](#scope)
@@ -42,7 +42,9 @@ The work falls into three phases:
 
 Priority order, if you want one: **P0** (OIDC grants + cross-cutting changes — the whole job for most apps) → **P1** ([other flows](./authentication-flows.md), only the ones you use) → **P2** ([session apps](./server-side-sessions.md), only if you want the SDK to own sessions). Stuck? See [`troubleshooting.md`](./troubleshooting.md).
 
-## Migrating only OIDC, while staying on v6
+## Optional: migrate only OIDC while staying on v6
+
+This is an optional, lower-commitment path — not the scope of this guide. The full guide covers every Authentication API flow; this section is for readers who want to migrate *only* their OIDC code and stop there.
 
 You do not have to migrate everything at once, and you do not have to wait for v7. node-auth0 v6 still ships `AuthenticationClient` alongside `ManagementClient`, so you can move your OIDC login and token-grant code off `AuthenticationClient` to `@auth0/auth0-auth-js` **now**, incrementally, while the rest of the app keeps using `auth0` v6 unchanged.
 

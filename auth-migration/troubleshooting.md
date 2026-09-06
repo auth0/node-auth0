@@ -5,7 +5,7 @@ Common questions and failure modes when migrating off the `auth0` package's Auth
 > **Migrating with an AI agent?** Point it at the Auth0 migration skill (the `auth0` skill in [`auth0/agent-skills`](https://github.com/auth0/agent-skills), migration intent `migrate-node-auth0`), which encodes these gotchas as guardrails.
 
 **Do I have to migrate everything at once?**
-No. The OIDC / token-grant work in the P0 section is a complete, shippable step on its own. You can stay on `auth0` v6 and migrate only OIDC, leaving other auth flows on `AuthenticationClient` for now. See [Migrating only OIDC, while staying on v6](./index.md#migrating-only-oidc-while-staying-on-v6).
+No. The OIDC / token-grant work in the P0 section is a complete, shippable step on its own. You can stay on `auth0` v6 and migrate only OIDC, leaving other auth flows on `AuthenticationClient` for now. See [Optional: migrate only OIDC while staying on v6](./index.md#optional-migrate-only-oidc-while-staying-on-v6).
 
 **Do I have to migrate the Management API too?**
 No. `ManagementClient` is out of scope and stays on the `auth0` package. A file importing both `auth0` (for management) and `@auth0/auth0-auth-js` (for authentication) is correct.
