@@ -1,6 +1,6 @@
 # Migrating the other authentication flows
 
-This is the incremental part of the [Authentication Migration Guide](../AUTH_MIGRATION_GUIDE.md). Start with the guide's P0 sections (OIDC token grants and the four cross-cutting breaking changes) before you touch anything here. Everything below builds on those changes, so apply them to every rewrite on this page too.
+This is the incremental part of the [Authentication Migration Guide](./index.md). Start with the guide's P0 sections (OIDC token grants and the four cross-cutting breaking changes) before you touch anything here. Everything below builds on those changes, so apply them to every rewrite on this page too.
 
 > **Migrating with an AI agent?** Point it at the Auth0 migration skill (the `auth0` skill in [`auth0/agent-skills`](https://github.com/auth0/agent-skills), migration intent `migrate-node-auth0`). It encodes these mappings and a verify loop so smaller models follow them exactly.
 
@@ -108,7 +108,7 @@ const resp = await auth0.passwordless.loginWithSMS({ phone_number, code });
 const tokens = await authClient.getTokenByPasswordlessSms({ phoneNumber, code });
 ```
 
-> **Session apps:** `@auth0/auth0-server-js` exposes `startPasswordless` / `completePasswordless` / `completePasswordlessMagicLink`, which both send the code and establish a session. Use those instead of the two-step auth-js flow when the SDK owns the session. See [Migrating session apps](./sessions.md).
+> **Session apps:** `@auth0/auth0-server-js` exposes `startPasswordless` / `completePasswordless` / `completePasswordlessMagicLink`, which both send the code and establish a session. Use those instead of the two-step auth-js flow when the SDK owns the session. See [Migrating session apps](./server-side-sessions.md).
 
 ## Backchannel authentication (CIBA)
 
@@ -143,7 +143,7 @@ const tokens = await authClient.backchannelAuthenticationGrant({ authReqId });
 
 > **One-shot convenience:** `authClient.backchannelAuthentication({ ... })` initiates and polls to completion, returning a `TokenResponse`. Use it if your code did the initiate-then-poll loop by hand.
 >
-> **Session apps:** `@auth0/auth0-server-js` exposes `loginBackchannel(...)`, which runs CIBA and establishes a session in one call. See [Migrating session apps](./sessions.md).
+> **Session apps:** `@auth0/auth0-server-js` exposes `loginBackchannel(...)`, which runs CIBA and establishes a session in one call. See [Migrating session apps](./server-side-sessions.md).
 
 ## Token exchange (RFC 8693)
 
@@ -242,4 +242,4 @@ The complete node-auth0 → new SDK map, including the OIDC methods covered in t
 | (no equivalent) — build `/v2/logout` URL | `authClient.buildLogoutUrl({ returnTo })` | auth-js |
 | `ManagementClient.*` | **not migrated — stays on `auth0`** | — |
 
-When you finish a flow, return to the [verification checklist](../AUTH_MIGRATION_GUIDE.md#verification-checklist) and confirm the four cross-cutting changes for every call site you touched.
+When you finish a flow, return to the [verification checklist](./index.md#verification-checklist) and confirm the four cross-cutting changes for every call site you touched.

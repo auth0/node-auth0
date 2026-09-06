@@ -1,6 +1,6 @@
 # Migrating session apps to `@auth0/auth0-server-js`
 
-This page is part of the [Authentication Migration Guide](../AUTH_MIGRATION_GUIDE.md). Read it only when you are routing to **`@auth0/auth0-server-js`** — when you want the SDK to own the login redirect flow, session storage, cookies, token refresh, and logout, instead of hand-rolling that around node-auth0. If you only need stateless token grants, stay on the main guide and [`migration/other-flows.md`](./other-flows.md); you do not need this page.
+This page is part of the [Authentication Migration Guide](./index.md). Read it only when you are routing to **`@auth0/auth0-server-js`** — when you want the SDK to own the login redirect flow, session storage, cookies, token refresh, and logout, instead of hand-rolling that around node-auth0. If you only need stateless token grants, stay on the main guide and [`authentication-flows.md`](./authentication-flows.md); you do not need this page.
 
 > **Migrating with an AI agent?** Point it at the Auth0 migration skill (the `auth0` skill in [`auth0/agent-skills`](https://github.com/auth0/agent-skills), migration intent `migrate-node-auth0`). It walks the session lifecycle step by step.
 
@@ -160,4 +160,4 @@ app.post("/backchannel-logout", async (req, res) => {
 
 It validates the logout token and clears the corresponding session.
 
-When the session layer is wired, return to the [verification checklist](../AUTH_MIGRATION_GUIDE.md#verification-checklist) in the main guide.
+When the session layer is wired, return to the [verification checklist](./index.md#verification-checklist) in the main guide.
