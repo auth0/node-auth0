@@ -2,7 +2,7 @@
 
 A guide to migrating the Auth0 Node.js SDK from `6.x` to `7.x`.
 
-> **Migrating with an AI agent?** Point it at the Auth0 migration skill first. The skill lives in [`auth0/agent-skills`](https://github.com/auth0/agent-skills) as the `auth0` skill (migration intent: `migrate-node-auth0`). It encodes the authentication-layer rewrite rules and a verify loop, so even a smaller model follows them exactly. This guide is the human-facing companion.
+> **Migrating with an AI agent?** Point it at the Auth0 migration skill first. The skill lives in [`auth0/agent-skills`](https://github.com/auth0/agent-skills) as the `auth0` skill (migration intent: `migrate-node-auth0`). It encodes the authentication-layer rewrite rules and a verify loop.
 
 - [Overall changes](#overall-changes)
 - [Breaking changes](#breaking-changes)
@@ -18,9 +18,9 @@ A guide to migrating the Auth0 Node.js SDK from `6.x` to `7.x`.
 
 ## Overall changes
 
-V7 makes `node-auth0` a **Management-API-only SDK**. The Authentication API layer — `AuthenticationClient`, its sub-clients, and `UserInfoClient` — has been removed from the main entrypoint. `ManagementClient` continues to work exactly as before; it now acquires its internal token directly via the client credentials grant rather than through the removed authentication layer.
+V7 makes `node-auth0` a **Management-API-only SDK**. The Authentication API layer (`AuthenticationClient`, its sub-clients, and `UserInfoClient`) has been removed from the main entrypoint. `ManagementClient` continues to work exactly as before; it now acquires its internal token directly via the client credentials grant rather than through the removed authentication layer.
 
-If your code only uses `ManagementClient`, the upgrade is small: address the Management-side breaking changes below (mTLS, domain validation, error type) and you are done. If your code uses `AuthenticationClient` or `UserInfoClient`, that code must move to a dedicated package — see [Migrating authentication code](#migrating-authentication-code).
+If your code only uses `ManagementClient`, the upgrade is small: address the Management-side breaking changes below (mTLS, domain validation, error type) and you are done. If your code uses `AuthenticationClient` or `UserInfoClient`, that code must move to a dedicated package; see [Migrating authentication code](#migrating-authentication-code).
 
 ## Breaking changes
 
@@ -76,7 +76,7 @@ A `ManagementClient` constructed with `useMTLS: true` must now supply an explici
 The token endpoint automatically uses the `mtls.{domain}` host when `useMTLS` is enabled.
 
 ```ts
-// v7 — throws at construction if `fetch` is omitted
+// v7: throws at construction if `fetch` is omitted
 const mgmt = new ManagementClient({
     domain,
     clientId,
@@ -88,7 +88,7 @@ const mgmt = new ManagementClient({
 
 ### mTLS and client assertion are mutually exclusive
 
-`useMTLS: true` and `clientAssertionSigningKey` cannot be combined — they select incompatible token-endpoint authentication methods. Supplying both now throws at construction. `useMTLS` has been removed from the `ManagementClientOptionsWithClientAssertion` type.
+`useMTLS: true` and `clientAssertionSigningKey` cannot be combined; they select incompatible token-endpoint authentication methods. Supplying both now throws at construction. `useMTLS` has been removed from the `ManagementClientOptionsWithClientAssertion` type.
 
 ### `domain` must be a bare hostname
 
@@ -123,18 +123,18 @@ The `uuid` package is no longer a dependency. If your project imported `uuid` tr
 
 ## Migrating authentication code
 
-If your app calls `AuthenticationClient` or `UserInfoClient`, follow the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/tree/master/auth-migration). Start with [`auth-migration/index.md`](https://github.com/auth0/node-auth0/blob/master/auth-migration/index.md) for the P0 OIDC section; the incremental flow, session, and troubleshooting pages live in the same [`auth-migration/`](https://github.com/auth0/node-auth0/tree/master/auth-migration) directory. It covers:
+If your app calls `AuthenticationClient` or `UserInfoClient`, follow the dedicated [Authentication Migration Guide](https://github.com/auth0/node-auth0/tree/master/auth-migration). Start with [`auth-migration/index.md`](https://github.com/auth0/node-auth0/blob/master/auth-migration/index.md) for the OIDC token grants section; the incremental flow, session, and troubleshooting pages live in the same [`auth-migration/`](https://github.com/auth0/node-auth0/tree/master/auth-migration) directory. It covers:
 
 - Choosing between `@auth0/auth0-auth-js` (stateless token grants) and `@auth0/auth0-server-js` (server-managed sessions).
 - The complete method-by-method API mapping for `.oauth`, `.database`, `.passwordless`, `.backchannel`, `.tokenExchange`, and `UserInfoClient`.
-- The four cross-cutting behavior changes: return shape (envelope dropped), casing (snake_case → camelCase), token expiry (`expires_in` relative → `expiresAt` absolute — a silent, high-risk change), and the typed error model with `isMfaRequiredError()`.
+- The four cross-cutting behavior changes: return shape (envelope dropped), casing (snake_case → camelCase), token expiry (`expires_in` relative → `expiresAt` absolute, a silent high-risk change), and the typed error model with `isMfaRequiredError()`.
 - Wiring the `auth0-server-js` session lifecycle when you want the SDK to own login, cookies, refresh, and logout.
 
-The Management API is explicitly out of scope in that guide — a file that keeps using `ManagementClient` from `auth0` while importing `@auth0/auth0-auth-js` for authentication is correct and expected.
+The Management API is explicitly out of scope in that guide: a file that keeps using `ManagementClient` from `auth0` while importing `@auth0/auth0-auth-js` for authentication is correct and expected.
 
 ## Staying on the legacy entrypoint
 
-If you cannot migrate the authentication code immediately, the `auth0/legacy` entrypoint still ships `AuthenticationClient` and `UserInfoClient` at their v4.x configuration format and method signatures. This is a stopgap, not a destination — the legacy shapes differ from the current API and will not receive new features.
+If you cannot migrate the authentication code immediately, the `auth0/legacy` entrypoint still ships `AuthenticationClient` and `UserInfoClient` at their v4.x configuration format and method signatures. This is a stopgap, not a destination; the legacy shapes differ from the current API and will not receive new features.
 
 ```ts
 import { AuthenticationClient } from "auth0/legacy";
