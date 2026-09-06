@@ -6,15 +6,41 @@ This guide covers **only the Authentication API layer** — `AuthenticationClien
 
 > **Migrating with an AI agent?** Point it at the Auth0 migration skill first. The skill lives in [`auth0/agent-skills`](https://github.com/auth0/agent-skills) as the `auth0` skill (migration intent: `migrate-node-auth0`). It encodes the target-SDK routing, the four cross-cutting breaking changes, the method-by-method mapping, and a build-until-green verify loop — so even a smaller model follows the exact rewrite rules instead of guessing. This document is the human-facing companion; the skill is the agent-facing one. They stay in sync.
 
-## Directory
+## Contents
 
-Work top to bottom. Most apps finish after the P0 section; the incremental pages only matter for the flows and session behavior you actually use.
+- [How to use this guide](#how-to-use-this-guide)
+- [Migrating only OIDC, while staying on v6](#migrating-only-oidc-while-staying-on-v6)
+- [Overview](#overview)
+    - [Who this is for](#who-this-is-for)
+    - [Scope](#scope)
+- [Choosing your target SDK](#choosing-your-target-sdk)
+- [Prerequisites](#prerequisites)
+- [Installation and constructor mapping](#installation-and-constructor-mapping)
+- [P0: OIDC token grants](#p0-oidc-token-grants)
+- [Cross-cutting breaking changes](#cross-cutting-breaking-changes)
+    - [1. Return shape](#1-return-shape)
+    - [2. Casing](#2-casing)
+    - [3. Token expiry](#3-token-expiry)
+    - [4. Error model](#4-error-model)
+- [Verification checklist](#verification-checklist)
+- Incremental pages:
+    - [`migration/other-flows.md`](./migration/other-flows.md) — database, passwordless, CIBA, token exchange, `UserInfoClient`
+    - [`migration/sessions.md`](./migration/sessions.md) — the `@auth0/auth0-server-js` session layer
+    - [`migration/troubleshooting.md`](./migration/troubleshooting.md) — FAQ and gotchas
 
-| Priority | Read | Covers |
+## How to use this guide
+
+This is a reference, not a linear read. You do not have to work through it top to bottom — migrate only the flows your app actually uses, in whatever order suits you. Most apps finish after the P0 section below.
+
+The work falls into three phases:
+
+| Phase | What you do | Where |
 | --- | --- | --- |
-| **P0 — everyone** | This file (below) | OIDC token grants (authorization code, refresh, client credentials, PKCE), plus the four cross-cutting breaking changes that apply to *every* rewrite. This is the whole job for most apps. |
-| **P1 — as needed** | [`migration/other-flows.md`](./migration/other-flows.md) | Database sign-up / change-password, passwordless, backchannel (CIBA), token exchange, and `UserInfoClient`. Migrate only the flows your app uses. |
-| **P2 — session apps only** | [`migration/sessions.md`](./migration/sessions.md) | Wiring `@auth0/auth0-server-js` when you want the SDK to own login redirect, cookies, refresh, and logout. Skip entirely if you only need token grants. |
+| **Before** — orient and set up | Pick your target SDK, check prerequisites, install the package, map constructor options. | [Choosing your target SDK](#choosing-your-target-sdk), [Prerequisites](#prerequisites), [Installation and constructor mapping](#installation-and-constructor-mapping) |
+| **During** — rewrite call sites | Rewrite the OIDC token grants (P0, in this file), then the other flows and the session layer as needed. Apply the four cross-cutting breaking changes to every call site. | [P0: OIDC token grants](#p0-oidc-token-grants), [Cross-cutting breaking changes](#cross-cutting-breaking-changes), [`migration/other-flows.md`](./migration/other-flows.md), [`migration/sessions.md`](./migration/sessions.md) |
+| **After** — verify | Run the build-until-green checklist; confirm no residue and that `ManagementClient` code is untouched. | [Verification checklist](#verification-checklist) |
+
+Priority order, if you want one: **P0** (OIDC grants + cross-cutting changes — the whole job for most apps) → **P1** ([other flows](./migration/other-flows.md), only the ones you use) → **P2** ([session apps](./migration/sessions.md), only if you want the SDK to own sessions). Stuck? See [`migration/troubleshooting.md`](./migration/troubleshooting.md).
 
 ## Migrating only OIDC, while staying on v6
 
@@ -697,31 +723,6 @@ Then run the project gates and repeat the whole loop if any step fails:
 
 Do not declare the migration complete until the loop converges — all steps pass in a single iteration.
 
-## FAQ and gotchas
+## Troubleshooting
 
-**Do I have to migrate everything at once?**
-No. The OIDC / token-grant work in the P0 section is a complete, shippable step on its own. You can stay on `auth0` v6 and migrate only OIDC, leaving other auth flows on `AuthenticationClient` for now. See [Migrating only OIDC, while staying on v6](#migrating-only-oidc-while-staying-on-v6).
-
-**Do I have to migrate the Management API too?**
-No. `ManagementClient` is out of scope and stays on the `auth0` package. A file importing both `auth0` (for management) and `@auth0/auth0-auth-js` (for authentication) is correct.
-
-**auth0-auth-js or auth0-server-js — which do I pick?**
-Default to auth0-auth-js for a faithful, low-risk parity migration. Pick auth0-server-js only when you want the SDK to own the login redirect flow, session storage, cookies, refresh, and logout. See [Choosing your target SDK](#choosing-your-target-sdk).
-
-**My tokens suddenly look valid for decades. What happened?**
-You almost certainly left `Date.now() +` in front of `expiresAt`. `expiresAt` is already an absolute Unix timestamp, not a relative lifetime. See [Token expiry](#3-token-expiry).
-
-**Where did `resp.data` go?**
-The new SDKs return the domain object directly. Read `tokens.accessToken`, not `resp.data.access_token`. If you truly need HTTP response metadata on a success path, opt into `fullResponse` — but note that flag is part of the [post-1.12.1 caveat](#the-requestoptions--fullresponse-caveat).
-
-**My magic-link passwordless flow stopped sending links.**
-The `send` default changed from `'link'` (node-auth0) to `'code'` (new SDK). Set `send: 'link'` explicitly if you want magic links. See [`migration/other-flows.md`](./migration/other-flows.md#passwordless).
-
-**Where is `getUserInfo`?**
-Prefer `TokenResponse.claims` — they are already decoded and validated, with no extra round-trip. `authClient.getUserInfo({ accessToken })` lands when auth0-auth-js PR #228 merges. In a session app, use `serverClient.getUser()`. See [`migration/other-flows.md`](./migration/other-flows.md#userinfoclient).
-
-**Can I still set a global `headers` / `timeout` / `agent` on the client?**
-Not on the constructor. Move them to the per-call `RequestOptions` argument (`headers`, `signal: AbortSignal.timeout(ms)`) or wrap `customFetch`. `RequestOptions` is part of the [post-1.12.1 caveat](#the-requestoptions--fullresponse-caveat).
-
-**How do I detect `mfa_required` now?**
-Use the `isMfaRequiredError()` type guard, not a string comparison. It narrows the error and exposes the `mfa_token`. Drive the challenge via `authClient.mfa.*`. See [Error model](#4-error-model).
+Common questions and failure modes (tokens valid for decades, missing `resp.data`, magic-link default flip, `getUserInfo`, `mfa_required` detection, global config) live in [`migration/troubleshooting.md`](./migration/troubleshooting.md).
