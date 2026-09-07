@@ -351,12 +351,6 @@ try {
 }
 ```
 
-## Migrating from v6 to v7
-
-Version 7.0.0 removes the authentication clients (`AuthenticationClient`, `UserInfoClient`) from the `auth0` entrypoint. Authentication moves to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) (stateless token grants) and [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-server-js) (session-based apps); `ManagementClient` stays in `auth0`.
-
-The [v7 Migration Guide](./v7_MIGRATION_GUIDE.md) covers the full move: which package to pick, method mapping, error-handling changes, and mTLS. For step-by-step authentication routing, see the [Authentication Migration Guide](./AUTH_MIGRATION_GUIDE.md).
-
 ## Request and Response Types
 
 The SDK exports all request and response types as TypeScript interfaces. You can import them directly:
