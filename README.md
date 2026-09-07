@@ -352,93 +352,9 @@ try {
 
 ## Migrating from v6 to v7
 
-Version 7.0.0 removes authentication clients from the main entrypoint. The authentication layer has been separated into [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js).
+Version 7.0.0 removes the authentication clients (`AuthenticationClient`, `UserInfoClient`) from the `auth0` entrypoint. Authentication moves to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) (stateless token grants) and [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-server-js) (session-based apps); `ManagementClient` stays in `auth0`.
 
-### Install the authentication package
-
-```bash
-npm install @auth0/auth0-auth-js
-```
-
-### Update imports
-
-```js
-// v6
-import { AuthenticationClient, UserInfoClient } from "auth0";
-
-// v7
-import { AuthClient } from "@auth0/auth0-auth-js";
-```
-
-### Method mapping
-
-| v6 (node-auth0)                                         | v7 (@auth0/auth0-auth-js)                                              |
-| ------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `authenticationClient.authorizationCodeGrant(...)`      | `authClient.getTokenByCode(...)`                                       |
-| `authenticationClient.clientCredentialsGrant(...)`      | `authClient.getTokenByClientCredentials(...)`                          |
-| `authenticationClient.refreshTokenGrant(...)`           | `authClient.getTokenByRefreshToken(...)`                               |
-| `authenticationClient.passwordGrant(...)`               | `authClient.getTokenByPassword(...)`                                   |
-| `authenticationClient.revokeRefreshToken(...)`          | `authClient.revokeToken(...)`                                          |
-| `authenticationClient.database.signUp(...)`             | `authClient.database.signUp(...)`                                      |
-| `authenticationClient.database.changePassword(...)`     | `authClient.database.changePassword(...)`                              |
-| `authenticationClient.passwordless.sendEmail(...)`      | `authClient.passwordless.sendEmail(...)`                               |
-| `authenticationClient.passwordless.sendSMS(...)`        | `authClient.passwordless.sendSms(...)`                                 |
-| `authenticationClient.passwordless.loginWithEmail(...)` | `authClient.getTokenByPasswordlessEmail(...)`                          |
-| `authenticationClient.passwordless.loginWithSMS(...)`   | `authClient.getTokenByPasswordlessSms(...)`                            |
-| `userInfoClient.getUserInfo(accessToken)`               | `authClient.getUserInfo({ accessToken })` (see note on audience above) |
-
-### Error handling
-
-`AuthApiError` has been removed. Token acquisition and all Management API calls now throw `ManagementError`.
-
-**Before (v6):**
-
-```typescript
-import { AuthApiError } from "auth0";
-
-try {
-    await client.oauth.clientCredentialsGrant(params);
-} catch (e) {
-    if (e instanceof AuthApiError && e.error === "invalid_client") {
-        // handle
-    }
-}
-```
-
-**After (v7):**
-
-```typescript
-import { ManagementError } from "auth0";
-
-try {
-    await managementClient.someMethod(params);
-} catch (e) {
-    if (e instanceof ManagementError && e.statusCode === 401) {
-        const body = e.body as { error?: string };
-        if (body.error === "invalid_client") {
-            // handle
-        }
-    }
-}
-```
-
-### mTLS (ManagementClient)
-
-`useMTLS: true` now requires an explicit `fetch` option pre-configured with your mTLS client certificate. The token endpoint uses `mtls.{domain}` automatically when `useMTLS` is set.
-
-```typescript
-const client = new ManagementClient({
-    domain: "tenant.auth0.com",
-    clientId: "...",
-    clientSecret: "...",
-    useMTLS: true,
-    fetch: createMtlsFetch({ cert, key }), // your mTLS-capable fetch
-});
-```
-
-`useMTLS` works with both `clientSecret` and `clientAssertionSigningKey`. mTLS (RFC 8705) is a transport-layer concern that is independent of the client authentication method: the TLS client certificate yields a certificate-bound access token regardless of how the client authenticates. When `useMTLS` is set, an explicit `fetch` option configured with your client certificate is required.
-
-See the [auth0-auth-js documentation](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) for complete API details.
+For method mapping, error-handling changes, mTLS notes, and step-by-step routing, see the [Authentication Migration Guide](./AUTH_MIGRATION_GUIDE.md).
 
 ## Request and Response Types
 
