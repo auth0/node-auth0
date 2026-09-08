@@ -2,11 +2,13 @@
 
 ## Project Overview
 
-The **Auth0 Node.js SDK v7** is a TypeScript-based Management-API-only SDK. Authentication has moved to [@auth0/auth0-auth-js](https://github.com/auth0/auth0-auth-js). The codebase uses **Fern-generated code** for the Management API with custom wrappers.
+The **Auth0 Node.js SDK v5** is a TypeScript-based SDK providing Auth0 Authentication and Management API clients. The codebase uses **Fern-generated code** for the Management API with custom wrappers, alongside hand-written Authentication API clients.
 
 **Key Capabilities:**
 
+- Authentication API client for login, token exchange, and user authentication flows
 - Management API client for tenant administration and user management
+- UserInfo API client for user profile retrieval
 - Dual module system supporting both CommonJS and ESM
 - TypeScript-first with comprehensive type definitions
 - Legacy v4 compatibility layer for migration
@@ -87,6 +89,13 @@ yarn format
 src/                                    # TypeScript source
 ├── index.ts                           # Main SDK exports
 ├── utils.ts                           # Shared utilities
+├── auth/                              # Authentication API client (hand-written)
+│   ├── base-auth-api.ts              # Base authentication class
+│   ├── client-authentication.ts       # Client credential flows
+│   ├── database.ts                    # Database connection flows
+│   ├── oauth.ts                       # OAuth flows
+│   ├── passwordless.ts                # Passwordless authentication
+│   └── id-token-validator.ts          # JWT validation
 ├── management/                        # Management API client
 │   ├── Client.ts                      # Fern-generated client (READ-ONLY)
 │   ├── api/                          # Fern-generated API definitions (READ-ONLY)
@@ -94,6 +103,7 @@ src/                                    # TypeScript source
 │   │   └── ManagementClient.ts       # Main Management API wrapper
 │   ├── request-options.ts            # Helper functions for API calls
 │   └── tests/                        # Management API tests
+├── userinfo/                          # UserInfo API client
 ├── lib/                              # Shared libraries and utilities
 └── auth0/                            # Legacy compatibility exports
 ```
@@ -158,7 +168,9 @@ const options = {
 
 ### Error Handling
 
-- **ManagementError** - For Management API errors (the only error class in v7)
+- **ManagementError** - For Management API errors
+- **AuthApiError** - For Authentication API errors
+- **IdTokenValidatorError** - For JWT validation errors
 - Use `.withRawResponse()` for accessing raw HTTP response data
 - Provide clear, actionable error messages
 
@@ -218,26 +230,26 @@ describe("ManagementClient", () => {
 });
 ```
 
-### Writing Management API Integration Tests
+### Writing Authentication API Tests
 
-Pattern for testing Management API clients with HTTP mocking:
+Pattern for testing Authentication API clients:
 
 ```typescript
-import { ManagementClient } from "../src/index.js";
+import { AuthenticationClient } from "../index.js";
+import nock from "nock";
 
-describe("ManagementClient", () => {
-    let management: ManagementClient;
+describe("AuthenticationClient", () => {
+    let auth0: AuthenticationClient;
 
     beforeEach(() => {
-        management = new ManagementClient({
+        auth0 = new AuthenticationClient({
             domain: "test.auth0.com",
             clientId: "test-client-id",
-            clientSecret: "test-secret",
         });
     });
 
-    it("should call Management API correctly", async () => {
-        // Test implementation
+    afterEach(() => {
+        nock.cleanAll();
     });
 });
 ```
@@ -251,9 +263,9 @@ describe("ManagementClient", () => {
 
 ## Common Development Tasks
 
-### Adding New Management API Methods
+### Adding New Authentication API Methods
 
-1. Add method to appropriate class in `src/management/wrapper/`
+1. Add method to appropriate class in `src/auth/`
 2. Follow existing patterns for parameter validation
 3. Add proper TypeScript types
 4. Write comprehensive tests
@@ -407,6 +419,8 @@ du -sh dist/
 ```
 auth0 (main export)
 ├── ManagementClient (tenant administration)
+├── AuthenticationClient (user authentication)
+├── UserInfoClient (user profile data)
 └── Legacy exports (v4 compatibility)
 ```
 
@@ -423,6 +437,13 @@ auth0 (main export)
 ### Key Configuration Options
 
 ```typescript
+// Authentication Client
+const auth0 = new AuthenticationClient({
+    domain: "your-tenant.auth0.com",
+    clientId: "your-client-id",
+    clientSecret: "your-client-secret", // Optional
+});
+
 // Management Client
 const management = new ManagementClient({
     domain: "your-tenant.auth0.com",
@@ -436,6 +457,7 @@ const management = new ManagementClient({
 
 - `src/index.ts` - Main SDK exports
 - `src/management/wrapper/ManagementClient.ts` - Management API wrapper
+- `src/auth/` - All Authentication API clients
 - `src/management/request-options.ts` - Request configuration helpers
 - `src/lib/models.ts` - Shared TypeScript types
 - `jest.config.mjs` - Test configuration with multiple projects
