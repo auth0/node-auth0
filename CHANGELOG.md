@@ -14,7 +14,7 @@
 
 **Changed**
 
-- Management client now acquires client-credentials tokens natively, without the removed shared `BaseAPI` runtime. (\[BREAKING\] feat!: remove Authentication layer[\#1390](https://github.com/auth0/node-auth0/pull/1390) ([tusharpandey13](https://github.com/tusharpandey13)))
+- Management client now acquires client-credentials tokens natively, without the removed shared `BaseAPI` runtime. (\[BREAKING\] feat!: remove Authentication layer [\#1390](https://github.com/auth0/node-auth0/pull/1390) ([tusharpandey13](https://github.com/tusharpandey13)))
 
 ## [v6.4.0](https://github.com/auth0/node-auth0/tree/v6.4.0) (2026-09-04)
 
