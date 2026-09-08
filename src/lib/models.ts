@@ -78,47 +78,6 @@ export interface ApiResponse<T> {
     statusText: string;
 }
 
-export class JSONApiResponse<T> implements ApiResponse<T> {
-    constructor(
-        public data: T,
-        public headers: Headers,
-        readonly status: number,
-        readonly statusText: string,
-    ) {}
-
-    static async fromResponse<T = unknown>(raw: Response) {
-        const value = (await raw.json()) as T;
-        return new JSONApiResponse<T>(value, raw.headers, raw.status, raw.statusText);
-    }
-}
-
-export class VoidApiResponse implements ApiResponse<undefined> {
-    public data: undefined;
-    constructor(
-        public headers: Headers,
-        readonly status: number,
-        readonly statusText: string,
-    ) {}
-
-    static async fromResponse(raw: Response) {
-        return new VoidApiResponse(raw.headers, raw.status, raw.statusText);
-    }
-}
-
-export class TextApiResponse implements ApiResponse<string> {
-    constructor(
-        public data: string,
-        public headers: Headers,
-        readonly status: number,
-        readonly statusText: string,
-    ) {}
-
-    static async fromResponse(raw: Response) {
-        const value = await raw.text();
-        return new TextApiResponse(value, raw.headers, raw.status, raw.statusText);
-    }
-}
-
 export interface FetchParams {
     url: string | URL | Request;
     init: RequestInit;
