@@ -70,6 +70,11 @@ export async function parseError(response: Response) {
 }
 
 /**
+ * @deprecated `UserInfoClient` will be removed in v7.0.0.
+ * Use `authClient.getUserInfo(accessToken)` from [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js).
+ * See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md).
+ */
+/**
  * Auth0 UserInfo API Client
  *
  * Provides access to the UserInfo endpoint to retrieve user profile information
@@ -103,6 +108,7 @@ export class UserInfoClient extends BaseAPI {
         });
     }
 
+    /** @deprecated Use `authClient.getUserInfo(accessToken)` from `@auth0/auth0-auth-js`. */
     /**
    * Given an access token get the user profile linked to it.
    *

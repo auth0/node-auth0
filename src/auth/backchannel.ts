@@ -183,9 +183,14 @@ const CIBA_AUTHORIZE_URL = "/bc-authorize";
 const CIBA_TOKEN_URL = "/oauth/token";
 
 /**
+ * @deprecated Will be removed in v7.0.0. Use `@auth0/auth0-auth-js` instead.
+ * See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md).
+ */
+/**
  * Class implementing the backchannel authentication flow.
  */
 export class Backchannel extends BaseAuthAPI implements IBackchannel {
+    /** @deprecated Use `authClient.backchannel.authorize()` from `@auth0/auth0-auth-js`. */
     /**
      * Initiates a CIBA authorization request.
      *
@@ -223,6 +228,7 @@ export class Backchannel extends BaseAuthAPI implements IBackchannel {
         return r.data;
     }
 
+    /** @deprecated Use `authClient.backchannel.backchannelGrant()` from `@auth0/auth0-auth-js`. */
     /**
      * Handles the backchannel grant flow for authentication. Client can poll this method at regular intervals to check if the backchannel auth request has been approved.
      *

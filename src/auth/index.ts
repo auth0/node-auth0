@@ -12,6 +12,11 @@ export { IDTokenValidateOptions, IdTokenValidatorError } from "./id-token-valida
 export { AuthApiError, AuthenticationClientOptions } from "./base-auth-api.js";
 
 /**
+ * @deprecated `AuthenticationClient` will be removed in v7.0.0.
+ * Migrate to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js).
+ * See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md).
+ */
+/**
  * Auth0 Authentication API Client
  *
  * Provides access to Auth0's authentication endpoints for login, signup,

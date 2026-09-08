@@ -115,9 +115,14 @@ export interface ChangePasswordRequest {
 }
 
 /**
+ * @deprecated Will be removed in v7.0.0. Use `@auth0/auth0-auth-js` instead.
+ * See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md).
+ */
+/**
  * Sign-up and change-password for Database & Active Directory authentication services.
  */
 export class Database extends BaseAuthAPI {
+    /** @deprecated Use `authClient.database.signUp()` from `@auth0/auth0-auth-js`. */
     /**
      * Given a user's credentials, and a connection, this endpoint will create a new user using active authentication.
      *
@@ -169,6 +174,7 @@ export class Database extends BaseAuthAPI {
         return jsonResponse as JSONApiResponse<SignUpResponse>;
     }
 
+    /** @deprecated Use `authClient.database.changePassword()` from `@auth0/auth0-auth-js`. */
     /**
      * Given a user's email address and a connection, Auth0 will send a change password email.
      *

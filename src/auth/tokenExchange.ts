@@ -126,6 +126,10 @@ const TOKEN_EXCHANGE_GRANT_TYPE = "urn:ietf:params:oauth:grant-type:token-exchan
 const TOKEN_URL = "/oauth/token";
 
 /**
+ * @deprecated Will be removed in v7.0.0. Use `@auth0/auth0-auth-js` instead.
+ * See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md).
+ */
+/**
  * Implements Auth0's Custom Token Exchange functionality with security best practices
  *
  * @security
@@ -152,6 +156,7 @@ const TOKEN_URL = "/oauth/token";
  * ```
  */
 export class CustomTokenExchange extends BaseAuthAPI implements ICustomTokenExchange {
+    /** @deprecated Use `authClient.tokenExchange.exchangeToken()` from `@auth0/auth0-auth-js`. */
     /**
      * Executes token exchange flow with security validations
      *

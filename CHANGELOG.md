@@ -1,5 +1,13 @@
 # Change Log
 
+## [v6.5.0](https://github.com/auth0/node-auth0/tree/v6.5.0) (2026-09-08)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.4.0...v6.5.0)
+
+**Deprecated**
+
+- chore: deprecate AuthenticationClient and UserInfoClient ahead of v7.0.0 removal [\#1403](https://github.com/auth0/node-auth0/pull/1403) ([tusharpandey13](https://github.com/tusharpandey13))
+
 ## [v6.4.0](https://github.com/auth0/node-auth0/tree/v6.4.0) (2026-09-04)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v6.3.0...v6.4.0)

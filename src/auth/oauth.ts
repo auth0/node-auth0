@@ -329,6 +329,10 @@ export const TOKEN_FOR_CONNECTION_REQUESTED_TOKEN_TYPE =
 export const TOKEN_URL = "/oauth/token";
 
 /**
+ * @deprecated Will be removed in v7.0.0. Use `@auth0/auth0-auth-js` instead.
+ * See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md).
+ */
+/**
  *  OAuth 2.0 flows.
  */
 export class OAuth extends BaseAuthAPI {
@@ -341,6 +345,7 @@ export class OAuth extends BaseAuthAPI {
         this.idTokenValidator = new IDTokenValidator(options);
     }
 
+    /** @deprecated Use `authClient.oauth.authorizationCodeGrant()` from `@auth0/auth0-auth-js`. */
     /**
      * This is the flow that regular web apps use to access an API.
      *
@@ -375,6 +380,7 @@ export class OAuth extends BaseAuthAPI {
         );
     }
 
+    /** @deprecated Use `authClient.oauth.authorizationCodeGrantWithPKCE()` from `@auth0/auth0-auth-js`. */
     /**
      * PKCE was originally designed to protect the authorization code flow in mobile apps,
      * but its ability to prevent authorization code injection makes it useful for every type of OAuth client,
@@ -412,6 +418,7 @@ export class OAuth extends BaseAuthAPI {
         );
     }
 
+    /** @deprecated Use `authClient.oauth.clientCredentialsGrant()` from `@auth0/auth0-auth-js`. */
     /**
      * This is the OAuth 2.0 grant that server processes use to access an API.
      *
@@ -447,6 +454,7 @@ export class OAuth extends BaseAuthAPI {
         );
     }
 
+    /** @deprecated Use `authClient.oauth.pushedAuthorization()` from `@auth0/auth0-auth-js`. */
     /**
      * This is the OAuth 2.0 extension that allows to initiate an OAuth flow from the backchannel instead of by building a URL.
      *
@@ -490,6 +498,7 @@ export class OAuth extends BaseAuthAPI {
         return JSONApiResponse.fromResponse(response);
     }
 
+    /** @deprecated Use `authClient.oauth.passwordGrant()` from `@auth0/auth0-auth-js`. */
     /**
      * This information is typically received from a highly trusted public client like a SPA*.
      * (<strong>*Note:</string> For single-page applications and native/mobile apps, we recommend using web flows instead.)
@@ -534,6 +543,7 @@ export class OAuth extends BaseAuthAPI {
         );
     }
 
+    /** @deprecated Use `authClient.oauth.refreshTokenGrant()` from `@auth0/auth0-auth-js`. */
     /**
      * Use this endpoint to refresh an Access Token using the Refresh Token you got during authorization.
      *
@@ -566,6 +576,7 @@ export class OAuth extends BaseAuthAPI {
         );
     }
 
+    /** @deprecated Use `authClient.oauth.revokeRefreshToken()` from `@auth0/auth0-auth-js`. */
     /**
      * Use this endpoint to invalidate a Refresh Token if it has been compromised.
      *
@@ -608,6 +619,7 @@ export class OAuth extends BaseAuthAPI {
         return VoidApiResponse.fromResponse(response);
     }
 
+    /** @deprecated Use `authClient.oauth.tokenForConnection()` from `@auth0/auth0-auth-js`. */
     /**
      * Exchanges a subject token for an access token for the connection.
      *
