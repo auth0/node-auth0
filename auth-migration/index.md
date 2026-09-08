@@ -1,6 +1,6 @@
 # Authentication Migration Guide
 
-A guide to migrating your authentication code off the `auth0` package (node-auth0) to the modern Auth0 server SDKs: [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js) for stateless token grants, and [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-server-js) for server-managed sessions.
+A guide to migrating your authentication code off the `auth0` package (node-auth0) to the modern Auth0 server SDKs: [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js) for stateless token grants, and [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-server-js) for server-managed sessions.
 
 > **Migrating with an AI agent?** Point it at the Auth0 migration skill first. The skill lives in [`auth0/agent-skills`](https://github.com/auth0/agent-skills) as the `auth0` skill (migration intent: `migrate-node-auth0`). It encodes the target-SDK routing, the four cross-cutting breaking changes, the method-by-method mapping, and a build-until-green verify loop.
 
@@ -109,16 +109,10 @@ Both target SDKs need Node.js 20 LTS or newer. Verify the project's runtime befo
 
 ### SDK versions
 
-- `@auth0/auth0-auth-js` >= `1.12.1`
-- `@auth0/auth0-server-js` >= `1.12.1`
+- `@auth0/auth0-auth-js` >= `1.13.0`
+- `@auth0/auth0-server-js` >= `1.13.0`
 
-Both are published on npm: `@auth0/auth0-auth-js@1.12.1` and `@auth0/auth0-server-js@1.12.1` are the current `latest`. Plain token grant migrations work against the published `1.12.1`.
-
-### The RequestOptions / fullResponse caveat
-
-The per-request options surface (`signal`, `headers`, per-request `customFetch` in `RequestOptions`) and the `fullResponse` envelope landed after the `1.12.1` npm release and are not in the published tarball yet. If your migration depends on those APIs, install from the pre-release path (the local tarball, before the next npm release cuts). A plain token grant migration that does not read HTTP response metadata on success needs none of this and works against `1.12.1` as published.
-
-This guide flags each place where `RequestOptions` or `fullResponse` applies, so you can tell which parts need it.
+Both are published on npm; install the current `latest`. `1.13.0` is the floor for the full API surface used in this guide (`getUserInfo`, per-request `RequestOptions`, and `fullResponse`).
 
 ## Installation and constructor mapping
 
@@ -231,7 +225,7 @@ Option-by-option:
 
 ### Global config to per-request options
 
-node-auth0's global constructor options for `headers`, `timeoutDuration`, `agent`, `retry`, and `middleware` have no direct constructor equivalents in auth0-auth-js. Instead, the new SDK's methods accept a trailing `RequestOptions` parameter (part of the [post-1.12.1 caveat](#the-requestoptions--fullresponse-caveat)):
+node-auth0's global constructor options for `headers`, `timeoutDuration`, `agent`, `retry`, and `middleware` have no direct constructor equivalents in auth0-auth-js. Instead, the new SDK's methods accept a trailing `RequestOptions` parameter:
 
 ```ts
 import type { RequestOptions } from "@auth0/auth0-server-js"; // or '@auth0/auth0-auth-js'
@@ -272,7 +266,7 @@ Naming conventions used throughout:
 
 ### `oauth.authorizationCodeGrant` → `getTokenByCode`
 
-The single most important semantic change in the whole migration. In node-auth0 you pass the raw authorization `code` (and `redirect_uri`) that you extracted from the callback query string yourself. In auth0-auth-js you pass the entire callback `URL`; the SDK extracts `code` and validates `state` for you, and `redirect_uri` comes from the `AuthClient` config / `authorizationParams`.
+The single most important semantic change in the whole migration. In node-auth0 you pass the raw authorization `code` (and `redirect_uri`) that you extracted from the callback query string yourself. In auth0-auth-js you pass the entire callback `URL`; the SDK extracts `code` and enforces PKCE, and `redirect_uri` comes from the `AuthClient` config / `authorizationParams`. The stateless `AuthClient` does **not** validate OAuth `state` — that is your responsibility (or use `@auth0/auth0-server-js` `completeInteractiveLogin`, which owns a transaction store and validates `state` for you).
 
 **Before (node-auth0):**
 
@@ -298,16 +292,18 @@ import { AuthClient } from "@auth0/auth0-auth-js";
 
 const authClient = new AuthClient({ domain, clientId, clientSecret });
 
-// `callbackUrl` is a URL object for the full incoming request URL,
+// `url` is a URL object for the full incoming request URL,
 // e.g. new URL(req.url, `https://${req.headers.host}`)
-const tokens = await authClient.getTokenByCode(callbackUrl, {
+const tokens = await authClient.getTokenByCode(url, {
     // options; e.g. codeVerifier (PKCE) or organization
 });
 const accessToken = tokens.accessToken;
 const expiresAt = tokens.expiresAt; // absolute Unix seconds
 ```
 
-> If your code manually parses `req.query.code`, that parsing is now the SDK's job. Delete it and hand the SDK the full URL: the SDK reads `code` and `state` from the URL and validates `state` against the value it persisted when it built the authorization URL. (`getTokenByCode` options are `codeVerifier` and `organization`; there is no `expectedState` parameter, that lives on `getTokenByMagicLinkCode`.) If the node-auth0 code read `resp.headers.get(...)` on success, see [Reading HTTP response metadata](#reading-http-response-metadata-fullresponse). Error-path metadata remains accessible on the typed error.
+> If your code manually parses `req.query.code`, that parsing is now the SDK's job. Delete it and hand the SDK the full URL. The SDK reads `code` from the URL and validates the PKCE verifier; it does **not** validate OAuth `state`. **Keep your existing `state` check** (compare the `state` query parameter against what you stored before the redirect) — or migrate to `@auth0/auth0-server-js` `completeInteractiveLogin`, which handles `state` validation automatically. (`getTokenByCode` options are `codeVerifier` and `organization`.) If the node-auth0 code read `resp.headers.get(...)` on success, see [Reading HTTP response metadata](#reading-http-response-metadata-fullresponse). Error-path metadata remains accessible on the typed error.
+
+> **Warning:** Do not delete your `state`/CSRF check when migrating to `AuthClient.getTokenByCode`. The stateless client does not validate `state`. Removing the check silently disables CSRF protection on the authorization-code flow.
 
 ### `oauth.authorizationCodeGrantWithPKCE` → `getTokenByCode` (with verifier)
 
@@ -322,7 +318,7 @@ const resp = await auth0.oauth.authorizationCodeGrantWithPKCE({
 });
 
 // after
-const tokens = await authClient.getTokenByCode(callbackUrl, {
+const tokens = await authClient.getTokenByCode(url, {
     codeVerifier: verifier,
 });
 ```
@@ -439,7 +435,7 @@ The new SDKs drop the envelope and return the domain object directly:
 - `database.changePassword` returns a `string`.
 - `sendEmail` / `sendSms` / `revokeToken` return `void`.
 
-HTTP metadata (status code, response headers such as `x-request-id`, `retry-after`, rate-limit headers) is available through the typed error objects on failure paths. On success paths, metadata is available via the opt-in `fullResponse` envelope (see below). It is no longer on the bare success value by default.
+HTTP metadata (status code, response headers such as `x-request-id`, `retry-after`, rate-limit headers) is available through the typed error objects on failure paths. On success paths, metadata is available via the opt-in `fullResponse` envelope (see [Reading HTTP response metadata](#reading-http-response-metadata-fullresponse)). It is no longer on the bare success value by default.
 
 The rewrite: delete `.data` indirection on every success path:
 
@@ -467,8 +463,6 @@ console.log(message);
 > `changePassword` requires `connection` plus at least one of `email` or `username`: either identifier is accepted, not `email` alone.
 
 #### Reading HTTP response metadata (fullResponse)
-
-> The `fullResponse` envelope and the per-request `RequestOptions` are not in the published `1.12.1` tarball yet. See the [pre-release path](#the-requestoptions--fullresponse-caveat).
 
 When your node-auth0 code reads HTTP response metadata (status, headers) on a success path, migrate to the opt-in envelope rather than dropping the read. This is most common when you track rate limits, log request IDs, or check retry-after headers for dashboard telemetry.
 
@@ -551,7 +545,7 @@ Output fields, `TokenResponse` field map:
 | `refresh_token` | `refreshToken` |
 | `id_token` | `idToken` |
 | `token_type` | `tokenType` |
-| `expires_in` (relative) | `expiresAt` (absolute, see below) |
+| `expires_in` (relative) | `expiresAt` (absolute, see [Token expiry](#3-token-expiry)) |
 | `scope` | `scope` |
 | (none): had to decode id_token yourself | `claims` (already-decoded ID token claims) |
 | `authorization_details` | `authorizationDetails` |
