@@ -2,7 +2,7 @@
 
 ## [v7.0.0](https://github.com/auth0/node-auth0/tree/v7.0.0) (2026-09-08)
 
-[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.5.0...v7.0.0)
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.4.0...v7.0.0)
 
 > **Important:** `v7.0.0` introduces breaking changes. Please review the [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) for detailed upgrade instructions.
 
