@@ -26,7 +26,7 @@ If your code only uses `ManagementClient`, the upgrade is small: address the Man
 
 ### Authentication API removed from the main entrypoint
 
-`AuthenticationClient` and `UserInfoClient` are no longer exported from the `auth0` main entrypoint. The stateless authentication layer now lives in [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js), and the server-managed session layer lives in [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-server-js).
+`AuthenticationClient` and `UserInfoClient` are no longer exported from the `auth0` main entrypoint. The stateless authentication layer now lives in [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js), and the server-managed session layer lives in [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-server-js).
 
 **Before (v6):**
 
@@ -66,6 +66,9 @@ The following symbols were exported from the main entrypoint in v6 and are remov
 | `SUBJECT_TOKEN_TYPES`        | Pass the token-type URN string directly to `exchangeToken` in `@auth0/auth0-auth-js`   |
 | `UserInfoResponse`           | Return type of `AuthClient.getUserInfo()` in `@auth0/auth0-auth-js`                    |
 | `UserInfoError`              | Typed error from `AuthClient.getUserInfo()` in `@auth0/auth0-auth-js`                   |
+| `ResponseError`              | Management API calls throw `ManagementError`                                          |
+| `FetchError`                 | Management API calls throw `ManagementError`                                          |
+| `JSONApiResponse`            | Responses return the data directly (no wrapper)                                        |
 
 `ManagementClient`, the `Management` namespace, and `ManagementError` are unchanged and still exported.
 
