@@ -114,8 +114,8 @@ describe("ManagementClient custom fetch option", () => {
 
         // The mTLS-capable fetch must actually be invoked for the api/v2 call,
         // otherwise the client certificate is never presented on the request.
-        const apiCall = myFetchMock.mock.calls.find(([u]) => !String(u).includes("/oauth/token"));
+        const apiCall = myFetchMock.mock.calls.find(([u]) => String(u).includes("/api/v2"));
         expect(apiCall).toBeDefined();
-        expect(String(apiCall![0])).toContain(DOMAIN);
+        expect(String(apiCall![0])).toContain(`${DOMAIN}/api/v2`);
     });
 });

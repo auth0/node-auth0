@@ -14,8 +14,6 @@
     "defaultCategory": "Other",
     "categoryOrder": [
         "Management API",
-        "Authentication API",
-        "UserInfo API",
         "Core",
         "Errors",
         "Models",
@@ -51,8 +49,6 @@
     },
     "groupOrder": [
         "Management API",
-        "Authentication API",
-        "UserInfo API",
         "Core",
         "Errors",
         "Models",

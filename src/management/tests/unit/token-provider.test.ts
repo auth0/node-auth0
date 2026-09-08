@@ -533,8 +533,7 @@ describe("TokenProvider (raw fetch + jose)", () => {
             const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
             expect(callHeaders["auth0-client"]).toBeDefined();
             const decoded = decodeTelemetry(callHeaders["auth0-client"]);
-            expect(typeof decoded.name).toBe("string");
-            expect(decoded.name.length).toBeGreaterThan(0);
+            expect(decoded.name).toBe("node-auth0");
             expect(typeof decoded.version).toBe("string");
             expect(decoded.version.length).toBeGreaterThan(0);
         });
