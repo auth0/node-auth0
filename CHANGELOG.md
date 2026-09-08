@@ -6,12 +6,15 @@
 
 > **Important:** `v7.0.0` introduces breaking changes. Please review the [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) for detailed upgrade instructions.
 
-**Removed**
-
 **⚠️ BREAKING CHANGES**
-- \[BREAKING\] feat!: remove Authentication layer [\#1390](https://github.com/auth0/node-auth0/pull/1390) ([tusharpandey13](https://github.com/tusharpandey13))
-- chore(v7): remove dead exports and unreachable telemetry middleware [\#1397](https://github.com/auth0/node-auth0/pull/1397) ([tusharpandey13](https://github.com/tusharpandey13))
 
+- Removed `AuthenticationClient` and all sub-clients (`database`, `oauth`, `passwordless`, `backchannel`, `tokenExchange`). Migrate to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js).
+- Removed `UserInfoClient`. Use `authClient.getUserInfo()` from `@auth0/auth0-auth-js`.
+- Removed public `ResponseError`, `FetchError`, and `JSONApiResponse` exports.
+
+**Changed**
+
+- Management client now acquires client-credentials tokens natively, without the removed shared `BaseAPI` runtime. [\#1390](https://github.com/auth0/node-auth0/pull/1390) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v6.4.0](https://github.com/auth0/node-auth0/tree/v6.4.0) (2026-09-04)
 
