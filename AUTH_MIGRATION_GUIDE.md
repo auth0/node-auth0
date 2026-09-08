@@ -1,8 +1,8 @@
 # Authentication Migration Guide
 
-This guide has moved into the [`auth-migration/`](./auth-migration/) directory.
+This guide lives in the [`auth-migration/`](./auth-migration/) directory.
 
-**→ Start here: [`auth-migration/index.md`](./auth-migration/index.md)**: migrate your authentication code off the `auth0` package to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js) (stateless token grants) or [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-server-js) (server-managed sessions).
+**→ Start here: [`auth-migration/index.md`](./auth-migration/index.md)**: migrate your authentication code off the `auth0` package to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js) (stateless token grants) or [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-server-js) (server-managed sessions).
 
 The directory contains:
 

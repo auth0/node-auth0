@@ -17,16 +17,16 @@ Default to auth0-auth-js for a low-risk parity migration. Pick auth0-server-js o
 You almost certainly left `Date.now() +` in front of `expiresAt`. `expiresAt` is already an absolute Unix timestamp, not a relative lifetime. See [Token expiry](./index.md#3-token-expiry).
 
 ### Where did `resp.data` go?
-The new SDKs return the domain object directly. Read `tokens.accessToken`, not `resp.data.access_token`. If you truly need HTTP response metadata on a success path, opt into `fullResponse`, but note that flag is part of the [post-1.12.1 caveat](./index.md#the-requestoptions--fullresponse-caveat).
+The new SDKs return the domain object directly. Read `tokens.accessToken`, not `resp.data.access_token`. If you truly need HTTP response metadata on a success path, opt into `fullResponse`.
 
 ### My magic-link passwordless flow stopped sending links.
 The `send` default changed from `'link'` (node-auth0) to `'code'` (new SDK). Set `send: 'link'` explicitly if you want magic links. See [Passwordless](./authentication-flows.md#passwordless).
 
 ### Where is `getUserInfo`?
-Prefer `TokenResponse.claims`; they are already decoded and validated, with no extra round-trip. `authClient.getUserInfo({ accessToken })` lands when auth0-auth-js PR #228 merges. In a session app, use `serverClient.getUser()`. See [UserInfoClient](./authentication-flows.md#userinfoclient).
+Prefer `TokenResponse.claims`; they are already decoded and validated, with no extra round-trip. For an arbitrary access token, use `authClient.getUserInfo({ accessToken })`. In a session app, use `serverClient.getUser()`. See [UserInfoClient](./authentication-flows.md#userinfoclient).
 
 ### Can I still set a global `headers` / `timeout` / `agent` on the client?
-Not on the constructor. Move them to the per-call `RequestOptions` argument (`headers`, `signal: AbortSignal.timeout(ms)`) or wrap `customFetch`. `RequestOptions` is part of the [post-1.12.1 caveat](./index.md#the-requestoptions--fullresponse-caveat).
+Not on the constructor. Move them to the per-call `RequestOptions` argument (`headers`, `signal: AbortSignal.timeout(ms)`) or wrap `customFetch`.
 
 ### How do I detect `mfa_required` now?
 Use the `isMfaRequiredError()` type guard, not a string comparison. It narrows the error and exposes the `mfa_token`. Drive the challenge via `authClient.mfa.*`. See [Error model](./index.md#4-error-model).
