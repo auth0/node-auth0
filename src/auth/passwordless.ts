@@ -68,6 +68,10 @@ export interface LoginWithSMSRequest extends Omit<LoginWithEmailRequest, "email"
 }
 
 /**
+ * @deprecated Will be removed in v7.0.0. Use `@auth0/auth0-auth-js` instead.
+ * See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md).
+ */
+/**
  * Handles passwordless flows using Email and SMS.
  */
 export class Passwordless extends BaseAuthAPI {
@@ -78,6 +82,7 @@ export class Passwordless extends BaseAuthAPI {
         this.idTokenValidator = new IDTokenValidator(configuration);
     }
 
+    /** @deprecated Use `authClient.passwordless.sendEmail()` from `@auth0/auth0-auth-js`. */
     /**
      * Start passwordless flow sending an email.
      *
@@ -136,6 +141,7 @@ export class Passwordless extends BaseAuthAPI {
         return VoidApiResponse.fromResponse(response);
     }
 
+    /** @deprecated Use `authClient.passwordless.sendSMS()` from `@auth0/auth0-auth-js`. */
     /**
      * Start passwordless flow sending an SMS.
      *
@@ -181,6 +187,7 @@ export class Passwordless extends BaseAuthAPI {
         return VoidApiResponse.fromResponse(response);
     }
 
+    /** @deprecated Use `authClient.passwordless.loginWithEmail()` from `@auth0/auth0-auth-js`. */
     /**
      * Once you have a verification code, use this endpoint to login the user with their email and verification code.
      *
@@ -221,6 +228,7 @@ export class Passwordless extends BaseAuthAPI {
         );
     }
 
+    /** @deprecated Use `authClient.passwordless.loginWithSMS()` from `@auth0/auth0-auth-js`. */
     /**
      * Once you have a verification code, use this endpoint to login the user with their phone number and verification code.
      *
