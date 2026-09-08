@@ -9,7 +9,7 @@ A guide to migrating the Auth0 Node.js SDK from `6.x` to `7.x`.
     - [Authentication API removed from the main entrypoint](#authentication-api-removed-from-the-main-entrypoint)
     - [Removed exports](#removed-exports)
     - [ManagementClient mTLS requires an explicit `fetch`](#managementclient-mtls-requires-an-explicit-fetch)
-    - [mTLS and client assertion are mutually exclusive](#mtls-and-client-assertion-are-mutually-exclusive)
+    - [mTLS works with both client secret and client assertion](#mtls-works-with-both-client-secret-and-client-assertion)
     - [`domain` must be a bare hostname](#domain-must-be-a-bare-hostname)
     - [Token acquisition failures throw `ManagementError`](#token-acquisition-failures-throw-managementerror)
     - [`uuid` dependency removed](#uuid-dependency-removed)
@@ -86,9 +86,9 @@ const mgmt = new ManagementClient({
 });
 ```
 
-### mTLS and client assertion are mutually exclusive
+### mTLS works with both client secret and client assertion
 
-`useMTLS: true` and `clientAssertionSigningKey` cannot be combined; they select incompatible token-endpoint authentication methods. Supplying both now throws at construction. `useMTLS` has been removed from the `ManagementClientOptionsWithClientAssertion` type.
+`useMTLS` works with both `clientSecret` and `clientAssertionSigningKey`. mTLS (RFC 8705) is a transport-layer concern: the TLS client certificate yields a certificate-bound token regardless of which client authentication method is used. An explicit `fetch` option is always required when `useMTLS` is set.
 
 ### `domain` must be a bare hostname
 
