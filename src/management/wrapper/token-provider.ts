@@ -146,10 +146,7 @@ export class TokenProvider {
         const { clientAssertionSigningKey, clientAssertionSigningAlg = "RS256" } = this
             .options as ManagementClient.ManagementClientOptionsWithClientAssertion & { audience: string };
 
-        const key =
-            typeof clientAssertionSigningKey === "string"
-                ? await importPKCS8(clientAssertionSigningKey, clientAssertionSigningAlg)
-                : clientAssertionSigningKey;
+        const key = await importPKCS8(clientAssertionSigningKey, clientAssertionSigningAlg);
 
         const now = Math.floor(Date.now() / 1000);
         return new SignJWT({})

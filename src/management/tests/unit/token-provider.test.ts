@@ -485,4 +485,57 @@ describe("TokenProvider (raw fetch + jose)", () => {
             expect(err.message).toContain("token request failed");
         });
     });
+
+    // Helper: decode the Auth0-Client telemetry header (base64url JSON).
+    // The jose mock's base64url.encode uses the real Buffer base64url encoding,
+    // so Buffer decode round-trips it.
+    function decodeTelemetry(header: string): { name: string; version: string } {
+        return JSON.parse(Buffer.from(header, "base64url").toString());
+    }
+
+    describe("TC-2.18 — telemetry:false omits Auth0-Client header", () => {
+        it("should not send the auth0-client header when telemetry is disabled", async () => {
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "no-telemetry-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider({ ...opts, telemetry: false } as any);
+            await tp.getAccessToken();
+
+            const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+            expect(callHeaders["auth0-client"]).toBeUndefined();
+        });
+    });
+
+    describe("TC-2.19 — clientInfo override sets custom name/version in Auth0-Client header", () => {
+        it("should encode the supplied clientInfo name and version", async () => {
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "client-info-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider({
+                ...opts,
+                clientInfo: { name: "my-custom-sdk", version: "9.9.9" },
+            } as any);
+            await tp.getAccessToken();
+
+            const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+            expect(callHeaders["auth0-client"]).toBeDefined();
+            const decoded = decodeTelemetry(callHeaders["auth0-client"]);
+            expect(decoded.name).toBe("my-custom-sdk");
+            expect(decoded.version).toBe("9.9.9");
+        });
+    });
+
+    describe("TC-2.20 — default Auth0-Client header carries node-auth0 identity JSON", () => {
+        it("should send a decodable auth0-client header with name and version", async () => {
+            fetchSpy.mockResolvedValue(makeOkResponse({ access_token: "default-telemetry-token", expires_in: 3600 }));
+
+            const tp = new TokenProvider(opts);
+            await tp.getAccessToken();
+
+            const callHeaders = (fetchSpy.mock.calls[0][1] as RequestInit).headers as Record<string, string>;
+            expect(callHeaders["auth0-client"]).toBeDefined();
+            const decoded = decodeTelemetry(callHeaders["auth0-client"]);
+            expect(decoded.name).toBe("node-auth0");
+            expect(typeof decoded.version).toBe("string");
+            expect(decoded.version.length).toBeGreaterThan(0);
+        });
+    });
 });
