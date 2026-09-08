@@ -1,5 +1,20 @@
 # Change Log
 
+## [v7.0.0] (2026-09-08)
+
+> **⚠️ BREAKING CHANGES** — See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md) for the full upgrade path.
+>
+> `AuthenticationClient` and `UserInfoClient` have been removed from this package. Migrate to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js).
+
+### Removed
+- `AuthenticationClient` and all sub-clients (`database`, `oauth`, `passwordless`, `backchannel`, `tokenExchange`) — use `@auth0/auth0-auth-js` `AuthClient` ([#1390])
+- `UserInfoClient` — use `authClient.getUserInfo()` from `@auth0/auth0-auth-js` ([#1390])
+- `BaseAPI` (`src/lib/runtime.ts`) removed from public surface ([#1390])
+
+### Changed
+- Node.js engine requirement updated to `^20.19.0 || ^22.12.0 || ^24.0.0 || ^26.0.0`
+- `SDK_VERSION` bumped to `7.0.0`
+
 ## [v6.4.0](https://github.com/auth0/node-auth0/tree/v6.4.0) (2026-09-04)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v6.3.0...v6.4.0)
