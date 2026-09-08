@@ -1,19 +1,15 @@
 # Change Log
 
-## [v7.0.0] (2026-09-08)
+## [v7.0.0](https://github.com/auth0/node-auth0/tree/v7.0.0) (2026-09-08)
 
-> **⚠️ BREAKING CHANGES** — See the [v7 Migration Guide](v7_MIGRATION_GUIDE.md) for the full upgrade path.
->
-> `AuthenticationClient` and `UserInfoClient` have been removed from this package. Migrate to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js).
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v6.5.0...v7.0.0)
 
-### Removed
-- `AuthenticationClient` and all sub-clients (`database`, `oauth`, `passwordless`, `backchannel`, `tokenExchange`) — use `@auth0/auth0-auth-js` `AuthClient` ([#1390])
-- `UserInfoClient` — use `authClient.getUserInfo()` from `@auth0/auth0-auth-js` ([#1390])
-- `BaseAPI` (`src/lib/runtime.ts`) removed from public surface ([#1390])
+> **Important:** `v7.0.0` introduces breaking changes. Please review the [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) for detailed upgrade instructions.
 
-### Changed
-- Node.js engine requirement updated to `^20.19.0 || ^22.12.0 || ^24.0.0 || ^26.0.0`
-- `SDK_VERSION` bumped to `7.0.0`
+**⚠️ BREAKING CHANGES**
+
+- \[BREAKING\] feat!: remove Authentication layer [\#1390](https://github.com/auth0/node-auth0/pull/1390) ([tusharpandey13](https://github.com/tusharpandey13))
+- chore(v7): remove dead exports and unreachable telemetry middleware [\#1397](https://github.com/auth0/node-auth0/pull/1397) ([tusharpandey13](https://github.com/tusharpandey13))
 
 ## [v6.4.0](https://github.com/auth0/node-auth0/tree/v6.4.0) (2026-09-04)
 
