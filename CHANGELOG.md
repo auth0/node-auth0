@@ -6,10 +6,12 @@
 
 > **Important:** `v7.0.0` introduces breaking changes. Please review the [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) for detailed upgrade instructions.
 
-**⚠️ BREAKING CHANGES**
+**Removed**
 
+**⚠️ BREAKING CHANGES**
 - \[BREAKING\] feat!: remove Authentication layer [\#1390](https://github.com/auth0/node-auth0/pull/1390) ([tusharpandey13](https://github.com/tusharpandey13))
 - chore(v7): remove dead exports and unreachable telemetry middleware [\#1397](https://github.com/auth0/node-auth0/pull/1397) ([tusharpandey13](https://github.com/tusharpandey13))
+
 
 ## [v6.4.0](https://github.com/auth0/node-auth0/tree/v6.4.0) (2026-09-04)
 
