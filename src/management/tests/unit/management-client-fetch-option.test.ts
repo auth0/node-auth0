@@ -79,4 +79,43 @@ describe("ManagementClient custom fetch option", () => {
         const [calledUrl] = myFetchMock.mock.calls[0] as [string, RequestInit];
         expect(calledUrl).toContain(DOMAIN);
     });
+
+    it("uses the supplied mTLS fetch for Management API requests when useMTLS is set", async () => {
+        // Client-credentials mode issues two calls through the supplied fetch:
+        // (1) the token request to the oauth endpoint, (2) the api/v2 request.
+        // Branch on URL so the token call gets a valid access_token and the
+        // api/v2 call gets a users payload.
+        const myFetchMock = jest.fn((url: string) => {
+            if (String(url).includes("/oauth/token")) {
+                return Promise.resolve(
+                    new Response(JSON.stringify({ access_token: "mtls-token", expires_in: 3600 }), {
+                        status: 200,
+                        headers: { "content-type": "application/json" },
+                    }),
+                );
+            }
+            return Promise.resolve(
+                new Response(JSON.stringify({ users: [], length: 0 }), {
+                    status: 200,
+                    headers: { "content-type": "application/json" },
+                }),
+            );
+        });
+
+        const client = new ManagementClient({
+            domain: DOMAIN,
+            clientId: "test-client-id",
+            clientSecret: "test-client-secret",
+            useMTLS: true,
+            fetch: myFetchMock as unknown as typeof fetch,
+        });
+
+        await client.users.list();
+
+        // The mTLS-capable fetch must actually be invoked for the api/v2 call,
+        // otherwise the client certificate is never presented on the request.
+        const apiCall = myFetchMock.mock.calls.find(([u]) => !String(u).includes("/oauth/token"));
+        expect(apiCall).toBeDefined();
+        expect(String(apiCall![0])).toContain(DOMAIN);
+    });
 });
