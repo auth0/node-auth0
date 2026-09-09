@@ -16,6 +16,7 @@
 - [API Reference](https://github.com/auth0/node-auth0/blob/master/reference.md) - full reference for this library
 - [v6 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v6_MIGRATION_GUIDE.md) - upgrade from v5 to v6
 - [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) - upgrade from v6 to v7
+- [Authentication Migration Guide](https://github.com/auth0/node-auth0/tree/master/auth-migration) - migrate the Authentication API layer to `@auth0/auth0-auth-js` / `@auth0/auth0-server-js`
 
 ## Getting Started
 
