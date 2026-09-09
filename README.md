@@ -15,6 +15,7 @@
 - [SDK Documentation](http://auth0.github.io/node-auth0/) - explore the SDK documentation
 - [API Reference](https://github.com/auth0/node-auth0/blob/master/reference.md) - full reference for this library
 - [v6 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v6_MIGRATION_GUIDE.md) - upgrade from v5 to v6
+- [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) - upgrade from v6 to v7
 - [Authentication Migration Guide](https://github.com/auth0/node-auth0/tree/master/auth-migration) - migrate the Authentication API layer to `@auth0/auth0-auth-js` / `@auth0/auth0-server-js`
 
 ## Getting Started
@@ -350,12 +351,6 @@ try {
     console.error(error);
 }
 ```
-
-## Migrating from v6 to v7
-
-Version 7.0.0 removes the authentication clients (`AuthenticationClient`, `UserInfoClient`) from the `auth0` entrypoint. Authentication moves to [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) (stateless token grants) and [`@auth0/auth0-server-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-server-js) (session-based apps); `ManagementClient` stays in `auth0`.
-
-For method mapping, error-handling changes, mTLS notes, and step-by-step routing, see the [Authentication Migration Guide](./AUTH_MIGRATION_GUIDE.md).
 
 ## Request and Response Types
 
