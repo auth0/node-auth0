@@ -736,11 +736,23 @@ export const OauthScope = {
      * Delete Organization Client Associations */
     DeleteOrganizationClients: "delete:organization_clients",
     /**
+     * Create Organization Templates */
+    CreateOrganizationTemplates: "create:organization_templates",
+    /**
+     * Read Organization Templates */
+    ReadOrganizationTemplates: "read:organization_templates",
+    /**
+     * Update Organization Templates */
+    UpdateOrganizationTemplates: "update:organization_templates",
+    /**
      * Create Network ACL Keys */
     CreateNetworkAclKeys: "create:network_acl_keys",
     /**
      * Read Network ACL Keys */
     ReadNetworkAclKeys: "read:network_acl_keys",
+    /**
+     * Delete Network ACL Keys */
+    DeleteNetworkAclKeys: "delete:network_acl_keys",
 } as const;
 export type OauthScope = (typeof OauthScope)[keyof typeof OauthScope];
 
@@ -1122,6 +1134,7 @@ export const ActionTriggerTypeEnum = {
     PasswordHashMigration: "password-hash-migration",
     LoginPostIdentifier: "login-post-identifier",
     SignupPostIdentifier: "signup-post-identifier",
+    PostCredentialValidation: "post-credential-validation",
 } as const;
 export type ActionTriggerTypeEnum = (typeof ActionTriggerTypeEnum)[keyof typeof ActionTriggerTypeEnum];
 
@@ -1546,6 +1559,24 @@ export const AuthenticationTypeEnum = {
     Totp: "totp",
 } as const;
 export type AuthenticationTypeEnum = (typeof AuthenticationTypeEnum)[keyof typeof AuthenticationTypeEnum];
+
+/**
+ * Configuration for B2B Integration clients.
+ */
+export interface B2BIntegrationConfiguration {
+    /** List of SSO profile IDs linked to this B2B integration client. Maximum 1 entry. */
+    sso_profiles?: string[] | undefined;
+    integration_type?: Management.B2BIntegrationConfigurationIntegrationTypeEnum | undefined;
+}
+
+/** The type of integration used to connect to this B2B integration client. Must be one of `custom_auth_server`, `third_party`, or `application`. */
+export const B2BIntegrationConfigurationIntegrationTypeEnum = {
+    CustomAuthServer: "custom_auth_server",
+    ThirdParty: "third_party",
+    Application: "application",
+} as const;
+export type B2BIntegrationConfigurationIntegrationTypeEnum =
+    (typeof B2BIntegrationConfigurationIntegrationTypeEnum)[keyof typeof B2BIntegrationConfigurationIntegrationTypeEnum];
 
 /**
  * Bad Request
@@ -2211,6 +2242,7 @@ export interface Client {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
@@ -2643,7 +2675,6 @@ export const ClientAppTypeEnum = {
     NonInteractive: "non_interactive",
     ResourceServer: "resource_server",
     ExpressConfiguration: "express_configuration",
-    B2BIntegration: "b2b_integration",
     Rms: "rms",
     Box: "box",
     Cloudbees: "cloudbees",
@@ -3869,6 +3900,14 @@ export type ConnectionDecryptionKeySaml =
      * Private key in PEM format. */
     | string;
 
+/** Controls whether connections created from this template can be deleted. */
+export const ConnectionDeletionBehaviorEnum = {
+    Allow: "allow",
+    AllowIfEmpty: "allow_if_empty",
+} as const;
+export type ConnectionDeletionBehaviorEnum =
+    (typeof ConnectionDeletionBehaviorEnum)[keyof typeof ConnectionDeletionBehaviorEnum];
+
 /**
  * The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL.
  */
@@ -4005,6 +4044,11 @@ export interface ConnectionEmailOtpAuthenticationMethod {
  * Email subject line
  */
 export type ConnectionEmailSubjectEmail = string;
+
+/**
+ * When true, the server uses Pushed Authorization Requests (PAR) to start the authorization transaction with the identity provider, pushing authorization parameters over back-channel HTTP and redirecting with only a request_uri.
+ */
+export type ConnectionEnablePushedAuthorizationRequests = boolean;
 
 /**
  * Set to true to inject context into custom DB scripts (warning: cannot be disabled once enabled)
@@ -4419,6 +4463,24 @@ export const ConnectionIdentityProviderEnum = {
     Wordpress: "wordpress",
     Yahoo: "yahoo",
     Yandex: "yandex",
+    NotionMcp: "notion-mcp",
+    AsanaMcp: "asana-mcp",
+    AtlassianMcp: "atlassian-mcp",
+    CloudflareMcp: "cloudflare-mcp",
+    DocusignMcp: "docusign-mcp",
+    FigmaMcp: "figma-mcp",
+    GitlabMcp: "gitlab-mcp",
+    GustoMcp: "gusto-mcp",
+    HerokuMcp: "heroku-mcp",
+    HubspotMcp: "hubspot-mcp",
+    IntercomMcp: "intercom-mcp",
+    LinearMcp: "linear-mcp",
+    PagerdutyMcp: "pagerduty-mcp",
+    SentryMcp: "sentry-mcp",
+    SlackMcp: "slack-mcp",
+    SupabaseMcp: "supabase-mcp",
+    VercelMcp: "vercel-mcp",
+    XeroMcp: "xero-mcp",
 } as const;
 export type ConnectionIdentityProviderEnum =
     (typeof ConnectionIdentityProviderEnum)[keyof typeof ConnectionIdentityProviderEnum];
@@ -4897,12 +4959,14 @@ export interface ConnectionOptionsCommonOidc {
     connection_settings?: Management.ConnectionConnectionSettings | undefined;
     domain_aliases?: Management.ConnectionDomainAliases | undefined;
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
+    enable_pushed_authorization_requests?: Management.ConnectionEnablePushedAuthorizationRequests | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
     id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     issuer?: Management.ConnectionIssuer | undefined;
     jwks_uri?: Management.ConnectionJwksUri | undefined;
     oidc_metadata?: Management.ConnectionOptionsOidcMetadata | undefined;
+    pushed_authorization_request_endpoint?: Management.ConnectionPushedAuthorizationRequestEndpoint | undefined;
     scope?: Management.ConnectionScopeOidc | undefined;
     send_back_channel_nonce?: Management.ConnectionSendBackChannelNonce | undefined;
     set_user_root_attributes?: Management.ConnectionSetUserRootAttributesEnum | undefined;
@@ -5531,6 +5595,7 @@ export interface ConnectionOptionsOidcMetadata {
     jwks_uri: Management.ConnectionJwksUri;
     op_policy_uri?: Management.ConnectionOpPolicyUri | undefined;
     op_tos_uri?: Management.ConnectionOpTosUri | undefined;
+    pushed_authorization_request_endpoint?: Management.ConnectionPushedAuthorizationRequestEndpoint | undefined;
     registration_endpoint?: Management.ConnectionRegistrationEndpoint | undefined;
     request_object_encryption_alg_values_supported?:
         | Management.ConnectionRequestObjectEncryptionAlgValuesSupported
@@ -5543,6 +5608,7 @@ export interface ConnectionOptionsOidcMetadata {
         | undefined;
     request_parameter_supported?: Management.ConnectionRequestParameterSupported | undefined;
     request_uri_parameter_supported?: Management.ConnectionRequestUriParameterSupported | undefined;
+    require_pushed_authorization_requests?: Management.ConnectionRequirePushedAuthorizationRequests | undefined;
     require_request_uri_registration?: Management.ConnectionRequireRequestUriRegistration | undefined;
     response_modes_supported?: Management.ConnectionResponseModesSupported | undefined;
     response_types_supported?: Management.ConnectionResponseTypesSupported | undefined;
@@ -5643,11 +5709,13 @@ export interface ConnectionOptionsSaml
     destinationUrl?: Management.ConnectionDestinationUrlSaml | undefined;
     /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
     disableSignout?: boolean | undefined;
+    discovery_url?: Management.ConnectionDiscoveryUrl | undefined;
     fieldsMap?: Management.ConnectionFieldsMapSaml | undefined;
     global_token_revocation_jwt_iss?: Management.ConnectionGlobalTokenRevocationJwtIssSaml | undefined;
     global_token_revocation_jwt_sub?: Management.ConnectionGlobalTokenRevocationJwtSubSaml | undefined;
     metadataUrl?: Management.ConnectionMetadataUrlSaml | undefined;
     metadataXml?: Management.ConnectionMetadataXmlSaml | undefined;
+    oidc_metadata?: Management.ConnectionOptionsOidcMetadata | undefined;
     recipientUrl?: Management.ConnectionRecipientUrlSaml | undefined;
     requestTemplate?: Management.ConnectionRequestTemplateSaml | undefined;
     signingCert?: Management.ConnectionSigningCertSaml | undefined;
@@ -6121,6 +6189,7 @@ export interface ConnectionProfile {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    provisioning?: Management.ConnectionProfileProvisioning | undefined;
     cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
@@ -6213,11 +6282,63 @@ export type ConnectionProfileOrganizationShowAsButtonEnum =
     (typeof ConnectionProfileOrganizationShowAsButtonEnum)[keyof typeof ConnectionProfileOrganizationShowAsButtonEnum];
 
 /**
+ * Provisioning settings for connections created from this profile.
+ */
+export interface ConnectionProfileProvisioning {
+    scim?: Management.ConnectionProfileProvisioningScim | undefined;
+}
+
+/**
+ * SCIM provisioning settings.
+ */
+export interface ConnectionProfileProvisioningScim {
+    tokens: Management.ConnectionProfileProvisioningScimTokens;
+}
+
+/**
+ * The default SCIM token expiry, in seconds. `null` means the token never expires by default.
+ */
+export type ConnectionProfileProvisioningScimTokenDefaultExpiry = (number | null) | undefined;
+
+/**
+ * The maximum SCIM token expiry, in seconds. `null` means there is no maximum.
+ */
+export type ConnectionProfileProvisioningScimTokenMaxAllowedExpiry = (number | null) | undefined;
+
+/** A SCIM token scope. */
+export const ConnectionProfileProvisioningScimTokenScopeEnum = {
+    GetUsers: "get:users",
+    PostUsers: "post:users",
+    PatchUsers: "patch:users",
+    DeleteUsers: "delete:users",
+    PutUsers: "put:users",
+} as const;
+export type ConnectionProfileProvisioningScimTokenScopeEnum =
+    (typeof ConnectionProfileProvisioningScimTokenScopeEnum)[keyof typeof ConnectionProfileProvisioningScimTokenScopeEnum];
+
+/**
+ * The scopes granted to SCIM tokens.
+ */
+export type ConnectionProfileProvisioningScimTokenScopes = Management.ConnectionProfileProvisioningScimTokenScopeEnum[];
+
+/**
+ * SCIM token settings for connections created from this profile.
+ */
+export interface ConnectionProfileProvisioningScimTokens {
+    scopes: Management.ConnectionProfileProvisioningScimTokenScopes;
+    default_expiry?: ((Management.ConnectionProfileProvisioningScimTokenDefaultExpiry | undefined) | null) | undefined;
+    max_allowed_expiry?:
+        | ((Management.ConnectionProfileProvisioningScimTokenMaxAllowedExpiry | undefined) | null)
+        | undefined;
+}
+
+/**
  * Connection Profile Strategy Override
  */
 export interface ConnectionProfileStrategyOverride {
     enabled_features?: Management.ConnectionProfileStrategyOverridesEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileStrategyOverridesConnectionConfig | undefined;
+    provisioning?: Management.ConnectionProfileStrategyOverridesProvisioning | undefined;
 }
 
 /**
@@ -6245,6 +6366,13 @@ export interface ConnectionProfileStrategyOverridesConnectionConfig {}
 export type ConnectionProfileStrategyOverridesEnabledFeatures = Management.EnabledFeaturesEnum[];
 
 /**
+ * Provisioning settings for a connection profile strategy override.
+ */
+export interface ConnectionProfileStrategyOverridesProvisioning {
+    scim?: Management.ConnectionProfileProvisioningScim | undefined;
+}
+
+/**
  * The structure of the template, which can be used as the payload for creating or updating a Connection Profile.
  */
 export interface ConnectionProfileTemplate {
@@ -6254,6 +6382,7 @@ export interface ConnectionProfileTemplate {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    provisioning?: Management.ConnectionProfileProvisioning | undefined;
 }
 
 export interface ConnectionProfileTemplateItem {
@@ -6307,6 +6436,8 @@ export interface ConnectionPropertiesOptions {
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
+    enable_pushed_authorization_requests?: Management.ConnectionEnablePushedAuthorizationRequests | undefined;
+    pushed_authorization_request_endpoint?: Management.ConnectionPushedAuthorizationRequestEndpoint | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
@@ -6355,6 +6486,11 @@ export interface ConnectionPurposes {
     authentication?: Management.ConnectionAuthenticationPurpose | undefined;
     connected_accounts?: Management.ConnectionConnectedAccountsPurpose | undefined;
 }
+
+/**
+ * URL of the identity provider's Pushed Authorization Request (PAR) endpoint, as per https://datatracker.ietf.org/doc/html/rfc9126. Must use HTTPS scheme.
+ */
+export type ConnectionPushedAuthorizationRequestEndpoint = string;
 
 /**
  * Indicates whether to use realm fallback.
@@ -6410,6 +6546,11 @@ export type ConnectionRequestTokenUrloAuth1 = Management.ConnectionHttpsUrlWithH
  * Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false.
  */
 export type ConnectionRequestUriParameterSupported = boolean;
+
+/**
+ * Boolean parameter indicating whether the identity provider requires Pushed Authorization Requests (PAR), as per https://datatracker.ietf.org/doc/html/rfc9126. Discovered from the identity provider's metadata; not used to decide whether the server performs PAR.
+ */
+export type ConnectionRequirePushedAuthorizationRequests = boolean;
 
 /**
  * Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false.
@@ -7043,6 +7184,7 @@ export namespace ConnectionResponseContentPlanningCenter {
 export interface ConnectionResponseContentSaml
     extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSaml.Strategy;
+    cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
@@ -7612,6 +7754,24 @@ export const ConnectionStrategyEnum = {
     Wordpress: "wordpress",
     Yahoo: "yahoo",
     Yandex: "yandex",
+    NotionMcp: "notion-mcp",
+    AsanaMcp: "asana-mcp",
+    AtlassianMcp: "atlassian-mcp",
+    CloudflareMcp: "cloudflare-mcp",
+    DocusignMcp: "docusign-mcp",
+    FigmaMcp: "figma-mcp",
+    GitlabMcp: "gitlab-mcp",
+    GustoMcp: "gusto-mcp",
+    HerokuMcp: "heroku-mcp",
+    HubspotMcp: "hubspot-mcp",
+    IntercomMcp: "intercom-mcp",
+    LinearMcp: "linear-mcp",
+    PagerdutyMcp: "pagerduty-mcp",
+    SentryMcp: "sentry-mcp",
+    SlackMcp: "slack-mcp",
+    SupabaseMcp: "supabase-mcp",
+    VercelMcp: "vercel-mcp",
+    XeroMcp: "xero-mcp",
     Auth0Adldap: "auth0-adldap",
 } as const;
 export type ConnectionStrategyEnum = (typeof ConnectionStrategyEnum)[keyof typeof ConnectionStrategyEnum];
@@ -8003,6 +8163,10 @@ export interface ConnectionsOidcMetadata {
     op_tos_uri?: string | undefined;
     /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
     end_session_endpoint?: string | undefined;
+    /** URL of the identity provider's Pushed Authorization Request (PAR) endpoint, as per https://datatracker.ietf.org/doc/html/rfc9126. Must use HTTPS scheme. */
+    pushed_authorization_request_endpoint?: string | undefined;
+    /** Boolean parameter indicating whether the identity provider requires Pushed Authorization Requests (PAR), as per https://datatracker.ietf.org/doc/html/rfc9126. Discovered from the identity provider's metadata; not used to decide whether the server performs PAR. */
+    require_pushed_authorization_requests?: boolean | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
     dpop_signing_alg_values_supported?: string[] | undefined;
     /** Accepts any additional properties */
@@ -8249,6 +8413,7 @@ export interface CreateClientResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
@@ -8285,6 +8450,7 @@ export interface CreateConnectionProfileResponseContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    provisioning?: Management.ConnectionProfileProvisioning | undefined;
     cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
@@ -8866,6 +9032,7 @@ export namespace CreateConnectionRequestContentPlanningCenter {
  */
 export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSaml.Strategy;
+    cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -10516,7 +10683,7 @@ export interface CredentialId {
  * Configure the connection to be used as a Requesting Application for Cross App Access.
  */
 export interface CrossAppAccessRequestingApp {
-    /** Set to `true` to enable the connection as a Requesting Application for Cross App Access. */
+    /** Set to `true` to enable the connection as a Requesting Application for Cross App Access. On `oidc` connections this requires `options.type` to be `back_channel`. Setting `false` is always accepted, so the role can be turned off even if the tenant or connection no longer supports it. */
     active: boolean;
 }
 
@@ -11338,6 +11505,7 @@ export type EventStreamCloudEventConnectionCreatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventConnectionCreatedData {
     object: Management.EventStreamCloudEventConnectionCreatedObject;
+    previous_object?: Management.EventStreamCloudEventConnectionCreatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -11448,6 +11616,8 @@ export interface EventStreamCloudEventConnectionCreatedObject0Options {
         | Management.EventStreamCloudEventConnectionCreatedObject0OptionsTokenEndpointJwtcaAudFormatEnum
         | undefined;
     upstream_params?: Management.EventStreamCloudEventConnectionCreatedObject0OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
     /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
     userinfo_endpoint?: string | undefined;
     attribute_map?: Management.EventStreamCloudEventConnectionCreatedObject0OptionsAttributeMap | undefined;
@@ -11545,6 +11715,8 @@ export interface EventStreamCloudEventConnectionCreatedObject0OptionsOidcMetadat
     claims_parameter_supported?: boolean | undefined;
     /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
     claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
     display_values_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
@@ -11768,6 +11940,8 @@ export interface EventStreamCloudEventConnectionCreatedObject1Options {
         | Management.EventStreamCloudEventConnectionCreatedObject1OptionsTokenEndpointJwtcaAudFormatEnum
         | undefined;
     upstream_params?: Management.EventStreamCloudEventConnectionCreatedObject1OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
     /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
     userinfo_endpoint?: string | undefined;
     attribute_map?: Management.EventStreamCloudEventConnectionCreatedObject1OptionsAttributeMap | undefined;
@@ -11865,6 +12039,8 @@ export interface EventStreamCloudEventConnectionCreatedObject1OptionsOidcMetadat
     claims_parameter_supported?: boolean | undefined;
     /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
     claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
     display_values_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
@@ -12083,15 +12259,22 @@ export interface EventStreamCloudEventConnectionCreatedObject2Options {
     deflate?: boolean | undefined;
     /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
     destinationUrl?: string | undefined;
+    /** When true, disables the automatic correction of the fieldsMap configuration to ensure proper mapping of SAML attributes to user profile fields. Defaults to false (fieldsMap fix enabled). */
+    disableFieldsMapFix?: boolean | undefined;
     /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
     disableSignout?: boolean | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. Used with Cross App Access. */
+    discovery_url?: string | undefined;
     fieldsMap?: Management.EventStreamCloudEventConnectionCreatedObject2OptionsFieldsMap | undefined;
+    /** Raw JSON string representation of the fieldsMap configuration. Used internally for storage and retrieval of the fieldsMap object. */
+    fieldsMapJsonRaw?: string | undefined;
     /** Expected 'iss' (Issuer) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT issuer matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_sub. */
     global_token_revocation_jwt_iss?: string | undefined;
     /** Expected 'sub' (Subject) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT subject matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_iss. */
     global_token_revocation_jwt_sub?: string | undefined;
     /** HTTPS URL to the identity provider's SAML metadata document. When provided, Auth0 automatically fetches and parses the metadata to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Use metadataUrl OR metadataXml, not both. */
     metadataUrl?: string | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionCreatedObject2OptionsOidcMetadata | undefined;
     /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
     recipientUrl?: string | undefined;
     /** Custom XML template for SAML authentication requests. Supports variable substitution using @@variableName@@ syntax. When not provided, uses default SAML AuthnRequest template. See https://auth0.com/docs/authenticate/protocols/saml/saml-sso-integrations/configure-auth0-saml-service-provider#customize-the-request-template */
@@ -12154,6 +12337,88 @@ export const EventStreamCloudEventConnectionCreatedObject2OptionsIdpinitiatedCli
 } as const;
 export type EventStreamCloudEventConnectionCreatedObject2OptionsIdpinitiatedClientProtocolEnum =
     (typeof EventStreamCloudEventConnectionCreatedObject2OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionCreatedObject2OptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. Used with Cross App Access.
+ */
+export interface EventStreamCloudEventConnectionCreatedObject2OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
 
 /** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
 export const EventStreamCloudEventConnectionCreatedObject2OptionsProtocolBindingEnum = {
@@ -12548,6 +12813,8 @@ export interface EventStreamCloudEventConnectionCreatedObject5Options {
     ips?: string[] | undefined;
     /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
     kerberos?: boolean | undefined;
+    /** When true, restricts the connection to Kerberos-only authentication, disallowing username/password fallback. */
+    kerberos_only?: boolean | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
     non_persistent_attrs?: string[] | undefined;
     set_user_root_attributes?:
@@ -12873,6 +13140,1675 @@ export const EventStreamCloudEventConnectionCreatedObject7StrategyEnum = {
 export type EventStreamCloudEventConnectionCreatedObject7StrategyEnum =
     (typeof EventStreamCloudEventConnectionCreatedObject7StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedObject7StrategyEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject =
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject0
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject1
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject2
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject3
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject4
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject5
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject6
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject7;
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0Authentication | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0ConnectedAccounts | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject0StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0ConnectedAccounts {
+    active: boolean;
+    cross_app_access?: boolean | undefined;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0Metadata {}
+
+/**
+ * Options for the 'oidc' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0Options {
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    connection_settings?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsConnectionSettings
+        | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    dpop_signing_alg?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsDpopSigningAlgEnum
+        | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Indicates whether the identity provider supports session expiry via the id_token. If true, the system will use the session_expiry claim in the id_token to determine session expiry. */
+    id_token_session_expiry_supported?: boolean | undefined;
+    /** List of algorithms allowed to verify the ID tokens. Applicable when strategy=oidc or okta. */
+    id_token_signed_response_algs?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum[]
+        | undefined;
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer?: string | undefined;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsOidcMetadata | undefined;
+    schema_version?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSchemaVersionEnum
+        | undefined;
+    /** Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider. */
+    scope?: string | undefined;
+    /** When true and type is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation. */
+    send_back_channel_nonce?: boolean | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    token_endpoint_auth_method?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthMethodEnum
+        | undefined;
+    token_endpoint_auth_signing_alg?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum
+        | undefined;
+    token_endpoint_jwtca_aud_format?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum
+        | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    attribute_map?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMap | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. */
+    discovery_url?: string | undefined;
+    type?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTypeEnum | undefined;
+}
+
+/**
+ * Configuration for mapping claims from the identity provider to Auth0 user profile attributes. Allows customizing which IdP claims populate user fields and how they are transformed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMap {
+    attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapAttributes
+        | undefined;
+    /** Scopes to send to the IdP's Userinfo endpoint */
+    userinfo_scope?: string | undefined;
+    mapping_mode?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapMappingModeEnum
+        | undefined;
+}
+
+/**
+ * Object containing mapping details for incoming claims
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapAttributes = Record<
+    string,
+    unknown
+>;
+
+/** Method used to map incoming claims when strategy=oidc. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapMappingModeEnum = {
+    BindAll: "bind_all",
+    UseMap: "use_map",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapMappingModeEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapMappingModeEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapMappingModeEnum];
+
+/**
+ * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0OptionsConnectionSettings {
+    pkce?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject0OptionsConnectionSettingsPkceEnum
+        | undefined;
+}
+
+/** PKCE configuration. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsConnectionSettingsPkceEnum = {
+    Auto: "auto",
+    S256: "S256",
+    Plain: "plain",
+    Disabled: "disabled",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsConnectionSettingsPkceEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsConnectionSettingsPkceEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsConnectionSettingsPkceEnum];
+
+/** Algorithm used for DPoP proof JWT signing. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Es512: "ES512",
+    Ed25519: "Ed25519",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsDpopSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsDpopSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsDpopSigningAlgEnum];
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Algorithm allowed to verify the ID tokens. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject0OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** The internal schema version of the connection options. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSchemaVersionEnum = {
+    Openid100: "openid-1.0.0",
+    OidcV4: "oidc-v4",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSchemaVersionEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSchemaVersionEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSchemaVersionEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsSetUserRootAttributesEnum];
+
+/** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthMethodEnum = {
+    ClientSecretPost: "client_secret_post",
+    PrivateKeyJwt: "private_key_jwt",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthMethodEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthMethodEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthMethodEnum];
+
+/** Algorithm used to sign client_assertions. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum];
+
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum = {
+    Issuer: "issuer",
+    TokenEndpoint: "token_endpoint",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum];
+
+/** OIDC communication channel type. 'back_channel' (confidential client) exchanges tokens server-side for stronger security; 'front_channel' handles responses in the browser. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTypeEnum = {
+    BackChannel: "back_channel",
+    FrontChannel: "front_channel",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTypeEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTypeEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTypeEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject0StrategyEnum = {
+    Oidc: "oidc",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject0StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject0StrategyEnum];
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject1StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1Metadata {}
+
+/**
+ * Options for the 'okta' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1Options {
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    connection_settings?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsConnectionSettings
+        | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    dpop_signing_alg?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsDpopSigningAlgEnum
+        | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Indicates whether the identity provider supports session expiry via the id_token. If true, the system will use the session_expiry claim in the id_token to determine session expiry. */
+    id_token_session_expiry_supported?: boolean | undefined;
+    /** List of algorithms allowed to verify the ID tokens. Applicable when strategy=oidc or okta. */
+    id_token_signed_response_algs?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum[]
+        | undefined;
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer?: string | undefined;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsOidcMetadata | undefined;
+    schema_version?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSchemaVersionEnum
+        | undefined;
+    /** Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider. */
+    scope?: string | undefined;
+    /** When true and type is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation. */
+    send_back_channel_nonce?: boolean | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    token_endpoint_auth_method?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthMethodEnum
+        | undefined;
+    token_endpoint_auth_signing_alg?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum
+        | undefined;
+    token_endpoint_jwtca_aud_format?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum
+        | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    attribute_map?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMap | undefined;
+    /** Domain of the Okta organization (e.g., dev-123456.okta.com). Should be just the domain of the okta server with no scheme or trailing backslash. Discovery runs only when connection.options.oidc_metadata is empty and a domain is provided */
+    domain?: string | undefined;
+    type?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTypeEnum | undefined;
+}
+
+/**
+ * Mapping of claims received from the identity provider (IdP)
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMap {
+    attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapAttributes
+        | undefined;
+    /** Scopes to send to the IdP's Userinfo endpoint */
+    userinfo_scope?: string | undefined;
+    mapping_mode?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapMappingModeEnum
+        | undefined;
+}
+
+/**
+ * Object containing mapping details for incoming claims
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapAttributes = Record<
+    string,
+    unknown
+>;
+
+/** Method used to map incoming claims when strategy=okta. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapMappingModeEnum = {
+    BasicProfile: "basic_profile",
+    UseMap: "use_map",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapMappingModeEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapMappingModeEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapMappingModeEnum];
+
+/**
+ * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1OptionsConnectionSettings {
+    pkce?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject1OptionsConnectionSettingsPkceEnum
+        | undefined;
+}
+
+/** PKCE configuration. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsConnectionSettingsPkceEnum = {
+    Auto: "auto",
+    S256: "S256",
+    Plain: "plain",
+    Disabled: "disabled",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsConnectionSettingsPkceEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsConnectionSettingsPkceEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsConnectionSettingsPkceEnum];
+
+/** Algorithm used for DPoP proof JWT signing. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Es512: "ES512",
+    Ed25519: "Ed25519",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsDpopSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsDpopSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsDpopSigningAlgEnum];
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Algorithm allowed to verify the ID tokens. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject1OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** The internal schema version of the connection options. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSchemaVersionEnum = {
+    Openid100: "openid-1.0.0",
+    OidcV4: "oidc-v4",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSchemaVersionEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSchemaVersionEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSchemaVersionEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsSetUserRootAttributesEnum];
+
+/** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthMethodEnum = {
+    ClientSecretPost: "client_secret_post",
+    PrivateKeyJwt: "private_key_jwt",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthMethodEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthMethodEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthMethodEnum];
+
+/** Algorithm used to sign client_assertions. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum];
+
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum = {
+    Issuer: "issuer",
+    TokenEndpoint: "token_endpoint",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum];
+
+/** Connection type */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTypeEnum = {
+    BackChannel: "back_channel",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTypeEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTypeEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTypeEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject1StrategyEnum = {
+    Okta: "okta",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject1StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject1StrategyEnum];
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject2StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2Metadata {}
+
+/**
+ * Options for the 'samlp' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2Options {
+    assertion_decryption_settings?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsAssertionDecryptionSettings
+        | undefined;
+    /** X.509 signing certificate from the identity provider in .der format. Used to validate signatures in SAML Responses and Assertions. This is an alternative to signingCert and is kept for backward compatibility. Prefer using signingCert instead. */
+    cert?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    digestAlgorithm?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsDigestAlgorithmEnum
+        | undefined;
+    /** Domain aliases for the connection */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider. */
+    entityId?: string | undefined;
+    /** ISO 8601 formatted datetime indicating when the identity provider's signing certificate expires. */
+    expires?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    idpinitiated?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsIdpinitiated | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    protocolBinding?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsProtocolBindingEnum
+        | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSetUserRootAttributesEnum
+        | undefined;
+    signatureAlgorithm?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSignatureAlgorithmEnum
+        | undefined;
+    /** Identity provider's SAML SingleSignOnService endpoint URL where Auth0 sends SAML authentication requests. This is the primary login URL for the SAML connection. Required unless using metadataUrl or metadataXml. */
+    signInEndpoint?: string | undefined;
+    /** Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification. */
+    signingCert?: string | undefined;
+    /** When true, Auth0 signs SAML authentication requests using the connection's signing key. The signature includes the request's digest and is validated by the identity provider. Defaults to false (unsigned requests). */
+    signSAMLRequest?: boolean | undefined;
+    subject?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSubject | undefined;
+    /** For SAML connections, the tenant domain used to construct the login endpoint URL. Can be a string for single-tenant or an array of strings for multi-tenant validation. */
+    tenant_domain?: string | undefined;
+    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsUpstreamParams | undefined;
+    /** When true, enables detailed SAML debugging by issuing 'w' (warning) events in tenant logs containing SAML request/response details. WARNING: Potentially exposes sensitive user information (PII, credentials) and should only be enabled temporarily for debugging purposes. */
+    debug?: boolean | undefined;
+    /** When true, enables DEFLATE compression for SAML requests sent via HTTP-Redirect binding. */
+    deflate?: boolean | undefined;
+    /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
+    destinationUrl?: string | undefined;
+    /** When true, disables the automatic correction of the fieldsMap configuration to ensure proper mapping of SAML attributes to user profile fields. Defaults to false (fieldsMap fix enabled). */
+    disableFieldsMapFix?: boolean | undefined;
+    /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
+    disableSignout?: boolean | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. Used with Cross App Access. */
+    discovery_url?: string | undefined;
+    fieldsMap?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsFieldsMap | undefined;
+    /** Raw JSON string representation of the fieldsMap configuration. Used internally for storage and retrieval of the fieldsMap object. */
+    fieldsMapJsonRaw?: string | undefined;
+    /** Expected 'iss' (Issuer) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT issuer matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_sub. */
+    global_token_revocation_jwt_iss?: string | undefined;
+    /** Expected 'sub' (Subject) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT subject matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_iss. */
+    global_token_revocation_jwt_sub?: string | undefined;
+    /** HTTPS URL to the identity provider's SAML metadata document. When provided, Auth0 automatically fetches and parses the metadata to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Use metadataUrl OR metadataXml, not both. */
+    metadataUrl?: string | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsOidcMetadata | undefined;
+    /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
+    recipientUrl?: string | undefined;
+    /** Custom XML template for SAML authentication requests. Supports variable substitution using @@variableName@@ syntax. When not provided, uses default SAML AuthnRequest template. See https://auth0.com/docs/authenticate/protocols/saml/saml-sso-integrations/configure-auth0-saml-service-provider#customize-the-request-template */
+    requestTemplate?: string | undefined;
+    /** Identity provider's SAML SingleLogoutService endpoint URL where Auth0 sends logout requests for federated sign-out. When not provided, defaults to signInEndpoint. Only used if disableSignout is false. */
+    signOutEndpoint?: string | undefined;
+    /** Custom SAML assertion attribute to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single SAML attribute name). */
+    user_id_attribute?: string | undefined;
+}
+
+/**
+ * Settings for SAML assertion decryption.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2OptionsAssertionDecryptionSettings {
+    /** A list of insecure algorithms to allow for SAML assertion decryption. */
+    algorithm_exceptions?: string[] | undefined;
+    algorithm_profile: Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum;
+}
+
+/** The algorithm profile to use for decrypting SAML assertions. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    {
+        V20261: "v2026-1",
+    } as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum];
+
+/** Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject2OptionsDigestAlgorithmEnum = {
+    Sha1: "sha1",
+    Sha256: "sha256",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsDigestAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsDigestAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsDigestAlgorithmEnum];
+
+/**
+ * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsFieldsMap = Record<string, unknown>;
+
+/**
+ * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2OptionsIdpinitiated {
+    /** The query string sent to the default application */
+    client_authorizequery?: string | undefined;
+    /** The client ID to use for IdP-initiated login requests. */
+    client_id?: string | undefined;
+    client_protocol?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum
+        | undefined;
+    /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
+    enabled?: boolean | undefined;
+}
+
+/** The response protocol used to communicate with the default application. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum = {
+    Oidc: "oidc",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. Used with Cross App Access.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject2OptionsProtocolBindingEnum = {
+    UrnOasisNamesTcSaml20BindingsHttpPost: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+    UrnOasisNamesTcSaml20BindingsHttpRedirect: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsProtocolBindingEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsProtocolBindingEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsProtocolBindingEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSetUserRootAttributesEnum];
+
+/** Algorithm used to sign SAML authentication requests and logout requests using the connection's signing key. Common values: 'rsa-sha256' (RSA signature with SHA-256 digest) or 'rsa-sha1'. Defaults to 'rsa-sha256'. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSignatureAlgorithmEnum = {
+    RsaSha1: "rsa-sha1",
+    RsaSha256: "rsa-sha256",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSignatureAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSignatureAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSignatureAlgorithmEnum];
+
+/**
+ * Certificate Subject Distinguished Name (DN) extracted from the identity provider's signing certificate.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSubject {}
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject2StrategyEnum = {
+    Samlp: "samlp",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject2StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject2StrategyEnum];
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject3StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3Metadata {}
+
+/**
+ * Options for the 'pingfederate' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3Options {
+    assertion_decryption_settings?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsAssertionDecryptionSettings
+        | undefined;
+    /** X.509 signing certificate from the identity provider in .der format. Used to validate signatures in SAML Responses and Assertions. This is an alternative to signingCert and is kept for backward compatibility. Prefer using signingCert instead. */
+    cert?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    digestAlgorithm?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsDigestAlgorithmEnum
+        | undefined;
+    /** Domain aliases for the connection */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider. */
+    entityId?: string | undefined;
+    /** ISO 8601 formatted datetime indicating when the identity provider's signing certificate expires. */
+    expires?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    idpinitiated?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsIdpinitiated | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    protocolBinding?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsProtocolBindingEnum
+        | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSetUserRootAttributesEnum
+        | undefined;
+    signatureAlgorithm?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSignatureAlgorithmEnum
+        | undefined;
+    /** Identity provider's SAML SingleSignOnService endpoint URL where Auth0 sends SAML authentication requests. This is the primary login URL for the SAML connection. Required unless using metadataUrl or metadataXml. */
+    signInEndpoint?: string | undefined;
+    /** Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification. */
+    signingCert?: string | undefined;
+    /** When true, Auth0 signs SAML authentication requests using the connection's signing key. The signature includes the request's digest and is validated by the identity provider. Defaults to false (unsigned requests). */
+    signSAMLRequest?: boolean | undefined;
+    subject?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSubject | undefined;
+    /** For SAML connections, the tenant domain used to construct the login endpoint URL. Can be a string for single-tenant or an array of strings for multi-tenant validation. */
+    tenant_domain?: string | undefined;
+    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsUpstreamParams | undefined;
+    /** URL provided by PingFederate which returns information used for creating the connection */
+    pingFederateBaseUrl: string;
+}
+
+/**
+ * Settings for SAML assertion decryption.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3OptionsAssertionDecryptionSettings {
+    /** A list of insecure algorithms to allow for SAML assertion decryption. */
+    algorithm_exceptions?: string[] | undefined;
+    algorithm_profile: Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum;
+}
+
+/** The algorithm profile to use for decrypting SAML assertions. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    {
+        V20261: "v2026-1",
+    } as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum];
+
+/** Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject3OptionsDigestAlgorithmEnum = {
+    Sha1: "sha1",
+    Sha256: "sha256",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsDigestAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsDigestAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsDigestAlgorithmEnum];
+
+/**
+ * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3OptionsIdpinitiated {
+    /** The query string sent to the default application */
+    client_authorizequery?: string | undefined;
+    /** The client ID to use for IdP-initiated login requests. */
+    client_id?: string | undefined;
+    client_protocol?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum
+        | undefined;
+    /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
+    enabled?: boolean | undefined;
+}
+
+/** The response protocol used to communicate with the default application. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum = {
+    Oidc: "oidc",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum];
+
+/** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject3OptionsProtocolBindingEnum = {
+    UrnOasisNamesTcSaml20BindingsHttpPost: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+    UrnOasisNamesTcSaml20BindingsHttpRedirect: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsProtocolBindingEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsProtocolBindingEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsProtocolBindingEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSetUserRootAttributesEnum];
+
+/** Algorithm used to sign SAML authentication requests and logout requests using the connection's signing key. Common values: 'rsa-sha256' (RSA signature with SHA-256 digest) or 'rsa-sha1'. Defaults to 'rsa-sha256'. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSignatureAlgorithmEnum = {
+    RsaSha1: "rsa-sha1",
+    RsaSha256: "rsa-sha256",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSignatureAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSignatureAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSignatureAlgorithmEnum];
+
+/**
+ * Certificate Subject Distinguished Name (DN) extracted from the identity provider's signing certificate.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSubject {}
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject3StrategyEnum = {
+    Pingfederate: "pingfederate",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject3StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject3StrategyEnum];
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject4 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject4Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject4ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject4Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject4Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject4StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject4Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject4ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject4Metadata {}
+
+/**
+ * Options for the 'adfs' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject4Options {
+    /** ADFS federation metadata host or XML URL used to discover WS-Fed endpoints and certificates. Errors if adfs_server and fedMetadataXml are both absent. */
+    adfs_server?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the ADFS Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. */
+    entityId?: string | undefined;
+    /** Inline XML alternative to 'adfs_server'. Cannot be set together with 'adfs_server'. */
+    fedMetadataXml?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    prev_thumbprints?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject4OptionsSetUserRootAttributesEnum
+        | undefined;
+    should_trust_email_verified_connection?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum
+        | undefined;
+    /** Passive Requestor (WS-Fed) sign-in endpoint discovered from metadata or provided explicitly. */
+    signInEndpoint?: string | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject4OptionsUpstreamParams | undefined;
+    /** Custom ADFS claim to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single ADFS claim name). */
+    user_id_attribute?: string | undefined;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject4OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject4OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject4OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject4OptionsSetUserRootAttributesEnum];
+
+/** Choose how Auth0 sets the email_verified field in the user profile. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum = {
+    NeverSetEmailsAsVerified: "never_set_emails_as_verified",
+    AlwaysSetEmailsAsVerified: "always_set_emails_as_verified",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject4OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject4StrategyEnum = {
+    Adfs: "adfs",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject4StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject4StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject4StrategyEnum];
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject5 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject5Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject5ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject5Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject5Options | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject5StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject5Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject5ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject5Metadata {}
+
+/**
+ * Options for the 'ad' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject5Options {
+    /** IP address of the AD connector agent used to validate that authentication requests originate from the corporate network for Kerberos authentication  (managed by the AD Connector agent). */
+    agentIP?: string | undefined;
+    /** When enabled, allows direct username/password authentication through the AD connector agent instead of WS-Federation protocol (managed by the AD Connector agent). */
+    agentMode?: boolean | undefined;
+    /** Version identifier of the installed AD connector agent software (managed by the AD Connector agent). */
+    agentVersion?: string | undefined;
+    /** Enables Auth0's brute force protection to prevent credential stuffing attacks. When enabled, blocks suspicious login attempts from specific IP addresses after repeated failures. */
+    brute_force_protection?: boolean | undefined;
+    /** Enables client SSL certificate authentication for the AD connector, requiring HTTPS on the sign-in endpoint */
+    certAuth?: boolean | undefined;
+    /** Array of X.509 certificates in PEM format used for validating SAML signatures from the AD identity provider (managed by the AD Connector agent). */
+    certs?: string[] | undefined;
+    /** When enabled, disables caching of AD connector authentication results to ensure real-time validation against the directory */
+    disable_cache?: boolean | undefined;
+    /** When enabled, hides the 'Forgot Password' link on login pages to prevent users from initiating self-service password resets */
+    disable_self_service_change_password?: boolean | undefined;
+    /** List of domain names that can be used with identifier-first authentication flow to route users to this AD connection; each domain must be a valid DNS name up to 256 characters */
+    domain_aliases?: string[] | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Array of IP address ranges in CIDR notation used to determine if authentication requests originate from the corporate network for Kerberos or certificate authentication. */
+    ips?: string[] | undefined;
+    /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
+    kerberos?: boolean | undefined;
+    /** When true, restricts the connection to Kerberos-only authentication, disallowing username/password fallback. */
+    kerberos_only?: boolean | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject5OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** The sign-in endpoint type for the AD-LDAP connector agent (managed by the AD Connector agent). */
+    signInEndpoint?: string | undefined;
+    /** Primary AD domain hint used for HRD and discovery. */
+    tenant_domain?: string | undefined;
+    /** Array of certificate SHA-1 thumbprints for validating signatures. Managed by Auth0 when using the AD Connector agent. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject5OptionsUpstreamParams | undefined;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject5OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject5OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject5OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject5OptionsSetUserRootAttributesEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject5OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject5StrategyEnum = {
+    Ad: "ad",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject5StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject5StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject5StrategyEnum];
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject6 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject6Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject6ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject6Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject6Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject6StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject6Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject6ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject6Metadata {}
+
+/**
+ * Options for the 'google-apps' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject6Options {
+    /** Expiration timestamp for the `admin_access_token` in ISO 8601 format. Auth0 uses this value to determine when to refresh the token. */
+    admin_access_token_expiresin?: string | undefined;
+    /** When true, allows customization of OAuth scopes requested during user login. Custom scopes are appended to the mandatory email and profile scopes. When false or omitted, only the default email and profile scopes are used. This property is automatically enabled when Token Vault or Connected Accounts features are activated. */
+    allow_setting_login_scopes?: boolean | undefined;
+    /** Enables integration with the Google Workspace Admin SDK Directory API for groups. When true, Auth0 can synchronize groups & group memberships and supports inbound directory provisioning for groups. Defaults to false. */
+    api_enable_groups?: boolean | undefined;
+    /** Enables integration with the Google Workspace Admin SDK Directory API. When true, Auth0 can retrieve extended user attributes (admin status, suspension status, group memberships) and supports inbound directory provisioning (SCIM). Defaults to true. */
+    api_enable_users?: boolean | undefined;
+    /** Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section. */
+    client_id: string;
+    /** Primary Google Workspace domain name that users must belong to. */
+    domain?: string | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    /** Whether the OAuth flow requests the `email` scope. */
+    email?: boolean | undefined;
+    /** Fetches the `agreedToTerms` flag from the Google Directory profile. */
+    ext_agreed_terms?: boolean | undefined;
+    /** Enables enrichment with Google group memberships (required for `ext_groups_extended`). */
+    ext_groups?: boolean | undefined;
+    /** Controls whether enriched group entries include `id`, `email`, `name` (true) or only the group name (false); can only be set when `ext_groups` is true. */
+    ext_groups_extended?: boolean | undefined;
+    /** Fetches the Google Directory admin flag for the signing-in user. */
+    ext_is_admin?: boolean | undefined;
+    /** Fetches the Google Directory suspended flag for the signing-in user. */
+    ext_is_suspended?: boolean | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject6OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** When enabled, users who sign in with their Google account through a social login will be automatically routed to this Google Workspace connection if their email domain matches the configured tenant_domain or domain_aliases. This ensures enterprise users authenticate through their organization's Google Workspace identity provider rather than through a generic Google social login, enabling access to directory-based attributes and enforcing organizational security policies. Defaults to true for new connections. */
+    handle_login_from_social?: boolean | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    /** Determines how Auth0 generates the user_id for Google Workspace users. When false (default), the user's email address is used. When true, Google's stable numeric user ID is used instead, which persists even if the user's email changes. This setting can only be configured when creating the connection and cannot be changed afterward. */
+    map_user_id_to_id?: boolean | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** Whether the OAuth flow requests the `profile` scope. */
+    profile?: boolean | undefined;
+    /** Additional OAuth scopes requested beyond the default `email profile` scopes; ignored unless `allow_setting_login_scopes` is true. */
+    scope?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject6OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** The Google Workspace primary domain used to identify the organization during authentication. */
+    tenant_domain?: string | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject6OptionsUpstreamParams | undefined;
+}
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject6OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject6OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject6OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject6OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject6OptionsSetUserRootAttributesEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject6OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject6StrategyEnum = {
+    GoogleApps: "google-apps",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject6StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject6StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject6StrategyEnum];
+
+export interface EventStreamCloudEventConnectionCreatedPreviousObject7 {
+    authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject7StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject7Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject7ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject7Metadata {}
+
+/**
+ * Options for the 'waad' connection
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject7Options {
+    /** Enable users API */
+    api_enable_users?: boolean | undefined;
+    /** The Azure AD application domain (e.g., 'contoso.onmicrosoft.com'). Used primarily with WS-Federation protocol and Azure AD v1 endpoints. */
+    app_domain?: string | undefined;
+    /** The Application ID URI (App ID URI) for the Azure AD application. Required when using Azure AD v1 with the Resource Owner Password flow. Used to identify the resource being requested in OAuth token requests. */
+    app_id?: string | undefined;
+    /** Includes basic user profile information from Azure AD (name, email, given_name, family_name). Always enabled and required - represents the minimum profile data retrieved during authentication. */
+    basic_profile?: boolean | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    /** The primary Azure AD tenant domain (e.g., 'contoso.onmicrosoft.com' or 'contoso.com'). */
+    domain?: string | undefined;
+    /** Alternative domain names associated with this Azure AD tenant. Allows users from multiple verified domains to authenticate through this connection. Can be an array of domain strings. */
+    domain_aliases?: string[] | undefined;
+    /** When enabled (true), retrieves and stores Azure AD security group memberships for the user. Requires Microsoft Graph API permissions (Directory.Read.All). Allows configuring max_groups_to_retrieve. */
+    ext_groups?: boolean | undefined;
+    /** When true, stores all groups the user is member of, including transitive group memberships (groups within groups). When false (default), only direct group memberships are included. */
+    ext_nested_groups?: boolean | undefined;
+    /** When enabled (true), retrieves extended profile attributes from Azure AD via Microsoft Graph API (job title, department, office location, etc.). Requires Graph API permissions. Only available with Azure AD v1 or when explicitly enabled for v2. */
+    ext_profile?: boolean | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** Indicates whether admin consent has been granted for the required Azure AD permissions. Read-only status field managed by Auth0 during the OAuth authorization flow. */
+    granted?: boolean | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    identity_api?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsIdentityApiEnum | undefined;
+    /** Maximum number of Azure AD groups to retrieve per user during authentication. Helps prevent performance issues for users in many groups. Only applies when ext_groups is enabled. Leave empty to use platform default. */
+    max_groups_to_retrieve?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** OAuth 2.0 scopes to request from Azure AD during authentication. Each scope represents a permission (e.g., 'User.Read', 'Group.Read.All'). Only applies with Microsoft Identity Platform v2.0. See Microsoft Graph permissions reference for available scopes. */
+    scope?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsSetUserRootAttributesEnum
+        | undefined;
+    should_trust_email_verified_connection?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum
+        | undefined;
+    tenant_domain?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsTenantDomainOne | undefined;
+    /** The Azure AD tenant ID as a UUID. The unique identifier for your Azure AD organization. Must be a valid 36-character UUID. */
+    tenantId?: string | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUpstreamParams | undefined;
+    /** Indicates WS-Federation protocol usage. When true, uses WS-Federation; when false, uses OpenID Connect. */
+    use_wsfed?: boolean | undefined;
+    /** When enabled (true), uses the Azure AD common endpoint for multi-tenant authentication. Allows users from any Azure AD organization to sign in. Requires userid_attribute set to 'sub' (not 'oid'). Cannot be used with SCIM provisioning. Defaults to false. */
+    useCommonEndpoint?: boolean | undefined;
+    userid_attribute?:
+        | Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUseridAttributeEnum
+        | undefined;
+    waad_protocol?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7OptionsWaadProtocolEnum | undefined;
+}
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionCreatedPreviousObject7OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** The Azure AD endpoint version for authentication. 'microsoft-identity-platform-v2.0' (recommended, default) supports modern OAuth 2.0 features. 'azure-active-directory-v1.0' is the legacy endpoint with protocol limitations. Selection affects available features. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject7OptionsIdentityApiEnum = {
+    MicrosoftIdentityPlatformV20: "microsoft-identity-platform-v2.0",
+    AzureActiveDirectoryV10: "azure-active-directory-v1.0",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsIdentityApiEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsIdentityApiEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsIdentityApiEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject7OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsSetUserRootAttributesEnum];
+
+/** Choose how Auth0 sets the email_verified field in the user profile. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum = {
+    NeverSetEmailsAsVerified: "never_set_emails_as_verified",
+    AlwaysSetEmailsAsVerified: "always_set_emails_as_verified",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum];
+
+/**
+ * Azure AD tenant domain as a UUID tenant ID.
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsTenantDomainOne = string;
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUpstreamParams = Record<string, unknown>;
+
+/** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUseridAttributeEnum = {
+    Oid: "oid",
+    Sub: "sub",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUseridAttributeEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUseridAttributeEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUseridAttributeEnum];
+
+/** The authentication protocol for Azure AD v1 endpoints. 'openid-connect' (default, recommended) uses modern OAuth 2.0/OIDC. 'ws-federation' is a legacy SAML-based protocol for older integrations. Only available with Azure AD v1 API. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject7OptionsWaadProtocolEnum = {
+    WsFederation: "ws-federation",
+    OpenidConnect: "openid-connect",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsWaadProtocolEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsWaadProtocolEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject7OptionsWaadProtocolEnum];
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionCreatedPreviousObject7StrategyEnum = {
+    Waad: "waad",
+} as const;
+export type EventStreamCloudEventConnectionCreatedPreviousObject7StrategyEnum =
+    (typeof EventStreamCloudEventConnectionCreatedPreviousObject7StrategyEnum)[keyof typeof EventStreamCloudEventConnectionCreatedPreviousObject7StrategyEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventConnectionCreatedTypeEnum = {
     ConnectionCreated: "connection.created",
@@ -12921,6 +14857,7 @@ export type EventStreamCloudEventConnectionDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventConnectionDeletedData {
     object: Management.EventStreamCloudEventConnectionDeletedObject;
+    previous_object?: Management.EventStreamCloudEventConnectionDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -13031,6 +14968,8 @@ export interface EventStreamCloudEventConnectionDeletedObject0Options {
         | Management.EventStreamCloudEventConnectionDeletedObject0OptionsTokenEndpointJwtcaAudFormatEnum
         | undefined;
     upstream_params?: Management.EventStreamCloudEventConnectionDeletedObject0OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
     /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
     userinfo_endpoint?: string | undefined;
     attribute_map?: Management.EventStreamCloudEventConnectionDeletedObject0OptionsAttributeMap | undefined;
@@ -13128,6 +15067,8 @@ export interface EventStreamCloudEventConnectionDeletedObject0OptionsOidcMetadat
     claims_parameter_supported?: boolean | undefined;
     /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
     claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
     display_values_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
@@ -13351,6 +15292,8 @@ export interface EventStreamCloudEventConnectionDeletedObject1Options {
         | Management.EventStreamCloudEventConnectionDeletedObject1OptionsTokenEndpointJwtcaAudFormatEnum
         | undefined;
     upstream_params?: Management.EventStreamCloudEventConnectionDeletedObject1OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
     /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
     userinfo_endpoint?: string | undefined;
     attribute_map?: Management.EventStreamCloudEventConnectionDeletedObject1OptionsAttributeMap | undefined;
@@ -13448,6 +15391,8 @@ export interface EventStreamCloudEventConnectionDeletedObject1OptionsOidcMetadat
     claims_parameter_supported?: boolean | undefined;
     /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
     claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
     display_values_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
@@ -13666,15 +15611,22 @@ export interface EventStreamCloudEventConnectionDeletedObject2Options {
     deflate?: boolean | undefined;
     /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
     destinationUrl?: string | undefined;
+    /** When true, disables the automatic correction of the fieldsMap configuration to ensure proper mapping of SAML attributes to user profile fields. Defaults to false (fieldsMap fix enabled). */
+    disableFieldsMapFix?: boolean | undefined;
     /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
     disableSignout?: boolean | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. Used with Cross App Access. */
+    discovery_url?: string | undefined;
     fieldsMap?: Management.EventStreamCloudEventConnectionDeletedObject2OptionsFieldsMap | undefined;
+    /** Raw JSON string representation of the fieldsMap configuration. Used internally for storage and retrieval of the fieldsMap object. */
+    fieldsMapJsonRaw?: string | undefined;
     /** Expected 'iss' (Issuer) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT issuer matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_sub. */
     global_token_revocation_jwt_iss?: string | undefined;
     /** Expected 'sub' (Subject) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT subject matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_iss. */
     global_token_revocation_jwt_sub?: string | undefined;
     /** HTTPS URL to the identity provider's SAML metadata document. When provided, Auth0 automatically fetches and parses the metadata to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Use metadataUrl OR metadataXml, not both. */
     metadataUrl?: string | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionDeletedObject2OptionsOidcMetadata | undefined;
     /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
     recipientUrl?: string | undefined;
     /** Custom XML template for SAML authentication requests. Supports variable substitution using @@variableName@@ syntax. When not provided, uses default SAML AuthnRequest template. See https://auth0.com/docs/authenticate/protocols/saml/saml-sso-integrations/configure-auth0-saml-service-provider#customize-the-request-template */
@@ -13737,6 +15689,88 @@ export const EventStreamCloudEventConnectionDeletedObject2OptionsIdpinitiatedCli
 } as const;
 export type EventStreamCloudEventConnectionDeletedObject2OptionsIdpinitiatedClientProtocolEnum =
     (typeof EventStreamCloudEventConnectionDeletedObject2OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionDeletedObject2OptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. Used with Cross App Access.
+ */
+export interface EventStreamCloudEventConnectionDeletedObject2OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
 
 /** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
 export const EventStreamCloudEventConnectionDeletedObject2OptionsProtocolBindingEnum = {
@@ -14131,6 +16165,8 @@ export interface EventStreamCloudEventConnectionDeletedObject5Options {
     ips?: string[] | undefined;
     /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
     kerberos?: boolean | undefined;
+    /** When true, restricts the connection to Kerberos-only authentication, disallowing username/password fallback. */
+    kerberos_only?: boolean | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
     non_persistent_attrs?: string[] | undefined;
     set_user_root_attributes?:
@@ -14456,6 +16492,1675 @@ export const EventStreamCloudEventConnectionDeletedObject7StrategyEnum = {
 export type EventStreamCloudEventConnectionDeletedObject7StrategyEnum =
     (typeof EventStreamCloudEventConnectionDeletedObject7StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedObject7StrategyEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject =
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject0
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject1
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject2
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject3
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject4
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject5
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject6
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject7;
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0Authentication | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0ConnectedAccounts | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject0StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0ConnectedAccounts {
+    active: boolean;
+    cross_app_access?: boolean | undefined;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0Metadata {}
+
+/**
+ * Options for the 'oidc' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0Options {
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    connection_settings?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsConnectionSettings
+        | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    dpop_signing_alg?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsDpopSigningAlgEnum
+        | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Indicates whether the identity provider supports session expiry via the id_token. If true, the system will use the session_expiry claim in the id_token to determine session expiry. */
+    id_token_session_expiry_supported?: boolean | undefined;
+    /** List of algorithms allowed to verify the ID tokens. Applicable when strategy=oidc or okta. */
+    id_token_signed_response_algs?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum[]
+        | undefined;
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer?: string | undefined;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsOidcMetadata | undefined;
+    schema_version?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSchemaVersionEnum
+        | undefined;
+    /** Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider. */
+    scope?: string | undefined;
+    /** When true and type is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation. */
+    send_back_channel_nonce?: boolean | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    token_endpoint_auth_method?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthMethodEnum
+        | undefined;
+    token_endpoint_auth_signing_alg?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum
+        | undefined;
+    token_endpoint_jwtca_aud_format?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum
+        | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    attribute_map?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMap | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. */
+    discovery_url?: string | undefined;
+    type?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTypeEnum | undefined;
+}
+
+/**
+ * Configuration for mapping claims from the identity provider to Auth0 user profile attributes. Allows customizing which IdP claims populate user fields and how they are transformed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMap {
+    attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapAttributes
+        | undefined;
+    /** Scopes to send to the IdP's Userinfo endpoint */
+    userinfo_scope?: string | undefined;
+    mapping_mode?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapMappingModeEnum
+        | undefined;
+}
+
+/**
+ * Object containing mapping details for incoming claims
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapAttributes = Record<
+    string,
+    unknown
+>;
+
+/** Method used to map incoming claims when strategy=oidc. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapMappingModeEnum = {
+    BindAll: "bind_all",
+    UseMap: "use_map",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapMappingModeEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapMappingModeEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapMappingModeEnum];
+
+/**
+ * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0OptionsConnectionSettings {
+    pkce?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject0OptionsConnectionSettingsPkceEnum
+        | undefined;
+}
+
+/** PKCE configuration. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsConnectionSettingsPkceEnum = {
+    Auto: "auto",
+    S256: "S256",
+    Plain: "plain",
+    Disabled: "disabled",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsConnectionSettingsPkceEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsConnectionSettingsPkceEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsConnectionSettingsPkceEnum];
+
+/** Algorithm used for DPoP proof JWT signing. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Es512: "ES512",
+    Ed25519: "Ed25519",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsDpopSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsDpopSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsDpopSigningAlgEnum];
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Algorithm allowed to verify the ID tokens. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject0OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** The internal schema version of the connection options. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSchemaVersionEnum = {
+    Openid100: "openid-1.0.0",
+    OidcV4: "oidc-v4",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSchemaVersionEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSchemaVersionEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSchemaVersionEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsSetUserRootAttributesEnum];
+
+/** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthMethodEnum = {
+    ClientSecretPost: "client_secret_post",
+    PrivateKeyJwt: "private_key_jwt",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthMethodEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthMethodEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthMethodEnum];
+
+/** Algorithm used to sign client_assertions. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum];
+
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum = {
+    Issuer: "issuer",
+    TokenEndpoint: "token_endpoint",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum];
+
+/** OIDC communication channel type. 'back_channel' (confidential client) exchanges tokens server-side for stronger security; 'front_channel' handles responses in the browser. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTypeEnum = {
+    BackChannel: "back_channel",
+    FrontChannel: "front_channel",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTypeEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTypeEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTypeEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject0StrategyEnum = {
+    Oidc: "oidc",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject0StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject0StrategyEnum];
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject1StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1Metadata {}
+
+/**
+ * Options for the 'okta' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1Options {
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    connection_settings?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsConnectionSettings
+        | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    dpop_signing_alg?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsDpopSigningAlgEnum
+        | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Indicates whether the identity provider supports session expiry via the id_token. If true, the system will use the session_expiry claim in the id_token to determine session expiry. */
+    id_token_session_expiry_supported?: boolean | undefined;
+    /** List of algorithms allowed to verify the ID tokens. Applicable when strategy=oidc or okta. */
+    id_token_signed_response_algs?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum[]
+        | undefined;
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer?: string | undefined;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsOidcMetadata | undefined;
+    schema_version?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSchemaVersionEnum
+        | undefined;
+    /** Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider. */
+    scope?: string | undefined;
+    /** When true and type is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation. */
+    send_back_channel_nonce?: boolean | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    token_endpoint_auth_method?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthMethodEnum
+        | undefined;
+    token_endpoint_auth_signing_alg?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum
+        | undefined;
+    token_endpoint_jwtca_aud_format?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum
+        | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    attribute_map?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMap | undefined;
+    /** Domain of the Okta organization (e.g., dev-123456.okta.com). Should be just the domain of the okta server with no scheme or trailing backslash. Discovery runs only when connection.options.oidc_metadata is empty and a domain is provided */
+    domain?: string | undefined;
+    type?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTypeEnum | undefined;
+}
+
+/**
+ * Mapping of claims received from the identity provider (IdP)
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMap {
+    attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapAttributes
+        | undefined;
+    /** Scopes to send to the IdP's Userinfo endpoint */
+    userinfo_scope?: string | undefined;
+    mapping_mode?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapMappingModeEnum
+        | undefined;
+}
+
+/**
+ * Object containing mapping details for incoming claims
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapAttributes = Record<
+    string,
+    unknown
+>;
+
+/** Method used to map incoming claims when strategy=okta. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapMappingModeEnum = {
+    BasicProfile: "basic_profile",
+    UseMap: "use_map",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapMappingModeEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapMappingModeEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapMappingModeEnum];
+
+/**
+ * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1OptionsConnectionSettings {
+    pkce?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject1OptionsConnectionSettingsPkceEnum
+        | undefined;
+}
+
+/** PKCE configuration. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsConnectionSettingsPkceEnum = {
+    Auto: "auto",
+    S256: "S256",
+    Plain: "plain",
+    Disabled: "disabled",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsConnectionSettingsPkceEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsConnectionSettingsPkceEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsConnectionSettingsPkceEnum];
+
+/** Algorithm used for DPoP proof JWT signing. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Es512: "ES512",
+    Ed25519: "Ed25519",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsDpopSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsDpopSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsDpopSigningAlgEnum];
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Algorithm allowed to verify the ID tokens. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject1OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** The internal schema version of the connection options. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSchemaVersionEnum = {
+    Openid100: "openid-1.0.0",
+    OidcV4: "oidc-v4",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSchemaVersionEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSchemaVersionEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSchemaVersionEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsSetUserRootAttributesEnum];
+
+/** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthMethodEnum = {
+    ClientSecretPost: "client_secret_post",
+    PrivateKeyJwt: "private_key_jwt",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthMethodEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthMethodEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthMethodEnum];
+
+/** Algorithm used to sign client_assertions. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum];
+
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum = {
+    Issuer: "issuer",
+    TokenEndpoint: "token_endpoint",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum];
+
+/** Connection type */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTypeEnum = {
+    BackChannel: "back_channel",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTypeEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTypeEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTypeEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject1StrategyEnum = {
+    Okta: "okta",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject1StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject1StrategyEnum];
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject2StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2Metadata {}
+
+/**
+ * Options for the 'samlp' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2Options {
+    assertion_decryption_settings?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsAssertionDecryptionSettings
+        | undefined;
+    /** X.509 signing certificate from the identity provider in .der format. Used to validate signatures in SAML Responses and Assertions. This is an alternative to signingCert and is kept for backward compatibility. Prefer using signingCert instead. */
+    cert?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    digestAlgorithm?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsDigestAlgorithmEnum
+        | undefined;
+    /** Domain aliases for the connection */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider. */
+    entityId?: string | undefined;
+    /** ISO 8601 formatted datetime indicating when the identity provider's signing certificate expires. */
+    expires?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    idpinitiated?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsIdpinitiated | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    protocolBinding?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsProtocolBindingEnum
+        | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSetUserRootAttributesEnum
+        | undefined;
+    signatureAlgorithm?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSignatureAlgorithmEnum
+        | undefined;
+    /** Identity provider's SAML SingleSignOnService endpoint URL where Auth0 sends SAML authentication requests. This is the primary login URL for the SAML connection. Required unless using metadataUrl or metadataXml. */
+    signInEndpoint?: string | undefined;
+    /** Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification. */
+    signingCert?: string | undefined;
+    /** When true, Auth0 signs SAML authentication requests using the connection's signing key. The signature includes the request's digest and is validated by the identity provider. Defaults to false (unsigned requests). */
+    signSAMLRequest?: boolean | undefined;
+    subject?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSubject | undefined;
+    /** For SAML connections, the tenant domain used to construct the login endpoint URL. Can be a string for single-tenant or an array of strings for multi-tenant validation. */
+    tenant_domain?: string | undefined;
+    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsUpstreamParams | undefined;
+    /** When true, enables detailed SAML debugging by issuing 'w' (warning) events in tenant logs containing SAML request/response details. WARNING: Potentially exposes sensitive user information (PII, credentials) and should only be enabled temporarily for debugging purposes. */
+    debug?: boolean | undefined;
+    /** When true, enables DEFLATE compression for SAML requests sent via HTTP-Redirect binding. */
+    deflate?: boolean | undefined;
+    /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
+    destinationUrl?: string | undefined;
+    /** When true, disables the automatic correction of the fieldsMap configuration to ensure proper mapping of SAML attributes to user profile fields. Defaults to false (fieldsMap fix enabled). */
+    disableFieldsMapFix?: boolean | undefined;
+    /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
+    disableSignout?: boolean | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. Used with Cross App Access. */
+    discovery_url?: string | undefined;
+    fieldsMap?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsFieldsMap | undefined;
+    /** Raw JSON string representation of the fieldsMap configuration. Used internally for storage and retrieval of the fieldsMap object. */
+    fieldsMapJsonRaw?: string | undefined;
+    /** Expected 'iss' (Issuer) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT issuer matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_sub. */
+    global_token_revocation_jwt_iss?: string | undefined;
+    /** Expected 'sub' (Subject) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT subject matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_iss. */
+    global_token_revocation_jwt_sub?: string | undefined;
+    /** HTTPS URL to the identity provider's SAML metadata document. When provided, Auth0 automatically fetches and parses the metadata to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Use metadataUrl OR metadataXml, not both. */
+    metadataUrl?: string | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsOidcMetadata | undefined;
+    /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
+    recipientUrl?: string | undefined;
+    /** Custom XML template for SAML authentication requests. Supports variable substitution using @@variableName@@ syntax. When not provided, uses default SAML AuthnRequest template. See https://auth0.com/docs/authenticate/protocols/saml/saml-sso-integrations/configure-auth0-saml-service-provider#customize-the-request-template */
+    requestTemplate?: string | undefined;
+    /** Identity provider's SAML SingleLogoutService endpoint URL where Auth0 sends logout requests for federated sign-out. When not provided, defaults to signInEndpoint. Only used if disableSignout is false. */
+    signOutEndpoint?: string | undefined;
+    /** Custom SAML assertion attribute to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single SAML attribute name). */
+    user_id_attribute?: string | undefined;
+}
+
+/**
+ * Settings for SAML assertion decryption.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2OptionsAssertionDecryptionSettings {
+    /** A list of insecure algorithms to allow for SAML assertion decryption. */
+    algorithm_exceptions?: string[] | undefined;
+    algorithm_profile: Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum;
+}
+
+/** The algorithm profile to use for decrypting SAML assertions. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    {
+        V20261: "v2026-1",
+    } as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum];
+
+/** Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject2OptionsDigestAlgorithmEnum = {
+    Sha1: "sha1",
+    Sha256: "sha256",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsDigestAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsDigestAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsDigestAlgorithmEnum];
+
+/**
+ * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsFieldsMap = Record<string, unknown>;
+
+/**
+ * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2OptionsIdpinitiated {
+    /** The query string sent to the default application */
+    client_authorizequery?: string | undefined;
+    /** The client ID to use for IdP-initiated login requests. */
+    client_id?: string | undefined;
+    client_protocol?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject2OptionsIdpinitiatedClientProtocolEnum
+        | undefined;
+    /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
+    enabled?: boolean | undefined;
+}
+
+/** The response protocol used to communicate with the default application. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject2OptionsIdpinitiatedClientProtocolEnum = {
+    Oidc: "oidc",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsIdpinitiatedClientProtocolEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. Used with Cross App Access.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject2OptionsProtocolBindingEnum = {
+    UrnOasisNamesTcSaml20BindingsHttpPost: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+    UrnOasisNamesTcSaml20BindingsHttpRedirect: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsProtocolBindingEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsProtocolBindingEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsProtocolBindingEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSetUserRootAttributesEnum];
+
+/** Algorithm used to sign SAML authentication requests and logout requests using the connection's signing key. Common values: 'rsa-sha256' (RSA signature with SHA-256 digest) or 'rsa-sha1'. Defaults to 'rsa-sha256'. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSignatureAlgorithmEnum = {
+    RsaSha1: "rsa-sha1",
+    RsaSha256: "rsa-sha256",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSignatureAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSignatureAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSignatureAlgorithmEnum];
+
+/**
+ * Certificate Subject Distinguished Name (DN) extracted from the identity provider's signing certificate.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSubject {}
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject2StrategyEnum = {
+    Samlp: "samlp",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject2StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject2StrategyEnum];
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject3StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3Metadata {}
+
+/**
+ * Options for the 'pingfederate' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3Options {
+    assertion_decryption_settings?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsAssertionDecryptionSettings
+        | undefined;
+    /** X.509 signing certificate from the identity provider in .der format. Used to validate signatures in SAML Responses and Assertions. This is an alternative to signingCert and is kept for backward compatibility. Prefer using signingCert instead. */
+    cert?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    digestAlgorithm?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsDigestAlgorithmEnum
+        | undefined;
+    /** Domain aliases for the connection */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider. */
+    entityId?: string | undefined;
+    /** ISO 8601 formatted datetime indicating when the identity provider's signing certificate expires. */
+    expires?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    idpinitiated?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsIdpinitiated | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    protocolBinding?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsProtocolBindingEnum
+        | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSetUserRootAttributesEnum
+        | undefined;
+    signatureAlgorithm?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSignatureAlgorithmEnum
+        | undefined;
+    /** Identity provider's SAML SingleSignOnService endpoint URL where Auth0 sends SAML authentication requests. This is the primary login URL for the SAML connection. Required unless using metadataUrl or metadataXml. */
+    signInEndpoint?: string | undefined;
+    /** Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification. */
+    signingCert?: string | undefined;
+    /** When true, Auth0 signs SAML authentication requests using the connection's signing key. The signature includes the request's digest and is validated by the identity provider. Defaults to false (unsigned requests). */
+    signSAMLRequest?: boolean | undefined;
+    subject?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSubject | undefined;
+    /** For SAML connections, the tenant domain used to construct the login endpoint URL. Can be a string for single-tenant or an array of strings for multi-tenant validation. */
+    tenant_domain?: string | undefined;
+    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsUpstreamParams | undefined;
+    /** URL provided by PingFederate which returns information used for creating the connection */
+    pingFederateBaseUrl: string;
+}
+
+/**
+ * Settings for SAML assertion decryption.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3OptionsAssertionDecryptionSettings {
+    /** A list of insecure algorithms to allow for SAML assertion decryption. */
+    algorithm_exceptions?: string[] | undefined;
+    algorithm_profile: Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum;
+}
+
+/** The algorithm profile to use for decrypting SAML assertions. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    {
+        V20261: "v2026-1",
+    } as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum];
+
+/** Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject3OptionsDigestAlgorithmEnum = {
+    Sha1: "sha1",
+    Sha256: "sha256",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsDigestAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsDigestAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsDigestAlgorithmEnum];
+
+/**
+ * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3OptionsIdpinitiated {
+    /** The query string sent to the default application */
+    client_authorizequery?: string | undefined;
+    /** The client ID to use for IdP-initiated login requests. */
+    client_id?: string | undefined;
+    client_protocol?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject3OptionsIdpinitiatedClientProtocolEnum
+        | undefined;
+    /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
+    enabled?: boolean | undefined;
+}
+
+/** The response protocol used to communicate with the default application. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject3OptionsIdpinitiatedClientProtocolEnum = {
+    Oidc: "oidc",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsIdpinitiatedClientProtocolEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsIdpinitiatedClientProtocolEnum];
+
+/** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject3OptionsProtocolBindingEnum = {
+    UrnOasisNamesTcSaml20BindingsHttpPost: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+    UrnOasisNamesTcSaml20BindingsHttpRedirect: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsProtocolBindingEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsProtocolBindingEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsProtocolBindingEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSetUserRootAttributesEnum];
+
+/** Algorithm used to sign SAML authentication requests and logout requests using the connection's signing key. Common values: 'rsa-sha256' (RSA signature with SHA-256 digest) or 'rsa-sha1'. Defaults to 'rsa-sha256'. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSignatureAlgorithmEnum = {
+    RsaSha1: "rsa-sha1",
+    RsaSha256: "rsa-sha256",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSignatureAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSignatureAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSignatureAlgorithmEnum];
+
+/**
+ * Certificate Subject Distinguished Name (DN) extracted from the identity provider's signing certificate.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSubject {}
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject3StrategyEnum = {
+    Pingfederate: "pingfederate",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject3StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject3StrategyEnum];
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject4 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject4Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject4ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject4Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject4Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject4StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject4Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject4ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject4Metadata {}
+
+/**
+ * Options for the 'adfs' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject4Options {
+    /** ADFS federation metadata host or XML URL used to discover WS-Fed endpoints and certificates. Errors if adfs_server and fedMetadataXml are both absent. */
+    adfs_server?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the ADFS Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. */
+    entityId?: string | undefined;
+    /** Inline XML alternative to 'adfs_server'. Cannot be set together with 'adfs_server'. */
+    fedMetadataXml?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    prev_thumbprints?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject4OptionsSetUserRootAttributesEnum
+        | undefined;
+    should_trust_email_verified_connection?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum
+        | undefined;
+    /** Passive Requestor (WS-Fed) sign-in endpoint discovered from metadata or provided explicitly. */
+    signInEndpoint?: string | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject4OptionsUpstreamParams | undefined;
+    /** Custom ADFS claim to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single ADFS claim name). */
+    user_id_attribute?: string | undefined;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject4OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject4OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject4OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject4OptionsSetUserRootAttributesEnum];
+
+/** Choose how Auth0 sets the email_verified field in the user profile. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum = {
+    NeverSetEmailsAsVerified: "never_set_emails_as_verified",
+    AlwaysSetEmailsAsVerified: "always_set_emails_as_verified",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject4OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject4StrategyEnum = {
+    Adfs: "adfs",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject4StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject4StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject4StrategyEnum];
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject5 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject5Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject5ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject5Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject5Options | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject5StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject5Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject5ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject5Metadata {}
+
+/**
+ * Options for the 'ad' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject5Options {
+    /** IP address of the AD connector agent used to validate that authentication requests originate from the corporate network for Kerberos authentication  (managed by the AD Connector agent). */
+    agentIP?: string | undefined;
+    /** When enabled, allows direct username/password authentication through the AD connector agent instead of WS-Federation protocol (managed by the AD Connector agent). */
+    agentMode?: boolean | undefined;
+    /** Version identifier of the installed AD connector agent software (managed by the AD Connector agent). */
+    agentVersion?: string | undefined;
+    /** Enables Auth0's brute force protection to prevent credential stuffing attacks. When enabled, blocks suspicious login attempts from specific IP addresses after repeated failures. */
+    brute_force_protection?: boolean | undefined;
+    /** Enables client SSL certificate authentication for the AD connector, requiring HTTPS on the sign-in endpoint */
+    certAuth?: boolean | undefined;
+    /** Array of X.509 certificates in PEM format used for validating SAML signatures from the AD identity provider (managed by the AD Connector agent). */
+    certs?: string[] | undefined;
+    /** When enabled, disables caching of AD connector authentication results to ensure real-time validation against the directory */
+    disable_cache?: boolean | undefined;
+    /** When enabled, hides the 'Forgot Password' link on login pages to prevent users from initiating self-service password resets */
+    disable_self_service_change_password?: boolean | undefined;
+    /** List of domain names that can be used with identifier-first authentication flow to route users to this AD connection; each domain must be a valid DNS name up to 256 characters */
+    domain_aliases?: string[] | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Array of IP address ranges in CIDR notation used to determine if authentication requests originate from the corporate network for Kerberos or certificate authentication. */
+    ips?: string[] | undefined;
+    /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
+    kerberos?: boolean | undefined;
+    /** When true, restricts the connection to Kerberos-only authentication, disallowing username/password fallback. */
+    kerberos_only?: boolean | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject5OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** The sign-in endpoint type for the AD-LDAP connector agent (managed by the AD Connector agent). */
+    signInEndpoint?: string | undefined;
+    /** Primary AD domain hint used for HRD and discovery. */
+    tenant_domain?: string | undefined;
+    /** Array of certificate SHA-1 thumbprints for validating signatures. Managed by Auth0 when using the AD Connector agent. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject5OptionsUpstreamParams | undefined;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject5OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject5OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject5OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject5OptionsSetUserRootAttributesEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject5OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject5StrategyEnum = {
+    Ad: "ad",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject5StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject5StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject5StrategyEnum];
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject6 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject6Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject6ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject6Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject6Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject6StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject6Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject6ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject6Metadata {}
+
+/**
+ * Options for the 'google-apps' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject6Options {
+    /** Expiration timestamp for the `admin_access_token` in ISO 8601 format. Auth0 uses this value to determine when to refresh the token. */
+    admin_access_token_expiresin?: string | undefined;
+    /** When true, allows customization of OAuth scopes requested during user login. Custom scopes are appended to the mandatory email and profile scopes. When false or omitted, only the default email and profile scopes are used. This property is automatically enabled when Token Vault or Connected Accounts features are activated. */
+    allow_setting_login_scopes?: boolean | undefined;
+    /** Enables integration with the Google Workspace Admin SDK Directory API for groups. When true, Auth0 can synchronize groups & group memberships and supports inbound directory provisioning for groups. Defaults to false. */
+    api_enable_groups?: boolean | undefined;
+    /** Enables integration with the Google Workspace Admin SDK Directory API. When true, Auth0 can retrieve extended user attributes (admin status, suspension status, group memberships) and supports inbound directory provisioning (SCIM). Defaults to true. */
+    api_enable_users?: boolean | undefined;
+    /** Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section. */
+    client_id: string;
+    /** Primary Google Workspace domain name that users must belong to. */
+    domain?: string | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    /** Whether the OAuth flow requests the `email` scope. */
+    email?: boolean | undefined;
+    /** Fetches the `agreedToTerms` flag from the Google Directory profile. */
+    ext_agreed_terms?: boolean | undefined;
+    /** Enables enrichment with Google group memberships (required for `ext_groups_extended`). */
+    ext_groups?: boolean | undefined;
+    /** Controls whether enriched group entries include `id`, `email`, `name` (true) or only the group name (false); can only be set when `ext_groups` is true. */
+    ext_groups_extended?: boolean | undefined;
+    /** Fetches the Google Directory admin flag for the signing-in user. */
+    ext_is_admin?: boolean | undefined;
+    /** Fetches the Google Directory suspended flag for the signing-in user. */
+    ext_is_suspended?: boolean | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject6OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** When enabled, users who sign in with their Google account through a social login will be automatically routed to this Google Workspace connection if their email domain matches the configured tenant_domain or domain_aliases. This ensures enterprise users authenticate through their organization's Google Workspace identity provider rather than through a generic Google social login, enabling access to directory-based attributes and enforcing organizational security policies. Defaults to true for new connections. */
+    handle_login_from_social?: boolean | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    /** Determines how Auth0 generates the user_id for Google Workspace users. When false (default), the user's email address is used. When true, Google's stable numeric user ID is used instead, which persists even if the user's email changes. This setting can only be configured when creating the connection and cannot be changed afterward. */
+    map_user_id_to_id?: boolean | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** Whether the OAuth flow requests the `profile` scope. */
+    profile?: boolean | undefined;
+    /** Additional OAuth scopes requested beyond the default `email profile` scopes; ignored unless `allow_setting_login_scopes` is true. */
+    scope?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject6OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** The Google Workspace primary domain used to identify the organization during authentication. */
+    tenant_domain?: string | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject6OptionsUpstreamParams | undefined;
+}
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject6OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject6OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject6OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject6OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject6OptionsSetUserRootAttributesEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject6OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject6StrategyEnum = {
+    GoogleApps: "google-apps",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject6StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject6StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject6StrategyEnum];
+
+export interface EventStreamCloudEventConnectionDeletedPreviousObject7 {
+    authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject7StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject7Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject7ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject7Metadata {}
+
+/**
+ * Options for the 'waad' connection
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject7Options {
+    /** Enable users API */
+    api_enable_users?: boolean | undefined;
+    /** The Azure AD application domain (e.g., 'contoso.onmicrosoft.com'). Used primarily with WS-Federation protocol and Azure AD v1 endpoints. */
+    app_domain?: string | undefined;
+    /** The Application ID URI (App ID URI) for the Azure AD application. Required when using Azure AD v1 with the Resource Owner Password flow. Used to identify the resource being requested in OAuth token requests. */
+    app_id?: string | undefined;
+    /** Includes basic user profile information from Azure AD (name, email, given_name, family_name). Always enabled and required - represents the minimum profile data retrieved during authentication. */
+    basic_profile?: boolean | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    /** The primary Azure AD tenant domain (e.g., 'contoso.onmicrosoft.com' or 'contoso.com'). */
+    domain?: string | undefined;
+    /** Alternative domain names associated with this Azure AD tenant. Allows users from multiple verified domains to authenticate through this connection. Can be an array of domain strings. */
+    domain_aliases?: string[] | undefined;
+    /** When enabled (true), retrieves and stores Azure AD security group memberships for the user. Requires Microsoft Graph API permissions (Directory.Read.All). Allows configuring max_groups_to_retrieve. */
+    ext_groups?: boolean | undefined;
+    /** When true, stores all groups the user is member of, including transitive group memberships (groups within groups). When false (default), only direct group memberships are included. */
+    ext_nested_groups?: boolean | undefined;
+    /** When enabled (true), retrieves extended profile attributes from Azure AD via Microsoft Graph API (job title, department, office location, etc.). Requires Graph API permissions. Only available with Azure AD v1 or when explicitly enabled for v2. */
+    ext_profile?: boolean | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** Indicates whether admin consent has been granted for the required Azure AD permissions. Read-only status field managed by Auth0 during the OAuth authorization flow. */
+    granted?: boolean | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    identity_api?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsIdentityApiEnum | undefined;
+    /** Maximum number of Azure AD groups to retrieve per user during authentication. Helps prevent performance issues for users in many groups. Only applies when ext_groups is enabled. Leave empty to use platform default. */
+    max_groups_to_retrieve?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** OAuth 2.0 scopes to request from Azure AD during authentication. Each scope represents a permission (e.g., 'User.Read', 'Group.Read.All'). Only applies with Microsoft Identity Platform v2.0. See Microsoft Graph permissions reference for available scopes. */
+    scope?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsSetUserRootAttributesEnum
+        | undefined;
+    should_trust_email_verified_connection?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum
+        | undefined;
+    tenant_domain?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsTenantDomainOne | undefined;
+    /** The Azure AD tenant ID as a UUID. The unique identifier for your Azure AD organization. Must be a valid 36-character UUID. */
+    tenantId?: string | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUpstreamParams | undefined;
+    /** Indicates WS-Federation protocol usage. When true, uses WS-Federation; when false, uses OpenID Connect. */
+    use_wsfed?: boolean | undefined;
+    /** When enabled (true), uses the Azure AD common endpoint for multi-tenant authentication. Allows users from any Azure AD organization to sign in. Requires userid_attribute set to 'sub' (not 'oid'). Cannot be used with SCIM provisioning. Defaults to false. */
+    useCommonEndpoint?: boolean | undefined;
+    userid_attribute?:
+        | Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUseridAttributeEnum
+        | undefined;
+    waad_protocol?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7OptionsWaadProtocolEnum | undefined;
+}
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionDeletedPreviousObject7OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** The Azure AD endpoint version for authentication. 'microsoft-identity-platform-v2.0' (recommended, default) supports modern OAuth 2.0 features. 'azure-active-directory-v1.0' is the legacy endpoint with protocol limitations. Selection affects available features. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject7OptionsIdentityApiEnum = {
+    MicrosoftIdentityPlatformV20: "microsoft-identity-platform-v2.0",
+    AzureActiveDirectoryV10: "azure-active-directory-v1.0",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsIdentityApiEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsIdentityApiEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsIdentityApiEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject7OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsSetUserRootAttributesEnum];
+
+/** Choose how Auth0 sets the email_verified field in the user profile. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum = {
+    NeverSetEmailsAsVerified: "never_set_emails_as_verified",
+    AlwaysSetEmailsAsVerified: "always_set_emails_as_verified",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum];
+
+/**
+ * Azure AD tenant domain as a UUID tenant ID.
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsTenantDomainOne = string;
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUpstreamParams = Record<string, unknown>;
+
+/** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUseridAttributeEnum = {
+    Oid: "oid",
+    Sub: "sub",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUseridAttributeEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUseridAttributeEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUseridAttributeEnum];
+
+/** The authentication protocol for Azure AD v1 endpoints. 'openid-connect' (default, recommended) uses modern OAuth 2.0/OIDC. 'ws-federation' is a legacy SAML-based protocol for older integrations. Only available with Azure AD v1 API. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject7OptionsWaadProtocolEnum = {
+    WsFederation: "ws-federation",
+    OpenidConnect: "openid-connect",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsWaadProtocolEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsWaadProtocolEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject7OptionsWaadProtocolEnum];
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionDeletedPreviousObject7StrategyEnum = {
+    Waad: "waad",
+} as const;
+export type EventStreamCloudEventConnectionDeletedPreviousObject7StrategyEnum =
+    (typeof EventStreamCloudEventConnectionDeletedPreviousObject7StrategyEnum)[keyof typeof EventStreamCloudEventConnectionDeletedPreviousObject7StrategyEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventConnectionDeletedTypeEnum = {
     ConnectionDeleted: "connection.deleted",
@@ -14504,6 +18209,7 @@ export type EventStreamCloudEventConnectionUpdatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventConnectionUpdatedData {
     object: Management.EventStreamCloudEventConnectionUpdatedObject;
+    previous_object?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -14614,6 +18320,8 @@ export interface EventStreamCloudEventConnectionUpdatedObject0Options {
         | Management.EventStreamCloudEventConnectionUpdatedObject0OptionsTokenEndpointJwtcaAudFormatEnum
         | undefined;
     upstream_params?: Management.EventStreamCloudEventConnectionUpdatedObject0OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
     /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
     userinfo_endpoint?: string | undefined;
     attribute_map?: Management.EventStreamCloudEventConnectionUpdatedObject0OptionsAttributeMap | undefined;
@@ -14711,6 +18419,8 @@ export interface EventStreamCloudEventConnectionUpdatedObject0OptionsOidcMetadat
     claims_parameter_supported?: boolean | undefined;
     /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
     claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
     display_values_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
@@ -14934,6 +18644,8 @@ export interface EventStreamCloudEventConnectionUpdatedObject1Options {
         | Management.EventStreamCloudEventConnectionUpdatedObject1OptionsTokenEndpointJwtcaAudFormatEnum
         | undefined;
     upstream_params?: Management.EventStreamCloudEventConnectionUpdatedObject1OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
     /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
     userinfo_endpoint?: string | undefined;
     attribute_map?: Management.EventStreamCloudEventConnectionUpdatedObject1OptionsAttributeMap | undefined;
@@ -15031,6 +18743,8 @@ export interface EventStreamCloudEventConnectionUpdatedObject1OptionsOidcMetadat
     claims_parameter_supported?: boolean | undefined;
     /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
     claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
     display_values_supported?: string[] | undefined;
     /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
@@ -15249,15 +18963,22 @@ export interface EventStreamCloudEventConnectionUpdatedObject2Options {
     deflate?: boolean | undefined;
     /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
     destinationUrl?: string | undefined;
+    /** When true, disables the automatic correction of the fieldsMap configuration to ensure proper mapping of SAML attributes to user profile fields. Defaults to false (fieldsMap fix enabled). */
+    disableFieldsMapFix?: boolean | undefined;
     /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
     disableSignout?: boolean | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. Used with Cross App Access. */
+    discovery_url?: string | undefined;
     fieldsMap?: Management.EventStreamCloudEventConnectionUpdatedObject2OptionsFieldsMap | undefined;
+    /** Raw JSON string representation of the fieldsMap configuration. Used internally for storage and retrieval of the fieldsMap object. */
+    fieldsMapJsonRaw?: string | undefined;
     /** Expected 'iss' (Issuer) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT issuer matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_sub. */
     global_token_revocation_jwt_iss?: string | undefined;
     /** Expected 'sub' (Subject) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT subject matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_iss. */
     global_token_revocation_jwt_sub?: string | undefined;
     /** HTTPS URL to the identity provider's SAML metadata document. When provided, Auth0 automatically fetches and parses the metadata to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Use metadataUrl OR metadataXml, not both. */
     metadataUrl?: string | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionUpdatedObject2OptionsOidcMetadata | undefined;
     /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
     recipientUrl?: string | undefined;
     /** Custom XML template for SAML authentication requests. Supports variable substitution using @@variableName@@ syntax. When not provided, uses default SAML AuthnRequest template. See https://auth0.com/docs/authenticate/protocols/saml/saml-sso-integrations/configure-auth0-saml-service-provider#customize-the-request-template */
@@ -15320,6 +19041,88 @@ export const EventStreamCloudEventConnectionUpdatedObject2OptionsIdpinitiatedCli
 } as const;
 export type EventStreamCloudEventConnectionUpdatedObject2OptionsIdpinitiatedClientProtocolEnum =
     (typeof EventStreamCloudEventConnectionUpdatedObject2OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedObject2OptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. Used with Cross App Access.
+ */
+export interface EventStreamCloudEventConnectionUpdatedObject2OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
 
 /** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
 export const EventStreamCloudEventConnectionUpdatedObject2OptionsProtocolBindingEnum = {
@@ -15714,6 +19517,8 @@ export interface EventStreamCloudEventConnectionUpdatedObject5Options {
     ips?: string[] | undefined;
     /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
     kerberos?: boolean | undefined;
+    /** When true, restricts the connection to Kerberos-only authentication, disallowing username/password fallback. */
+    kerberos_only?: boolean | undefined;
     /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
     non_persistent_attrs?: string[] | undefined;
     set_user_root_attributes?:
@@ -16039,6 +19844,1675 @@ export const EventStreamCloudEventConnectionUpdatedObject7StrategyEnum = {
 export type EventStreamCloudEventConnectionUpdatedObject7StrategyEnum =
     (typeof EventStreamCloudEventConnectionUpdatedObject7StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedObject7StrategyEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject =
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject4
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject5
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject6
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject7;
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0Authentication | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0ConnectedAccounts | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0ConnectedAccounts {
+    active: boolean;
+    cross_app_access?: boolean | undefined;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0Metadata {}
+
+/**
+ * Options for the 'oidc' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0Options {
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    connection_settings?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsConnectionSettings
+        | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    dpop_signing_alg?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsDpopSigningAlgEnum
+        | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Indicates whether the identity provider supports session expiry via the id_token. If true, the system will use the session_expiry claim in the id_token to determine session expiry. */
+    id_token_session_expiry_supported?: boolean | undefined;
+    /** List of algorithms allowed to verify the ID tokens. Applicable when strategy=oidc or okta. */
+    id_token_signed_response_algs?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum[]
+        | undefined;
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer?: string | undefined;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsOidcMetadata | undefined;
+    schema_version?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSchemaVersionEnum
+        | undefined;
+    /** Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider. */
+    scope?: string | undefined;
+    /** When true and type is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation. */
+    send_back_channel_nonce?: boolean | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    token_endpoint_auth_method?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthMethodEnum
+        | undefined;
+    token_endpoint_auth_signing_alg?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum
+        | undefined;
+    token_endpoint_jwtca_aud_format?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum
+        | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    attribute_map?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMap | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. */
+    discovery_url?: string | undefined;
+    type?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTypeEnum | undefined;
+}
+
+/**
+ * Configuration for mapping claims from the identity provider to Auth0 user profile attributes. Allows customizing which IdP claims populate user fields and how they are transformed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMap {
+    attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapAttributes
+        | undefined;
+    /** Scopes to send to the IdP's Userinfo endpoint */
+    userinfo_scope?: string | undefined;
+    mapping_mode?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapMappingModeEnum
+        | undefined;
+}
+
+/**
+ * Object containing mapping details for incoming claims
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapAttributes = Record<
+    string,
+    unknown
+>;
+
+/** Method used to map incoming claims when strategy=oidc. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapMappingModeEnum = {
+    BindAll: "bind_all",
+    UseMap: "use_map",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapMappingModeEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapMappingModeEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapMappingModeEnum];
+
+/**
+ * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsConnectionSettings {
+    pkce?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsConnectionSettingsPkceEnum
+        | undefined;
+}
+
+/** PKCE configuration. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsConnectionSettingsPkceEnum = {
+    Auto: "auto",
+    S256: "S256",
+    Plain: "plain",
+    Disabled: "disabled",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsConnectionSettingsPkceEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsConnectionSettingsPkceEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsConnectionSettingsPkceEnum];
+
+/** Algorithm used for DPoP proof JWT signing. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Es512: "ES512",
+    Ed25519: "Ed25519",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsDpopSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsDpopSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsDpopSigningAlgEnum];
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Algorithm allowed to verify the ID tokens. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsIdTokenSignedResponseAlgsItemEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** The internal schema version of the connection options. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSchemaVersionEnum = {
+    Openid100: "openid-1.0.0",
+    OidcV4: "oidc-v4",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSchemaVersionEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSchemaVersionEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSchemaVersionEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsSetUserRootAttributesEnum];
+
+/** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthMethodEnum = {
+    ClientSecretPost: "client_secret_post",
+    PrivateKeyJwt: "private_key_jwt",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthMethodEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthMethodEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthMethodEnum];
+
+/** Algorithm used to sign client_assertions. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointAuthSigningAlgEnum];
+
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum = {
+    Issuer: "issuer",
+    TokenEndpoint: "token_endpoint",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTokenEndpointJwtcaAudFormatEnum];
+
+/** OIDC communication channel type. 'back_channel' (confidential client) exchanges tokens server-side for stronger security; 'front_channel' handles responses in the browser. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTypeEnum = {
+    BackChannel: "back_channel",
+    FrontChannel: "front_channel",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTypeEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTypeEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTypeEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject0StrategyEnum = {
+    Oidc: "oidc",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject0StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject0StrategyEnum];
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1Metadata {}
+
+/**
+ * Options for the 'okta' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1Options {
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    connection_settings?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsConnectionSettings
+        | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    dpop_signing_alg?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsDpopSigningAlgEnum
+        | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Indicates whether the identity provider supports session expiry via the id_token. If true, the system will use the session_expiry claim in the id_token to determine session expiry. */
+    id_token_session_expiry_supported?: boolean | undefined;
+    /** List of algorithms allowed to verify the ID tokens. Applicable when strategy=oidc or okta. */
+    id_token_signed_response_algs?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum[]
+        | undefined;
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer?: string | undefined;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsOidcMetadata | undefined;
+    schema_version?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSchemaVersionEnum
+        | undefined;
+    /** Space-separated list of OAuth 2.0 scopes requested during authorization. Must include 'openid' (required by OIDC spec). Common values: 'openid profile email'. Additional scopes depend on the identity provider. */
+    scope?: string | undefined;
+    /** When true and type is 'back_channel', includes a cryptographic nonce in authorization requests to prevent replay attacks. The identity provider must include this nonce in the ID token for validation. */
+    send_back_channel_nonce?: boolean | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    token_endpoint_auth_method?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthMethodEnum
+        | undefined;
+    token_endpoint_auth_signing_alg?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum
+        | undefined;
+    token_endpoint_jwtca_aud_format?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum
+        | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsUpstreamParams | undefined;
+    /** When true, uses space-delimited scopes (per OAuth 2.0 spec) instead of comma-delimited when calling the identity provider's authorization endpoint. Only relevant when using the connection_scope parameter. See https://auth0.com/docs/authenticate/identity-providers/adding-scopes-for-an-external-idp#pass-scopes-to-authorize-endpoint */
+    useOauthSpecScope?: boolean | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    attribute_map?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMap | undefined;
+    /** Domain of the Okta organization (e.g., dev-123456.okta.com). Should be just the domain of the okta server with no scheme or trailing backslash. Discovery runs only when connection.options.oidc_metadata is empty and a domain is provided */
+    domain?: string | undefined;
+    type?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTypeEnum | undefined;
+}
+
+/**
+ * Mapping of claims received from the identity provider (IdP)
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMap {
+    attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapAttributes
+        | undefined;
+    /** Scopes to send to the IdP's Userinfo endpoint */
+    userinfo_scope?: string | undefined;
+    mapping_mode?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapMappingModeEnum
+        | undefined;
+}
+
+/**
+ * Object containing mapping details for incoming claims
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapAttributes = Record<
+    string,
+    unknown
+>;
+
+/** Method used to map incoming claims when strategy=okta. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapMappingModeEnum = {
+    BasicProfile: "basic_profile",
+    UseMap: "use_map",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapMappingModeEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapMappingModeEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapMappingModeEnum];
+
+/**
+ * OAuth 2.0 PKCE (Proof Key for Code Exchange) settings. PKCE enhances security for public clients by preventing authorization code interception attacks. 'auto' (recommended) uses the strongest method supported by the IdP.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsConnectionSettings {
+    pkce?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsConnectionSettingsPkceEnum
+        | undefined;
+}
+
+/** PKCE configuration. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsConnectionSettingsPkceEnum = {
+    Auto: "auto",
+    S256: "S256",
+    Plain: "plain",
+    Disabled: "disabled",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsConnectionSettingsPkceEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsConnectionSettingsPkceEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsConnectionSettingsPkceEnum];
+
+/** Algorithm used for DPoP proof JWT signing. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsDpopSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Es512: "ES512",
+    Ed25519: "Ed25519",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsDpopSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsDpopSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsDpopSigningAlgEnum];
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Algorithm allowed to verify the ID tokens. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsIdTokenSignedResponseAlgsItemEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** The internal schema version of the connection options. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSchemaVersionEnum = {
+    Openid100: "openid-1.0.0",
+    OidcV4: "oidc-v4",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSchemaVersionEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSchemaVersionEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSchemaVersionEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsSetUserRootAttributesEnum];
+
+/** Authentication method used at the identity provider's token endpoint. 'client_secret_post' sends credentials in the request body; 'private_key_jwt' uses a signed JWT assertion for enhanced security. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthMethodEnum = {
+    ClientSecretPost: "client_secret_post",
+    PrivateKeyJwt: "private_key_jwt",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthMethodEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthMethodEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthMethodEnum];
+
+/** Algorithm used to sign client_assertions. Applicable when strategy=oidc or okta. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum = {
+    Es256: "ES256",
+    Es384: "ES384",
+    Ps256: "PS256",
+    Ps384: "PS384",
+    Rs256: "RS256",
+    Rs384: "RS384",
+    Rs512: "RS512",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointAuthSigningAlgEnum];
+
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum = {
+    Issuer: "issuer",
+    TokenEndpoint: "token_endpoint",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTokenEndpointJwtcaAudFormatEnum];
+
+/** Connection type */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTypeEnum = {
+    BackChannel: "back_channel",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTypeEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTypeEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTypeEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject1StrategyEnum = {
+    Okta: "okta",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject1StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject1StrategyEnum];
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2Metadata {}
+
+/**
+ * Options for the 'samlp' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2Options {
+    assertion_decryption_settings?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsAssertionDecryptionSettings
+        | undefined;
+    /** X.509 signing certificate from the identity provider in .der format. Used to validate signatures in SAML Responses and Assertions. This is an alternative to signingCert and is kept for backward compatibility. Prefer using signingCert instead. */
+    cert?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    digestAlgorithm?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsDigestAlgorithmEnum
+        | undefined;
+    /** Domain aliases for the connection */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider. */
+    entityId?: string | undefined;
+    /** ISO 8601 formatted datetime indicating when the identity provider's signing certificate expires. */
+    expires?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    idpinitiated?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsIdpinitiated | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    protocolBinding?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsProtocolBindingEnum
+        | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSetUserRootAttributesEnum
+        | undefined;
+    signatureAlgorithm?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSignatureAlgorithmEnum
+        | undefined;
+    /** Identity provider's SAML SingleSignOnService endpoint URL where Auth0 sends SAML authentication requests. This is the primary login URL for the SAML connection. Required unless using metadataUrl or metadataXml. */
+    signInEndpoint?: string | undefined;
+    /** Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification. */
+    signingCert?: string | undefined;
+    /** When true, Auth0 signs SAML authentication requests using the connection's signing key. The signature includes the request's digest and is validated by the identity provider. Defaults to false (unsigned requests). */
+    signSAMLRequest?: boolean | undefined;
+    subject?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSubject | undefined;
+    /** For SAML connections, the tenant domain used to construct the login endpoint URL. Can be a string for single-tenant or an array of strings for multi-tenant validation. */
+    tenant_domain?: string | undefined;
+    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsUpstreamParams | undefined;
+    /** When true, enables detailed SAML debugging by issuing 'w' (warning) events in tenant logs containing SAML request/response details. WARNING: Potentially exposes sensitive user information (PII, credentials) and should only be enabled temporarily for debugging purposes. */
+    debug?: boolean | undefined;
+    /** When true, enables DEFLATE compression for SAML requests sent via HTTP-Redirect binding. */
+    deflate?: boolean | undefined;
+    /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
+    destinationUrl?: string | undefined;
+    /** When true, disables the automatic correction of the fieldsMap configuration to ensure proper mapping of SAML attributes to user profile fields. Defaults to false (fieldsMap fix enabled). */
+    disableFieldsMapFix?: boolean | undefined;
+    /** When true, disables sending SAML logout requests (SingleLogoutService) to the identity provider during user sign-out. The user will be logged out of Auth0 but will remain logged into the identity provider. Defaults to false (federated logout enabled). */
+    disableSignout?: boolean | undefined;
+    /** URL of the identity provider's OIDC Discovery endpoint (/.well-known/openid-configuration). When provided and oidc_metadata is empty, Auth0 automatically retrieves the provider's configuration including endpoints and supported features. Used with Cross App Access. */
+    discovery_url?: string | undefined;
+    fieldsMap?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsFieldsMap | undefined;
+    /** Raw JSON string representation of the fieldsMap configuration. Used internally for storage and retrieval of the fieldsMap object. */
+    fieldsMapJsonRaw?: string | undefined;
+    /** Expected 'iss' (Issuer) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT issuer matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_sub. */
+    global_token_revocation_jwt_iss?: string | undefined;
+    /** Expected 'sub' (Subject) claim value for JWT tokens in Global Token Revocation requests from the identity provider. When configured, Auth0 validates the JWT subject matches this value before processing token revocation. Must be used together with global_token_revocation_jwt_iss. */
+    global_token_revocation_jwt_sub?: string | undefined;
+    /** HTTPS URL to the identity provider's SAML metadata document. When provided, Auth0 automatically fetches and parses the metadata to extract signInEndpoint, signOutEndpoint, signingCert, signSAMLRequest, and protocolBinding. Use metadataUrl OR metadataXml, not both. */
+    metadataUrl?: string | undefined;
+    oidc_metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsOidcMetadata | undefined;
+    /** The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL. */
+    recipientUrl?: string | undefined;
+    /** Custom XML template for SAML authentication requests. Supports variable substitution using @@variableName@@ syntax. When not provided, uses default SAML AuthnRequest template. See https://auth0.com/docs/authenticate/protocols/saml/saml-sso-integrations/configure-auth0-saml-service-provider#customize-the-request-template */
+    requestTemplate?: string | undefined;
+    /** Identity provider's SAML SingleLogoutService endpoint URL where Auth0 sends logout requests for federated sign-out. When not provided, defaults to signInEndpoint. Only used if disableSignout is false. */
+    signOutEndpoint?: string | undefined;
+    /** Custom SAML assertion attribute to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single SAML attribute name). */
+    user_id_attribute?: string | undefined;
+}
+
+/**
+ * Settings for SAML assertion decryption.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsAssertionDecryptionSettings {
+    /** A list of insecure algorithms to allow for SAML assertion decryption. */
+    algorithm_exceptions?: string[] | undefined;
+    algorithm_profile: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum;
+}
+
+/** The algorithm profile to use for decrypting SAML assertions. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    {
+        V20261: "v2026-1",
+    } as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsAssertionDecryptionSettingsAlgorithmProfileEnum];
+
+/** Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsDigestAlgorithmEnum = {
+    Sha1: "sha1",
+    Sha256: "sha256",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsDigestAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsDigestAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsDigestAlgorithmEnum];
+
+/**
+ * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsFieldsMap = Record<string, unknown>;
+
+/**
+ * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsIdpinitiated {
+    /** The query string sent to the default application */
+    client_authorizequery?: string | undefined;
+    /** The client ID to use for IdP-initiated login requests. */
+    client_id?: string | undefined;
+    client_protocol?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum
+        | undefined;
+    /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
+    enabled?: boolean | undefined;
+}
+
+/** The response protocol used to communicate with the default application. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum = {
+    Oidc: "oidc",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsIdpinitiatedClientProtocolEnum];
+
+/**
+ * OpenID Connect Provider Metadata as per https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. Used with Cross App Access.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsOidcMetadata {
+    /** A list of the Authentication Context Class References that this OP supports */
+    acr_values_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 authorization endpoint where users are redirected for authentication. Must be a valid HTTPS URL. This endpoint initiates the OAuth 2.0 authorization code flow. */
+    authorization_endpoint: string;
+    /** JSON array containing a list of the Claim Types that the OpenID Provider supports. These Claim Types are described in Section 5.6 of OpenID Connect Core 1.0 [OpenID.Core]. If omitted, the implementation supports only normal Claims. */
+    claim_types_supported?: string[] | undefined;
+    /** Languages and scripts supported for values in Claims being returned, represented as a JSON array of BCP47 [RFC5646] language tag values. Not all languages and scripts are necessarily supported for all Claim values. */
+    claims_locales_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the claims parameter, with true indicating support. If omitted, the default value is false. */
+    claims_parameter_supported?: boolean | undefined;
+    /** JSON array containing a list of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list. */
+    claims_supported?: string[] | undefined;
+    /** JSON array containing a list of Proof Key for Code Exchange (PKCE) code challenge methods supported by this OP (e.g., S256, plain), as defined in RFC 7636. */
+    code_challenge_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    display_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported for DPoP proof JWT signing. */
+    dpop_signing_alg_values_supported?: string[] | undefined;
+    /** URL of the identity provider's logout/end session endpoint. When configured as a static URL, users are redirected here after logging out from Auth0. Must use HTTPS scheme. */
+    end_session_endpoint?: string | undefined;
+    /** A list of the OAuth 2.0 Grant Type values that this OP supports. Dynamic OpenID Providers MUST support the authorization_code and implicit Grant Type values and MAY support other Grant Types. If omitted, the default value is ["authorization_code", "implicit"]. */
+    grant_types_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT */
+    id_token_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for the ID Token to encode the Claims in a JWT [JWT]. */
+    id_token_encryption_enc_values_supported?: string[] | undefined;
+    /** A list of the JWS signing algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT. The algorithm RS256 MUST be included. The value none MAY be supported, but MUST NOT be used unless the Response Type used returns no ID Token from the Authorization Endpoint (such as when using the Authorization Code Flow). https://datatracker.ietf.org/doc/html/rfc7518 */
+    id_token_signing_alg_values_supported: string[];
+    /** The identity provider's unique issuer identifier URL (e.g., https://accounts.google.com). Must match the 'iss' claim in ID tokens from the identity provider. */
+    issuer: string;
+    /** URL of the identity provider's JSON Web Key Set (JWKS) endpoint containing public keys for signature verification. Auth0 retrieves these keys to validate ID token signatures. */
+    jwks_uri: string;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about the OPs requirements on how the Relying Party can use the data provided by the OP. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_policy_uri?: string | undefined;
+    /** URL that the OpenID Provider provides to the person registering the Client to read about OpenID Providers terms of service. The registration process SHOULD display this URL to the person registering the Client if it is given. */
+    op_tos_uri?: string | undefined;
+    /** URL of the OPs Dynamic Client Registration Endpoint. RECOMMENDED but not REQUIRED. https://openid.net/specs/openid-connect-discovery-1_0.html#OpenID.Registration */
+    registration_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) supported by the OP for Request Objects. These algorithms are used both when the Request Object is passed by value and when it is passed by reference. */
+    request_object_encryption_enc_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the OP for Request Objects, which are described in Section 6.1 of OpenID Connect Core 1.0 [OpenID.Core]. These algorithms are used both when the Request Object is passed by value (using the request parameter) and when it is passed by reference (using the request_uri parameter). Servers SHOULD support none and RS256. */
+    request_object_signing_alg_values_supported?: string[] | undefined;
+    /** Boolean value specifying whether the OP supports use of the request parameter, with true indicating support. If omitted, the default value is false. */
+    request_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP supports use of the request_uri parameter, with true indicating support. If omitted, the default value is false. */
+    request_uri_parameter_supported?: boolean | undefined;
+    /** Boolean value specifying whether the OP requires use of the request_uri parameter. If omitted, the default value is false. */
+    require_request_uri_registration?: boolean | undefined;
+    /** A list of the OAuth 2.0 response_mode values that this OP supports. If omitted, the default for Dynamic OpenID Providers is ["query", "fragment"] */
+    response_modes_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 response_type values that this OP supports. Dynamic OpenID Providers MUST support the code, id_token, and the token id_token Response Type values */
+    response_types_supported?: string[] | undefined;
+    /** A list of the OAuth 2.0 [RFC6749] scope values that this server supports. The server MUST support the openid scope value. Servers MAY choose not to advertise some supported scope values even when this parameter is used, although those defined in [OpenID.Core] SHOULD be listed, if supported. RECOMMENDED but not REQUIRED */
+    scopes_supported?: string[] | undefined;
+    /** URL of a page containing human-readable information that developers might want or need to know when using the OpenID Provider. In particular, if the OpenID Provider does not support Dynamic Client Registration, then information on how to register Clients needs to be provided in this documentation. */
+    service_documentation?: string | undefined;
+    /** A list of the Subject Identifier types that this OP supports. Valid types include pairwise and public */
+    subject_types_supported?: string[] | undefined;
+    /** URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow. */
+    token_endpoint?: string | undefined;
+    /** JSON array containing a list of Client Authentication methods supported by this Token Endpoint. The options are client_secret_post, client_secret_basic, client_secret_jwt, and private_key_jwt, as described in Section 9 of OpenID Connect Core 1.0 [OpenID.Core]. Other authentication methods MAY be defined by extensions. If omitted, the default is client_secret_basic -- the HTTP Basic Authentication Scheme specified in Section 2.3.1 of OAuth 2.0 [RFC6749]. */
+    token_endpoint_auth_methods_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWS signing algorithms (alg values) supported by the Token Endpoint for the signature on the JWT [JWT] used to authenticate the Client at the Token Endpoint for the private_key_jwt and client_secret_jwt authentication methods. Servers SHOULD support RS256. The value none MUST NOT be used. */
+    token_endpoint_auth_signing_alg_values_supported?: string[] | undefined;
+    /** Languages and scripts supported for the user interface, represented as a JSON array of BCP47 [RFC5646] language tag values. */
+    ui_locales_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE [JWE] encryption algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_alg_values_supported?: string[] | undefined;
+    /** JSON array containing a list of the JWE encryption algorithms (enc values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. */
+    userinfo_encryption_enc_values_supported?: string[] | undefined;
+    /** Optional URL of the identity provider's UserInfo endpoint. When configured with attribute mapping, Auth0 calls this endpoint to retrieve additional user profile claims using the access token. */
+    userinfo_endpoint?: string | undefined;
+    /** JSON array containing a list of the JWS [JWS] signing algorithms (alg values) [JWA] supported by the UserInfo Endpoint to encode the Claims in a JWT [JWT]. The value none MAY be included. */
+    userinfo_signing_alg_values_supported?: string[] | undefined;
+}
+
+/** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsProtocolBindingEnum = {
+    UrnOasisNamesTcSaml20BindingsHttpPost: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+    UrnOasisNamesTcSaml20BindingsHttpRedirect: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsProtocolBindingEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsProtocolBindingEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsProtocolBindingEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSetUserRootAttributesEnum];
+
+/** Algorithm used to sign SAML authentication requests and logout requests using the connection's signing key. Common values: 'rsa-sha256' (RSA signature with SHA-256 digest) or 'rsa-sha1'. Defaults to 'rsa-sha256'. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSignatureAlgorithmEnum = {
+    RsaSha1: "rsa-sha1",
+    RsaSha256: "rsa-sha256",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSignatureAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSignatureAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSignatureAlgorithmEnum];
+
+/**
+ * Certificate Subject Distinguished Name (DN) extracted from the identity provider's signing certificate.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSubject {}
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject2StrategyEnum = {
+    Samlp: "samlp",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject2StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject2StrategyEnum];
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3Metadata {}
+
+/**
+ * Options for the 'pingfederate' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3Options {
+    assertion_decryption_settings?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsAssertionDecryptionSettings
+        | undefined;
+    /** X.509 signing certificate from the identity provider in .der format. Used to validate signatures in SAML Responses and Assertions. This is an alternative to signingCert and is kept for backward compatibility. Prefer using signingCert instead. */
+    cert?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    digestAlgorithm?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsDigestAlgorithmEnum
+        | undefined;
+    /** Domain aliases for the connection */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the SAML Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. This value is included in SAML AuthnRequest messages sent to the identity provider. */
+    entityId?: string | undefined;
+    /** ISO 8601 formatted datetime indicating when the identity provider's signing certificate expires. */
+    expires?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    idpinitiated?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsIdpinitiated | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    protocolBinding?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsProtocolBindingEnum
+        | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSetUserRootAttributesEnum
+        | undefined;
+    signatureAlgorithm?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSignatureAlgorithmEnum
+        | undefined;
+    /** Identity provider's SAML SingleSignOnService endpoint URL where Auth0 sends SAML authentication requests. This is the primary login URL for the SAML connection. Required unless using metadataUrl or metadataXml. */
+    signInEndpoint?: string | undefined;
+    /** Base64-encoded X.509 certificate from the identity provider used to validate signatures in SAML responses and assertions. The certificate is decoded and used for cryptographic signature verification. */
+    signingCert?: string | undefined;
+    /** When true, Auth0 signs SAML authentication requests using the connection's signing key. The signature includes the request's digest and is validated by the identity provider. Defaults to false (unsigned requests). */
+    signSAMLRequest?: boolean | undefined;
+    subject?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSubject | undefined;
+    /** For SAML connections, the tenant domain used to construct the login endpoint URL. Can be a string for single-tenant or an array of strings for multi-tenant validation. */
+    tenant_domain?: string | undefined;
+    /** SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsUpstreamParams | undefined;
+    /** URL provided by PingFederate which returns information used for creating the connection */
+    pingFederateBaseUrl: string;
+}
+
+/**
+ * Settings for SAML assertion decryption.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsAssertionDecryptionSettings {
+    /** A list of insecure algorithms to allow for SAML assertion decryption. */
+    algorithm_exceptions?: string[] | undefined;
+    algorithm_profile: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum;
+}
+
+/** The algorithm profile to use for decrypting SAML assertions. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    {
+        V20261: "v2026-1",
+    } as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsAssertionDecryptionSettingsAlgorithmProfileEnum];
+
+/** Algorithm used for computing digest values when signing SAML requests and logout requests. Defaults to 'sha256'. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsDigestAlgorithmEnum = {
+    Sha1: "sha1",
+    Sha256: "sha256",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsDigestAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsDigestAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsDigestAlgorithmEnum];
+
+/**
+ * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsIdpinitiated {
+    /** The query string sent to the default application */
+    client_authorizequery?: string | undefined;
+    /** The client ID to use for IdP-initiated login requests. */
+    client_id?: string | undefined;
+    client_protocol?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum
+        | undefined;
+    /** When true, enables IdP-initiated login support for this SAML connection. Allows users to log in directly from the identity provider without first visiting Auth0. */
+    enabled?: boolean | undefined;
+}
+
+/** The response protocol used to communicate with the default application. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum = {
+    Oidc: "oidc",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsIdpinitiatedClientProtocolEnum];
+
+/** SAML protocol binding mechanism for sending authentication requests to the identity provider. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsProtocolBindingEnum = {
+    UrnOasisNamesTcSaml20BindingsHttpPost: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+    UrnOasisNamesTcSaml20BindingsHttpRedirect: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsProtocolBindingEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsProtocolBindingEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsProtocolBindingEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSetUserRootAttributesEnum];
+
+/** Algorithm used to sign SAML authentication requests and logout requests using the connection's signing key. Common values: 'rsa-sha256' (RSA signature with SHA-256 digest) or 'rsa-sha1'. Defaults to 'rsa-sha256'. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSignatureAlgorithmEnum = {
+    RsaSha1: "rsa-sha1",
+    RsaSha256: "rsa-sha256",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSignatureAlgorithmEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSignatureAlgorithmEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSignatureAlgorithmEnum];
+
+/**
+ * Certificate Subject Distinguished Name (DN) extracted from the identity provider's signing certificate.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSubject {}
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject3StrategyEnum = {
+    Pingfederate: "pingfederate",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject3StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject3StrategyEnum];
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject4 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject4Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject4ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject4Metadata {}
+
+/**
+ * Options for the 'adfs' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject4Options {
+    /** ADFS federation metadata host or XML URL used to discover WS-Fed endpoints and certificates. Errors if adfs_server and fedMetadataXml are both absent. */
+    adfs_server?: string | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    /** The entity identifier (Issuer) for the ADFS Service Provider. When not provided, defaults to 'urn:auth0:{tenant}:{connection}'. */
+    entityId?: string | undefined;
+    /** Inline XML alternative to 'adfs_server'. Cannot be set together with 'adfs_server'. */
+    fedMetadataXml?: string | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    prev_thumbprints?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsSetUserRootAttributesEnum
+        | undefined;
+    should_trust_email_verified_connection?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum
+        | undefined;
+    /** Passive Requestor (WS-Fed) sign-in endpoint discovered from metadata or provided explicitly. */
+    signInEndpoint?: string | undefined;
+    /** Tenant domain */
+    tenant_domain?: string | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsUpstreamParams | undefined;
+    /** Custom ADFS claim to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single ADFS claim name). */
+    user_id_attribute?: string | undefined;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsSetUserRootAttributesEnum];
+
+/** Choose how Auth0 sets the email_verified field in the user profile. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum = {
+    NeverSetEmailsAsVerified: "never_set_emails_as_verified",
+    AlwaysSetEmailsAsVerified: "always_set_emails_as_verified",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsShouldTrustEmailVerifiedConnectionEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject4StrategyEnum = {
+    Adfs: "adfs",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject4StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject4StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject4StrategyEnum];
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject5 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5Options | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject5Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject5ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject5Metadata {}
+
+/**
+ * Options for the 'ad' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject5Options {
+    /** IP address of the AD connector agent used to validate that authentication requests originate from the corporate network for Kerberos authentication  (managed by the AD Connector agent). */
+    agentIP?: string | undefined;
+    /** When enabled, allows direct username/password authentication through the AD connector agent instead of WS-Federation protocol (managed by the AD Connector agent). */
+    agentMode?: boolean | undefined;
+    /** Version identifier of the installed AD connector agent software (managed by the AD Connector agent). */
+    agentVersion?: string | undefined;
+    /** Enables Auth0's brute force protection to prevent credential stuffing attacks. When enabled, blocks suspicious login attempts from specific IP addresses after repeated failures. */
+    brute_force_protection?: boolean | undefined;
+    /** Enables client SSL certificate authentication for the AD connector, requiring HTTPS on the sign-in endpoint */
+    certAuth?: boolean | undefined;
+    /** Array of X.509 certificates in PEM format used for validating SAML signatures from the AD identity provider (managed by the AD Connector agent). */
+    certs?: string[] | undefined;
+    /** When enabled, disables caching of AD connector authentication results to ensure real-time validation against the directory */
+    disable_cache?: boolean | undefined;
+    /** When enabled, hides the 'Forgot Password' link on login pages to prevent users from initiating self-service password resets */
+    disable_self_service_change_password?: boolean | undefined;
+    /** List of domain names that can be used with identifier-first authentication flow to route users to this AD connection; each domain must be a valid DNS name up to 256 characters */
+    domain_aliases?: string[] | undefined;
+    /** https url of the icon to be shown */
+    icon_url?: string | undefined;
+    /** Array of IP address ranges in CIDR notation used to determine if authentication requests originate from the corporate network for Kerberos or certificate authentication. */
+    ips?: string[] | undefined;
+    /** Enables Windows Integrated Authentication (Kerberos) for seamless SSO when users authenticate from within the corporate network IP ranges */
+    kerberos?: boolean | undefined;
+    /** When true, restricts the connection to Kerberos-only authentication, disallowing username/password fallback. */
+    kerberos_only?: boolean | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** The sign-in endpoint type for the AD-LDAP connector agent (managed by the AD Connector agent). */
+    signInEndpoint?: string | undefined;
+    /** Primary AD domain hint used for HRD and discovery. */
+    tenant_domain?: string | undefined;
+    /** Array of certificate SHA-1 thumbprints for validating signatures. Managed by Auth0 when using the AD Connector agent. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsUpstreamParams | undefined;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsSetUserRootAttributesEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject5StrategyEnum = {
+    Ad: "ad",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject5StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject5StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject5StrategyEnum];
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject6 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject6Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject6ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject6Metadata {}
+
+/**
+ * Options for the 'google-apps' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject6Options {
+    /** Expiration timestamp for the `admin_access_token` in ISO 8601 format. Auth0 uses this value to determine when to refresh the token. */
+    admin_access_token_expiresin?: string | undefined;
+    /** When true, allows customization of OAuth scopes requested during user login. Custom scopes are appended to the mandatory email and profile scopes. When false or omitted, only the default email and profile scopes are used. This property is automatically enabled when Token Vault or Connected Accounts features are activated. */
+    allow_setting_login_scopes?: boolean | undefined;
+    /** Enables integration with the Google Workspace Admin SDK Directory API for groups. When true, Auth0 can synchronize groups & group memberships and supports inbound directory provisioning for groups. Defaults to false. */
+    api_enable_groups?: boolean | undefined;
+    /** Enables integration with the Google Workspace Admin SDK Directory API. When true, Auth0 can retrieve extended user attributes (admin status, suspension status, group memberships) and supports inbound directory provisioning (SCIM). Defaults to true. */
+    api_enable_users?: boolean | undefined;
+    /** Your Google OAuth 2.0 client ID. You can find this in your [Google Cloud Console](https://console.cloud.google.com/apis/credentials) under the OAuth 2.0 Client IDs section. */
+    client_id: string;
+    /** Primary Google Workspace domain name that users must belong to. */
+    domain?: string | undefined;
+    /** Email domains associated with this connection for Home Realm Discovery (HRD). When a user's email matches one of these domains, they are automatically routed to this connection during authentication. */
+    domain_aliases?: string[] | undefined;
+    /** Whether the OAuth flow requests the `email` scope. */
+    email?: boolean | undefined;
+    /** Fetches the `agreedToTerms` flag from the Google Directory profile. */
+    ext_agreed_terms?: boolean | undefined;
+    /** Enables enrichment with Google group memberships (required for `ext_groups_extended`). */
+    ext_groups?: boolean | undefined;
+    /** Controls whether enriched group entries include `id`, `email`, `name` (true) or only the group name (false); can only be set when `ext_groups` is true. */
+    ext_groups_extended?: boolean | undefined;
+    /** Fetches the Google Directory admin flag for the signing-in user. */
+    ext_is_admin?: boolean | undefined;
+    /** Fetches the Google Directory suspended flag for the signing-in user. */
+    ext_is_suspended?: boolean | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** When enabled, users who sign in with their Google account through a social login will be automatically routed to this Google Workspace connection if their email domain matches the configured tenant_domain or domain_aliases. This ensures enterprise users authenticate through their organization's Google Workspace identity provider rather than through a generic Google social login, enabling access to directory-based attributes and enforcing organizational security policies. Defaults to true for new connections. */
+    handle_login_from_social?: boolean | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    /** Determines how Auth0 generates the user_id for Google Workspace users. When false (default), the user's email address is used. When true, Google's stable numeric user ID is used instead, which persists even if the user's email changes. This setting can only be configured when creating the connection and cannot be changed afterward. */
+    map_user_id_to_id?: boolean | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** Whether the OAuth flow requests the `profile` scope. */
+    profile?: boolean | undefined;
+    /** Additional OAuth scopes requested beyond the default `email profile` scopes; ignored unless `allow_setting_login_scopes` is true. */
+    scope?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsSetUserRootAttributesEnum
+        | undefined;
+    /** The Google Workspace primary domain used to identify the organization during authentication. */
+    tenant_domain?: string | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsUpstreamParams | undefined;
+}
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsSetUserRootAttributesEnum];
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsUpstreamParams = Record<string, unknown>;
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject6StrategyEnum = {
+    GoogleApps: "google-apps",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject6StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject6StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject6StrategyEnum];
+
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject7 {
+    authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7Authentication | undefined;
+    connected_accounts?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7ConnectedAccounts | undefined;
+    /** Connection name used in the new universal login experience */
+    display_name?: string | undefined;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    /** The connection's identifier */
+    id: string;
+    /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+    is_domain_connection?: boolean | undefined;
+    metadata?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7Metadata | undefined;
+    /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+    name: string;
+    /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+    realms?: string[] | undefined;
+    options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7Options | undefined;
+    /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
+    show_as_button?: boolean | undefined;
+    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7StrategyEnum;
+}
+
+/**
+ * Configure the purpose of a connection to be used for authentication during login.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject7Authentication {
+    active: boolean;
+}
+
+/**
+ * Configure the purpose of a connection to be used for connected accounts and Token Vault.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject7ConnectedAccounts {
+    active: boolean;
+}
+
+/**
+ * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject7Metadata {}
+
+/**
+ * Options for the 'waad' connection
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject7Options {
+    /** Enable users API */
+    api_enable_users?: boolean | undefined;
+    /** The Azure AD application domain (e.g., 'contoso.onmicrosoft.com'). Used primarily with WS-Federation protocol and Azure AD v1 endpoints. */
+    app_domain?: string | undefined;
+    /** The Application ID URI (App ID URI) for the Azure AD application. Required when using Azure AD v1 with the Resource Owner Password flow. Used to identify the resource being requested in OAuth token requests. */
+    app_id?: string | undefined;
+    /** Includes basic user profile information from Azure AD (name, email, given_name, family_name). Always enabled and required - represents the minimum profile data retrieved during authentication. */
+    basic_profile?: boolean | undefined;
+    /** Timestamp of the last certificate expiring soon notification. */
+    cert_rollover_notification?: string | undefined;
+    /** OAuth 2.0 client identifier issued by the identity provider during application registration. This value identifies your Auth0 connection to the identity provider. */
+    client_id: string;
+    /** The primary Azure AD tenant domain (e.g., 'contoso.onmicrosoft.com' or 'contoso.com'). */
+    domain?: string | undefined;
+    /** Alternative domain names associated with this Azure AD tenant. Allows users from multiple verified domains to authenticate through this connection. Can be an array of domain strings. */
+    domain_aliases?: string[] | undefined;
+    /** When enabled (true), retrieves and stores Azure AD security group memberships for the user. Requires Microsoft Graph API permissions (Directory.Read.All). Allows configuring max_groups_to_retrieve. */
+    ext_groups?: boolean | undefined;
+    /** When true, stores all groups the user is member of, including transitive group memberships (groups within groups). When false (default), only direct group memberships are included. */
+    ext_nested_groups?: boolean | undefined;
+    /** When enabled (true), retrieves extended profile attributes from Azure AD via Microsoft Graph API (job title, department, office location, etc.). Requires Graph API permissions. Only available with Azure AD v1 or when explicitly enabled for v2. */
+    ext_profile?: boolean | undefined;
+    federated_connections_access_tokens?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsFederatedConnectionsAccessTokens
+        | undefined;
+    /** Indicates whether admin consent has been granted for the required Azure AD permissions. Read-only status field managed by Auth0 during the OAuth authorization flow. */
+    granted?: boolean | undefined;
+    /** URL for the connection icon displayed in Auth0 login pages. Accepts HTTPS URLs. Used for visual branding in authentication flows. */
+    icon_url?: string | undefined;
+    identity_api?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsIdentityApiEnum | undefined;
+    /** Maximum number of Azure AD groups to retrieve per user during authentication. Helps prevent performance issues for users in many groups. Only applies when ext_groups is enabled. Leave empty to use platform default. */
+    max_groups_to_retrieve?: string | undefined;
+    /** An array of user fields that should not be stored in the Auth0 database (https://auth0.com/docs/security/data-security/denylist) */
+    non_persistent_attrs?: string[] | undefined;
+    /** OAuth 2.0 scopes to request from Azure AD during authentication. Each scope represents a permission (e.g., 'User.Read', 'Group.Read.All'). Only applies with Microsoft Identity Platform v2.0. See Microsoft Graph permissions reference for available scopes. */
+    scope?: string[] | undefined;
+    set_user_root_attributes?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsSetUserRootAttributesEnum
+        | undefined;
+    should_trust_email_verified_connection?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum
+        | undefined;
+    tenant_domain?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsTenantDomainOne | undefined;
+    /** The Azure AD tenant ID as a UUID. The unique identifier for your Azure AD organization. Must be a valid 36-character UUID. */
+    tenantId?: string | undefined;
+    /** Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string. */
+    thumbprints?: string[] | undefined;
+    upstream_params?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUpstreamParams | undefined;
+    /** Indicates WS-Federation protocol usage. When true, uses WS-Federation; when false, uses OpenID Connect. */
+    use_wsfed?: boolean | undefined;
+    /** When enabled (true), uses the Azure AD common endpoint for multi-tenant authentication. Allows users from any Azure AD organization to sign in. Requires userid_attribute set to 'sub' (not 'oid'). Cannot be used with SCIM provisioning. Defaults to false. */
+    useCommonEndpoint?: boolean | undefined;
+    userid_attribute?:
+        | Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUseridAttributeEnum
+        | undefined;
+    waad_protocol?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsWaadProtocolEnum | undefined;
+}
+
+/**
+ * Configuration for storing identity provider tokens in Auth0's Token Vault. When active, Auth0 securely stores access and refresh tokens from federated logins, enabling your application to make authenticated API calls on behalf of users.
+ */
+export interface EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsFederatedConnectionsAccessTokens {
+    /** Enables refresh tokens and access tokens collection for federated connections */
+    active: boolean;
+}
+
+/** The Azure AD endpoint version for authentication. 'microsoft-identity-platform-v2.0' (recommended, default) supports modern OAuth 2.0 features. 'azure-active-directory-v1.0' is the legacy endpoint with protocol limitations. Selection affects available features. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsIdentityApiEnum = {
+    MicrosoftIdentityPlatformV20: "microsoft-identity-platform-v2.0",
+    AzureActiveDirectoryV10: "azure-active-directory-v1.0",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsIdentityApiEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsIdentityApiEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsIdentityApiEnum];
+
+/** Controls how user profile root attributes (name, nickname, picture, etc.) are synchronized from the identity provider. 'on_each_login': updates on every authentication (default); 'on_first_login': sets attributes only during initial login, allowing independent updates afterward; 'never_on_login': never syncs from IdP, preserving locally-set values. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsSetUserRootAttributesEnum = {
+    OnEachLogin: "on_each_login",
+    OnFirstLogin: "on_first_login",
+    NeverOnLogin: "never_on_login",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsSetUserRootAttributesEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsSetUserRootAttributesEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsSetUserRootAttributesEnum];
+
+/** Choose how Auth0 sets the email_verified field in the user profile. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum = {
+    NeverSetEmailsAsVerified: "never_set_emails_as_verified",
+    AlwaysSetEmailsAsVerified: "always_set_emails_as_verified",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsShouldTrustEmailVerifiedConnectionEnum];
+
+/**
+ * Azure AD tenant domain as a UUID tenant ID.
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsTenantDomainOne = string;
+
+/**
+ * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
+ */
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUpstreamParams = Record<string, unknown>;
+
+/** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUseridAttributeEnum = {
+    Oid: "oid",
+    Sub: "sub",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUseridAttributeEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUseridAttributeEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUseridAttributeEnum];
+
+/** The authentication protocol for Azure AD v1 endpoints. 'openid-connect' (default, recommended) uses modern OAuth 2.0/OIDC. 'ws-federation' is a legacy SAML-based protocol for older integrations. Only available with Azure AD v1 API. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsWaadProtocolEnum = {
+    WsFederation: "ws-federation",
+    OpenidConnect: "openid-connect",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsWaadProtocolEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsWaadProtocolEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsWaadProtocolEnum];
+
+/** The connection strategy. */
+export const EventStreamCloudEventConnectionUpdatedPreviousObject7StrategyEnum = {
+    Waad: "waad",
+} as const;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7StrategyEnum =
+    (typeof EventStreamCloudEventConnectionUpdatedPreviousObject7StrategyEnum)[keyof typeof EventStreamCloudEventConnectionUpdatedPreviousObject7StrategyEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventConnectionUpdatedTypeEnum = {
     ConnectionUpdated: "connection.updated",
@@ -16133,8 +21607,8 @@ export interface EventStreamCloudEventContextRequestGeo {
  * Reference to a tenant in event context
  */
 export interface EventStreamCloudEventContextTenant {
-    /** Machine-generated unique tenant identifier. */
-    tenant_id: string;
+    /** User-provided tenant identifier. */
+    id: string;
 }
 
 /**
@@ -16220,6 +21694,7 @@ export type EventStreamCloudEventGroupCreatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventGroupCreatedData {
     object: Management.EventStreamCloudEventGroupCreatedObject;
+    previous_object?: Management.EventStreamCloudEventGroupCreatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -16301,6 +21776,84 @@ export const EventStreamCloudEventGroupCreatedObject2TypeEnum = {
 export type EventStreamCloudEventGroupCreatedObject2TypeEnum =
     (typeof EventStreamCloudEventGroupCreatedObject2TypeEnum)[keyof typeof EventStreamCloudEventGroupCreatedObject2TypeEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export type EventStreamCloudEventGroupCreatedPreviousObject =
+    | Management.EventStreamCloudEventGroupCreatedPreviousObject0
+    | Management.EventStreamCloudEventGroupCreatedPreviousObject1
+    | Management.EventStreamCloudEventGroupCreatedPreviousObject2;
+
+/**
+ * Represents a connection group entity.
+ */
+export interface EventStreamCloudEventGroupCreatedPreviousObject0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupCreatedPreviousObject0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupCreatedPreviousObject0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupCreatedPreviousObject0TypeEnum =
+    (typeof EventStreamCloudEventGroupCreatedPreviousObject0TypeEnum)[keyof typeof EventStreamCloudEventGroupCreatedPreviousObject0TypeEnum];
+
+/**
+ * Represents an organization group entity.
+ */
+export interface EventStreamCloudEventGroupCreatedPreviousObject1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupCreatedPreviousObject1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupCreatedPreviousObject1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventGroupCreatedPreviousObject1TypeEnum =
+    (typeof EventStreamCloudEventGroupCreatedPreviousObject1TypeEnum)[keyof typeof EventStreamCloudEventGroupCreatedPreviousObject1TypeEnum];
+
+/**
+ * Represents a tenant group entity.
+ */
+export interface EventStreamCloudEventGroupCreatedPreviousObject2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupCreatedPreviousObject2TypeEnum;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupCreatedPreviousObject2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventGroupCreatedPreviousObject2TypeEnum =
+    (typeof EventStreamCloudEventGroupCreatedPreviousObject2TypeEnum)[keyof typeof EventStreamCloudEventGroupCreatedPreviousObject2TypeEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventGroupCreatedTypeEnum = {
     GroupCreated: "group.created",
@@ -16349,6 +21902,7 @@ export type EventStreamCloudEventGroupDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventGroupDeletedData {
     object: Management.EventStreamCloudEventGroupDeletedObject;
+    previous_object?: Management.EventStreamCloudEventGroupDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -16436,6 +21990,90 @@ export const EventStreamCloudEventGroupDeletedObject2TypeEnum = {
 export type EventStreamCloudEventGroupDeletedObject2TypeEnum =
     (typeof EventStreamCloudEventGroupDeletedObject2TypeEnum)[keyof typeof EventStreamCloudEventGroupDeletedObject2TypeEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export type EventStreamCloudEventGroupDeletedPreviousObject =
+    | Management.EventStreamCloudEventGroupDeletedPreviousObject0
+    | Management.EventStreamCloudEventGroupDeletedPreviousObject1
+    | Management.EventStreamCloudEventGroupDeletedPreviousObject2;
+
+/**
+ * Connection group with updated_at timestamp
+ */
+export interface EventStreamCloudEventGroupDeletedPreviousObject0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupDeletedPreviousObject0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupDeletedPreviousObject0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupDeletedPreviousObject0TypeEnum =
+    (typeof EventStreamCloudEventGroupDeletedPreviousObject0TypeEnum)[keyof typeof EventStreamCloudEventGroupDeletedPreviousObject0TypeEnum];
+
+/**
+ * Organization group with updated_at timestamp
+ */
+export interface EventStreamCloudEventGroupDeletedPreviousObject1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupDeletedPreviousObject1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupDeletedPreviousObject1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventGroupDeletedPreviousObject1TypeEnum =
+    (typeof EventStreamCloudEventGroupDeletedPreviousObject1TypeEnum)[keyof typeof EventStreamCloudEventGroupDeletedPreviousObject1TypeEnum];
+
+/**
+ * Tenant group with updated_at timestamp
+ */
+export interface EventStreamCloudEventGroupDeletedPreviousObject2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupDeletedPreviousObject2TypeEnum;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupDeletedPreviousObject2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventGroupDeletedPreviousObject2TypeEnum =
+    (typeof EventStreamCloudEventGroupDeletedPreviousObject2TypeEnum)[keyof typeof EventStreamCloudEventGroupDeletedPreviousObject2TypeEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventGroupDeletedTypeEnum = {
     GroupDeleted: "group.deleted",
@@ -16484,6 +22122,7 @@ export type EventStreamCloudEventGroupMemberAddedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventGroupMemberAddedData {
     object: Management.EventStreamCloudEventGroupMemberAddedObject;
+    previous_object?: Management.EventStreamCloudEventGroupMemberAddedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -16604,6 +22243,123 @@ export const EventStreamCloudEventGroupMemberAddedObjectMember1MemberTypeEnum = 
 export type EventStreamCloudEventGroupMemberAddedObjectMember1MemberTypeEnum =
     (typeof EventStreamCloudEventGroupMemberAddedObjectMember1MemberTypeEnum)[keyof typeof EventStreamCloudEventGroupMemberAddedObjectMember1MemberTypeEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventGroupMemberAddedPreviousObject {
+    group: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup;
+    member: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember;
+}
+
+/**
+ * The group the member belongs to.
+ */
+export type EventStreamCloudEventGroupMemberAddedPreviousObjectGroup =
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2;
+
+/**
+ * Reference to a connection group
+ */
+export interface EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0TypeEnum =
+    (typeof EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0TypeEnum)[keyof typeof EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0TypeEnum];
+
+/**
+ * Reference to an organization group
+ */
+export interface EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1TypeEnum =
+    (typeof EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1TypeEnum)[keyof typeof EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1TypeEnum];
+
+/**
+ * Reference to a tenant group
+ */
+export interface EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2TypeEnum;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2TypeEnum =
+    (typeof EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2TypeEnum)[keyof typeof EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2TypeEnum];
+
+/**
+ * The member that is a part of the group.
+ */
+export type EventStreamCloudEventGroupMemberAddedPreviousObjectMember =
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember0
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember1;
+
+/**
+ * A group member of member_type user
+ */
+export interface EventStreamCloudEventGroupMemberAddedPreviousObjectMember0 {
+    member_type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember0MemberTypeEnum;
+    /** The user's unique identifier */
+    id: string;
+}
+
+/** Type discriminator for user members */
+export const EventStreamCloudEventGroupMemberAddedPreviousObjectMember0MemberTypeEnum = {
+    User: "user",
+} as const;
+export type EventStreamCloudEventGroupMemberAddedPreviousObjectMember0MemberTypeEnum =
+    (typeof EventStreamCloudEventGroupMemberAddedPreviousObjectMember0MemberTypeEnum)[keyof typeof EventStreamCloudEventGroupMemberAddedPreviousObjectMember0MemberTypeEnum];
+
+/**
+ * A group member of member_type group
+ */
+export interface EventStreamCloudEventGroupMemberAddedPreviousObjectMember1 {
+    member_type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember1MemberTypeEnum;
+    /** The connection member's unique identifier */
+    id: string;
+    /** The type of the connection */
+    type: string;
+    /** Connection ID associated with the member */
+    connection_id: string;
+}
+
+/** Type discriminator for connection members */
+export const EventStreamCloudEventGroupMemberAddedPreviousObjectMember1MemberTypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupMemberAddedPreviousObjectMember1MemberTypeEnum =
+    (typeof EventStreamCloudEventGroupMemberAddedPreviousObjectMember1MemberTypeEnum)[keyof typeof EventStreamCloudEventGroupMemberAddedPreviousObjectMember1MemberTypeEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventGroupMemberAddedTypeEnum = {
     GroupMemberAdded: "group.member.added",
@@ -16652,6 +22408,7 @@ export type EventStreamCloudEventGroupMemberDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventGroupMemberDeletedData {
     object: Management.EventStreamCloudEventGroupMemberDeletedObject;
+    previous_object?: Management.EventStreamCloudEventGroupMemberDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -16772,6 +22529,123 @@ export const EventStreamCloudEventGroupMemberDeletedObjectMember1MemberTypeEnum 
 export type EventStreamCloudEventGroupMemberDeletedObjectMember1MemberTypeEnum =
     (typeof EventStreamCloudEventGroupMemberDeletedObjectMember1MemberTypeEnum)[keyof typeof EventStreamCloudEventGroupMemberDeletedObjectMember1MemberTypeEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventGroupMemberDeletedPreviousObject {
+    group: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup;
+    member: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember;
+}
+
+/**
+ * The group the member belongs to.
+ */
+export type EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup =
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2;
+
+/**
+ * Reference to a connection group
+ */
+export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0TypeEnum =
+    (typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0TypeEnum)[keyof typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0TypeEnum];
+
+/**
+ * Reference to an organization group
+ */
+export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1TypeEnum =
+    (typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1TypeEnum)[keyof typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1TypeEnum];
+
+/**
+ * Reference to a tenant group
+ */
+export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2TypeEnum;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2TypeEnum =
+    (typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2TypeEnum)[keyof typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2TypeEnum];
+
+/**
+ * The member that is a part of the group.
+ */
+export type EventStreamCloudEventGroupMemberDeletedPreviousObjectMember =
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1;
+
+/**
+ * A group member of member_type user
+ */
+export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0 {
+    member_type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0MemberTypeEnum;
+    /** The user's unique identifier */
+    id: string;
+}
+
+/** Type discriminator for user members */
+export const EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0MemberTypeEnum = {
+    User: "user",
+} as const;
+export type EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0MemberTypeEnum =
+    (typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0MemberTypeEnum)[keyof typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0MemberTypeEnum];
+
+/**
+ * A group member of member_type group
+ */
+export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1 {
+    member_type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1MemberTypeEnum;
+    /** The connection member's unique identifier */
+    id: string;
+    /** The type of the connection */
+    type: string;
+    /** Connection ID associated with the member */
+    connection_id: string;
+}
+
+/** Type discriminator for connection members */
+export const EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1MemberTypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1MemberTypeEnum =
+    (typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1MemberTypeEnum)[keyof typeof EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1MemberTypeEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventGroupMemberDeletedTypeEnum = {
     GroupMemberDeleted: "group.member.deleted",
@@ -16820,6 +22694,7 @@ export type EventStreamCloudEventGroupRoleAssignedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventGroupRoleAssignedData {
     object: Management.EventStreamCloudEventGroupRoleAssignedObject;
+    previous_object?: Management.EventStreamCloudEventGroupRoleAssignedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -16909,6 +22784,92 @@ export interface EventStreamCloudEventGroupRoleAssignedObjectRole {
     name: string;
 }
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventGroupRoleAssignedPreviousObject {
+    group: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup;
+    role: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectRole;
+    /** The time at which the role was assigned to the group. */
+    created_at: string;
+}
+
+/**
+ * The group the role is assigned to.
+ */
+export type EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup =
+    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0
+    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1
+    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2;
+
+/**
+ * Reference to a connection group
+ */
+export interface EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0TypeEnum =
+    (typeof EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0TypeEnum)[keyof typeof EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0TypeEnum];
+
+/**
+ * Reference to an organization group
+ */
+export interface EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1TypeEnum =
+    (typeof EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1TypeEnum)[keyof typeof EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1TypeEnum];
+
+/**
+ * Reference to a tenant group
+ */
+export interface EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2TypeEnum;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2TypeEnum =
+    (typeof EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2TypeEnum)[keyof typeof EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2TypeEnum];
+
+/**
+ * The role assigned to the group.
+ */
+export interface EventStreamCloudEventGroupRoleAssignedPreviousObjectRole {
+    /** The ID of the role. */
+    id: string;
+    /** The name of the role. */
+    name: string;
+}
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventGroupRoleAssignedTypeEnum = {
     GroupRoleAssigned: "group.role.assigned",
@@ -16957,6 +22918,7 @@ export type EventStreamCloudEventGroupRoleDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventGroupRoleDeletedData {
     object: Management.EventStreamCloudEventGroupRoleDeletedObject;
+    previous_object?: Management.EventStreamCloudEventGroupRoleDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17044,6 +23006,92 @@ export interface EventStreamCloudEventGroupRoleDeletedObjectRole {
     id: string;
 }
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventGroupRoleDeletedPreviousObject {
+    group: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup;
+    role: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectRole;
+    /** The time at which the role was assigned to the group. */
+    created_at: string;
+}
+
+/**
+ * The group the role is assigned to.
+ */
+export type EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup =
+    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0
+    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1
+    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2;
+
+/**
+ * Reference to a connection group
+ */
+export interface EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0TypeEnum =
+    (typeof EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0TypeEnum)[keyof typeof EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0TypeEnum];
+
+/**
+ * Reference to an organization group
+ */
+export interface EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1TypeEnum =
+    (typeof EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1TypeEnum)[keyof typeof EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1TypeEnum];
+
+/**
+ * Reference to a tenant group
+ */
+export interface EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2TypeEnum;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2TypeEnum =
+    (typeof EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2TypeEnum)[keyof typeof EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2TypeEnum];
+
+/**
+ * The role assigned to the group.
+ */
+export interface EventStreamCloudEventGroupRoleDeletedPreviousObjectRole {
+    /** The ID of the role. */
+    id: string;
+    /** The name of the role. */
+    name: string;
+}
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventGroupRoleDeletedTypeEnum = {
     GroupRoleDeleted: "group.role.deleted",
@@ -17092,6 +23140,7 @@ export type EventStreamCloudEventGroupUpdatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventGroupUpdatedData {
     object: Management.EventStreamCloudEventGroupUpdatedObject;
+    previous_object?: Management.EventStreamCloudEventGroupUpdatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17179,6 +23228,90 @@ export const EventStreamCloudEventGroupUpdatedObject2TypeEnum = {
 export type EventStreamCloudEventGroupUpdatedObject2TypeEnum =
     (typeof EventStreamCloudEventGroupUpdatedObject2TypeEnum)[keyof typeof EventStreamCloudEventGroupUpdatedObject2TypeEnum];
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export type EventStreamCloudEventGroupUpdatedPreviousObject =
+    | Management.EventStreamCloudEventGroupUpdatedPreviousObject0
+    | Management.EventStreamCloudEventGroupUpdatedPreviousObject1
+    | Management.EventStreamCloudEventGroupUpdatedPreviousObject2;
+
+/**
+ * Connection group with updated_at timestamp
+ */
+export interface EventStreamCloudEventGroupUpdatedPreviousObject0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupUpdatedPreviousObject0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupUpdatedPreviousObject0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventGroupUpdatedPreviousObject0TypeEnum =
+    (typeof EventStreamCloudEventGroupUpdatedPreviousObject0TypeEnum)[keyof typeof EventStreamCloudEventGroupUpdatedPreviousObject0TypeEnum];
+
+/**
+ * Organization group with updated_at timestamp
+ */
+export interface EventStreamCloudEventGroupUpdatedPreviousObject1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupUpdatedPreviousObject1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupUpdatedPreviousObject1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventGroupUpdatedPreviousObject1TypeEnum =
+    (typeof EventStreamCloudEventGroupUpdatedPreviousObject1TypeEnum)[keyof typeof EventStreamCloudEventGroupUpdatedPreviousObject1TypeEnum];
+
+/**
+ * Tenant group with updated_at timestamp
+ */
+export interface EventStreamCloudEventGroupUpdatedPreviousObject2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The name of the group. */
+    name: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    type: Management.EventStreamCloudEventGroupUpdatedPreviousObject2TypeEnum;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventGroupUpdatedPreviousObject2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventGroupUpdatedPreviousObject2TypeEnum =
+    (typeof EventStreamCloudEventGroupUpdatedPreviousObject2TypeEnum)[keyof typeof EventStreamCloudEventGroupUpdatedPreviousObject2TypeEnum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventGroupUpdatedTypeEnum = {
     GroupUpdated: "group.updated",
@@ -17242,6 +23375,7 @@ export type EventStreamCloudEventOrgConnectionAddedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgConnectionAddedData {
     object: Management.EventStreamCloudEventOrgConnectionAddedObject;
+    previous_object?: Management.EventStreamCloudEventOrgConnectionAddedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17267,6 +23401,11 @@ export interface EventStreamCloudEventOrgConnectionAddedObject {
      * Only applicable for database connections.
      */
     is_signup_enabled?: boolean | undefined;
+    /** Determines whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    organization_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel
+        | undefined;
 }
 
 export interface EventStreamCloudEventOrgConnectionAddedObjectConnection {
@@ -17283,6 +23422,116 @@ export interface EventStreamCloudEventOrgConnectionAddedObjectOrganization {
     /** ID of the organization. */
     id: string;
 }
+
+/**
+ * The access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum];
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgConnectionAddedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganization;
+    connection: Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectConnection;
+    /**
+     * When true, all users that log in with this connection will be automatically granted membership
+     * in the organization. When false, users must be granted membership in the organization before
+     * logging in with this connection.
+     */
+    assign_membership_on_login?: boolean | undefined;
+    /**
+     * Determines whether a connection should be displayed on this organization’s login prompt.
+     * Only applicable for enterprise connections.
+     */
+    show_as_button?: boolean | undefined;
+    /**
+     * Determines whether organization signup should be enabled for this organization connection.
+     * Only applicable for database connections.
+     */
+    is_signup_enabled?: boolean | undefined;
+    /** Determines whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    organization_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel
+        | undefined;
+}
+
+export interface EventStreamCloudEventOrgConnectionAddedPreviousObjectConnection {
+    /** The ID of the connection. */
+    id: string;
+}
+
+/**
+ * Information about an Auth0 Organization.
+ */
+export interface EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganization {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum];
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgConnectionAddedTypeEnum = {
@@ -17332,6 +23581,7 @@ export type EventStreamCloudEventOrgConnectionRemovedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgConnectionRemovedData {
     object: Management.EventStreamCloudEventOrgConnectionRemovedObject;
+    previous_object?: Management.EventStreamCloudEventOrgConnectionRemovedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17352,6 +23602,29 @@ export interface EventStreamCloudEventOrgConnectionRemovedObjectConnection {
  * Information about an Auth0 Organization.
  */
 export interface EventStreamCloudEventOrgConnectionRemovedObjectOrganization {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgConnectionRemovedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgConnectionRemovedPreviousObjectOrganization;
+    connection: Management.EventStreamCloudEventOrgConnectionRemovedPreviousObjectConnection;
+}
+
+export interface EventStreamCloudEventOrgConnectionRemovedPreviousObjectConnection {
+    /** The ID of the connection. */
+    id: string;
+}
+
+/**
+ * Information about an Auth0 Organization.
+ */
+export interface EventStreamCloudEventOrgConnectionRemovedPreviousObjectOrganization {
     /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
     name?: string | undefined;
     /** ID of the organization. */
@@ -17406,6 +23679,7 @@ export type EventStreamCloudEventOrgConnectionUpdatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgConnectionUpdatedData {
     object: Management.EventStreamCloudEventOrgConnectionUpdatedObject;
+    previous_object?: Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17431,6 +23705,11 @@ export interface EventStreamCloudEventOrgConnectionUpdatedObject {
      * Only applicable for database connections.
      */
     is_signup_enabled?: boolean | undefined;
+    /** Determines whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    organization_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel
+        | undefined;
 }
 
 export interface EventStreamCloudEventOrgConnectionUpdatedObjectConnection {
@@ -17447,6 +23726,116 @@ export interface EventStreamCloudEventOrgConnectionUpdatedObjectOrganization {
     /** ID of the organization. */
     id: string;
 }
+
+/**
+ * The access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum];
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgConnectionUpdatedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganization;
+    connection: Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectConnection;
+    /**
+     * When true, all users that log in with this connection will be automatically granted membership
+     * in the organization. When false, users must be granted membership in the organization before
+     * logging in with this connection.
+     */
+    assign_membership_on_login?: boolean | undefined;
+    /**
+     * Determines whether a connection should be displayed on this organization’s login prompt.
+     * Only applicable for enterprise connections.
+     */
+    show_as_button?: boolean | undefined;
+    /**
+     * Determines whether organization signup should be enabled for this organization connection.
+     * Only applicable for database connections.
+     */
+    is_signup_enabled?: boolean | undefined;
+    /** Determines whether the connection is enabled for the organization. */
+    is_enabled?: boolean | undefined;
+    organization_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel
+        | undefined;
+}
+
+export interface EventStreamCloudEventOrgConnectionUpdatedPreviousObjectConnection {
+    /** The ID of the connection. */
+    id: string;
+}
+
+/**
+ * Information about an Auth0 Organization.
+ */
+export interface EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganization {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum];
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgConnectionUpdatedTypeEnum = {
@@ -17496,6 +23885,7 @@ export type EventStreamCloudEventOrgCreatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgCreatedData {
     object: Management.EventStreamCloudEventOrgCreatedObject;
+    previous_object?: Management.EventStreamCloudEventOrgCreatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17536,6 +23926,44 @@ export interface EventStreamCloudEventOrgCreatedObjectBrandingColors {
  * The metadata associated with the organization.
  */
 export type EventStreamCloudEventOrgCreatedObjectMetadata = Record<string, unknown>;
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgCreatedPreviousObject {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+    /** If set, the name that will be displayed to end-users for this organization in any interaction with them. */
+    display_name?: string | undefined;
+    metadata?: Management.EventStreamCloudEventOrgCreatedPreviousObjectMetadata | undefined;
+    branding?: Management.EventStreamCloudEventOrgCreatedPreviousObjectBranding | undefined;
+}
+
+/**
+ * The branding associated with the organization.
+ */
+export interface EventStreamCloudEventOrgCreatedPreviousObjectBranding {
+    /** URL of logo to display on login page. */
+    logo_url?: string | undefined;
+    colors?: Management.EventStreamCloudEventOrgCreatedPreviousObjectBrandingColors | undefined;
+}
+
+/**
+ * Color scheme used to customize the login pages.
+ */
+export interface EventStreamCloudEventOrgCreatedPreviousObjectBrandingColors {
+    /** HEX Color for primary elements. */
+    primary?: string | undefined;
+    /** HEX Color for background. */
+    page_background?: string | undefined;
+}
+
+/**
+ * The metadata associated with the organization.
+ */
+export type EventStreamCloudEventOrgCreatedPreviousObjectMetadata = Record<string, unknown>;
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgCreatedTypeEnum = {
@@ -17585,6 +24013,7 @@ export type EventStreamCloudEventOrgDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgDeletedData {
     object: Management.EventStreamCloudEventOrgDeletedObject;
+    previous_object?: Management.EventStreamCloudEventOrgDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17605,6 +24034,24 @@ export interface EventStreamCloudEventOrgDeletedObject {
  * The metadata associated with the organization.
  */
 export type EventStreamCloudEventOrgDeletedObjectMetadata = Record<string, unknown>;
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgDeletedPreviousObject {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+    /** If set, the name that will be displayed to end-users for this organization in any interaction with them. */
+    display_name?: string | undefined;
+    metadata?: Management.EventStreamCloudEventOrgDeletedPreviousObjectMetadata | undefined;
+}
+
+/**
+ * The metadata associated with the organization.
+ */
+export type EventStreamCloudEventOrgDeletedPreviousObjectMetadata = Record<string, unknown>;
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgDeletedTypeEnum = {
@@ -17654,6 +24101,7 @@ export type EventStreamCloudEventOrgGroupRoleAssignedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgGroupRoleAssignedData {
     object: Management.EventStreamCloudEventOrgGroupRoleAssignedObject;
+    previous_object?: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17752,6 +24200,101 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedObjectRole {
     name: string;
 }
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectOrganization;
+    role: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectRole;
+    group: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup;
+    /** The time at which the role was assigned to the group in the organization. */
+    created_at: string;
+}
+
+/**
+ * The group the role is assigned to.
+ */
+export type EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup =
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2;
+
+/**
+ * Reference to a connection group
+ */
+export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0TypeEnum =
+    (typeof EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0TypeEnum)[keyof typeof EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0TypeEnum];
+
+/**
+ * Reference to an organization group
+ */
+export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1TypeEnum =
+    (typeof EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1TypeEnum)[keyof typeof EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1TypeEnum];
+
+/**
+ * Reference to a tenant group
+ */
+export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2TypeEnum;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2TypeEnum =
+    (typeof EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2TypeEnum)[keyof typeof EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2TypeEnum];
+
+/**
+ * The organization the group role is assigned in.
+ */
+export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectOrganization {
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The role assigned to the group in the organization.
+ */
+export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectRole {
+    /** The ID of the role. */
+    id: string;
+    /** The name of the role. */
+    name: string;
+}
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgGroupRoleAssignedTypeEnum = {
     OrganizationGroupRoleAssigned: "organization.group.role.assigned",
@@ -17800,6 +24343,7 @@ export type EventStreamCloudEventOrgGroupRoleDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgGroupRoleDeletedData {
     object: Management.EventStreamCloudEventOrgGroupRoleDeletedObject;
+    previous_object?: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17896,6 +24440,101 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedObjectRole {
     id: string;
 }
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectOrganization;
+    role: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectRole;
+    group: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup;
+    /** The time at which the role was assigned to the group in the organization. */
+    created_at: string;
+}
+
+/**
+ * The group the role is assigned to.
+ */
+export type EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup =
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2;
+
+/**
+ * Reference to a connection group
+ */
+export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0TypeEnum;
+    /** The connection ID associated with the group. */
+    connection_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0TypeEnum = {
+    Connection: "connection",
+} as const;
+export type EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0TypeEnum =
+    (typeof EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0TypeEnum)[keyof typeof EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0TypeEnum];
+
+/**
+ * Reference to an organization group
+ */
+export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1TypeEnum;
+    /** The organization ID associated with the group. */
+    organization_id: string;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1TypeEnum = {
+    Organization: "organization",
+} as const;
+export type EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1TypeEnum =
+    (typeof EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1TypeEnum)[keyof typeof EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1TypeEnum];
+
+/**
+ * Reference to a tenant group
+ */
+export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2 {
+    /** The unique identifier for the group. */
+    id: string;
+    /** The external identifier for the group. */
+    external_id?: string | undefined;
+    type: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2TypeEnum;
+}
+
+/** The type of the group. */
+export const EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2TypeEnum = {
+    Tenant: "tenant",
+} as const;
+export type EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2TypeEnum =
+    (typeof EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2TypeEnum)[keyof typeof EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2TypeEnum];
+
+/**
+ * The organization the group role is assigned in.
+ */
+export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectOrganization {
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The role assigned to the group in the organization.
+ */
+export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectRole {
+    /** The ID of the role. */
+    id: string;
+    /** The name of the role. */
+    name: string;
+}
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgGroupRoleDeletedTypeEnum = {
     OrganizationGroupRoleDeleted: "organization.group.role.deleted",
@@ -17944,6 +24583,7 @@ export type EventStreamCloudEventOrgMemberAddedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgMemberAddedData {
     object: Management.EventStreamCloudEventOrgMemberAddedObject;
+    previous_object?: Management.EventStreamCloudEventOrgMemberAddedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -17969,6 +24609,34 @@ export interface EventStreamCloudEventOrgMemberAddedObjectOrganization {
  * The user that is a member of the organization.
  */
 export interface EventStreamCloudEventOrgMemberAddedObjectUser {
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id: string;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgMemberAddedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgMemberAddedPreviousObjectOrganization;
+    user: Management.EventStreamCloudEventOrgMemberAddedPreviousObjectUser;
+}
+
+/**
+ * The organization the member belongs to.
+ */
+export interface EventStreamCloudEventOrgMemberAddedPreviousObjectOrganization {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The user that is a member of the organization.
+ */
+export interface EventStreamCloudEventOrgMemberAddedPreviousObjectUser {
     /** ID of the user which can be used when interacting with other APIs. */
     user_id: string;
     /** Accepts any additional properties */
@@ -18023,6 +24691,7 @@ export type EventStreamCloudEventOrgMemberDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgMemberDeletedData {
     object: Management.EventStreamCloudEventOrgMemberDeletedObject;
+    previous_object?: Management.EventStreamCloudEventOrgMemberDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -18048,6 +24717,34 @@ export interface EventStreamCloudEventOrgMemberDeletedObjectOrganization {
  * The user that is a member of the organization.
  */
 export interface EventStreamCloudEventOrgMemberDeletedObjectUser {
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id: string;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgMemberDeletedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgMemberDeletedPreviousObjectOrganization;
+    user: Management.EventStreamCloudEventOrgMemberDeletedPreviousObjectUser;
+}
+
+/**
+ * The organization the member belongs to.
+ */
+export interface EventStreamCloudEventOrgMemberDeletedPreviousObjectOrganization {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The user that is a member of the organization.
+ */
+export interface EventStreamCloudEventOrgMemberDeletedPreviousObjectUser {
     /** ID of the user which can be used when interacting with other APIs. */
     user_id: string;
     /** Accepts any additional properties */
@@ -18102,6 +24799,7 @@ export type EventStreamCloudEventOrgMemberRoleAssignedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgMemberRoleAssignedData {
     object: Management.EventStreamCloudEventOrgMemberRoleAssignedObject;
+    previous_object?: Management.EventStreamCloudEventOrgMemberRoleAssignedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -18136,6 +24834,43 @@ export interface EventStreamCloudEventOrgMemberRoleAssignedObjectRole {
  * The user that is a member of the organization.
  */
 export interface EventStreamCloudEventOrgMemberRoleAssignedObjectUser {
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id: string;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgMemberRoleAssignedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgMemberRoleAssignedPreviousObjectOrganization;
+    user: Management.EventStreamCloudEventOrgMemberRoleAssignedPreviousObjectUser;
+    role: Management.EventStreamCloudEventOrgMemberRoleAssignedPreviousObjectRole;
+}
+
+/**
+ * The organization the member belongs to.
+ */
+export interface EventStreamCloudEventOrgMemberRoleAssignedPreviousObjectOrganization {
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The role assigned to the user in the organization.
+ */
+export interface EventStreamCloudEventOrgMemberRoleAssignedPreviousObjectRole {
+    /** The ID of the role. */
+    id: string;
+    /** The name of the role. */
+    name: string;
+}
+
+/**
+ * The user that is a member of the organization.
+ */
+export interface EventStreamCloudEventOrgMemberRoleAssignedPreviousObjectUser {
     /** ID of the user which can be used when interacting with other APIs. */
     user_id: string;
     /** Accepts any additional properties */
@@ -18190,6 +24925,7 @@ export type EventStreamCloudEventOrgMemberRoleDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgMemberRoleDeletedData {
     object: Management.EventStreamCloudEventOrgMemberRoleDeletedObject;
+    previous_object?: Management.EventStreamCloudEventOrgMemberRoleDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -18224,6 +24960,43 @@ export interface EventStreamCloudEventOrgMemberRoleDeletedObjectRole {
  * The user that is a member of the organization.
  */
 export interface EventStreamCloudEventOrgMemberRoleDeletedObjectUser {
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id: string;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgMemberRoleDeletedPreviousObject {
+    organization: Management.EventStreamCloudEventOrgMemberRoleDeletedPreviousObjectOrganization;
+    user: Management.EventStreamCloudEventOrgMemberRoleDeletedPreviousObjectUser;
+    role: Management.EventStreamCloudEventOrgMemberRoleDeletedPreviousObjectRole;
+}
+
+/**
+ * The organization the member belongs to.
+ */
+export interface EventStreamCloudEventOrgMemberRoleDeletedPreviousObjectOrganization {
+    /** ID of the organization. */
+    id: string;
+}
+
+/**
+ * The role assigned to the user in the organization.
+ */
+export interface EventStreamCloudEventOrgMemberRoleDeletedPreviousObjectRole {
+    /** The ID of the role. */
+    id: string;
+    /** The name of the role. */
+    name: string;
+}
+
+/**
+ * The user that is a member of the organization.
+ */
+export interface EventStreamCloudEventOrgMemberRoleDeletedPreviousObjectUser {
     /** ID of the user which can be used when interacting with other APIs. */
     user_id: string;
     /** Accepts any additional properties */
@@ -18278,6 +25051,7 @@ export type EventStreamCloudEventOrgUpdatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventOrgUpdatedData {
     object: Management.EventStreamCloudEventOrgUpdatedObject;
+    previous_object?: Management.EventStreamCloudEventOrgUpdatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -18318,6 +25092,44 @@ export interface EventStreamCloudEventOrgUpdatedObjectBrandingColors {
  * The metadata associated with the organization.
  */
 export type EventStreamCloudEventOrgUpdatedObjectMetadata = Record<string, unknown>;
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventOrgUpdatedPreviousObject {
+    /** The human-readable identifier for the organization that will be used by end-users to direct them to their organization in your application.. */
+    name?: string | undefined;
+    /** ID of the organization. */
+    id: string;
+    /** If set, the name that will be displayed to end-users for this organization in any interaction with them. */
+    display_name?: string | undefined;
+    metadata?: Management.EventStreamCloudEventOrgUpdatedPreviousObjectMetadata | undefined;
+    branding?: Management.EventStreamCloudEventOrgUpdatedPreviousObjectBranding | undefined;
+}
+
+/**
+ * The branding associated with the organization.
+ */
+export interface EventStreamCloudEventOrgUpdatedPreviousObjectBranding {
+    /** URL of logo to display on login page. */
+    logo_url?: string | undefined;
+    colors?: Management.EventStreamCloudEventOrgUpdatedPreviousObjectBrandingColors | undefined;
+}
+
+/**
+ * Color scheme used to customize the login pages.
+ */
+export interface EventStreamCloudEventOrgUpdatedPreviousObjectBrandingColors {
+    /** HEX Color for primary elements. */
+    primary?: string | undefined;
+    /** HEX Color for background. */
+    page_background?: string | undefined;
+}
+
+/**
+ * The metadata associated with the organization.
+ */
+export type EventStreamCloudEventOrgUpdatedPreviousObjectMetadata = Record<string, unknown>;
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgUpdatedTypeEnum = {
@@ -18374,6 +25186,7 @@ export type EventStreamCloudEventUserCreatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventUserCreatedData {
     object: Management.EventStreamCloudEventUserCreatedObject;
+    previous_object?: Management.EventStreamCloudEventUserCreatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -18744,6 +25557,379 @@ export type EventStreamCloudEventUserCreatedObjectIdentitiesItemSocialUserId = s
  */
 export type EventStreamCloudEventUserCreatedObjectUserMetadata = Record<string, unknown>;
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObject {
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id: string;
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+    /** Array of user identity objects when accounts are linked. */
+    identities: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItem[];
+    app_metadata?: Management.EventStreamCloudEventUserCreatedPreviousObjectAppMetadata | undefined;
+    user_metadata?: Management.EventStreamCloudEventUserCreatedPreviousObjectUserMetadata | undefined;
+    /** URL to picture, photo, or avatar of this user. */
+    picture?: string | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Preferred nickname or alias of this user. */
+    nickname?: string | undefined;
+    /** List of multi-factor authentication providers with which this user has enrolled. */
+    multifactor?: string[] | undefined;
+    /** Last IP address from which this user logged in. */
+    last_ip?: string | undefined;
+    /** Last date and time this user logged in (ISO_8601 format). */
+    last_login?: string | undefined;
+    /** Total number of logins this user has performed. */
+    logins_count?: number | undefined;
+    /** Whether this user was blocked by an administrator (true) or is not (false). */
+    blocked?: boolean | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * User metadata to which this user has read-only access.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectAppMetadata = Record<string, unknown>;
+
+/**
+ * Identity object when accounts are linked.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItem =
+    | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustom
+    | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabase
+    | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterprise
+    | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordless
+    | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocial;
+
+/**
+ * The identity object for custom identity providers.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustom {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomUserId;
+    profileData?: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomProfileData | undefined;
+    provider: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of custom identity providers. */
+export const EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomProviderEnum = {
+    Custom: "custom",
+} as const;
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomProviderEnum =
+    (typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomProviderEnum)[keyof typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemCustomUserId = string | number;
+
+/**
+ * The identity object for database identity providers.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabase {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of database identity providers. */
+export const EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseProviderEnum = {
+    Auth0: "auth0",
+} as const;
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseProviderEnum =
+    (typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseProviderEnum)[keyof typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemDatabaseUserId = string | number;
+
+/**
+ * The identity object for enterprise identity providers.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterprise {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of enterprise identity providers. */
+export const EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseProviderEnum = {
+    Ad: "ad",
+    Adfs: "adfs",
+    GoogleApps: "google-apps",
+    Ip: "ip",
+    Office365: "office365",
+    Oidc: "oidc",
+    Okta: "okta",
+    Pingfederate: "pingfederate",
+    Samlp: "samlp",
+    Sharepoint: "sharepoint",
+    Waad: "waad",
+} as const;
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseProviderEnum =
+    (typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseProviderEnum)[keyof typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemEnterpriseUserId = string | number;
+
+/**
+ * The identity object for passwordless identity providers.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordless {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of passwordless identity providers. */
+export const EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessProviderEnum = {
+    Email: "email",
+    Sms: "sms",
+} as const;
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessProviderEnum =
+    (typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessProviderEnum)[keyof typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemPasswordlessUserId = string | number;
+
+/**
+ * The identity object for social identity providers.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocial {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialUserId;
+    profileData?: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialProfileData | undefined;
+    provider: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of social identity providers. */
+export const EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialProviderEnum = {
+    Amazon: "amazon",
+    Apple: "apple",
+    Dropbox: "dropbox",
+    Bitbucket: "bitbucket",
+    Auth0Oidc: "auth0-oidc",
+    Baidu: "baidu",
+    Bitly: "bitly",
+    Box: "box",
+    Daccount: "daccount",
+    Dwolla: "dwolla",
+    EvernoteSandbox: "evernote-sandbox",
+    Evernote: "evernote",
+    Exact: "exact",
+    Facebook: "facebook",
+    Fitbit: "fitbit",
+    Github: "github",
+    GoogleOauth2: "google-oauth2",
+    Instagram: "instagram",
+    Line: "line",
+    Linkedin: "linkedin",
+    Oauth1: "oauth1",
+    Oauth2: "oauth2",
+    Paypal: "paypal",
+    PaypalSandbox: "paypal-sandbox",
+    Planningcenter: "planningcenter",
+    SalesforceCommunity: "salesforce-community",
+    SalesforceSandbox: "salesforce-sandbox",
+    Salesforce: "salesforce",
+    Shopify: "shopify",
+    Soundcloud: "soundcloud",
+    Thirtysevensignals: "thirtysevensignals",
+    Twitter: "twitter",
+    Untapped: "untapped",
+    Vkontakte: "vkontakte",
+    Weibo: "weibo",
+    Windowslive: "windowslive",
+    Wordpress: "wordpress",
+    Yahoo: "yahoo",
+    Yandex: "yandex",
+} as const;
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialProviderEnum =
+    (typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialProviderEnum)[keyof typeof EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialUserId = string | number;
+
+/**
+ * User metadata to which this user has read/write access.
+ */
+export type EventStreamCloudEventUserCreatedPreviousObjectUserMetadata = Record<string, unknown>;
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventUserCreatedTypeEnum = {
     UserCreated: "user.created",
@@ -18792,6 +25978,7 @@ export type EventStreamCloudEventUserDeletedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventUserDeletedData {
     object: Management.EventStreamCloudEventUserDeletedObject;
+    previous_object?: Management.EventStreamCloudEventUserDeletedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -19164,6 +26351,379 @@ export type EventStreamCloudEventUserDeletedObjectIdentitiesItemSocialUserId = s
  */
 export type EventStreamCloudEventUserDeletedObjectUserMetadata = Record<string, unknown>;
 
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObject {
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id: string;
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+    /** Array of user identity objects when accounts are linked. */
+    identities: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItem[];
+    app_metadata?: Management.EventStreamCloudEventUserDeletedPreviousObjectAppMetadata | undefined;
+    user_metadata?: Management.EventStreamCloudEventUserDeletedPreviousObjectUserMetadata | undefined;
+    /** URL to picture, photo, or avatar of this user. */
+    picture?: string | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Preferred nickname or alias of this user. */
+    nickname?: string | undefined;
+    /** List of multi-factor authentication providers with which this user has enrolled. */
+    multifactor?: string[] | undefined;
+    /** Last IP address from which this user logged in. */
+    last_ip?: string | undefined;
+    /** Last date and time this user logged in (ISO_8601 format). */
+    last_login?: string | undefined;
+    /** Total number of logins this user has performed. */
+    logins_count?: number | undefined;
+    /** Whether this user was blocked by an administrator (true) or is not (false). */
+    blocked?: boolean | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * User metadata to which this user has read-only access.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectAppMetadata = Record<string, unknown>;
+
+/**
+ * Identity object when accounts are linked.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItem =
+    | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustom
+    | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabase
+    | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterprise
+    | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordless
+    | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocial;
+
+/**
+ * The identity object for custom identity providers.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustom {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomUserId;
+    profileData?: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomProfileData | undefined;
+    provider: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of custom identity providers. */
+export const EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomProviderEnum = {
+    Custom: "custom",
+} as const;
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomProviderEnum =
+    (typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomProviderEnum)[keyof typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemCustomUserId = string | number;
+
+/**
+ * The identity object for database identity providers.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabase {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of database identity providers. */
+export const EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseProviderEnum = {
+    Auth0: "auth0",
+} as const;
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseProviderEnum =
+    (typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseProviderEnum)[keyof typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemDatabaseUserId = string | number;
+
+/**
+ * The identity object for enterprise identity providers.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterprise {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of enterprise identity providers. */
+export const EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseProviderEnum = {
+    Ad: "ad",
+    Adfs: "adfs",
+    GoogleApps: "google-apps",
+    Ip: "ip",
+    Office365: "office365",
+    Oidc: "oidc",
+    Okta: "okta",
+    Pingfederate: "pingfederate",
+    Samlp: "samlp",
+    Sharepoint: "sharepoint",
+    Waad: "waad",
+} as const;
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseProviderEnum =
+    (typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseProviderEnum)[keyof typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemEnterpriseUserId = string | number;
+
+/**
+ * The identity object for passwordless identity providers.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordless {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of passwordless identity providers. */
+export const EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessProviderEnum = {
+    Email: "email",
+    Sms: "sms",
+} as const;
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessProviderEnum =
+    (typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessProviderEnum)[keyof typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemPasswordlessUserId = string | number;
+
+/**
+ * The identity object for social identity providers.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocial {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialUserId;
+    profileData?: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialProfileData | undefined;
+    provider: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of social identity providers. */
+export const EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialProviderEnum = {
+    Amazon: "amazon",
+    Apple: "apple",
+    Dropbox: "dropbox",
+    Bitbucket: "bitbucket",
+    Auth0Oidc: "auth0-oidc",
+    Baidu: "baidu",
+    Bitly: "bitly",
+    Box: "box",
+    Daccount: "daccount",
+    Dwolla: "dwolla",
+    EvernoteSandbox: "evernote-sandbox",
+    Evernote: "evernote",
+    Exact: "exact",
+    Facebook: "facebook",
+    Fitbit: "fitbit",
+    Github: "github",
+    GoogleOauth2: "google-oauth2",
+    Instagram: "instagram",
+    Line: "line",
+    Linkedin: "linkedin",
+    Oauth1: "oauth1",
+    Oauth2: "oauth2",
+    Paypal: "paypal",
+    PaypalSandbox: "paypal-sandbox",
+    Planningcenter: "planningcenter",
+    SalesforceCommunity: "salesforce-community",
+    SalesforceSandbox: "salesforce-sandbox",
+    Salesforce: "salesforce",
+    Shopify: "shopify",
+    Soundcloud: "soundcloud",
+    Thirtysevensignals: "thirtysevensignals",
+    Twitter: "twitter",
+    Untapped: "untapped",
+    Vkontakte: "vkontakte",
+    Weibo: "weibo",
+    Windowslive: "windowslive",
+    Wordpress: "wordpress",
+    Yahoo: "yahoo",
+    Yandex: "yandex",
+} as const;
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialProviderEnum =
+    (typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialProviderEnum)[keyof typeof EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialUserId = string | number;
+
+/**
+ * User metadata to which this user has read/write access.
+ */
+export type EventStreamCloudEventUserDeletedPreviousObjectUserMetadata = Record<string, unknown>;
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventUserDeletedTypeEnum = {
     UserDeleted: "user.deleted",
@@ -19212,6 +26772,7 @@ export type EventStreamCloudEventUserUpdatedCloudEventTypeEnum =
  */
 export interface EventStreamCloudEventUserUpdatedData {
     object: Management.EventStreamCloudEventUserUpdatedObject;
+    previous_object?: Management.EventStreamCloudEventUserUpdatedPreviousObject | undefined;
     context?: Management.EventStreamCloudEventContext | undefined;
 }
 
@@ -19581,6 +27142,379 @@ export type EventStreamCloudEventUserUpdatedObjectIdentitiesItemSocialUserId = s
  * User metadata to which this user has read/write access.
  */
 export type EventStreamCloudEventUserUpdatedObjectUserMetadata = Record<string, unknown>;
+
+/**
+ * The event content as it was prior to the change described by this event, when applicable.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObject {
+    /** ID of the user which can be used when interacting with other APIs. */
+    user_id: string;
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Date and time when this entity was created (ISO_8601 format). */
+    created_at: string;
+    /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+    updated_at: string;
+    /** Array of user identity objects when accounts are linked. */
+    identities: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItem[];
+    app_metadata?: Management.EventStreamCloudEventUserUpdatedPreviousObjectAppMetadata | undefined;
+    user_metadata?: Management.EventStreamCloudEventUserUpdatedPreviousObjectUserMetadata | undefined;
+    /** URL to picture, photo, or avatar of this user. */
+    picture?: string | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Preferred nickname or alias of this user. */
+    nickname?: string | undefined;
+    /** List of multi-factor authentication providers with which this user has enrolled. */
+    multifactor?: string[] | undefined;
+    /** Last IP address from which this user logged in. */
+    last_ip?: string | undefined;
+    /** Last date and time this user logged in (ISO_8601 format). */
+    last_login?: string | undefined;
+    /** Total number of logins this user has performed. */
+    logins_count?: number | undefined;
+    /** Whether this user was blocked by an administrator (true) or is not (false). */
+    blocked?: boolean | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * User metadata to which this user has read-only access.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectAppMetadata = Record<string, unknown>;
+
+/**
+ * Identity object when accounts are linked.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItem =
+    | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustom
+    | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabase
+    | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterprise
+    | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordless
+    | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocial;
+
+/**
+ * The identity object for custom identity providers.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustom {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomUserId;
+    profileData?: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomProfileData | undefined;
+    provider: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of custom identity providers. */
+export const EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomProviderEnum = {
+    Custom: "custom",
+} as const;
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomProviderEnum =
+    (typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomProviderEnum)[keyof typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemCustomUserId = string | number;
+
+/**
+ * The identity object for database identity providers.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabase {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of database identity providers. */
+export const EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseProviderEnum = {
+    Auth0: "auth0",
+} as const;
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseProviderEnum =
+    (typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseProviderEnum)[keyof typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemDatabaseUserId = string | number;
+
+/**
+ * The identity object for enterprise identity providers.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterprise {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of enterprise identity providers. */
+export const EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseProviderEnum = {
+    Ad: "ad",
+    Adfs: "adfs",
+    GoogleApps: "google-apps",
+    Ip: "ip",
+    Office365: "office365",
+    Oidc: "oidc",
+    Okta: "okta",
+    Pingfederate: "pingfederate",
+    Samlp: "samlp",
+    Sharepoint: "sharepoint",
+    Waad: "waad",
+} as const;
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseProviderEnum =
+    (typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseProviderEnum)[keyof typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemEnterpriseUserId = string | number;
+
+/**
+ * The identity object for passwordless identity providers.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordless {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessUserId;
+    profileData?:
+        | Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessProfileData
+        | undefined;
+    provider: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of passwordless identity providers. */
+export const EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessProviderEnum = {
+    Email: "email",
+    Sms: "sms",
+} as const;
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessProviderEnum =
+    (typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessProviderEnum)[keyof typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemPasswordlessUserId = string | number;
+
+/**
+ * The identity object for social identity providers.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocial {
+    /** Name of the connection containing this identity. */
+    connection: string;
+    user_id: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialUserId;
+    profileData?: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialProfileData | undefined;
+    provider: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialProviderEnum;
+    isSocial: Management.EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialIsSocialEnum;
+}
+
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialIsSocialEnum = boolean;
+
+/**
+ * Profile data for the user.
+ */
+export interface EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialProfileData {
+    /** Email address of this user. */
+    email?: string | undefined;
+    /** Whether this email address is verified (true) or unverified (false). */
+    email_verified?: boolean | undefined;
+    /** Name of this user. */
+    name?: string | undefined;
+    /** Username of this user. */
+    username?: string | undefined;
+    /** Given name/first name/forename of this user. */
+    given_name?: string | undefined;
+    /** Family name/last name/surname of this user. */
+    family_name?: string | undefined;
+    /** Phone number of this user. */
+    phone_number?: string | undefined;
+    /** Whether this phone number has been verified (true) or not (false). */
+    phone_verified?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** List of social identity providers. */
+export const EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialProviderEnum = {
+    Amazon: "amazon",
+    Apple: "apple",
+    Dropbox: "dropbox",
+    Bitbucket: "bitbucket",
+    Auth0Oidc: "auth0-oidc",
+    Baidu: "baidu",
+    Bitly: "bitly",
+    Box: "box",
+    Daccount: "daccount",
+    Dwolla: "dwolla",
+    EvernoteSandbox: "evernote-sandbox",
+    Evernote: "evernote",
+    Exact: "exact",
+    Facebook: "facebook",
+    Fitbit: "fitbit",
+    Github: "github",
+    GoogleOauth2: "google-oauth2",
+    Instagram: "instagram",
+    Line: "line",
+    Linkedin: "linkedin",
+    Oauth1: "oauth1",
+    Oauth2: "oauth2",
+    Paypal: "paypal",
+    PaypalSandbox: "paypal-sandbox",
+    Planningcenter: "planningcenter",
+    SalesforceCommunity: "salesforce-community",
+    SalesforceSandbox: "salesforce-sandbox",
+    Salesforce: "salesforce",
+    Shopify: "shopify",
+    Soundcloud: "soundcloud",
+    Thirtysevensignals: "thirtysevensignals",
+    Twitter: "twitter",
+    Untapped: "untapped",
+    Vkontakte: "vkontakte",
+    Weibo: "weibo",
+    Windowslive: "windowslive",
+    Wordpress: "wordpress",
+    Yahoo: "yahoo",
+    Yandex: "yandex",
+} as const;
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialProviderEnum =
+    (typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialProviderEnum)[keyof typeof EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialProviderEnum];
+
+/**
+ * The IDP-specific identifer for the user.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialUserId = string | number;
+
+/**
+ * User metadata to which this user has read/write access.
+ */
+export type EventStreamCloudEventUserUpdatedPreviousObjectUserMetadata = Record<string, unknown>;
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventUserUpdatedTypeEnum = {
@@ -23548,6 +31482,7 @@ export interface FormWidgetGMapsAddress {
 
 export interface FormWidgetGMapsAddressConfig {
     api_key: string;
+    server_key?: string | undefined;
 }
 
 export interface FormWidgetRecaptcha {
@@ -24022,6 +31957,7 @@ export interface GetClientResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
@@ -24058,6 +31994,7 @@ export interface GetConnectionProfileResponseContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    provisioning?: Management.ConnectionProfileProvisioning | undefined;
     cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
@@ -25999,6 +33936,12 @@ export interface ListOrganizationRoleMembersResponseContent {
     next?: string | undefined;
 }
 
+export interface ListOrganizationTemplatesPaginatedResponseContent {
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+    organization_templates?: Management.OrganizationTemplate[] | undefined;
+}
+
 export interface ListOrganizationsPaginatedResponseContent {
     next?: string | undefined;
     organizations?: Management.Organization[] | undefined;
@@ -26085,6 +34028,13 @@ export interface ListSynchronizedGroupsResponseContent {
     groups: Management.SynchronizedGroupPayload[];
     /** The cursor to be used as the "from" query parameter for the next page of results. */
     next?: string | undefined;
+}
+
+export interface ListTemplateOrganizationsPaginatedResponseContent {
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+    /** The list of organizations assigned to this template. */
+    organizations: Management.OrganizationTemplateAssignedOrganization[];
 }
 
 export interface ListTokenExchangeProfileResponseContent {
@@ -26926,6 +34876,23 @@ export type NetworkAclActionLogEnum = boolean;
  */
 export type NetworkAclActionRedirectEnum = boolean;
 
+/**
+ * HTTP Message Signature configuration.
+ */
+export interface NetworkAclHttpMessageSignature {
+    keys: Management.NetworkAclHttpMessageSignatureKeys;
+}
+
+export interface NetworkAclHttpMessageSignatureKey {
+    /** Auth0-generated identifier for the key, as returned by `POST /api/v2/keys/network-acls`. */
+    id: string;
+}
+
+/**
+ * The keys whose signatures satisfy this rule. Each id references a key that was already created via `POST /api/v2/keys/network-acls`.
+ */
+export type NetworkAclHttpMessageSignatureKeys = Management.NetworkAclHttpMessageSignatureKey[];
+
 export interface NetworkAclKey {
     /** Generated identifier for the key. Used to reference the key from a Network ACL and to identify it in Tenant Logs. */
     id: string;
@@ -26959,6 +34926,7 @@ export interface NetworkAclMatch {
     hostnames?: string[] | undefined;
     connecting_ipv4_cidrs?: Management.NetworkAclMatchConnectingIpv4Cidr[] | undefined;
     connecting_ipv6_cidrs?: Management.NetworkAclMatchConnectingIpv6Cidr[] | undefined;
+    http_message_signature?: Management.NetworkAclHttpMessageSignature | undefined;
 }
 
 export interface NetworkAclRule {
@@ -27164,6 +35132,14 @@ export interface OrganizationConnectionInformation {
     [key: string]: any;
 }
 
+/** Controls whether organizations using this template can be deleted. */
+export const OrganizationDeletionBehaviorEnum = {
+    Allow: "allow",
+    AllowIfEmpty: "allow_if_empty",
+} as const;
+export type OrganizationDeletionBehaviorEnum =
+    (typeof OrganizationDeletionBehaviorEnum)[keyof typeof OrganizationDeletionBehaviorEnum];
+
 export interface OrganizationDiscoveryDomain {
     /** Organization discovery domain identifier. */
     id: string;
@@ -27276,6 +35252,95 @@ export interface OrganizationMemberRole {
  * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
  */
 export type OrganizationMetadata = Record<string, string | null>;
+
+export interface OrganizationTemplate {
+    /** Organization Template identifier. */
+    id?: string | undefined;
+    /** The name of the organization template. */
+    name?: string | undefined;
+    /** Whether this is the default template applied to new organizations. */
+    is_default?: boolean | undefined;
+    organization_deletion_behavior?: Management.OrganizationDeletionBehaviorEnum | undefined;
+    connection_deletion_behavior?: Management.ConnectionDeletionBehaviorEnum | undefined;
+    /** Whether to enforce permission ceiling for organizations using this template. */
+    enforce_permission_ceiling?: boolean | undefined;
+    /** Whether to enforce self-assignment restrictions for organizations using this template. */
+    enforce_self_assignment_restriction?: boolean | undefined;
+    /** The connection profile to apply to new connections. */
+    connection_profile_id?: string | undefined;
+    /** The user attribute profile to apply to organizations. */
+    user_attribute_profile_id?: string | undefined;
+    /** List of allowed connection strategies for this template. */
+    allowed_strategies?: Management.OrganizationTemplateAllowedStrategyEnum[] | undefined;
+    /** The client ID for the invitation landing page. */
+    invitation_landing_client_id?: string | undefined;
+    /** Default admin roles to assign to organization creators. */
+    admin_roles_assignment?: string[] | undefined;
+    use_for_organization_discovery?: (Management.OrganizationTemplateUseForOrganizationDiscovery | null) | undefined;
+    role_visibility_policy?: (Management.OrganizationTemplateRoleVisibilityPolicy | null) | undefined;
+    /** The ISO 8601 formatted timestamp representing when the template was created. */
+    created_at?: string | undefined;
+    /** The ISO 8601 formatted timestamp representing when the template was last updated. */
+    updated_at?: string | undefined;
+}
+
+/** An allowed enterprise connection strategy. */
+export const OrganizationTemplateAllowedStrategyEnum = {
+    Adfs: "adfs",
+    GoogleApps: "google-apps",
+    Oidc: "oidc",
+    Okta: "okta",
+    Pingfederate: "pingfederate",
+    Samlp: "samlp",
+    Waad: "waad",
+} as const;
+export type OrganizationTemplateAllowedStrategyEnum =
+    (typeof OrganizationTemplateAllowedStrategyEnum)[keyof typeof OrganizationTemplateAllowedStrategyEnum];
+
+/**
+ * An organization assigned to the template.
+ */
+export interface OrganizationTemplateAssignedOrganization {
+    /** Organization identifier. */
+    id: string;
+}
+
+/** The role visibility level. */
+export const OrganizationTemplateRoleVisibilityEnum = {
+    Write: "write",
+    ReadOnly: "read_only",
+    Hidden: "hidden",
+} as const;
+export type OrganizationTemplateRoleVisibilityEnum =
+    (typeof OrganizationTemplateRoleVisibilityEnum)[keyof typeof OrganizationTemplateRoleVisibilityEnum];
+
+/**
+ * A role visibility override.
+ */
+export interface OrganizationTemplateRoleVisibilityOverride {
+    /** The role identifier. */
+    role_id: string;
+    access: Management.OrganizationTemplateRoleVisibilityEnum;
+}
+
+/**
+ * Controls role visibility for organization administrators.
+ */
+export interface OrganizationTemplateRoleVisibilityPolicy {
+    default_value: Management.OrganizationTemplateRoleVisibilityEnum;
+    /** Role-specific visibility overrides. */
+    overrides?: Management.OrganizationTemplateRoleVisibilityOverride[] | undefined;
+}
+
+/**
+ * Controls whether connections from this template are used for organization discovery.
+ */
+export interface OrganizationTemplateUseForOrganizationDiscovery {
+    /** The default value for organization discovery. */
+    default_value: boolean;
+    /** The allowed values for organization discovery. */
+    allowed_values?: boolean[] | undefined;
+}
 
 /** Controls whether this organization can be used in user flows with third-party clients. Defaults to `block`. */
 export const OrganizationThirdPartyClientAccessEnum = {
@@ -28319,6 +36384,7 @@ export interface RotateClientSecretResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
@@ -28481,6 +36547,7 @@ export const ScreenGroupNameEnum = {
     ResetPasswordMfaWebauthnRoamingChallenge: "reset-password-mfa-webauthn-roaming-challenge",
     CustomForm: "custom-form",
     Consent: "consent",
+    ConsentTenantScopes: "consent-tenant-scopes",
     CustomizedConsent: "customized-consent",
     Logout: "logout",
     LogoutComplete: "logout-complete",
@@ -29453,6 +37520,8 @@ export interface TenantSettingsFlags {
     improved_signup_bot_detection_in_classic?: boolean | undefined;
     /** This tenant signed up for the Auth4GenAI trail */
     genai_trial?: boolean | undefined;
+    /** Whether the Local Resource Discovery endpoint is enabled (true) or disabled (false). */
+    local_resource_discovery?: boolean | undefined;
     /** Whether third-party developers can <a href="https://auth0.com/docs/api-auth/dynamic-client-registration">dynamically register</a> applications for your APIs (true) or not (false). This flag enables dynamic client registration. */
     enable_dynamic_client_registration?: boolean | undefined;
     /** If true, SMS phone numbers will not be obfuscated in Management API GET calls. */
@@ -30065,6 +38134,7 @@ export interface UpdateClientResponseContent {
     par_request_expiry?: (number | null) | undefined;
     token_quota?: Management.TokenQuota | undefined;
     express_configuration?: Management.ExpressConfiguration | undefined;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
@@ -30127,6 +38197,8 @@ export interface UpdateConnectionOptions {
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
+    enable_pushed_authorization_requests?: Management.ConnectionEnablePushedAuthorizationRequests | undefined;
+    pushed_authorization_request_endpoint?: Management.ConnectionPushedAuthorizationRequestEndpoint | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
     token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
@@ -30146,6 +38218,7 @@ export interface UpdateConnectionProfileResponseContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures | undefined;
     connection_config?: Management.ConnectionProfileConfig | undefined;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides | undefined;
+    provisioning?: Management.ConnectionProfileProvisioning | undefined;
     cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp | undefined;
 }
 
@@ -30430,6 +38503,7 @@ export interface UpdateConnectionRequestContentPlanningCenter extends Management
  */
 export interface UpdateConnectionRequestContentSaml extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsSaml | undefined;
+    cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
 

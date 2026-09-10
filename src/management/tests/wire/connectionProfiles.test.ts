@@ -138,6 +138,7 @@ describe("ConnectionProfilesClient", () => {
                 oidc: { enabled_features: ["scim"] },
                 samlp: { enabled_features: ["scim"] },
             },
+            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
             cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
         };
 
@@ -353,6 +354,7 @@ describe("ConnectionProfilesClient", () => {
                 organization: { show_as_button: "none", assign_membership_on_login: "none" },
                 connection_name_prefix_template: "connection_name_prefix_template",
                 enabled_features: ["scim"],
+                provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
             },
         };
 
@@ -464,6 +466,7 @@ describe("ConnectionProfilesClient", () => {
                 oidc: { enabled_features: ["scim"] },
                 samlp: { enabled_features: ["scim"] },
             },
+            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
             cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
         };
 
@@ -642,6 +645,7 @@ describe("ConnectionProfilesClient", () => {
                 oidc: { enabled_features: ["scim"] },
                 samlp: { enabled_features: ["scim"] },
             },
+            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
             cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
         };
 

@@ -360,6 +360,7 @@ export interface CreateClientRequestContent {
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
     redirection_policy?: Management.ClientRedirectionPolicyEnum;
     express_configuration?: Management.ExpressConfiguration;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration;
     my_organization_configuration?: Management.ClientMyOrganizationPostConfiguration;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
 }
@@ -492,6 +493,7 @@ export interface UpdateClientRequestContent {
     /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
     par_request_expiry?: number | null;
     express_configuration?: Management.ExpressConfigurationOrNull | null;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration;
     my_organization_configuration?: Management.ClientMyOrganizationPatchConfiguration | null;
     async_approval_notification_channels?:
         | (Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration | undefined)
@@ -527,6 +529,7 @@ export interface CreateConnectionProfileRequestContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures;
     connection_config?: Management.ConnectionProfileConfig;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    provisioning?: Management.ConnectionProfileProvisioning;
     cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp;
 }
 
@@ -541,6 +544,7 @@ export interface UpdateConnectionProfileRequestContent {
     enabled_features?: Management.ConnectionProfileEnabledFeatures;
     connection_config?: Management.ConnectionProfileConfig;
     strategy_overrides?: Management.ConnectionProfileStrategyOverrides;
+    provisioning?: Management.ConnectionProfileProvisioning;
     cross_app_access_resource_app?: Management.ConnectionProfileCrossAppAccessResourceApp;
 }
 
@@ -1273,6 +1277,97 @@ export interface UpdateNetworkAclRequestContent {
     /** Indicates the order in which the ACL will be evaluated relative to other ACL rules. */
     priority?: number;
     rule?: Management.NetworkAclRule;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListOrganizationTemplatesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 5. Values greater than 10 are capped at 10. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         organization_deletion_behavior: "allow",
+ *         enforce_permission_ceiling: true,
+ *         enforce_self_assignment_restriction: true
+ *     }
+ */
+export interface CreateOrganizationTemplateRequestContent {
+    /** The name of the organization template. */
+    name: string;
+    /** Whether this is the default template applied to new organizations. */
+    is_default?: boolean;
+    organization_deletion_behavior: Management.OrganizationDeletionBehaviorEnum;
+    connection_deletion_behavior?: Management.ConnectionDeletionBehaviorEnum;
+    /** Whether to enforce permission ceiling for organizations using this template. */
+    enforce_permission_ceiling: boolean;
+    /** Whether to enforce self-assignment restrictions for organizations using this template. */
+    enforce_self_assignment_restriction: boolean;
+    /** The connection profile to apply to new connections. */
+    connection_profile_id?: string | null;
+    /** The user attribute profile to apply to organizations. */
+    user_attribute_profile_id?: string | null;
+    /** List of allowed connection strategies for this template. */
+    allowed_strategies?: Management.OrganizationTemplateAllowedStrategyEnum[] | null;
+    /** The client ID for the invitation landing page. */
+    invitation_landing_client_id?: string | null;
+    /** Default admin roles to assign to organization creators. */
+    admin_roles_assignment?: string[] | null;
+    use_for_organization_discovery?: Management.OrganizationTemplateUseForOrganizationDiscovery | null;
+    role_visibility_policy?: Management.OrganizationTemplateRoleVisibilityPolicy | null;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateOrganizationTemplateRequestContent {
+    /** The name of the organization template. */
+    name?: string;
+    /** Whether this is the default template applied to new organizations. */
+    is_default?: boolean;
+    organization_deletion_behavior?: Management.OrganizationDeletionBehaviorEnum;
+    connection_deletion_behavior?: Management.ConnectionDeletionBehaviorEnum;
+    /** Whether to enforce permission ceiling for organizations using this template. */
+    enforce_permission_ceiling?: boolean;
+    /** Whether to enforce self-assignment restrictions for organizations using this template. */
+    enforce_self_assignment_restriction?: boolean;
+    /** The connection profile to apply to new connections. */
+    connection_profile_id?: string | null;
+    /** The user attribute profile to apply to organizations. */
+    user_attribute_profile_id?: string | null;
+    /** List of allowed connection strategies for this template. */
+    allowed_strategies?: Management.OrganizationTemplateAllowedStrategyEnum[] | null;
+    /** The client ID for the invitation landing page. */
+    invitation_landing_client_id?: string | null;
+    /** Default admin roles to assign to organization creators. */
+    admin_roles_assignment?: string[] | null;
+    use_for_organization_discovery?: Management.OrganizationTemplateUseForOrganizationDiscovery | null;
+    role_visibility_policy?: Management.OrganizationTemplateRoleVisibilityPolicy | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListTemplateOrganizationsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 5. Values greater than 10 are capped at 10. */
+    take?: number | null;
 }
 
 /**

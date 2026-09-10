@@ -327,6 +327,7 @@ describe("NetworkAclsClient", () => {
                     hostnames: ["hostnames"],
                     connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
                     connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
+                    http_message_signature: { keys: [{ id: "id" }] },
                 },
                 not_match: {
                     asns: [1],
@@ -341,6 +342,7 @@ describe("NetworkAclsClient", () => {
                     hostnames: ["hostnames"],
                     connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
                     connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
+                    http_message_signature: { keys: [{ id: "id" }] },
                 },
                 match_all: true,
                 scope: "management",
@@ -431,6 +433,7 @@ describe("NetworkAclsClient", () => {
                     hostnames: ["hostnames"],
                     connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
                     connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
+                    http_message_signature: { keys: [{ id: "id" }] },
                 },
                 not_match: {
                     asns: [1],
@@ -445,6 +448,7 @@ describe("NetworkAclsClient", () => {
                     hostnames: ["hostnames"],
                     connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
                     connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
+                    http_message_signature: { keys: [{ id: "id" }] },
                 },
                 match_all: true,
                 scope: "management",
@@ -737,6 +741,7 @@ describe("NetworkAclsClient", () => {
                     hostnames: ["hostnames"],
                     connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
                     connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
+                    http_message_signature: { keys: [{ id: "id" }] },
                 },
                 not_match: {
                     asns: [1],
@@ -751,6 +756,7 @@ describe("NetworkAclsClient", () => {
                     hostnames: ["hostnames"],
                     connecting_ipv4_cidrs: ["connecting_ipv4_cidrs"],
                     connecting_ipv6_cidrs: ["connecting_ipv6_cidrs"],
+                    http_message_signature: { keys: [{ id: "id" }] },
                 },
                 match_all: true,
                 scope: "management",
