@@ -1,0 +1,84 @@
+name: RL Scan (action)
+
+# Example: invoke the rl-scan composite action from auth0/devsecops-tooling.
+# ReversingLabs scans a pre-built artifact for malware.
+# Composite actions run at step level inside a caller-owned job.
+# Copy this job block into your .github/workflows/ file.
+#
+# Artifact contract
+# ─────────────────
+# The rl-scan action does NOT build artifacts.
+# The job must download (or build) the artifact before invoking the action.
+# artifact-path MUST be a concrete file path — the action's internal existence
+# check uses [ -f ], which does NOT expand globs. A missing artifact fails the job.
+#
+# Required org secrets (configured at org level in auth0/):
+#   RLSECURE_LICENSE            — ReversingLabs license key
+#   RLSECURE_SITE_KEY           — ReversingLabs site key
+#   SIGNAL_HANDLER_TOKEN        — scan-service telemetry auth
+#   SIGNAL_HANDLER_DOMAIN       — scan-service endpoint domain
+#   PRODSEC_TOOLS_ARN           — AWS role ARN for ProdSec tools
+#   PRODSEC_TOOLS_USER          — ProdSec Python tools repo user
+#   PRODSEC_TOOLS_TOKEN         — ProdSec Python tools repo token
+#   PRODSEC_PYTHON_TOOLS_REPO   — ProdSec Python tools repo URL
+
+on:
+  release:
+    types: [published]   # malware scan is typically gated on release events
+
+jobs:
+  # ── Malware scan via ReversingLabs composite action ─────────────────────────
+  rl-scan:
+    name: RL Scan
+    runs-on: ubuntu-latest  # Use a runner that supports OIDC (Ubuntu, Windows, macOS)
+    permissions:
+      contents: read
+      id-token: write   # required for AWS OIDC federation (PRODSEC_TOOLS_ARN)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      # Download a previously uploaded artifact, or replace with your own build step.
+      - name: Download artifact
+        id: download
+        continue-on-error: true   # let the rl-scan action be the authority on artifact presence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: my-artifact              # must match the name used in upload-artifact
+          path: dist/
+
+      - name: Run RL malware scan
+        id: rl
+        uses: auth0/devsecops-tooling/.github/actions/rl-scan@e29f26478db18ff0bcbe4bc447a8fbd54fbeec9e
+        continue-on-error: true   # let the gate step below decide pass/fail
+        with:
+          # ── Artifact inputs ─────────────────────────────────────────────────
+          artifact-name: my-artifact
+          artifact-path: dist/my-artifact.tgz     # must be a concrete file — the action's [ -f ] check does NOT expand globs
+          version: ${{ github.event.release.tag_name }}
+          # ── Required secrets ────────────────────────────────────────────────
+          RLSECURE_LICENSE:          ${{ secrets.RLSECURE_LICENSE }}
+          RLSECURE_SITE_KEY:         ${{ secrets.RLSECURE_SITE_KEY }}
+          SIGNAL_HANDLER_TOKEN:      ${{ secrets.SIGNAL_HANDLER_TOKEN }}
+          SIGNAL_HANDLER_DOMAIN:     ${{ secrets.SIGNAL_HANDLER_DOMAIN }}
+          PRODSEC_TOOLS_ARN:         ${{ secrets.PRODSEC_TOOLS_ARN }}
+          PRODSEC_TOOLS_USER:        ${{ secrets.PRODSEC_TOOLS_USER }}
+          PRODSEC_TOOLS_TOKEN:       ${{ secrets.PRODSEC_TOOLS_TOKEN }}
+          PRODSEC_PYTHON_TOOLS_REPO: ${{ secrets.PRODSEC_PYTHON_TOOLS_REPO }}
+
+      # Pass/fail is decided solely by the RL scan step's scan-status output:
+      #   scan-status = success → ✅ pass
+      #   anything else (malware detected, scanner error, or artifact not found
+      #   as reported by the action's own [ -f ] check) → ❌ fail the job
+      - name: RL scan result
+        if: always()
+        shell: bash
+        env:
+          SCAN_STATUS: ${{ steps.rl.outputs.scan-status }}
+        run: |
+          if [ "$SCAN_STATUS" = "success" ]; then
+            echo "::notice title=Malware::✅ ReversingLabs scan passed."
+          else
+            echo "::error title=Malware::❌ ReversingLabs scan failed — malware detected, scanner error, or artifact not found (status: '${SCAN_STATUS:-none}')."
+            exit 1
+          fi
