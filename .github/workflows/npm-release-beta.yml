@@ -1,0 +1,223 @@
+name: Publish beta release to npm
+
+#
+# Reusable workflow that publishes a beta prerelease to npm (dist-tag `beta`).
+# It is called by `release.yml` whenever a PR is merged into the `beta` branch
+# (every fern-bot regeneration PR or human PR). The version is computed from
+# the existing git tags by the compute-next-version action, the version files
+# are stamped, a CHANGELOG.md entry is generated from the merged squash-commit
+# message, the package is built and published to npm, a release commit is
+# tagged, and a GitHub prerelease is created.
+#
+# Routing through `release.yml` (rather than triggering directly) means a
+# single entry workflow is the npm trusted publisher for both the stable and
+# beta tracks, matching npm's one-trusted-publisher-per-package limit.
+#
+# This runs against the `beta` branch, so CHANGELOG.md here is the beta
+# track's own changelog and never collides with the stable changelog on
+# `master`.
+#
+# Security notes:
+#   - Reached via `pull_request` (NOT `pull_request_target`) in the caller.
+#     PRs from forks run with a read-only token and no access to secrets, so
+#     a malicious fork PR cannot reach the release credentials. All real inflow
+#     (fern-bot, org members) comes from same-repo branches.
+#   - The workflow never executes checked-out PR source beyond the repo's own
+#     build; it only reads the merge commit message and stamps files. Untrusted
+#     text is handled via shell variables/`env:`, never interpolated into `run:`
+#     via `${{ }}`.
+#
+
+on:
+    workflow_call:
+        inputs:
+            node-version:
+                required: true
+                type: string
+            require-build:
+                default: true
+                type: string
+        secrets:
+            github-token:
+                required: true
+
+# Least privilege: the job opts into only what it needs.
+permissions: {}
+
+jobs:
+    beta-release:
+        # Guard against forks running the release logic. The caller (release.yml)
+        # already gates on the merge/dispatch event and the target branch.
+        if: github.repository == 'auth0/node-auth0'
+        runs-on: ubuntu-latest
+        environment: release
+        permissions:
+            contents: write # for pushing the release commit and tag
+            id-token: write # for publishing to npm using --provenance
+
+        steps:
+            # Checkout the full history so compute-next-version can inspect all
+            # existing git tags.
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  ref: beta
+
+            # Compute the next beta version from the existing git tags.
+            - id: get_version
+              uses: ./.github/actions/compute-next-version
+              with:
+                  track: beta
+
+            # Defense in depth: abort if the tag already exists so a re-run
+            # can never overwrite a published release.
+            - id: tag_exists
+              uses: ./.github/actions/tag-exists
+              with:
+                  tag: ${{ steps.get_version.outputs.version }}
+                  token: ${{ secrets.github-token }}
+
+            - if: steps.tag_exists.outputs.exists == 'true'
+              shell: bash
+              run: |
+                  echo "::error::Tag ${{ steps.get_version.outputs.version }} already exists; aborting to avoid overwriting a published release."
+                  exit 1
+
+            # Build release notes from the structured squash-commit message of
+            # the merged PR. The author marks beta-only vs. stable-mirrored
+            # changes at merge time using HTML comment markers:
+            #
+            #   <!-- BETA -->
+            #   - feat: add Sandbox preview API (Beta)
+            #   <!-- /BETA -->
+            #   <!-- STABLE -->
+            #   - feat: add tenant security headers
+            #   <!-- /STABLE -->
+            #
+            # If the markers are absent we fall back to the raw commit subject.
+            - id: notes
+              name: Generate release notes
+              shell: bash
+              run: |
+                  MSG=$(git log -1 --pretty='%B' HEAD)
+
+                  extract() { # $1=open marker  $2=close marker
+                    printf '%s\n' "${MSG}" | awk -v o="$1" -v c="$2" '
+                      $0 ~ o {grab=1; next}
+                      $0 ~ c {grab=0}
+                      grab {print}
+                    ' | sed '/^[[:space:]]*$/d'
+                  }
+
+                  BETA_SECTION=$(extract '<!-- BETA -->' '<!-- /BETA -->')
+                  STABLE_SECTION=$(extract '<!-- STABLE -->' '<!-- /STABLE -->')
+
+                  # Unpredictable delimiter so commit-message content cannot
+                  # forge the terminator and inject extra step outputs.
+                  DELIM="RELEASE_NOTES_$(openssl rand -hex 16)"
+                  {
+                    echo "RELEASE_NOTES<<${DELIM}"
+                    if [ -z "${BETA_SECTION}" ] && [ -z "${STABLE_SECTION}" ]; then
+                      echo "**Beta**"
+                      echo "- $(printf '%s\n' "${MSG}" | head -1)"
+                    else
+                      echo "**Beta**"
+                      if [ -n "${BETA_SECTION}" ]; then
+                        echo "${BETA_SECTION}"
+                      else
+                        echo "- No beta-only changes in this release."
+                      fi
+                      echo ""
+                      echo "**Stable (from master)**"
+                      if [ -n "${STABLE_SECTION}" ]; then
+                        echo "${STABLE_SECTION}"
+                      else
+                        echo "- No stable changes in this release."
+                      fi
+                    fi
+                    echo "${DELIM}"
+                  } >> "$GITHUB_OUTPUT"
+
+            # Stamp .version, package.json, src/management/version.ts, and
+            # prepend a CHANGELOG.md entry. Files are only edited on disk here;
+            # the git commit is created in a later step.
+            - name: Stamp version files and changelog
+              shell: bash
+              run: |
+                  # .version stores the full vX.Y.Z-beta.N string
+                  echo "${VERSION}" > .version
+
+                  # package.json and version.ts use the bare version without
+                  # the leading 'v' (npm semver convention)
+                  PKG_VERSION="${VERSION#v}"
+                  sed -i -E 's/^(    "version": ")[^"]*(",)$/\1'"${PKG_VERSION}"'\2/' package.json
+                  sed -i -E 's/export const SDK_VERSION = "[^"]*";/export const SDK_VERSION = "'"${PKG_VERSION}"'";/' src/management/version.ts
+
+                  DATE=$(date -u +%Y-%m-%d)
+                  [ -f CHANGELOG.md ] || printf '# Change Log\n\n' > CHANGELOG.md
+                  {
+                    head -2 CHANGELOG.md
+                    echo "## [${VERSION}](https://github.com/auth0/node-auth0/tree/${VERSION}) (${DATE})"
+                    echo ""
+                    echo "${RELEASE_NOTES}"
+                    echo ""
+                    tail -n +3 CHANGELOG.md
+                  } > CHANGELOG.md.tmp
+                  mv CHANGELOG.md.tmp CHANGELOG.md
+              env:
+                  VERSION: ${{ steps.get_version.outputs.version }}
+                  RELEASE_NOTES: ${{ steps.notes.outputs.RELEASE_NOTES }}
+
+            # Build and publish to npm BEFORE creating the release commit so
+            # that the built artifacts carry the stamped version. If publish
+            # fails we have not yet created a release commit.
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ inputs.node-version }}
+                  cache: yarn
+                  registry-url: https://registry.npmjs.org
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Update npm to latest
+              run: npm install -g npm@^11
+
+            - name: Build package
+              if: inputs.require-build == 'true'
+              run: yarn build
+
+            - name: Validate package
+              run: yarn lint:package
+
+            - name: Publish to npm with beta dist-tag
+              run: npm publish --provenance --tag beta
+
+            # Commit the stamped files, tag the commit, and push both back to
+            # the `beta` branch. The push is allowed because the job runs in
+            # the `release` environment with `contents: write`.
+            - id: release_commit
+              name: Create and push release commit
+              shell: bash
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add .version package.json src/management/version.ts CHANGELOG.md
+                  git commit -m "Release ${{ steps.get_version.outputs.version }}"
+                  git tag -a "${{ steps.get_version.outputs.version }}" \
+                      -m "Release ${{ steps.get_version.outputs.version }}"
+                  RELEASE_SHA=$(git rev-parse HEAD)
+                  git push origin "${{ steps.get_version.outputs.version }}"
+                  git push origin HEAD:beta
+                  echo "SHA=${RELEASE_SHA}" >> "$GITHUB_OUTPUT"
+
+            # Create the GitHub prerelease on the tag.
+            - uses: ./.github/actions/release-create
+              with:
+                  token: ${{ secrets.github-token }}
+                  name: ${{ steps.get_version.outputs.version }}
+                  body: ${{ steps.notes.outputs.RELEASE_NOTES }}
+                  tag: ${{ steps.get_version.outputs.version }}
+                  commit: ${{ steps.release_commit.outputs.SHA }}
+                  prerelease: "true"

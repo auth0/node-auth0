@@ -133,6 +133,78 @@ If you have questions or run into issues:
 
 For questions about the Fern code generator itself, see the [Fern documentation](https://buildwithfern.com) or [Fern repository](https://github.com/fern-api/fern).
 
+## Beta Track Releases
+
+> Applies only when working on the `beta` branch.
+
+This SDK ships two tracks from one npm package (`auth0`):
+
+- **Stable** (`master`): EA/GA endpoints only. Released by a maintainer via a `release/*` branch.
+- **Beta** (`beta`): a superset of stable plus beta-only endpoints. Released automatically when a PR is merged into `beta`.
+
+The `beta` branch is **regenerated** from the stable spec plus the beta-only spec files; it is never produced by merging `master` into `beta`. It receives one combined regeneration PR (stable + beta) as a single squash commit.
+
+### Versioning
+
+Beta uses the next stable minor + `-beta.N`, derived from git tags:
+
+```
+Latest stable: v6.3.0  →  Next beta: v6.4.0-beta.1
+                           Subsequent betas: v6.4.0-beta.2, v6.4.0-beta.3, ...
+                           Once v6.4.0 ships: v6.5.0-beta.1
+```
+
+Because `v6.4.0-beta.N` sorts before `v6.4.0` in semver, consumers running `npm install auth0` will never receive a beta version unless they explicitly pin it:
+
+```sh
+# Stable (default)
+npm install auth0
+
+# Beta (explicit prerelease pin)
+npm install auth0@beta
+# or a specific version
+npm install auth0@6.4.0-beta.1
+```
+
+### When merging a beta regeneration PR
+
+Squash and merge with a commit message that marks each group:
+
+```
+Regenerate SDK (stable + beta) (#<pr-number>)
+
+<!-- BETA -->
+- feat: add `Management.Sandbox` preview API (Beta)
+<!-- /BETA -->
+
+<!-- STABLE -->
+- feat: add tenant security headers configuration
+<!-- /STABLE -->
+```
+
+- Beta-only changes go inside the `BETA` markers; stable-mirrored changes go inside the `STABLE` markers.
+- The `<!-- ... -->` markers are HTML comments and stay invisible in GitHub's rendered view.
+- Omitting a section renders a "No ... changes in this release." note; omitting both falls back to the raw commit subject. Always prefer the structured form.
+- Everything reaches `beta` through a PR. Never push directly to `beta` — a direct push will not trigger a release.
+
+### What happens automatically after a PR is merged into beta
+
+1. The `beta-autorelease` workflow computes the next `vX.Y.0-beta.N` from git tags.
+2. It aborts if that tag already exists (prevents overwriting a published release).
+3. It parses the `<!-- BETA -->` / `<!-- STABLE -->` sections from the squash commit message.
+4. It stamps `.version`, `package.json`, and `CHANGELOG.md` on disk.
+5. It builds the package and publishes to npm with `--tag beta --provenance`.
+6. It creates a signed release commit via the GitHub API (shows as **Verified**, no GPG key required).
+7. It tags the commit and publishes a GitHub prerelease.
+
+### Do not hand-edit release files on beta
+
+The `beta-autorelease` workflow owns `.version`, `package.json` (version field), and `CHANGELOG.md` on the `beta` branch. Never manually bump these files on `beta`.
+
+### Hand-written code
+
+Code outside of the Fern-generated directories is hand-written and is **not** regenerated on `beta`. A fix on `master` does not reach `beta` automatically, so hand-written changes must be PR'd to **both** `master` and `beta`.
+
 ## License
 
 By contributing to this project, you agree that your contributions will be licensed under the same license as the project.

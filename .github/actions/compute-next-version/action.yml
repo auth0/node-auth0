@@ -1,0 +1,69 @@
+name: Compute the next version for a release track
+
+#
+# Computes the next version for either the stable or beta track from the
+# existing git tags, which are treated as the single source of truth.
+#
+#   - stable: next minor after the latest stable tag (vX.Y.0 -> vX.(Y+1).0)
+#   - beta:   vX.(Y+1).0-beta.N, where the base is the next minor after the
+#             latest stable tag and N auto-increments from existing beta tags.
+#
+# The current major line is read from the .version file so that legacy tags
+# from older majors (e.g. v5.*) are never treated as candidates.
+#
+# Because the beta base is always derived from the latest stable tag, the
+# moment a stable release is tagged the next beta computation rolls forward
+# automatically. No shared state file is needed.
+#
+
+inputs:
+    track:
+        description: 'Release track: "stable" or "beta".'
+        required: true
+
+outputs:
+    version:
+        value: ${{ steps.compute.outputs.VERSION }}
+
+runs:
+    using: composite
+
+    steps:
+        - id: compute
+          shell: bash
+          run: |
+              set -euo pipefail
+              git fetch --tags --quiet
+
+              # Determine the current major from the .version file so we never
+              # pick up tags from a previous major line (e.g. v5.*).
+              CURRENT_MAJOR=$(head -1 .version | sed -E 's/^v([0-9]+)\..*/\1/')
+
+              # Only consider clean stable tags on the current major line
+              # (vMAJOR.MINOR.PATCH with no prerelease suffix). `sort -V` orders
+              # by semver so double-digit minors sort correctly.
+              LATEST_STABLE=$(git tag --list | grep -E "^v${CURRENT_MAJOR}\.[0-9]+\.[0-9]+$" | sort -V | tail -1)
+              if [ -z "${LATEST_STABLE}" ]; then
+                echo "::error::No stable v${CURRENT_MAJOR}.MINOR.PATCH tag found; cannot compute next version." >&2
+                exit 1
+              fi
+
+              BASE=$(echo "${LATEST_STABLE}" | awk -F. '{printf "%s.%d.0", $1, $2+1}')
+
+              if [ "${TRACK}" = "stable" ]; then
+                VERSION="${BASE}"
+                echo "::notice::compute-next-version (stable): latest_stable=${LATEST_STABLE} -> ${VERSION}"
+              elif [ "${TRACK}" = "beta" ]; then
+                # Only beta tags whose base is exactly BASE, with a numeric suffix.
+                LAST_N=$(git tag --list | grep -E "^${BASE}-beta\.[0-9]+$" | sed -E 's/.*-beta\.//' | sort -n | tail -1)
+                N=$(( ${LAST_N:-0} + 1 ))
+                VERSION="${BASE}-beta.${N}"
+                echo "::notice::compute-next-version (beta): latest_stable=${LATEST_STABLE} base=${BASE} last_beta_n=${LAST_N:-<none>} -> ${VERSION}"
+              else
+                echo "::error::Unknown track '${TRACK}'. Expected 'stable' or 'beta'." >&2
+                exit 1
+              fi
+
+              echo "VERSION=${VERSION}" >> "$GITHUB_OUTPUT"
+          env:
+              TRACK: ${{ inputs.track }}
