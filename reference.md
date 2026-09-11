@@ -5442,6 +5442,131 @@ await client.groups.delete("id");
 </dl>
 </details>
 
+## Guardian
+
+<details><summary><code>client.guardian.<a href="/src/management/api/resources/guardian/client/Client.ts">get</a>() -> Management.GetGuardianSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `GuardianClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.<a href="/src/management/api/resources/guardian/client/Client.ts">set</a>({ ...params }) -> Management.SetGuardianSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a tenant's guardian settings such as Remember Me
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.set({
+    display_remember_me_checkbox: true,
+    remember_me_default_value: true,
+    mfa_session_inactivity_timeout: 1,
+    mfa_session_overall_timeout: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetGuardianSettingsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GuardianClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Hooks
 
 <details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Hook, Management.ListHooksOffsetPaginatedResponseContent&gt;</code></summary>
@@ -7309,380 +7434,6 @@ await client.networkAcls.update("id");
 </dl>
 </details>
 
-## OrganizationTemplates
-
-<details><summary><code>client.organizationTemplates.<a href="/src/management/api/resources/organizationTemplates/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.OrganizationTemplate, Management.ListOrganizationTemplatesPaginatedResponseContent&gt;</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a list of Organization Templates. This endpoint supports Checkpoint pagination. Results are returned in a stable order, sorted by their identifier (`id`) in ascending order.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-const pageableResponse = await client.organizationTemplates.list({
-    from: "from",
-    take: 1,
-});
-for await (const item of pageableResponse) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.organizationTemplates.list({
-    from: "from",
-    take: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-
-// You can also access the underlying response
-const response = page.response;
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.ListOrganizationTemplatesRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OrganizationTemplatesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.organizationTemplates.<a href="/src/management/api/resources/organizationTemplates/client/Client.ts">create</a>({ ...params }) -> Management.OrganizationTemplate</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create an Organization Template.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.organizationTemplates.create({
-    name: "name",
-    organization_deletion_behavior: "allow",
-    enforce_permission_ceiling: true,
-    enforce_self_assignment_restriction: true,
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.CreateOrganizationTemplateRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OrganizationTemplatesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.organizationTemplates.<a href="/src/management/api/resources/organizationTemplates/client/Client.ts">get</a>(id) -> Management.OrganizationTemplate</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve details about a single Organization Template specified by ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.organizationTemplates.get("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Organization Template identifier.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OrganizationTemplatesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.organizationTemplates.<a href="/src/management/api/resources/organizationTemplates/client/Client.ts">update</a>(id, { ...params }) -> Management.OrganizationTemplate</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update the details of a specific Organization Template.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.organizationTemplates.update("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Organization Template identifier.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateOrganizationTemplateRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OrganizationTemplatesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.organizationTemplates.<a href="/src/management/api/resources/organizationTemplates/client/Client.ts">listOrganizations</a>(id, { ...params }) -> core.Page&lt;Management.OrganizationTemplateAssignedOrganization, Management.ListTemplateOrganizationsPaginatedResponseContent&gt;</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a list of organizations assigned to an Organization Template. This endpoint supports Checkpoint pagination. Results are returned in a stable order, sorted by their identifier (`id`) in ascending order.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-const pageableResponse = await client.organizationTemplates.listOrganizations("id", {
-    from: "from",
-    take: 1,
-});
-for await (const item of pageableResponse) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-let page = await client.organizationTemplates.listOrganizations("id", {
-    from: "from",
-    take: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
-
-// You can also access the underlying response
-const response = page.response;
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — The ID of the organization template.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.ListTemplateOrganizationsRequestParameters`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `OrganizationTemplatesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 ## Organizations
 
 <details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Organization, Management.ListOrganizationsPaginatedResponseContent&gt;</code></summary>
@@ -7898,6 +7649,107 @@ await client.organizations.getByName("name");
 <dd>
 
 **name:** `string` — name of the organization to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrganizationsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">search</a>({ ...params }) -> core.Page&lt;Management.SearchOrganization, Management.SearchOrganizationsPaginatedResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details of organizations matching a search criteria. It is possible to:
+
+- Specify a search criteria for organizations
+- Search via `name`
+- Search via `display_name`
+- Substring matching (`contains` and `ends-with`) requires at least 3 characters
+- Use wildcards
+
+The `q` query parameter can be used to get organizations that match the specified criteria on `name` OR `display_name`.
+
+This endpoint supports SCIM or Lucene filter syntax with low-latency, cursor-based pagination. Use the `parser` parameter to specify "scim" or "lucene" syntax (default: "lucene").
+
+Results are eventually consistent and may not reflect recent updates immediately.
+
+**Sortable fields:** `name`, `display_name`, `created_at` (ascending only). Defaults to insertion order (oldest first).
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.search({
+    q: "q",
+    parser: "scim",
+    take: 1,
+    from: "from",
+    sort: "name",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.search({
+    q: "q",
+    parser: "scim",
+    take: 1,
+    from: "from",
+    sort: "name",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SearchOrganizationsRequestParameters`
 
 </dd>
 </dl>
@@ -9007,6 +8859,100 @@ await client.resourceServers.create({
 <dd>
 
 **request:** `Management.CreateResourceServerRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ResourceServersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.resourceServers.<a href="/src/management/api/resources/resourceServers/client/Client.ts">search</a>({ ...params }) -> core.Page&lt;Management.ResourceServerSearchResponse, Management.SearchResourceServersResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search resource servers using SCIM or Lucene filter syntax with low-latency, eventually consistent results. Use the parser parameter to specify "scim" or "lucene" syntax (default: "lucene"). This endpoint provides an alternative to the standard GET /resource-servers endpoint with better performance for complex queries.
+Results may not reflect recent updates immediately.
+
+The `signing_secret` field is not supported by this endpoint.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.resourceServers.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "identifier",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.resourceServers.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "identifier",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SearchResourceServersRequestParameters`
 
 </dd>
 </dl>
@@ -19432,6 +19378,81 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 </dl>
 </details>
 
+## Experimentation Experiments
+
+<details><summary><code>client.experimentation.experiments.<a href="/src/management/api/resources/experimentation/resources/experiments/client/Client.ts">advanceRamp</a>(id, { ...params }) -> Management.AdvanceRampResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Increments the current ramp index to the requested target level. Up-only: the target must be the immediate next level in the schedule. Idempotent: calling with the current level returns success without writing anything.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.experimentation.experiments.advanceRamp("id", {
+    target_level: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the experiment to advance.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.AdvanceRampRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ExperimentsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Flows Executions
 
 <details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flow_id, { ...params }) -> core.Page&lt;Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent&gt;</code></summary>
@@ -20699,6 +20720,129 @@ await client.guardian.policies.set(["all-applications"]);
 </dl>
 </details>
 
+## Guardian Factors Email
+
+<details><summary><code>client.guardian.factors.email.<a href="/src/management/api/resources/guardian/resources/factors/resources/email/client/Client.ts">get</a>() -> Management.GetEmailFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.email.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `EmailClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.email.<a href="/src/management/api/resources/guardian/resources/factors/resources/email/client/Client.ts">set</a>({ ...params }) -> Management.SetEmailFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.email.set({
+    otp_length: 1,
+    otp_expiration_time: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetEmailFactorSettingsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `EmailClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Guardian Factors Phone
 
 <details><summary><code>client.guardian.factors.phone.<a href="/src/management/api/resources/guardian/resources/factors/resources/phone/client/Client.ts">getMessageTypes</a>() -> Management.GetGuardianFactorPhoneMessageTypesResponseContent</code></summary>
@@ -21026,6 +21170,127 @@ await client.guardian.factors.phone.setProvider({
 <dd>
 
 **request:** `Management.SetGuardianFactorsProviderPhoneRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PhoneClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.phone.<a href="/src/management/api/resources/guardian/resources/factors/resources/phone/client/Client.ts">get</a>() -> Management.GetPhoneFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.phone.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `PhoneClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.phone.<a href="/src/management/api/resources/guardian/resources/factors/resources/phone/client/Client.ts">set</a>({ ...params }) -> Management.SetPhoneFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.phone.set({
+    otp_length: 1,
+    otp_expiration_time: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetPhoneFactorSettingsRequestContent`
 
 </dd>
 </dl>

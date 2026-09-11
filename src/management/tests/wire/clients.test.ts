@@ -16,6 +16,8 @@ describe("ClientsClient", () => {
             clients: [
                 {
                     client_id: "client_id",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
                     tenant: "tenant",
                     name: "name",
                     description: "description",
@@ -71,6 +73,7 @@ describe("ClientsClient", () => {
                         connection_deletion_behavior: "allow",
                     },
                     identity_assertion_authorization_grant: { active: true },
+                    anonymous_sessions: { active: true },
                     third_party_security_mode: "strict",
                     redirection_policy: "allow_always",
                     resource_server_identifier: "resource_server_identifier",
@@ -193,6 +196,8 @@ describe("ClientsClient", () => {
         const rawRequestBody = { name: "name" };
         const rawResponseBody = {
             client_id: "client_id",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
             tenant: "tenant",
             name: "name",
             description: "description",
@@ -397,6 +402,7 @@ describe("ClientsClient", () => {
                 invitation_landing_client_id: "invitation_landing_client_id",
             },
             identity_assertion_authorization_grant: { active: true },
+            anonymous_sessions: { active: true },
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -857,6 +863,8 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = {
             client_id: "client_id",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
             tenant: "tenant",
             name: "name",
             description: "description",
@@ -1061,6 +1069,7 @@ describe("ClientsClient", () => {
                 invitation_landing_client_id: "invitation_landing_client_id",
             },
             identity_assertion_authorization_grant: { active: true },
+            anonymous_sessions: { active: true },
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -1213,6 +1222,8 @@ describe("ClientsClient", () => {
         const rawRequestBody = {};
         const rawResponseBody = {
             client_id: "client_id",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
             tenant: "tenant",
             name: "name",
             description: "description",
@@ -1417,6 +1428,7 @@ describe("ClientsClient", () => {
                 invitation_landing_client_id: "invitation_landing_client_id",
             },
             identity_assertion_authorization_grant: { active: true },
+            anonymous_sessions: { active: true },
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -1546,6 +1558,8 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = {
             client_id: "client_id",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
             tenant: "tenant",
             name: "name",
             description: "description",
@@ -1750,6 +1764,7 @@ describe("ClientsClient", () => {
                 invitation_landing_client_id: "invitation_landing_client_id",
             },
             identity_assertion_authorization_grant: { active: true },
+            anonymous_sessions: { active: true },
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",

@@ -357,6 +357,7 @@ export interface CreateClientRequestContent {
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string;
     identity_assertion_authorization_grant?: Management.CreateIdentityAssertionAuthorizationGrant;
+    anonymous_sessions?: Management.CreateAnonymousSessions;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
     redirection_policy?: Management.ClientRedirectionPolicyEnum;
     express_configuration?: Management.ExpressConfiguration;
@@ -459,6 +460,7 @@ export interface UpdateClientRequestContent {
     custom_login_page_preview?: string;
     token_quota?: Management.UpdateTokenQuota | null;
     identity_assertion_authorization_grant?: Management.UpdateIdentityAssertionAuthorizationGrant | null;
+    anonymous_sessions?: Management.UpdateAnonymousSessions | null;
     /** Form template for WS-Federation protocol */
     form_template?: string;
     addons?: Management.ClientAddons;
@@ -734,7 +736,7 @@ export interface ListDeviceCredentialsRequestParameters {
     user_id?: string | null;
     /** client_id of the devices to retrieve. */
     client_id?: string | null;
-    /** Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested */
+    /** Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. If none is provided a combined list of `refresh_tokens` and `public_keys` will be returned (and no `rotating_refresh_token`), in this case `page`, `per_page` and `include_totals` will be ignored. */
     type?: Management.DeviceCredentialTypeEnum | null;
 }
 
@@ -1092,6 +1094,26 @@ export interface ListGroupsRequestParameters {
 /**
  * @example
  *     {
+ *         display_remember_me_checkbox: true,
+ *         remember_me_default_value: true,
+ *         mfa_session_inactivity_timeout: 1,
+ *         mfa_session_overall_timeout: 1
+ *     }
+ */
+export interface SetGuardianSettingsRequestContent {
+    /** Determines whether to display the "Remember Me" checkbox on the MFA prompt in Universal Login. */
+    display_remember_me_checkbox: boolean;
+    /** Determines the default state of the "Remember Me" checkbox on the MFA prompt in Universal Login. */
+    remember_me_default_value: boolean;
+    /** Duration of inactivity after which the user will be prompted for MFA. Represented as seconds. Minimum duration is 1 hour, maximum is 30 days, and cannot exceed the overall timeout. */
+    mfa_session_inactivity_timeout: number;
+    /** Maximum duration after which the user will be prompted for MFA regardless of activity. Represented as seconds. Minimum duration is 1 hour, maximum is 90 days. */
+    mfa_session_overall_timeout: number;
+}
+
+/**
+ * @example
+ *     {
  *         page: 1,
  *         per_page: 1,
  *         include_totals: true,
@@ -1282,97 +1304,6 @@ export interface UpdateNetworkAclRequestContent {
 /**
  * @example
  *     {
- *         from: "from",
- *         take: 1
- *     }
- */
-export interface ListOrganizationTemplatesRequestParameters {
-    /** Optional Id from which to start selection. */
-    from?: string | null;
-    /** Number of results per page. Defaults to 5. Values greater than 10 are capped at 10. */
-    take?: number | null;
-}
-
-/**
- * @example
- *     {
- *         name: "name",
- *         organization_deletion_behavior: "allow",
- *         enforce_permission_ceiling: true,
- *         enforce_self_assignment_restriction: true
- *     }
- */
-export interface CreateOrganizationTemplateRequestContent {
-    /** The name of the organization template. */
-    name: string;
-    /** Whether this is the default template applied to new organizations. */
-    is_default?: boolean;
-    organization_deletion_behavior: Management.OrganizationDeletionBehaviorEnum;
-    connection_deletion_behavior?: Management.ConnectionDeletionBehaviorEnum;
-    /** Whether to enforce permission ceiling for organizations using this template. */
-    enforce_permission_ceiling: boolean;
-    /** Whether to enforce self-assignment restrictions for organizations using this template. */
-    enforce_self_assignment_restriction: boolean;
-    /** The connection profile to apply to new connections. */
-    connection_profile_id?: string | null;
-    /** The user attribute profile to apply to organizations. */
-    user_attribute_profile_id?: string | null;
-    /** List of allowed connection strategies for this template. */
-    allowed_strategies?: Management.OrganizationTemplateAllowedStrategyEnum[] | null;
-    /** The client ID for the invitation landing page. */
-    invitation_landing_client_id?: string | null;
-    /** Default admin roles to assign to organization creators. */
-    admin_roles_assignment?: string[] | null;
-    use_for_organization_discovery?: Management.OrganizationTemplateUseForOrganizationDiscovery | null;
-    role_visibility_policy?: Management.OrganizationTemplateRoleVisibilityPolicy | null;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateOrganizationTemplateRequestContent {
-    /** The name of the organization template. */
-    name?: string;
-    /** Whether this is the default template applied to new organizations. */
-    is_default?: boolean;
-    organization_deletion_behavior?: Management.OrganizationDeletionBehaviorEnum;
-    connection_deletion_behavior?: Management.ConnectionDeletionBehaviorEnum;
-    /** Whether to enforce permission ceiling for organizations using this template. */
-    enforce_permission_ceiling?: boolean;
-    /** Whether to enforce self-assignment restrictions for organizations using this template. */
-    enforce_self_assignment_restriction?: boolean;
-    /** The connection profile to apply to new connections. */
-    connection_profile_id?: string | null;
-    /** The user attribute profile to apply to organizations. */
-    user_attribute_profile_id?: string | null;
-    /** List of allowed connection strategies for this template. */
-    allowed_strategies?: Management.OrganizationTemplateAllowedStrategyEnum[] | null;
-    /** The client ID for the invitation landing page. */
-    invitation_landing_client_id?: string | null;
-    /** Default admin roles to assign to organization creators. */
-    admin_roles_assignment?: string[] | null;
-    use_for_organization_discovery?: Management.OrganizationTemplateUseForOrganizationDiscovery | null;
-    role_visibility_policy?: Management.OrganizationTemplateRoleVisibilityPolicy | null;
-}
-
-/**
- * @example
- *     {
- *         from: "from",
- *         take: 1
- *     }
- */
-export interface ListTemplateOrganizationsRequestParameters {
-    /** Optional Id from which to start selection. */
-    from?: string | null;
-    /** Number of results per page. Defaults to 5. Values greater than 10 are capped at 10. */
-    take?: number | null;
-}
-
-/**
- * @example
- *     {
  *         include_totals: true,
  *         from: "from",
  *         take: 1,
@@ -1412,6 +1343,29 @@ export interface CreateOrganizationRequestContent {
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum;
     /** Whether app entitlement is active for this organization. */
     is_app_entitlement_active?: boolean;
+}
+
+/**
+ * @example
+ *     {
+ *         q: "q",
+ *         parser: "scim",
+ *         take: 1,
+ *         from: "from",
+ *         sort: "name"
+ *     }
+ */
+export interface SearchOrganizationsRequestParameters {
+    /** Filter expression in SCIM or Lucene syntax (depending on parser parameter, default: Lucene). Lucene examples: `name:acme*`, `display_name:*auth*`. SCIM examples: `name eq "Auth0"`, `display_name sw "auth" and created_at gt "2024-01-01"`. SCIM operators: eq, ne, sw, ew, co, pr, gt, ge, lt, le, and, or. <br /><br /><b>Supported Fields</b>:<ul><li><i>id</i> - Organization ID (case-sensitive, exact match)</li><li><i>name</i> - Organization name (supports contains, starts-with, ends-with operators; sortable)</li><li><i>display_name</i> - Organization display name (supports contains, starts-with, ends-with operators; sortable)</li><li><i>created_at</i> - Creation timestamp (supports date range operators; sortable)</li><li><i>metadata.{key}</i> - Filter by organization metadata key-value pairs</li></ul>Maximum 5 filter operations per query. Results are eventually consistent and may not reflect recent updates. */
+    q?: string | null;
+    /** Query parser to use for the filter expression. Use "scim" for SCIM filter syntax or "lucene" for Lucene query syntax (default). */
+    parser?: Management.SearchParserEnum | null;
+    /** Maximum number of results to return per page (1-100). Defaults to 50. */
+    take?: number | null;
+    /** Cursor for the next page of results. Use the value from the next field in the previous response. */
+    from?: string | null;
+    /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
+    sort?: Management.OrganizationSortFieldEnum | null;
 }
 
 /**
@@ -1594,6 +1548,8 @@ export interface CreateResourceServerRequestContent {
     allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
+    /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
+    token_lifetime_for_anonymous_access_tokens?: number | null;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
     /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
     skip_consent_for_verifiable_first_party_clients?: boolean;
@@ -1605,6 +1561,35 @@ export interface CreateResourceServerRequestContent {
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
     authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
+}
+
+/**
+ * @example
+ *     {
+ *         q: "q",
+ *         parser: "scim",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         take: 1,
+ *         from: "from",
+ *         sort: "identifier"
+ *     }
+ */
+export interface SearchResourceServersRequestParameters {
+    /** Filter expression in SCIM or Lucene syntax (depending on parser parameter). SCIM examples: `name eq "My API"`, `identifier sw "https://"`. SCIM operators: eq, ne, sw, ew, co, pr, gt, ge, lt, le, and, or. <br /><br /><b>Supported Fields</b>:<ul><li><i>id</i> - Filter by resource server ID</li><li><i>identifier</i> - Filter by resource server identifier</li><li><i>name</i> - Filter by resource server name</li><li><i>updated_at</i> - Filter by last update date</li></ul>Maximum 5 filter operations per query. Results are eventually consistent and may not reflect recent updates. */
+    q?: string | null;
+    /** Query parser to use for the filter expression. Use "scim" for SCIM filter syntax or "lucene" for Lucene query syntax (default). */
+    parser?: Management.SearchParserEnum | null;
+    /** Comma-separated list of fields to include or exclude in the response. Works with the include_fields parameter to control projection mode. */
+    fields?: string | null;
+    /** Controls field projection mode. Set to true to include only fields specified in the fields parameter. Set to false to exclude fields specified in the fields parameter. Defaults to true if not specified. */
+    include_fields?: boolean | null;
+    /** Maximum number of results to return per page (1-100). Defaults to 50. */
+    take?: number | null;
+    /** Cursor for the next page of results. Use the value from the next field in the previous response. */
+    from?: string | null;
+    /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
+    sort?: Management.ResourceServerSortFieldEnum | null;
 }
 
 /**
@@ -1640,6 +1625,8 @@ export interface UpdateResourceServerRequestContent {
     allow_online_access_with_ephemeral_sessions?: boolean;
     /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
     token_lifetime?: number;
+    /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
+    token_lifetime_for_anonymous_access_tokens?: number | null;
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
     /** Whether authorization policies are enforced (true) or not enforced (false). */
     enforce_policies?: boolean;
@@ -3005,6 +2992,17 @@ export interface CreateEventStreamRedeliveryRequestContent {
 /**
  * @example
  *     {
+ *         target_level: 1
+ *     }
+ */
+export interface AdvanceRampRequestContent {
+    /** The target percentage level from the experiment schedule. Must be the immediate next level. */
+    target_level: number;
+}
+
+/**
+ * @example
+ *     {
  *         include_totals: true,
  *         from: "from",
  *         take: 1
@@ -3149,6 +3147,20 @@ export interface SetGuardianFactorRequestContent {
 /**
  * @example
  *     {
+ *         otp_length: 1,
+ *         otp_expiration_time: 1
+ *     }
+ */
+export interface SetEmailFactorSettingsRequestContent {
+    /** The length of the OTP code. */
+    otp_length: number;
+    /** The OTP expiration time in seconds. */
+    otp_expiration_time: number;
+}
+
+/**
+ * @example
+ *     {
  *         message_types: ["sms"]
  *     }
  */
@@ -3180,6 +3192,20 @@ export interface SetGuardianFactorsProviderPhoneTwilioRequestContent {
  */
 export interface SetGuardianFactorsProviderPhoneRequestContent {
     provider: Management.GuardianFactorsProviderSmsProviderEnum;
+}
+
+/**
+ * @example
+ *     {
+ *         otp_length: 1,
+ *         otp_expiration_time: 1
+ *     }
+ */
+export interface SetPhoneFactorSettingsRequestContent {
+    /** The length of the OTP code. */
+    otp_length: number;
+    /** The OTP expiration time in seconds. */
+    otp_expiration_time: number;
 }
 
 /**
