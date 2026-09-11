@@ -1,5 +1,37 @@
 # Change Log
 
+## [v7.1.0](https://github.com/auth0/node-auth0/tree/v7.1.0) (2026-09-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.0.0...v7.1.0)
+
+**⚠️ Breaking Changes**
+
+- Removed the top-level `client.organizationTemplates` resource (`list()`, `create()`, `get()`, `update()`, `listOrganizations()`), a Limited EA feature that was exposed before it was ready; removed associated `OauthScope` values `CreateOrganizationTemplates` and `UpdateOrganizationTemplates`; removed types `ListOrganizationTemplatesPaginatedResponseContent`, `OrganizationTemplateAssignedOrganization`, `ListTemplateOrganizationsPaginatedResponseContent`, `OrganizationTemplatesClient` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- Renamed and removed beta `-mcp` values on `ConnectionStrategyEnum` and `ConnectionIdentityProviderEnum`: dropped the `-mcp` suffix on `asana`, `atlassian`, `gitlab`, and `slack`; removed `docusign`, `figma`, `gusto`, `heroku`, `intercom`, `pagerduty`, `supabase`, `vercel`, and `xero`; `notion`, `cloudflare`, `hubspot`, `linear`, and `sentry` still use the `-mcp` suffix [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Added**
+
+- feat: add `guardian.get()` / `guardian.set()` for Guardian settings (`GET/PUT /api/v2/guardian/settings`), along with the `GetGuardianSettingsResponseContent`, `SetGuardianSettingsResponseContent`, and `SetGuardianSettingsRequestContent` types; properties: `display_remember_me_checkbox`, `remember_me_default_value`, `mfa_session_inactivity_timeout`, `mfa_session_overall_timeout` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `guardian.factors.email.get()` / `guardian.factors.email.set()` for email MFA factor settings (`GET/PUT /api/v2/guardian/factors/email/settings`), along with the `GetEmailFactorSettingsResponseContent`, `SetEmailFactorSettingsResponseContent`, and `SetEmailFactorSettingsRequestContent` types; properties: `otp_length`, `otp_expiration_time` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `guardian.factors.phone.get()` / `guardian.factors.phone.set()` for phone MFA factor settings (`GET/PUT /api/v2/guardian/factors/phone/settings`), along with the `GetPhoneFactorSettingsResponseContent`, `SetPhoneFactorSettingsResponseContent`, and `SetPhoneFactorSettingsRequestContent` types; properties: `otp_length`, `otp_expiration_time` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `client.experimentation.experiments.advanceRamp(id, request)` for the Experimentation API (`POST /api/v2/experimentation/experiments/{id}/advance-ramp`), along with the `AdvanceRampResponseContent` and `AdvanceRampRequestContent` types; add `UpdateExperimentation: "update:experimentation"` to `OauthScope` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `organizations.search(request)` for the cursor-paginated search endpoint (`GET /api/v2/organizations/search`) with SCIM/Lucene filter syntax, along with the `SearchOrganizationsRequestParameters`, `SearchOrganization`, `SearchOrganizationsPaginatedResponseContent`, `OrganizationSortFieldEnum`, and `SearchParserEnum` types [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `resourceServers.search(request)` for the cursor-paginated search endpoint (`GET /api/v2/resource-servers/search`) with SCIM/Lucene filter syntax, along with the `SearchResourceServersRequestParameters`, `ResourceServerSearchResponse`, `SearchResourceServersResponseContent`, and `ResourceServerSortFieldEnum` types [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add the `AnonymousSessions` type (with `CreateAnonymousSessions` and `UpdateAnonymousSessions`) to `Client`, `CreateClientRequestContent`, `UpdateClientRequestContent`, and all client response types via `anonymous_sessions.active` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `TenantSettingsSessionsAnonymous` to tenant settings (`sessions.anonymous.lifetime_in_minutes`, `sessions.anonymous.activate_cookie`) [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `subject_type_authorization.anonymous_user.policy` (`deny_all` | `require_client_grant`) and `token_lifetime_for_anonymous_access_tokens` to resource server types, along with `ResourceServerSubjectTypeAuthorizationAnonymousUser` and `ResourceServerSubjectTypeAuthorizationAnonymousUserPolicyEnum` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+- feat: add `GatewayTimeoutError` type and map HTTP `504` responses to it; surfaced in `organizations.search()` and `resourceServers.search()` [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.0.0](https://github.com/auth0/node-auth0/tree/v7.0.0) (2026-09-08)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v6.4.0...v7.0.0)
