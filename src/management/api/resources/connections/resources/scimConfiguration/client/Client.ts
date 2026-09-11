@@ -222,6 +222,7 @@ export class ScimConfigurationClient {
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.ConflictError}
      *
      * @example
      *     await client.connections.scimConfiguration.create("id")
@@ -277,6 +278,8 @@ export class ScimConfigurationClient {
                     throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.ManagementError({
                         statusCode: _response.error.statusCode,

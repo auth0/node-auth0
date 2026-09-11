@@ -9,6 +9,7 @@ import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStat
 import * as errors from "../../../../../../errors/index.js";
 import * as Management from "../../../../../index.js";
 import { DuoClient } from "../resources/duo/client/Client.js";
+import { EmailClient } from "../resources/email/client/Client.js";
 import { PhoneClient } from "../resources/phone/client/Client.js";
 import { PushNotificationClient } from "../resources/pushNotification/client/Client.js";
 import { SmsClient } from "../resources/sms/client/Client.js";
@@ -21,6 +22,7 @@ export declare namespace FactorsClient {
 
 export class FactorsClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<FactorsClient.Options>;
+    protected _email: EmailClient | undefined;
     protected _phone: PhoneClient | undefined;
     protected _pushNotification: PushNotificationClient | undefined;
     protected _sms: SmsClient | undefined;
@@ -28,6 +30,10 @@ export class FactorsClient {
 
     constructor(options: FactorsClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
+    }
+
+    public get email(): EmailClient {
+        return (this._email ??= new EmailClient(this._options));
     }
 
     public get phone(): PhoneClient {

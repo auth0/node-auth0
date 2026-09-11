@@ -251,6 +251,25 @@ describe("ScimConfigurationClient", () => {
         }).rejects.toThrow(Management.NotFoundError);
     });
 
+    test("create (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/connections/id/scim-configuration")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.connections.scimConfiguration.create("id", undefined);
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });

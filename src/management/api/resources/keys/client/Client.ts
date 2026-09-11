@@ -6,6 +6,7 @@ import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { CustomSigningClient } from "../resources/customSigning/client/Client.js";
 import { EncryptionClient } from "../resources/encryption/client/Client.js";
+import { NetworkAclsClient } from "../resources/networkAcls/client/Client.js";
 import { SigningClient } from "../resources/signing/client/Client.js";
 
 export declare namespace KeysClient {
@@ -16,6 +17,7 @@ export class KeysClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<KeysClient.Options>;
     protected _customSigning: CustomSigningClient | undefined;
     protected _encryption: EncryptionClient | undefined;
+    protected _networkAcls: NetworkAclsClient | undefined;
     protected _signing: SigningClient | undefined;
 
     constructor(options: KeysClient.Options) {
@@ -28,6 +30,10 @@ export class KeysClient {
 
     public get encryption(): EncryptionClient {
         return (this._encryption ??= new EncryptionClient(this._options));
+    }
+
+    public get networkAcls(): NetworkAclsClient {
+        return (this._networkAcls ??= new NetworkAclsClient(this._options));
     }
 
     public get signing(): SigningClient {

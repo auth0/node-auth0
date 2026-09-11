@@ -29,6 +29,7 @@ describe("ResourceServersClient", () => {
                     token_lifetime: 1,
                     token_lifetime_for_web: 1,
                     enforce_policies: true,
+                    token_lifetime_for_anonymous_access_tokens: 1,
                     token_dialect: "access_token",
                     token_encryption: {
                         format: "compact-nested-jwe",
@@ -160,6 +161,7 @@ describe("ResourceServersClient", () => {
             token_lifetime: 1,
             token_lifetime_for_web: 1,
             enforce_policies: true,
+            token_lifetime_for_anonymous_access_tokens: 1,
             token_dialect: "access_token",
             token_encryption: {
                 format: "compact-nested-jwe",
@@ -168,7 +170,11 @@ describe("ResourceServersClient", () => {
             consent_policy: "transactional-authorization-with-mfa",
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
-            subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
+            subject_type_authorization: {
+                user: { policy: "allow_all" },
+                client: { policy: "deny_all" },
+                anonymous_user: { policy: "deny_all" },
+            },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
         };
@@ -298,6 +304,199 @@ describe("ResourceServersClient", () => {
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
+    test("search (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            resource_servers: [
+                {
+                    id: "id",
+                    name: "name",
+                    is_system: true,
+                    identifier: "identifier",
+                    scopes: [{ value: "value" }],
+                    signing_alg: "HS256",
+                    allow_offline_access: true,
+                    allow_online_access: true,
+                    allow_online_access_with_ephemeral_sessions: true,
+                    skip_consent_for_verifiable_first_party_clients: true,
+                    token_lifetime: 1,
+                    token_lifetime_for_web: 1,
+                    enforce_policies: true,
+                    token_lifetime_for_anonymous_access_tokens: 1,
+                    token_dialect: "access_token",
+                    token_encryption: {
+                        format: "compact-nested-jwe",
+                        encryption_key: { alg: "RSA-OAEP-256", pem: "pem" },
+                    },
+                    consent_policy: "transactional-authorization-with-mfa",
+                    proof_of_possession: { mechanism: "mtls", required: true },
+                    authorization_policy: { policy_id: "policy_id" },
+                    client_id: "client_id",
+                },
+            ],
+            next: "next",
+        };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = rawResponseBody;
+        const page = await client.resourceServers.search({
+            q: "q",
+            parser: "scim",
+            fields: "fields",
+            include_fields: true,
+            take: 1,
+            from: "from",
+            sort: "identifier",
+        });
+
+        expect(expected.resource_servers).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.resource_servers).toEqual(nextPage.data);
+    });
+
+    test("search (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.resourceServers.search();
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("search (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.resourceServers.search();
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("search (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.resourceServers.search();
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("search (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.resourceServers.search();
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("search (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.resourceServers.search();
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("search (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.resourceServers.search();
+        }).rejects.toThrow(Management.InternalServerError);
+    });
+
+    test("search (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/resource-servers/search")
+            .respondWith()
+            .statusCode(504)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.resourceServers.search();
+        }).rejects.toThrow(Management.GatewayTimeoutError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
@@ -317,6 +516,7 @@ describe("ResourceServersClient", () => {
             token_lifetime: 1,
             token_lifetime_for_web: 1,
             enforce_policies: true,
+            token_lifetime_for_anonymous_access_tokens: 1,
             token_dialect: "access_token",
             token_encryption: {
                 format: "compact-nested-jwe",
@@ -325,7 +525,11 @@ describe("ResourceServersClient", () => {
             consent_policy: "transactional-authorization-with-mfa",
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
-            subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
+            subject_type_authorization: {
+                user: { policy: "allow_all" },
+                client: { policy: "deny_all" },
+                anonymous_user: { policy: "deny_all" },
+            },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
         };
@@ -544,6 +748,7 @@ describe("ResourceServersClient", () => {
             token_lifetime: 1,
             token_lifetime_for_web: 1,
             enforce_policies: true,
+            token_lifetime_for_anonymous_access_tokens: 1,
             token_dialect: "access_token",
             token_encryption: {
                 format: "compact-nested-jwe",
@@ -552,7 +757,11 @@ describe("ResourceServersClient", () => {
             consent_policy: "transactional-authorization-with-mfa",
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
-            subject_type_authorization: { user: { policy: "allow_all" }, client: { policy: "deny_all" } },
+            subject_type_authorization: {
+                user: { policy: "allow_all" },
+                client: { policy: "deny_all" },
+                anonymous_user: { policy: "deny_all" },
+            },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
         };

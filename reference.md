@@ -1356,7 +1356,7 @@ For more information, read [Applications in Auth0](https://www.auth0.com/docs/ge
   `jwt_configuration.lifetime_in_seconds`, `jwt_configuration.secret_encoded`,
   `jwt_configuration.scopes`, `jwt_configuration.alg`, `api_type`,
   `logo_uri`, `allowed_clients`, `owners`, `custom_login_page`,
-  `custom_login_page_off`, `sso`, `addons`, `form_template`,
+  `custom_login_page_on`, `sso`, `addons`, `form_template`,
   `custom_login_page_codeview`, `resource_servers`, `client_metadata`,
   `mobile`, `mobile.android`, `mobile.ios`, `allowed_logout_urls`,
   `token_endpoint_auth_method`, `is_first_party`, `oidc_conformant`,
@@ -1697,7 +1697,7 @@ For more information, read [Applications in Auth0](https://www.auth0.com/docs/ge
   `jwt_configuration.lifetime_in_seconds`, `jwt_configuration.secret_encoded`,
   `jwt_configuration.scopes`, `jwt_configuration.alg`, `api_type`,
   `logo_uri`, `allowed_clients`, `owners`, `custom_login_page`,
-  `custom_login_page_off`, `sso`, `addons`, `form_template`,
+  `custom_login_page_on`, `sso`, `addons`, `form_template`,
   `custom_login_page_codeview`, `resource_servers`, `client_metadata`,
   `mobile`, `mobile.android`, `mobile.ios`, `allowed_logout_urls`,
   `token_endpoint_auth_method`, `is_first_party`, `oidc_conformant`,
@@ -2770,7 +2770,7 @@ await client.connections.delete("id");
 
 Update details for a specific [connection](https://auth0.com/docs/authenticate/identity-providers), including option properties for identity provider configuration.
 
-**Note**: If you use the `options` parameter, the entire `options` object is overridden. To avoid partial data or other issues, ensure all parameters are present when using this option.
+**Note**: If you use the `options` parameter, the entire `options` object is overridden. To avoid partial data or other issues, ensure all parameters are present when using this option. If any options are unspecified, the default will be used, even if it differs from the existing value.
 
 </dd>
 </dl>
@@ -5442,6 +5442,131 @@ await client.groups.delete("id");
 </dl>
 </details>
 
+## Guardian
+
+<details><summary><code>client.guardian.<a href="/src/management/api/resources/guardian/client/Client.ts">get</a>() -> Management.GetGuardianSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `GuardianClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.<a href="/src/management/api/resources/guardian/client/Client.ts">set</a>({ ...params }) -> Management.SetGuardianSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a tenant's guardian settings such as Remember Me
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.set({
+    display_remember_me_checkbox: true,
+    remember_me_default_value: true,
+    mfa_session_inactivity_timeout: 1,
+    mfa_session_overall_timeout: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetGuardianSettingsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `GuardianClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Hooks
 
 <details><summary><code>client.hooks.<a href="/src/management/api/resources/hooks/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Hook, Management.ListHooksOffsetPaginatedResponseContent&gt;</code></summary>
@@ -7542,6 +7667,107 @@ await client.organizations.getByName("name");
 </dl>
 </details>
 
+<details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">search</a>({ ...params }) -> core.Page&lt;Management.SearchOrganization, Management.SearchOrganizationsPaginatedResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details of organizations matching a search criteria. It is possible to:
+
+- Specify a search criteria for organizations
+- Search via `name`
+- Search via `display_name`
+- Substring matching (`contains` and `ends-with`) requires at least 3 characters
+- Use wildcards
+
+The `q` query parameter can be used to get organizations that match the specified criteria on `name` OR `display_name`.
+
+This endpoint supports SCIM or Lucene filter syntax with low-latency, cursor-based pagination. Use the `parser` parameter to specify "scim" or "lucene" syntax (default: "lucene").
+
+Results are eventually consistent and may not reflect recent updates immediately.
+
+**Sortable fields:** `name`, `display_name`, `created_at` (ascending only). Defaults to insertion order (oldest first).
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.organizations.search({
+    q: "q",
+    parser: "scim",
+    take: 1,
+    from: "from",
+    sort: "name",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.organizations.search({
+    q: "q",
+    parser: "scim",
+    take: 1,
+    from: "from",
+    sort: "name",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SearchOrganizationsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrganizationsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.organizations.<a href="/src/management/api/resources/organizations/client/Client.ts">get</a>(id) -> Management.GetOrganizationResponseContent</code></summary>
 <dl>
 <dd>
@@ -8633,6 +8859,100 @@ await client.resourceServers.create({
 <dd>
 
 **request:** `Management.CreateResourceServerRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ResourceServersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.resourceServers.<a href="/src/management/api/resources/resourceServers/client/Client.ts">search</a>({ ...params }) -> core.Page&lt;Management.ResourceServerSearchResponse, Management.SearchResourceServersResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search resource servers using SCIM or Lucene filter syntax with low-latency, eventually consistent results. Use the parser parameter to specify "scim" or "lucene" syntax (default: "lucene"). This endpoint provides an alternative to the standard GET /resource-servers endpoint with better performance for complex queries.
+Results may not reflect recent updates immediately.
+
+The `signing_secret` field is not supported by this endpoint.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.resourceServers.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "identifier",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.resourceServers.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "identifier",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SearchResourceServersRequestParameters`
 
 </dd>
 </dl>
@@ -19058,6 +19378,81 @@ await client.eventStreams.redeliveries.createById("id", "event_id");
 </dl>
 </details>
 
+## Experimentation Experiments
+
+<details><summary><code>client.experimentation.experiments.<a href="/src/management/api/resources/experimentation/resources/experiments/client/Client.ts">advanceRamp</a>(id, { ...params }) -> Management.AdvanceRampResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Increments the current ramp index to the requested target level. Up-only: the target must be the immediate next level in the schedule. Idempotent: calling with the current level returns success without writing anything.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.experimentation.experiments.advanceRamp("id", {
+    target_level: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the experiment to advance.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.AdvanceRampRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ExperimentsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Flows Executions
 
 <details><summary><code>client.flows.executions.<a href="/src/management/api/resources/flows/resources/executions/client/Client.ts">list</a>(flow_id, { ...params }) -> core.Page&lt;Management.FlowExecutionSummary, Management.ListFlowExecutionsPaginatedResponseContent&gt;</code></summary>
@@ -20325,6 +20720,129 @@ await client.guardian.policies.set(["all-applications"]);
 </dl>
 </details>
 
+## Guardian Factors Email
+
+<details><summary><code>client.guardian.factors.email.<a href="/src/management/api/resources/guardian/resources/factors/resources/email/client/Client.ts">get</a>() -> Management.GetEmailFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.email.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `EmailClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.email.<a href="/src/management/api/resources/guardian/resources/factors/resources/email/client/Client.ts">set</a>({ ...params }) -> Management.SetEmailFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.email.set({
+    otp_length: 1,
+    otp_expiration_time: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetEmailFactorSettingsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `EmailClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Guardian Factors Phone
 
 <details><summary><code>client.guardian.factors.phone.<a href="/src/management/api/resources/guardian/resources/factors/resources/phone/client/Client.ts">getMessageTypes</a>() -> Management.GetGuardianFactorPhoneMessageTypesResponseContent</code></summary>
@@ -20652,6 +21170,127 @@ await client.guardian.factors.phone.setProvider({
 <dd>
 
 **request:** `Management.SetGuardianFactorsProviderPhoneRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PhoneClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.phone.<a href="/src/management/api/resources/guardian/resources/factors/resources/phone/client/Client.ts">get</a>() -> Management.GetPhoneFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.phone.get();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `PhoneClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.guardian.factors.phone.<a href="/src/management/api/resources/guardian/resources/factors/resources/phone/client/Client.ts">set</a>({ ...params }) -> Management.SetPhoneFactorSettingsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+TODO: Link this endpoint to relevant documentation when available.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.guardian.factors.phone.set({
+    otp_length: 1,
+    otp_expiration_time: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SetPhoneFactorSettingsRequestContent`
 
 </dd>
 </dl>
@@ -23265,6 +23904,256 @@ await client.keys.encryption.createPublicWrappingKey("kid");
 </dl>
 </details>
 
+## Keys NetworkAcls
+
+<details><summary><code>client.keys.networkAcls.<a href="/src/management/api/resources/keys/resources/networkAcls/client/Client.ts">list</a>() -> Management.GetAllKeysNetworkAclsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all keys used to verify HTTP Message Signatures on Network ACL rules, ordered by creation time descending.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.keys.networkAcls.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAclsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.keys.networkAcls.<a href="/src/management/api/resources/keys/resources/networkAcls/client/Client.ts">create</a>({ ...params }) -> Management.CreateKeysNetworkAclsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new key used to verify HTTP Message Signatures on Network ACL rules.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.keys.networkAcls.create({
+    name: "name",
+    alg: "hmac-sha256",
+    value: "value",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateKeysNetworkAclsRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAclsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.keys.networkAcls.<a href="/src/management/api/resources/keys/resources/networkAcls/client/Client.ts">get</a>(id) -> Management.NetworkAclKey</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a specific key used to verify HTTP Message Signatures on Network ACL rules.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.keys.networkAcls.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the Network ACL Key to retrieve.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAclsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.keys.networkAcls.<a href="/src/management/api/resources/keys/resources/networkAcls/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a key used to verify HTTP Message Signatures on Network ACL rules
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.keys.networkAcls.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the Network ACL Key to delete.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `NetworkAclsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Keys Signing
 
 <details><summary><code>client.keys.signing.<a href="/src/management/api/resources/keys/resources/signing/client/Client.ts">list</a>() -> Management.SigningKeys[]</code></summary>
@@ -25798,6 +26687,213 @@ await client.organizations.members.delete("id", {
 <dd>
 
 **requestOptions:** `MembersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Organizations OrganizationTemplate
+
+<details><summary><code>client.organizations.organizationTemplate.<a href="/src/management/api/resources/organizations/resources/organizationTemplate/client/Client.ts">get</a>(id) -> Management.OrganizationTemplate</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the organization template assigned to a specific organization. Returns the template object if one is explicitly assigned, or a 404 if no template is assigned.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.organizationTemplate.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrganizationTemplateClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.organizationTemplate.<a href="/src/management/api/resources/organizations/resources/organizationTemplate/client/Client.ts">assignOrganizationTemplate</a>(id, template_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Assign an Organization Template to an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.organizationTemplate.assignOrganizationTemplate("id", "template_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**template_id:** `string` — The ID of the organization template to assign.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrganizationTemplateClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.organizationTemplate.<a href="/src/management/api/resources/organizations/resources/organizationTemplate/client/Client.ts">unassignOrganizationTemplate</a>(id, template_id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove an Organization Template assignment from an organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.organizations.organizationTemplate.unassignOrganizationTemplate("id", "template_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the organization.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**template_id:** `string` — The ID of the organization template to unassign.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `OrganizationTemplateClient.RequestOptions`
 
 </dd>
 </dl>
@@ -30254,6 +31350,22 @@ await client.users.multifactor.deleteProvider("id", "duo");
 <dd>
 
 Retrieve list of the specified user's current Organization memberships. User must be specified by user ID. For more information, review [Auth0 Organizations](https://auth0.com/docs/manage-users/organizations).
+
+This endpoint supports two types of pagination:
+
+- Offset pagination
+- Checkpoint pagination
+
+Checkpoint pagination must be used if you need to retrieve more than 1000 organizations.
+
+**Checkpoint Pagination**
+
+To search by checkpoint, use the following parameters:
+
+- `from`: Optional id from which to start selection.
+- `take`: The total number of entries to retrieve when using the `from` parameter. Defaults to 50.
+
+**Note**: The first time you call this endpoint using checkpoint pagination, omit the `from` parameter. If there are more results, a `next` value is included in the response. You can use this for subsequent API calls. When `next` is no longer included in the response, no pages are remaining.
 
 </dd>
 </dl>

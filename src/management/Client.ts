@@ -15,6 +15,7 @@ import { EmailsClient } from "./api/resources/emails/client/Client.js";
 import { EmailTemplatesClient } from "./api/resources/emailTemplates/client/Client.js";
 import { EventsClient } from "./api/resources/events/client/Client.js";
 import { EventStreamsClient } from "./api/resources/eventStreams/client/Client.js";
+import { ExperimentationClient } from "./api/resources/experimentation/client/Client.js";
 import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { FormsClient } from "./api/resources/forms/client/Client.js";
 import { GroupsClient } from "./api/resources/groups/client/Client.js";
@@ -75,6 +76,7 @@ export class ManagementClient {
     protected _forms: FormsClient | undefined;
     protected _userGrants: UserGrantsClient | undefined;
     protected _groups: GroupsClient | undefined;
+    protected _guardian: GuardianClient | undefined;
     protected _hooks: HooksClient | undefined;
     protected _jobs: JobsClient | undefined;
     protected _logStreams: LogStreamsClient | undefined;
@@ -100,7 +102,7 @@ export class ManagementClient {
     protected _anomaly: AnomalyClient | undefined;
     protected _attackProtection: AttackProtectionClient | undefined;
     protected _emails: EmailsClient | undefined;
-    protected _guardian: GuardianClient | undefined;
+    protected _experimentation: ExperimentationClient | undefined;
     protected _keys: KeysClient | undefined;
     protected _riskAssessments: RiskAssessmentsClient | undefined;
     protected _tenants: TenantsClient | undefined;
@@ -172,6 +174,10 @@ export class ManagementClient {
 
     public get groups(): GroupsClient {
         return (this._groups ??= new GroupsClient(this._options));
+    }
+
+    public get guardian(): GuardianClient {
+        return (this._guardian ??= new GuardianClient(this._options));
     }
 
     public get hooks(): HooksClient {
@@ -274,8 +280,8 @@ export class ManagementClient {
         return (this._emails ??= new EmailsClient(this._options));
     }
 
-    public get guardian(): GuardianClient {
-        return (this._guardian ??= new GuardianClient(this._options));
+    public get experimentation(): ExperimentationClient {
+        return (this._experimentation ??= new ExperimentationClient(this._options));
     }
 
     public get keys(): KeysClient {

@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "6.2.0",
+    "version": "7.0.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -198,6 +198,17 @@
                 "default": "./dist/cjs/management/api/resources/groups/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/groups/exports.js"
+        },
+        "./guardian": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/exports.js"
         },
         "./hooks": {
             "import": {
@@ -815,6 +826,28 @@
             },
             "default": "./dist/cjs/management/api/resources/eventStreams/resources/redeliveries/exports.js"
         },
+        "./experimentation": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/experimentation/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/experimentation/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/experimentation/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/experimentation/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/experimentation/exports.js"
+        },
+        "./experimentation/experiments": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/experimentation/resources/experiments/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/experimentation/resources/experiments/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/experimentation/resources/experiments/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/experimentation/resources/experiments/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/experimentation/resources/experiments/exports.js"
+        },
         "./flows/executions": {
             "import": {
                 "types": "./dist/esm/management/api/resources/flows/resources/executions/exports.d.mts",
@@ -870,17 +903,6 @@
             },
             "default": "./dist/cjs/management/api/resources/groups/resources/roles/exports.js"
         },
-        "./guardian": {
-            "import": {
-                "types": "./dist/esm/management/api/resources/guardian/exports.d.mts",
-                "default": "./dist/esm/management/api/resources/guardian/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/management/api/resources/guardian/exports.d.ts",
-                "default": "./dist/cjs/management/api/resources/guardian/exports.js"
-            },
-            "default": "./dist/cjs/management/api/resources/guardian/exports.js"
-        },
         "./guardian/enrollments": {
             "import": {
                 "types": "./dist/esm/management/api/resources/guardian/resources/enrollments/exports.d.mts",
@@ -913,6 +935,17 @@
                 "default": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.js"
+        },
+        "./guardian/factors/email": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/email/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/email/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/email/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/email/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/email/exports.js"
         },
         "./guardian/factors/phone": {
             "import": {
@@ -1057,6 +1090,17 @@
             },
             "default": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.js"
         },
+        "./keys/networkAcls": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/keys/resources/networkAcls/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/keys/resources/networkAcls/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.js"
+        },
         "./keys/signing": {
             "import": {
                 "types": "./dist/esm/management/api/resources/keys/resources/signing/exports.d.mts",
@@ -1144,6 +1188,17 @@
                 "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
+        },
+        "./organizations/organizationTemplate": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
         },
         "./organizations/groups": {
             "import": {

@@ -113,6 +113,25 @@ describe("ExecutionsClient", () => {
             .mockEndpoint()
             .get("/flows/flow_id/executions")
             .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.flows.executions.list("flow_id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("list (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/flows/flow_id/executions")
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -210,6 +229,25 @@ describe("ExecutionsClient", () => {
     });
 
     test("get (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/flows/flow_id/executions/execution_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.flows.executions.get("flow_id", "execution_id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("get (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 

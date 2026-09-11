@@ -14,6 +14,7 @@ export * as emailTemplates from "./emailTemplates/index.js";
 export * as events from "./events/index.js";
 export * as eventStreams from "./eventStreams/index.js";
 export * from "./eventStreams/types/index.js";
+export * as experimentation from "./experimentation/index.js";
 export * as flows from "./flows/index.js";
 export * as forms from "./forms/index.js";
 export * as groups from "./groups/index.js";

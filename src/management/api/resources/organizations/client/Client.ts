@@ -16,6 +16,7 @@ import { EnabledConnectionsClient } from "../resources/enabledConnections/client
 import { GroupsClient } from "../resources/groups/client/Client.js";
 import { InvitationsClient } from "../resources/invitations/client/Client.js";
 import { MembersClient } from "../resources/members/client/Client.js";
+import { OrganizationTemplateClient } from "../resources/organizationTemplate/client/Client.js";
 import { RolesClient } from "../resources/roles/client/Client.js";
 
 export declare namespace OrganizationsClient {
@@ -33,6 +34,7 @@ export class OrganizationsClient {
     protected _enabledConnections: EnabledConnectionsClient | undefined;
     protected _invitations: InvitationsClient | undefined;
     protected _members: MembersClient | undefined;
+    protected _organizationTemplate: OrganizationTemplateClient | undefined;
     protected _groups: GroupsClient | undefined;
     protected _roles: RolesClient | undefined;
 
@@ -66,6 +68,10 @@ export class OrganizationsClient {
 
     public get members(): MembersClient {
         return (this._members ??= new MembersClient(this._options));
+    }
+
+    public get organizationTemplate(): OrganizationTemplateClient {
+        return (this._organizationTemplate ??= new OrganizationTemplateClient(this._options));
     }
 
     public get groups(): GroupsClient {
@@ -370,6 +376,137 @@ export class OrganizationsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/organizations/name/{name}");
+    }
+
+    /**
+     * Retrieve details of organizations matching a search criteria. It is possible to:
+     *
+     * - Specify a search criteria for organizations
+     * - Search via `name`
+     * - Search via `display_name`
+     * - Substring matching (`contains` and `ends-with`) requires at least 3 characters
+     * - Use wildcards
+     *
+     * The `q` query parameter can be used to get organizations that match the specified criteria on `name` OR `display_name`.
+     *
+     * This endpoint supports SCIM or Lucene filter syntax with low-latency, cursor-based pagination. Use the `parser` parameter to specify "scim" or "lucene" syntax (default: "lucene").
+     *
+     * Results are eventually consistent and may not reflect recent updates immediately.
+     *
+     * **Sortable fields:** `name`, `display_name`, `created_at` (ascending only). Defaults to insertion order (oldest first).
+     *
+     * @param {Management.SearchOrganizationsRequestParameters} request
+     * @param {OrganizationsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link Management.GatewayTimeoutError}
+     *
+     * @example
+     *     await client.organizations.search({
+     *         q: "q",
+     *         parser: "scim",
+     *         take: 1,
+     *         from: "from",
+     *         sort: "name"
+     *     })
+     */
+    public async search(
+        request: Management.SearchOrganizationsRequestParameters = {},
+        requestOptions?: OrganizationsClient.RequestOptions,
+    ): Promise<core.Page<Management.SearchOrganization, Management.SearchOrganizationsPaginatedResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.SearchOrganizationsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.SearchOrganizationsPaginatedResponseContent>> => {
+                const { q, parser, take = 50, from: from_, sort } = request;
+                const _queryParams: Record<string, unknown> = {
+                    q,
+                    parser: parser !== undefined ? parser : undefined,
+                    take,
+                    from: from_,
+                    sort: sort !== undefined ? sort : undefined,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "organizations/search",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.SearchOrganizationsPaginatedResponseContent,
+                        rawResponse: _response.rawResponse,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 504:
+                            throw new Management.GatewayTimeoutError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/organizations/search");
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.SearchOrganization, Management.SearchOrganizationsPaginatedResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.organizations ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
     }
 
     /**
