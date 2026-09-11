@@ -68,7 +68,10 @@ describe("SettingsClient", () => {
                 x_xss_protection: { enabled: true, mode: "block", report_uri: "report_uri" },
             },
             session_cookie: { mode: "persistent" },
-            sessions: { oidc_logout_prompt_enabled: true },
+            sessions: {
+                oidc_logout_prompt_enabled: true,
+                anonymous: { lifetime_in_minutes: 1, activate_cookie: true },
+            },
             oidc_logout: { rp_logout_end_session_endpoint_discovery: true },
             allow_organization_name_in_authentication_api: true,
             customize_mfa_in_postlogin_action: true,
@@ -210,7 +213,10 @@ describe("SettingsClient", () => {
                 x_xss_protection: { enabled: true, mode: "block", report_uri: "report_uri" },
             },
             session_cookie: { mode: "persistent" },
-            sessions: { oidc_logout_prompt_enabled: true },
+            sessions: {
+                oidc_logout_prompt_enabled: true,
+                anonymous: { lifetime_in_minutes: 1, activate_cookie: true },
+            },
             oidc_logout: { rp_logout_end_session_endpoint_discovery: true },
             allow_organization_name_in_authentication_api: true,
             customize_mfa_in_postlogin_action: true,
