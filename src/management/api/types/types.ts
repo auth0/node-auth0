@@ -256,6 +256,9 @@ export const OauthScope = {
      * Read Events */
     ReadEvents: "read:events",
     /**
+     * Update Experimentation */
+    UpdateExperimentation: "update:experimentation",
+    /**
      * Create Flows */
     CreateFlows: "create:flows",
     /**
@@ -736,14 +739,8 @@ export const OauthScope = {
      * Delete Organization Client Associations */
     DeleteOrganizationClients: "delete:organization_clients",
     /**
-     * Create Organization Templates */
-    CreateOrganizationTemplates: "create:organization_templates",
-    /**
      * Read Organization Templates */
     ReadOrganizationTemplates: "read:organization_templates",
-    /**
-     * Update Organization Templates */
-    UpdateOrganizationTemplates: "update:organization_templates",
     /**
      * Create Network ACL Keys */
     CreateNetworkAclKeys: "create:network_acl_keys",
@@ -1368,6 +1365,13 @@ export interface AddOrganizationConnectionResponseContent {
     connection?: Management.OrganizationConnectionInformation | undefined;
 }
 
+export interface AdvanceRampResponseContent {
+    experiment_id: string;
+    from_level: number;
+    to_level: number;
+    current_level: number;
+}
+
 /**
  * Arbitrary key-value metadata for the agent
  */
@@ -1391,6 +1395,14 @@ export interface AgentResponseContent {
  * IP address to check.
  */
 export type AnomalyIpFormat = string;
+
+/**
+ * Anonymous sessions configuration for this client.
+ */
+export interface AnonymousSessions {
+    /** If set to true, this client is allowed to create anonymous sessions. */
+    active: boolean;
+}
 
 /**
  * Data related to the user that does affect the application's core functionality.
@@ -2155,6 +2167,10 @@ export interface CimdValidationResult {
 export interface Client {
     /** ID of this client. */
     client_id?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was created. */
+    created_at?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was last updated. */
+    updated_at?: string | undefined;
     /** Name of the tenant this client belongs to. */
     tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
@@ -2245,6 +2261,7 @@ export interface Client {
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
+    anonymous_sessions?: Management.AnonymousSessions | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -4464,23 +4481,14 @@ export const ConnectionIdentityProviderEnum = {
     Yahoo: "yahoo",
     Yandex: "yandex",
     NotionMcp: "notion-mcp",
-    AsanaMcp: "asana-mcp",
-    AtlassianMcp: "atlassian-mcp",
+    Asana: "asana",
+    Atlassian: "atlassian",
     CloudflareMcp: "cloudflare-mcp",
-    DocusignMcp: "docusign-mcp",
-    FigmaMcp: "figma-mcp",
-    GitlabMcp: "gitlab-mcp",
-    GustoMcp: "gusto-mcp",
-    HerokuMcp: "heroku-mcp",
+    Gitlab: "gitlab",
     HubspotMcp: "hubspot-mcp",
-    IntercomMcp: "intercom-mcp",
     LinearMcp: "linear-mcp",
-    PagerdutyMcp: "pagerduty-mcp",
     SentryMcp: "sentry-mcp",
-    SlackMcp: "slack-mcp",
-    SupabaseMcp: "supabase-mcp",
-    VercelMcp: "vercel-mcp",
-    XeroMcp: "xero-mcp",
+    Slack: "slack",
 } as const;
 export type ConnectionIdentityProviderEnum =
     (typeof ConnectionIdentityProviderEnum)[keyof typeof ConnectionIdentityProviderEnum];
@@ -7755,23 +7763,14 @@ export const ConnectionStrategyEnum = {
     Yahoo: "yahoo",
     Yandex: "yandex",
     NotionMcp: "notion-mcp",
-    AsanaMcp: "asana-mcp",
-    AtlassianMcp: "atlassian-mcp",
+    Asana: "asana",
+    Atlassian: "atlassian",
     CloudflareMcp: "cloudflare-mcp",
-    DocusignMcp: "docusign-mcp",
-    FigmaMcp: "figma-mcp",
-    GitlabMcp: "gitlab-mcp",
-    GustoMcp: "gusto-mcp",
-    HerokuMcp: "heroku-mcp",
+    Gitlab: "gitlab",
     HubspotMcp: "hubspot-mcp",
-    IntercomMcp: "intercom-mcp",
     LinearMcp: "linear-mcp",
-    PagerdutyMcp: "pagerduty-mcp",
     SentryMcp: "sentry-mcp",
-    SlackMcp: "slack-mcp",
-    SupabaseMcp: "supabase-mcp",
-    VercelMcp: "vercel-mcp",
-    XeroMcp: "xero-mcp",
+    Slack: "slack",
     Auth0Adldap: "auth0-adldap",
 } as const;
 export type ConnectionStrategyEnum = (typeof ConnectionStrategyEnum)[keyof typeof ConnectionStrategyEnum];
@@ -8259,6 +8258,14 @@ export interface CreateActionResponseContent {
 }
 
 /**
+ * Anonymous sessions configuration for this client.
+ */
+export interface CreateAnonymousSessions {
+    /** If set to true, this client is allowed to create anonymous sessions. */
+    active: boolean;
+}
+
+/**
  * Phone provider configuration schema
  */
 export interface CreateBrandingPhoneProviderResponseContent {
@@ -8326,6 +8333,10 @@ export interface CreateClientGrantResponseContent {
 export interface CreateClientResponseContent {
     /** ID of this client. */
     client_id?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was created. */
+    created_at?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was last updated. */
+    updated_at?: string | undefined;
     /** Name of the tenant this client belongs to. */
     tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
@@ -8416,6 +8427,7 @@ export interface CreateClientResponseContent {
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
+    anonymous_sessions?: Management.AnonymousSessions | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -10392,6 +10404,8 @@ export interface CreateResourceServerResponseContent {
     token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
     enforce_policies?: boolean | undefined;
+    /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
+    token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
@@ -11108,7 +11122,7 @@ export const DeviceCredentialPublicKeyTypeEnum = {
 export type DeviceCredentialPublicKeyTypeEnum =
     (typeof DeviceCredentialPublicKeyTypeEnum)[keyof typeof DeviceCredentialPublicKeyTypeEnum];
 
-/** Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. The property will default to `refresh_token` when paging is requested */
+/** Type of credentials to retrieve. Must be `public_key`, `refresh_token` or `rotating_refresh_token`. If none is provided a combined list of `refresh_tokens` and `public_keys` will be returned (and no `rotating_refresh_token`), in this case `page`, `per_page` and `include_totals` will be ignored. */
 export const DeviceCredentialTypeEnum = {
     PublicKey: "public_key",
     RefreshToken: "refresh_token",
@@ -31870,6 +31884,10 @@ export interface GetClientGrantResponseContent {
 export interface GetClientResponseContent {
     /** ID of this client. */
     client_id?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was created. */
+    created_at?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was last updated. */
+    updated_at?: string | undefined;
     /** Name of the tenant this client belongs to. */
     tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
@@ -31960,6 +31978,7 @@ export interface GetClientResponseContent {
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
+    anonymous_sessions?: Management.AnonymousSessions | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -32128,6 +32147,13 @@ export interface GetDirectoryProvisioningResponseContent {
     last_synchronization_status?: string | undefined;
     /** The error message of the last synchronization, if any */
     last_synchronization_error?: string | undefined;
+}
+
+export interface GetEmailFactorSettingsResponseContent {
+    /** The length of the OTP code. */
+    otp_length: number;
+    /** The OTP expiration time in seconds. */
+    otp_expiration_time: number;
 }
 
 export interface GetEmailProviderResponseContent {
@@ -32392,6 +32418,17 @@ export interface GetGuardianFactorsProviderSnsResponseContent {
     aws_region?: (string | null) | undefined;
     sns_apns_platform_application_arn?: (string | null) | undefined;
     sns_gcm_platform_application_arn?: (string | null) | undefined;
+}
+
+export interface GetGuardianSettingsResponseContent {
+    /** Determines whether to display the "Remember Me" checkbox on the MFA prompt in Universal Login. */
+    display_remember_me_checkbox: boolean;
+    /** Determines the default state of the "Remember Me" checkbox on the MFA prompt in Universal Login. */
+    remember_me_default_value: boolean;
+    /** Duration of inactivity after which the user will be prompted for MFA. Represented as seconds. Minimum duration is 1 hour, maximum is 30 days, and cannot exceed the overall timeout. */
+    mfa_session_inactivity_timeout: number;
+    /** Maximum duration after which the user will be prompted for MFA regardless of activity. Represented as seconds. Minimum duration is 1 hour, maximum is 90 days. */
+    mfa_session_overall_timeout: number;
 }
 
 export interface GetHookResponseContent {
@@ -32691,6 +32728,13 @@ export interface GetOrganizationResponseContent {
  */
 export type GetPartialsResponseContent = Record<string, unknown>;
 
+export interface GetPhoneFactorSettingsResponseContent {
+    /** The length of the OTP code. */
+    otp_length: number;
+    /** The OTP expiration time in seconds. */
+    otp_expiration_time: number;
+}
+
 export interface GetPhoneProviderProtectionResponseContent {
     type: Management.PhoneProviderProtectionBackoffStrategyEnum;
     /** Accepts any additional properties */
@@ -32780,6 +32824,8 @@ export interface GetResourceServerResponseContent {
     token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
     enforce_policies?: boolean | undefined;
+    /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
+    token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
@@ -33936,12 +33982,6 @@ export interface ListOrganizationRoleMembersResponseContent {
     next?: string | undefined;
 }
 
-export interface ListOrganizationTemplatesPaginatedResponseContent {
-    /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string | undefined;
-    organization_templates?: Management.OrganizationTemplate[] | undefined;
-}
-
 export interface ListOrganizationsPaginatedResponseContent {
     next?: string | undefined;
     organizations?: Management.Organization[] | undefined;
@@ -34028,13 +34068,6 @@ export interface ListSynchronizedGroupsResponseContent {
     groups: Management.SynchronizedGroupPayload[];
     /** The cursor to be used as the "from" query parameter for the next page of results. */
     next?: string | undefined;
-}
-
-export interface ListTemplateOrganizationsPaginatedResponseContent {
-    /** A cursor to be used as the "from" query parameter for the next page of results. */
-    next?: string | undefined;
-    /** The list of organizations assigned to this template. */
-    organizations: Management.OrganizationTemplateAssignedOrganization[];
 }
 
 export interface ListTokenExchangeProfileResponseContent {
@@ -35253,6 +35286,14 @@ export interface OrganizationMemberRole {
  */
 export type OrganizationMetadata = Record<string, string | null>;
 
+/** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
+export const OrganizationSortFieldEnum = {
+    Name: "name",
+    DisplayName: "display_name",
+    CreatedAt: "created_at",
+} as const;
+export type OrganizationSortFieldEnum = (typeof OrganizationSortFieldEnum)[keyof typeof OrganizationSortFieldEnum];
+
 export interface OrganizationTemplate {
     /** Organization Template identifier. */
     id?: string | undefined;
@@ -35296,14 +35337,6 @@ export const OrganizationTemplateAllowedStrategyEnum = {
 } as const;
 export type OrganizationTemplateAllowedStrategyEnum =
     (typeof OrganizationTemplateAllowedStrategyEnum)[keyof typeof OrganizationTemplateAllowedStrategyEnum];
-
-/**
- * An organization assigned to the template.
- */
-export interface OrganizationTemplateAssignedOrganization {
-    /** Organization identifier. */
-    id: string;
-}
 
 /** The role visibility level. */
 export const OrganizationTemplateRoleVisibilityEnum = {
@@ -36039,6 +36072,8 @@ export interface ResourceServer {
     token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
     enforce_policies?: boolean | undefined;
+    /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
+    token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
@@ -36097,13 +36132,79 @@ export interface ResourceServerScope {
     description?: string | undefined;
 }
 
+export interface ResourceServerSearchResponse {
+    /** ID of the API (resource server). */
+    id?: string | undefined;
+    /** Friendly name for this resource server. Can not contain `<` or `>` characters. */
+    name?: string | undefined;
+    /** Whether this is an Auth0 system API (true) or a custom API (false). */
+    is_system?: boolean | undefined;
+    /** Unique identifier for the API used as the audience parameter on authorization calls. Can not be changed once set. */
+    identifier?: string | undefined;
+    /** List of permissions (scopes) that this API uses. */
+    scopes?: Management.ResourceServerScope[] | undefined;
+    signing_alg?: Management.SigningAlgorithmEnum | undefined;
+    /** Whether refresh tokens can be issued for this API (true) or not (false). */
+    allow_offline_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued for this API (true) or not (false). */
+    allow_online_access?: boolean | undefined;
+    /** Whether Online Refresh Tokens can be issued even when sessions are configured as ephemeral (true) or not (false). */
+    allow_online_access_with_ephemeral_sessions?: boolean | undefined;
+    /** Whether to skip user consent for applications flagged as first party (true) or not (false). */
+    skip_consent_for_verifiable_first_party_clients?: boolean | undefined;
+    /** Expiration value (in seconds) for access tokens issued for this API from the token endpoint. */
+    token_lifetime?: number | undefined;
+    /** Expiration value (in seconds) for access tokens issued for this API via Implicit or Hybrid Flows. Cannot be greater than the `token_lifetime` value. */
+    token_lifetime_for_web?: number | undefined;
+    /** Whether authorization polices are enforced (true) or unenforced (false). */
+    enforce_policies?: boolean | undefined;
+    /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
+    token_lifetime_for_anonymous_access_tokens?: number | undefined;
+    token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
+    consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    authorization_details?: (unknown[] | null) | undefined;
+    proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
+    subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
+    authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
+    /** The client ID of the client that this resource server is linked to */
+    client_id?: string | undefined;
+}
+
+/** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
+export const ResourceServerSortFieldEnum = {
+    Identifier: "identifier",
+    Name: "name",
+    UpdatedAt: "updated_at",
+} as const;
+export type ResourceServerSortFieldEnum =
+    (typeof ResourceServerSortFieldEnum)[keyof typeof ResourceServerSortFieldEnum];
+
 /**
  * Defines application access permission for a resource server
  */
 export interface ResourceServerSubjectTypeAuthorization {
     user?: Management.ResourceServerSubjectTypeAuthorizationUser | undefined;
     client?: Management.ResourceServerSubjectTypeAuthorizationClient | undefined;
+    anonymous_user?: Management.ResourceServerSubjectTypeAuthorizationAnonymousUser | undefined;
 }
+
+/**
+ * Access Permissions for anonymous user flows
+ */
+export interface ResourceServerSubjectTypeAuthorizationAnonymousUser {
+    policy?: Management.ResourceServerSubjectTypeAuthorizationAnonymousUserPolicyEnum | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/** Defines the anonymous user flows policy for the resource server */
+export const ResourceServerSubjectTypeAuthorizationAnonymousUserPolicyEnum = {
+    DenyAll: "deny_all",
+    RequireClientGrant: "require_client_grant",
+} as const;
+export type ResourceServerSubjectTypeAuthorizationAnonymousUserPolicyEnum =
+    (typeof ResourceServerSubjectTypeAuthorizationAnonymousUserPolicyEnum)[keyof typeof ResourceServerSubjectTypeAuthorizationAnonymousUserPolicyEnum];
 
 /**
  * Access Permissions for client flows
@@ -36297,6 +36398,10 @@ export interface RollbackActionModuleResponseContent {
 export interface RotateClientSecretResponseContent {
     /** ID of this client. */
     client_id?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was created. */
+    created_at?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was last updated. */
+    updated_at?: string | undefined;
     /** Name of the tenant this client belongs to. */
     tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
@@ -36387,6 +36492,7 @@ export interface RotateClientSecretResponseContent {
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
+    anonymous_sessions?: Management.AnonymousSessions | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -36619,6 +36725,43 @@ export const SearchEngineVersionsEnum = {
     V3: "v3",
 } as const;
 export type SearchEngineVersionsEnum = (typeof SearchEngineVersionsEnum)[keyof typeof SearchEngineVersionsEnum];
+
+export interface SearchOrganization {
+    /** Organization identifier. */
+    id?: string | undefined;
+    /** The name of this organization. */
+    name?: string | undefined;
+    /** Friendly name of this organization. */
+    display_name?: string | undefined;
+    branding?: Management.OrganizationBranding | undefined;
+    metadata?: Management.OrganizationMetadata | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
+    /** Whether app entitlement is active for this organization. */
+    is_app_entitlement_active?: boolean | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+export interface SearchOrganizationsPaginatedResponseContent {
+    organizations: Management.SearchOrganization[];
+    /** Cursor for retrieving the next page of results. Absent when no more results are available. */
+    next?: string | undefined;
+}
+
+/** Query parser to use for the filter expression. Use "scim" for SCIM filter syntax or "lucene" for Lucene query syntax (default). */
+export const SearchParserEnum = {
+    Scim: "scim",
+    Lucene: "lucene",
+} as const;
+export type SearchParserEnum = (typeof SearchParserEnum)[keyof typeof SearchParserEnum];
+
+export interface SearchResourceServersResponseContent {
+    /** Array of resource server objects matching the search criteria. */
+    resource_servers: Management.ResourceServerSearchResponse[];
+    /** Cursor for retrieving the next page of results. Omitted if there are no more results. */
+    next?: string | undefined;
+}
 
 export interface SelfServiceProfile {
     /** The unique ID of the self-service Profile. */
@@ -36970,6 +37113,13 @@ export interface SetCustomSigningKeysResponseContent {
     keys?: Management.CustomSigningKeyJwk[] | undefined;
 }
 
+export interface SetEmailFactorSettingsResponseContent {
+    /** The length of the OTP code. */
+    otp_length: number;
+    /** The OTP expiration time in seconds. */
+    otp_expiration_time: number;
+}
+
 export interface SetEmailTemplateResponseContent {
     template: Management.EmailTemplateNameEnum;
     /** Body of the email template. */
@@ -37075,6 +37225,17 @@ export type SetGuardianPoliciesRequestContent = Management.MfaPolicyEnum[];
 
 export type SetGuardianPoliciesResponseContent = Management.MfaPolicyEnum[];
 
+export interface SetGuardianSettingsResponseContent {
+    /** Determines whether to display the "Remember Me" checkbox on the MFA prompt in Universal Login. */
+    display_remember_me_checkbox: boolean;
+    /** Determines the default state of the "Remember Me" checkbox on the MFA prompt in Universal Login. */
+    remember_me_default_value: boolean;
+    /** Duration of inactivity after which the user will be prompted for MFA. Represented as seconds. Minimum duration is 1 hour, maximum is 30 days, and cannot exceed the overall timeout. */
+    mfa_session_inactivity_timeout: number;
+    /** Maximum duration after which the user will be prompted for MFA regardless of activity. Represented as seconds. Minimum duration is 1 hour, maximum is 90 days. */
+    mfa_session_overall_timeout: number;
+}
+
 export interface SetNetworkAclsResponseContent {
     id?: string | undefined;
     description?: string | undefined;
@@ -37093,6 +37254,13 @@ export interface SetNetworkAclsResponseContent {
  * An object containing template partials for a group of screens.
  */
 export type SetPartialsRequestContent = Record<string, unknown>;
+
+export interface SetPhoneFactorSettingsResponseContent {
+    /** The length of the OTP code. */
+    otp_length: number;
+    /** The OTP expiration time in seconds. */
+    otp_expiration_time: number;
+}
 
 export interface SetRulesConfigResponseContent {
     /** Key for a rules config variable. */
@@ -37582,6 +37750,17 @@ export type TenantSettingsResourceParameterProfile =
 export interface TenantSettingsSessions {
     /** Whether to bypass prompting logic (false) when performing OIDC Logout */
     oidc_logout_prompt_enabled?: boolean | undefined;
+    anonymous?: (Management.TenantSettingsSessionsAnonymous | null) | undefined;
+}
+
+/**
+ * Anonymous session settings for tenant.
+ */
+export interface TenantSettingsSessionsAnonymous {
+    /** Anonymous session lifetime, in minutes. Defaults to 43200 (30 days); maximum 525600 (1 year). */
+    lifetime_in_minutes?: number | undefined;
+    /** Whether anonymous session requests return the `auth0_anon` cookie. Defaults to enabled; set to false to stop issuing the cookie. */
+    activate_cookie?: boolean | undefined;
 }
 
 export const TenantSettingsSupportedLocalesEnum = {
@@ -37894,6 +38073,14 @@ export interface UpdateAculResponseContent {
     [key: string]: any;
 }
 
+/**
+ * Anonymous sessions configuration for this client.
+ */
+export interface UpdateAnonymousSessions {
+    /** If set to true, this client is allowed to create anonymous sessions. */
+    active: boolean;
+}
+
 export interface UpdateAttackProtectionCaptchaResponseContent {
     active_provider_id?: string | undefined;
     arkose?: Management.AttackProtectionCaptchaArkoseResponseContent | undefined;
@@ -38047,6 +38234,10 @@ export interface UpdateClientGrantResponseContent {
 export interface UpdateClientResponseContent {
     /** ID of this client. */
     client_id?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was created. */
+    created_at?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was last updated. */
+    updated_at?: string | undefined;
     /** Name of the tenant this client belongs to. */
     tenant?: string | undefined;
     /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
@@ -38137,6 +38328,7 @@ export interface UpdateClientResponseContent {
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
+    anonymous_sessions?: Management.AnonymousSessions | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -39079,6 +39271,8 @@ export interface UpdateResourceServerResponseContent {
     token_lifetime_for_web?: number | undefined;
     /** Whether authorization polices are enforced (true) or unenforced (false). */
     enforce_policies?: boolean | undefined;
+    /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
+    token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;

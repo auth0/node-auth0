@@ -15,6 +15,7 @@ import { EmailsClient } from "./api/resources/emails/client/Client.js";
 import { EmailTemplatesClient } from "./api/resources/emailTemplates/client/Client.js";
 import { EventsClient } from "./api/resources/events/client/Client.js";
 import { EventStreamsClient } from "./api/resources/eventStreams/client/Client.js";
+import { ExperimentationClient } from "./api/resources/experimentation/client/Client.js";
 import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { FormsClient } from "./api/resources/forms/client/Client.js";
 import { GroupsClient } from "./api/resources/groups/client/Client.js";
@@ -26,7 +27,6 @@ import { LogsClient } from "./api/resources/logs/client/Client.js";
 import { LogStreamsClient } from "./api/resources/logStreams/client/Client.js";
 import { NetworkAclsClient } from "./api/resources/networkAcls/client/Client.js";
 import { OrganizationsClient } from "./api/resources/organizations/client/Client.js";
-import { OrganizationTemplatesClient } from "./api/resources/organizationTemplates/client/Client.js";
 import { PromptsClient } from "./api/resources/prompts/client/Client.js";
 import { RateLimitPoliciesClient } from "./api/resources/rateLimitPolicies/client/Client.js";
 import { RefreshTokensClient } from "./api/resources/refreshTokens/client/Client.js";
@@ -76,12 +76,12 @@ export class ManagementClient {
     protected _forms: FormsClient | undefined;
     protected _userGrants: UserGrantsClient | undefined;
     protected _groups: GroupsClient | undefined;
+    protected _guardian: GuardianClient | undefined;
     protected _hooks: HooksClient | undefined;
     protected _jobs: JobsClient | undefined;
     protected _logStreams: LogStreamsClient | undefined;
     protected _logs: LogsClient | undefined;
     protected _networkAcls: NetworkAclsClient | undefined;
-    protected _organizationTemplates: OrganizationTemplatesClient | undefined;
     protected _organizations: OrganizationsClient | undefined;
     protected _prompts: PromptsClient | undefined;
     protected _rateLimitPolicies: RateLimitPoliciesClient | undefined;
@@ -102,7 +102,7 @@ export class ManagementClient {
     protected _anomaly: AnomalyClient | undefined;
     protected _attackProtection: AttackProtectionClient | undefined;
     protected _emails: EmailsClient | undefined;
-    protected _guardian: GuardianClient | undefined;
+    protected _experimentation: ExperimentationClient | undefined;
     protected _keys: KeysClient | undefined;
     protected _riskAssessments: RiskAssessmentsClient | undefined;
     protected _tenants: TenantsClient | undefined;
@@ -176,6 +176,10 @@ export class ManagementClient {
         return (this._groups ??= new GroupsClient(this._options));
     }
 
+    public get guardian(): GuardianClient {
+        return (this._guardian ??= new GuardianClient(this._options));
+    }
+
     public get hooks(): HooksClient {
         return (this._hooks ??= new HooksClient(this._options));
     }
@@ -194,10 +198,6 @@ export class ManagementClient {
 
     public get networkAcls(): NetworkAclsClient {
         return (this._networkAcls ??= new NetworkAclsClient(this._options));
-    }
-
-    public get organizationTemplates(): OrganizationTemplatesClient {
-        return (this._organizationTemplates ??= new OrganizationTemplatesClient(this._options));
     }
 
     public get organizations(): OrganizationsClient {
@@ -280,8 +280,8 @@ export class ManagementClient {
         return (this._emails ??= new EmailsClient(this._options));
     }
 
-    public get guardian(): GuardianClient {
-        return (this._guardian ??= new GuardianClient(this._options));
+    public get experimentation(): ExperimentationClient {
+        return (this._experimentation ??= new ExperimentationClient(this._options));
     }
 
     public get keys(): KeysClient {

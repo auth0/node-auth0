@@ -27,11 +27,11 @@ export default {
             displayName: "unit",
             preset: "ts-jest",
             testEnvironment: "node",
+            roots: ["<rootDir>/src/management/tests"],
+            testPathIgnorePatterns: ["/tests/wire/"],
             moduleNameMapper: {
                 "^(\.{1,2}/.*)\.js$": "$1",
             },
-            roots: ["<rootDir>/src/management/tests"],
-            testPathIgnorePatterns: ["/tests/wire/"],
             setupFilesAfterEnv: ["<rootDir>/src/management/tests/setup.ts"],
             transform: {
                 "^.+\\.tsx?$": [

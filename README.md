@@ -15,6 +15,8 @@
 - [SDK Documentation](http://auth0.github.io/node-auth0/) - explore the SDK documentation
 - [API Reference](https://github.com/auth0/node-auth0/blob/master/reference.md) - full reference for this library
 - [v6 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v6_MIGRATION_GUIDE.md) - upgrade from v5 to v6
+- [v7 Migration Guide](https://github.com/auth0/node-auth0/blob/master/v7_MIGRATION_GUIDE.md) - upgrade from v6 to v7
+- [Authentication Migration Guide](https://github.com/auth0/node-auth0/tree/master/auth-migration) - migrate the Authentication API layer to `@auth0/auth0-auth-js` / `@auth0/auth0-server-js`
 
 ## Getting Started
 
@@ -34,19 +36,21 @@ npm install auth0
 
 ### Configure the SDK
 
-#### Authentication API Client
+#### Authentication
 
-This client can be used to access Auth0's [Authentication API](https://auth0.com/docs/api/authentication).
+For authentication operations (OAuth flows, token management, user sign-up), use [`@auth0/auth0-auth-js`](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js). As of v7, node-auth0 no longer ships `AuthenticationClient` in its main entrypoint. The authentication layer has been separated into a dedicated package.
 
 ```js
-import { AuthenticationClient } from "auth0";
+import { AuthClient } from "@auth0/auth0-auth-js";
 
-const auth0 = new AuthenticationClient({
+const auth = new AuthClient({
     domain: "{YOUR_TENANT_AND REGION}.auth0.com",
     clientId: "{YOUR_CLIENT_ID}",
     clientSecret: "{OPTIONAL_CLIENT_SECRET}",
 });
 ```
+
+See the [auth0-auth-js documentation](https://github.com/auth0/auth0-auth-js/tree/main/packages/auth0-auth-js) for full API reference.
 
 #### Management API Client
 
@@ -169,24 +173,27 @@ types from the root `auth0` entry adds nothing to your bundle and does not pull 
 > through a bundler. A plain CommonJS `require()` cannot tree-shake and loads the full
 > resource graph.
 
-#### UserInfo API Client
+#### User Profile Information
 
-This client can be used to retrieve user profile information.
+As of v7, node-auth0 no longer ships `UserInfoClient`. Use `authClient.getUserInfo` from `@auth0/auth0-auth-js` instead.
 
 ```js
-import { UserInfoClient } from "auth0";
+import { AuthClient } from "@auth0/auth0-auth-js";
 
-const userInfo = new UserInfoClient({
-    domain: "{YOUR_TENANT_AND REGION}.auth0.com",
-});
+const auth = new AuthClient({ domain: "...", clientId: "..." });
 
-// Get user info with an access token
-const userProfile = await userInfo.getUserInfo(accessToken);
+// Requires a default OIDC token (openid scope, no explicit audience).
+// If your app uses MRRT, request https://{domain}/userinfo as the audience.
+const profile = await auth.getUserInfo({ accessToken });
 ```
+
+Note: tokens issued with a custom `audience` (e.g. the Management API) are rejected by `/userinfo`. Use a token obtained without an explicit audience, or request `https://{domain}/userinfo` as the audience when using MRRT.
 
 ## Legacy Usage
 
 If you are migrating from the legacy `node-auth0` package (v4.x) or need to maintain compatibility with legacy code, you can use the legacy export which provides the `node-auth0` v4.x API interface.
+
+**Note:** The legacy entrypoint still includes `AuthenticationClient` from the v4.x API. This is separate from the v7 main entrypoint, which no longer ships authentication clients.
 
 ### Installing Legacy Version
 
@@ -202,7 +209,7 @@ const { ManagementClient, AuthenticationClient } = require("auth0/legacy");
 
 ### Legacy Configuration
 
-The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current v6 API:
+The legacy API uses the `node-auth0` v4.x configuration format and method signatures, which are different from the current API:
 
 #### Legacy Management Client
 
@@ -375,8 +382,6 @@ const actions = await client.actions.list(listParams);
 ### Key Classes
 
 - **ManagementClient** - for Auth0 Management API operations
-- **AuthenticationClient** - for Auth0 Authentication API operations
-- **UserInfoClient** - for retrieving user profile information
 
 ## Exception Handling
 
