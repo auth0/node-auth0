@@ -1,5 +1,13 @@
 # Change Log
 
+## [v7.1.0](https://github.com/auth0/node-auth0/tree/v7.1.0) (2026-09-11)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.0.0...v7.1.0)
+
+**Added**
+
+- feat: SDK regeneration - MFA Advanced Factor Configuration (GA), Anonymous Sessions, Experimentation API, and Search endpoint [\#1404](https://github.com/auth0/node-auth0/pull/1404) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.0.0](https://github.com/auth0/node-auth0/tree/v7.0.0) (2026-09-08)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v6.4.0...v7.0.0)
