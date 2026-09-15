@@ -1555,6 +1555,7 @@ export interface CreateResourceServerRequestContent {
     skip_consent_for_verifiable_first_party_clients?: boolean;
     /** Whether to enforce authorization policies (true) or to ignore them (false). */
     enforce_policies?: boolean;
+    access_token?: Management.ResourceServerAccessToken | null;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
     consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[] | null;
@@ -1630,6 +1631,7 @@ export interface UpdateResourceServerRequestContent {
     token_dialect?: Management.ResourceServerTokenDialectSchemaEnum;
     /** Whether authorization policies are enforced (true) or not enforced (false). */
     enforce_policies?: boolean;
+    access_token?: Management.ResourceServerAccessToken | null;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
     consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
     authorization_details?: unknown[] | null;
@@ -3604,6 +3606,7 @@ export interface CreateOrganizationAllConnectionRequestParameters {
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
     is_signup_enabled?: boolean;
     organization_access_level?: Management.OrganizationAccessLevelEnum;
+    organization_member_access_level?: Management.OrganizationMemberAccessLevelEnum;
     /** Whether the connection is enabled for the organization. */
     is_enabled?: boolean;
     /** Connection identifier. */
@@ -3624,6 +3627,7 @@ export interface UpdateOrganizationConnectionRequestParameters {
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
     is_signup_enabled?: boolean;
     organization_access_level?: Management.OrganizationAccessLevelEnumWithNull | null;
+    organization_member_access_level?: Management.OrganizationMemberAccessLevelEnumWithNull | null;
     /** Whether the connection is enabled for the organization. */
     is_enabled?: boolean | null;
 }
@@ -4260,6 +4264,7 @@ export interface UpdateTenantSettingsRequestContent {
     default_redirection_uri?: string;
     /** Supported locales for the user interface */
     enabled_locales?: Management.TenantSettingsSupportedLocalesEnum[];
+    access_token?: Management.ResourceServerAccessToken | null;
     security_headers?: Management.TenantSettingsNullableSecurityHeaders | null;
     session_cookie?: Management.SessionCookieSchema | null;
     sessions?: Management.TenantSettingsSessions | null;

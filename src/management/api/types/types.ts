@@ -3068,6 +3068,10 @@ export interface ClientMyOrganizationPatchConfiguration {
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
     /** The client ID this client uses while creating invitations through My Organization API. */
     invitation_landing_client_id?: string | undefined;
+    /** When true, limits the permissions that organization admins can assign to members to only those held by the admin themselves. */
+    enforce_permission_ceiling?: boolean | undefined;
+    /** When true, prevents organization admins from assigning permissions to themselves. */
+    enforce_self_assignment_restriction?: boolean | undefined;
 }
 
 /**
@@ -3084,6 +3088,10 @@ export interface ClientMyOrganizationPostConfiguration {
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
     /** The client ID this client uses while creating invitations through My Organization API. */
     invitation_landing_client_id?: string | undefined;
+    /** When true, limits the permissions that organization admins can assign to members to only those held by the admin themselves. */
+    enforce_permission_ceiling?: boolean | undefined;
+    /** When true, prevents organization admins from assigning permissions to themselves. */
+    enforce_self_assignment_restriction?: boolean | undefined;
 }
 
 /**
@@ -3100,6 +3108,10 @@ export interface ClientMyOrganizationResponseConfiguration {
     connection_deletion_behavior: Management.ClientMyOrganizationDeletionBehaviorEnum;
     /** The client ID this client uses while creating invitations through My Organization API. */
     invitation_landing_client_id?: string | undefined;
+    /** When true, limits the permissions that organization admins can assign to members to only those held by the admin themselves. */
+    enforce_permission_ceiling?: boolean | undefined;
+    /** When true, prevents organization admins from assigning permissions to themselves. */
+    enforce_self_assignment_restriction?: boolean | undefined;
 }
 
 /**
@@ -10257,6 +10269,7 @@ export interface CreateOrganizationAllConnectionResponseContent {
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
     is_signup_enabled?: boolean | undefined;
     organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    organization_member_access_level?: Management.OrganizationMemberAccessLevelEnum | undefined;
     /** Whether the connection is enabled for the organization. */
     is_enabled?: boolean | undefined;
     /** Connection identifier. */
@@ -10407,6 +10420,7 @@ export interface CreateResourceServerResponseContent {
     /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
     token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
     authorization_details?: (unknown[] | null) | undefined;
@@ -32607,6 +32621,7 @@ export interface GetOrganizationAllConnectionResponseContent {
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
     is_signup_enabled?: boolean | undefined;
     organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    organization_member_access_level?: Management.OrganizationMemberAccessLevelEnum | undefined;
     /** Whether the connection is enabled for the organization. */
     is_enabled?: boolean | undefined;
     /** Connection identifier. */
@@ -32827,6 +32842,7 @@ export interface GetResourceServerResponseContent {
     /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
     token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
     authorization_details?: (unknown[] | null) | undefined;
@@ -33037,6 +33053,7 @@ export interface GetTenantSettingsResponseContent {
     default_redirection_uri?: string | undefined;
     /** Supported locales for the user interface. */
     enabled_locales?: Management.SupportedLocales[] | undefined;
+    access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     security_headers?: (Management.TenantSettingsNullableSecurityHeaders | null) | undefined;
     session_cookie?: (Management.SessionCookieSchema | null) | undefined;
     sessions?: (Management.TenantSettingsSessions | null) | undefined;
@@ -35062,6 +35079,7 @@ export interface OrganizationAllConnectionPost {
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
     is_signup_enabled?: boolean | undefined;
     organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    organization_member_access_level?: Management.OrganizationMemberAccessLevelEnum | undefined;
     /** Whether the connection is enabled for the organization. */
     is_enabled?: boolean | undefined;
     /** Connection identifier. */
@@ -35255,6 +35273,26 @@ export interface OrganizationMember {
     email?: string | undefined;
     roles?: Management.OrganizationMemberRole[] | undefined;
 }
+
+/** Access level for the organization member (e.g., "none", "full"). */
+export const OrganizationMemberAccessLevelEnum = {
+    None: "none",
+    Readonly: "readonly",
+    Limited: "limited",
+    Full: "full",
+} as const;
+export type OrganizationMemberAccessLevelEnum =
+    (typeof OrganizationMemberAccessLevelEnum)[keyof typeof OrganizationMemberAccessLevelEnum];
+
+/** Access level for the organization member (e.g., "none", "full"). */
+export const OrganizationMemberAccessLevelEnumWithNull = {
+    None: "none",
+    Readonly: "readonly",
+    Limited: "limited",
+    Full: "full",
+} as const;
+export type OrganizationMemberAccessLevelEnumWithNull =
+    (typeof OrganizationMemberAccessLevelEnumWithNull)[keyof typeof OrganizationMemberAccessLevelEnumWithNull];
 
 export interface OrganizationMemberEffectiveRole {
     /** Role ID */
@@ -36075,6 +36113,7 @@ export interface ResourceServer {
     /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
     token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
     authorization_details?: (unknown[] | null) | undefined;
@@ -36083,6 +36122,33 @@ export interface ResourceServer {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+}
+
+/**
+ * Custom configuration for access tokens
+ */
+export interface ResourceServerAccessToken {
+    claims_mapping?: Management.ResourceServerAccessTokenClaimsMapping | undefined;
+}
+
+/**
+ * Custom configuration for claims in access tokens
+ */
+export interface ResourceServerAccessTokenClaimsMapping {
+    custom_claims?: Management.ResourceServerAccessTokenCustomClaimsMapping | undefined;
+}
+
+/**
+ * Custom claims to emit in anonymous-session access tokens. Each rule maps a value read from the anonymous-session context (via a restricted dot-path expression) onto a named access-token claim.
+ */
+export type ResourceServerAccessTokenCustomClaimsMapping =
+    Management.ResourceServerAccessTokenCustomClaimsMappingRule[];
+
+export interface ResourceServerAccessTokenCustomClaimsMappingRule {
+    /** The access-token claim name to emit, stored with the casing you provide. Reserved OIDC/JWT claim names are not allowed (compared case-insensitively). */
+    name: string;
+    /** Restricted dot-path expression read from the anonymous-session context (e.g. `anonymous_session.metadata.country`). */
+    expression: string;
 }
 
 /**
@@ -36161,6 +36227,7 @@ export interface ResourceServerSearchResponse {
     /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
     token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
     authorization_details?: (unknown[] | null) | undefined;
@@ -39137,6 +39204,7 @@ export interface UpdateOrganizationAllConnectionResponseContent {
     /** Determines whether organization signup should be enabled for this organization connection. Only applicable for database connections. Default: false. */
     is_signup_enabled?: boolean | undefined;
     organization_access_level?: Management.OrganizationAccessLevelEnum | undefined;
+    organization_member_access_level?: Management.OrganizationMemberAccessLevelEnum | undefined;
     /** Whether the connection is enabled for the organization. */
     is_enabled?: boolean | undefined;
     /** Connection identifier. */
@@ -39274,6 +39342,7 @@ export interface UpdateResourceServerResponseContent {
     /** Expiration value (in seconds) for anonymous-session access tokens issued for this API. */
     token_lifetime_for_anonymous_access_tokens?: number | undefined;
     token_dialect?: Management.ResourceServerTokenDialectResponseEnum | undefined;
+    access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
     authorization_details?: (unknown[] | null) | undefined;
@@ -39443,6 +39512,7 @@ export interface UpdateTenantSettingsResponseContent {
     default_redirection_uri?: string | undefined;
     /** Supported locales for the user interface. */
     enabled_locales?: Management.SupportedLocales[] | undefined;
+    access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     security_headers?: (Management.TenantSettingsNullableSecurityHeaders | null) | undefined;
     session_cookie?: (Management.SessionCookieSchema | null) | undefined;
     sessions?: (Management.TenantSettingsSessions | null) | undefined;
