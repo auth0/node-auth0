@@ -63,6 +63,7 @@ describe("SettingsClient", () => {
             sandbox_versions_available: ["sandbox_versions_available"],
             default_redirection_uri: "default_redirection_uri",
             enabled_locales: ["am"],
+            access_token: { claims_mapping: { custom_claims: [{ name: "name", expression: "expression" }] } },
             security_headers: {
                 content_security_policy: { enabled: true, policies: [{}] },
                 x_xss_protection: { enabled: true, mode: "block", report_uri: "report_uri" },
@@ -208,6 +209,7 @@ describe("SettingsClient", () => {
             sandbox_versions_available: ["sandbox_versions_available"],
             default_redirection_uri: "default_redirection_uri",
             enabled_locales: ["am"],
+            access_token: { claims_mapping: { custom_claims: [{ name: "name", expression: "expression" }] } },
             security_headers: {
                 content_security_policy: { enabled: true, policies: [{}] },
                 x_xss_protection: { enabled: true, mode: "block", report_uri: "report_uri" },
