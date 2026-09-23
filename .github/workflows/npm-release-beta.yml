@@ -194,23 +194,53 @@ jobs:
             - name: Publish to npm with beta dist-tag
               run: npm publish --provenance --tag beta
 
-            # Commit the stamped files, tag the commit, and push both back to
-            # the `beta` branch. The push is allowed because the job runs in
-            # the `release` environment with `contents: write`.
+            # Commit the stamped files back to the `beta` branch through the
+            # GitHub Git Data API rather than `git commit`/`git push`.
+            # Commits authored via the API with GITHUB_TOKEN are automatically
+            # signed with GitHub's key and show as Verified, without us having
+            # to manage a GPG/SSH signing key in CI. The push is allowed because
+            # the job runs in the `release` environment with `contents: write`.
             - id: release_commit
-              name: Create and push release commit
+              name: Create and push signed release commit
               shell: bash
+              env:
+                  GH_TOKEN: ${{ secrets.github-token }}
+                  REPO: ${{ github.repository }}
+                  VERSION: ${{ steps.get_version.outputs.version }}
               run: |
-                  git config user.name "github-actions[bot]"
-                  git config user.email "github-actions[bot]@users.noreply.github.com"
-                  git add .version package.json src/management/version.ts CHANGELOG.md
-                  git commit -m "Release ${{ steps.get_version.outputs.version }}"
-                  git tag -a "${{ steps.get_version.outputs.version }}" \
-                      -m "Release ${{ steps.get_version.outputs.version }}"
-                  RELEASE_SHA=$(git rev-parse HEAD)
-                  git push origin "${{ steps.get_version.outputs.version }}"
-                  git push origin HEAD:beta
-                  echo "SHA=${RELEASE_SHA}" >> "$GITHUB_OUTPUT"
+                  set -euo pipefail
+                  BRANCH=beta
+                  FILES=(.version package.json src/management/version.ts CHANGELOG.md)
+
+                  # 1. Current tip of the branch and its tree.
+                  BASE_SHA=$(gh api "repos/$REPO/git/refs/heads/$BRANCH" --jq '.object.sha')
+                  BASE_TREE=$(gh api "repos/$REPO/git/commits/$BASE_SHA" --jq '.tree.sha')
+
+                  # 2. Upload each stamped file as a blob, collect tree entries.
+                  TREE=$(for f in "${FILES[@]}"; do
+                    SHA=$(gh api "repos/$REPO/git/blobs" \
+                      -f content="$(base64 -w0 "$f")" -f encoding=base64 --jq '.sha')
+                    jq -nc --arg path "$f" --arg sha "$SHA" \
+                      '{path:$path, mode:"100644", type:"blob", sha:$sha}'
+                  done | jq -sc '.')
+
+                  # 3. New tree on top of the current one.
+                  NEW_TREE=$(jq -nc --arg base "$BASE_TREE" --argjson tree "$TREE" \
+                    '{base_tree:$base, tree:$tree}' \
+                    | gh api "repos/$REPO/git/trees" --input - --jq '.sha')
+
+                  # 4. Commit — signed by GitHub because GH_TOKEN authenticates the call.
+                  NEW_SHA=$(jq -nc --arg msg "Release $VERSION" --arg tree "$NEW_TREE" --arg parent "$BASE_SHA" \
+                    '{message:$msg, tree:$tree, parents:[$parent]}' \
+                    | gh api "repos/$REPO/git/commits" --input - --jq '.sha')
+
+                  # 5. Move the branch to the new commit (the "push"). The tag
+                  # itself is created by the release-create step below (via
+                  # softprops/action-gh-release at this commit), so we do not
+                  # create a tag ref here.
+                  gh api -X PATCH "repos/$REPO/git/refs/heads/$BRANCH" -f sha="$NEW_SHA"
+
+                  echo "SHA=$NEW_SHA" >> "$GITHUB_OUTPUT"
 
             # Create the GitHub prerelease on the tag.
             - uses: ./.github/actions/release-create
