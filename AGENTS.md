@@ -488,7 +488,7 @@ Regenerate SDK (stable + beta) (#<pr-number>)
 
 ### Do not hand-edit release files on `beta`
 
-The Beta Auto-Release workflow (`.github/workflows/beta-autorelease.yml`) owns versioning. When a PR is merged into `beta` it computes the next `vX.Y.0-beta.N`, aborts if that tag already exists, stamps `.version`, `package.json`, `src/management/version.ts`, and `CHANGELOG.md`, creates the release commit **through the GitHub API** (so it is signed/Verified, no GPG key), publishes to npm with `--tag beta`, tags it, and publishes a GitHub prerelease. Never manually bump these files on `beta`.
+The Beta Auto-Release workflow (`.github/workflows/npm-release-beta.yml`) owns versioning. When a PR is merged into `beta` it computes the next `vX.Y.0-beta.N`, aborts if that tag already exists, stamps `.version`, `package.json`, `src/management/version.ts`, and `CHANGELOG.md`, creates the release commit **through the GitHub API** (so it is signed/Verified, no GPG key), publishes to npm with `--tag beta`, tags it, and publishes a GitHub prerelease. Never manually bump these files on `beta`.
 
 ### Hand-written code
 

@@ -42,7 +42,10 @@ runs:
               # Only consider clean stable tags on the current major line
               # (vMAJOR.MINOR.PATCH with no prerelease suffix). `sort -V` orders
               # by semver so double-digit minors sort correctly.
-              LATEST_STABLE=$(git tag --list | grep -E "^v${CURRENT_MAJOR}\.[0-9]+\.[0-9]+$" | sort -V | tail -1)
+              # `|| true` so that under `set -e`/`pipefail` an empty grep result
+              # (no matching tag) is a valid empty value handled by the check
+              # below, rather than a non-zero pipeline status that aborts the step.
+              LATEST_STABLE=$(git tag --list | grep -E "^v${CURRENT_MAJOR}\.[0-9]+\.[0-9]+$" | sort -V | tail -1 || true)
               if [ -z "${LATEST_STABLE}" ]; then
                 echo "::error::No stable v${CURRENT_MAJOR}.MINOR.PATCH tag found; cannot compute next version." >&2
                 exit 1
@@ -55,7 +58,10 @@ runs:
                 echo "::notice::compute-next-version (stable): latest_stable=${LATEST_STABLE} -> ${VERSION}"
               elif [ "${TRACK}" = "beta" ]; then
                 # Only beta tags whose base is exactly BASE, with a numeric suffix.
-                LAST_N=$(git tag --list | grep -E "^${BASE}-beta\.[0-9]+$" | sed -E 's/.*-beta\.//' | sort -n | tail -1)
+                # `|| true` so the first beta of a new minor (no existing beta
+                # tags) yields an empty value handled by `${LAST_N:-0}` below,
+                # rather than aborting the step under `set -e`/`pipefail`.
+                LAST_N=$(git tag --list | grep -E "^${BASE}-beta\.[0-9]+$" | sed -E 's/.*-beta\.//' | sort -n | tail -1 || true)
                 N=$(( ${LAST_N:-0} + 1 ))
                 VERSION="${BASE}-beta.${N}"
                 echo "::notice::compute-next-version (beta): latest_stable=${LATEST_STABLE} base=${BASE} last_beta_n=${LAST_N:-<none>} -> ${VERSION}"

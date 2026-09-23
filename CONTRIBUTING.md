@@ -189,17 +189,17 @@ Regenerate SDK (stable + beta) (#<pr-number>)
 
 ### What happens automatically after a PR is merged into beta
 
-1. The `beta-autorelease` workflow computes the next `vX.Y.0-beta.N` from git tags.
+1. The `npm-release-beta` workflow computes the next `vX.Y.0-beta.N` from git tags.
 2. It aborts if that tag already exists (prevents overwriting a published release).
 3. It parses the `<!-- BETA -->` / `<!-- STABLE -->` sections from the squash commit message.
-4. It stamps `.version`, `package.json`, and `CHANGELOG.md` on disk.
+4. It stamps `.version`, `package.json`, `src/management/version.ts`, and `CHANGELOG.md` on disk.
 5. It builds the package and publishes to npm with `--tag beta --provenance`.
 6. It creates a signed release commit via the GitHub API (shows as **Verified**, no GPG key required).
 7. It tags the commit and publishes a GitHub prerelease.
 
 ### Do not hand-edit release files on beta
 
-The `beta-autorelease` workflow owns `.version`, `package.json` (version field), and `CHANGELOG.md` on the `beta` branch. Never manually bump these files on `beta`.
+The `npm-release-beta` workflow owns `.version`, `package.json` (version field), `src/management/version.ts`, and `CHANGELOG.md` on the `beta` branch. Never manually bump these files on `beta`.
 
 ### Hand-written code
 

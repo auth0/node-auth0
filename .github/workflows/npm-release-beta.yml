@@ -79,8 +79,10 @@ jobs:
 
             - if: steps.tag_exists.outputs.exists == 'true'
               shell: bash
+              env:
+                  VERSION: ${{ steps.get_version.outputs.version }}
               run: |
-                  echo "::error::Tag ${{ steps.get_version.outputs.version }} already exists; aborting to avoid overwriting a published release."
+                  echo "::error::Tag ${VERSION} already exists; aborting to avoid overwriting a published release."
                   exit 1
 
             # Build release notes from the structured squash-commit message of
@@ -150,7 +152,10 @@ jobs:
                   # package.json and version.ts use the bare version without
                   # the leading 'v' (npm semver convention)
                   PKG_VERSION="${VERSION#v}"
-                  sed -i -E 's/^(    "version": ")[^"]*(",)$/\1'"${PKG_VERSION}"'\2/' package.json
+                  # `npm version` rewrites package.json's version field without
+                  # assuming any particular indentation (unlike a sed regex) and
+                  # without creating a git tag/commit of its own.
+                  npm version "${PKG_VERSION}" --no-git-tag-version --allow-same-version
                   sed -i -E 's/export const SDK_VERSION = "[^"]*";/export const SDK_VERSION = "'"${PKG_VERSION}"'";/' src/management/version.ts
 
                   DATE=$(date -u +%Y-%m-%d)
@@ -191,6 +196,14 @@ jobs:
             - name: Validate package
               run: yarn lint:package
 
+            # npm publish runs BEFORE the release commit/tag is created so the
+            # published artifacts carry the stamped version. RECOVERY: if this
+            # publish succeeds but a later step (commit/tag/release) fails, npm
+            # has the version but git has no tag. A re-run will recompute the
+            # same beta.N (tags are the source of truth) and then fail to
+            # republish because the version already exists on npm. To recover,
+            # manually create the missing tag at the intended commit (and the
+            # GitHub release) rather than re-running the workflow.
             - name: Publish to npm with beta dist-tag
               run: npm publish --provenance --tag beta
 
