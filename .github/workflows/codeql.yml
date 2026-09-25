@@ -1,0 +1,96 @@
+name: CodeQL Advanced
+
+# Runs CodeQL static analysis directly via github/codeql-action (no composite wrapper).
+# All action refs are SHA-pinned for supply-chain integrity.
+#
+# Language / build-mode matrix
+# ────────────────────────────
+# Each matrix entry pairs a CodeQL language with a build-mode:
+#   none       — interpreted languages (JavaScript, TypeScript, Python, Ruby, Go)
+#   autobuild  — compiled languages where CodeQL can infer the build command
+#   manual     — compiled languages that need an explicit build command
+#                (uncomment and fill in the "Run manual build" step below)
+#
+# Supported CodeQL languages:
+#   c-cpp, csharp, go, java-kotlin, javascript-typescript, python, ruby, swift
+#
+# Runner requirements:
+#   - ubuntu-latest for most languages; macos-latest required for swift.
+#     For swift, change runs-on to: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '30 1 * * 0'   # weekly, Sunday 01:30 UTC — spread load, avoid top-of-hour spikes
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write   # upload SARIF to the Security tab
+      packages: read            # fetch internal or private CodeQL packs
+      actions: read             # required by CodeQL in private repositories
+      contents: read            # checkout the code under analysis
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ── Update this list to match the languages in this repo ───────────
+          # For compiled languages needing a manual build, change build-mode to
+          # 'manual' and fill in the "Run manual build" step below.
+          - language: javascript-typescript
+            build-mode: none
+          - language: java-kotlin
+            build-mode: none   # change to 'manual' if autobuild fails
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          # Optional: path to a CodeQL config file for path exclusions.
+          # config-file: .github/codeql-config.yml
+          #
+          # Optional: override the default query suite.
+          queries: security-extended,security-and-quality
+
+      # ── Manual build step — only runs when build-mode is 'manual' ──────────
+      # Replace the echo command with your real build, for example:
+      #   make bootstrap && make release
+      #   mvn --no-transfer-progress package -DskipTests
+      #   go build -o ./bin/myapp ./...
+      #   dotnet publish -c Release -o ./publish
+      # ────────────────────────────────────────────────────────────────────────
+      - name: Run manual build
+        if: matrix.build-mode == 'manual'
+        shell: bash
+        run: |
+          echo 'Replace this step with the commands that build your code, for example:'
+          echo '  make bootstrap'
+          echo '  make release'
+          exit 1
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
+        with:
+          category: "/language:${{ matrix.language }}"
+
+      - name: Result
+        if: always()
+        shell: bash
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "::notice title=SAST::✅ SAST / CodeQL (${{ matrix.language }}) passed."
+          else
+            echo "::error title=SAST::❌ SAST / CodeQL (${{ matrix.language }}) failed."
+          fi
