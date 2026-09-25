@@ -1,22 +1,77 @@
 name: Create GitHub Release
 
+#
+# Single entry workflow for both release tracks. It is the one npm trusted
+# publisher for this package (npm allows only one per package), so every
+# publish for either track flows through this file:
+#
+#   - stable: a `release/*` branch merged into `master` -> npm `latest`
+#   - beta:   any PR merged into `beta`                 -> npm `beta`
+#
+# The actual publish logic lives in the reusable workflows this file calls
+# (`npm-release.yml` for stable, `npm-release-beta.yml` for beta). npm
+# validates the calling workflow for OIDC trusted publishing, so routing both
+# tracks through this caller lets a single trusted-publisher registration
+# cover both.
+#
+# `pull_request` workflows are read from the base branch of the PR, so this
+# file must exist on both `master` and `beta`.
+#
+
 on:
     pull_request:
         types:
             - closed
+        branches: [master, beta]
     workflow_dispatch:
+        inputs:
+            track:
+                description: "Release track to run for a manual dispatch."
+                required: true
+                type: choice
+                options:
+                    - stable
+                    - beta
+                default: stable
 
 permissions:
     contents: write
     id-token: write # For publishing to npm using --provenance
 
+# Serialize releases per track so concurrent merges cut versions one at a time
+# and the push-back to the release branch never races.
+concurrency:
+    group: release-${{ github.event.pull_request.base.ref || inputs.track }}
+    cancel-in-progress: false
+
 ### TODO: Replace instances of './.github/workflows/' w/ `auth0/dx-sdk-actions/workflows/` and append `@latest` after the common `dx-sdk-actions` repo is made public.
 ### TODO: Also remove `get-prerelease`, `get-release-notes`, `get-version`, `npm-publish`, `release-create`, and `tag-exists` actions from this repo's .github/actions folder once the repo is public.
-### TODO: Also remove `npm-release` workflow from this repo's .github/workflows folder once the repo is public.
+### TODO: Also remove `npm-release` and `npm-release-beta` workflows from this repo's .github/workflows folder once the repo is public.
 
 jobs:
-    release:
+    # Stable: a `release/*` branch merged into `master`, or a manual stable dispatch.
+    stable:
+        if: >-
+            (github.event_name == 'workflow_dispatch' && inputs.track == 'stable') ||
+            (github.event_name == 'pull_request' &&
+             github.event.pull_request.merged == true &&
+             github.event.pull_request.base.ref == 'master' &&
+             startsWith(github.event.pull_request.head.ref, 'release/'))
         uses: ./.github/workflows/npm-release.yml
+        with:
+            node-version: 22.23.1
+            require-build: true
+        secrets:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    # Beta: any PR merged into `beta`, or a manual beta dispatch.
+    beta:
+        if: >-
+            (github.event_name == 'workflow_dispatch' && inputs.track == 'beta') ||
+            (github.event_name == 'pull_request' &&
+             github.event.pull_request.merged == true &&
+             github.event.pull_request.base.ref == 'beta')
+        uses: ./.github/workflows/npm-release-beta.yml
         with:
             node-version: 22.23.1
             require-build: true
@@ -25,7 +80,7 @@ jobs:
 
     deploy-docs:
         name: Deploy Documentation
-        needs: release
+        needs: stable
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged && startsWith(github.event.pull_request.head.ref, 'release/'))
         runs-on: ubuntu-latest
         permissions:
