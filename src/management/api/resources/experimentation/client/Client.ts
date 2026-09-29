@@ -5,6 +5,8 @@ import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } 
 import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { ExperimentsClient } from "../resources/experiments/client/Client.js";
+import { FeatureFlagsClient } from "../resources/featureFlags/client/Client.js";
+import { SegmentsClient } from "../resources/segments/client/Client.js";
 
 export declare namespace ExperimentationClient {
     export type Options = BaseClientOptions;
@@ -13,6 +15,8 @@ export declare namespace ExperimentationClient {
 export class ExperimentationClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ExperimentationClient.Options>;
     protected _experiments: ExperimentsClient | undefined;
+    protected _featureFlags: FeatureFlagsClient | undefined;
+    protected _segments: SegmentsClient | undefined;
 
     constructor(options: ExperimentationClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
@@ -20,5 +24,13 @@ export class ExperimentationClient {
 
     public get experiments(): ExperimentsClient {
         return (this._experiments ??= new ExperimentsClient(this._options));
+    }
+
+    public get featureFlags(): FeatureFlagsClient {
+        return (this._featureFlags ??= new FeatureFlagsClient(this._options));
+    }
+
+    public get segments(): SegmentsClient {
+        return (this._segments ??= new SegmentsClient(this._options));
     }
 }

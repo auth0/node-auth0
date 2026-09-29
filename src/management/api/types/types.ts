@@ -256,8 +256,17 @@ export const OauthScope = {
      * Read Events */
     ReadEvents: "read:events",
     /**
+     * Create Experimentation */
+    CreateExperimentation: "create:experimentation",
+    /**
+     * Read Experimentation */
+    ReadExperimentation: "read:experimentation",
+    /**
      * Update Experimentation */
     UpdateExperimentation: "update:experimentation",
+    /**
+     * Delete Experimentation */
+    DeleteExperimentation: "delete:experimentation",
     /**
      * Create Flows */
     CreateFlows: "create:flows",
@@ -738,9 +747,6 @@ export const OauthScope = {
     /**
      * Delete Organization Client Associations */
     DeleteOrganizationClients: "delete:organization_clients",
-    /**
-     * Read Organization Templates */
-    ReadOrganizationTemplates: "read:organization_templates",
     /**
      * Create Network ACL Keys */
     CreateNetworkAclKeys: "create:network_acl_keys",
@@ -1391,6 +1397,40 @@ export interface AgentResponseContent {
     metadata: Management.AgentMetadata;
 }
 
+export interface AllocationItem {
+    variation_id?: string | undefined;
+    variation_name?: string | undefined;
+    segment_id?: string | undefined;
+    segment_name?: string | undefined;
+    weight?: number | undefined;
+    priority?: number | undefined;
+    is_control?: boolean | undefined;
+    is_fallback?: boolean | undefined;
+    variation_snapshot?: (Record<string, unknown> | null) | undefined;
+    segment_snapshot?: (Record<string, unknown> | null) | undefined;
+}
+
+export interface AllocationRequestItem {
+    /** The ID of the variation to allocate */
+    variation_id: string;
+    /** Percentage weight for this allocation (percentage strategy only) */
+    weight?: number | undefined;
+    /** The segment this allocation targets (segment strategy only) */
+    segment_id?: string | undefined;
+    /** Evaluation order; 1 = highest priority (segment strategy only) */
+    priority?: number | undefined;
+    /** Whether this allocation is the control group */
+    is_control: boolean;
+    /** Whether this allocation is the default fallback (segment strategy only) */
+    is_fallback?: boolean | undefined;
+}
+
+export const AllocationStrategyEnum = {
+    Percentage: "percentage",
+    Segment: "segment",
+} as const;
+export type AllocationStrategyEnum = (typeof AllocationStrategyEnum)[keyof typeof AllocationStrategyEnum];
+
 /**
  * IP address to check.
  */
@@ -1432,6 +1472,7 @@ export interface AssociateOrganizationClientGrantResponseContent {
 export const AsyncApprovalNotificationsChannelsEnum = {
     GuardianPush: "guardian-push",
     Email: "email",
+    MyAccount: "my-account",
 } as const;
 export type AsyncApprovalNotificationsChannelsEnum =
     (typeof AsyncApprovalNotificationsChannelsEnum)[keyof typeof AsyncApprovalNotificationsChannelsEnum];
@@ -1548,6 +1589,17 @@ export interface AttackProtectionUpdateCaptchaRecaptchaV2 {
     /** The secret key for the reCAPTCHA v2 provider. */
     secret: string;
 }
+
+/** Specifies the target authentication flow for this experiment. Must be one of: authentication, mfa_enrollment, mfa_challenge, password_reset, passkey_enrollment, or all. Note that the all value targets every flow at once, but requires that this is the only active experiment. */
+export const AuthenticationFlowEnum = {
+    Authentication: "authentication",
+    MfaEnrollment: "mfa_enrollment",
+    MfaChallenge: "mfa_challenge",
+    PasswordReset: "password_reset",
+    PasskeyEnrollment: "passkey_enrollment",
+    All: "all",
+} as const;
+export type AuthenticationFlowEnum = (typeof AuthenticationFlowEnum)[keyof typeof AuthenticationFlowEnum];
 
 export const AuthenticationMethodTypeEnum = {
     RecoveryCode: "recovery-code",
@@ -2715,14 +2767,14 @@ export const ClientAppTypeEnum = {
 export type ClientAppTypeEnum = (typeof ClientAppTypeEnum)[keyof typeof ClientAppTypeEnum];
 
 /**
- * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
+ * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`, `my-account`.
  */
 export type ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration =
     | (Management.AsyncApprovalNotificationsChannelsEnum[] | null)
     | undefined;
 
 /**
- * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`.
+ * Array of notification channels for contacting the user when their approval is required. Valid values are `guardian-push`, `email`, `my-account`.
  */
 export type ClientAsyncApprovalNotificationsChannelsApiPostConfiguration =
     Management.AsyncApprovalNotificationsChannelsEnum[];
@@ -3144,6 +3196,7 @@ export const ClientOidcBackchannelLogoutInitiatorsEnum = {
     EmailIdentifierChanged: "email-identifier-changed",
     MfaPhoneUnenrolled: "mfa-phone-unenrolled",
     AccountDeactivated: "account-deactivated",
+    ProfileChanged: "profile-changed",
 } as const;
 export type ClientOidcBackchannelLogoutInitiatorsEnum =
     (typeof ClientOidcBackchannelLogoutInitiatorsEnum)[keyof typeof ClientOidcBackchannelLogoutInitiatorsEnum];
@@ -3176,6 +3229,24 @@ export interface ClientOidcBackchannelLogoutSettings {
     backchannel_logout_session_metadata?: (Management.ClientOidcBackchannelLogoutSessionMetadata | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export const ClientOidcSupportAllowedScopesEnum = {
+    Profile: "profile",
+    Email: "email",
+    Address: "address",
+    Phone: "phone",
+} as const;
+export type ClientOidcSupportAllowedScopesEnum =
+    (typeof ClientOidcSupportAllowedScopesEnum)[keyof typeof ClientOidcSupportAllowedScopesEnum];
+
+/**
+ * OIDC support configuration for a client. Controls whether OIDC flows are allowed and which scopes the client may request.
+ */
+export interface ClientOidcSupportPost {
+    is_allowed: boolean;
+    allow_all_scopes?: boolean | undefined;
+    allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
 }
 
 /** Method for discovering organizations during the `pre_login_prompt`. `email` allows users to find their organization by entering their email address and performing domain matching, while `organization_name` requires users to enter the organization name directly. These methods can be combined. */
@@ -3929,14 +4000,6 @@ export type ConnectionDecryptionKeySaml =
      * Private key in PEM format. */
     | string;
 
-/** Controls whether connections created from this template can be deleted. */
-export const ConnectionDeletionBehaviorEnum = {
-    Allow: "allow",
-    AllowIfEmpty: "allow_if_empty",
-} as const;
-export type ConnectionDeletionBehaviorEnum =
-    (typeof ConnectionDeletionBehaviorEnum)[keyof typeof ConnectionDeletionBehaviorEnum];
-
 /**
  * The URL where Auth0 will send SAML authentication requests (the Identity Provider's SSO URL). Must be a valid HTTPS URL.
  */
@@ -4674,6 +4737,7 @@ export interface ConnectionOptionsAd extends Management.ConnectionOptionsCommon 
     signInEndpoint?: Management.ConnectionSignInEndpointAd | undefined;
     tenant_domain?: Management.ConnectionTenantDomainAd | undefined;
     thumbprints?: Management.ConnectionThumbprintsAd | undefined;
+    thumbprints_sha384?: Management.ConnectionThumbprintsSha384Ad | undefined;
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -4696,6 +4760,7 @@ export interface ConnectionOptionsAdfs extends Management.ConnectionOptionsCommo
     signInEndpoint?: Management.ConnectionSignInEndpointAdfs | undefined;
     tenant_domain?: Management.ConnectionTenantDomain | undefined;
     thumbprints?: Management.ConnectionThumbprints | undefined;
+    thumbprints_sha384?: Management.ConnectionThumbprintsSha384 | undefined;
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Custom ADFS claim to use as the unique user identifier. When provided, this attribute is prepended to the default user_id mapping list with highest priority. Accepts a string (single ADFS claim name). */
     user_id_attribute?: string | undefined;
@@ -4894,6 +4959,7 @@ export interface ConnectionOptionsAzureAd extends Management.ConnectionOptionsCo
     tenant_domain?: Management.ConnectionTenantDomainAzureAdOne | undefined;
     tenantId?: Management.ConnectionTenantIdAzureAd | undefined;
     thumbprints?: Management.ConnectionThumbprints | undefined;
+    thumbprints_sha384?: Management.ConnectionThumbprintsSha384 | undefined;
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
     /** Indicates WS-Federation protocol usage. When true, uses WS-Federation; when false, uses OpenID Connect. */
     use_wsfed?: boolean | undefined;
@@ -5021,6 +5087,7 @@ export interface ConnectionOptionsCommonSaml {
     signatureAlgorithm?: Management.ConnectionSignatureAlgorithmSaml | undefined;
     tenant_domain?: Management.ConnectionTenantDomainSaml | undefined;
     thumbprints?: Management.ConnectionThumbprintsSaml | undefined;
+    thumbprints_sha384?: Management.ConnectionThumbprintsSha384Saml | undefined;
     upstream_params?: ((Management.ConnectionUpstreamParams | undefined) | null) | undefined;
 }
 
@@ -6465,6 +6532,8 @@ export interface ConnectionPropertiesOptions {
     useOauthSpecScope?: Management.ConnectionUseOauthSpecScope | undefined;
     discovery_url?: ((Management.ConnectionsDiscoveryUrl | undefined) | null) | undefined;
     oidc_metadata?: (Management.ConnectionsOidcMetadata | null) | undefined;
+    thumbprints?: Management.ConnectionThumbprints | undefined;
+    thumbprints_sha384?: Management.ConnectionThumbprintsSha384 | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -7840,7 +7909,7 @@ export type ConnectionTenantDomainSaml = string;
 export type ConnectionTenantIdAzureAd = string;
 
 /**
- * Array of certificate thumbprints (SHA-128/SHA-256/SHA-512 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string.
+ * Array of certificate thumbprints (SHA-128 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a hexadecimal string.
  */
 export type ConnectionThumbprints = string[];
 
@@ -7853,6 +7922,21 @@ export type ConnectionThumbprintsAd = Management.ConnectionSha1Thumbprint[];
  * SHA-1 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 40-character hexadecimal string.
  */
 export type ConnectionThumbprintsSaml = Management.ConnectionSha1Thumbprint[];
+
+/**
+ * Array of certificate thumbprints (SHA-384 hex hashes) for validating SAML signatures. Used with WS-Federation protocol. Maximum 20 thumbprints. Each thumbprint must be a 96-character hexadecimal string.
+ */
+export type ConnectionThumbprintsSha384 = string[];
+
+/**
+ * Array of certificate SHA-384 thumbprints for validating signatures. Managed by Auth0 when using the AD Connector agent.
+ */
+export type ConnectionThumbprintsSha384Ad = string[];
+
+/**
+ * SHA-384 thumbprints (fingerprints) of the identity provider's signing certificates. Automatically computed from signingCert during connection creation. Each thumbprint must be a 96-character hexadecimal string.
+ */
+export type ConnectionThumbprintsSha384Saml = string[];
 
 /**
  * URL of the identity provider's OAuth 2.0 token endpoint where authorization codes are exchanged for access tokens. Must be a valid HTTPS URL. Required for authorization code flow but optional for implicit flow.
@@ -9542,6 +9626,31 @@ export interface CreateEventStreamWebHookRequestContent {
     status?: Management.EventStreamStatusEnum | undefined;
 }
 
+export interface CreateExperimentResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    feature_flag_id: string;
+    feature_flag_name?: string | undefined;
+    authentication_flow: string;
+    allocation_strategy: Management.AllocationStrategyEnum;
+    status: Management.ExperimentStatusEnum;
+    is_valid: boolean;
+    default_config?: Management.DefaultConfigEnum | undefined;
+    feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
+    allocations: Management.AllocationItem[];
+    /** Fields that may be mutated given the experiment's current status. Computed at response time; always current with the API's enforcement logic. */
+    editable_fields: string[];
+    /** Ramp experiment levels configuration. */
+    levels?: number[] | undefined;
+    /** Read-only. The active exposure percentage for the current ramp step. Null when no ramp schedule is active. */
+    current_level?: (number | null) | undefined;
+    started_at?: string | undefined;
+    ended_at?: string | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface CreateExportUsersFields {
     /** Name of the field in the profile. */
     name: string;
@@ -9567,6 +9676,22 @@ export interface CreateExportUsersResponseContent {
     fields?: Management.CreateExportUsersFields[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+/**
+ * Configuration parameters for this feature flag
+ */
+export type CreateFeatureFlagParameters = Record<string, Management.FeatureFlagConfigParam>;
+
+export interface CreateFeatureFlagResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.FeatureFlagTypeEnum;
+    status: Management.FeatureFlagStatusEnum;
+    parameters?: Management.FeatureFlagConfigParams | undefined;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface CreateFlowResponseContent {
@@ -10423,6 +10548,8 @@ export interface CreateResourceServerResponseContent {
     access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    /** When true, the resource server requires every consent approval to be digitally signed, so the approver cannot later deny a consent they granted. When false, consent decisions do not need a signature. Defaults to false. A configured value is still returned even after the related entitlement is disabled. */
+    require_consent_non_repudiation?: boolean | undefined;
     authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
@@ -10495,6 +10622,16 @@ export interface CreateScimTokenResponseContent {
     created_at?: string | undefined;
     /** The token's valid until at timestamp */
     valid_until?: string | undefined;
+}
+
+export interface CreateSegmentResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.SegmentTypeEnum;
+    rules: Management.SegmentRule[];
+    created_at: string;
+    updated_at: string;
 }
 
 export interface CreateSelfServiceProfileResponseContent {
@@ -10639,6 +10776,16 @@ export interface CreateUserResponseContent {
     family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface CreateVariationResponseContent {
+    id: string;
+    feature_flag_id: string;
+    name: string;
+    description?: string | undefined;
+    overrides: Management.VariationOverridesMap;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface CreateVerifiableCredentialTemplateResponseContent {
@@ -10990,6 +11137,13 @@ export interface DailyStats {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/** For Auth0-managed flags, where non-overridden config keys resolve from: 'tenant' inherits the tenant's live config, 'flag' uses the flag's frozen defaults. Omitted when unset (defaults to 'tenant' at resolution). Not applicable to customer-defined flags. */
+export const DefaultConfigEnum = {
+    Tenant: "tenant",
+    Flag: "flag",
+} as const;
+export type DefaultConfigEnum = (typeof DefaultConfigEnum)[keyof typeof DefaultConfigEnum];
 
 /** Default authentication method for email identifier */
 export const DefaultMethodEmailIdentifierEnum = {
@@ -28039,6 +28193,58 @@ export interface EventStreamWebhookResponseContent {
     updated_at?: string | undefined;
 }
 
+export interface ExperimentListItem {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    feature_flag_id: string;
+    feature_flag_name?: string | undefined;
+    authentication_flow: string;
+    allocation_strategy: Management.AllocationStrategyEnum;
+    status: Management.ExperimentStatusEnum;
+    is_valid: boolean;
+    default_config?: Management.DefaultConfigEnum | undefined;
+    feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
+    allocations: Management.AllocationItem[];
+    /** Fields that may be mutated given the experiment's current status. Computed at response time; always current with the API's enforcement logic. */
+    editable_fields: string[];
+    /** Ramp experiment levels configuration. */
+    levels?: number[] | undefined;
+    /** Read-only. The active exposure percentage for the current ramp step. Null when no ramp schedule is active. */
+    current_level?: (number | null) | undefined;
+    started_at?: string | undefined;
+    ended_at?: string | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
+/** Filter by status. Exact match. */
+export const ExperimentStatusEnum = {
+    Draft: "draft",
+    Active: "active",
+    Paused: "paused",
+    Completed: "completed",
+    Archived: "archived",
+} as const;
+export type ExperimentStatusEnum = (typeof ExperimentStatusEnum)[keyof typeof ExperimentStatusEnum];
+
+/** The target status to transition the experiment to. */
+export const ExperimentTransitionStatusEnum = {
+    Active: "active",
+    Paused: "paused",
+    Completed: "completed",
+    Archived: "archived",
+} as const;
+export type ExperimentTransitionStatusEnum =
+    (typeof ExperimentTransitionStatusEnum)[keyof typeof ExperimentTransitionStatusEnum];
+
+export interface ExperimentValidationError {
+    /** Machine-readable error code identifying the validation failure. */
+    code: string;
+    /** Human-readable description of the validation failure. */
+    message: string;
+}
+
 /**
  * Application specific configuration for use with the OIN Express Configuration feature.
  */
@@ -28088,6 +28294,55 @@ export interface ExpressConfigurationOrNull {
 }
 
 export interface ExtensibilityEmailProviderCredentials {}
+
+export interface FeatureFlag {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.FeatureFlagTypeEnum;
+    status: Management.FeatureFlagStatusEnum;
+    parameters?: Management.FeatureFlagConfigParams | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface FeatureFlagConfigParam {
+    type: Management.FeatureFlagConfigParamTypeEnum;
+    value?: unknown | undefined;
+    /** A human-readable description of the parameter */
+    description?: string | undefined;
+}
+
+/** The data type of the parameter value */
+export const FeatureFlagConfigParamTypeEnum = {
+    String: "string",
+    Boolean: "boolean",
+    Number: "number",
+    Array: "array",
+    Object: "object",
+} as const;
+export type FeatureFlagConfigParamTypeEnum =
+    (typeof FeatureFlagConfigParamTypeEnum)[keyof typeof FeatureFlagConfigParamTypeEnum];
+
+/**
+ * Configuration parameters for this feature flag
+ */
+export type FeatureFlagConfigParams = Record<string, Management.FeatureFlagConfigParam>;
+
+/** Filter by status. Exact match. */
+export const FeatureFlagStatusEnum = {
+    Draft: "draft",
+    Active: "active",
+    Archived: "archived",
+} as const;
+export type FeatureFlagStatusEnum = (typeof FeatureFlagStatusEnum)[keyof typeof FeatureFlagStatusEnum];
+
+/** Filter by type. Exact match. */
+export const FeatureFlagTypeEnum = {
+    Auth0: "auth0",
+    Self: "self",
+} as const;
+export type FeatureFlagTypeEnum = (typeof FeatureFlagTypeEnum)[keyof typeof FeatureFlagTypeEnum];
 
 /**
  * Configure FedCM login settings for New Universal Login
@@ -32239,6 +32494,42 @@ export type GetEventStreamResponseContent =
     | Management.EventStreamEventBridgeResponseContent
     | Management.EventStreamActionResponseContent;
 
+export interface GetExperimentResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    feature_flag_id: string;
+    feature_flag_name?: string | undefined;
+    authentication_flow: string;
+    allocation_strategy: Management.AllocationStrategyEnum;
+    status: Management.ExperimentStatusEnum;
+    is_valid: boolean;
+    default_config?: Management.DefaultConfigEnum | undefined;
+    feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
+    allocations: Management.AllocationItem[];
+    /** Fields that may be mutated given the experiment's current status. Computed at response time; always current with the API's enforcement logic. */
+    editable_fields: string[];
+    /** Ramp experiment levels configuration. */
+    levels?: number[] | undefined;
+    /** Read-only. The active exposure percentage for the current ramp step. Null when no ramp schedule is active. */
+    current_level?: (number | null) | undefined;
+    started_at?: string | undefined;
+    ended_at?: string | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface GetFeatureFlagResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.FeatureFlagTypeEnum;
+    status: Management.FeatureFlagStatusEnum;
+    parameters?: Management.FeatureFlagConfigParams | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
 export const GetFlowExecutionRequestParametersHydrateEnum = {
     Debug: "debug",
 } as const;
@@ -32845,6 +33136,8 @@ export interface GetResourceServerResponseContent {
     access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    /** When true, the resource server requires every consent approval to be digitally signed, so the approver cannot later deny a consent they granted. When false, consent decisions do not need a signature. Defaults to false. A configured value is still returned even after the related entitlement is disabled. */
+    require_consent_non_repudiation?: boolean | undefined;
     authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
@@ -32918,6 +33211,16 @@ export interface GetScimConfigurationResponseContent {
  * The list of scim tokens for scim clients
  */
 export type GetScimTokensResponseContent = Management.ScimTokenItem[];
+
+export interface GetSegmentResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.SegmentTypeEnum;
+    rules: Management.SegmentRule[];
+    created_at: string;
+    updated_at: string;
+}
 
 export interface GetSelfServiceProfileResponseContent {
     /** The unique ID of the self-service Profile. */
@@ -33234,6 +33537,16 @@ export interface GetUserResponseContent {
     family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface GetVariationResponseContent {
+    id: string;
+    feature_flag_id: string;
+    name: string;
+    description?: string | undefined;
+    overrides: Management.VariationOverridesMap;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface GetVerifiableCredentialTemplateResponseContent {
@@ -33834,6 +34147,18 @@ export interface ListEventStreamsResponseContent {
     [key: string]: any;
 }
 
+export interface ListExperimentsResponseContent {
+    experiments: Management.ExperimentListItem[];
+    /** Checkpoint token for the next page. Omitted when there are no further results. */
+    next?: string | undefined;
+}
+
+export interface ListFeatureFlagsResponseContent {
+    feature_flags: Management.FeatureFlag[];
+    /** Checkpoint token for the next page. Omitted when there are no further results. */
+    next?: string | undefined;
+}
+
 export interface ListFlowExecutionsPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
     next?: string | undefined;
@@ -34068,6 +34393,12 @@ export interface ListScimConfigurationsResponseContent {
     next?: string | undefined;
 }
 
+export interface ListSegmentsResponseContent {
+    segments: Management.Segment[];
+    /** Checkpoint token for the next page. Omitted when there are no further results. */
+    next?: string | undefined;
+}
+
 /**
  * The list of custom text keys and values.
  */
@@ -34198,6 +34529,10 @@ export interface ListUsersOffsetPaginatedResponseContent {
     length?: number | undefined;
     total?: number | undefined;
     users?: Management.UserResponseSchema[] | undefined;
+}
+
+export interface ListVariationsResponseContent {
+    variations: Management.Variation[];
 }
 
 export interface ListVerifiableCredentialTemplatesPaginatedResponseContent {
@@ -35183,14 +35518,6 @@ export interface OrganizationConnectionInformation {
     [key: string]: any;
 }
 
-/** Controls whether organizations using this template can be deleted. */
-export const OrganizationDeletionBehaviorEnum = {
-    Allow: "allow",
-    AllowIfEmpty: "allow_if_empty",
-} as const;
-export type OrganizationDeletionBehaviorEnum =
-    (typeof OrganizationDeletionBehaviorEnum)[keyof typeof OrganizationDeletionBehaviorEnum];
-
 export interface OrganizationDiscoveryDomain {
     /** Organization discovery domain identifier. */
     id: string;
@@ -35331,87 +35658,6 @@ export const OrganizationSortFieldEnum = {
     CreatedAt: "created_at",
 } as const;
 export type OrganizationSortFieldEnum = (typeof OrganizationSortFieldEnum)[keyof typeof OrganizationSortFieldEnum];
-
-export interface OrganizationTemplate {
-    /** Organization Template identifier. */
-    id?: string | undefined;
-    /** The name of the organization template. */
-    name?: string | undefined;
-    /** Whether this is the default template applied to new organizations. */
-    is_default?: boolean | undefined;
-    organization_deletion_behavior?: Management.OrganizationDeletionBehaviorEnum | undefined;
-    connection_deletion_behavior?: Management.ConnectionDeletionBehaviorEnum | undefined;
-    /** Whether to enforce permission ceiling for organizations using this template. */
-    enforce_permission_ceiling?: boolean | undefined;
-    /** Whether to enforce self-assignment restrictions for organizations using this template. */
-    enforce_self_assignment_restriction?: boolean | undefined;
-    /** The connection profile to apply to new connections. */
-    connection_profile_id?: string | undefined;
-    /** The user attribute profile to apply to organizations. */
-    user_attribute_profile_id?: string | undefined;
-    /** List of allowed connection strategies for this template. */
-    allowed_strategies?: Management.OrganizationTemplateAllowedStrategyEnum[] | undefined;
-    /** The client ID for the invitation landing page. */
-    invitation_landing_client_id?: string | undefined;
-    /** Default admin roles to assign to organization creators. */
-    admin_roles_assignment?: string[] | undefined;
-    use_for_organization_discovery?: (Management.OrganizationTemplateUseForOrganizationDiscovery | null) | undefined;
-    role_visibility_policy?: (Management.OrganizationTemplateRoleVisibilityPolicy | null) | undefined;
-    /** The ISO 8601 formatted timestamp representing when the template was created. */
-    created_at?: string | undefined;
-    /** The ISO 8601 formatted timestamp representing when the template was last updated. */
-    updated_at?: string | undefined;
-}
-
-/** An allowed enterprise connection strategy. */
-export const OrganizationTemplateAllowedStrategyEnum = {
-    Adfs: "adfs",
-    GoogleApps: "google-apps",
-    Oidc: "oidc",
-    Okta: "okta",
-    Pingfederate: "pingfederate",
-    Samlp: "samlp",
-    Waad: "waad",
-} as const;
-export type OrganizationTemplateAllowedStrategyEnum =
-    (typeof OrganizationTemplateAllowedStrategyEnum)[keyof typeof OrganizationTemplateAllowedStrategyEnum];
-
-/** The role visibility level. */
-export const OrganizationTemplateRoleVisibilityEnum = {
-    Write: "write",
-    ReadOnly: "read_only",
-    Hidden: "hidden",
-} as const;
-export type OrganizationTemplateRoleVisibilityEnum =
-    (typeof OrganizationTemplateRoleVisibilityEnum)[keyof typeof OrganizationTemplateRoleVisibilityEnum];
-
-/**
- * A role visibility override.
- */
-export interface OrganizationTemplateRoleVisibilityOverride {
-    /** The role identifier. */
-    role_id: string;
-    access: Management.OrganizationTemplateRoleVisibilityEnum;
-}
-
-/**
- * Controls role visibility for organization administrators.
- */
-export interface OrganizationTemplateRoleVisibilityPolicy {
-    default_value: Management.OrganizationTemplateRoleVisibilityEnum;
-    /** Role-specific visibility overrides. */
-    overrides?: Management.OrganizationTemplateRoleVisibilityOverride[] | undefined;
-}
-
-/**
- * Controls whether connections from this template are used for organization discovery.
- */
-export interface OrganizationTemplateUseForOrganizationDiscovery {
-    /** The default value for organization discovery. */
-    default_value: boolean;
-    /** The allowed values for organization discovery. */
-    allowed_values?: boolean[] | undefined;
-}
 
 /** Controls whether this organization can be used in user flows with third-party clients. Defaults to `block`. */
 export const OrganizationThirdPartyClientAccessEnum = {
@@ -36116,6 +36362,8 @@ export interface ResourceServer {
     access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    /** When true, the resource server requires every consent approval to be digitally signed, so the approver cannot later deny a consent they granted. When false, consent decisions do not need a signature. Defaults to false. A configured value is still returned even after the related entitlement is disabled. */
+    require_consent_non_repudiation?: boolean | undefined;
     authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
@@ -36230,6 +36478,8 @@ export interface ResourceServerSearchResponse {
     access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    /** When true, the resource server requires every consent approval to be digitally signed, so the approver cannot later deny a consent they granted. When false, consent decisions do not need a signature. Defaults to false. A configured value is still returned even after the related entitlement is disabled. */
+    require_consent_non_repudiation?: boolean | undefined;
     authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
@@ -36829,6 +37079,95 @@ export interface SearchResourceServersResponseContent {
     /** Cursor for retrieving the next page of results. Omitted if there are no more results. */
     next?: string | undefined;
 }
+
+export interface Segment {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.SegmentTypeEnum;
+    rules: Management.SegmentRule[];
+    created_at: string;
+    updated_at: string;
+}
+
+export interface SegmentContainsExpression {
+    contains: string[];
+}
+
+export interface SegmentEndsWithExpression {
+    ends_with: string[];
+}
+
+export interface SegmentExistsExpression {
+    exists: boolean;
+}
+
+/**
+ * Attribute conditions that must match.
+ */
+export interface SegmentMatchConditions {
+    client_id?: Management.SegmentMatchExpression | undefined;
+    connection?: Management.SegmentMatchExpression | undefined;
+    connection_type?: Management.SegmentMatchExpression | undefined;
+    organization_id?: Management.SegmentMatchExpression | undefined;
+    domain?: Management.SegmentMatchExpression | undefined;
+    device_type?: Management.SegmentMatchExpression | undefined;
+    browser?: Management.SegmentMatchExpression | undefined;
+    platform?: Management.SegmentMatchExpression | undefined;
+    user_agent?: Management.SegmentMatchExpression | undefined;
+    country?: Management.SegmentMatchExpression | undefined;
+    region?: Management.SegmentMatchExpression | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+export type SegmentMatchExpression =
+    | string[]
+    | Management.SegmentContainsExpression
+    | Management.SegmentStartsWithExpression
+    | Management.SegmentEndsWithExpression
+    | Management.SegmentExistsExpression;
+
+/**
+ * Attribute conditions that must not match.
+ */
+export interface SegmentNotMatchConditions {
+    client_id?: Management.SegmentMatchExpression | undefined;
+    connection?: Management.SegmentMatchExpression | undefined;
+    connection_type?: Management.SegmentMatchExpression | undefined;
+    organization_id?: Management.SegmentMatchExpression | undefined;
+    domain?: Management.SegmentMatchExpression | undefined;
+    device_type?: Management.SegmentMatchExpression | undefined;
+    browser?: Management.SegmentMatchExpression | undefined;
+    platform?: Management.SegmentMatchExpression | undefined;
+    user_agent?: Management.SegmentMatchExpression | undefined;
+    country?: Management.SegmentMatchExpression | undefined;
+    region?: Management.SegmentMatchExpression | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+export interface SegmentRule {
+    match?: Management.SegmentMatchConditions | undefined;
+    not_match?: Management.SegmentNotMatchConditions | undefined;
+}
+
+export interface SegmentStartsWithExpression {
+    starts_with: string[];
+}
+
+export const SegmentTypeEnum = {
+    Self: "self",
+    Auth0: "auth0",
+} as const;
+export type SegmentTypeEnum = (typeof SegmentTypeEnum)[keyof typeof SegmentTypeEnum];
+
+/** Filter by type. Exact match. */
+export const SegmentTypeFilterEnum = {
+    Auth0: "auth0",
+    Self: "self",
+} as const;
+export type SegmentTypeFilterEnum = (typeof SegmentTypeFilterEnum)[keyof typeof SegmentTypeFilterEnum];
 
 export interface SelfServiceProfile {
     /** The unique ID of the self-service Profile. */
@@ -38465,6 +38804,8 @@ export interface UpdateConnectionOptions {
     useOauthSpecScope?: Management.ConnectionUseOauthSpecScope | undefined;
     discovery_url?: ((Management.ConnectionsDiscoveryUrl | undefined) | null) | undefined;
     oidc_metadata?: (Management.ConnectionsOidcMetadata | null) | undefined;
+    thumbprints?: Management.ConnectionThumbprints | undefined;
+    thumbprints_sha384?: Management.ConnectionThumbprintsSha384 | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
 }
@@ -39052,6 +39393,83 @@ export type UpdateEventStreamResponseContent =
     | Management.EventStreamEventBridgeResponseContent
     | Management.EventStreamActionResponseContent;
 
+export interface UpdateExperimentResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    feature_flag_id: string;
+    feature_flag_name?: string | undefined;
+    authentication_flow: string;
+    allocation_strategy: Management.AllocationStrategyEnum;
+    status: Management.ExperimentStatusEnum;
+    is_valid: boolean;
+    default_config?: Management.DefaultConfigEnum | undefined;
+    feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
+    allocations: Management.AllocationItem[];
+    /** Fields that may be mutated given the experiment's current status. Computed at response time; always current with the API's enforcement logic. */
+    editable_fields: string[];
+    /** Ramp experiment levels configuration. */
+    levels?: number[] | undefined;
+    /** Read-only. The active exposure percentage for the current ramp step. Null when no ramp schedule is active. */
+    current_level?: (number | null) | undefined;
+    started_at?: string | undefined;
+    ended_at?: string | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface UpdateExperimentStatusResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    feature_flag_id: string;
+    feature_flag_name?: string | undefined;
+    authentication_flow: string;
+    allocation_strategy: Management.AllocationStrategyEnum;
+    status: Management.ExperimentStatusEnum;
+    is_valid: boolean;
+    default_config?: Management.DefaultConfigEnum | undefined;
+    feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
+    allocations: Management.AllocationItem[];
+    /** Fields that may be mutated given the experiment's current status. Computed at response time; always current with the API's enforcement logic. */
+    editable_fields: string[];
+    /** Ramp experiment levels configuration. */
+    levels?: number[] | undefined;
+    /** Read-only. The active exposure percentage for the current ramp step. Null when no ramp schedule is active. */
+    current_level?: (number | null) | undefined;
+    started_at?: string | undefined;
+    ended_at?: string | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
+/**
+ * Configuration parameters for this feature flag
+ */
+export type UpdateFeatureFlagParameters = Record<string, Management.FeatureFlagConfigParam>;
+
+export interface UpdateFeatureFlagResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.FeatureFlagTypeEnum;
+    status: Management.FeatureFlagStatusEnum;
+    parameters?: Management.FeatureFlagConfigParams | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface UpdateFeatureFlagStatusResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.FeatureFlagTypeEnum;
+    status: Management.FeatureFlagStatusEnum;
+    parameters?: Management.FeatureFlagConfigParams | undefined;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface UpdateFlowResponseContent {
     id: string;
     name: string;
@@ -39345,6 +39763,8 @@ export interface UpdateResourceServerResponseContent {
     access_token?: (Management.ResourceServerAccessToken | null) | undefined;
     token_encryption?: (Management.ResourceServerTokenEncryption | null) | undefined;
     consent_policy?: (Management.ResourceServerConsentPolicyEnum | null) | undefined;
+    /** When true, the resource server requires every consent approval to be digitally signed, so the approver cannot later deny a consent they granted. When false, consent decisions do not need a signature. Defaults to false. A configured value is still returned even after the related entitlement is disabled. */
+    require_consent_non_repudiation?: boolean | undefined;
     authorization_details?: (unknown[] | null) | undefined;
     proof_of_possession?: (Management.ResourceServerProofOfPossession | null) | undefined;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization | undefined;
@@ -39407,6 +39827,16 @@ export interface UpdateScimConfigurationResponseContent {
     created_at: string;
     /** The ISO 8601 date and time the SCIM configuration was last updated on */
     updated_on: string;
+}
+
+export interface UpdateSegmentResponseContent {
+    id: string;
+    name: string;
+    description?: string | undefined;
+    type: Management.SegmentTypeEnum;
+    rules: Management.SegmentRule[];
+    created_at: string;
+    updated_at: string;
 }
 
 export interface UpdateSelfServiceProfileResponseContent {
@@ -39644,6 +40074,21 @@ export interface UpdateUserResponseContent {
     family_name?: string | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+/**
+ * Configuration overrides for this variation; keys must exist in the parent flag parameters. Empty {} is the baseline (control) variation that overrides nothing.
+ */
+export type UpdateVariationOverridesMap = Record<string, unknown>;
+
+export interface UpdateVariationResponseContent {
+    id: string;
+    feature_flag_id: string;
+    name: string;
+    description?: string | undefined;
+    overrides: Management.VariationOverridesMap;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface UpdateVerifiableCredentialTemplateResponseContent {
@@ -40248,6 +40693,28 @@ export interface UsersEnrollment {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+export interface ValidateExperimentResponseContent {
+    /** Whether the experiment is ready to be activated. */
+    is_valid: boolean;
+    /** List of validation errors preventing activation. Empty when is_valid is true. */
+    errors: Management.ExperimentValidationError[];
+}
+
+export interface Variation {
+    id: string;
+    feature_flag_id: string;
+    name: string;
+    description?: string | undefined;
+    overrides: Management.VariationOverridesMap;
+    created_at: string;
+    updated_at: string;
+}
+
+/**
+ * Configuration overrides for this variation
+ */
+export type VariationOverridesMap = Record<string, unknown>;
 
 export interface VerifiableCredentialTemplateResponse {
     /** The id of the template. */

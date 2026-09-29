@@ -848,6 +848,39 @@
             },
             "default": "./dist/cjs/management/api/resources/experimentation/resources/experiments/exports.js"
         },
+        "./experimentation/featureFlags": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/experimentation/resources/featureFlags/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/experimentation/resources/featureFlags/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/experimentation/resources/featureFlags/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/experimentation/resources/featureFlags/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/experimentation/resources/featureFlags/exports.js"
+        },
+        "./experimentation/segments": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/experimentation/resources/segments/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/experimentation/resources/segments/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/experimentation/resources/segments/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/experimentation/resources/segments/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/experimentation/resources/segments/exports.js"
+        },
+        "./experimentation/featureFlags/variations": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/experimentation/resources/featureFlags/resources/variations/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/experimentation/resources/featureFlags/resources/variations/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/experimentation/resources/featureFlags/resources/variations/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/experimentation/resources/featureFlags/resources/variations/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/experimentation/resources/featureFlags/resources/variations/exports.js"
+        },
         "./flows/executions": {
             "import": {
                 "types": "./dist/esm/management/api/resources/flows/resources/executions/exports.d.mts",
@@ -1188,17 +1221,6 @@
                 "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
-        },
-        "./organizations/organizationTemplate": {
-            "import": {
-                "types": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.d.mts",
-                "default": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.d.ts",
-                "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
-            },
-            "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
         },
         "./organizations/groups": {
             "import": {
