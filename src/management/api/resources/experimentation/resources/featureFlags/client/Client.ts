@@ -8,25 +8,31 @@ import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../errors/index.js";
 import * as Management from "../../../../../index.js";
+import { VariationsClient } from "../resources/variations/client/Client.js";
 
-export declare namespace ExperimentsClient {
+export declare namespace FeatureFlagsClient {
     export type Options = BaseClientOptions;
 
     export interface RequestOptions extends BaseRequestOptions {}
 }
 
-export class ExperimentsClient {
-    protected readonly _options: NormalizedClientOptionsWithAuth<ExperimentsClient.Options>;
+export class FeatureFlagsClient {
+    protected readonly _options: NormalizedClientOptionsWithAuth<FeatureFlagsClient.Options>;
+    protected _variations: VariationsClient | undefined;
 
-    constructor(options: ExperimentsClient.Options) {
+    constructor(options: FeatureFlagsClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
     }
 
+    public get variations(): VariationsClient {
+        return (this._variations ??= new VariationsClient(this._options));
+    }
+
     /**
-     * Retrieve a paginated list of experiments for the tenant, with optional filters.
+     * Retrieve a paginated list of feature flags for the tenant.
      *
-     * @param {Management.ListExperimentsRequestParameters} request
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Management.ListFeatureFlagsRequestParameters} request
+     * @param {FeatureFlagsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
@@ -34,35 +40,27 @@ export class ExperimentsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.experimentation.experiments.list({
+     *     await client.experimentation.featureFlags.list({
      *         from: "from",
      *         take: 1,
-     *         status: "draft",
-     *         authentication_flow: "authentication_flow",
-     *         feature_flag_id: "feature_flag_id"
+     *         type: "auth0",
+     *         status: "draft"
      *     })
      */
     public async list(
-        request: Management.ListExperimentsRequestParameters = {},
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): Promise<core.Page<Management.ExperimentListItem, Management.ListExperimentsResponseContent>> {
+        request: Management.ListFeatureFlagsRequestParameters = {},
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): Promise<core.Page<Management.FeatureFlag, Management.ListFeatureFlagsResponseContent>> {
         const list = core.HttpResponsePromise.interceptFunction(
             async (
-                request: Management.ListExperimentsRequestParameters,
-            ): Promise<core.WithRawResponse<Management.ListExperimentsResponseContent>> => {
-                const {
-                    from: from_,
-                    take = 50,
-                    status,
-                    authentication_flow: authenticationFlow,
-                    feature_flag_id: featureFlagId,
-                } = request;
+                request: Management.ListFeatureFlagsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.ListFeatureFlagsResponseContent>> => {
+                const { from: from_, take = 50, type: type_, status } = request;
                 const _queryParams: Record<string, unknown> = {
                     from: from_,
                     take,
+                    type: type_ !== undefined ? type_ : undefined,
                     status: status !== undefined ? status : undefined,
-                    authentication_flow: authenticationFlow,
-                    feature_flag_id: featureFlagId,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -75,7 +73,7 @@ export class ExperimentsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        "experimentation/experiments",
+                        "experimentation/feature-flags",
                     ),
                     method: "GET",
                     headers: _headers,
@@ -92,7 +90,7 @@ export class ExperimentsClient {
                 });
                 if (_response.ok) {
                     return {
-                        data: _response.body as Management.ListExperimentsResponseContent,
+                        data: _response.body as Management.ListFeatureFlagsResponseContent,
                         rawResponse: _response.rawResponse,
                     };
                 }
@@ -127,17 +125,17 @@ export class ExperimentsClient {
                     _response.error,
                     _response.rawResponse,
                     "GET",
-                    "/experimentation/experiments",
+                    "/experimentation/feature-flags",
                 );
             },
         );
         const dataWithRawResponse = await list(request).withRawResponse();
-        return new core.Page<Management.ExperimentListItem, Management.ListExperimentsResponseContent>({
+        return new core.Page<Management.FeatureFlag, Management.ListFeatureFlagsResponseContent>({
             response: dataWithRawResponse.data,
             rawResponse: dataWithRawResponse.rawResponse,
             hasNextPage: (response) =>
                 response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
-            getItems: (response) => response?.experiments ?? [],
+            getItems: (response) => response?.feature_flags ?? [],
             loadPage: (response) => {
                 return list(core.setObjectProperty(request, "from", response?.next));
             },
@@ -145,37 +143,34 @@ export class ExperimentsClient {
     }
 
     /**
-     * Create a new experiment for A/B testing.
+     * Create a new feature flag with parameters for use in experiments.
      *
-     * @param {Management.CreateExperimentRequestContent} request
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Management.CreateFeatureFlagRequestContent} request
+     * @param {FeatureFlagsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
-     * @throws {@link Management.UnprocessableEntityError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.experimentation.experiments.create({
+     *     await client.experimentation.featureFlags.create({
      *         name: "name",
-     *         feature_flag_id: "feature_flag_id",
-     *         authentication_flow: "authentication"
+     *         parameters: {}
      *     })
      */
     public create(
-        request: Management.CreateExperimentRequestContent,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.CreateExperimentResponseContent> {
+        request: Management.CreateFeatureFlagRequestContent,
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.CreateFeatureFlagResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: Management.CreateExperimentRequestContent,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.CreateExperimentResponseContent>> {
+        request: Management.CreateFeatureFlagRequestContent,
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.CreateFeatureFlagResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -187,7 +182,7 @@ export class ExperimentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                "experimentation/experiments",
+                "experimentation/feature-flags",
             ),
             method: "POST",
             headers: _headers,
@@ -203,7 +198,7 @@ export class ExperimentsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.CreateExperimentResponseContent,
+                data: _response.body as Management.CreateFeatureFlagResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -216,15 +211,8 @@ export class ExperimentsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
                     throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
-                case 422:
-                    throw new Management.UnprocessableEntityError(
-                        _response.error.body as unknown,
-                        _response.rawResponse,
-                    );
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -236,14 +224,19 @@ export class ExperimentsClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/experimentation/experiments");
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/experimentation/feature-flags",
+        );
     }
 
     /**
-     * Retrieve a single experiment with its allocations by ID.
+     * Retrieve a single feature flag by its ID.
      *
-     * @param {string} id - The ID of the experiment to retrieve.
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - The ID of the feature flag to retrieve.
+     * @param {FeatureFlagsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
@@ -251,19 +244,19 @@ export class ExperimentsClient {
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.experimentation.experiments.get("id")
+     *     await client.experimentation.featureFlags.get("id")
      */
     public get(
         id: string,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.GetExperimentResponseContent> {
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.GetFeatureFlagResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
     private async __get(
         id: string,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.GetExperimentResponseContent>> {
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.GetFeatureFlagResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -275,7 +268,7 @@ export class ExperimentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/experiments/${core.url.encodePathParam(id)}`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -288,7 +281,7 @@ export class ExperimentsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.GetExperimentResponseContent,
+                data: _response.body as Management.GetFeatureFlagResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -316,30 +309,30 @@ export class ExperimentsClient {
             _response.error,
             _response.rawResponse,
             "GET",
-            "/experimentation/experiments/{id}",
+            "/experimentation/feature-flags/{id}",
         );
     }
 
     /**
-     * Permanently delete an experiment and its allocations by ID. Active experiments cannot be deleted; pause or complete first. Idempotent: returns 204 even if the experiment does not exist.
+     * Delete a feature flag by ID. Idempotent: returns 204 even if flag does not exist.
      *
-     * @param {string} id - The ID of the experiment to delete.
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - The ID of the feature flag to delete.
+     * @param {FeatureFlagsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.experimentation.experiments.delete("id")
+     *     await client.experimentation.featureFlags.delete("id")
      */
-    public delete(id: string, requestOptions?: ExperimentsClient.RequestOptions): core.HttpResponsePromise<void> {
+    public delete(id: string, requestOptions?: FeatureFlagsClient.RequestOptions): core.HttpResponsePromise<void> {
         return core.HttpResponsePromise.fromPromise(this.__delete(id, requestOptions));
     }
 
     private async __delete(
         id: string,
-        requestOptions?: ExperimentsClient.RequestOptions,
+        requestOptions?: FeatureFlagsClient.RequestOptions,
     ): Promise<core.WithRawResponse<void>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -352,7 +345,7 @@ export class ExperimentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/experiments/${core.url.encodePathParam(id)}`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -369,10 +362,10 @@ export class ExperimentsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -388,41 +381,40 @@ export class ExperimentsClient {
             _response.error,
             _response.rawResponse,
             "DELETE",
-            "/experimentation/experiments/{id}",
+            "/experimentation/feature-flags/{id}",
         );
     }
 
     /**
-     * Partially update an experiment by ID. Only provided fields are updated. Providing allocations replaces the entire allocations set.
+     * Partially update a feature flag by ID. Only provided fields are updated.
      *
-     * @param {string} id - The ID of the experiment to update.
-     * @param {Management.UpdateExperimentRequestParameters} request
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - The ID of the feature flag to update.
+     * @param {Management.UpdateFeatureFlagRequestContent} request
+     * @param {FeatureFlagsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
-     * @throws {@link Management.UnprocessableEntityError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.experimentation.experiments.update("id")
+     *     await client.experimentation.featureFlags.update("id")
      */
     public update(
         id: string,
-        request: Management.UpdateExperimentRequestParameters = {},
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateExperimentResponseContent> {
+        request: Management.UpdateFeatureFlagRequestContent = {},
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.UpdateFeatureFlagResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
     private async __update(
         id: string,
-        request: Management.UpdateExperimentRequestParameters = {},
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateExperimentResponseContent>> {
+        request: Management.UpdateFeatureFlagRequestContent = {},
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.UpdateFeatureFlagResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -434,7 +426,7 @@ export class ExperimentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/experiments/${core.url.encodePathParam(id)}`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id)}`,
             ),
             method: "PATCH",
             headers: _headers,
@@ -450,7 +442,7 @@ export class ExperimentsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateExperimentResponseContent,
+                data: _response.body as Management.UpdateFeatureFlagResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -467,11 +459,6 @@ export class ExperimentsClient {
                     throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
                 case 409:
                     throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
-                case 422:
-                    throw new Management.UnprocessableEntityError(
-                        _response.error.body as unknown,
-                        _response.rawResponse,
-                    );
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -487,138 +474,41 @@ export class ExperimentsClient {
             _response.error,
             _response.rawResponse,
             "PATCH",
-            "/experimentation/experiments/{id}",
+            "/experimentation/feature-flags/{id}",
         );
     }
 
     /**
-     * Increments the current ramp index to the requested target level. Up-only: the target must be the immediate next level in the schedule. Idempotent: calling with the current level returns success without writing anything.
+     * Transitions a feature flag through its lifecycle states: draft → active, draft → archived, active → archived.
      *
-     * @param {string} id - The ID of the experiment to advance.
-     * @param {Management.AdvanceRampRequestContent} request
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} id - The ID of the feature flag to transition.
+     * @param {Management.UpdateFeatureFlagStatusRequestContent} request
+     * @param {FeatureFlagsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
      *
      * @example
-     *     await client.experimentation.experiments.advanceRamp("id", {
-     *         target_level: 1
-     *     })
-     */
-    public advanceRamp(
-        id: string,
-        request: Management.AdvanceRampRequestContent,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.AdvanceRampResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__advanceRamp(id, request, requestOptions));
-    }
-
-    private async __advanceRamp(
-        id: string,
-        request: Management.AdvanceRampRequestContent,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.AdvanceRampResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `experimentation/experiments/${core.url.encodePathParam(id)}/advance-ramp`,
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: request,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.AdvanceRampResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "POST",
-            "/experimentation/experiments/{id}/advance-ramp",
-        );
-    }
-
-    /**
-     * Transitions an experiment through its lifecycle: draft → active, active → paused, paused → active, active/paused → completed. Activation runs full readiness validation.
-     *
-     * @param {string} id - The ID of the experiment to transition.
-     * @param {Management.UpdateExperimentStatusRequestContent} request
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.ConflictError}
-     * @throws {@link Management.UnprocessableEntityError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.experimentation.experiments.updateStatus("id", {
-     *         status: "active"
+     *     await client.experimentation.featureFlags.updateStatus("id", {
+     *         status: "draft"
      *     })
      */
     public updateStatus(
         id: string,
-        request: Management.UpdateExperimentStatusRequestContent,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateExperimentStatusResponseContent> {
+        request: Management.UpdateFeatureFlagStatusRequestContent,
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): core.HttpResponsePromise<Management.UpdateFeatureFlagStatusResponseContent> {
         return core.HttpResponsePromise.fromPromise(this.__updateStatus(id, request, requestOptions));
     }
 
     private async __updateStatus(
         id: string,
-        request: Management.UpdateExperimentStatusRequestContent,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateExperimentStatusResponseContent>> {
+        request: Management.UpdateFeatureFlagStatusRequestContent,
+        requestOptions?: FeatureFlagsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<Management.UpdateFeatureFlagStatusResponseContent>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -630,7 +520,7 @@ export class ExperimentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/experiments/${core.url.encodePathParam(id)}/status`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id)}/status`,
             ),
             method: "POST",
             headers: _headers,
@@ -646,7 +536,7 @@ export class ExperimentsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as Management.UpdateExperimentStatusResponseContent,
+                data: _response.body as Management.UpdateFeatureFlagStatusResponseContent,
                 rawResponse: _response.rawResponse,
             };
         }
@@ -661,13 +551,6 @@ export class ExperimentsClient {
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:
                     throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 409:
-                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
-                case 422:
-                    throw new Management.UnprocessableEntityError(
-                        _response.error.body as unknown,
-                        _response.rawResponse,
-                    );
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 default:
@@ -683,88 +566,7 @@ export class ExperimentsClient {
             _response.error,
             _response.rawResponse,
             "POST",
-            "/experimentation/experiments/{id}/status",
-        );
-    }
-
-    /**
-     * Checks whether an experiment is ready to be activated. Returns is_valid boolean and an errors array describing any blockers. Read-only; no state is modified.
-     *
-     * @param {string} id - The ID of the experiment to validate.
-     * @param {ExperimentsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.experimentation.experiments.validate("id")
-     */
-    public validate(
-        id: string,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.ValidateExperimentResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__validate(id, requestOptions));
-    }
-
-    private async __validate(
-        id: string,
-        requestOptions?: ExperimentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.ValidateExperimentResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `experimentation/experiments/${core.url.encodePathParam(id)}/validate`,
-            ),
-            method: "POST",
-            headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.ValidateExperimentResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "POST",
-            "/experimentation/experiments/{id}/validate",
+            "/experimentation/feature-flags/{id}/status",
         );
     }
 }
