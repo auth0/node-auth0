@@ -364,6 +364,7 @@ export interface CreateClientRequestContent {
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration;
     my_organization_configuration?: Management.ClientMyOrganizationPostConfiguration;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+    oidc_support?: Management.ClientOidcSupportPost;
 }
 
 /**
@@ -1558,6 +1559,8 @@ export interface CreateResourceServerRequestContent {
     access_token?: Management.ResourceServerAccessToken | null;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
     consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
+    /** When true, the resource server requires every consent approval to be digitally signed, so the approver cannot later deny a consent they granted. When false, consent decisions do not need a signature. Defaults to false. A configured value is still returned even after the related entitlement is disabled. */
+    require_consent_non_repudiation?: boolean;
     authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -1634,6 +1637,8 @@ export interface UpdateResourceServerRequestContent {
     access_token?: Management.ResourceServerAccessToken | null;
     token_encryption?: Management.ResourceServerTokenEncryption | null;
     consent_policy?: Management.ResourceServerConsentPolicyEnum | null;
+    /** When true, the resource server requires every consent approval to be digitally signed, so the approver cannot later deny a consent they granted. When false, consent decisions do not need a signature. Defaults to false. A configured value is still returned even after the related entitlement is disabled. */
+    require_consent_non_repudiation?: boolean;
     authorization_details?: unknown[] | null;
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
@@ -2012,8 +2017,8 @@ export interface ListUserBlocksByIdentifierRequestParameters {
     /** Should be any of a username, phone number, or email. */
     identifier: string;
     /**
-     *           If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
-     *           If true and Brute Force Protection is disabled, will return an empty list.
+     *           If true, returns only blocks that are currently enforced (e.g. subject to protection status, IP allowlist, etc.).
+     *           If false or omitted, returns all blocks regardless of enforcement state.
      *
      */
     consider_brute_force_enablement?: boolean | null;
@@ -2038,8 +2043,8 @@ export interface DeleteUserBlocksByIdentifierRequestParameters {
  */
 export interface ListUserBlocksRequestParameters {
     /**
-     *           If true and Brute Force Protection is enabled and configured to block logins, will return a list of blocked IP addresses.
-     *           If true and Brute Force Protection is disabled, will return an empty list.
+     *           If true, returns only blocks that are currently enforced (e.g. subject to protection status, IP allowlist, etc.).
+     *           If false or omitted, returns all blocks regardless of enforcement state.
      *
      */
     consider_brute_force_enablement?: boolean | null;
@@ -2994,12 +2999,224 @@ export interface CreateEventStreamRedeliveryRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1,
+ *         status: "draft",
+ *         authentication_flow: "authentication_flow",
+ *         feature_flag_id: "feature_flag_id"
+ *     }
+ */
+export interface ListExperimentsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of experiments to return per page. Defaults to 25, maximum 50. */
+    take?: number | null;
+    /** Filter by status. Exact match. */
+    status?: Management.ExperimentStatusEnum | null;
+    /** Filter by authentication flow. Exact match. */
+    authentication_flow?: string | null;
+    /** Filter by feature flag ID. Exact match. */
+    feature_flag_id?: string | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         feature_flag_id: "feature_flag_id",
+ *         authentication_flow: "authentication"
+ *     }
+ */
+export interface CreateExperimentRequestContent {
+    /** A human-readable name for the experiment */
+    name: string;
+    /** A description of the experiment */
+    description?: string;
+    /** The ID of the feature flag this experiment is based on */
+    feature_flag_id: string;
+    authentication_flow: Management.AuthenticationFlowEnum;
+    /** Applies only to Auth0-managed flags. Controls where non-overridden config keys resolve from: 'tenant' inherits the tenant's live config so the experiment overlays only its changes, 'flag' uses the flag's frozen defaults for a complete config. Optional; defaults to 'tenant' when omitted. Rejected for customer-defined flags. */
+    default_config?: Management.DefaultConfigEnum;
+    /** The traffic allocation strategy for this experiment */
+    allocation_strategy?: Management.AllocationStrategyEnum;
+    /** Traffic allocations mapping variations to weights or segments */
+    allocations?: Management.AllocationRequestItem[];
+    /** Ramp experiment levels configuration. A strictly-increasing sequence of exposure percentages, each an integer in [0, 100]. */
+    levels?: number[];
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateExperimentRequestParameters {
+    /** A human-readable name for the experiment */
+    name?: string;
+    /** A description of the experiment */
+    description?: string | null;
+    /** Specifies the target authentication flow for this experiment. This field can only be modified on draft experiments. Must be one of: authentication, mfa_enrollment, mfa_challenge, password_reset, passkey_enrollment, or all. Note that the all value targets every flow at once, but requires that this is the only active experiment. */
+    authentication_flow?: Management.AuthenticationFlowEnum;
+    /** Replaces all traffic allocations. Cannot be modified while the experiment is active. */
+    allocations?: Management.AllocationRequestItem[];
+    /** Applies only to Auth0-managed flags. Controls where non-overridden config keys resolve from: 'tenant' inherits the tenant's live config, 'flag' uses the flag's frozen defaults. Can only be modified on draft experiments. Rejected for customer-defined flags. */
+    default_config?: Management.DefaultConfigEnum;
+    /** Ramp experiment levels configuration. A strictly-increasing sequence of exposure percentages, each an integer in [0, 100]. Can only be modified on draft experiments. */
+    levels?: number[];
+}
+
+/**
+ * @example
+ *     {
  *         target_level: 1
  *     }
  */
 export interface AdvanceRampRequestContent {
     /** The target percentage level from the experiment schedule. Must be the immediate next level. */
     target_level: number;
+}
+
+/**
+ * @example
+ *     {
+ *         status: "active"
+ *     }
+ */
+export interface UpdateExperimentStatusRequestContent {
+    status: Management.ExperimentTransitionStatusEnum;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         type: "auth0",
+ *         status: "draft"
+ *     }
+ */
+export interface ListFeatureFlagsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of feature flags to return per page. Defaults to 25, maximum 50. */
+    take?: number | null;
+    /** Filter by type. Exact match. */
+    type?: Management.FeatureFlagTypeEnum | null;
+    /** Filter by status. Exact match. */
+    status?: Management.FeatureFlagStatusEnum | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         parameters: {}
+ *     }
+ */
+export interface CreateFeatureFlagRequestContent {
+    /** A human-readable name for the feature flag */
+    name: string;
+    /** A description of what this feature flag controls */
+    description?: string;
+    parameters: Management.CreateFeatureFlagParameters;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateFeatureFlagRequestContent {
+    /** A human-readable name for the feature flag */
+    name?: string;
+    /** A description of what this feature flag controls */
+    description?: string | null;
+    parameters?: Management.UpdateFeatureFlagParameters;
+}
+
+/**
+ * @example
+ *     {
+ *         status: "draft"
+ *     }
+ */
+export interface UpdateFeatureFlagStatusRequestContent {
+    /** The target status to transition the feature flag to. */
+    status: Management.FeatureFlagStatusEnum;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1,
+ *         type: "auth0"
+ *     }
+ */
+export interface ListSegmentsRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of segments to return per page. Defaults to 25, maximum 50. */
+    take?: number | null;
+    /** Filter by type. Exact match. */
+    type?: Management.SegmentTypeFilterEnum | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         rules: [{}]
+ *     }
+ */
+export interface CreateSegmentRequestContent {
+    /** A human-readable name for the segment */
+    name: string;
+    /** A description of the segment */
+    description?: string;
+    /** An ordered list of rules. A segment matches if any rule matches. Each rule is limited to 4KB and the whole segment to 10KB (serialized). */
+    rules: Management.SegmentRule[];
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateSegmentRequestContent {
+    /** A human-readable name for the segment */
+    name?: string;
+    /** A description of the segment */
+    description?: string | null;
+    /** Replaces the entire rules array. Each rule is limited to 4KB and the whole segment to 10KB (serialized). */
+    rules?: Management.SegmentRule[];
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         overrides: {
+ *             "key": "value"
+ *         }
+ *     }
+ */
+export interface CreateVariationRequestContent {
+    /** A human-readable name for the variation */
+    name: string;
+    /** A description of what this variation controls */
+    description?: string;
+    /** Configuration overrides for this variation; keys must exist in the parent flag parameters. Empty {} is the baseline (control) variation that overrides nothing. */
+    overrides: Management.VariationOverridesMap;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateVariationRequestContent {
+    /** A human-readable name for the variation */
+    name?: string;
+    /** A description of what this variation controls */
+    description?: string | null;
+    overrides?: Management.UpdateVariationOverridesMap;
 }
 
 /**

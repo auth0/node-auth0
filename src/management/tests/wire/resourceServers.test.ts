@@ -36,6 +36,7 @@ describe("ResourceServersClient", () => {
                         encryption_key: { alg: "RSA-OAEP-256", pem: "pem" },
                     },
                     consent_policy: "transactional-authorization-with-mfa",
+                    require_consent_non_repudiation: true,
                     proof_of_possession: { mechanism: "mtls", required: true },
                     authorization_policy: { policy_id: "policy_id" },
                     client_id: "client_id",
@@ -169,6 +170,7 @@ describe("ResourceServersClient", () => {
                 encryption_key: { name: "name", alg: "RSA-OAEP-256", kid: "kid", pem: "pem" },
             },
             consent_policy: "transactional-authorization-with-mfa",
+            require_consent_non_repudiation: true,
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: {
@@ -332,6 +334,7 @@ describe("ResourceServersClient", () => {
                         encryption_key: { alg: "RSA-OAEP-256", pem: "pem" },
                     },
                     consent_policy: "transactional-authorization-with-mfa",
+                    require_consent_non_repudiation: true,
                     proof_of_possession: { mechanism: "mtls", required: true },
                     authorization_policy: { policy_id: "policy_id" },
                     client_id: "client_id",
@@ -525,6 +528,7 @@ describe("ResourceServersClient", () => {
                 encryption_key: { name: "name", alg: "RSA-OAEP-256", kid: "kid", pem: "pem" },
             },
             consent_policy: "transactional-authorization-with-mfa",
+            require_consent_non_repudiation: true,
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: {
@@ -758,6 +762,7 @@ describe("ResourceServersClient", () => {
                 encryption_key: { name: "name", alg: "RSA-OAEP-256", kid: "kid", pem: "pem" },
             },
             consent_policy: "transactional-authorization-with-mfa",
+            require_consent_non_repudiation: true,
             authorization_details: [{ key: "value" }],
             proof_of_possession: { mechanism: "mtls", required: true, required_for: "public_clients" },
             subject_type_authorization: {

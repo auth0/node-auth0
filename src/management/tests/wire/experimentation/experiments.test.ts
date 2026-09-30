@@ -5,6 +5,778 @@ import { ManagementClient } from "../../../Client";
 import { mockServerPool } from "../../mock-server/MockServerPool";
 
 describe("ExperimentsClient", () => {
+    test("list (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            experiments: [
+                {
+                    id: "id",
+                    name: "name",
+                    description: "description",
+                    feature_flag_id: "feature_flag_id",
+                    feature_flag_name: "feature_flag_name",
+                    authentication_flow: "authentication_flow",
+                    allocation_strategy: "percentage",
+                    status: "draft",
+                    is_valid: true,
+                    default_config: "tenant",
+                    feature_flag_snapshot: { key: "value" },
+                    allocations: [{}],
+                    editable_fields: ["editable_fields"],
+                    levels: [1],
+                    current_level: 1,
+                    started_at: "2024-01-15T09:30:00Z",
+                    ended_at: "2024-01-15T09:30:00Z",
+                    created_at: "2024-01-15T09:30:00Z",
+                    updated_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+            next: "next",
+        };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/experimentation/experiments")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = rawResponseBody;
+        const page = await client.experimentation.experiments.list({
+            from: "from",
+            take: 1,
+            status: "draft",
+            authentication_flow: "authentication_flow",
+            feature_flag_id: "feature_flag_id",
+        });
+
+        expect(expected.experiments).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.experiments).toEqual(nextPage.data);
+    });
+
+    test("list (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.list();
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.list();
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("list (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.list();
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("list (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.list();
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("create (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "name",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            feature_flag_id: "feature_flag_id",
+            feature_flag_name: "feature_flag_name",
+            authentication_flow: "authentication_flow",
+            allocation_strategy: "percentage",
+            status: "draft",
+            is_valid: true,
+            default_config: "tenant",
+            feature_flag_snapshot: { key: "value" },
+            allocations: [
+                {
+                    variation_id: "variation_id",
+                    variation_name: "variation_name",
+                    segment_id: "segment_id",
+                    segment_name: "segment_name",
+                    weight: 1,
+                    priority: 1,
+                    is_control: true,
+                    is_fallback: true,
+                    variation_snapshot: { key: "value" },
+                    segment_snapshot: { key: "value" },
+                },
+            ],
+            editable_fields: ["editable_fields"],
+            levels: [1],
+            current_level: 1,
+            started_at: "2024-01-15T09:30:00Z",
+            ended_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+        };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.experimentation.experiments.create({
+            name: "name",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("create (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "foo",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.create({
+                name: "foo",
+                feature_flag_id: "feature_flag_id",
+                authentication_flow: "authentication",
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("create (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "foo",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.create({
+                name: "foo",
+                feature_flag_id: "feature_flag_id",
+                authentication_flow: "authentication",
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("create (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "foo",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.create({
+                name: "foo",
+                feature_flag_id: "feature_flag_id",
+                authentication_flow: "authentication",
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("create (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "foo",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.create({
+                name: "foo",
+                feature_flag_id: "feature_flag_id",
+                authentication_flow: "authentication",
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("create (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "foo",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.create({
+                name: "foo",
+                feature_flag_id: "feature_flag_id",
+                authentication_flow: "authentication",
+            });
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("create (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "foo",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.create({
+                name: "foo",
+                feature_flag_id: "feature_flag_id",
+                authentication_flow: "authentication",
+            });
+        }).rejects.toThrow(Management.UnprocessableEntityError);
+    });
+
+    test("create (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: "foo",
+            feature_flag_id: "feature_flag_id",
+            authentication_flow: "authentication",
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.create({
+                name: "foo",
+                feature_flag_id: "feature_flag_id",
+                authentication_flow: "authentication",
+            });
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("get (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            feature_flag_id: "feature_flag_id",
+            feature_flag_name: "feature_flag_name",
+            authentication_flow: "authentication_flow",
+            allocation_strategy: "percentage",
+            status: "draft",
+            is_valid: true,
+            default_config: "tenant",
+            feature_flag_snapshot: { key: "value" },
+            allocations: [
+                {
+                    variation_id: "variation_id",
+                    variation_name: "variation_name",
+                    segment_id: "segment_id",
+                    segment_name: "segment_name",
+                    weight: 1,
+                    priority: 1,
+                    is_control: true,
+                    is_fallback: true,
+                    variation_snapshot: { key: "value" },
+                    segment_snapshot: { key: "value" },
+                },
+            ],
+            editable_fields: ["editable_fields"],
+            levels: [1],
+            current_level: 1,
+            started_at: "2024-01-15T09:30:00Z",
+            ended_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+        };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.experimentation.experiments.get("id");
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("get (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.get("id");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("get (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.get("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.get("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("get (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.get("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("delete (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        server.mockEndpoint().delete("/experimentation/experiments/id").respondWith().statusCode(200).build();
+
+        const response = await client.experimentation.experiments.delete("id");
+        expect(response).toEqual(undefined);
+    });
+
+    test("delete (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.delete("id");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("delete (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.delete("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("delete (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/experimentation/experiments/id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.delete("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("update (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            feature_flag_id: "feature_flag_id",
+            feature_flag_name: "feature_flag_name",
+            authentication_flow: "authentication_flow",
+            allocation_strategy: "percentage",
+            status: "draft",
+            is_valid: true,
+            default_config: "tenant",
+            feature_flag_snapshot: { key: "value" },
+            allocations: [
+                {
+                    variation_id: "variation_id",
+                    variation_name: "variation_name",
+                    segment_id: "segment_id",
+                    segment_name: "segment_name",
+                    weight: 1,
+                    priority: 1,
+                    is_control: true,
+                    is_fallback: true,
+                    variation_snapshot: { key: "value" },
+                    segment_snapshot: { key: "value" },
+                },
+            ],
+            editable_fields: ["editable_fields"],
+            levels: [1],
+            current_level: 1,
+            started_at: "2024-01-15T09:30:00Z",
+            ended_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+        };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.experimentation.experiments.update("id");
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("update (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.update("id");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("update (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.update("id");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("update (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.update("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("update (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.update("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("update (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.update("id");
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("update (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.update("id");
+        }).rejects.toThrow(Management.UnprocessableEntityError);
+    });
+
+    test("update (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .patch("/experimentation/experiments/id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.update("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
     test("advanceRamp (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
@@ -155,6 +927,308 @@ describe("ExperimentsClient", () => {
             return await client.experimentation.experiments.advanceRamp("id", {
                 target_level: 100,
             });
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("updateStatus (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            feature_flag_id: "feature_flag_id",
+            feature_flag_name: "feature_flag_name",
+            authentication_flow: "authentication_flow",
+            allocation_strategy: "percentage",
+            status: "draft",
+            is_valid: true,
+            default_config: "tenant",
+            feature_flag_snapshot: { key: "value" },
+            allocations: [
+                {
+                    variation_id: "variation_id",
+                    variation_name: "variation_name",
+                    segment_id: "segment_id",
+                    segment_name: "segment_name",
+                    weight: 1,
+                    priority: 1,
+                    is_control: true,
+                    is_fallback: true,
+                    variation_snapshot: { key: "value" },
+                    segment_snapshot: { key: "value" },
+                },
+            ],
+            editable_fields: ["editable_fields"],
+            levels: [1],
+            current_level: 1,
+            started_at: "2024-01-15T09:30:00Z",
+            ended_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            updated_at: "2024-01-15T09:30:00Z",
+        };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.experimentation.experiments.updateStatus("id", {
+            status: "active",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("updateStatus (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.updateStatus("id", {
+                status: "active",
+            });
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("updateStatus (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.updateStatus("id", {
+                status: "active",
+            });
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("updateStatus (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.updateStatus("id", {
+                status: "active",
+            });
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("updateStatus (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.updateStatus("id", {
+                status: "active",
+            });
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("updateStatus (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.updateStatus("id", {
+                status: "active",
+            });
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("updateStatus (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.updateStatus("id", {
+                status: "active",
+            });
+        }).rejects.toThrow(Management.UnprocessableEntityError);
+    });
+
+    test("updateStatus (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { status: "active" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/status")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.updateStatus("id", {
+                status: "active",
+            });
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("validate (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { is_valid: true, errors: [{ code: "code", message: "message" }] };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/validate")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.experimentation.experiments.validate("id");
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("validate (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/validate")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.validate("id");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("validate (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/validate")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.validate("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("validate (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/validate")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.validate("id");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("validate (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/experimentation/experiments/id/validate")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.experimentation.experiments.validate("id");
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 });
