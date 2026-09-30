@@ -476,6 +476,147 @@ export class ClientsClient {
     }
 
     /**
+     * Search clients using SCIM or Lucene filter syntax with low-latency, eventually consistent results.
+     * Use the parser parameter to specify "scim" or "lucene" syntax (default: "lucene").
+     * This endpoint provides an alternative to the standard GET /clients endpoint with better performance
+     * for complex queries. Results may not reflect recent updates immediately.
+     *
+     * - This endpoint only supports `read:clients` and `read:client_summary` scopes. The `read:client_keys` and `read:client_credentials` scopes are not supported.
+     * - The following fields are never returned by this endpoint:
+     *   - `client_secret`
+     *   - `encryption_key`
+     *   - `signing_keys`
+     *   - `owners`
+     *   - `addons`
+     *
+     * @param {Management.SearchClientsRequestParameters} request
+     * @param {ClientsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Management.BadRequestError}
+     * @throws {@link Management.UnauthorizedError}
+     * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.NotFoundError}
+     * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link Management.InternalServerError}
+     * @throws {@link Management.GatewayTimeoutError}
+     *
+     * @example
+     *     await client.clients.search({
+     *         q: "q",
+     *         parser: "scim",
+     *         fields: "fields",
+     *         include_fields: true,
+     *         take: 1,
+     *         from: "from",
+     *         sort: "name"
+     *     })
+     */
+    public async search(
+        request: Management.SearchClientsRequestParameters = {},
+        requestOptions?: ClientsClient.RequestOptions,
+    ): Promise<core.Page<Management.ClientSearchResponse, Management.SearchClientsResponseContent>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: Management.SearchClientsRequestParameters,
+            ): Promise<core.WithRawResponse<Management.SearchClientsResponseContent>> => {
+                const { q, parser, fields, include_fields: includeFields, take = 50, from: from_, sort } = request;
+                const _queryParams: Record<string, unknown> = {
+                    q,
+                    parser: parser !== undefined ? parser : undefined,
+                    fields,
+                    include_fields: includeFields,
+                    take,
+                    from: from_,
+                    sort: sort !== undefined ? sort : undefined,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ManagementEnvironment.Default,
+                        "clients/search",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as Management.SearchClientsResponseContent,
+                        rawResponse: _response.rawResponse,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new Management.BadRequestError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new Management.UnauthorizedError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 403:
+                            throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                        case 404:
+                            throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                        case 429:
+                            throw new Management.TooManyRequestsError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 500:
+                            throw new Management.InternalServerError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        case 504:
+                            throw new Management.GatewayTimeoutError(
+                                _response.error.body as unknown,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ManagementError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/clients/search");
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<Management.ClientSearchResponse, Management.SearchClientsResponseContent>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next != null && !(typeof response?.next === "string" && response?.next === ""),
+            getItems: (response) => response?.clients ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "from", response?.next));
+            },
+        });
+    }
+
+    /**
      * Retrieve client details by ID. Clients are SSO connections or Applications linked with your Auth0 tenant. A list of fields to include or exclude may also be specified.
      * For more information, read [Applications in Auth0](https://www.auth0.com/docs/get-started/applications) and [Single Sign-On](https://www.auth0.com/docs/authenticate/single-sign-on).
      *

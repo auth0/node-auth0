@@ -1,5 +1,13 @@
 # Change Log
 
+## [v7.2.0](https://github.com/auth0/node-auth0/tree/v7.2.0) (2026-09-16)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.1.0...v7.2.0)
+
+**Added**
+
+- feat: My Organization Member Management EA, Resource Server Access Token Custom Claims, and Organization Connection Member Access Level [\#1406](https://github.com/auth0/node-auth0/pull/1406) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.1.0](https://github.com/auth0/node-auth0/tree/v7.1.0) (2026-09-11)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.0.0...v7.1.0)
