@@ -189,6 +189,11 @@ jobs:
             - name: Update npm to latest
               run: npm install -g npm@^11
 
+            # Run the full test suite before building or publishing. A failing
+            # test aborts the run, so a broken regeneration can never reach npm.
+            - name: Run tests
+              run: yarn test
+
             - name: Build package
               if: inputs.require-build == 'true'
               run: yarn build
