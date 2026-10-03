@@ -58,7 +58,7 @@ jobs:
         steps:
             # Checkout the full history so compute-next-version can inspect all
             # existing git tags.
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                   fetch-depth: 0
                   ref: beta
@@ -177,7 +177,7 @@ jobs:
             # that the built artifacts carry the stamped version. If publish
             # fails we have not yet created a release commit.
             - name: Setup Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version: ${{ inputs.node-version }}
                   cache: yarn

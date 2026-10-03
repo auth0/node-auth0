@@ -33,8 +33,9 @@ runs:
     using: composite
 
     steps:
-        - uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
           with:
+              token: ${{ inputs.token }}
               body: ${{ inputs.body }}
               name: ${{ inputs.name }}
               tag_name: ${{ inputs.tag }}
@@ -43,5 +44,3 @@ runs:
               prerelease: ${{ inputs.prerelease }}
               fail_on_unmatched_files: ${{ inputs.fail_on_unmatched_files }}
               files: ${{ inputs.files }}
-          env:
-              GITHUB_TOKEN: ${{ inputs.token }}
