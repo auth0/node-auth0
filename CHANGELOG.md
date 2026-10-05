@@ -1,5 +1,10 @@
 # Change Log
 
+## [v7.4.0-beta.1](https://github.com/auth0/node-auth0/tree/v7.4.0-beta.1) (2026-10-05)
+
+**Beta**
+- feat: add Clients search and brute-force form submission mode (Beta); sync v7.3.0 API changes (#1414)
+
 ## [v7.2.0](https://github.com/auth0/node-auth0/tree/v7.2.0) (2026-09-16)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.1.0...v7.2.0)
