@@ -63,6 +63,12 @@ jobs:
                   fetch-depth: 0
                   ref: beta
 
+            # Record the commit this run builds from. Later steps compare it to
+            # the live tip of `beta` to detect a PR merged mid-run.
+            - id: checkout_sha
+              shell: bash
+              run: echo "SHA=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
             # Compute the next beta version from the existing git tags.
             - id: get_version
               uses: ./.github/actions/compute-next-version
@@ -173,6 +179,27 @@ jobs:
                   VERSION: ${{ steps.get_version.outputs.version }}
                   RELEASE_NOTES: ${{ steps.notes.outputs.RELEASE_NOTES }}
 
+            # Verify the stamp step actually wrote the expected version into
+            # every file. `sed` exits 0 even when its pattern matches nothing
+            # (e.g. if the generated version.ts changes format), so without this
+            # a stale version could be published to npm and committed.
+            - name: Validate stamped files
+              shell: bash
+              env:
+                  VERSION: ${{ steps.get_version.outputs.version }}
+              run: |
+                  set -euo pipefail
+                  PKG_VERSION="${VERSION#v}"
+                  fail() { echo "::error::$1"; exit 1; }
+                  for f in .version package.json src/management/version.ts CHANGELOG.md; do
+                    [ -s "$f" ] || fail "$f is missing or empty after stamping"
+                  done
+                  [ "$(cat .version)" = "${VERSION}" ] || fail ".version does not match ${VERSION}"
+                  # require() parses the JSON, so a malformed package.json fails here too
+                  [ "$(node -p 'require("./package.json").version')" = "${PKG_VERSION}" ] || fail "package.json version does not match ${PKG_VERSION}"
+                  grep -qF "export const SDK_VERSION = \"${PKG_VERSION}\";" src/management/version.ts || fail "src/management/version.ts does not match ${PKG_VERSION}"
+                  grep -qF "## [${VERSION}]" CHANGELOG.md || fail "CHANGELOG.md has no ${VERSION} entry"
+
             # Build and publish to npm BEFORE creating the release commit so
             # that the built artifacts carry the stamped version. If publish
             # fails we have not yet created a release commit.
@@ -209,6 +236,28 @@ jobs:
             # republish because the version already exists on npm. To recover,
             # manually create the missing tag at the intended commit (and the
             # GitHub release) rather than re-running the workflow.
+            # The release commit overwrites the stamped files on the live tip of
+            # `beta` with this run's copies. If another PR merged into `beta`
+            # after checkout, those copies are stale and would silently revert
+            # its changes (e.g. dependency bumps in package.json). The
+            # concurrency group in release.yml serializes release runs, but not
+            # merges, so abort here before anything is published. The queued
+            # release run for the newer merge checks out a tip that contains
+            # both changes and releases them together.
+            - name: Abort if beta moved since checkout
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ secrets.github-token }}
+                  REPO: ${{ github.repository }}
+                  CHECKOUT_SHA: ${{ steps.checkout_sha.outputs.SHA }}
+              run: |
+                  set -euo pipefail
+                  TIP=$(gh api "repos/$REPO/git/refs/heads/beta" --jq '.object.sha')
+                  if [ "${TIP}" != "${CHECKOUT_SHA}" ]; then
+                    echo "::error::beta moved from ${CHECKOUT_SHA} to ${TIP} during this run; aborting before publish. Nothing was published; the queued release run for the newer merge will include these changes (if there is none, re-run this workflow)."
+                    exit 1
+                  fi
+
             - name: Publish to npm with beta dist-tag
               run: npm publish --provenance --tag beta
 
@@ -218,47 +267,70 @@ jobs:
             # signed with GitHub's key and show as Verified, without us having
             # to manage a GPG/SSH signing key in CI. The push is allowed because
             # the job runs in the `release` environment with `contents: write`.
+            #
+            # File contents are sent in the request body via github-script, not
+            # as `gh api -f` arguments: package.json is >128KB once base64
+            # encoded, which exceeds Linux's per-argument limit (E2BIG). Any API
+            # error throws and fails the step, so a blob that failed to upload
+            # can never be committed as a deletion.
             - id: release_commit
               name: Create and push signed release commit
-              shell: bash
+              uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
               env:
-                  GH_TOKEN: ${{ secrets.github-token }}
-                  REPO: ${{ github.repository }}
                   VERSION: ${{ steps.get_version.outputs.version }}
-              run: |
-                  set -euo pipefail
-                  BRANCH=beta
-                  FILES=(.version package.json src/management/version.ts CHANGELOG.md)
+                  CHECKOUT_SHA: ${{ steps.checkout_sha.outputs.SHA }}
+              with:
+                  github-token: ${{ secrets.github-token }}
+                  script: |
+                      const fs = require('fs');
+                      const { owner, repo } = context.repo;
+                      const branch = 'beta';
+                      const version = process.env.VERSION;
+                      const files = ['.version', 'package.json', 'src/management/version.ts', 'CHANGELOG.md'];
 
-                  # 1. Current tip of the branch and its tree.
-                  BASE_SHA=$(gh api "repos/$REPO/git/refs/heads/$BRANCH" --jq '.object.sha')
-                  BASE_TREE=$(gh api "repos/$REPO/git/commits/$BASE_SHA" --jq '.tree.sha')
+                      // 1. Current tip of the branch and its tree.
+                      const ref = await github.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
+                      const parentSha = ref.data.object.sha;
+                      // Same check as before publish, covering the short window
+                      // between publish and here. The version is already on npm,
+                      // so fail loudly rather than overwrite newer changes.
+                      if (parentSha !== process.env.CHECKOUT_SHA) {
+                        throw new Error(`beta moved from ${process.env.CHECKOUT_SHA} to ${parentSha} after publish; create the release commit for ${version} manually.`);
+                      }
+                      const parentCommit = await github.rest.git.getCommit({ owner, repo, commit_sha: parentSha });
 
-                  # 2. Upload each stamped file as a blob, collect tree entries.
-                  TREE=$(for f in "${FILES[@]}"; do
-                    SHA=$(gh api "repos/$REPO/git/blobs" \
-                      -f content="$(base64 -w0 "$f")" -f encoding=base64 --jq '.sha')
-                    jq -nc --arg path "$f" --arg sha "$SHA" \
-                      '{path:$path, mode:"100644", type:"blob", sha:$sha}'
-                  done | jq -sc '.')
+                      // 2. Upload each stamped file as a blob, collect tree entries.
+                      const tree = [];
+                      for (const path of files) {
+                        const blob = await github.rest.git.createBlob({
+                          owner, repo,
+                          content: fs.readFileSync(path, 'utf8'),
+                          encoding: 'utf-8',
+                        });
+                        if (!blob.data.sha) throw new Error(`Blob upload for ${path} returned no sha`);
+                        tree.push({ path, mode: '100644', type: 'blob', sha: blob.data.sha });
+                      }
 
-                  # 3. New tree on top of the current one.
-                  NEW_TREE=$(jq -nc --arg base "$BASE_TREE" --argjson tree "$TREE" \
-                    '{base_tree:$base, tree:$tree}' \
-                    | gh api "repos/$REPO/git/trees" --input - --jq '.sha')
+                      // 3. New tree on top of the current one.
+                      const newTree = await github.rest.git.createTree({
+                        owner, repo, base_tree: parentCommit.data.tree.sha, tree,
+                      });
 
-                  # 4. Commit — signed by GitHub because GH_TOKEN authenticates the call.
-                  NEW_SHA=$(jq -nc --arg msg "Release $VERSION" --arg tree "$NEW_TREE" --arg parent "$BASE_SHA" \
-                    '{message:$msg, tree:$tree, parents:[$parent]}' \
-                    | gh api "repos/$REPO/git/commits" --input - --jq '.sha')
+                      // 4. Commit — signed by GitHub because the token authenticates the call.
+                      const commit = await github.rest.git.createCommit({
+                        owner, repo,
+                        message: `Release ${version}`,
+                        tree: newTree.data.sha,
+                        parents: [parentSha],
+                      });
 
-                  # 5. Move the branch to the new commit (the "push"). The tag
-                  # itself is created by the release-create step below (via
-                  # softprops/action-gh-release at this commit), so we do not
-                  # create a tag ref here.
-                  gh api -X PATCH "repos/$REPO/git/refs/heads/$BRANCH" -f sha="$NEW_SHA"
+                      // 5. Fast-forward the branch to the new commit (the "push"). The
+                      // tag itself is created by the release-create step below (via
+                      // softprops/action-gh-release at this commit).
+                      await github.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: commit.data.sha });
 
-                  echo "SHA=$NEW_SHA" >> "$GITHUB_OUTPUT"
+                      core.setOutput('SHA', commit.data.sha);
+                      core.notice(`Created signed release commit ${commit.data.sha} for ${version}`);
 
             # Create the GitHub prerelease on the tag.
             - uses: ./.github/actions/release-create
