@@ -63,6 +63,12 @@ jobs:
                   fetch-depth: 0
                   ref: beta
 
+            # Record the commit this run builds from. Later steps compare it to
+            # the live tip of `beta` to detect a PR merged mid-run.
+            - id: checkout_sha
+              shell: bash
+              run: echo "SHA=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
             # Compute the next beta version from the existing git tags.
             - id: get_version
               uses: ./.github/actions/compute-next-version
@@ -173,6 +179,27 @@ jobs:
                   VERSION: ${{ steps.get_version.outputs.version }}
                   RELEASE_NOTES: ${{ steps.notes.outputs.RELEASE_NOTES }}
 
+            # Verify the stamp step actually wrote the expected version into
+            # every file. `sed` exits 0 even when its pattern matches nothing
+            # (e.g. if the generated version.ts changes format), so without this
+            # a stale version could be published to npm and committed.
+            - name: Validate stamped files
+              shell: bash
+              env:
+                  VERSION: ${{ steps.get_version.outputs.version }}
+              run: |
+                  set -euo pipefail
+                  PKG_VERSION="${VERSION#v}"
+                  fail() { echo "::error::$1"; exit 1; }
+                  for f in .version package.json src/management/version.ts CHANGELOG.md; do
+                    [ -s "$f" ] || fail "$f is missing or empty after stamping"
+                  done
+                  [ "$(cat .version)" = "${VERSION}" ] || fail ".version does not match ${VERSION}"
+                  # require() parses the JSON, so a malformed package.json fails here too
+                  [ "$(node -p 'require("./package.json").version')" = "${PKG_VERSION}" ] || fail "package.json version does not match ${PKG_VERSION}"
+                  grep -qF "export const SDK_VERSION = \"${PKG_VERSION}\";" src/management/version.ts || fail "src/management/version.ts does not match ${PKG_VERSION}"
+                  grep -qF "## [${VERSION}]" CHANGELOG.md || fail "CHANGELOG.md has no ${VERSION} entry"
+
             # Build and publish to npm BEFORE creating the release commit so
             # that the built artifacts carry the stamped version. If publish
             # fails we have not yet created a release commit.
@@ -209,6 +236,28 @@ jobs:
             # republish because the version already exists on npm. To recover,
             # manually create the missing tag at the intended commit (and the
             # GitHub release) rather than re-running the workflow.
+            # The release commit overwrites the stamped files on the live tip of
+            # `beta` with this run's copies. If another PR merged into `beta`
+            # after checkout, those copies are stale and would silently revert
+            # its changes (e.g. dependency bumps in package.json). The
+            # concurrency group in release.yml serializes release runs, but not
+            # merges, so abort here before anything is published. The queued
+            # release run for the newer merge checks out a tip that contains
+            # both changes and releases them together.
+            - name: Abort if beta moved since checkout
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ secrets.github-token }}
+                  REPO: ${{ github.repository }}
+                  CHECKOUT_SHA: ${{ steps.checkout_sha.outputs.SHA }}
+              run: |
+                  set -euo pipefail
+                  TIP=$(gh api "repos/$REPO/git/refs/heads/beta" --jq '.object.sha')
+                  if [ "${TIP}" != "${CHECKOUT_SHA}" ]; then
+                    echo "::error::beta moved from ${CHECKOUT_SHA} to ${TIP} during this run; aborting before publish. Nothing was published; the queued release run for the newer merge will include these changes (if there is none, re-run this workflow)."
+                    exit 1
+                  fi
+
             - name: Publish to npm with beta dist-tag
               run: npm publish --provenance --tag beta
 
@@ -229,6 +278,7 @@ jobs:
               uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
               env:
                   VERSION: ${{ steps.get_version.outputs.version }}
+                  CHECKOUT_SHA: ${{ steps.checkout_sha.outputs.SHA }}
               with:
                   github-token: ${{ secrets.github-token }}
                   script: |
@@ -241,6 +291,12 @@ jobs:
                       // 1. Current tip of the branch and its tree.
                       const ref = await github.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
                       const parentSha = ref.data.object.sha;
+                      // Same check as before publish, covering the short window
+                      // between publish and here. The version is already on npm,
+                      // so fail loudly rather than overwrite newer changes.
+                      if (parentSha !== process.env.CHECKOUT_SHA) {
+                        throw new Error(`beta moved from ${process.env.CHECKOUT_SHA} to ${parentSha} after publish; create the release commit for ${version} manually.`);
+                      }
                       const parentCommit = await github.rest.git.getCommit({ owner, repo, commit_sha: parentSha });
 
                       // 2. Upload each stamped file as a blob, collect tree entries.
