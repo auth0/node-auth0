@@ -1,5 +1,10 @@
 # Change Log
 
+## [v7.4.0-beta.2](https://github.com/auth0/node-auth0/tree/v7.4.0-beta.2) (2026-10-05)
+
+**Beta**
+- fix(ci): stop beta release from deleting package.json; start betas at .0 (#1417)
+
 ## [v7.4.0-beta.1](https://github.com/auth0/node-auth0/tree/v7.4.0-beta.1) (2026-10-05)
 
 **Beta**
