@@ -149,9 +149,9 @@ The `beta` branch is **regenerated** from the stable spec plus the beta-only spe
 Beta uses the next stable minor + `-beta.N`, derived from git tags:
 
 ```
-Latest stable: v6.3.0  →  Next beta: v6.4.0-beta.1
-                           Subsequent betas: v6.4.0-beta.2, v6.4.0-beta.3, ...
-                           Once v6.4.0 ships: v6.5.0-beta.1
+Latest stable: v6.3.0  →  Next beta: v6.4.0-beta.0
+                           Subsequent betas: v6.4.0-beta.1, v6.4.0-beta.2, ...
+                           Once v6.4.0 ships: v6.5.0-beta.0
 ```
 
 Because `v6.4.0-beta.N` sorts before `v6.4.0` in semver, consumers running `npm install auth0` will never receive a beta version unless they explicitly pin it:
@@ -163,7 +163,7 @@ npm install auth0
 # Beta (explicit prerelease pin)
 npm install auth0@beta
 # or a specific version
-npm install auth0@6.4.0-beta.1
+npm install auth0@6.4.0-beta.0
 ```
 
 ### When merging a beta regeneration PR
