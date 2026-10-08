@@ -74,6 +74,7 @@ describe("ClientsClient", () => {
                     },
                     identity_assertion_authorization_grant: { active: true },
                     anonymous_sessions: { active: true },
+                    enforce_anon_session_transfer_network_binding: "ip",
                     third_party_security_mode: "strict",
                     redirection_policy: "allow_always",
                     resource_server_identifier: "resource_server_identifier",
@@ -120,13 +121,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -139,13 +134,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -158,13 +147,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -177,13 +160,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -405,6 +382,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -1074,6 +1052,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -1435,6 +1414,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -1773,6 +1753,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",

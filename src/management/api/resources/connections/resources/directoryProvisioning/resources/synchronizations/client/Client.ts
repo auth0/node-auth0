@@ -37,6 +37,8 @@ export class SynchronizationsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.synchronizations.create("id")

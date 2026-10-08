@@ -67,13 +67,7 @@ describe("LogsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/logs")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/logs").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.logs.list("id");
@@ -86,13 +80,7 @@ describe("LogsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/logs")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/logs").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.logs.list("id");
@@ -105,13 +93,7 @@ describe("LogsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/logs")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/logs").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.logs.list("id");
@@ -124,13 +106,7 @@ describe("LogsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/users/id/logs")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/users/id/logs").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.users.logs.list("id");

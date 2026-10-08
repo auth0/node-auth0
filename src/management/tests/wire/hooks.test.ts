@@ -55,13 +55,7 @@ describe("HooksClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/hooks")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/hooks").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.hooks.list();
@@ -74,13 +68,7 @@ describe("HooksClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/hooks")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/hooks").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.hooks.list();
@@ -93,13 +81,7 @@ describe("HooksClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/hooks")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/hooks").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.hooks.list();
@@ -112,13 +94,7 @@ describe("HooksClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/hooks")
-            .respondWith()
-            .statusCode(404)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/hooks").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.hooks.list();
@@ -131,13 +107,7 @@ describe("HooksClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/hooks")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/hooks").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.hooks.list();

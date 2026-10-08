@@ -4,6 +4,7 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClie
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../BaseClient.js";
 import * as core from "../../../../core/index.js";
 import { mergeHeaders } from "../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
@@ -41,7 +42,7 @@ export class RolesClient {
     }
 
     /**
-     * Retrieve detailed list of user roles created in your tenant.
+     * Retrieve a list of roles. Includes roles created in your tenant and, when `owner_id=auth0` is supplied, Auth0-managed System Roles.
      *
      * **Note**: The returned list does not include standard roles available for tenant members, such as Admin or Support Access.
      *
@@ -52,6 +53,8 @@ export class RolesClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.roles.list({
@@ -159,8 +162,15 @@ export class RolesClient {
                 (request?.per_page == null || (response?.roles ?? []).length >= request?.per_page),
             getItems: (response) => response?.roles ?? [],
             loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
+                const _nextOffset = _offset + 1;
+                return core.HttpResponsePromise.fromPromise(
+                    list(core.setObjectProperty(request, "page", _nextOffset))
+                        .withRawResponse()
+                        .then((_pageResponse) => {
+                            _offset = _nextOffset;
+                            return _pageResponse;
+                        }),
+                );
             },
         });
     }
@@ -178,6 +188,8 @@ export class RolesClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.roles.create({
@@ -213,7 +225,7 @@ export class RolesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -259,6 +271,8 @@ export class RolesClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.roles.get("id")
@@ -335,6 +349,8 @@ export class RolesClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.roles.delete("id")
@@ -408,6 +424,8 @@ export class RolesClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.roles.update("id")
@@ -443,7 +461,7 @@ export class RolesClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

@@ -31,6 +31,8 @@ export class SigningClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.list()
@@ -98,6 +100,8 @@ export class SigningClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.rotate()
@@ -171,6 +175,8 @@ export class SigningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.get("kid")
@@ -249,6 +255,8 @@ export class SigningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.revoke("kid")

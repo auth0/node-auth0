@@ -4,6 +4,7 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../../../Ba
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../../../BaseClient.js";
 import * as core from "../../../../../../core/index.js";
 import { mergeHeaders } from "../../../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../../../core/requestBody.js";
 import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../errors/index.js";
@@ -38,6 +39,8 @@ export class FeatureFlagsClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.list({
@@ -153,6 +156,8 @@ export class FeatureFlagsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.create({
@@ -189,7 +194,7 @@ export class FeatureFlagsClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -242,6 +247,8 @@ export class FeatureFlagsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.get("id")
@@ -322,6 +329,8 @@ export class FeatureFlagsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.delete("id")
@@ -398,6 +407,8 @@ export class FeatureFlagsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.update("id")
@@ -433,7 +444,7 @@ export class FeatureFlagsClient {
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -475,98 +486,6 @@ export class FeatureFlagsClient {
             _response.rawResponse,
             "PATCH",
             "/experimentation/feature-flags/{id}",
-        );
-    }
-
-    /**
-     * Transitions a feature flag through its lifecycle states: draft → active, draft → archived, active → archived.
-     *
-     * @param {string} id - The ID of the feature flag to transition.
-     * @param {Management.UpdateFeatureFlagStatusRequestContent} request
-     * @param {FeatureFlagsClient.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Management.BadRequestError}
-     * @throws {@link Management.UnauthorizedError}
-     * @throws {@link Management.ForbiddenError}
-     * @throws {@link Management.NotFoundError}
-     * @throws {@link Management.TooManyRequestsError}
-     *
-     * @example
-     *     await client.experimentation.featureFlags.updateStatus("id", {
-     *         status: "draft"
-     *     })
-     */
-    public updateStatus(
-        id: string,
-        request: Management.UpdateFeatureFlagStatusRequestContent,
-        requestOptions?: FeatureFlagsClient.RequestOptions,
-    ): core.HttpResponsePromise<Management.UpdateFeatureFlagStatusResponseContent> {
-        return core.HttpResponsePromise.fromPromise(this.__updateStatus(id, request, requestOptions));
-    }
-
-    private async __updateStatus(
-        id: string,
-        request: Management.UpdateFeatureFlagStatusRequestContent,
-        requestOptions?: FeatureFlagsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Management.UpdateFeatureFlagStatusResponseContent>> {
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ManagementEnvironment.Default,
-                `experimentation/feature-flags/${core.url.encodePathParam(id)}/status`,
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
-            requestType: "json",
-            body: request,
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return {
-                data: _response.body as Management.UpdateFeatureFlagStatusResponseContent,
-                rawResponse: _response.rawResponse,
-            };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
-                case 401:
-                    throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
-                case 403:
-                    throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
-                case 404:
-                    throw new Management.NotFoundError(_response.error.body as unknown, _response.rawResponse);
-                case 429:
-                    throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
-                default:
-                    throw new errors.ManagementError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(
-            _response.error,
-            _response.rawResponse,
-            "POST",
-            "/experimentation/feature-flags/{id}/status",
         );
     }
 }

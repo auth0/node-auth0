@@ -62,7 +62,7 @@ describe("InvitationsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/invitations")
             .respondWith()
             .statusCode(400)
@@ -81,7 +81,7 @@ describe("InvitationsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/invitations")
             .respondWith()
             .statusCode(401)
@@ -100,7 +100,7 @@ describe("InvitationsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/invitations")
             .respondWith()
             .statusCode(403)
@@ -119,7 +119,7 @@ describe("InvitationsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/invitations")
             .respondWith()
             .statusCode(404)
@@ -138,7 +138,7 @@ describe("InvitationsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/invitations")
             .respondWith()
             .statusCode(429)
