@@ -138,7 +138,7 @@ describe("ConnectionProfilesClient", () => {
                 oidc: { enabled_features: ["scim"] },
                 samlp: { enabled_features: ["scim"] },
             },
-            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
+            provisioning: { scim: { tokens: { scopes: ["get:users"] } }, google_workspace: { sync_users: true } },
             cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
         };
 
@@ -354,7 +354,7 @@ describe("ConnectionProfilesClient", () => {
                 organization: { show_as_button: "none", assign_membership_on_login: "none" },
                 connection_name_prefix_template: "connection_name_prefix_template",
                 enabled_features: ["scim"],
-                provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
+                provisioning: { scim: { tokens: { scopes: ["get:users"] } }, google_workspace: { sync_users: true } },
             },
         };
 
@@ -466,7 +466,7 @@ describe("ConnectionProfilesClient", () => {
                 oidc: { enabled_features: ["scim"] },
                 samlp: { enabled_features: ["scim"] },
             },
-            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
+            provisioning: { scim: { tokens: { scopes: ["get:users"] } }, google_workspace: { sync_users: true } },
             cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
         };
 
@@ -645,7 +645,7 @@ describe("ConnectionProfilesClient", () => {
                 oidc: { enabled_features: ["scim"] },
                 samlp: { enabled_features: ["scim"] },
             },
-            provisioning: { scim: { tokens: { scopes: ["get:users"] } } },
+            provisioning: { scim: { tokens: { scopes: ["get:users"] } }, google_workspace: { sync_users: true } },
             cross_app_access_resource_app: { status: { default_value: "enabled", allowed_values: ["enabled"] } },
         };
 
