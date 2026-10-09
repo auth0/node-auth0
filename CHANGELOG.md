@@ -1,5 +1,13 @@
 # Change Log
 
+## [v7.3.0](https://github.com/auth0/node-auth0/tree/v7.3.0) (2026-09-30)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.2.0...v7.3.0)
+
+**Added**
+
+- feat: consent non-repudiation, Experiment Center EA, OIDC client support; remove Organization Templates [\#1413](https://github.com/auth0/node-auth0/pull/1413) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.2.0](https://github.com/auth0/node-auth0/tree/v7.2.0) (2026-09-16)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.1.0...v7.2.0)
