@@ -1,5 +1,5 @@
-<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>ClientsClient | Auth0 Node.js SDK - v7.3.0</title><meta name="description" content="Documentation for Auth0 Node.js SDK"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
-<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Auth0 Node.js SDK - v7.3.0</a>
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>ClientsClient | Auth0 Node.js SDK - v7.4.0</title><meta name="description" content="Documentation for Auth0 Node.js SDK"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">Auth0 Node.js SDK - v7.4.0</a>
 <div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
 <ul role="listbox" id="tsd-search-results"></ul>
 <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
@@ -32,6 +32,7 @@
 <a href="#create" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>create</span></a>
 <a href="#previewcimdmetadata" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>preview<wbr/>Cimd<wbr/>Metadata</span></a>
 <a href="#registercimdclient" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>register<wbr/>Cimd<wbr/>Client</span></a>
+<a href="#search" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>search</span></a>
 <a href="#get" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get</span></a>
 <a href="#delete" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>delete</span></a>
 <a href="#update" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>update</span></a>
@@ -265,13 +266,74 @@ Uses external_client_id as the unique identifier for upsert operations.</p>
 <h4 class="tsd-anchor-link" id="throws-17">Throws<a href="#throws-17" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-18">Throws<a href="#throws-18" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
+<h4 class="tsd-anchor-link" id="throws-18">Throws<a href="#throws-18" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ConflictError.html" class="tsd-kind-class">Management.ConflictError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-19">Throws<a href="#throws-19" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.InternalServerError.html" class="tsd-kind-class">Management.InternalServerError</a></p>
+<h4 class="tsd-anchor-link" id="throws-19">Throws<a href="#throws-19" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-20">Throws<a href="#throws-20" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.InternalServerError.html" class="tsd-kind-class">Management.InternalServerError</a></p>
 </div>
 <div class="tsd-tag-example">
 <h4 class="tsd-anchor-link" id="example-3">Example<a href="#example-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">registerCimdClient</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-4">external_client_id:</span><span class="hl-1"> </span><span class="hl-2">&quot;external_client_id&quot;</span><br/><span class="hl-1">    })</span>
+</code><button type="button">Copy</button></pre>
+
+</div></div></div></li></ul></section>
+<section class="tsd-panel tsd-member">
+<h3 class="tsd-anchor-link" id="search"><span>search</span><a href="#search" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul class="tsd-signatures">
+<li class="">
+<div class="tsd-signature tsd-anchor-link" id="search-1"><span class="tsd-kind-call-signature">search</span><span class="tsd-signature-symbol">(</span><br/>    <span class="tsd-kind-parameter">request</span><span class="tsd-signature-symbol">?:</span> <a href="../interfaces/index.Management.SearchClientsRequestParameters.html" class="tsd-signature-type tsd-kind-interface">SearchClientsRequestParameters</a><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-kind-parameter">requestOptions</span><span class="tsd-signature-symbol">?:</span> <a href="../modules/index.SDK.ClientsClient.html" class="tsd-signature-type tsd-kind-namespace">ClientsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/index.SDK.ClientsClient.RequestOptions.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a><span class="tsd-signature-symbol">,</span><br/><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.Page.html" class="tsd-signature-type tsd-kind-interface">Page</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.Management.ClientSearchResponse.html" class="tsd-signature-type tsd-kind-interface">ClientSearchResponse</a><span class="tsd-signature-symbol">,</span> <a href="../interfaces/index.Management.SearchClientsResponseContent.html" class="tsd-signature-type tsd-kind-interface">SearchClientsResponseContent</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><a href="#search-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div>
+<div class="tsd-description">
+<div class="tsd-comment tsd-typography"><p>Search clients using SCIM or Lucene filter syntax with low-latency, eventually consistent results.
+Use the parser parameter to specify &quot;scim&quot; or &quot;lucene&quot; syntax (default: &quot;lucene&quot;).
+This endpoint provides an alternative to the standard GET /clients endpoint with better performance
+for complex queries. Results may not reflect recent updates immediately.</p>
+<ul>
+<li>This endpoint only supports <code>read:clients</code> and <code>read:client_summary</code> scopes. The <code>read:client_keys</code> and <code>read:client_credentials</code> scopes are not supported.</li>
+<li>The following fields are never returned by this endpoint:
+<ul>
+<li><code>client_secret</code></li>
+<li><code>encryption_key</code></li>
+<li><code>signing_keys</code></li>
+<li><code>owners</code></li>
+<li><code>addons</code></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">request</span>: <a href="../interfaces/index.Management.SearchClientsRequestParameters.html" class="tsd-signature-type tsd-kind-interface">SearchClientsRequestParameters</a><span class="tsd-signature-symbol"> = {}</span></span></li>
+<li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">requestOptions</span>: <a href="../modules/index.SDK.ClientsClient.html" class="tsd-signature-type tsd-kind-namespace">ClientsClient</a><span class="tsd-signature-symbol">.</span><a href="../interfaces/index.SDK.ClientsClient.RequestOptions.html" class="tsd-signature-type tsd-kind-interface">RequestOptions</a></span>
+<div class="tsd-comment tsd-typography"><p>Request-specific configuration.</p>
+</div></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.Page.html" class="tsd-signature-type tsd-kind-interface">Page</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.Management.ClientSearchResponse.html" class="tsd-signature-type tsd-kind-interface">ClientSearchResponse</a><span class="tsd-signature-symbol">,</span> <a href="../interfaces/index.Management.SearchClientsResponseContent.html" class="tsd-signature-type tsd-kind-interface">SearchClientsResponseContent</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography">
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-21">Throws<a href="#throws-21" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-22">Throws<a href="#throws-22" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-23">Throws<a href="#throws-23" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-24">Throws<a href="#throws-24" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-25">Throws<a href="#throws-25" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-26">Throws<a href="#throws-26" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.InternalServerError.html" class="tsd-kind-class">Management.InternalServerError</a></p>
+</div>
+<div class="tsd-tag-throws">
+<h4 class="tsd-anchor-link" id="throws-27">Throws<a href="#throws-27" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.GatewayTimeoutError.html" class="tsd-kind-class">Management.GatewayTimeoutError</a></p>
+</div>
+<div class="tsd-tag-example">
+<h4 class="tsd-anchor-link" id="example-4">Example<a href="#example-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">search</span><span class="hl-1">({</span><br/><span class="hl-1">        </span><span class="hl-4">q:</span><span class="hl-1"> </span><span class="hl-2">&quot;q&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">parser:</span><span class="hl-1"> </span><span class="hl-2">&quot;scim&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">fields:</span><span class="hl-1"> </span><span class="hl-2">&quot;fields&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">include_fields:</span><span class="hl-1"> </span><span class="hl-5">true</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">take:</span><span class="hl-1"> </span><span class="hl-8">1</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">from:</span><span class="hl-1"> </span><span class="hl-2">&quot;from&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">sort:</span><span class="hl-1"> </span><span class="hl-2">&quot;name&quot;</span><br/><span class="hl-1">    })</span>
 </code><button type="button">Copy</button></pre>
 
 </div></div></div></li></ul></section>
@@ -320,22 +382,22 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <h4 class="tsd-returns-title">Returns <a href="index.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.Management.GetClientResponseContent.html" class="tsd-signature-type tsd-kind-interface">GetClientResponseContent</a><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-20">Throws<a href="#throws-20" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
+<h4 class="tsd-anchor-link" id="throws-28">Throws<a href="#throws-28" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-21">Throws<a href="#throws-21" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
+<h4 class="tsd-anchor-link" id="throws-29">Throws<a href="#throws-29" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-22">Throws<a href="#throws-22" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
+<h4 class="tsd-anchor-link" id="throws-30">Throws<a href="#throws-30" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-23">Throws<a href="#throws-23" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
+<h4 class="tsd-anchor-link" id="throws-31">Throws<a href="#throws-31" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-24">Throws<a href="#throws-24" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
+<h4 class="tsd-anchor-link" id="throws-32">Throws<a href="#throws-32" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
 </div>
 <div class="tsd-tag-example">
-<h4 class="tsd-anchor-link" id="example-4">Example<a href="#example-4" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">get</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-4">fields:</span><span class="hl-1"> </span><span class="hl-2">&quot;fields&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">include_fields:</span><span class="hl-1"> </span><span class="hl-5">true</span><br/><span class="hl-1">    })</span>
+<h4 class="tsd-anchor-link" id="example-5">Example<a href="#example-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">get</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">        </span><span class="hl-4">fields:</span><span class="hl-1"> </span><span class="hl-2">&quot;fields&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">        </span><span class="hl-4">include_fields:</span><span class="hl-1"> </span><span class="hl-5">true</span><br/><span class="hl-1">    })</span>
 </code><button type="button">Copy</button></pre>
 
 </div></div></div></li></ul></section>
@@ -359,19 +421,19 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <h4 class="tsd-returns-title">Returns <a href="index.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-25">Throws<a href="#throws-25" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
+<h4 class="tsd-anchor-link" id="throws-33">Throws<a href="#throws-33" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-26">Throws<a href="#throws-26" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
+<h4 class="tsd-anchor-link" id="throws-34">Throws<a href="#throws-34" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-27">Throws<a href="#throws-27" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
+<h4 class="tsd-anchor-link" id="throws-35">Throws<a href="#throws-35" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-28">Throws<a href="#throws-28" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
+<h4 class="tsd-anchor-link" id="throws-36">Throws<a href="#throws-36" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
 </div>
 <div class="tsd-tag-example">
-<h4 class="tsd-anchor-link" id="example-5">Example<a href="#example-5" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">delete</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">)</span>
+<h4 class="tsd-anchor-link" id="example-6">Example<a href="#example-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">delete</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">)</span>
 </code><button type="button">Copy</button></pre>
 
 </div></div></div></li></ul></section>
@@ -405,22 +467,22 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <h4 class="tsd-returns-title">Returns <a href="index.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.Management.UpdateClientResponseContent.html" class="tsd-signature-type tsd-kind-interface">UpdateClientResponseContent</a><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-29">Throws<a href="#throws-29" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
+<h4 class="tsd-anchor-link" id="throws-37">Throws<a href="#throws-37" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-30">Throws<a href="#throws-30" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
+<h4 class="tsd-anchor-link" id="throws-38">Throws<a href="#throws-38" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-31">Throws<a href="#throws-31" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
+<h4 class="tsd-anchor-link" id="throws-39">Throws<a href="#throws-39" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-32">Throws<a href="#throws-32" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
+<h4 class="tsd-anchor-link" id="throws-40">Throws<a href="#throws-40" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-33">Throws<a href="#throws-33" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
+<h4 class="tsd-anchor-link" id="throws-41">Throws<a href="#throws-41" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
 </div>
 <div class="tsd-tag-example">
-<h4 class="tsd-anchor-link" id="example-6">Example<a href="#example-6" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">update</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">)</span>
+<h4 class="tsd-anchor-link" id="example-7">Example<a href="#example-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">update</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">)</span>
 </code><button type="button">Copy</button></pre>
 
 </div></div></div></li></ul></section>
@@ -446,22 +508,22 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <h4 class="tsd-returns-title">Returns <a href="index.SDK.HttpResponsePromise.html" class="tsd-signature-type tsd-kind-class">HttpResponsePromise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index.Management.RotateClientSecretResponseContent.html" class="tsd-signature-type tsd-kind-interface">RotateClientSecretResponseContent</a><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography">
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-34">Throws<a href="#throws-34" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
+<h4 class="tsd-anchor-link" id="throws-42">Throws<a href="#throws-42" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.BadRequestError.html" class="tsd-kind-class">Management.BadRequestError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-35">Throws<a href="#throws-35" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
+<h4 class="tsd-anchor-link" id="throws-43">Throws<a href="#throws-43" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.UnauthorizedError.html" class="tsd-kind-class">Management.UnauthorizedError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-36">Throws<a href="#throws-36" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
+<h4 class="tsd-anchor-link" id="throws-44">Throws<a href="#throws-44" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.ForbiddenError.html" class="tsd-kind-class">Management.ForbiddenError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-37">Throws<a href="#throws-37" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
+<h4 class="tsd-anchor-link" id="throws-45">Throws<a href="#throws-45" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.NotFoundError.html" class="tsd-kind-class">Management.NotFoundError</a></p>
 </div>
 <div class="tsd-tag-throws">
-<h4 class="tsd-anchor-link" id="throws-38">Throws<a href="#throws-38" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
+<h4 class="tsd-anchor-link" id="throws-46">Throws<a href="#throws-46" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><p><a href="index.Management.TooManyRequestsError.html" class="tsd-kind-class">Management.TooManyRequestsError</a></p>
 </div>
 <div class="tsd-tag-example">
-<h4 class="tsd-anchor-link" id="example-7">Example<a href="#example-7" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">rotateSecret</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">)</span>
+<h4 class="tsd-anchor-link" id="example-8">Example<a href="#example-8" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h4><pre><code class="ts"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">client</span><span class="hl-1">.</span><span class="hl-4">clients</span><span class="hl-1">.</span><span class="hl-0">rotateSecret</span><span class="hl-1">(</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">)</span>
 </code><button type="button">Copy</button></pre>
 
 </div></div></div></li></ul></section></section></details>
@@ -496,11 +558,11 @@ For more information, read <a href="https://www.auth0.com/docs/get-started/appli
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Constructors"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Constructors</summary>
 <div><a href="#constructor"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Constructor"><use href="../assets/icons.svg#icon-512"></use></svg><span>constructor</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Methods"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Methods</summary>
-<div><a href="#list"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>list</span></a><a href="#create"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>create</span></a><a href="#previewcimdmetadata"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>preview<wbr/>Cimd<wbr/>Metadata</span></a><a href="#registercimdclient"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>register<wbr/>Cimd<wbr/>Client</span></a><a href="#get"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get</span></a><a href="#delete"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>delete</span></a><a href="#update"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>update</span></a><a href="#rotatesecret"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>rotate<wbr/>Secret</span></a></div></details>
+<div><a href="#list"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>list</span></a><a href="#create"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>create</span></a><a href="#previewcimdmetadata"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>preview<wbr/>Cimd<wbr/>Metadata</span></a><a href="#registercimdclient"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>register<wbr/>Cimd<wbr/>Client</span></a><a href="#search"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>search</span></a><a href="#get"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>get</span></a><a href="#delete"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>delete</span></a><a href="#update"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>update</span></a><a href="#rotatesecret"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Method"><use href="../assets/icons.svg#icon-2048"></use></svg><span>rotate<wbr/>Secret</span></a></div></details>
 <details open class="tsd-accordion tsd-page-navigation-section"><summary class="tsd-accordion-summary" data-key="section-Properties"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>Properties</summary>
 <div><a href="#_options" class="tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>_<wbr/>options</span></a><a href="#_credentials" class="tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>_<wbr/>credentials</span></a><a href="#_connections" class="tsd-is-protected"><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Property"><use href="../assets/icons.svg#icon-1024"></use></svg><span>_<wbr/>connections</span></a></div></details></div></details></div>
 <div class="site-menu">
-<nav class="tsd-navigation"><a href="../modules.html">Auth0 Node.js SDK - v7.3.0</a>
+<nav class="tsd-navigation"><a href="../modules.html">Auth0 Node.js SDK - v7.4.0</a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
 <li>Loading...</li></ul></nav></div></div></div><footer></footer>
 <div class="overlay"></div></body></html>
