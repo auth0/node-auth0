@@ -1672,6 +1672,107 @@ await client.clients.registerCimdClient({
 </dl>
 </details>
 
+<details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">search</a>({ ...params }) -> core.Page&lt;Management.ClientSearchResponse, Management.SearchClientsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search clients using SCIM or Lucene filter syntax with low-latency, eventually consistent results.
+Use the parser parameter to specify "scim" or "lucene" syntax (default: "lucene").
+This endpoint provides an alternative to the standard GET /clients endpoint with better performance
+for complex queries. Results may not reflect recent updates immediately.
+
+- This endpoint only supports `read:clients` and `read:client_summary` scopes. The `read:client_keys` and `read:client_credentials` scopes are not supported.
+- The following fields are never returned by this endpoint:
+    - `client_secret`
+    - `encryption_key`
+    - `signing_keys`
+    - `owners`
+    - `addons`
+      </dd>
+      </dl>
+      </dd>
+      </dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.clients.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "name",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.clients.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "name",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SearchClientsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">get</a>(id, { ...params }) -> Management.GetClientResponseContent</code></summary>
 <dl>
 <dd>
@@ -9192,7 +9293,7 @@ await client.resourceServers.update("id");
 <dl>
 <dd>
 
-Retrieve detailed list of user roles created in your tenant.
+Retrieve a list of roles. Includes roles created in your tenant and, when `owner_id=auth0` is supplied, Auth0-managed System Roles.
 
 **Note**: The returned list does not include standard roles available for tenant members, such as Admin or Support Access.
 
@@ -19806,79 +19907,6 @@ await client.experimentation.experiments.advanceRamp("id", {
 </dl>
 </details>
 
-<details><summary><code>client.experimentation.experiments.<a href="/src/management/api/resources/experimentation/resources/experiments/client/Client.ts">updateStatus</a>(id, { ...params }) -> Management.UpdateExperimentStatusResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Transitions an experiment through its lifecycle: draft → active, active → paused, paused → active, active/paused → completed. Activation runs full readiness validation.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.experimentation.experiments.updateStatus("id", {
-    status: "active",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — The ID of the experiment to transition.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateExperimentStatusRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ExperimentsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.experimentation.experiments.<a href="/src/management/api/resources/experimentation/resources/experiments/client/Client.ts">validate</a>(id) -> Management.ValidateExperimentResponseContent</code></summary>
 <dl>
 <dd>
@@ -20274,79 +20302,6 @@ await client.experimentation.featureFlags.update("id");
 <dd>
 
 **request:** `Management.UpdateFeatureFlagRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `FeatureFlagsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.experimentation.featureFlags.<a href="/src/management/api/resources/experimentation/resources/featureFlags/client/Client.ts">updateStatus</a>(id, { ...params }) -> Management.UpdateFeatureFlagStatusResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Transitions a feature flag through its lifecycle states: draft → active, draft → archived, active → archived.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.experimentation.featureFlags.updateStatus("id", {
-    status: "draft",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — The ID of the feature flag to transition.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateFeatureFlagStatusRequestContent`
 
 </dd>
 </dl>

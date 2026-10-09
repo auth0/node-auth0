@@ -298,7 +298,6 @@ export class VariationsClient {
      * @param {string} vid - The ID of the variation to delete.
      * @param {VariationsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link Management.BadRequestError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
@@ -348,8 +347,6 @@ export class VariationsClient {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
-                case 400:
-                    throw new Management.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
                 case 404:

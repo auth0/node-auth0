@@ -2087,6 +2087,14 @@ export interface BreachedPasswordDetectionStage {
     "pre-change-password"?: Management.BreachedPasswordDetectionPreChangePasswordStage | undefined;
 }
 
+/** Controls whether the unblock form is submitted automatically when the link is opened or must be submitted manually by the user. */
+export const BruteForceProtectionFormSubmissionModeEnum = {
+    Auto: "auto",
+    Manual: "manual",
+} as const;
+export type BruteForceProtectionFormSubmissionModeEnum =
+    (typeof BruteForceProtectionFormSubmissionModeEnum)[keyof typeof BruteForceProtectionFormSubmissionModeEnum];
+
 /**
  * Account Lockout: Determines whether or not IP address is used when counting failed attempts.
  *           Possible values: <code>count_per_identifier_and_ip</code>, <code>count_per_identifier</code>.
@@ -2314,6 +2322,9 @@ export interface Client {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -2735,6 +2746,15 @@ export interface ClientAddons {
     sso_integration?: Management.ClientAddonSsoIntegration | undefined;
     oag?: (Management.ClientAddonOag | null) | undefined;
 }
+
+/** Indicates whether network binding should be enforced when consuming an anonymous session transfer token. If set to 'ip', consumption must happen from the same IP as the issuer. If set to 'asn', consumption must happen from the same ASN as the issuer. If set to 'none', binding is not enforced. Default value is `ip`. */
+export const ClientAnonymousSessionTransferNetworkBindingEnum = {
+    Ip: "ip",
+    Asn: "asn",
+    None: "none",
+} as const;
+export type ClientAnonymousSessionTransferNetworkBindingEnum =
+    (typeof ClientAnonymousSessionTransferNetworkBindingEnum)[keyof typeof ClientAnonymousSessionTransferNetworkBindingEnum];
 
 /** The type of application this client represents */
 export const ClientAppTypeEnum = {
@@ -3241,6 +3261,15 @@ export type ClientOidcSupportAllowedScopesEnum =
     (typeof ClientOidcSupportAllowedScopesEnum)[keyof typeof ClientOidcSupportAllowedScopesEnum];
 
 /**
+ * OIDC support configuration for a client. Replaces the stored object entirely; send null to unset it.
+ */
+export interface ClientOidcSupportPatch {
+    is_allowed: boolean;
+    allow_all_scopes?: boolean | undefined;
+    allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
+}
+
+/**
  * OIDC support configuration for a client. Controls whether OIDC flows are allowed and which scopes the client may request.
  */
 export interface ClientOidcSupportPost {
@@ -3328,6 +3357,119 @@ export interface ClientRefreshTokenPolicy {
     scope: string[];
 }
 
+export interface ClientSearchResponse {
+    /** ID of this client. */
+    client_id?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was created. */
+    created_at?: string | undefined;
+    /** The ISO 8601 timestamp of when this client was last updated. */
+    updated_at?: string | undefined;
+    /** Name of the tenant this client belongs to. */
+    tenant?: string | undefined;
+    /** Name of this client (min length: 1 character, does not allow `<` or `>`). */
+    name?: string | undefined;
+    /** Free text description of this client (max length: 140 characters). */
+    description?: string | undefined;
+    /** Whether this is your global 'All Applications' client representing legacy tenant settings (true) or a regular client (false). */
+    global?: boolean | undefined;
+    app_type?: Management.ClientAppTypeEnum | undefined;
+    /** URL of the logo to display for this client. Recommended size is 150x150 pixels. */
+    logo_uri?: string | undefined;
+    /** Whether this client a first party client (true) or not (false). */
+    is_first_party?: boolean | undefined;
+    /** Whether this client conforms to <a href='https://auth0.com/docs/api-auth/tutorials/adoption'>strict OIDC specifications</a> (true) or uses legacy features (false). */
+    oidc_conformant?: boolean | undefined;
+    /** Comma-separated list of URLs whitelisted for Auth0 to use as a callback to the client after authentication. */
+    callbacks?: string[] | undefined;
+    /** Comma-separated list of URLs allowed to make requests from JavaScript to Auth0 API (typically used with CORS). By default, all your callback URLs will be allowed. This field allows you to enter other origins if necessary. You can also use wildcards at the subdomain level (e.g., https://*.contoso.com). Query strings and hash information are not taken into account when validating these URLs. */
+    allowed_origins?: string[] | undefined;
+    /** Comma-separated list of allowed origins for use with <a href='https://auth0.com/docs/cross-origin-authentication'>Cross-Origin Authentication</a>, <a href='https://auth0.com/docs/flows/concepts/device-auth'>Device Flow</a>, and <a href='https://auth0.com/docs/protocols/oauth2#how-response-mode-works'>web message response mode</a>. */
+    web_origins?: string[] | undefined;
+    /** List of audiences/realms for SAML protocol. Used by the wsfed addon. */
+    client_aliases?: string[] | undefined;
+    /** List of allow clients and API ids that are allowed to make delegation requests. Empty means all all your clients are allowed. */
+    allowed_clients?: string[] | undefined;
+    /** Comma-separated list of URLs that are valid to redirect to after logout from Auth0. Wildcards are allowed for subdomains. */
+    allowed_logout_urls?: string[] | undefined;
+    session_transfer?: (Management.ClientSessionTransferConfiguration | null) | undefined;
+    oidc_logout?: Management.ClientOidcBackchannelLogoutSettings | undefined;
+    /** List of grant types supported for this application. Can include `authorization_code`, `implicit`, `refresh_token`, `client_credentials`, `password`, `http://auth0.com/oauth/grant-type/password-realm`, `http://auth0.com/oauth/grant-type/mfa-oob`, `http://auth0.com/oauth/grant-type/mfa-otp`, `http://auth0.com/oauth/grant-type/mfa-recovery-code`, `urn:openid:params:grant-type:ciba`, `urn:ietf:params:oauth:grant-type:device_code`, and `urn:auth0:params:oauth:grant-type:token-exchange:federated-connection-access-token`. */
+    grant_types?: string[] | undefined;
+    jwt_configuration?: Management.ClientJwtConfiguration | undefined;
+    /** Applies only to SSO clients and determines whether Auth0 will handle Single Sign On (true) or whether the Identity Provider will (false). */
+    sso?: boolean | undefined;
+    /** Whether Single Sign On is disabled (true) or enabled (true). Defaults to true. */
+    sso_disabled?: boolean | undefined;
+    /** Whether this client can be used to make cross-origin authentication requests (true) or it is not allowed to make such requests (false). */
+    cross_origin_authentication?: boolean | undefined;
+    /** URL of the location in your site where the cross origin verification takes place for the cross-origin auth flow when performing Auth in your own domain instead of Auth0 hosted login page. */
+    cross_origin_loc?: string | undefined;
+    /** Whether a custom login page is to be used (true) or the default provided login page (false). */
+    custom_login_page_on?: boolean | undefined;
+    /** The content (HTML, CSS, JS) of the custom login page. */
+    custom_login_page?: string | undefined;
+    /** The content (HTML, CSS, JS) of the custom login page. (Used on Previews) */
+    custom_login_page_preview?: string | undefined;
+    /** HTML form template to be used for WS-Federation. */
+    form_template?: string | undefined;
+    token_endpoint_auth_method?: Management.ClientTokenEndpointAuthMethodEnum | undefined;
+    /** If true, trust that the IP specified in the `auth0-forwarded-for` header is the end-user's IP for brute-force-protection on token endpoint. */
+    is_token_endpoint_ip_header_trusted?: boolean | undefined;
+    client_metadata?: Management.ClientMetadata | undefined;
+    mobile?: Management.ClientMobile | undefined;
+    /** Initiate login uri, must be https */
+    initiate_login_uri?: string | undefined;
+    native_social_login?: Management.NativeSocialLogin | undefined;
+    fedcm_login?: Management.FedCmLogin | undefined;
+    refresh_token?: (Management.ClientRefreshTokenConfiguration | null) | undefined;
+    default_organization?: (Management.ClientDefaultOrganization | null) | undefined;
+    organization_usage?: Management.ClientOrganizationUsageEnum | undefined;
+    organization_require_behavior?: Management.ClientOrganizationRequireBehaviorEnum | undefined;
+    /** Defines the available methods for organization discovery during the `pre_login_prompt`. Users can discover their organization either by `email`, `organization_name` or both. */
+    organization_discovery_methods?: Management.ClientOrganizationDiscoveryEnum[] | undefined;
+    client_authentication_methods?: (Management.ClientAuthenticationMethod | null) | undefined;
+    /** Makes the use of Pushed Authorization Requests mandatory for this client */
+    require_pushed_authorization_requests?: boolean | undefined;
+    /** Makes the use of Proof-of-Possession mandatory for this client */
+    require_proof_of_possession?: boolean | undefined;
+    signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
+    token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
+    compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
+    /**
+     * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
+     * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
+     * See https://auth0.com/docs/secure/security-guidance/measures-against-app-impersonation for more information.
+     */
+    skip_non_verifiable_callback_uri_confirmation_prompt?: boolean | undefined;
+    token_exchange?: Management.ClientTokenExchangeConfiguration | undefined;
+    /** Specifies how long, in seconds, a Pushed Authorization Request URI remains valid */
+    par_request_expiry?: (number | null) | undefined;
+    token_quota?: Management.TokenQuota | undefined;
+    express_configuration?: Management.ExpressConfiguration | undefined;
+    b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
+    my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
+    anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
+    third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
+    /** The identifier of the resource server that this client is linked to. */
+    resource_server_identifier?: string | undefined;
+    async_approval_notification_channels?:
+        | Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration
+        | undefined;
+    external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
+    external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
+    external_client_id?: string | undefined;
+    /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
+    jwks_uri?: string | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export const ClientSessionTransferAllowedAuthenticationMethodsEnum = {
     Cookie: "cookie",
     Query: "query",
@@ -3413,6 +3555,13 @@ export interface ClientSigningKey {
  * Signing certificates associated with this client.
  */
 export type ClientSigningKeys = (Management.ClientSigningKey[] | null) | undefined;
+
+/** Field name to sort results by in ascending order. Defaults to insertion order (oldest first) if not provided. */
+export const ClientSortFieldEnum = {
+    Name: "name",
+    UpdatedAt: "updated_at",
+} as const;
+export type ClientSortFieldEnum = (typeof ClientSortFieldEnum)[keyof typeof ClientSortFieldEnum];
 
 /** Security mode for third-party clients. `strict` enforces <a href="https://auth0.com/docs/get-started/applications/third-party-applications/security-controls">enhanced security controls</a>: OAuth 2.1 alignment, explicit API authorization, and a curated set of supported features. `permissive` preserves <a href="https://auth0.com/docs/get-started/applications/third-party-applications/permissive-mode">pre-existing behavior</a> and is only available to tenants with prior third-party client usage. Set on creation and cannot be modified. */
 export const ClientThirdPartySecurityModeEnum = {
@@ -6373,7 +6522,20 @@ export type ConnectionProfileOrganizationShowAsButtonEnum =
  */
 export interface ConnectionProfileProvisioning {
     scim?: Management.ConnectionProfileProvisioningScim | undefined;
+    google_workspace?: Management.ConnectionProfileProvisioningGoogleWorkspace | undefined;
 }
+
+/**
+ * Google Workspace provisioning settings.
+ */
+export interface ConnectionProfileProvisioningGoogleWorkspace {
+    sync_users: Management.ConnectionProfileProvisioningGoogleWorkspaceSyncUsers;
+}
+
+/**
+ * Whether the connection is authorized to run Google Workspace user provisioning.
+ */
+export type ConnectionProfileProvisioningGoogleWorkspaceSyncUsers = boolean;
 
 /**
  * SCIM provisioning settings.
@@ -6457,6 +6619,7 @@ export type ConnectionProfileStrategyOverridesEnabledFeatures = Management.Enabl
  */
 export interface ConnectionProfileStrategyOverridesProvisioning {
     scim?: Management.ConnectionProfileProvisioningScim | undefined;
+    google_workspace?: Management.ConnectionProfileProvisioningGoogleWorkspace | undefined;
 }
 
 /**
@@ -6651,9 +6814,15 @@ export type ConnectionRequireRequestUriRegistration = boolean;
  */
 export type ConnectionRequiresUsername = boolean;
 
-export interface ConnectionResponseCommon extends Management.CreateConnectionCommon {
+export interface ConnectionResponseCommon {
+    display_name: Management.ConnectionDisplayName;
     id: Management.ConnectionId;
     realms?: Management.ConnectionRealms | undefined;
+    name: Management.ConnectionName;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    is_domain_connection?: Management.ConnectionIsDomainConnection | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
 }
 
 /**
@@ -8524,6 +8693,9 @@ export interface CreateClientResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -10566,8 +10738,7 @@ export interface CreateRoleResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 export interface CreateRuleResponseContent {
@@ -10629,6 +10800,7 @@ export interface CreateSegmentResponseContent {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -11539,6 +11711,7 @@ export type EmailTemplateNameEnum = (typeof EmailTemplateNameEnum)[keyof typeof 
 export const EnabledFeaturesEnum = {
     Scim: "scim",
     UniversalLogout: "universal_logout",
+    DirectorySync: "directory_sync",
 } as const;
 export type EnabledFeaturesEnum = (typeof EnabledFeaturesEnum)[keyof typeof EnabledFeaturesEnum];
 
@@ -11670,8 +11843,12 @@ export interface EventStreamCloudEventConnectionCreatedCloudEvent {
     data: Management.EventStreamCloudEventConnectionCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -15022,8 +15199,12 @@ export interface EventStreamCloudEventConnectionDeletedCloudEvent {
     data: Management.EventStreamCloudEventConnectionDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -18374,8 +18555,12 @@ export interface EventStreamCloudEventConnectionUpdatedCloudEvent {
     data: Management.EventStreamCloudEventConnectionUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -21859,8 +22044,12 @@ export interface EventStreamCloudEventGroupCreatedCloudEvent {
     data: Management.EventStreamCloudEventGroupCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22067,8 +22256,12 @@ export interface EventStreamCloudEventGroupDeletedCloudEvent {
     data: Management.EventStreamCloudEventGroupDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22287,8 +22480,12 @@ export interface EventStreamCloudEventGroupMemberAddedCloudEvent {
     data: Management.EventStreamCloudEventGroupMemberAddedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22573,8 +22770,12 @@ export interface EventStreamCloudEventGroupMemberDeletedCloudEvent {
     data: Management.EventStreamCloudEventGroupMemberDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22859,8 +23060,12 @@ export interface EventStreamCloudEventGroupRoleAssignedCloudEvent {
     data: Management.EventStreamCloudEventGroupRoleAssignedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23083,8 +23288,12 @@ export interface EventStreamCloudEventGroupRoleDeletedCloudEvent {
     data: Management.EventStreamCloudEventGroupRoleDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23305,8 +23514,12 @@ export interface EventStreamCloudEventGroupUpdatedCloudEvent {
     data: Management.EventStreamCloudEventGroupUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23540,8 +23753,12 @@ export interface EventStreamCloudEventOrgConnectionAddedCloudEvent {
     data: Management.EventStreamCloudEventOrgConnectionAddedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23587,6 +23804,9 @@ export interface EventStreamCloudEventOrgConnectionAddedObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -23639,6 +23859,39 @@ export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel
     (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum];
 
 /**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum];
+
+/**
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export interface EventStreamCloudEventOrgConnectionAddedPreviousObject {
@@ -23664,6 +23917,9 @@ export interface EventStreamCloudEventOrgConnectionAddedPreviousObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -23715,6 +23971,39 @@ export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAc
 export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum =
     (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum];
 
+/**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgConnectionAddedTypeEnum = {
     OrganizationConnectionAdded: "organization.connection.added",
@@ -23746,8 +24035,12 @@ export interface EventStreamCloudEventOrgConnectionRemovedCloudEvent {
     data: Management.EventStreamCloudEventOrgConnectionRemovedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23844,8 +24137,12 @@ export interface EventStreamCloudEventOrgConnectionUpdatedCloudEvent {
     data: Management.EventStreamCloudEventOrgConnectionUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23891,6 +24188,9 @@ export interface EventStreamCloudEventOrgConnectionUpdatedObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -23943,6 +24243,39 @@ export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLev
     (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum];
 
 /**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum];
+
+/**
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export interface EventStreamCloudEventOrgConnectionUpdatedPreviousObject {
@@ -23968,6 +24301,9 @@ export interface EventStreamCloudEventOrgConnectionUpdatedPreviousObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -24019,6 +24355,39 @@ export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganization
 export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum =
     (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum];
 
+/**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgConnectionUpdatedTypeEnum = {
     OrganizationConnectionUpdated: "organization.connection.updated",
@@ -24050,8 +24419,12 @@ export interface EventStreamCloudEventOrgCreatedCloudEvent {
     data: Management.EventStreamCloudEventOrgCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24178,8 +24551,12 @@ export interface EventStreamCloudEventOrgDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24266,8 +24643,12 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedCloudEvent {
     data: Management.EventStreamCloudEventOrgGroupRoleAssignedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24508,8 +24889,12 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgGroupRoleDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24748,8 +25133,12 @@ export interface EventStreamCloudEventOrgMemberAddedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberAddedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24856,8 +25245,12 @@ export interface EventStreamCloudEventOrgMemberDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24964,8 +25357,12 @@ export interface EventStreamCloudEventOrgMemberRoleAssignedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberRoleAssignedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -25090,8 +25487,12 @@ export interface EventStreamCloudEventOrgMemberRoleDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberRoleDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -25216,8 +25617,12 @@ export interface EventStreamCloudEventOrgUpdatedCloudEvent {
     data: Management.EventStreamCloudEventOrgUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -25351,8 +25756,12 @@ export interface EventStreamCloudEventUserCreatedCloudEvent {
     data: Management.EventStreamCloudEventUserCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -26143,8 +26552,12 @@ export interface EventStreamCloudEventUserDeletedCloudEvent {
     data: Management.EventStreamCloudEventUserDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -26937,8 +27350,12 @@ export interface EventStreamCloudEventUserUpdatedCloudEvent {
     data: Management.EventStreamCloudEventUserUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -28228,7 +28645,7 @@ export const ExperimentStatusEnum = {
 } as const;
 export type ExperimentStatusEnum = (typeof ExperimentStatusEnum)[keyof typeof ExperimentStatusEnum];
 
-/** The target status to transition the experiment to. */
+/** Target lifecycle status. Transitions the experiment through its lifecycle (draft → active, draft → archived, active → paused, paused → active, active/paused → completed, paused/completed → archived). Activation runs full readiness validation and snapshots the configuration. When combined with field edits, the edits apply first and the transition sees the updated config. */
 export const ExperimentTransitionStatusEnum = {
     Active: "active",
     Paused: "paused",
@@ -32103,6 +32520,7 @@ export interface GetBruteForceSettingsResponseContent {
     mode?: Management.BruteForceProtectionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface GetClientCredentialResponseContent {
@@ -32248,6 +32666,9 @@ export interface GetClientResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -33164,8 +33585,7 @@ export interface GetRoleResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 export interface GetRuleResponseContent {
@@ -33217,6 +33637,7 @@ export interface GetSegmentResponseContent {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -33372,6 +33793,8 @@ export interface GetTenantSettingsResponseContent {
     pushed_authorization_requests_supported?: boolean | undefined;
     /** Supports iss parameter in authorization responses */
     authorization_response_iss_parameter_supported?: (boolean | null) | undefined;
+    /** Enables strict DPoP refresh token binding per RFC 9449: all refresh tokens issued to public clients that present a DPoP proof are bound to the sender's key, and the binding is validated on every subsequent exchange. When disabled, DPoP refresh token binding may still apply for specific audiences for backwards compatibility. */
+    dpop_strict_refresh_token_binding?: (boolean | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
@@ -36631,8 +37054,7 @@ export interface Role {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 /**
@@ -36669,6 +37091,16 @@ export interface RoleMember {
     /** Email address of this user. */
     email?: string | undefined;
 }
+
+/**
+ * The id of the entity that owns this role: an organization id, or "auth0" for Auth0-managed System Roles.
+ */
+export type RoleOwnerId = string;
+
+/**
+ * Filter organization-level roles by owner ID. Use an organization ID to filter that organization's roles, or "auth0" to retrieve Auth0-managed System Roles. Required when type is "organization".
+ */
+export type RoleOwnerIdFilter = string;
 
 /** The type of the role */
 export const RoleTypeEnum = {
@@ -36810,6 +37242,9 @@ export interface RotateClientSecretResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -37035,6 +37470,13 @@ export const ScreenGroupNameEnum = {
 } as const;
 export type ScreenGroupNameEnum = (typeof ScreenGroupNameEnum)[keyof typeof ScreenGroupNameEnum];
 
+export interface SearchClientsResponseContent {
+    /** Array of client objects matching the search criteria. */
+    clients: Management.ClientSearchResponse[];
+    /** Cursor for retrieving the next page of results. Absent when no more results are available. */
+    next?: string | undefined;
+}
+
 /** The version of the search engine */
 export const SearchEngineVersionsEnum = {
     V1: "v1",
@@ -37051,7 +37493,6 @@ export interface SearchOrganization {
     /** Friendly name of this organization. */
     display_name?: string | undefined;
     branding?: Management.OrganizationBranding | undefined;
-    metadata?: Management.OrganizationMetadata | undefined;
     token_quota?: Management.TokenQuota | undefined;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
     /** Whether app entitlement is active for this organization. */
@@ -37061,6 +37502,7 @@ export interface SearchOrganization {
 }
 
 export interface SearchOrganizationsPaginatedResponseContent {
+    /** Array of organization objects matching the search criteria. */
     organizations: Management.SearchOrganization[];
     /** Cursor for retrieving the next page of results. Absent when no more results are available. */
     next?: string | undefined;
@@ -37085,6 +37527,7 @@ export interface Segment {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -37155,6 +37598,12 @@ export interface SegmentRule {
 export interface SegmentStartsWithExpression {
     starts_with: string[];
 }
+
+export const SegmentStatusEnum = {
+    Active: "active",
+    Archived: "archived",
+} as const;
+export type SegmentStatusEnum = (typeof SegmentStatusEnum)[keyof typeof SegmentStatusEnum];
 
 export const SegmentTypeEnum = {
     Self: "self",
@@ -37961,6 +38410,11 @@ export interface SynchronizedGroupSelectionId {
     id: string;
 }
 
+export const SystemRoleOwnerId = {
+    Auth0: "auth0",
+} as const;
+export type SystemRoleOwnerId = (typeof SystemRoleOwnerId)[keyof typeof SystemRoleOwnerId];
+
 /**
  * Settings related to OIDC RP-initiated Logout
  */
@@ -38613,6 +39067,7 @@ export interface UpdateBruteForceSettingsResponseContent {
     mode?: Management.BruteForceProtectionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface UpdateClientGrantResponseContent {
@@ -38735,6 +39190,9 @@ export interface UpdateClientResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -39418,48 +39876,12 @@ export interface UpdateExperimentResponseContent {
     updated_at: string;
 }
 
-export interface UpdateExperimentStatusResponseContent {
-    id: string;
-    name: string;
-    description?: string | undefined;
-    feature_flag_id: string;
-    feature_flag_name?: string | undefined;
-    authentication_flow: string;
-    allocation_strategy: Management.AllocationStrategyEnum;
-    status: Management.ExperimentStatusEnum;
-    is_valid: boolean;
-    default_config?: Management.DefaultConfigEnum | undefined;
-    feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
-    allocations: Management.AllocationItem[];
-    /** Fields that may be mutated given the experiment's current status. Computed at response time; always current with the API's enforcement logic. */
-    editable_fields: string[];
-    /** Ramp experiment levels configuration. */
-    levels?: number[] | undefined;
-    /** Read-only. The active exposure percentage for the current ramp step. Null when no ramp schedule is active. */
-    current_level?: (number | null) | undefined;
-    started_at?: string | undefined;
-    ended_at?: string | undefined;
-    created_at: string;
-    updated_at: string;
-}
-
 /**
  * Configuration parameters for this feature flag
  */
 export type UpdateFeatureFlagParameters = Record<string, Management.FeatureFlagConfigParam>;
 
 export interface UpdateFeatureFlagResponseContent {
-    id: string;
-    name: string;
-    description?: string | undefined;
-    type: Management.FeatureFlagTypeEnum;
-    status: Management.FeatureFlagStatusEnum;
-    parameters?: Management.FeatureFlagConfigParams | undefined;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface UpdateFeatureFlagStatusResponseContent {
     id: string;
     name: string;
     description?: string | undefined;
@@ -39791,8 +40213,7 @@ export interface UpdateRoleResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 export interface UpdateRuleResponseContent {
@@ -39834,6 +40255,7 @@ export interface UpdateSegmentResponseContent {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -39958,6 +40380,8 @@ export interface UpdateTenantSettingsResponseContent {
     pushed_authorization_requests_supported?: boolean | undefined;
     /** Supports iss parameter in authorization responses */
     authorization_response_iss_parameter_supported?: (boolean | null) | undefined;
+    /** Enables strict DPoP refresh token binding per RFC 9449: all refresh tokens issued to public clients that present a DPoP proof are bound to the sender's key, and the binding is validated on every subsequent exchange. When disabled, DPoP refresh token binding may still apply for specific audiences for backwards compatibility. */
+    dpop_strict_refresh_token_binding?: (boolean | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
@@ -40369,8 +40793,7 @@ export interface UserEffectivePermissionRoleSourceResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
     /** List of sources where this role is coming from. */
     sources?: Management.UserEffectivePermissionRoleSourceEnum[] | undefined;
 }
