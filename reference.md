@@ -1131,6 +1131,98 @@ await client.clientGrants.create({
 </dl>
 </details>
 
+<details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">search</a>({ ...params }) -> core.Page&lt;Management.ClientGrantResponseContent, Management.SearchClientGrantsResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search client grants using SCIM or Lucene filter syntax with low-latency, eventually consistent results. Use the parser parameter to specify "scim" or "lucene" syntax (default: "lucene"). This endpoint provides an alternative to the standard GET /client-grants endpoint with better performance for complex queries.
+Results may not reflect recent updates immediately.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.clientGrants.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "audience",
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.clientGrants.search({
+    q: "q",
+    parser: "scim",
+    fields: "fields",
+    include_fields: true,
+    take: 1,
+    from: "from",
+    sort: "audience",
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.SearchClientGrantsRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientGrantsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.clientGrants.<a href="/src/management/api/resources/clientGrants/client/Client.ts">get</a>(id) -> Management.GetClientGrantResponseContent</code></summary>
 <dl>
 <dd>
@@ -9293,7 +9385,7 @@ await client.resourceServers.update("id");
 <dl>
 <dd>
 
-Retrieve detailed list of user roles created in your tenant.
+Retrieve a list of roles. Includes roles created in your tenant and, when `owner_id=auth0` is supplied, Auth0-managed System Roles.
 
 **Note**: The returned list does not include standard roles available for tenant members, such as Admin or Support Access.
 
@@ -14843,6 +14935,328 @@ await client.attackProtection.captcha.update();
 </dl>
 </details>
 
+## AttackProtection CaptchaPolicies
+
+<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">list</a>() -> Management.ListAttackProtectionCaptchaPoliciesResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all CAPTCHA attack protection policies for the tenant, sorted by priority ascending.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.captchaPolicies.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">create</a>({ ...params }) -> Management.AttackProtectionCaptchaPolicy</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new CAPTCHA attack protection policy for the tenant. The maximum number of policies per tenant is determined by the tenant's subscription.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.captchaPolicies.create({
+    name: "name",
+    priority: 1,
+    match: {},
+    action: {},
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateAttackProtectionCaptchaPolicyRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">get</a>(id) -> Management.AttackProtectionCaptchaPolicy</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a single CAPTCHA attack protection policy for the tenant by ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.captchaPolicies.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the CAPTCHA attack protection policy.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a CAPTCHA attack protection policy for the tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.captchaPolicies.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the CAPTCHA attack protection policy.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">update</a>(id, { ...params }) -> Management.AttackProtectionCaptchaPolicy</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Partially update a CAPTCHA attack protection policy. Only the provided fields are modified. A provided match or action replaces the stored value in full rather than merging with it; within action, a provider secret or API key that is omitted from a provided provider block keeps its stored value.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.attackProtection.captchaPolicies.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — ID of the CAPTCHA attack protection policy.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateAttackProtectionCaptchaPolicyRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## AttackProtection PhoneProviderProtection
 
 <details><summary><code>client.attackProtection.phoneProviderProtection.<a href="/src/management/api/resources/attackProtection/resources/phoneProviderProtection/client/Client.ts">get</a>() -> Management.GetPhoneProviderProtectionResponseContent</code></summary>
@@ -19907,79 +20321,6 @@ await client.experimentation.experiments.advanceRamp("id", {
 </dl>
 </details>
 
-<details><summary><code>client.experimentation.experiments.<a href="/src/management/api/resources/experimentation/resources/experiments/client/Client.ts">updateStatus</a>(id, { ...params }) -> Management.UpdateExperimentStatusResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Transitions an experiment through its lifecycle: draft → active, active → paused, paused → active, active/paused → completed. Activation runs full readiness validation.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.experimentation.experiments.updateStatus("id", {
-    status: "active",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — The ID of the experiment to transition.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateExperimentStatusRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `ExperimentsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.experimentation.experiments.<a href="/src/management/api/resources/experimentation/resources/experiments/client/Client.ts">validate</a>(id) -> Management.ValidateExperimentResponseContent</code></summary>
 <dl>
 <dd>
@@ -20375,79 +20716,6 @@ await client.experimentation.featureFlags.update("id");
 <dd>
 
 **request:** `Management.UpdateFeatureFlagRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `FeatureFlagsClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.experimentation.featureFlags.<a href="/src/management/api/resources/experimentation/resources/featureFlags/client/Client.ts">updateStatus</a>(id, { ...params }) -> Management.UpdateFeatureFlagStatusResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Transitions a feature flag through its lifecycle states: draft → active, draft → archived, active → archived.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.experimentation.featureFlags.updateStatus("id", {
-    status: "draft",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — The ID of the feature flag to transition.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateFeatureFlagStatusRequestContent`
 
 </dd>
 </dl>

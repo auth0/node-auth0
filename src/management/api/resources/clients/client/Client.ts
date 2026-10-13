@@ -400,6 +400,7 @@ export class ClientsClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
      * @throws {@link Management.InternalServerError}
      *
@@ -459,6 +460,8 @@ export class ClientsClient {
                     throw new Management.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
                 case 403:
                     throw new Management.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new Management.ConflictError(_response.error.body as unknown, _response.rawResponse);
                 case 429:
                     throw new Management.TooManyRequestsError(_response.error.body as unknown, _response.rawResponse);
                 case 500:

@@ -11,10 +11,10 @@ describe("LogStreamsClient", () => {
 
         const rawResponseBody = [
             {
+                type: "http",
                 id: "id",
                 name: "name",
                 status: "active",
-                type: "http",
                 isPriority: true,
                 filters: [{}],
                 pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },
@@ -91,10 +91,10 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = {
+            type: "http",
             id: "id",
             name: "name",
             status: "active",
-            type: "http",
             isPriority: true,
             filters: [{ type: "category", name: "auth.login.fail" }],
             pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },
@@ -255,10 +255,10 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
+            type: "http",
             id: "id",
             name: "name",
             status: "active",
-            type: "http",
             isPriority: true,
             filters: [{ type: "category", name: "auth.login.fail" }],
             pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },
@@ -409,10 +409,10 @@ describe("LogStreamsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
+            type: "http",
             id: "id",
             name: "name",
             status: "active",
-            type: "http",
             isPriority: true,
             filters: [{ type: "category", name: "auth.login.fail" }],
             pii_config: { log_fields: ["first_name"], method: "mask", algorithm: "xxhash" },

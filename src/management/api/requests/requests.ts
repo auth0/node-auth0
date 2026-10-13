@@ -214,6 +214,35 @@ export interface CreateClientGrantRequestContent {
 
 /**
  * @example
+ *     {
+ *         q: "q",
+ *         parser: "scim",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         take: 1,
+ *         from: "from",
+ *         sort: "audience"
+ *     }
+ */
+export interface SearchClientGrantsRequestParameters {
+    /** Filter expression in SCIM or Lucene syntax (depending on parser parameter). SCIM examples: `audience eq "https://api.example.com"`, `client_id eq "cli_abc"`, `subject_type eq "client"`, `allow_any_organization eq true`, `default_for eq "third_party_clients"`, `audience co "example" and organization_id eq "org_123"`. SCIM operators: eq, ne, sw, ew, co, pr, gt, ge, lt, le, and, or. <br /><br /><b>Supported Fields</b>:<ul><li><i>audience</i> - Filter by audience (eq, ne, sw, co, ew, pr)</li><li><i>client_id</i> - Filter by client ID (eq, ne, sw, pr)</li><li><i>subject_type</i> - Filter by subject type (eq, ne, sw, pr)</li><li><i>allow_any_organization</i> - Filter by allow_any_organization (eq, ne, pr)</li><li><i>organization_id</i> - Filter by organization ID (eq, ne, sw, pr)</li><li><i>updated_at</i> - Filter by last update date (eq, ne, gt, ge, lt, le, pr)</li><li><i>default_for</i> - Filter by default grant group (eq, ne, sw, pr)</li></ul>Maximum 5 filter operations per query. Results are eventually consistent and may not reflect recent updates. */
+    q?: string | null;
+    /** Query parser to use for the filter expression. Use "scim" for SCIM filter syntax or "lucene" for Lucene query syntax (default). */
+    parser?: Management.SearchParserEnum | null;
+    /** Comma-separated list of fields to include or exclude in the response. Works with the include_fields parameter to control projection mode. */
+    fields?: string | null;
+    /** Controls field projection mode. Set to true to include only fields specified in the fields parameter. Set to false to exclude fields specified in the fields parameter. Defaults to true if not specified. */
+    include_fields?: boolean | null;
+    /** Maximum number of results to return per page (1-100). Defaults to 50. */
+    take?: number | null;
+    /** Cursor for the next page of results. Use the value from the next field in the previous response. */
+    from?: string | null;
+    /** Field name to sort results by in ascending order. Defaults to insertion order (oldest first) if not provided. */
+    sort?: Management.ClientGrantSortFieldEnum | null;
+}
+
+/**
+ * @example
  *     {}
  */
 export interface UpdateClientGrantRequestContent {
@@ -358,6 +387,7 @@ export interface CreateClientRequestContent {
     resource_server_identifier?: string;
     identity_assertion_authorization_grant?: Management.CreateIdentityAssertionAuthorizationGrant;
     anonymous_sessions?: Management.CreateAnonymousSessions;
+    enforce_anon_session_transfer_network_binding?: Management.ClientAnonymousSessionTransferNetworkBindingEnum;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
     redirection_policy?: Management.ClientRedirectionPolicyEnum;
     express_configuration?: Management.ExpressConfiguration;
@@ -491,6 +521,7 @@ export interface UpdateClientRequestContent {
     token_quota?: Management.UpdateTokenQuota | null;
     identity_assertion_authorization_grant?: Management.UpdateIdentityAssertionAuthorizationGrant | null;
     anonymous_sessions?: Management.UpdateAnonymousSessions | null;
+    enforce_anon_session_transfer_network_binding?: Management.ClientAnonymousSessionTransferNetworkBindingEnum;
     /** Form template for WS-Federation protocol */
     form_template?: string;
     addons?: Management.ClientAddons;
@@ -1114,7 +1145,7 @@ export interface ListGroupsRequestParameters {
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean | null;
-    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). The returned total reflects at most 1,000 results. */
     include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
@@ -1697,8 +1728,8 @@ export interface ListRolesRequestParameters {
     name_filter?: string | null;
     /** Optional filter on the type of the role */
     type?: Management.RoleTypeEnum | null;
-    /** Filter organization-level roles by owner ID. Required when type is "organization". */
-    owner_id?: string | null;
+    /** Filter organization-level roles by owner ID. Use an organization ID to filter that organization's roles, or "auth0" to retrieve Auth0-managed System Roles. Required when type is "organization". */
+    owner_id?: Management.RoleOwnerIdFilter | null;
 }
 
 /**
@@ -2441,6 +2472,41 @@ export interface UpdateAttackProtectionCaptchaRequestContent {
 /**
  * @example
  *     {
+ *         name: "name",
+ *         priority: 1,
+ *         match: {},
+ *         action: {}
+ *     }
+ */
+export interface CreateAttackProtectionCaptchaPolicyRequestContent {
+    /** Human-readable policy name. */
+    name: string;
+    /** Description of the attack protection policy. */
+    description?: string;
+    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
+    priority: number;
+    match: Management.AttackProtectionCaptchaPolicyMatch;
+    action: Management.AttackProtectionCaptchaPolicyActionInput;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateAttackProtectionCaptchaPolicyRequestContent {
+    /** Human-readable policy name. */
+    name?: string;
+    /** Description of the policy's purpose. */
+    description?: string;
+    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
+    priority?: number;
+    match?: Management.AttackProtectionCaptchaPolicyMatch;
+    action?: Management.AttackProtectionCaptchaPolicyActionInput;
+}
+
+/**
+ * @example
+ *     {
  *         type: "exponential"
  *     }
  */
@@ -3093,6 +3159,7 @@ export interface UpdateExperimentRequestParameters {
     default_config?: Management.DefaultConfigEnum;
     /** Ramp experiment levels configuration. A strictly-increasing sequence of exposure percentages, each an integer in [0, 100]. Can only be modified on draft experiments. */
     levels?: number[];
+    status?: Management.ExperimentTransitionStatusEnum;
 }
 
 /**
@@ -3104,16 +3171,6 @@ export interface UpdateExperimentRequestParameters {
 export interface AdvanceRampRequestContent {
     /** The target percentage level from the experiment schedule. Must be the immediate next level. */
     target_level: number;
-}
-
-/**
- * @example
- *     {
- *         status: "active"
- *     }
- */
-export interface UpdateExperimentStatusRequestContent {
-    status: Management.ExperimentTransitionStatusEnum;
 }
 
 /**
@@ -3161,17 +3218,8 @@ export interface UpdateFeatureFlagRequestContent {
     /** A description of what this feature flag controls */
     description?: string | null;
     parameters?: Management.UpdateFeatureFlagParameters;
-}
-
-/**
- * @example
- *     {
- *         status: "draft"
- *     }
- */
-export interface UpdateFeatureFlagStatusRequestContent {
-    /** The target status to transition the feature flag to. */
-    status: Management.FeatureFlagStatusEnum;
+    /** Target lifecycle status (draft → active, draft → archived, active → archived). Activating a flag requires at least 2 variations. When combined with field edits, the edits and the transition are applied together; if the transition is rejected, no edits are applied. */
+    status?: Management.FeatureFlagStatusEnum;
 }
 
 /**
@@ -3218,6 +3266,8 @@ export interface UpdateSegmentRequestContent {
     description?: string | null;
     /** Replaces the entire rules array. Each rule is limited to 4KB and the whole segment to 10KB (serialized). */
     rules?: Management.SegmentRule[];
+    /** Target lifecycle status. Archiving removes the segment from the active pool and is terminal (an archived segment cannot return to active). When combined with field edits, the edits apply first and the transition follows. */
+    status?: Management.SegmentStatusEnum;
 }
 
 /**
@@ -4528,6 +4578,8 @@ export interface UpdateTenantSettingsRequestContent {
     pushed_authorization_requests_supported?: boolean | null;
     /** Supports iss parameter in authorization responses */
     authorization_response_iss_parameter_supported?: boolean | null;
+    /** Enables strict DPoP refresh token binding per RFC 9449: all refresh tokens issued to public clients that present a DPoP proof are bound to the sender's key, and the binding is validated on every subsequent exchange. When disabled, DPoP refresh token binding may still apply for specific audiences for backwards compatibility. */
+    dpop_strict_refresh_token_binding?: boolean | null;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.

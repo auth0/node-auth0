@@ -258,6 +258,187 @@ describe("ClientGrantsClient", () => {
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
+    test("search (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            client_grants: [
+                {
+                    id: "id",
+                    client_id: "client_id",
+                    audience: "audience",
+                    scope: ["scope"],
+                    organization_usage: "deny",
+                    allow_any_organization: true,
+                    default_for: "third_party_clients",
+                    is_system: true,
+                    subject_type: "client",
+                    authorization_details_types: ["authorization_details_types"],
+                    allow_all_scopes: true,
+                },
+            ],
+            next: "next",
+        };
+
+        server
+            .mockEndpoint({ once: false })
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const expected = rawResponseBody;
+        const page = await client.clientGrants.search({
+            q: "q",
+            parser: "scim",
+            fields: "fields",
+            include_fields: true,
+            take: 1,
+            from: "from",
+            sort: "audience",
+        });
+
+        expect(expected.client_grants).toEqual(page.data);
+        expect(page.hasNextPage()).toBe(true);
+        const nextPage = await page.getNextPage();
+        expect(expected.client_grants).toEqual(nextPage.data);
+    });
+
+    test("search (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.search();
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("search (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.search();
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("search (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.search();
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("search (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.search();
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("search (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.search();
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("search (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(500)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.search();
+        }).rejects.toThrow(Management.InternalServerError);
+    });
+
+    test("search (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/client-grants/search")
+            .respondWith()
+            .statusCode(504)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clientGrants.search();
+        }).rejects.toThrow(Management.GatewayTimeoutError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
