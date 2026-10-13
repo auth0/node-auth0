@@ -67,6 +67,17 @@
             },
             "default": "./dist/cjs/management/api/resources/clientGrants/exports.js"
         },
+        "./clientProfiles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/clientProfiles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/clientProfiles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/clientProfiles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/clientProfiles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/clientProfiles/exports.js"
+        },
         "./clients": {
             "import": {
                 "types": "./dist/esm/management/api/resources/clients/exports.d.mts",
@@ -594,6 +605,17 @@
                 "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
+        },
+        "./attackProtection/captchaPolicies": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/attackProtection/resources/captchaPolicies/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/attackProtection/resources/captchaPolicies/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/attackProtection/resources/captchaPolicies/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/attackProtection/resources/captchaPolicies/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/attackProtection/resources/captchaPolicies/exports.js"
         },
         "./attackProtection/phoneProviderProtection": {
             "import": {

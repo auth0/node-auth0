@@ -81,6 +81,7 @@ describe("ClientsClient", () => {
                     async_approval_notification_channels: ["guardian-push"],
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
+                    external_metadata_status: "available",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -413,6 +414,7 @@ describe("ClientsClient", () => {
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -570,6 +572,7 @@ describe("ClientsClient", () => {
         const rawRequestBody = { external_client_id: "external_client_id" };
         const rawResponseBody = {
             client_id: "client_id",
+            external_metadata_created_by: "admin",
             errors: ["errors"],
             validation: { valid: true, violations: ["violations"], warnings: ["warnings"] },
             mapped_fields: {
@@ -954,6 +957,7 @@ describe("ClientsClient", () => {
                     async_approval_notification_channels: ["guardian-push"],
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
+                    external_metadata_status: "available",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -1299,6 +1303,7 @@ describe("ClientsClient", () => {
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -1661,6 +1666,7 @@ describe("ClientsClient", () => {
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -2000,6 +2006,7 @@ describe("ClientsClient", () => {
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };

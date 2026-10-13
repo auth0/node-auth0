@@ -214,6 +214,35 @@ export interface CreateClientGrantRequestContent {
 
 /**
  * @example
+ *     {
+ *         q: "q",
+ *         parser: "scim",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         take: 1,
+ *         from: "from",
+ *         sort: "audience"
+ *     }
+ */
+export interface SearchClientGrantsRequestParameters {
+    /** Filter expression in SCIM or Lucene syntax (depending on parser parameter). SCIM examples: `audience eq "https://api.example.com"`, `client_id eq "cli_abc"`, `subject_type eq "client"`, `allow_any_organization eq true`, `default_for eq "third_party_clients"`, `audience co "example" and organization_id eq "org_123"`. SCIM operators: eq, ne, sw, ew, co, pr, gt, ge, lt, le, and, or. <br /><br /><b>Supported Fields</b>:<ul><li><i>audience</i> - Filter by audience (eq, ne, sw, co, ew, pr)</li><li><i>client_id</i> - Filter by client ID (eq, ne, sw, pr)</li><li><i>subject_type</i> - Filter by subject type (eq, ne, sw, pr)</li><li><i>allow_any_organization</i> - Filter by allow_any_organization (eq, ne, pr)</li><li><i>organization_id</i> - Filter by organization ID (eq, ne, sw, pr)</li><li><i>updated_at</i> - Filter by last update date (eq, ne, gt, ge, lt, le, pr)</li><li><i>default_for</i> - Filter by default grant group (eq, ne, sw, pr)</li></ul>Maximum 5 filter operations per query. Results are eventually consistent and may not reflect recent updates. */
+    q?: string | null;
+    /** Query parser to use for the filter expression. Use "scim" for SCIM filter syntax or "lucene" for Lucene query syntax (default). */
+    parser?: Management.SearchParserEnum | null;
+    /** Comma-separated list of fields to include or exclude in the response. Works with the include_fields parameter to control projection mode. */
+    fields?: string | null;
+    /** Controls field projection mode. Set to true to include only fields specified in the fields parameter. Set to false to exclude fields specified in the fields parameter. Defaults to true if not specified. */
+    include_fields?: boolean | null;
+    /** Maximum number of results to return per page (1-100). Defaults to 50. */
+    take?: number | null;
+    /** Cursor for the next page of results. Use the value from the next field in the previous response. */
+    from?: string | null;
+    /** Field name to sort results by in ascending order. Defaults to insertion order (oldest first) if not provided. */
+    sort?: Management.ClientGrantSortFieldEnum | null;
+}
+
+/**
+ * @example
  *     {}
  */
 export interface UpdateClientGrantRequestContent {
@@ -226,6 +255,49 @@ export interface UpdateClientGrantRequestContent {
     authorization_details_types?: string[];
     /** If enabled, all scopes configured on the resource server are allowed for this grant. */
     allow_all_scopes?: boolean | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListClientProfilesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         client_configuration: {},
+ *         apply_policy: {
+ *             external_metadata_type: "cimd",
+ *             external_metadata_created_by: "client"
+ *         }
+ *     }
+ */
+export interface CreateClientProfileRequestContent {
+    name: Management.ClientProfileName;
+    description?: (Management.ClientProfileDescription | undefined) | null;
+    client_configuration: Management.ClientProfileClientConfiguration;
+    apply_policy: Management.ClientProfileApplyPolicy;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateClientProfileRequestContent {
+    name?: Management.ClientProfileName;
+    description?: (Management.ClientProfileDescription | undefined) | null;
+    client_configuration?: Management.ClientProfileClientConfiguration;
+    apply_policy?: Management.ClientProfileApplyPolicy;
 }
 
 /**
@@ -2443,6 +2515,41 @@ export interface UpdateAttackProtectionCaptchaRequestContent {
 /**
  * @example
  *     {
+ *         name: "name",
+ *         priority: 1,
+ *         match: {},
+ *         action: {}
+ *     }
+ */
+export interface CreateAttackProtectionCaptchaPolicyRequestContent {
+    /** Human-readable policy name. */
+    name: string;
+    /** Description of the attack protection policy. */
+    description?: string;
+    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
+    priority: number;
+    match: Management.AttackProtectionCaptchaPolicyMatch;
+    action: Management.AttackProtectionCaptchaPolicyActionInput;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateAttackProtectionCaptchaPolicyRequestContent {
+    /** Human-readable policy name. */
+    name?: string;
+    /** Description of the policy's purpose. */
+    description?: string;
+    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
+    priority?: number;
+    match?: Management.AttackProtectionCaptchaPolicyMatch;
+    action?: Management.AttackProtectionCaptchaPolicyActionInput;
+}
+
+/**
+ * @example
+ *     {
  *         type: "exponential"
  *     }
  */
@@ -4525,6 +4632,8 @@ export interface UpdateTenantSettingsRequestContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
     /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
     client_id_metadata_document_supported?: boolean;
+    /** Whether the authorization server supports registering clients dynamically from a client_id URL. Requires client_id_metadata_document_supported to be enabled. */
+    client_id_metadata_document_dynamic_registration_supported?: boolean;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
