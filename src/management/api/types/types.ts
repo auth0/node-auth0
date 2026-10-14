@@ -1516,6 +1516,64 @@ export interface AttackProtectionCaptchaHcaptchaResponseContent {
     [key: string]: any;
 }
 
+/**
+ * An attack protection policy override for CAPTCHA.
+ */
+export interface AttackProtectionCaptchaPolicy {
+    /** System-generated identifier for the policy. */
+    id: string;
+    /** Human-readable policy name. */
+    name: string;
+    /** Description of the policy's purpose. */
+    description?: string | undefined;
+    /** Conflict resolution order. Lower number takes higher precedence. */
+    priority: number;
+    match: Management.AttackProtectionCaptchaPolicyMatch;
+    action: Management.AttackProtectionCaptchaPolicyAction;
+    /** ISO 8601 timestamp when the policy was created. */
+    created_at: string;
+    /** ISO 8601 timestamp when the policy was last updated. */
+    updated_at: string;
+}
+
+/**
+ * CAPTCHA configuration override stored for this policy.
+ */
+export interface AttackProtectionCaptchaPolicyAction {
+    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
+    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
+    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
+    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2 | undefined;
+    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterprise | undefined;
+    hcaptcha?: Management.CaptchaPolicyActionHcaptcha | undefined;
+    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptcha | undefined;
+    arkose?: Management.CaptchaPolicyActionArkose | undefined;
+}
+
+/**
+ * CAPTCHA configuration override for this policy.
+ */
+export interface AttackProtectionCaptchaPolicyActionInput {
+    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
+    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
+    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
+    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2Input | undefined;
+    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterpriseInput | undefined;
+    hcaptcha?: Management.CaptchaPolicyActionHcaptchaInput | undefined;
+    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptchaInput | undefined;
+    arkose?: Management.CaptchaPolicyActionArkoseInput | undefined;
+}
+
+/**
+ * Traffic matching criteria for the policy. Exactly one of auth0_managed or geo_country_codes must be specified.
+ */
+export interface AttackProtectionCaptchaPolicyMatch {
+    /** Match by Auth0-managed traffic identifiers. */
+    auth0_managed?: string[] | undefined;
+    /** Match by ISO 3166-1 alpha-2 country codes. */
+    geo_country_codes?: string[] | undefined;
+}
+
 /** The id of the active provider for the CAPTCHA. */
 export const AttackProtectionCaptchaProviderId = {
     Arkose: "arkose",
@@ -2087,10 +2145,10 @@ export interface BreachedPasswordDetectionStage {
     "pre-change-password"?: Management.BreachedPasswordDetectionPreChangePasswordStage | undefined;
 }
 
-/** Controls whether the BFP unblock form is submitted automatically or requires manual interaction. Canonical field; deprecated alias normalized upstream. */
+/** Controls whether the unblock form is submitted automatically when the link is opened or must be submitted manually by the user. */
 export const BruteForceProtectionFormSubmissionModeEnum = {
-    Manual: "manual",
     Auto: "auto",
+    Manual: "manual",
 } as const;
 export type BruteForceProtectionFormSubmissionModeEnum =
     (typeof BruteForceProtectionFormSubmissionModeEnum)[keyof typeof BruteForceProtectionFormSubmissionModeEnum];
@@ -2118,6 +2176,137 @@ export interface BulkUpdateAculResponseContent {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/** The CAPTCHA provider type. */
+export const CaptchaActiveProviderEnum = {
+    SimpleCaptcha: "simple_captcha",
+    AuthChallenge: "auth_challenge",
+    RecaptchaV2: "recaptcha_v2",
+    RecaptchaEnterprise: "recaptcha_enterprise",
+    Hcaptcha: "hcaptcha",
+    FriendlyCaptcha: "friendly_captcha",
+    Arkose: "arkose",
+} as const;
+export type CaptchaActiveProviderEnum = (typeof CaptchaActiveProviderEnum)[keyof typeof CaptchaActiveProviderEnum];
+
+/**
+ * Arkose Labs provider configuration.
+ */
+export interface CaptchaPolicyActionArkose {
+    /** The Arkose Labs site key. */
+    site_key?: string | undefined;
+    /** The Arkose Labs client subdomain. */
+    client_subdomain?: string | undefined;
+    /** The Arkose Labs verify subdomain. */
+    verify_subdomain?: string | undefined;
+    /** Whether to allow access when Arkose Labs is unavailable. */
+    fail_open?: boolean | undefined;
+}
+
+/**
+ * Arkose Labs provider configuration.
+ */
+export interface CaptchaPolicyActionArkoseInput {
+    /** The Arkose Labs site key. */
+    site_key?: string | undefined;
+    /** The Arkose Labs private key. Encrypted at rest. */
+    secret?: string | undefined;
+    /** The Arkose Labs client subdomain. */
+    client_subdomain?: string | undefined;
+    /** The Arkose Labs verify subdomain. */
+    verify_subdomain?: string | undefined;
+    /** Whether to allow access when Arkose Labs is unavailable. */
+    fail_open?: boolean | undefined;
+}
+
+/**
+ * Auth Challenge CAPTCHA provider configuration.
+ */
+export interface CaptchaPolicyActionAuthChallenge {
+    /** Whether to allow access when the challenge provider is unavailable. */
+    fail_open?: boolean | undefined;
+}
+
+/**
+ * Friendly Captcha provider configuration.
+ */
+export interface CaptchaPolicyActionFriendlyCaptcha {
+    /** The Friendly Captcha site key. */
+    site_key?: string | undefined;
+}
+
+/**
+ * Friendly Captcha provider configuration.
+ */
+export interface CaptchaPolicyActionFriendlyCaptchaInput {
+    /** The Friendly Captcha site key. */
+    site_key?: string | undefined;
+    /** The Friendly Captcha secret key. Encrypted at rest. */
+    secret?: string | undefined;
+}
+
+/**
+ * hCaptcha provider configuration.
+ */
+export interface CaptchaPolicyActionHcaptcha {
+    /** The hCaptcha site key. */
+    site_key?: string | undefined;
+}
+
+/**
+ * hCaptcha provider configuration.
+ */
+export interface CaptchaPolicyActionHcaptchaInput {
+    /** The hCaptcha site key. */
+    site_key?: string | undefined;
+    /** The hCaptcha secret key. Encrypted at rest. */
+    secret?: string | undefined;
+}
+
+/**
+ * reCAPTCHA Enterprise provider configuration.
+ */
+export interface CaptchaPolicyActionRecaptchaEnterprise {
+    /** The reCAPTCHA Enterprise site key. */
+    site_key?: string | undefined;
+    /** The Google Cloud project ID. */
+    project_id?: string | undefined;
+}
+
+/**
+ * reCAPTCHA Enterprise provider configuration.
+ */
+export interface CaptchaPolicyActionRecaptchaEnterpriseInput {
+    /** The reCAPTCHA Enterprise site key. */
+    site_key?: string | undefined;
+    /** The Google Cloud project ID. */
+    project_id?: string | undefined;
+    /** The reCAPTCHA Enterprise API key. Encrypted at rest. */
+    api_key?: string | undefined;
+}
+
+/**
+ * reCAPTCHA v2 provider configuration.
+ */
+export interface CaptchaPolicyActionRecaptchaV2 {
+    /** The reCAPTCHA v2 site key. */
+    site_key?: string | undefined;
+}
+
+/**
+ * reCAPTCHA v2 provider configuration.
+ */
+export interface CaptchaPolicyActionRecaptchaV2Input {
+    /** The reCAPTCHA v2 site key. */
+    site_key?: string | undefined;
+    /** The reCAPTCHA v2 secret key. Encrypted at rest. */
+    secret?: string | undefined;
+}
+
+/**
+ * Simple CAPTCHA provider configuration.
+ */
+export interface CaptchaPolicyActionSimpleCaptcha {}
 
 export interface CertificateSubjectDnCredential {
     credential_type: Management.CertificateSubjectDnCredentialTypeEnum;
@@ -2322,6 +2511,9 @@ export interface Client {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -2744,6 +2936,15 @@ export interface ClientAddons {
     oag?: (Management.ClientAddonOag | null) | undefined;
 }
 
+/** Indicates whether network binding should be enforced when consuming an anonymous session transfer token. If set to 'ip', consumption must happen from the same IP as the issuer. If set to 'asn', consumption must happen from the same ASN as the issuer. If set to 'none', binding is not enforced. Default value is `ip`. */
+export const ClientAnonymousSessionTransferNetworkBindingEnum = {
+    Ip: "ip",
+    Asn: "asn",
+    None: "none",
+} as const;
+export type ClientAnonymousSessionTransferNetworkBindingEnum =
+    (typeof ClientAnonymousSessionTransferNetworkBindingEnum)[keyof typeof ClientAnonymousSessionTransferNetworkBindingEnum];
+
 /** The type of application this client represents */
 export const ClientAppTypeEnum = {
     Native: "native",
@@ -3011,6 +3212,13 @@ export interface ClientGrantResponseContent {
     /** If enabled, all scopes configured on the resource server are allowed for this grant. */
     allow_all_scopes?: boolean | undefined;
 }
+
+/** Field name to sort results by in ascending order. Defaults to insertion order (oldest first) if not provided. */
+export const ClientGrantSortFieldEnum = {
+    Audience: "audience",
+    UpdatedAt: "updated_at",
+} as const;
+export type ClientGrantSortFieldEnum = (typeof ClientGrantSortFieldEnum)[keyof typeof ClientGrantSortFieldEnum];
 
 /** The type of application access the client grant allows. */
 export const ClientGrantSubjectTypeEnum = {
@@ -3438,6 +3646,9 @@ export interface ClientSearchResponse {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -6507,7 +6718,20 @@ export type ConnectionProfileOrganizationShowAsButtonEnum =
  */
 export interface ConnectionProfileProvisioning {
     scim?: Management.ConnectionProfileProvisioningScim | undefined;
+    google_workspace?: Management.ConnectionProfileProvisioningGoogleWorkspace | undefined;
 }
+
+/**
+ * Google Workspace provisioning settings.
+ */
+export interface ConnectionProfileProvisioningGoogleWorkspace {
+    sync_users: Management.ConnectionProfileProvisioningGoogleWorkspaceSyncUsers;
+}
+
+/**
+ * Whether the connection is authorized to run Google Workspace user provisioning.
+ */
+export type ConnectionProfileProvisioningGoogleWorkspaceSyncUsers = boolean;
 
 /**
  * SCIM provisioning settings.
@@ -6591,6 +6815,7 @@ export type ConnectionProfileStrategyOverridesEnabledFeatures = Management.Enabl
  */
 export interface ConnectionProfileStrategyOverridesProvisioning {
     scim?: Management.ConnectionProfileProvisioningScim | undefined;
+    google_workspace?: Management.ConnectionProfileProvisioningGoogleWorkspace | undefined;
 }
 
 /**
@@ -6785,9 +7010,15 @@ export type ConnectionRequireRequestUriRegistration = boolean;
  */
 export type ConnectionRequiresUsername = boolean;
 
-export interface ConnectionResponseCommon extends Management.CreateConnectionCommon {
+export interface ConnectionResponseCommon {
+    display_name: Management.ConnectionDisplayName;
     id: Management.ConnectionId;
     realms?: Management.ConnectionRealms | undefined;
+    name: Management.ConnectionName;
+    /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+    enabled_clients?: string[] | undefined;
+    is_domain_connection?: Management.ConnectionIsDomainConnection | undefined;
+    metadata?: Management.ConnectionsMetadata | undefined;
 }
 
 /**
@@ -8658,6 +8889,9 @@ export interface CreateClientResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -10389,7 +10623,6 @@ export interface CreateKeysNetworkAclsResponseContent {
 export interface CreateLogStreamDatadogRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamDatadogEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10403,7 +10636,6 @@ export interface CreateLogStreamDatadogRequestBody {
 export interface CreateLogStreamEventBridgeRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamEventBridgeEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10417,7 +10649,6 @@ export interface CreateLogStreamEventBridgeRequestBody {
 export interface CreateLogStreamEventGridRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamEventGridEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10431,7 +10662,6 @@ export interface CreateLogStreamEventGridRequestBody {
 export interface CreateLogStreamHttpRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamHttpEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10445,7 +10675,6 @@ export interface CreateLogStreamHttpRequestBody {
 export interface CreateLogStreamMixpanelRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamMixpanelEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10457,29 +10686,96 @@ export interface CreateLogStreamMixpanelRequestBody {
 }
 
 export type CreateLogStreamRequestContent =
-    | Management.CreateLogStreamHttpRequestBody
-    | Management.CreateLogStreamEventBridgeRequestBody
-    | Management.CreateLogStreamEventGridRequestBody
-    | Management.CreateLogStreamDatadogRequestBody
-    | Management.CreateLogStreamSplunkRequestBody
-    | Management.CreateLogStreamSumoRequestBody
-    | Management.CreateLogStreamSegmentRequestBody
-    | Management.CreateLogStreamMixpanelRequestBody;
+    | Management.CreateLogStreamRequestContent.Http
+    | Management.CreateLogStreamRequestContent.Eventbridge
+    | Management.CreateLogStreamRequestContent.Eventgrid
+    | Management.CreateLogStreamRequestContent.Datadog
+    | Management.CreateLogStreamRequestContent.Splunk
+    | Management.CreateLogStreamRequestContent.Sumo
+    | Management.CreateLogStreamRequestContent.Segment
+    | Management.CreateLogStreamRequestContent.Mixpanel;
+
+export namespace CreateLogStreamRequestContent {
+    export interface Http extends Management.CreateLogStreamHttpRequestBody {
+        type: "http";
+    }
+
+    export interface Eventbridge extends Management.CreateLogStreamEventBridgeRequestBody {
+        type: "eventbridge";
+    }
+
+    export interface Eventgrid extends Management.CreateLogStreamEventGridRequestBody {
+        type: "eventgrid";
+    }
+
+    export interface Datadog extends Management.CreateLogStreamDatadogRequestBody {
+        type: "datadog";
+    }
+
+    export interface Splunk extends Management.CreateLogStreamSplunkRequestBody {
+        type: "splunk";
+    }
+
+    export interface Sumo extends Management.CreateLogStreamSumoRequestBody {
+        type: "sumo";
+    }
+
+    export interface Segment extends Management.CreateLogStreamSegmentRequestBody {
+        type: "segment";
+    }
+
+    export interface Mixpanel extends Management.CreateLogStreamMixpanelRequestBody {
+        type: "mixpanel";
+    }
+}
 
 export type CreateLogStreamResponseContent =
-    | Management.LogStreamHttpResponseSchema
-    | Management.LogStreamEventBridgeResponseSchema
-    | Management.LogStreamEventGridResponseSchema
-    | Management.LogStreamDatadogResponseSchema
-    | Management.LogStreamSplunkResponseSchema
-    | Management.LogStreamSumoResponseSchema
-    | Management.LogStreamSegmentResponseSchema
-    | Management.LogStreamMixpanelResponseSchema;
+    | Management.CreateLogStreamResponseContent.Http
+    | Management.CreateLogStreamResponseContent.Eventbridge
+    | Management.CreateLogStreamResponseContent.Eventgrid
+    | Management.CreateLogStreamResponseContent.Datadog
+    | Management.CreateLogStreamResponseContent.Splunk
+    | Management.CreateLogStreamResponseContent.Sumo
+    | Management.CreateLogStreamResponseContent.Segment
+    | Management.CreateLogStreamResponseContent.Mixpanel;
+
+export namespace CreateLogStreamResponseContent {
+    export interface Http extends Management.LogStreamHttpResponseSchema {
+        type: "http";
+    }
+
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+        type: "eventbridge";
+    }
+
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+        type: "eventgrid";
+    }
+
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+        type: "datadog";
+    }
+
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+        type: "splunk";
+    }
+
+    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+        type: "sumo";
+    }
+
+    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+        type: "segment";
+    }
+
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+        type: "mixpanel";
+    }
+}
 
 export interface CreateLogStreamSegmentRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamSegmentEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10493,7 +10789,6 @@ export interface CreateLogStreamSegmentRequestBody {
 export interface CreateLogStreamSplunkRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamSplunkEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10507,7 +10802,6 @@ export interface CreateLogStreamSplunkRequestBody {
 export interface CreateLogStreamSumoRequestBody {
     /** log stream name */
     name?: string | undefined;
-    type: Management.LogStreamSumoEnum;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -10700,8 +10994,7 @@ export interface CreateRoleResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 export interface CreateRuleResponseContent {
@@ -10763,6 +11056,7 @@ export interface CreateSegmentResponseContent {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -11673,6 +11967,7 @@ export type EmailTemplateNameEnum = (typeof EmailTemplateNameEnum)[keyof typeof 
 export const EnabledFeaturesEnum = {
     Scim: "scim",
     UniversalLogout: "universal_logout",
+    DirectorySync: "directory_sync",
 } as const;
 export type EnabledFeaturesEnum = (typeof EnabledFeaturesEnum)[keyof typeof EnabledFeaturesEnum];
 
@@ -11804,8 +12099,12 @@ export interface EventStreamCloudEventConnectionCreatedCloudEvent {
     data: Management.EventStreamCloudEventConnectionCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -11829,14 +12128,48 @@ export interface EventStreamCloudEventConnectionCreatedData {
  * The event content.
  */
 export type EventStreamCloudEventConnectionCreatedObject =
-    | Management.EventStreamCloudEventConnectionCreatedObject0
-    | Management.EventStreamCloudEventConnectionCreatedObject1
-    | Management.EventStreamCloudEventConnectionCreatedObject2
-    | Management.EventStreamCloudEventConnectionCreatedObject3
-    | Management.EventStreamCloudEventConnectionCreatedObject4
-    | Management.EventStreamCloudEventConnectionCreatedObject5
-    | Management.EventStreamCloudEventConnectionCreatedObject6
-    | Management.EventStreamCloudEventConnectionCreatedObject7;
+    | Management.EventStreamCloudEventConnectionCreatedObject.Oidc
+    | Management.EventStreamCloudEventConnectionCreatedObject.Okta
+    | Management.EventStreamCloudEventConnectionCreatedObject.Samlp
+    | Management.EventStreamCloudEventConnectionCreatedObject.Pingfederate
+    | Management.EventStreamCloudEventConnectionCreatedObject.Adfs
+    | Management.EventStreamCloudEventConnectionCreatedObject.Ad
+    | Management.EventStreamCloudEventConnectionCreatedObject.GoogleApps
+    | Management.EventStreamCloudEventConnectionCreatedObject.Waad;
+
+export namespace EventStreamCloudEventConnectionCreatedObject {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionCreatedObject0 {
+        strategy: "oidc";
+    }
+
+    export interface Okta extends Management.EventStreamCloudEventConnectionCreatedObject1 {
+        strategy: "okta";
+    }
+
+    export interface Samlp extends Management.EventStreamCloudEventConnectionCreatedObject2 {
+        strategy: "samlp";
+    }
+
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionCreatedObject3 {
+        strategy: "pingfederate";
+    }
+
+    export interface Adfs extends Management.EventStreamCloudEventConnectionCreatedObject4 {
+        strategy: "adfs";
+    }
+
+    export interface Ad extends Management.EventStreamCloudEventConnectionCreatedObject5 {
+        strategy: "ad";
+    }
+
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionCreatedObject6 {
+        strategy: "google-apps";
+    }
+
+    export interface Waad extends Management.EventStreamCloudEventConnectionCreatedObject7 {
+        strategy: "waad";
+    }
+}
 
 export interface EventStreamCloudEventConnectionCreatedObject0 {
     authentication?: Management.EventStreamCloudEventConnectionCreatedObject0Authentication | undefined;
@@ -11857,7 +12190,6 @@ export interface EventStreamCloudEventConnectionCreatedObject0 {
     options?: Management.EventStreamCloudEventConnectionCreatedObject0Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject0StrategyEnum;
 }
 
 /**
@@ -12182,7 +12514,6 @@ export interface EventStreamCloudEventConnectionCreatedObject1 {
     options?: Management.EventStreamCloudEventConnectionCreatedObject1Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject1StrategyEnum;
 }
 
 /**
@@ -12505,7 +12836,6 @@ export interface EventStreamCloudEventConnectionCreatedObject2 {
     options?: Management.EventStreamCloudEventConnectionCreatedObject2Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject2StrategyEnum;
 }
 
 /**
@@ -12797,7 +13127,6 @@ export interface EventStreamCloudEventConnectionCreatedObject3 {
     options?: Management.EventStreamCloudEventConnectionCreatedObject3Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject3StrategyEnum;
 }
 
 /**
@@ -12974,7 +13303,6 @@ export interface EventStreamCloudEventConnectionCreatedObject4 {
     options?: Management.EventStreamCloudEventConnectionCreatedObject4Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject4StrategyEnum;
 }
 
 /**
@@ -13079,7 +13407,6 @@ export interface EventStreamCloudEventConnectionCreatedObject5 {
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
     realms?: string[] | undefined;
     options?: Management.EventStreamCloudEventConnectionCreatedObject5Options | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject5StrategyEnum;
 }
 
 /**
@@ -13185,7 +13512,6 @@ export interface EventStreamCloudEventConnectionCreatedObject6 {
     options?: Management.EventStreamCloudEventConnectionCreatedObject6Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject6StrategyEnum;
 }
 
 /**
@@ -13308,7 +13634,6 @@ export interface EventStreamCloudEventConnectionCreatedObject7 {
     options?: Management.EventStreamCloudEventConnectionCreatedObject7Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedObject7StrategyEnum;
 }
 
 /**
@@ -13460,14 +13785,48 @@ export type EventStreamCloudEventConnectionCreatedObject7StrategyEnum =
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export type EventStreamCloudEventConnectionCreatedPreviousObject =
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject0
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject1
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject2
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject3
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject4
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject5
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject6
-    | Management.EventStreamCloudEventConnectionCreatedPreviousObject7;
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Oidc
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Okta
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Samlp
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Pingfederate
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Adfs
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Ad
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.GoogleApps
+    | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Waad;
+
+export namespace EventStreamCloudEventConnectionCreatedPreviousObject {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionCreatedPreviousObject0 {
+        strategy: "oidc";
+    }
+
+    export interface Okta extends Management.EventStreamCloudEventConnectionCreatedPreviousObject1 {
+        strategy: "okta";
+    }
+
+    export interface Samlp extends Management.EventStreamCloudEventConnectionCreatedPreviousObject2 {
+        strategy: "samlp";
+    }
+
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionCreatedPreviousObject3 {
+        strategy: "pingfederate";
+    }
+
+    export interface Adfs extends Management.EventStreamCloudEventConnectionCreatedPreviousObject4 {
+        strategy: "adfs";
+    }
+
+    export interface Ad extends Management.EventStreamCloudEventConnectionCreatedPreviousObject5 {
+        strategy: "ad";
+    }
+
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionCreatedPreviousObject6 {
+        strategy: "google-apps";
+    }
+
+    export interface Waad extends Management.EventStreamCloudEventConnectionCreatedPreviousObject7 {
+        strategy: "waad";
+    }
+}
 
 export interface EventStreamCloudEventConnectionCreatedPreviousObject0 {
     authentication?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0Authentication | undefined;
@@ -13488,7 +13847,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject0 {
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject0Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject0StrategyEnum;
 }
 
 /**
@@ -13826,7 +14184,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject1 {
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject1Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject1StrategyEnum;
 }
 
 /**
@@ -14162,7 +14519,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject2 {
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject2Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject2StrategyEnum;
 }
 
 /**
@@ -14459,7 +14815,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject3 {
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject3Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject3StrategyEnum;
 }
 
 /**
@@ -14641,7 +14996,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject4 {
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject4Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject4StrategyEnum;
 }
 
 /**
@@ -14746,7 +15100,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject5 {
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
     realms?: string[] | undefined;
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject5Options | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject5StrategyEnum;
 }
 
 /**
@@ -14852,7 +15205,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject6 {
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject6Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject6StrategyEnum;
 }
 
 /**
@@ -14975,7 +15327,6 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject7 {
     options?: Management.EventStreamCloudEventConnectionCreatedPreviousObject7Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionCreatedPreviousObject7StrategyEnum;
 }
 
 /**
@@ -15156,8 +15507,12 @@ export interface EventStreamCloudEventConnectionDeletedCloudEvent {
     data: Management.EventStreamCloudEventConnectionDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -15181,14 +15536,48 @@ export interface EventStreamCloudEventConnectionDeletedData {
  * The event content.
  */
 export type EventStreamCloudEventConnectionDeletedObject =
-    | Management.EventStreamCloudEventConnectionDeletedObject0
-    | Management.EventStreamCloudEventConnectionDeletedObject1
-    | Management.EventStreamCloudEventConnectionDeletedObject2
-    | Management.EventStreamCloudEventConnectionDeletedObject3
-    | Management.EventStreamCloudEventConnectionDeletedObject4
-    | Management.EventStreamCloudEventConnectionDeletedObject5
-    | Management.EventStreamCloudEventConnectionDeletedObject6
-    | Management.EventStreamCloudEventConnectionDeletedObject7;
+    | Management.EventStreamCloudEventConnectionDeletedObject.Oidc
+    | Management.EventStreamCloudEventConnectionDeletedObject.Okta
+    | Management.EventStreamCloudEventConnectionDeletedObject.Samlp
+    | Management.EventStreamCloudEventConnectionDeletedObject.Pingfederate
+    | Management.EventStreamCloudEventConnectionDeletedObject.Adfs
+    | Management.EventStreamCloudEventConnectionDeletedObject.Ad
+    | Management.EventStreamCloudEventConnectionDeletedObject.GoogleApps
+    | Management.EventStreamCloudEventConnectionDeletedObject.Waad;
+
+export namespace EventStreamCloudEventConnectionDeletedObject {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionDeletedObject0 {
+        strategy: "oidc";
+    }
+
+    export interface Okta extends Management.EventStreamCloudEventConnectionDeletedObject1 {
+        strategy: "okta";
+    }
+
+    export interface Samlp extends Management.EventStreamCloudEventConnectionDeletedObject2 {
+        strategy: "samlp";
+    }
+
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionDeletedObject3 {
+        strategy: "pingfederate";
+    }
+
+    export interface Adfs extends Management.EventStreamCloudEventConnectionDeletedObject4 {
+        strategy: "adfs";
+    }
+
+    export interface Ad extends Management.EventStreamCloudEventConnectionDeletedObject5 {
+        strategy: "ad";
+    }
+
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionDeletedObject6 {
+        strategy: "google-apps";
+    }
+
+    export interface Waad extends Management.EventStreamCloudEventConnectionDeletedObject7 {
+        strategy: "waad";
+    }
+}
 
 export interface EventStreamCloudEventConnectionDeletedObject0 {
     authentication?: Management.EventStreamCloudEventConnectionDeletedObject0Authentication | undefined;
@@ -15209,7 +15598,6 @@ export interface EventStreamCloudEventConnectionDeletedObject0 {
     options?: Management.EventStreamCloudEventConnectionDeletedObject0Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject0StrategyEnum;
 }
 
 /**
@@ -15534,7 +15922,6 @@ export interface EventStreamCloudEventConnectionDeletedObject1 {
     options?: Management.EventStreamCloudEventConnectionDeletedObject1Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject1StrategyEnum;
 }
 
 /**
@@ -15857,7 +16244,6 @@ export interface EventStreamCloudEventConnectionDeletedObject2 {
     options?: Management.EventStreamCloudEventConnectionDeletedObject2Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject2StrategyEnum;
 }
 
 /**
@@ -16149,7 +16535,6 @@ export interface EventStreamCloudEventConnectionDeletedObject3 {
     options?: Management.EventStreamCloudEventConnectionDeletedObject3Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject3StrategyEnum;
 }
 
 /**
@@ -16326,7 +16711,6 @@ export interface EventStreamCloudEventConnectionDeletedObject4 {
     options?: Management.EventStreamCloudEventConnectionDeletedObject4Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject4StrategyEnum;
 }
 
 /**
@@ -16431,7 +16815,6 @@ export interface EventStreamCloudEventConnectionDeletedObject5 {
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
     realms?: string[] | undefined;
     options?: Management.EventStreamCloudEventConnectionDeletedObject5Options | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject5StrategyEnum;
 }
 
 /**
@@ -16537,7 +16920,6 @@ export interface EventStreamCloudEventConnectionDeletedObject6 {
     options?: Management.EventStreamCloudEventConnectionDeletedObject6Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject6StrategyEnum;
 }
 
 /**
@@ -16660,7 +17042,6 @@ export interface EventStreamCloudEventConnectionDeletedObject7 {
     options?: Management.EventStreamCloudEventConnectionDeletedObject7Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedObject7StrategyEnum;
 }
 
 /**
@@ -16812,14 +17193,48 @@ export type EventStreamCloudEventConnectionDeletedObject7StrategyEnum =
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export type EventStreamCloudEventConnectionDeletedPreviousObject =
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject0
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject1
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject2
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject3
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject4
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject5
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject6
-    | Management.EventStreamCloudEventConnectionDeletedPreviousObject7;
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Oidc
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Okta
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Samlp
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Pingfederate
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Adfs
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Ad
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.GoogleApps
+    | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Waad;
+
+export namespace EventStreamCloudEventConnectionDeletedPreviousObject {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionDeletedPreviousObject0 {
+        strategy: "oidc";
+    }
+
+    export interface Okta extends Management.EventStreamCloudEventConnectionDeletedPreviousObject1 {
+        strategy: "okta";
+    }
+
+    export interface Samlp extends Management.EventStreamCloudEventConnectionDeletedPreviousObject2 {
+        strategy: "samlp";
+    }
+
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionDeletedPreviousObject3 {
+        strategy: "pingfederate";
+    }
+
+    export interface Adfs extends Management.EventStreamCloudEventConnectionDeletedPreviousObject4 {
+        strategy: "adfs";
+    }
+
+    export interface Ad extends Management.EventStreamCloudEventConnectionDeletedPreviousObject5 {
+        strategy: "ad";
+    }
+
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionDeletedPreviousObject6 {
+        strategy: "google-apps";
+    }
+
+    export interface Waad extends Management.EventStreamCloudEventConnectionDeletedPreviousObject7 {
+        strategy: "waad";
+    }
+}
 
 export interface EventStreamCloudEventConnectionDeletedPreviousObject0 {
     authentication?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0Authentication | undefined;
@@ -16840,7 +17255,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject0 {
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject0Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject0StrategyEnum;
 }
 
 /**
@@ -17178,7 +17592,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject1 {
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject1Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject1StrategyEnum;
 }
 
 /**
@@ -17514,7 +17927,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject2 {
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject2Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject2StrategyEnum;
 }
 
 /**
@@ -17811,7 +18223,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject3 {
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject3Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject3StrategyEnum;
 }
 
 /**
@@ -17993,7 +18404,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject4 {
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject4Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject4StrategyEnum;
 }
 
 /**
@@ -18098,7 +18508,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject5 {
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
     realms?: string[] | undefined;
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject5Options | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject5StrategyEnum;
 }
 
 /**
@@ -18204,7 +18613,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject6 {
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject6Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject6StrategyEnum;
 }
 
 /**
@@ -18327,7 +18735,6 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject7 {
     options?: Management.EventStreamCloudEventConnectionDeletedPreviousObject7Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionDeletedPreviousObject7StrategyEnum;
 }
 
 /**
@@ -18508,8 +18915,12 @@ export interface EventStreamCloudEventConnectionUpdatedCloudEvent {
     data: Management.EventStreamCloudEventConnectionUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -18533,14 +18944,48 @@ export interface EventStreamCloudEventConnectionUpdatedData {
  * The event content.
  */
 export type EventStreamCloudEventConnectionUpdatedObject =
-    | Management.EventStreamCloudEventConnectionUpdatedObject0
-    | Management.EventStreamCloudEventConnectionUpdatedObject1
-    | Management.EventStreamCloudEventConnectionUpdatedObject2
-    | Management.EventStreamCloudEventConnectionUpdatedObject3
-    | Management.EventStreamCloudEventConnectionUpdatedObject4
-    | Management.EventStreamCloudEventConnectionUpdatedObject5
-    | Management.EventStreamCloudEventConnectionUpdatedObject6
-    | Management.EventStreamCloudEventConnectionUpdatedObject7;
+    | Management.EventStreamCloudEventConnectionUpdatedObject.Oidc
+    | Management.EventStreamCloudEventConnectionUpdatedObject.Okta
+    | Management.EventStreamCloudEventConnectionUpdatedObject.Samlp
+    | Management.EventStreamCloudEventConnectionUpdatedObject.Pingfederate
+    | Management.EventStreamCloudEventConnectionUpdatedObject.Adfs
+    | Management.EventStreamCloudEventConnectionUpdatedObject.Ad
+    | Management.EventStreamCloudEventConnectionUpdatedObject.GoogleApps
+    | Management.EventStreamCloudEventConnectionUpdatedObject.Waad;
+
+export namespace EventStreamCloudEventConnectionUpdatedObject {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionUpdatedObject0 {
+        strategy: "oidc";
+    }
+
+    export interface Okta extends Management.EventStreamCloudEventConnectionUpdatedObject1 {
+        strategy: "okta";
+    }
+
+    export interface Samlp extends Management.EventStreamCloudEventConnectionUpdatedObject2 {
+        strategy: "samlp";
+    }
+
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionUpdatedObject3 {
+        strategy: "pingfederate";
+    }
+
+    export interface Adfs extends Management.EventStreamCloudEventConnectionUpdatedObject4 {
+        strategy: "adfs";
+    }
+
+    export interface Ad extends Management.EventStreamCloudEventConnectionUpdatedObject5 {
+        strategy: "ad";
+    }
+
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionUpdatedObject6 {
+        strategy: "google-apps";
+    }
+
+    export interface Waad extends Management.EventStreamCloudEventConnectionUpdatedObject7 {
+        strategy: "waad";
+    }
+}
 
 export interface EventStreamCloudEventConnectionUpdatedObject0 {
     authentication?: Management.EventStreamCloudEventConnectionUpdatedObject0Authentication | undefined;
@@ -18561,7 +19006,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject0 {
     options?: Management.EventStreamCloudEventConnectionUpdatedObject0Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject0StrategyEnum;
 }
 
 /**
@@ -18886,7 +19330,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject1 {
     options?: Management.EventStreamCloudEventConnectionUpdatedObject1Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject1StrategyEnum;
 }
 
 /**
@@ -19209,7 +19652,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject2 {
     options?: Management.EventStreamCloudEventConnectionUpdatedObject2Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject2StrategyEnum;
 }
 
 /**
@@ -19501,7 +19943,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject3 {
     options?: Management.EventStreamCloudEventConnectionUpdatedObject3Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject3StrategyEnum;
 }
 
 /**
@@ -19678,7 +20119,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject4 {
     options?: Management.EventStreamCloudEventConnectionUpdatedObject4Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject4StrategyEnum;
 }
 
 /**
@@ -19783,7 +20223,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject5 {
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
     realms?: string[] | undefined;
     options?: Management.EventStreamCloudEventConnectionUpdatedObject5Options | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject5StrategyEnum;
 }
 
 /**
@@ -19889,7 +20328,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject6 {
     options?: Management.EventStreamCloudEventConnectionUpdatedObject6Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject6StrategyEnum;
 }
 
 /**
@@ -20012,7 +20450,6 @@ export interface EventStreamCloudEventConnectionUpdatedObject7 {
     options?: Management.EventStreamCloudEventConnectionUpdatedObject7Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedObject7StrategyEnum;
 }
 
 /**
@@ -20164,14 +20601,48 @@ export type EventStreamCloudEventConnectionUpdatedObject7StrategyEnum =
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export type EventStreamCloudEventConnectionUpdatedPreviousObject =
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject0
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject1
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject2
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject3
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject4
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject5
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject6
-    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject7;
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Oidc
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Okta
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Samlp
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Pingfederate
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Adfs
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Ad
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.GoogleApps
+    | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Waad;
+
+export namespace EventStreamCloudEventConnectionUpdatedPreviousObject {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject0 {
+        strategy: "oidc";
+    }
+
+    export interface Okta extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject1 {
+        strategy: "okta";
+    }
+
+    export interface Samlp extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject2 {
+        strategy: "samlp";
+    }
+
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject3 {
+        strategy: "pingfederate";
+    }
+
+    export interface Adfs extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject4 {
+        strategy: "adfs";
+    }
+
+    export interface Ad extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject5 {
+        strategy: "ad";
+    }
+
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject6 {
+        strategy: "google-apps";
+    }
+
+    export interface Waad extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject7 {
+        strategy: "waad";
+    }
+}
 
 export interface EventStreamCloudEventConnectionUpdatedPreviousObject0 {
     authentication?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0Authentication | undefined;
@@ -20192,7 +20663,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject0 {
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject0StrategyEnum;
 }
 
 /**
@@ -20530,7 +21000,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject1 {
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject1StrategyEnum;
 }
 
 /**
@@ -20866,7 +21335,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject2 {
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject2StrategyEnum;
 }
 
 /**
@@ -21163,7 +21631,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject3 {
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject3StrategyEnum;
 }
 
 /**
@@ -21345,7 +21812,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject4 {
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject4StrategyEnum;
 }
 
 /**
@@ -21450,7 +21916,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject5 {
     /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
     realms?: string[] | undefined;
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5Options | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject5StrategyEnum;
 }
 
 /**
@@ -21556,7 +22021,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject6 {
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject6StrategyEnum;
 }
 
 /**
@@ -21679,7 +22143,6 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject7 {
     options?: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7Options | undefined;
     /** Enables showing a button for the connection in the login page (new experience only). If false, it will be usable only by HRD. Defaults to `false`. */
     show_as_button?: boolean | undefined;
-    strategy: Management.EventStreamCloudEventConnectionUpdatedPreviousObject7StrategyEnum;
 }
 
 /**
@@ -21993,8 +22456,12 @@ export interface EventStreamCloudEventGroupCreatedCloudEvent {
     data: Management.EventStreamCloudEventGroupCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22018,9 +22485,23 @@ export interface EventStreamCloudEventGroupCreatedData {
  * The event content.
  */
 export type EventStreamCloudEventGroupCreatedObject =
-    | Management.EventStreamCloudEventGroupCreatedObject0
-    | Management.EventStreamCloudEventGroupCreatedObject1
-    | Management.EventStreamCloudEventGroupCreatedObject2;
+    | Management.EventStreamCloudEventGroupCreatedObject.Connection
+    | Management.EventStreamCloudEventGroupCreatedObject.Organization
+    | Management.EventStreamCloudEventGroupCreatedObject.Tenant;
+
+export namespace EventStreamCloudEventGroupCreatedObject {
+    export interface Connection extends Management.EventStreamCloudEventGroupCreatedObject0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupCreatedObject1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupCreatedObject2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Represents a connection group entity.
@@ -22034,7 +22515,6 @@ export interface EventStreamCloudEventGroupCreatedObject0 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupCreatedObject0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -22058,7 +22538,6 @@ export interface EventStreamCloudEventGroupCreatedObject1 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupCreatedObject1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -22082,7 +22561,6 @@ export interface EventStreamCloudEventGroupCreatedObject2 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupCreatedObject2TypeEnum;
 }
 
 /** The type of the group. */
@@ -22096,9 +22574,23 @@ export type EventStreamCloudEventGroupCreatedObject2TypeEnum =
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export type EventStreamCloudEventGroupCreatedPreviousObject =
-    | Management.EventStreamCloudEventGroupCreatedPreviousObject0
-    | Management.EventStreamCloudEventGroupCreatedPreviousObject1
-    | Management.EventStreamCloudEventGroupCreatedPreviousObject2;
+    | Management.EventStreamCloudEventGroupCreatedPreviousObject.Connection
+    | Management.EventStreamCloudEventGroupCreatedPreviousObject.Organization
+    | Management.EventStreamCloudEventGroupCreatedPreviousObject.Tenant;
+
+export namespace EventStreamCloudEventGroupCreatedPreviousObject {
+    export interface Connection extends Management.EventStreamCloudEventGroupCreatedPreviousObject0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupCreatedPreviousObject1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupCreatedPreviousObject2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Represents a connection group entity.
@@ -22112,7 +22604,6 @@ export interface EventStreamCloudEventGroupCreatedPreviousObject0 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupCreatedPreviousObject0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -22136,7 +22627,6 @@ export interface EventStreamCloudEventGroupCreatedPreviousObject1 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupCreatedPreviousObject1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -22160,7 +22650,6 @@ export interface EventStreamCloudEventGroupCreatedPreviousObject2 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupCreatedPreviousObject2TypeEnum;
 }
 
 /** The type of the group. */
@@ -22201,8 +22690,12 @@ export interface EventStreamCloudEventGroupDeletedCloudEvent {
     data: Management.EventStreamCloudEventGroupDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22226,9 +22719,23 @@ export interface EventStreamCloudEventGroupDeletedData {
  * The event content.
  */
 export type EventStreamCloudEventGroupDeletedObject =
-    | Management.EventStreamCloudEventGroupDeletedObject0
-    | Management.EventStreamCloudEventGroupDeletedObject1
-    | Management.EventStreamCloudEventGroupDeletedObject2;
+    | Management.EventStreamCloudEventGroupDeletedObject.Connection
+    | Management.EventStreamCloudEventGroupDeletedObject.Organization
+    | Management.EventStreamCloudEventGroupDeletedObject.Tenant;
+
+export namespace EventStreamCloudEventGroupDeletedObject {
+    export interface Connection extends Management.EventStreamCloudEventGroupDeletedObject0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupDeletedObject1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupDeletedObject2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Connection group with updated_at timestamp
@@ -22242,7 +22749,6 @@ export interface EventStreamCloudEventGroupDeletedObject0 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupDeletedObject0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -22268,7 +22774,6 @@ export interface EventStreamCloudEventGroupDeletedObject1 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupDeletedObject1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -22294,7 +22799,6 @@ export interface EventStreamCloudEventGroupDeletedObject2 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupDeletedObject2TypeEnum;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
     updated_at: string;
 }
@@ -22310,9 +22814,23 @@ export type EventStreamCloudEventGroupDeletedObject2TypeEnum =
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export type EventStreamCloudEventGroupDeletedPreviousObject =
-    | Management.EventStreamCloudEventGroupDeletedPreviousObject0
-    | Management.EventStreamCloudEventGroupDeletedPreviousObject1
-    | Management.EventStreamCloudEventGroupDeletedPreviousObject2;
+    | Management.EventStreamCloudEventGroupDeletedPreviousObject.Connection
+    | Management.EventStreamCloudEventGroupDeletedPreviousObject.Organization
+    | Management.EventStreamCloudEventGroupDeletedPreviousObject.Tenant;
+
+export namespace EventStreamCloudEventGroupDeletedPreviousObject {
+    export interface Connection extends Management.EventStreamCloudEventGroupDeletedPreviousObject0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupDeletedPreviousObject1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupDeletedPreviousObject2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Connection group with updated_at timestamp
@@ -22326,7 +22844,6 @@ export interface EventStreamCloudEventGroupDeletedPreviousObject0 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupDeletedPreviousObject0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -22352,7 +22869,6 @@ export interface EventStreamCloudEventGroupDeletedPreviousObject1 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupDeletedPreviousObject1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -22378,7 +22894,6 @@ export interface EventStreamCloudEventGroupDeletedPreviousObject2 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupDeletedPreviousObject2TypeEnum;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
     updated_at: string;
 }
@@ -22421,8 +22936,12 @@ export interface EventStreamCloudEventGroupMemberAddedCloudEvent {
     data: Management.EventStreamCloudEventGroupMemberAddedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22454,9 +22973,23 @@ export interface EventStreamCloudEventGroupMemberAddedObject {
  * The group the member belongs to.
  */
 export type EventStreamCloudEventGroupMemberAddedObjectGroup =
-    | Management.EventStreamCloudEventGroupMemberAddedObjectGroup0
-    | Management.EventStreamCloudEventGroupMemberAddedObjectGroup1
-    | Management.EventStreamCloudEventGroupMemberAddedObjectGroup2;
+    | Management.EventStreamCloudEventGroupMemberAddedObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupMemberAddedObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupMemberAddedObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupMemberAddedObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -22466,7 +22999,6 @@ export interface EventStreamCloudEventGroupMemberAddedObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberAddedObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -22486,7 +23018,6 @@ export interface EventStreamCloudEventGroupMemberAddedObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberAddedObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -22506,7 +23037,6 @@ export interface EventStreamCloudEventGroupMemberAddedObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberAddedObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -22520,14 +23050,23 @@ export type EventStreamCloudEventGroupMemberAddedObjectGroup2TypeEnum =
  * The member that is a part of the group.
  */
 export type EventStreamCloudEventGroupMemberAddedObjectMember =
-    | Management.EventStreamCloudEventGroupMemberAddedObjectMember0
-    | Management.EventStreamCloudEventGroupMemberAddedObjectMember1;
+    | Management.EventStreamCloudEventGroupMemberAddedObjectMember.User
+    | Management.EventStreamCloudEventGroupMemberAddedObjectMember.Connection;
+
+export namespace EventStreamCloudEventGroupMemberAddedObjectMember {
+    export interface User extends Management.EventStreamCloudEventGroupMemberAddedObjectMember0 {
+        member_type: "user";
+    }
+
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedObjectMember1 {
+        member_type: "connection";
+    }
+}
 
 /**
  * A group member of member_type user
  */
 export interface EventStreamCloudEventGroupMemberAddedObjectMember0 {
-    member_type: Management.EventStreamCloudEventGroupMemberAddedObjectMember0MemberTypeEnum;
     /** The user's unique identifier */
     id: string;
 }
@@ -22543,7 +23082,6 @@ export type EventStreamCloudEventGroupMemberAddedObjectMember0MemberTypeEnum =
  * A group member of member_type group
  */
 export interface EventStreamCloudEventGroupMemberAddedObjectMember1 {
-    member_type: Management.EventStreamCloudEventGroupMemberAddedObjectMember1MemberTypeEnum;
     /** The connection member's unique identifier */
     id: string;
     /** The type of the connection */
@@ -22571,9 +23109,23 @@ export interface EventStreamCloudEventGroupMemberAddedPreviousObject {
  * The group the member belongs to.
  */
 export type EventStreamCloudEventGroupMemberAddedPreviousObjectGroup =
-    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0
-    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1
-    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2;
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupMemberAddedPreviousObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -22583,7 +23135,6 @@ export interface EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -22603,7 +23154,6 @@ export interface EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -22623,7 +23173,6 @@ export interface EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -22637,14 +23186,23 @@ export type EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2TypeEnum =
  * The member that is a part of the group.
  */
 export type EventStreamCloudEventGroupMemberAddedPreviousObjectMember =
-    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember0
-    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember1;
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember.User
+    | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember.Connection;
+
+export namespace EventStreamCloudEventGroupMemberAddedPreviousObjectMember {
+    export interface User extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember0 {
+        member_type: "user";
+    }
+
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember1 {
+        member_type: "connection";
+    }
+}
 
 /**
  * A group member of member_type user
  */
 export interface EventStreamCloudEventGroupMemberAddedPreviousObjectMember0 {
-    member_type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember0MemberTypeEnum;
     /** The user's unique identifier */
     id: string;
 }
@@ -22660,7 +23218,6 @@ export type EventStreamCloudEventGroupMemberAddedPreviousObjectMember0MemberType
  * A group member of member_type group
  */
 export interface EventStreamCloudEventGroupMemberAddedPreviousObjectMember1 {
-    member_type: Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember1MemberTypeEnum;
     /** The connection member's unique identifier */
     id: string;
     /** The type of the connection */
@@ -22707,8 +23264,12 @@ export interface EventStreamCloudEventGroupMemberDeletedCloudEvent {
     data: Management.EventStreamCloudEventGroupMemberDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -22740,9 +23301,23 @@ export interface EventStreamCloudEventGroupMemberDeletedObject {
  * The group the member belongs to.
  */
 export type EventStreamCloudEventGroupMemberDeletedObjectGroup =
-    | Management.EventStreamCloudEventGroupMemberDeletedObjectGroup0
-    | Management.EventStreamCloudEventGroupMemberDeletedObjectGroup1
-    | Management.EventStreamCloudEventGroupMemberDeletedObjectGroup2;
+    | Management.EventStreamCloudEventGroupMemberDeletedObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupMemberDeletedObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupMemberDeletedObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupMemberDeletedObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -22752,7 +23327,6 @@ export interface EventStreamCloudEventGroupMemberDeletedObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberDeletedObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -22772,7 +23346,6 @@ export interface EventStreamCloudEventGroupMemberDeletedObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberDeletedObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -22792,7 +23365,6 @@ export interface EventStreamCloudEventGroupMemberDeletedObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberDeletedObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -22806,14 +23378,23 @@ export type EventStreamCloudEventGroupMemberDeletedObjectGroup2TypeEnum =
  * The member that is a part of the group.
  */
 export type EventStreamCloudEventGroupMemberDeletedObjectMember =
-    | Management.EventStreamCloudEventGroupMemberDeletedObjectMember0
-    | Management.EventStreamCloudEventGroupMemberDeletedObjectMember1;
+    | Management.EventStreamCloudEventGroupMemberDeletedObjectMember.User
+    | Management.EventStreamCloudEventGroupMemberDeletedObjectMember.Connection;
+
+export namespace EventStreamCloudEventGroupMemberDeletedObjectMember {
+    export interface User extends Management.EventStreamCloudEventGroupMemberDeletedObjectMember0 {
+        member_type: "user";
+    }
+
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedObjectMember1 {
+        member_type: "connection";
+    }
+}
 
 /**
  * A group member of member_type user
  */
 export interface EventStreamCloudEventGroupMemberDeletedObjectMember0 {
-    member_type: Management.EventStreamCloudEventGroupMemberDeletedObjectMember0MemberTypeEnum;
     /** The user's unique identifier */
     id: string;
 }
@@ -22829,7 +23410,6 @@ export type EventStreamCloudEventGroupMemberDeletedObjectMember0MemberTypeEnum =
  * A group member of member_type group
  */
 export interface EventStreamCloudEventGroupMemberDeletedObjectMember1 {
-    member_type: Management.EventStreamCloudEventGroupMemberDeletedObjectMember1MemberTypeEnum;
     /** The connection member's unique identifier */
     id: string;
     /** The type of the connection */
@@ -22857,9 +23437,23 @@ export interface EventStreamCloudEventGroupMemberDeletedPreviousObject {
  * The group the member belongs to.
  */
 export type EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup =
-    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0
-    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1
-    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2;
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -22869,7 +23463,6 @@ export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -22889,7 +23482,6 @@ export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -22909,7 +23501,6 @@ export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -22923,14 +23514,23 @@ export type EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2TypeEnum 
  * The member that is a part of the group.
  */
 export type EventStreamCloudEventGroupMemberDeletedPreviousObjectMember =
-    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0
-    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1;
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember.User
+    | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember.Connection;
+
+export namespace EventStreamCloudEventGroupMemberDeletedPreviousObjectMember {
+    export interface User extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0 {
+        member_type: "user";
+    }
+
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1 {
+        member_type: "connection";
+    }
+}
 
 /**
  * A group member of member_type user
  */
 export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0 {
-    member_type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0MemberTypeEnum;
     /** The user's unique identifier */
     id: string;
 }
@@ -22946,7 +23546,6 @@ export type EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0MemberTy
  * A group member of member_type group
  */
 export interface EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1 {
-    member_type: Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1MemberTypeEnum;
     /** The connection member's unique identifier */
     id: string;
     /** The type of the connection */
@@ -22993,8 +23592,12 @@ export interface EventStreamCloudEventGroupRoleAssignedCloudEvent {
     data: Management.EventStreamCloudEventGroupRoleAssignedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23028,9 +23631,23 @@ export interface EventStreamCloudEventGroupRoleAssignedObject {
  * The group the role is assigned to.
  */
 export type EventStreamCloudEventGroupRoleAssignedObjectGroup =
-    | Management.EventStreamCloudEventGroupRoleAssignedObjectGroup0
-    | Management.EventStreamCloudEventGroupRoleAssignedObjectGroup1
-    | Management.EventStreamCloudEventGroupRoleAssignedObjectGroup2;
+    | Management.EventStreamCloudEventGroupRoleAssignedObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupRoleAssignedObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupRoleAssignedObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupRoleAssignedObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -23040,7 +23657,6 @@ export interface EventStreamCloudEventGroupRoleAssignedObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleAssignedObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -23060,7 +23676,6 @@ export interface EventStreamCloudEventGroupRoleAssignedObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleAssignedObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -23080,7 +23695,6 @@ export interface EventStreamCloudEventGroupRoleAssignedObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleAssignedObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -23114,9 +23728,23 @@ export interface EventStreamCloudEventGroupRoleAssignedPreviousObject {
  * The group the role is assigned to.
  */
 export type EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup =
-    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0
-    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1
-    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2;
+    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -23126,7 +23754,6 @@ export interface EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -23146,7 +23773,6 @@ export interface EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -23166,7 +23792,6 @@ export interface EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -23217,8 +23842,12 @@ export interface EventStreamCloudEventGroupRoleDeletedCloudEvent {
     data: Management.EventStreamCloudEventGroupRoleDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23252,9 +23881,23 @@ export interface EventStreamCloudEventGroupRoleDeletedObject {
  * The group the role is removed from.
  */
 export type EventStreamCloudEventGroupRoleDeletedObjectGroup =
-    | Management.EventStreamCloudEventGroupRoleDeletedObjectGroup0
-    | Management.EventStreamCloudEventGroupRoleDeletedObjectGroup1
-    | Management.EventStreamCloudEventGroupRoleDeletedObjectGroup2;
+    | Management.EventStreamCloudEventGroupRoleDeletedObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupRoleDeletedObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupRoleDeletedObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupRoleDeletedObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -23264,7 +23907,6 @@ export interface EventStreamCloudEventGroupRoleDeletedObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleDeletedObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -23284,7 +23926,6 @@ export interface EventStreamCloudEventGroupRoleDeletedObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleDeletedObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -23304,7 +23945,6 @@ export interface EventStreamCloudEventGroupRoleDeletedObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleDeletedObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -23336,9 +23976,23 @@ export interface EventStreamCloudEventGroupRoleDeletedPreviousObject {
  * The group the role is assigned to.
  */
 export type EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup =
-    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0
-    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1
-    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2;
+    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup.Connection
+    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup.Organization
+    | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -23348,7 +24002,6 @@ export interface EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -23368,7 +24021,6 @@ export interface EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -23388,7 +24040,6 @@ export interface EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -23439,8 +24090,12 @@ export interface EventStreamCloudEventGroupUpdatedCloudEvent {
     data: Management.EventStreamCloudEventGroupUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23464,9 +24119,23 @@ export interface EventStreamCloudEventGroupUpdatedData {
  * The event content.
  */
 export type EventStreamCloudEventGroupUpdatedObject =
-    | Management.EventStreamCloudEventGroupUpdatedObject0
-    | Management.EventStreamCloudEventGroupUpdatedObject1
-    | Management.EventStreamCloudEventGroupUpdatedObject2;
+    | Management.EventStreamCloudEventGroupUpdatedObject.Connection
+    | Management.EventStreamCloudEventGroupUpdatedObject.Organization
+    | Management.EventStreamCloudEventGroupUpdatedObject.Tenant;
+
+export namespace EventStreamCloudEventGroupUpdatedObject {
+    export interface Connection extends Management.EventStreamCloudEventGroupUpdatedObject0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupUpdatedObject1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupUpdatedObject2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Connection group with updated_at timestamp
@@ -23480,7 +24149,6 @@ export interface EventStreamCloudEventGroupUpdatedObject0 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupUpdatedObject0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -23506,7 +24174,6 @@ export interface EventStreamCloudEventGroupUpdatedObject1 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupUpdatedObject1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -23532,7 +24199,6 @@ export interface EventStreamCloudEventGroupUpdatedObject2 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupUpdatedObject2TypeEnum;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
     updated_at: string;
 }
@@ -23548,9 +24214,23 @@ export type EventStreamCloudEventGroupUpdatedObject2TypeEnum =
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export type EventStreamCloudEventGroupUpdatedPreviousObject =
-    | Management.EventStreamCloudEventGroupUpdatedPreviousObject0
-    | Management.EventStreamCloudEventGroupUpdatedPreviousObject1
-    | Management.EventStreamCloudEventGroupUpdatedPreviousObject2;
+    | Management.EventStreamCloudEventGroupUpdatedPreviousObject.Connection
+    | Management.EventStreamCloudEventGroupUpdatedPreviousObject.Organization
+    | Management.EventStreamCloudEventGroupUpdatedPreviousObject.Tenant;
+
+export namespace EventStreamCloudEventGroupUpdatedPreviousObject {
+    export interface Connection extends Management.EventStreamCloudEventGroupUpdatedPreviousObject0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventGroupUpdatedPreviousObject1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventGroupUpdatedPreviousObject2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Connection group with updated_at timestamp
@@ -23564,7 +24244,6 @@ export interface EventStreamCloudEventGroupUpdatedPreviousObject0 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupUpdatedPreviousObject0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -23590,7 +24269,6 @@ export interface EventStreamCloudEventGroupUpdatedPreviousObject1 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupUpdatedPreviousObject1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
@@ -23616,7 +24294,6 @@ export interface EventStreamCloudEventGroupUpdatedPreviousObject2 {
     external_id?: string | undefined;
     /** Date and time when this entity was created (ISO_8601 format). */
     created_at: string;
-    type: Management.EventStreamCloudEventGroupUpdatedPreviousObject2TypeEnum;
     /** Date and time when this entity was last updated/modified (ISO_8601 format). */
     updated_at: string;
 }
@@ -23674,8 +24351,12 @@ export interface EventStreamCloudEventOrgConnectionAddedCloudEvent {
     data: Management.EventStreamCloudEventOrgConnectionAddedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23721,6 +24402,9 @@ export interface EventStreamCloudEventOrgConnectionAddedObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -23773,6 +24457,39 @@ export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel
     (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationAccessLevel3Enum];
 
 /**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedObjectOrganizationMemberAccessLevel3Enum];
+
+/**
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export interface EventStreamCloudEventOrgConnectionAddedPreviousObject {
@@ -23798,6 +24515,9 @@ export interface EventStreamCloudEventOrgConnectionAddedPreviousObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -23849,6 +24569,39 @@ export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAc
 export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum =
     (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationAccessLevel3Enum];
 
+/**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionAddedPreviousObjectOrganizationMemberAccessLevel3Enum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgConnectionAddedTypeEnum = {
     OrganizationConnectionAdded: "organization.connection.added",
@@ -23880,8 +24633,12 @@ export interface EventStreamCloudEventOrgConnectionRemovedCloudEvent {
     data: Management.EventStreamCloudEventOrgConnectionRemovedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -23978,8 +24735,12 @@ export interface EventStreamCloudEventOrgConnectionUpdatedCloudEvent {
     data: Management.EventStreamCloudEventOrgConnectionUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24025,6 +24786,9 @@ export interface EventStreamCloudEventOrgConnectionUpdatedObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -24077,6 +24841,39 @@ export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLev
     (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationAccessLevel3Enum];
 
 /**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedObjectOrganizationMemberAccessLevel3Enum];
+
+/**
  * The event content as it was prior to the change described by this event, when applicable.
  */
 export interface EventStreamCloudEventOrgConnectionUpdatedPreviousObject {
@@ -24102,6 +24899,9 @@ export interface EventStreamCloudEventOrgConnectionUpdatedPreviousObject {
     is_enabled?: boolean | undefined;
     organization_access_level?:
         | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel
+        | undefined;
+    organization_member_access_level?:
+        | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel
         | undefined;
 }
 
@@ -24153,6 +24953,39 @@ export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganization
 export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum =
     (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationAccessLevel3Enum];
 
+/**
+ * The organization member access level granted to the connection for an organization.
+ */
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel =
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum
+    | Management.EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum;
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum = {
+    None: "none",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel0Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum = {
+    Readonly: "readonly",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel1Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum = {
+    Limited: "limited",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel2Enum];
+
+export const EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum = {
+    Full: "full",
+} as const;
+export type EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum =
+    (typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum)[keyof typeof EventStreamCloudEventOrgConnectionUpdatedPreviousObjectOrganizationMemberAccessLevel3Enum];
+
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgConnectionUpdatedTypeEnum = {
     OrganizationConnectionUpdated: "organization.connection.updated",
@@ -24184,8 +25017,12 @@ export interface EventStreamCloudEventOrgCreatedCloudEvent {
     data: Management.EventStreamCloudEventOrgCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24312,8 +25149,12 @@ export interface EventStreamCloudEventOrgDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24400,8 +25241,12 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedCloudEvent {
     data: Management.EventStreamCloudEventOrgGroupRoleAssignedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24436,9 +25281,23 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedObject {
  * The group the role is assigned to.
  */
 export type EventStreamCloudEventOrgGroupRoleAssignedObjectGroup =
-    | Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup0
-    | Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup1
-    | Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup2;
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup.Connection
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup.Organization
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventOrgGroupRoleAssignedObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -24448,7 +25307,6 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -24468,7 +25326,6 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -24488,7 +25345,6 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -24531,9 +25387,23 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObject {
  * The group the role is assigned to.
  */
 export type EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup =
-    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0
-    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1
-    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2;
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup.Connection
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup.Organization
+    | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -24543,7 +25413,6 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -24563,7 +25432,6 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -24583,7 +25451,6 @@ export interface EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -24642,8 +25509,12 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgGroupRoleDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24678,9 +25549,23 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedObject {
  * The group the role is removed from.
  */
 export type EventStreamCloudEventOrgGroupRoleDeletedObjectGroup =
-    | Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup0
-    | Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup1
-    | Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup2;
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup.Connection
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup.Organization
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventOrgGroupRoleDeletedObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -24690,7 +25575,6 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -24710,7 +25594,6 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -24730,7 +25613,6 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -24771,9 +25653,23 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObject {
  * The group the role is assigned to.
  */
 export type EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup =
-    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0
-    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1
-    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2;
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup.Connection
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup.Organization
+    | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup.Tenant;
+
+export namespace EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup {
+    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0 {
+        type: "connection";
+    }
+
+    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1 {
+        type: "organization";
+    }
+
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2 {
+        type: "tenant";
+    }
+}
 
 /**
  * Reference to a connection group
@@ -24783,7 +25679,6 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0TypeEnum;
     /** The connection ID associated with the group. */
     connection_id: string;
 }
@@ -24803,7 +25698,6 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1TypeEnum;
     /** The organization ID associated with the group. */
     organization_id: string;
 }
@@ -24823,7 +25717,6 @@ export interface EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2 {
     id: string;
     /** The external identifier for the group. */
     external_id?: string | undefined;
-    type: Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2TypeEnum;
 }
 
 /** The type of the group. */
@@ -24882,8 +25775,12 @@ export interface EventStreamCloudEventOrgMemberAddedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberAddedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -24990,8 +25887,12 @@ export interface EventStreamCloudEventOrgMemberDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -25098,8 +25999,12 @@ export interface EventStreamCloudEventOrgMemberRoleAssignedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberRoleAssignedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -25224,8 +26129,12 @@ export interface EventStreamCloudEventOrgMemberRoleDeletedCloudEvent {
     data: Management.EventStreamCloudEventOrgMemberRoleDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -25350,8 +26259,12 @@ export interface EventStreamCloudEventOrgUpdatedCloudEvent {
     data: Management.EventStreamCloudEventOrgUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -25485,8 +26398,12 @@ export interface EventStreamCloudEventUserCreatedCloudEvent {
     data: Management.EventStreamCloudEventUserCreatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -26277,8 +27194,12 @@ export interface EventStreamCloudEventUserDeletedCloudEvent {
     data: Management.EventStreamCloudEventUserDeletedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -27071,8 +27992,12 @@ export interface EventStreamCloudEventUserUpdatedCloudEvent {
     data: Management.EventStreamCloudEventUserUpdatedData;
     /** The auth0 tenant ID to which the event is associated. */
     a0tenant: string;
-    /** The auth0 event stream ID of the stream the event was delivered on. */
-    a0stream: string;
+    /**
+     * The auth0 event stream ID of the stream the event was delivered on.
+     * Present when the event is delivered via an event stream; omitted when
+     * events are retrieved via the Events API (GET /api/v2/events).
+     */
+    a0stream?: string | undefined;
     a0purpose?: Management.EventStreamCloudEventA0PurposeEnum | undefined;
 }
 
@@ -27903,8 +28828,18 @@ export type EventStreamDeliveryStatusEnum =
     (typeof EventStreamDeliveryStatusEnum)[keyof typeof EventStreamDeliveryStatusEnum];
 
 export type EventStreamDestinationPatch =
-    | Management.EventStreamWebhookDestination
-    | Management.EventStreamActionDestination;
+    | Management.EventStreamDestinationPatch.Webhook
+    | Management.EventStreamDestinationPatch.Action;
+
+export namespace EventStreamDestinationPatch {
+    export interface Webhook extends Management.EventStreamWebhookDestination {
+        type: "webhook";
+    }
+
+    export interface Action extends Management.EventStreamActionDestination {
+        type: "action";
+    }
+}
 
 /** AWS Region for EventBridge destination. */
 export const EventStreamEventBridgeAwsRegionEnum = {
@@ -28242,15 +29177,28 @@ export type EventStreamTestEventTypeEnum =
     (typeof EventStreamTestEventTypeEnum)[keyof typeof EventStreamTestEventTypeEnum];
 
 export type EventStreamWebhookAuthorizationResponse =
-    | Management.EventStreamWebhookBasicAuth
-    | Management.EventStreamWebhookBearerAuth
-    | Management.EventStreamWebhookCustomHeaderAuth;
+    | Management.EventStreamWebhookAuthorizationResponse.Basic
+    | Management.EventStreamWebhookAuthorizationResponse.Bearer
+    | Management.EventStreamWebhookAuthorizationResponse.CustomHeader;
+
+export namespace EventStreamWebhookAuthorizationResponse {
+    export interface Basic extends Management.EventStreamWebhookBasicAuth {
+        method: "basic";
+    }
+
+    export interface Bearer extends Management.EventStreamWebhookBearerAuth {
+        method: "bearer";
+    }
+
+    export interface CustomHeader extends Management.EventStreamWebhookCustomHeaderAuth {
+        method: "custom_header";
+    }
+}
 
 /**
  * Basic Authorization for HTTP requests (e.g., 'Basic credentials').
  */
 export interface EventStreamWebhookBasicAuth {
-    method: Management.EventStreamWebhookBasicAuthMethodEnum;
     /** Username */
     username: string;
 }
@@ -28265,9 +29213,7 @@ export type EventStreamWebhookBasicAuthMethodEnum =
 /**
  * Bearer Authorization for HTTP requests (e.g., 'Bearer token').
  */
-export interface EventStreamWebhookBearerAuth {
-    method: Management.EventStreamWebhookBearerAuthMethodEnum;
-}
+export interface EventStreamWebhookBearerAuth {}
 
 /** Type of authorization. */
 export const EventStreamWebhookBearerAuthMethodEnum = {
@@ -28289,7 +29235,6 @@ export interface EventStreamWebhookConfiguration {
  * Custom header authorization for HTTP requests.
  */
 export interface EventStreamWebhookCustomHeaderAuth {
-    method: Management.EventStreamWebhookCustomHeaderAuthMethodEnum;
     /** HTTP header name. */
     header_key: string;
 }
@@ -28362,7 +29307,7 @@ export const ExperimentStatusEnum = {
 } as const;
 export type ExperimentStatusEnum = (typeof ExperimentStatusEnum)[keyof typeof ExperimentStatusEnum];
 
-/** The target status to transition the experiment to. */
+/** Target lifecycle status. Transitions the experiment through its lifecycle (draft → active, draft → archived, active → paused, paused → active, active/paused → completed, paused/completed → archived). Activation runs full readiness validation and snapshots the configuration. When combined with field edits, the edits apply first and the transition sees the updated config. */
 export const ExperimentTransitionStatusEnum = {
     Active: "active",
     Paused: "paused",
@@ -28536,14 +29481,23 @@ export type FlowAction =
     | Management.FlowActionZapier;
 
 export type FlowActionActivecampaign =
-    | Management.FlowActionActivecampaignListContacts
-    | Management.FlowActionActivecampaignUpsertContact;
+    | Management.FlowActionActivecampaign.ListContacts
+    | Management.FlowActionActivecampaign.UpsertContact;
+
+export namespace FlowActionActivecampaign {
+    export interface ListContacts extends Management.FlowActionActivecampaignListContacts {
+        action: "LIST_CONTACTS";
+    }
+
+    export interface UpsertContact extends Management.FlowActionActivecampaignUpsertContact {
+        action: "UPSERT_CONTACT";
+    }
+}
 
 export interface FlowActionActivecampaignListContacts {
     id: string;
     alias?: string | undefined;
     type: FlowActionActivecampaignListContacts.Type;
-    action: FlowActionActivecampaignListContacts.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionActivecampaignListContactsParams;
@@ -28554,10 +29508,6 @@ export namespace FlowActionActivecampaignListContacts {
         Activecampaign: "ACTIVECAMPAIGN",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        ListContacts: "LIST_CONTACTS",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionActivecampaignListContactsParams {
@@ -28569,7 +29519,6 @@ export interface FlowActionActivecampaignUpsertContact {
     id: string;
     alias?: string | undefined;
     type: FlowActionActivecampaignUpsertContact.Type;
-    action: FlowActionActivecampaignUpsertContact.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionActivecampaignUpsertContactParams;
@@ -28580,10 +29529,6 @@ export namespace FlowActionActivecampaignUpsertContact {
         Activecampaign: "ACTIVECAMPAIGN",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        UpsertContact: "UPSERT_CONTACT",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionActivecampaignUpsertContactParams {
@@ -28598,15 +29543,28 @@ export interface FlowActionActivecampaignUpsertContactParams {
 export type FlowActionActivecampaignUpsertContactParamsCustomFields = Record<string, unknown>;
 
 export type FlowActionAirtable =
-    | Management.FlowActionAirtableCreateRecord
-    | Management.FlowActionAirtableListRecords
-    | Management.FlowActionAirtableUpdateRecord;
+    | Management.FlowActionAirtable.CreateRecord
+    | Management.FlowActionAirtable.ListRecords
+    | Management.FlowActionAirtable.UpdateRecord;
+
+export namespace FlowActionAirtable {
+    export interface CreateRecord extends Management.FlowActionAirtableCreateRecord {
+        action: "CREATE_RECORD";
+    }
+
+    export interface ListRecords extends Management.FlowActionAirtableListRecords {
+        action: "LIST_RECORDS";
+    }
+
+    export interface UpdateRecord extends Management.FlowActionAirtableUpdateRecord {
+        action: "UPDATE_RECORD";
+    }
+}
 
 export interface FlowActionAirtableCreateRecord {
     id: string;
     alias?: string | undefined;
     type: FlowActionAirtableCreateRecord.Type;
-    action: FlowActionAirtableCreateRecord.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAirtableCreateRecordParams;
@@ -28617,10 +29575,6 @@ export namespace FlowActionAirtableCreateRecord {
         Airtable: "AIRTABLE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        CreateRecord: "CREATE_RECORD",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAirtableCreateRecordParams {
@@ -28636,7 +29590,6 @@ export interface FlowActionAirtableListRecords {
     id: string;
     alias?: string | undefined;
     type: FlowActionAirtableListRecords.Type;
-    action: FlowActionAirtableListRecords.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAirtableListRecordsParams;
@@ -28647,10 +29600,6 @@ export namespace FlowActionAirtableListRecords {
         Airtable: "AIRTABLE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        ListRecords: "LIST_RECORDS",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAirtableListRecordsParams {
@@ -28665,7 +29614,6 @@ export interface FlowActionAirtableUpdateRecord {
     id: string;
     alias?: string | undefined;
     type: FlowActionAirtableUpdateRecord.Type;
-    action: FlowActionAirtableUpdateRecord.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAirtableUpdateRecordParams;
@@ -28676,10 +29624,6 @@ export namespace FlowActionAirtableUpdateRecord {
         Airtable: "AIRTABLE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        UpdateRecord: "UPDATE_RECORD",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAirtableUpdateRecordParams {
@@ -28693,19 +29637,48 @@ export interface FlowActionAirtableUpdateRecordParams {
 export type FlowActionAirtableUpdateRecordParamsFields = Record<string, unknown>;
 
 export type FlowActionAuth0 =
-    | Management.FlowActionAuth0CreateUser
-    | Management.FlowActionAuth0GetUser
-    | Management.FlowActionAuth0UpdateUser
-    | Management.FlowActionAuth0SendRequest
-    | Management.FlowActionAuth0SendEmail
-    | Management.FlowActionAuth0SendSms
-    | Management.FlowActionAuth0MakeCall;
+    | Management.FlowActionAuth0.CreateUser
+    | Management.FlowActionAuth0.GetUser
+    | Management.FlowActionAuth0.UpdateUser
+    | Management.FlowActionAuth0.SendRequest
+    | Management.FlowActionAuth0.SendEmail
+    | Management.FlowActionAuth0.SendSms
+    | Management.FlowActionAuth0.MakeCall;
+
+export namespace FlowActionAuth0 {
+    export interface CreateUser extends Management.FlowActionAuth0CreateUser {
+        action: "CREATE_USER";
+    }
+
+    export interface GetUser extends Management.FlowActionAuth0GetUser {
+        action: "GET_USER";
+    }
+
+    export interface UpdateUser extends Management.FlowActionAuth0UpdateUser {
+        action: "UPDATE_USER";
+    }
+
+    export interface SendRequest extends Management.FlowActionAuth0SendRequest {
+        action: "SEND_REQUEST";
+    }
+
+    export interface SendEmail extends Management.FlowActionAuth0SendEmail {
+        action: "SEND_EMAIL";
+    }
+
+    export interface SendSms extends Management.FlowActionAuth0SendSms {
+        action: "SEND_SMS";
+    }
+
+    export interface MakeCall extends Management.FlowActionAuth0MakeCall {
+        action: "MAKE_CALL";
+    }
+}
 
 export interface FlowActionAuth0CreateUser {
     id: string;
     alias?: string | undefined;
     type: FlowActionAuth0CreateUser.Type;
-    action: FlowActionAuth0CreateUser.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0CreateUserParams;
@@ -28716,10 +29689,6 @@ export namespace FlowActionAuth0CreateUser {
         Auth0: "AUTH0",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        CreateUser: "CREATE_USER",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0CreateUserParams {
@@ -28733,7 +29702,6 @@ export interface FlowActionAuth0GetUser {
     id: string;
     alias?: string | undefined;
     type: FlowActionAuth0GetUser.Type;
-    action: FlowActionAuth0GetUser.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0GetUserParams;
@@ -28744,10 +29712,6 @@ export namespace FlowActionAuth0GetUser {
         Auth0: "AUTH0",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        GetUser: "GET_USER",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0GetUserParams {
@@ -28759,7 +29723,6 @@ export interface FlowActionAuth0MakeCall {
     id: string;
     alias?: string | undefined;
     type: FlowActionAuth0MakeCall.Type;
-    action: FlowActionAuth0MakeCall.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0MakeCallParams;
@@ -28770,10 +29733,6 @@ export namespace FlowActionAuth0MakeCall {
         Auth0: "AUTH0",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        MakeCall: "MAKE_CALL",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0MakeCallParams {
@@ -28789,7 +29748,6 @@ export interface FlowActionAuth0SendEmail {
     id: string;
     alias?: string | undefined;
     type: FlowActionAuth0SendEmail.Type;
-    action: FlowActionAuth0SendEmail.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0SendEmailParams;
@@ -28800,10 +29758,6 @@ export namespace FlowActionAuth0SendEmail {
         Auth0: "AUTH0",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SendEmail: "SEND_EMAIL",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0SendEmailParams {
@@ -28827,7 +29781,6 @@ export interface FlowActionAuth0SendRequest {
     id: string;
     alias?: string | undefined;
     type: FlowActionAuth0SendRequest.Type;
-    action: FlowActionAuth0SendRequest.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0SendRequestParams;
@@ -28838,10 +29791,6 @@ export namespace FlowActionAuth0SendRequest {
         Auth0: "AUTH0",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SendRequest: "SEND_REQUEST",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0SendRequestParams {
@@ -28888,7 +29837,6 @@ export interface FlowActionAuth0SendSms {
     id: string;
     alias?: string | undefined;
     type: FlowActionAuth0SendSms.Type;
-    action: FlowActionAuth0SendSms.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0SendSmsParams;
@@ -28899,10 +29847,6 @@ export namespace FlowActionAuth0SendSms {
         Auth0: "AUTH0",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SendSms: "SEND_SMS",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0SendSmsParams {
@@ -28918,7 +29862,6 @@ export interface FlowActionAuth0UpdateUser {
     id: string;
     alias?: string | undefined;
     type: FlowActionAuth0UpdateUser.Type;
-    action: FlowActionAuth0UpdateUser.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionAuth0UpdateUserParams;
@@ -28929,10 +29872,6 @@ export namespace FlowActionAuth0UpdateUser {
         Auth0: "AUTH0",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        UpdateUser: "UPDATE_USER",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionAuth0UpdateUserParams {
@@ -28975,13 +29914,22 @@ export interface FlowActionBigqueryInsertRowsParams {
 
 export type FlowActionBigqueryInsertRowsParamsData = Record<string, unknown>;
 
-export type FlowActionClearbit = Management.FlowActionClearbitFindPerson | Management.FlowActionClearbitFindCompany;
+export type FlowActionClearbit = Management.FlowActionClearbit.FindPerson | Management.FlowActionClearbit.FindCompany;
+
+export namespace FlowActionClearbit {
+    export interface FindPerson extends Management.FlowActionClearbitFindPerson {
+        action: "FIND_PERSON";
+    }
+
+    export interface FindCompany extends Management.FlowActionClearbitFindCompany {
+        action: "FIND_COMPANY";
+    }
+}
 
 export interface FlowActionClearbitFindCompany {
     id: string;
     alias?: string | undefined;
     type: FlowActionClearbitFindCompany.Type;
-    action: FlowActionClearbitFindCompany.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionClearbitFindCompanyParams;
@@ -28992,10 +29940,6 @@ export namespace FlowActionClearbitFindCompany {
         Clearbit: "CLEARBIT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        FindCompany: "FIND_COMPANY",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionClearbitFindCompanyParams {
@@ -29007,7 +29951,6 @@ export interface FlowActionClearbitFindPerson {
     id: string;
     alias?: string | undefined;
     type: FlowActionClearbitFindPerson.Type;
-    action: FlowActionClearbitFindPerson.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionClearbitFindPersonParams;
@@ -29018,10 +29961,6 @@ export namespace FlowActionClearbitFindPerson {
         Clearbit: "CLEARBIT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        FindPerson: "FIND_PERSON",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionClearbitFindPersonParams {
@@ -29067,19 +30006,48 @@ export interface FlowActionEmailVerifyEmailParamsRules {
 }
 
 export type FlowActionFlow =
-    | Management.FlowActionFlowBooleanCondition
-    | Management.FlowActionFlowDelayFlow
-    | Management.FlowActionFlowDoNothing
-    | Management.FlowActionFlowErrorMessage
-    | Management.FlowActionFlowMapValue
-    | Management.FlowActionFlowReturnJson
-    | Management.FlowActionFlowStoreVars;
+    | Management.FlowActionFlow.BooleanCondition
+    | Management.FlowActionFlow.DelayFlow
+    | Management.FlowActionFlow.DoNothing
+    | Management.FlowActionFlow.ErrorMessage
+    | Management.FlowActionFlow.MapValue
+    | Management.FlowActionFlow.ReturnJson
+    | Management.FlowActionFlow.StoreVars;
+
+export namespace FlowActionFlow {
+    export interface BooleanCondition extends Management.FlowActionFlowBooleanCondition {
+        action: "BOOLEAN_CONDITION";
+    }
+
+    export interface DelayFlow extends Management.FlowActionFlowDelayFlow {
+        action: "DELAY_FLOW";
+    }
+
+    export interface DoNothing extends Management.FlowActionFlowDoNothing {
+        action: "DO_NOTHING";
+    }
+
+    export interface ErrorMessage extends Management.FlowActionFlowErrorMessage {
+        action: "ERROR_MESSAGE";
+    }
+
+    export interface MapValue extends Management.FlowActionFlowMapValue {
+        action: "MAP_VALUE";
+    }
+
+    export interface ReturnJson extends Management.FlowActionFlowReturnJson {
+        action: "RETURN_JSON";
+    }
+
+    export interface StoreVars extends Management.FlowActionFlowStoreVars {
+        action: "STORE_VARS";
+    }
+}
 
 export interface FlowActionFlowBooleanCondition {
     id: string;
     alias?: string | undefined;
     type: FlowActionFlowBooleanCondition.Type;
-    action: FlowActionFlowBooleanCondition.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionFlowBooleanConditionParams;
@@ -29090,10 +30058,6 @@ export namespace FlowActionFlowBooleanCondition {
         Flow: "FLOW",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        BooleanCondition: "BOOLEAN_CONDITION",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowBooleanConditionParams {
@@ -29105,7 +30069,6 @@ export interface FlowActionFlowDelayFlow {
     id: string;
     alias?: string | undefined;
     type: FlowActionFlowDelayFlow.Type;
-    action: FlowActionFlowDelayFlow.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionFlowDelayFlowParams;
@@ -29116,10 +30079,6 @@ export namespace FlowActionFlowDelayFlow {
         Flow: "FLOW",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        DelayFlow: "DELAY_FLOW",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowDelayFlowParams {
@@ -29143,7 +30102,6 @@ export interface FlowActionFlowDoNothing {
     id: string;
     alias?: string | undefined;
     type: FlowActionFlowDoNothing.Type;
-    action: FlowActionFlowDoNothing.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params?: Management.FlowActionFlowDoNothingParams | undefined;
@@ -29154,10 +30112,6 @@ export namespace FlowActionFlowDoNothing {
         Flow: "FLOW",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        DoNothing: "DO_NOTHING",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowDoNothingParams {}
@@ -29166,7 +30120,6 @@ export interface FlowActionFlowErrorMessage {
     id: string;
     alias?: string | undefined;
     type: FlowActionFlowErrorMessage.Type;
-    action: FlowActionFlowErrorMessage.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionFlowErrorMessageParams;
@@ -29177,10 +30130,6 @@ export namespace FlowActionFlowErrorMessage {
         Flow: "FLOW",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        ErrorMessage: "ERROR_MESSAGE",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowErrorMessageParams {
@@ -29191,7 +30140,6 @@ export interface FlowActionFlowMapValue {
     id: string;
     alias?: string | undefined;
     type: FlowActionFlowMapValue.Type;
-    action: FlowActionFlowMapValue.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionFlowMapValueParams;
@@ -29202,10 +30150,6 @@ export namespace FlowActionFlowMapValue {
         Flow: "FLOW",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        MapValue: "MAP_VALUE",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowMapValueParams {
@@ -29230,7 +30174,6 @@ export interface FlowActionFlowReturnJson {
     id: string;
     alias?: string | undefined;
     type: FlowActionFlowReturnJson.Type;
-    action: FlowActionFlowReturnJson.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionFlowReturnJsonParams;
@@ -29241,10 +30184,6 @@ export namespace FlowActionFlowReturnJson {
         Flow: "FLOW",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        ReturnJson: "RETURN_JSON",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowReturnJsonParams {
@@ -29259,7 +30198,6 @@ export interface FlowActionFlowStoreVars {
     id: string;
     alias?: string | undefined;
     type: FlowActionFlowStoreVars.Type;
-    action: FlowActionFlowStoreVars.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionFlowStoreVarsParams;
@@ -29270,10 +30208,6 @@ export namespace FlowActionFlowStoreVars {
         Flow: "FLOW",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        StoreVars: "STORE_VARS",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionFlowStoreVarsParams {
@@ -29391,15 +30325,28 @@ export namespace FlowActionHttpSendRequestParamsQueryParams {
 }
 
 export type FlowActionHubspot =
-    | Management.FlowActionHubspotEnrollContact
-    | Management.FlowActionHubspotGetContact
-    | Management.FlowActionHubspotUpsertContact;
+    | Management.FlowActionHubspot.EnrollContact
+    | Management.FlowActionHubspot.GetContact
+    | Management.FlowActionHubspot.UpsertContact;
+
+export namespace FlowActionHubspot {
+    export interface EnrollContact extends Management.FlowActionHubspotEnrollContact {
+        action: "ENROLL_CONTACT";
+    }
+
+    export interface GetContact extends Management.FlowActionHubspotGetContact {
+        action: "GET_CONTACT";
+    }
+
+    export interface UpsertContact extends Management.FlowActionHubspotUpsertContact {
+        action: "UPSERT_CONTACT";
+    }
+}
 
 export interface FlowActionHubspotEnrollContact {
     id: string;
     alias?: string | undefined;
     type: FlowActionHubspotEnrollContact.Type;
-    action: FlowActionHubspotEnrollContact.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionHubspotEnrollContactParams;
@@ -29410,10 +30357,6 @@ export namespace FlowActionHubspotEnrollContact {
         Hubspot: "HUBSPOT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        EnrollContact: "ENROLL_CONTACT",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionHubspotEnrollContactParams {
@@ -29428,7 +30371,6 @@ export interface FlowActionHubspotGetContact {
     id: string;
     alias?: string | undefined;
     type: FlowActionHubspotGetContact.Type;
-    action: FlowActionHubspotGetContact.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionHubspotGetContactParams;
@@ -29439,10 +30381,6 @@ export namespace FlowActionHubspotGetContact {
         Hubspot: "HUBSPOT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        GetContact: "GET_CONTACT",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionHubspotGetContactParams {
@@ -29454,7 +30392,6 @@ export interface FlowActionHubspotUpsertContact {
     id: string;
     alias?: string | undefined;
     type: FlowActionHubspotUpsertContact.Type;
-    action: FlowActionHubspotUpsertContact.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionHubspotUpsertContactParams;
@@ -29465,10 +30402,6 @@ export namespace FlowActionHubspotUpsertContact {
         Hubspot: "HUBSPOT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        UpsertContact: "UPSERT_CONTACT",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionHubspotUpsertContactParams {
@@ -29484,15 +30417,28 @@ export interface FlowActionHubspotUpsertContactParamsProperty {
 }
 
 export type FlowActionJson =
-    | Management.FlowActionJsonCreateJson
-    | Management.FlowActionJsonParseJson
-    | Management.FlowActionJsonSerializeJson;
+    | Management.FlowActionJson.CreateJson
+    | Management.FlowActionJson.ParseJson
+    | Management.FlowActionJson.SerializeJson;
+
+export namespace FlowActionJson {
+    export interface CreateJson extends Management.FlowActionJsonCreateJson {
+        action: "CREATE_JSON";
+    }
+
+    export interface ParseJson extends Management.FlowActionJsonParseJson {
+        action: "PARSE_JSON";
+    }
+
+    export interface SerializeJson extends Management.FlowActionJsonSerializeJson {
+        action: "SERIALIZE_JSON";
+    }
+}
 
 export interface FlowActionJsonCreateJson {
     id: string;
     alias?: string | undefined;
     type: FlowActionJsonCreateJson.Type;
-    action: FlowActionJsonCreateJson.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionJsonCreateJsonParams;
@@ -29503,10 +30449,6 @@ export namespace FlowActionJsonCreateJson {
         Json: "JSON",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        CreateJson: "CREATE_JSON",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJsonCreateJsonParams {
@@ -29519,7 +30461,6 @@ export interface FlowActionJsonParseJson {
     id: string;
     alias?: string | undefined;
     type: FlowActionJsonParseJson.Type;
-    action: FlowActionJsonParseJson.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionJsonParseJsonParams;
@@ -29530,10 +30471,6 @@ export namespace FlowActionJsonParseJson {
         Json: "JSON",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        ParseJson: "PARSE_JSON",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJsonParseJsonParams {
@@ -29544,7 +30481,6 @@ export interface FlowActionJsonSerializeJson {
     id: string;
     alias?: string | undefined;
     type: FlowActionJsonSerializeJson.Type;
-    action: FlowActionJsonSerializeJson.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionJsonSerializeJsonParams;
@@ -29555,10 +30491,6 @@ export namespace FlowActionJsonSerializeJson {
         Json: "JSON",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SerializeJson: "SERIALIZE_JSON",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJsonSerializeJsonParams {
@@ -29570,15 +30502,28 @@ export type FlowActionJsonSerializeJsonParamsObject = string | Management.FlowAc
 export type FlowActionJsonSerializeJsonParamsObjectObject = Record<string, unknown>;
 
 export type FlowActionJwt =
-    | Management.FlowActionJwtDecodeJwt
-    | Management.FlowActionJwtSignJwt
-    | Management.FlowActionJwtVerifyJwt;
+    | Management.FlowActionJwt.DecodeJwt
+    | Management.FlowActionJwt.SignJwt
+    | Management.FlowActionJwt.VerifyJwt;
+
+export namespace FlowActionJwt {
+    export interface DecodeJwt extends Management.FlowActionJwtDecodeJwt {
+        action: "DECODE_JWT";
+    }
+
+    export interface SignJwt extends Management.FlowActionJwtSignJwt {
+        action: "SIGN_JWT";
+    }
+
+    export interface VerifyJwt extends Management.FlowActionJwtVerifyJwt {
+        action: "VERIFY_JWT";
+    }
+}
 
 export interface FlowActionJwtDecodeJwt {
     id: string;
     alias?: string | undefined;
     type: FlowActionJwtDecodeJwt.Type;
-    action: FlowActionJwtDecodeJwt.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionJwtDecodeJwtParams;
@@ -29589,10 +30534,6 @@ export namespace FlowActionJwtDecodeJwt {
         Jwt: "JWT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        DecodeJwt: "DECODE_JWT",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJwtDecodeJwtParams {
@@ -29603,7 +30544,6 @@ export interface FlowActionJwtSignJwt {
     id: string;
     alias?: string | undefined;
     type: FlowActionJwtSignJwt.Type;
-    action: FlowActionJwtSignJwt.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionJwtSignJwtParams;
@@ -29614,10 +30554,6 @@ export namespace FlowActionJwtSignJwt {
         Jwt: "JWT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SignJwt: "SIGN_JWT",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJwtSignJwtParams {
@@ -29635,7 +30571,6 @@ export interface FlowActionJwtVerifyJwt {
     id: string;
     alias?: string | undefined;
     type: FlowActionJwtVerifyJwt.Type;
-    action: FlowActionJwtVerifyJwt.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionJwtVerifyJwtParams;
@@ -29646,10 +30581,6 @@ export namespace FlowActionJwtVerifyJwt {
         Jwt: "JWT",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        VerifyJwt: "VERIFY_JWT",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionJwtVerifyJwtParams {
@@ -29730,13 +30661,22 @@ export type FlowActionMailjetSendEmailParams =
           [key: string]: any;
       };
 
-export type FlowActionOtp = Management.FlowActionOtpGenerateCode | Management.FlowActionOtpVerifyCode;
+export type FlowActionOtp = Management.FlowActionOtp.GenerateCode | Management.FlowActionOtp.VerifyCode;
+
+export namespace FlowActionOtp {
+    export interface GenerateCode extends Management.FlowActionOtpGenerateCode {
+        action: "GENERATE_CODE";
+    }
+
+    export interface VerifyCode extends Management.FlowActionOtpVerifyCode {
+        action: "VERIFY_CODE";
+    }
+}
 
 export interface FlowActionOtpGenerateCode {
     id: string;
     alias?: string | undefined;
     type: FlowActionOtpGenerateCode.Type;
-    action: FlowActionOtpGenerateCode.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionOtpGenerateCodeParams;
@@ -29747,10 +30687,6 @@ export namespace FlowActionOtpGenerateCode {
         Otp: "OTP",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        GenerateCode: "GENERATE_CODE",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionOtpGenerateCodeParams {
@@ -29762,7 +30698,6 @@ export interface FlowActionOtpVerifyCode {
     id: string;
     alias?: string | undefined;
     type: FlowActionOtpVerifyCode.Type;
-    action: FlowActionOtpVerifyCode.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionOtpVerifyCodeParams;
@@ -29773,10 +30708,6 @@ export namespace FlowActionOtpVerifyCode {
         Otp: "OTP",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        VerifyCode: "VERIFY_CODE",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionOtpVerifyCodeParams {
@@ -29787,15 +30718,28 @@ export interface FlowActionOtpVerifyCodeParams {
 export type FlowActionOtpVerifyCodeParamsCode = number | string;
 
 export type FlowActionPipedrive =
-    | Management.FlowActionPipedriveAddDeal
-    | Management.FlowActionPipedriveAddOrganization
-    | Management.FlowActionPipedriveAddPerson;
+    | Management.FlowActionPipedrive.AddDeal
+    | Management.FlowActionPipedrive.AddOrganization
+    | Management.FlowActionPipedrive.AddPerson;
+
+export namespace FlowActionPipedrive {
+    export interface AddDeal extends Management.FlowActionPipedriveAddDeal {
+        action: "ADD_DEAL";
+    }
+
+    export interface AddOrganization extends Management.FlowActionPipedriveAddOrganization {
+        action: "ADD_ORGANIZATION";
+    }
+
+    export interface AddPerson extends Management.FlowActionPipedriveAddPerson {
+        action: "ADD_PERSON";
+    }
+}
 
 export interface FlowActionPipedriveAddDeal {
     id: string;
     alias?: string | undefined;
     type: FlowActionPipedriveAddDeal.Type;
-    action: FlowActionPipedriveAddDeal.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionPipedriveAddDealParams;
@@ -29806,10 +30750,6 @@ export namespace FlowActionPipedriveAddDeal {
         Pipedrive: "PIPEDRIVE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        AddDeal: "ADD_DEAL",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionPipedriveAddDealParams {
@@ -29837,7 +30777,6 @@ export interface FlowActionPipedriveAddOrganization {
     id: string;
     alias?: string | undefined;
     type: FlowActionPipedriveAddOrganization.Type;
-    action: FlowActionPipedriveAddOrganization.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionPipedriveAddOrganizationParams;
@@ -29848,10 +30787,6 @@ export namespace FlowActionPipedriveAddOrganization {
         Pipedrive: "PIPEDRIVE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        AddOrganization: "ADD_ORGANIZATION",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionPipedriveAddOrganizationParams {
@@ -29869,7 +30804,6 @@ export interface FlowActionPipedriveAddPerson {
     id: string;
     alias?: string | undefined;
     type: FlowActionPipedriveAddPerson.Type;
-    action: FlowActionPipedriveAddPerson.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionPipedriveAddPersonParams;
@@ -29880,10 +30814,6 @@ export namespace FlowActionPipedriveAddPerson {
         Pipedrive: "PIPEDRIVE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        AddPerson: "ADD_PERSON",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionPipedriveAddPersonParams {
@@ -29903,16 +30833,33 @@ export type FlowActionPipedriveAddPersonParamsOrganizationId = string | number;
 export type FlowActionPipedriveAddPersonParamsOwnerId = string | number;
 
 export type FlowActionSalesforce =
-    | Management.FlowActionSalesforceCreateLead
-    | Management.FlowActionSalesforceGetLead
-    | Management.FlowActionSalesforceSearchLeads
-    | Management.FlowActionSalesforceUpdateLead;
+    | Management.FlowActionSalesforce.CreateLead
+    | Management.FlowActionSalesforce.GetLead
+    | Management.FlowActionSalesforce.SearchLeads
+    | Management.FlowActionSalesforce.UpdateLead;
+
+export namespace FlowActionSalesforce {
+    export interface CreateLead extends Management.FlowActionSalesforceCreateLead {
+        action: "CREATE_LEAD";
+    }
+
+    export interface GetLead extends Management.FlowActionSalesforceGetLead {
+        action: "GET_LEAD";
+    }
+
+    export interface SearchLeads extends Management.FlowActionSalesforceSearchLeads {
+        action: "SEARCH_LEADS";
+    }
+
+    export interface UpdateLead extends Management.FlowActionSalesforceUpdateLead {
+        action: "UPDATE_LEAD";
+    }
+}
 
 export interface FlowActionSalesforceCreateLead {
     id: string;
     alias?: string | undefined;
     type: FlowActionSalesforceCreateLead.Type;
-    action: FlowActionSalesforceCreateLead.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceCreateLeadParams;
@@ -29923,10 +30870,6 @@ export namespace FlowActionSalesforceCreateLead {
         Salesforce: "SALESFORCE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        CreateLead: "CREATE_LEAD",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceCreateLeadParams {
@@ -29945,7 +30888,6 @@ export interface FlowActionSalesforceGetLead {
     id: string;
     alias?: string | undefined;
     type: FlowActionSalesforceGetLead.Type;
-    action: FlowActionSalesforceGetLead.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceGetLeadParams;
@@ -29956,10 +30898,6 @@ export namespace FlowActionSalesforceGetLead {
         Salesforce: "SALESFORCE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        GetLead: "GET_LEAD",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceGetLeadParams {
@@ -29971,7 +30909,6 @@ export interface FlowActionSalesforceSearchLeads {
     id: string;
     alias?: string | undefined;
     type: FlowActionSalesforceSearchLeads.Type;
-    action: FlowActionSalesforceSearchLeads.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceSearchLeadsParams;
@@ -29982,10 +30919,6 @@ export namespace FlowActionSalesforceSearchLeads {
         Salesforce: "SALESFORCE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SearchLeads: "SEARCH_LEADS",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceSearchLeadsParams {
@@ -30009,7 +30942,6 @@ export interface FlowActionSalesforceUpdateLead {
     id: string;
     alias?: string | undefined;
     type: FlowActionSalesforceUpdateLead.Type;
-    action: FlowActionSalesforceUpdateLead.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionSalesforceUpdateLeadParams;
@@ -30020,10 +30952,6 @@ export namespace FlowActionSalesforceUpdateLead {
         Salesforce: "SALESFORCE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        UpdateLead: "UPDATE_LEAD",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionSalesforceUpdateLeadParams {
@@ -30122,19 +31050,48 @@ export interface FlowActionSlackPostMessageParamsAttachmentField {
 }
 
 export type FlowActionStripe =
-    | Management.FlowActionStripeAddTaxId
-    | Management.FlowActionStripeCreateCustomer
-    | Management.FlowActionStripeCreatePortalSession
-    | Management.FlowActionStripeDeleteTaxId
-    | Management.FlowActionStripeFindCustomers
-    | Management.FlowActionStripeGetCustomer
-    | Management.FlowActionStripeUpdateCustomer;
+    | Management.FlowActionStripe.AddTaxId
+    | Management.FlowActionStripe.CreateCustomer
+    | Management.FlowActionStripe.CreatePortalSession
+    | Management.FlowActionStripe.DeleteTaxId
+    | Management.FlowActionStripe.FindCustomers
+    | Management.FlowActionStripe.GetCustomer
+    | Management.FlowActionStripe.UpdateCustomer;
+
+export namespace FlowActionStripe {
+    export interface AddTaxId extends Management.FlowActionStripeAddTaxId {
+        action: "ADD_TAX_ID";
+    }
+
+    export interface CreateCustomer extends Management.FlowActionStripeCreateCustomer {
+        action: "CREATE_CUSTOMER";
+    }
+
+    export interface CreatePortalSession extends Management.FlowActionStripeCreatePortalSession {
+        action: "CREATE_PORTAL_SESSION";
+    }
+
+    export interface DeleteTaxId extends Management.FlowActionStripeDeleteTaxId {
+        action: "DELETE_TAX_ID";
+    }
+
+    export interface FindCustomers extends Management.FlowActionStripeFindCustomers {
+        action: "FIND_CUSTOMERS";
+    }
+
+    export interface GetCustomer extends Management.FlowActionStripeGetCustomer {
+        action: "GET_CUSTOMER";
+    }
+
+    export interface UpdateCustomer extends Management.FlowActionStripeUpdateCustomer {
+        action: "UPDATE_CUSTOMER";
+    }
+}
 
 export interface FlowActionStripeAddTaxId {
     id: string;
     alias?: string | undefined;
     type: FlowActionStripeAddTaxId.Type;
-    action: FlowActionStripeAddTaxId.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionStripeAddTaxIdParams;
@@ -30145,10 +31102,6 @@ export namespace FlowActionStripeAddTaxId {
         Stripe: "STRIPE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        AddTaxId: "ADD_TAX_ID",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeAddTaxIdParams {
@@ -30171,7 +31124,6 @@ export interface FlowActionStripeCreateCustomer {
     id: string;
     alias?: string | undefined;
     type: FlowActionStripeCreateCustomer.Type;
-    action: FlowActionStripeCreateCustomer.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionStripeCreateCustomerParams;
@@ -30182,10 +31134,6 @@ export namespace FlowActionStripeCreateCustomer {
         Stripe: "STRIPE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        CreateCustomer: "CREATE_CUSTOMER",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeCreateCustomerParams {
@@ -30204,7 +31152,6 @@ export interface FlowActionStripeCreatePortalSession {
     id: string;
     alias?: string | undefined;
     type: FlowActionStripeCreatePortalSession.Type;
-    action: FlowActionStripeCreatePortalSession.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionStripeCreatePortalSessionParams;
@@ -30215,10 +31162,6 @@ export namespace FlowActionStripeCreatePortalSession {
         Stripe: "STRIPE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        CreatePortalSession: "CREATE_PORTAL_SESSION",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeCreatePortalSessionParams {
@@ -30231,7 +31174,6 @@ export interface FlowActionStripeDeleteTaxId {
     id: string;
     alias?: string | undefined;
     type: FlowActionStripeDeleteTaxId.Type;
-    action: FlowActionStripeDeleteTaxId.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionStripeDeleteTaxIdParams;
@@ -30242,10 +31184,6 @@ export namespace FlowActionStripeDeleteTaxId {
         Stripe: "STRIPE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        DeleteTaxId: "DELETE_TAX_ID",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeDeleteTaxIdParams {
@@ -30258,7 +31196,6 @@ export interface FlowActionStripeFindCustomers {
     id: string;
     alias?: string | undefined;
     type: FlowActionStripeFindCustomers.Type;
-    action: FlowActionStripeFindCustomers.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionStripeFindCustomersParams;
@@ -30269,10 +31206,6 @@ export namespace FlowActionStripeFindCustomers {
         Stripe: "STRIPE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        FindCustomers: "FIND_CUSTOMERS",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeFindCustomersParams {
@@ -30284,7 +31217,6 @@ export interface FlowActionStripeGetCustomer {
     id: string;
     alias?: string | undefined;
     type: FlowActionStripeGetCustomer.Type;
-    action: FlowActionStripeGetCustomer.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionStripeGetCustomerParams;
@@ -30295,10 +31227,6 @@ export namespace FlowActionStripeGetCustomer {
         Stripe: "STRIPE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        GetCustomer: "GET_CUSTOMER",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeGetCustomerParams {
@@ -30317,7 +31245,6 @@ export interface FlowActionStripeUpdateCustomer {
     id: string;
     alias?: string | undefined;
     type: FlowActionStripeUpdateCustomer.Type;
-    action: FlowActionStripeUpdateCustomer.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionStripeUpdateCustomerParams;
@@ -30328,10 +31255,6 @@ export namespace FlowActionStripeUpdateCustomer {
         Stripe: "STRIPE",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        UpdateCustomer: "UPDATE_CUSTOMER",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionStripeUpdateCustomerParams {
@@ -30375,13 +31298,22 @@ export interface FlowActionTelegramSendMessageParams {
     text: string;
 }
 
-export type FlowActionTwilio = Management.FlowActionTwilioMakeCall | Management.FlowActionTwilioSendSms;
+export type FlowActionTwilio = Management.FlowActionTwilio.MakeCall | Management.FlowActionTwilio.SendSms;
+
+export namespace FlowActionTwilio {
+    export interface MakeCall extends Management.FlowActionTwilioMakeCall {
+        action: "MAKE_CALL";
+    }
+
+    export interface SendSms extends Management.FlowActionTwilioSendSms {
+        action: "SEND_SMS";
+    }
+}
 
 export interface FlowActionTwilioMakeCall {
     id: string;
     alias?: string | undefined;
     type: FlowActionTwilioMakeCall.Type;
-    action: FlowActionTwilioMakeCall.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionTwilioMakeCallParams;
@@ -30392,10 +31324,6 @@ export namespace FlowActionTwilioMakeCall {
         Twilio: "TWILIO",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        MakeCall: "MAKE_CALL",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionTwilioMakeCallParams {
@@ -30409,7 +31337,6 @@ export interface FlowActionTwilioSendSms {
     id: string;
     alias?: string | undefined;
     type: FlowActionTwilioSendSms.Type;
-    action: FlowActionTwilioSendSms.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionTwilioSendSmsParams;
@@ -30420,10 +31347,6 @@ export namespace FlowActionTwilioSendSms {
         Twilio: "TWILIO",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SendSms: "SEND_SMS",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionTwilioSendSmsParams {
@@ -30485,13 +31408,22 @@ export type FlowActionWhatsappSendMessageParamsPayload =
 
 export type FlowActionWhatsappSendMessageParamsPayloadObject = Record<string, unknown>;
 
-export type FlowActionXml = Management.FlowActionXmlParseXml | Management.FlowActionXmlSerializeXml;
+export type FlowActionXml = Management.FlowActionXml.ParseXml | Management.FlowActionXml.SerializeXml;
+
+export namespace FlowActionXml {
+    export interface ParseXml extends Management.FlowActionXmlParseXml {
+        action: "PARSE_XML";
+    }
+
+    export interface SerializeXml extends Management.FlowActionXmlSerializeXml {
+        action: "SERIALIZE_XML";
+    }
+}
 
 export interface FlowActionXmlParseXml {
     id: string;
     alias?: string | undefined;
     type: FlowActionXmlParseXml.Type;
-    action: FlowActionXmlParseXml.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionXmlParseXmlParams;
@@ -30502,10 +31434,6 @@ export namespace FlowActionXmlParseXml {
         Xml: "XML",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        ParseXml: "PARSE_XML",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionXmlParseXmlParams {
@@ -30516,7 +31444,6 @@ export interface FlowActionXmlSerializeXml {
     id: string;
     alias?: string | undefined;
     type: FlowActionXmlSerializeXml.Type;
-    action: FlowActionXmlSerializeXml.Action;
     allow_failure?: boolean | undefined;
     mask_output?: boolean | undefined;
     params: Management.FlowActionXmlSerializeXmlParams;
@@ -30527,10 +31454,6 @@ export namespace FlowActionXmlSerializeXml {
         Xml: "XML",
     } as const;
     export type Type = (typeof Type)[keyof typeof Type];
-    export const Action = {
-        SerializeXml: "SERIALIZE_XML",
-    } as const;
-    export type Action = (typeof Action)[keyof typeof Action];
 }
 
 export interface FlowActionXmlSerializeXmlParams {
@@ -30993,19 +31916,52 @@ export namespace ForbiddenSchema {
 }
 
 export type FormBlock =
-    | Management.FormBlockDivider
-    | Management.FormBlockHtml
-    | Management.FormBlockImage
-    | Management.FormBlockJumpButton
-    | Management.FormBlockResendButton
-    | Management.FormBlockNextButton
-    | Management.FormBlockPreviousButton
-    | Management.FormBlockRichText;
+    | Management.FormBlock.Divider
+    | Management.FormBlock.Html
+    | Management.FormBlock.Image
+    | Management.FormBlock.JumpButton
+    | Management.FormBlock.ResendButton
+    | Management.FormBlock.NextButton
+    | Management.FormBlock.PreviousButton
+    | Management.FormBlock.RichText;
+
+export namespace FormBlock {
+    export interface Divider extends Management.FormBlockDivider {
+        type: "DIVIDER";
+    }
+
+    export interface Html extends Management.FormBlockHtml {
+        type: "HTML";
+    }
+
+    export interface Image extends Management.FormBlockImage {
+        type: "IMAGE";
+    }
+
+    export interface JumpButton extends Management.FormBlockJumpButton {
+        type: "JUMP_BUTTON";
+    }
+
+    export interface ResendButton extends Management.FormBlockResendButton {
+        type: "RESEND_BUTTON";
+    }
+
+    export interface NextButton extends Management.FormBlockNextButton {
+        type: "NEXT_BUTTON";
+    }
+
+    export interface PreviousButton extends Management.FormBlockPreviousButton {
+        type: "PREVIOUS_BUTTON";
+    }
+
+    export interface RichText extends Management.FormBlockRichText {
+        type: "RICH_TEXT";
+    }
+}
 
 export interface FormBlockDivider {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypeDividerConst;
     config?: Management.FormBlockDividerConfig | undefined;
 }
 
@@ -31016,7 +31972,6 @@ export interface FormBlockDividerConfig {
 export interface FormBlockHtml {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypeHtmlConst;
     config?: Management.FormBlockHtmlConfig | undefined;
 }
 
@@ -31027,7 +31982,6 @@ export interface FormBlockHtmlConfig {
 export interface FormBlockImage {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypeImageConst;
     config?: Management.FormBlockImageConfig | undefined;
 }
 
@@ -31048,7 +32002,6 @@ export type FormBlockImageConfigPositionEnum =
 export interface FormBlockJumpButton {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypeJumpButtonConst;
     config: Management.FormBlockJumpButtonConfig;
 }
 
@@ -31065,7 +32018,6 @@ export interface FormBlockJumpButtonConfigStyle {
 export interface FormBlockNextButton {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypeNextButtonConst;
     config: Management.FormBlockNextButtonConfig;
 }
 
@@ -31076,7 +32028,6 @@ export interface FormBlockNextButtonConfig {
 export interface FormBlockPreviousButton {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypePreviousButtonConst;
     config: Management.FormBlockPreviousButtonConfig;
 }
 
@@ -31087,7 +32038,6 @@ export interface FormBlockPreviousButtonConfig {
 export interface FormBlockResendButton {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypeResendButtonConst;
     config: Management.FormBlockResendButtonConfig;
 }
 
@@ -31112,7 +32062,6 @@ export type FormBlockResendButtonConfigTextAlignmentEnum =
 export interface FormBlockRichText {
     id: string;
     category: Management.FormComponentCategoryBlockConst;
-    type: Management.FormBlockTypeRichTextConst;
     config?: Management.FormBlockRichTextConfig | undefined;
 }
 
@@ -31210,27 +32159,92 @@ export interface FormEndingNodeRedirection {
 export type FormEndingNodeResumeFlowTrueConst = boolean;
 
 export type FormField =
-    | Management.FormFieldBoolean
-    | Management.FormFieldCards
-    | Management.FormFieldChoice
-    | Management.FormFieldCustom
-    | Management.FormFieldDate
-    | Management.FormFieldDropdown
-    | Management.FormFieldEmail
-    | Management.FormFieldFile
-    | Management.FormFieldLegal
-    | Management.FormFieldNumber
-    | Management.FormFieldPassword
-    | Management.FormFieldPayment
-    | Management.FormFieldSocial
-    | Management.FormFieldTel
-    | Management.FormFieldText
-    | Management.FormFieldUrl;
+    | Management.FormField.Boolean
+    | Management.FormField.Cards
+    | Management.FormField.Choice
+    | Management.FormField.Custom
+    | Management.FormField.Date
+    | Management.FormField.Dropdown
+    | Management.FormField.Email
+    | Management.FormField.File
+    | Management.FormField.Legal
+    | Management.FormField.Number
+    | Management.FormField.Password
+    | Management.FormField.Payment
+    | Management.FormField.Social
+    | Management.FormField.Tel
+    | Management.FormField.Text
+    | Management.FormField.Url;
+
+export namespace FormField {
+    export interface Boolean extends Management.FormFieldBoolean {
+        type: "BOOLEAN";
+    }
+
+    export interface Cards extends Management.FormFieldCards {
+        type: "CARDS";
+    }
+
+    export interface Choice extends Management.FormFieldChoice {
+        type: "CHOICE";
+    }
+
+    export interface Custom extends Management.FormFieldCustom {
+        type: "CUSTOM";
+    }
+
+    export interface Date extends Management.FormFieldDate {
+        type: "DATE";
+    }
+
+    export interface Dropdown extends Management.FormFieldDropdown {
+        type: "DROPDOWN";
+    }
+
+    export interface Email extends Management.FormFieldEmail {
+        type: "EMAIL";
+    }
+
+    export interface File extends Management.FormFieldFile {
+        type: "FILE";
+    }
+
+    export interface Legal extends Management.FormFieldLegal {
+        type: "LEGAL";
+    }
+
+    export interface Number extends Management.FormFieldNumber {
+        type: "NUMBER";
+    }
+
+    export interface Password extends Management.FormFieldPassword {
+        type: "PASSWORD";
+    }
+
+    export interface Payment extends Management.FormFieldPayment {
+        type: "PAYMENT";
+    }
+
+    export interface Social extends Management.FormFieldSocial {
+        type: "SOCIAL";
+    }
+
+    export interface Tel extends Management.FormFieldTel {
+        type: "TEL";
+    }
+
+    export interface Text extends Management.FormFieldText {
+        type: "TEXT";
+    }
+
+    export interface Url extends Management.FormFieldUrl {
+        type: "URL";
+    }
+}
 
 export interface FormFieldBoolean {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeBooleanConst;
     config: Management.FormFieldBooleanConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31251,7 +32265,6 @@ export interface FormFieldBooleanConfigOptions {
 export interface FormFieldCards {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeCardsConst;
     config?: Management.FormFieldCardsConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31274,7 +32287,6 @@ export interface FormFieldCardsConfigOption {
 export interface FormFieldChoice {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeChoiceConst;
     config?: Management.FormFieldChoiceConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31304,7 +32316,6 @@ export interface FormFieldChoiceConfigOption {
 export interface FormFieldCustom {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeCustomConst;
     config: Management.FormFieldCustomConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31326,7 +32337,6 @@ export type FormFieldCustomConfigSchema = Record<string, unknown>;
 export interface FormFieldDate {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeDateConst;
     config: Management.FormFieldDateConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31349,7 +32359,6 @@ export type FormFieldDateConfigFormatEnum =
 export interface FormFieldDropdown {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeDropdownConst;
     config?: Management.FormFieldDropdownConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31371,7 +32380,6 @@ export interface FormFieldDropdownConfigOption {
 export interface FormFieldEmail {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeEmailConst;
     config?: Management.FormFieldEmailConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31387,7 +32395,6 @@ export interface FormFieldEmailConfig {
 export interface FormFieldFile {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeFileConst;
     config?: Management.FormFieldFileConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31430,7 +32437,6 @@ export type FormFieldFileConfigStorageTypeEnum =
 export interface FormFieldLegal {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeLegalConst;
     config?: Management.FormFieldLegalConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31445,7 +32451,6 @@ export interface FormFieldLegalConfig {
 export interface FormFieldNumber {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeNumberConst;
     config?: Management.FormFieldNumberConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31463,7 +32468,6 @@ export interface FormFieldNumberConfig {
 export interface FormFieldPassword {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypePasswordConst;
     config: Management.FormFieldPasswordConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31494,7 +32498,6 @@ export type FormFieldPasswordConfigHashEnum =
 export interface FormFieldPayment {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypePaymentConst;
     config: Management.FormFieldPaymentConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31511,14 +32514,21 @@ export interface FormFieldPaymentConfig {
 }
 
 export type FormFieldPaymentConfigCharge =
-    | Management.FormFieldPaymentConfigChargeOneOff
-    | {
-          type: Management.FormFieldPaymentConfigChargeTypeSubscriptionConst;
-          subscription: Management.FormFieldPaymentConfigSubscription;
-      };
+    | Management.FormFieldPaymentConfigCharge.OneOff
+    | Management.FormFieldPaymentConfigCharge.Subscription;
+
+export namespace FormFieldPaymentConfigCharge {
+    export interface OneOff extends Management.FormFieldPaymentConfigChargeOneOff {
+        type: "ONE_OFF";
+    }
+
+    export interface Subscription {
+        type: "SUBSCRIPTION";
+        subscription: Management.FormFieldPaymentConfigSubscription;
+    }
+}
 
 export interface FormFieldPaymentConfigChargeOneOff {
-    type: Management.FormFieldPaymentConfigChargeTypeOneOffConst;
     one_off: Management.FormFieldPaymentConfigChargeOneOffOneOff;
 }
 
@@ -31587,7 +32597,6 @@ export type FormFieldPaymentConfigSubscription = Record<string, unknown>;
 export interface FormFieldSocial {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeSocialConst;
     config?: Management.FormFieldSocialConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31600,7 +32609,6 @@ export interface FormFieldSocialConfig {}
 export interface FormFieldTel {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeTelConst;
     config?: Management.FormFieldTelConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31624,7 +32632,6 @@ export interface FormFieldTelConfigStrings {
 export interface FormFieldText {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeTextConst;
     config?: Management.FormFieldTextConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31723,7 +32730,6 @@ export type FormFieldTypeUrlConst = (typeof FormFieldTypeUrlConst)[keyof typeof 
 export interface FormFieldUrl {
     id: string;
     category: Management.FormComponentCategoryFieldConst;
-    type: Management.FormFieldTypeUrlConst;
     config?: Management.FormFieldUrlConfig | undefined;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31738,7 +32744,6 @@ export interface FormFieldUrlConfig {
 
 export interface FormFlow {
     id: string;
-    type: Management.FormNodeTypeFlowConst;
     coordinates?: Management.FormNodeCoordinates | undefined;
     alias?: string | undefined;
     config: Management.FormFlowConfig;
@@ -31772,7 +32777,21 @@ export type FormMessagesError = Record<string, string>;
 
 export type FormMessagesNullable = (Management.FormMessages | null) | undefined;
 
-export type FormNode = Management.FormFlow | Management.FormRouter | Management.FormStep;
+export type FormNode = Management.FormNode.Flow | Management.FormNode.Router | Management.FormNode.Step;
+
+export namespace FormNode {
+    export interface Flow extends Management.FormFlow {
+        type: "FLOW";
+    }
+
+    export interface Router extends Management.FormRouter {
+        type: "ROUTER";
+    }
+
+    export interface Step extends Management.FormStep {
+        type: "STEP";
+    }
+}
 
 export interface FormNodeCoordinates {
     x: number;
@@ -31802,7 +32821,6 @@ export type FormNodeTypeStepConst = (typeof FormNodeTypeStepConst)[keyof typeof 
 
 export interface FormRouter {
     id: string;
-    type: Management.FormNodeTypeRouterConst;
     coordinates?: Management.FormNodeCoordinates | undefined;
     alias?: string | undefined;
     config?: Management.FormRouterConfig | undefined;
@@ -31829,7 +32847,6 @@ export type FormStartNodeNullable = (Management.FormStartNode | null) | undefine
 
 export interface FormStep {
     id: string;
-    type: Management.FormNodeTypeStepConst;
     coordinates?: Management.FormNodeCoordinates | undefined;
     alias?: string | undefined;
     config?: Management.FormStepConfig | undefined;
@@ -31862,14 +32879,27 @@ export type FormTranslations = Record<string, Record<string, unknown>>;
 export type FormTranslationsNullable = (Management.FormTranslations | null) | undefined;
 
 export type FormWidget =
-    | Management.FormWidgetAuth0VerifiableCredentials
-    | Management.FormWidgetGMapsAddress
-    | Management.FormWidgetRecaptcha;
+    | Management.FormWidget.Auth0VerifiableCredentials
+    | Management.FormWidget.GmapsAddress
+    | Management.FormWidget.Recaptcha;
+
+export namespace FormWidget {
+    export interface Auth0VerifiableCredentials extends Management.FormWidgetAuth0VerifiableCredentials {
+        type: "AUTH0_VERIFIABLE_CREDENTIALS";
+    }
+
+    export interface GmapsAddress extends Management.FormWidgetGMapsAddress {
+        type: "GMAPS_ADDRESS";
+    }
+
+    export interface Recaptcha extends Management.FormWidgetRecaptcha {
+        type: "RECAPTCHA";
+    }
+}
 
 export interface FormWidgetAuth0VerifiableCredentials {
     id: string;
     category: Management.FormComponentCategoryWidgetConst;
-    type: Management.FormWidgetTypeAuth0VerifiableCredentialsConst;
     config: Management.FormWidgetAuth0VerifiableCredentialsConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31889,7 +32919,6 @@ export interface FormWidgetAuth0VerifiableCredentialsConfig {
 export interface FormWidgetGMapsAddress {
     id: string;
     category: Management.FormComponentCategoryWidgetConst;
-    type: Management.FormWidgetTypeGMapsAddressConst;
     config: Management.FormWidgetGMapsAddressConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -31905,7 +32934,6 @@ export interface FormWidgetGMapsAddressConfig {
 export interface FormWidgetRecaptcha {
     id: string;
     category: Management.FormComponentCategoryWidgetConst;
-    type: Management.FormWidgetTypeRecaptchaConst;
     config: Management.FormWidgetRecaptchaConfig;
     label?: string | undefined;
     hint?: string | undefined;
@@ -32383,6 +33411,9 @@ export interface GetClientResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -33014,14 +34045,48 @@ export interface GetLogResponseContent {
 }
 
 export type GetLogStreamResponseContent =
-    | Management.LogStreamHttpResponseSchema
-    | Management.LogStreamEventBridgeResponseSchema
-    | Management.LogStreamEventGridResponseSchema
-    | Management.LogStreamDatadogResponseSchema
-    | Management.LogStreamSplunkResponseSchema
-    | Management.LogStreamSumoResponseSchema
-    | Management.LogStreamSegmentResponseSchema
-    | Management.LogStreamMixpanelResponseSchema;
+    | Management.GetLogStreamResponseContent.Http
+    | Management.GetLogStreamResponseContent.Eventbridge
+    | Management.GetLogStreamResponseContent.Eventgrid
+    | Management.GetLogStreamResponseContent.Datadog
+    | Management.GetLogStreamResponseContent.Splunk
+    | Management.GetLogStreamResponseContent.Sumo
+    | Management.GetLogStreamResponseContent.Segment
+    | Management.GetLogStreamResponseContent.Mixpanel;
+
+export namespace GetLogStreamResponseContent {
+    export interface Http extends Management.LogStreamHttpResponseSchema {
+        type: "http";
+    }
+
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+        type: "eventbridge";
+    }
+
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+        type: "eventgrid";
+    }
+
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+        type: "datadog";
+    }
+
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+        type: "splunk";
+    }
+
+    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+        type: "sumo";
+    }
+
+    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+        type: "segment";
+    }
+
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+        type: "mixpanel";
+    }
+}
 
 export interface GetNetworkAclsResponseContent {
     id?: string | undefined;
@@ -33299,8 +34364,7 @@ export interface GetRoleResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 export interface GetRuleResponseContent {
@@ -33352,6 +34416,7 @@ export interface GetSegmentResponseContent {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -33507,6 +34572,8 @@ export interface GetTenantSettingsResponseContent {
     pushed_authorization_requests_supported?: boolean | undefined;
     /** Supports iss parameter in authorization responses */
     authorization_response_iss_parameter_supported?: (boolean | null) | undefined;
+    /** Enables strict DPoP refresh token binding per RFC 9449: all refresh tokens issued to public clients that present a DPoP proof are bound to the sender's key, and the binding is validated on every subsequent exchange. When disabled, DPoP refresh token binding may still apply for specific audiences for backwards compatibility. */
+    dpop_strict_refresh_token_binding?: (boolean | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
@@ -34193,6 +35260,11 @@ export interface ListAgentsResponseContent {
     next?: string | undefined;
 }
 
+/**
+ * List of CAPTCHA attack protection policies for the tenant, sorted by priority ascending.
+ */
+export type ListAttackProtectionCaptchaPoliciesResponseContent = Management.AttackProtectionCaptchaPolicy[];
+
 export interface ListBrandingPhoneProvidersResponseContent {
     providers?: Management.PhoneProviderSchemaMasked[] | undefined;
 }
@@ -34790,7 +35862,6 @@ export interface LogStreamDatadogResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamDatadogEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -34818,7 +35889,6 @@ export interface LogStreamEventBridgeResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamEventBridgeEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -34930,7 +36000,6 @@ export interface LogStreamEventGridResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamEventGridEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -35010,7 +36079,6 @@ export interface LogStreamHttpResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamHttpEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -35052,7 +36120,6 @@ export interface LogStreamMixpanelResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamMixpanelEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -35111,14 +36178,48 @@ export const LogStreamPiiMethodEnum = {
 export type LogStreamPiiMethodEnum = (typeof LogStreamPiiMethodEnum)[keyof typeof LogStreamPiiMethodEnum];
 
 export type LogStreamResponseSchema =
-    | Management.LogStreamHttpResponseSchema
-    | Management.LogStreamEventBridgeResponseSchema
-    | Management.LogStreamEventGridResponseSchema
-    | Management.LogStreamDatadogResponseSchema
-    | Management.LogStreamSplunkResponseSchema
-    | Management.LogStreamSumoResponseSchema
-    | Management.LogStreamSegmentResponseSchema
-    | Management.LogStreamMixpanelResponseSchema;
+    | Management.LogStreamResponseSchema.Http
+    | Management.LogStreamResponseSchema.Eventbridge
+    | Management.LogStreamResponseSchema.Eventgrid
+    | Management.LogStreamResponseSchema.Datadog
+    | Management.LogStreamResponseSchema.Splunk
+    | Management.LogStreamResponseSchema.Sumo
+    | Management.LogStreamResponseSchema.Segment
+    | Management.LogStreamResponseSchema.Mixpanel;
+
+export namespace LogStreamResponseSchema {
+    export interface Http extends Management.LogStreamHttpResponseSchema {
+        type: "http";
+    }
+
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+        type: "eventbridge";
+    }
+
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+        type: "eventgrid";
+    }
+
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+        type: "datadog";
+    }
+
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+        type: "splunk";
+    }
+
+    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+        type: "sumo";
+    }
+
+    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+        type: "segment";
+    }
+
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+        type: "mixpanel";
+    }
+}
 
 export const LogStreamSegmentEnum = {
     Segment: "segment",
@@ -35131,7 +36232,6 @@ export interface LogStreamSegmentResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamSegmentEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -35171,7 +36271,6 @@ export interface LogStreamSplunkResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamSplunkEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -35212,7 +36311,6 @@ export interface LogStreamSumoResponseSchema {
     /** log stream name */
     name?: string | undefined;
     status?: Management.LogStreamStatusEnum | undefined;
-    type?: Management.LogStreamSumoEnum | undefined;
     /** True for priority log streams, false for non-priority */
     isPriority?: boolean | undefined;
     /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
@@ -36766,8 +37864,7 @@ export interface Role {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 /**
@@ -36804,6 +37901,16 @@ export interface RoleMember {
     /** Email address of this user. */
     email?: string | undefined;
 }
+
+/**
+ * The id of the entity that owns this role: an organization id, or "auth0" for Auth0-managed System Roles.
+ */
+export type RoleOwnerId = string;
+
+/**
+ * Filter organization-level roles by owner ID. Use an organization ID to filter that organization's roles, or "auth0" to retrieve Auth0-managed System Roles. Required when type is "organization".
+ */
+export type RoleOwnerIdFilter = string;
 
 /** The type of the role */
 export const RoleTypeEnum = {
@@ -36945,6 +38052,9 @@ export interface RotateClientSecretResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -37170,6 +38280,13 @@ export const ScreenGroupNameEnum = {
 } as const;
 export type ScreenGroupNameEnum = (typeof ScreenGroupNameEnum)[keyof typeof ScreenGroupNameEnum];
 
+export interface SearchClientGrantsResponseContent {
+    /** Array of client grant objects matching the search criteria. */
+    client_grants: Management.ClientGrantResponseContent[];
+    /** Cursor for retrieving the next page of results. Omitted if there are no more results. */
+    next?: string | undefined;
+}
+
 export interface SearchClientsResponseContent {
     /** Array of client objects matching the search criteria. */
     clients: Management.ClientSearchResponse[];
@@ -37193,7 +38310,6 @@ export interface SearchOrganization {
     /** Friendly name of this organization. */
     display_name?: string | undefined;
     branding?: Management.OrganizationBranding | undefined;
-    metadata?: Management.OrganizationMetadata | undefined;
     token_quota?: Management.TokenQuota | undefined;
     third_party_client_access?: Management.OrganizationThirdPartyClientAccessEnum | undefined;
     /** Whether app entitlement is active for this organization. */
@@ -37203,6 +38319,7 @@ export interface SearchOrganization {
 }
 
 export interface SearchOrganizationsPaginatedResponseContent {
+    /** Array of organization objects matching the search criteria. */
     organizations: Management.SearchOrganization[];
     /** Cursor for retrieving the next page of results. Absent when no more results are available. */
     next?: string | undefined;
@@ -37227,6 +38344,7 @@ export interface Segment {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -37297,6 +38415,12 @@ export interface SegmentRule {
 export interface SegmentStartsWithExpression {
     starts_with: string[];
 }
+
+export const SegmentStatusEnum = {
+    Active: "active",
+    Archived: "archived",
+} as const;
+export type SegmentStatusEnum = (typeof SegmentStatusEnum)[keyof typeof SegmentStatusEnum];
 
 export const SegmentTypeEnum = {
     Self: "self",
@@ -38103,6 +39227,11 @@ export interface SynchronizedGroupSelectionId {
     id: string;
 }
 
+export const SystemRoleOwnerId = {
+    Auth0: "auth0",
+} as const;
+export type SystemRoleOwnerId = (typeof SystemRoleOwnerId)[keyof typeof SystemRoleOwnerId];
+
 /**
  * Settings related to OIDC RP-initiated Logout
  */
@@ -38878,6 +40007,9 @@ export interface UpdateClientResponseContent {
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
+    enforce_anon_session_transfer_network_binding?:
+        | Management.ClientAnonymousSessionTransferNetworkBindingEnum
+        | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
@@ -39561,48 +40693,12 @@ export interface UpdateExperimentResponseContent {
     updated_at: string;
 }
 
-export interface UpdateExperimentStatusResponseContent {
-    id: string;
-    name: string;
-    description?: string | undefined;
-    feature_flag_id: string;
-    feature_flag_name?: string | undefined;
-    authentication_flow: string;
-    allocation_strategy: Management.AllocationStrategyEnum;
-    status: Management.ExperimentStatusEnum;
-    is_valid: boolean;
-    default_config?: Management.DefaultConfigEnum | undefined;
-    feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
-    allocations: Management.AllocationItem[];
-    /** Fields that may be mutated given the experiment's current status. Computed at response time; always current with the API's enforcement logic. */
-    editable_fields: string[];
-    /** Ramp experiment levels configuration. */
-    levels?: number[] | undefined;
-    /** Read-only. The active exposure percentage for the current ramp step. Null when no ramp schedule is active. */
-    current_level?: (number | null) | undefined;
-    started_at?: string | undefined;
-    ended_at?: string | undefined;
-    created_at: string;
-    updated_at: string;
-}
-
 /**
  * Configuration parameters for this feature flag
  */
 export type UpdateFeatureFlagParameters = Record<string, Management.FeatureFlagConfigParam>;
 
 export interface UpdateFeatureFlagResponseContent {
-    id: string;
-    name: string;
-    description?: string | undefined;
-    type: Management.FeatureFlagTypeEnum;
-    status: Management.FeatureFlagStatusEnum;
-    parameters?: Management.FeatureFlagConfigParams | undefined;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface UpdateFeatureFlagStatusResponseContent {
     id: string;
     name: string;
     description?: string | undefined;
@@ -39732,14 +40828,48 @@ export interface UpdateIdentityAssertionAuthorizationGrant {
 }
 
 export type UpdateLogStreamResponseContent =
-    | Management.LogStreamHttpResponseSchema
-    | Management.LogStreamEventBridgeResponseSchema
-    | Management.LogStreamEventGridResponseSchema
-    | Management.LogStreamDatadogResponseSchema
-    | Management.LogStreamSplunkResponseSchema
-    | Management.LogStreamSumoResponseSchema
-    | Management.LogStreamSegmentResponseSchema
-    | Management.LogStreamMixpanelResponseSchema;
+    | Management.UpdateLogStreamResponseContent.Http
+    | Management.UpdateLogStreamResponseContent.Eventbridge
+    | Management.UpdateLogStreamResponseContent.Eventgrid
+    | Management.UpdateLogStreamResponseContent.Datadog
+    | Management.UpdateLogStreamResponseContent.Splunk
+    | Management.UpdateLogStreamResponseContent.Sumo
+    | Management.UpdateLogStreamResponseContent.Segment
+    | Management.UpdateLogStreamResponseContent.Mixpanel;
+
+export namespace UpdateLogStreamResponseContent {
+    export interface Http extends Management.LogStreamHttpResponseSchema {
+        type: "http";
+    }
+
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+        type: "eventbridge";
+    }
+
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+        type: "eventgrid";
+    }
+
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+        type: "datadog";
+    }
+
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+        type: "splunk";
+    }
+
+    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+        type: "sumo";
+    }
+
+    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+        type: "segment";
+    }
+
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+        type: "mixpanel";
+    }
+}
 
 export interface UpdateNetworkAclResponseContent {
     id?: string | undefined;
@@ -39934,8 +41064,7 @@ export interface UpdateRoleResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
 }
 
 export interface UpdateRuleResponseContent {
@@ -39977,6 +41106,7 @@ export interface UpdateSegmentResponseContent {
     name: string;
     description?: string | undefined;
     type: Management.SegmentTypeEnum;
+    status: Management.SegmentStatusEnum;
     rules: Management.SegmentRule[];
     created_at: string;
     updated_at: string;
@@ -40101,6 +41231,8 @@ export interface UpdateTenantSettingsResponseContent {
     pushed_authorization_requests_supported?: boolean | undefined;
     /** Supports iss parameter in authorization responses */
     authorization_response_iss_parameter_supported?: (boolean | null) | undefined;
+    /** Enables strict DPoP refresh token binding per RFC 9449: all refresh tokens issued to public clients that present a DPoP proof are bound to the sender's key, and the binding is validated on every subsequent exchange. When disabled, DPoP refresh token binding may still apply for specific audiences for backwards compatibility. */
+    dpop_strict_refresh_token_binding?: (boolean | null) | undefined;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
@@ -40512,8 +41644,7 @@ export interface UserEffectivePermissionRoleSourceResponseContent {
     /** Description of this role. */
     description?: string | undefined;
     type?: Management.RoleTypeEnum | undefined;
-    /** The id of the entity that owns this role, such as an organization id. */
-    owner_id?: string | undefined;
+    owner_id?: Management.RoleOwnerId | undefined;
     /** List of sources where this role is coming from. */
     sources?: Management.UserEffectivePermissionRoleSourceEnum[] | undefined;
 }

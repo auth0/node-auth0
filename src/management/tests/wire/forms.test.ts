@@ -134,7 +134,7 @@ describe("FormsClient", () => {
             languages: { primary: "primary", default: "default" },
             translations: { key: { key: "value" } },
             nodes: [
-                { id: "id", type: "FLOW", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
+                { type: "FLOW", id: "id", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
             ],
             start: { hidden_fields: [{ key: "key" }], next_node: "$ending", coordinates: { x: 1, y: 1 } },
             ending: {
@@ -264,7 +264,7 @@ describe("FormsClient", () => {
             languages: { primary: "primary", default: "default" },
             translations: { key: { key: "value" } },
             nodes: [
-                { id: "id", type: "FLOW", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
+                { type: "FLOW", id: "id", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
             ],
             start: { hidden_fields: [{ key: "key" }], next_node: "$ending", coordinates: { x: 1, y: 1 } },
             ending: {
@@ -426,7 +426,7 @@ describe("FormsClient", () => {
             languages: { primary: "primary", default: "default" },
             translations: { key: { key: "value" } },
             nodes: [
-                { id: "id", type: "FLOW", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
+                { type: "FLOW", id: "id", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
             ],
             start: { hidden_fields: [{ key: "key" }], next_node: "$ending", coordinates: { x: 1, y: 1 } },
             ending: {

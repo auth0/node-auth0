@@ -74,6 +74,7 @@ describe("ClientsClient", () => {
                     },
                     identity_assertion_authorization_grant: { active: true },
                     anonymous_sessions: { active: true },
+                    enforce_anon_session_transfer_network_binding: "ip",
                     third_party_security_mode: "strict",
                     redirection_policy: "allow_always",
                     resource_server_identifier: "resource_server_identifier",
@@ -405,6 +406,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -826,6 +828,28 @@ describe("ClientsClient", () => {
             .post("/clients/cimd/register")
             .jsonBody(rawRequestBody)
             .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.clients.registerCimdClient({
+                external_client_id: "x",
+            });
+        }).rejects.toThrow(Management.ConflictError);
+    });
+
+    test("registerCimdClient (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+        const rawRequestBody = { external_client_id: "x" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/clients/cimd/register")
+            .jsonBody(rawRequestBody)
+            .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
@@ -837,7 +861,7 @@ describe("ClientsClient", () => {
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
-    test("registerCimdClient (6)", async () => {
+    test("registerCimdClient (7)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { external_client_id: "x" };
@@ -923,6 +947,7 @@ describe("ClientsClient", () => {
                     },
                     identity_assertion_authorization_grant: { active: true },
                     anonymous_sessions: { active: true },
+                    enforce_anon_session_transfer_network_binding: "ip",
                     third_party_security_mode: "strict",
                     redirection_policy: "allow_always",
                     resource_server_identifier: "resource_server_identifier",
@@ -1267,6 +1292,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -1628,6 +1654,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
@@ -1966,6 +1993,7 @@ describe("ClientsClient", () => {
             },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
+            enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",

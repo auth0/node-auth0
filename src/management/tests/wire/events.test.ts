@@ -35,14 +35,14 @@ describe("EventsClient", () => {
                     time: "2024-01-15T09:30:00Z",
                     data: {
                         object: {
+                            strategy: "oidc",
                             id: "id",
                             name: "name",
-                            strategy: "oidc",
                         },
                         previous_object: {
+                            strategy: "oidc",
                             id: "id",
                             name: "name",
-                            strategy: "oidc",
                         },
                         context: {
                             tenant: {

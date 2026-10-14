@@ -132,10 +132,10 @@ describe("FlowsClient", () => {
             name: "name",
             actions: [
                 {
+                    action: "LIST_CONTACTS",
                     id: "id",
                     alias: "alias",
                     type: "ACTIVECAMPAIGN",
-                    action: "LIST_CONTACTS",
                     allow_failure: true,
                     mask_output: true,
                     params: { connection_id: "connection_id", email: "email" },
@@ -258,10 +258,10 @@ describe("FlowsClient", () => {
             name: "name",
             actions: [
                 {
+                    action: "LIST_CONTACTS",
                     id: "id",
                     alias: "alias",
                     type: "ACTIVECAMPAIGN",
-                    action: "LIST_CONTACTS",
                     allow_failure: true,
                     mask_output: true,
                     params: { connection_id: "connection_id", email: "email" },
@@ -442,10 +442,10 @@ describe("FlowsClient", () => {
             name: "name",
             actions: [
                 {
+                    action: "LIST_CONTACTS",
                     id: "id",
                     alias: "alias",
                     type: "ACTIVECAMPAIGN",
-                    action: "LIST_CONTACTS",
                     allow_failure: true,
                     mask_output: true,
                     params: { connection_id: "connection_id", email: "email" },
