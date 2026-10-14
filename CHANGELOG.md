@@ -1,5 +1,13 @@
 # Change Log
 
+## [v7.5.0](https://github.com/auth0/node-auth0/tree/v7.5.0) (2026-10-14)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.4.0...v7.5.0)
+
+**Added**
+
+- feat: add client profiles, attack protection CAPTCHA policies, client grants search, and CIMD external metadata status / dynamic registration [\#1425](https://github.com/auth0/node-auth0/pull/1425) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.4.0](https://github.com/auth0/node-auth0/tree/v7.4.0) (2026-10-09)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.3.0...v7.4.0)
