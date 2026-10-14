@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "7.4.0-beta.2",
+    "version": "7.5.0-beta.0",
     "private": false,
     "repository": {
         "type": "git",

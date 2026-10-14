@@ -1,5 +1,10 @@
 # Change Log
 
+## [v7.5.0-beta.0](https://github.com/auth0/node-auth0/tree/v7.5.0-beta.0) (2026-10-14)
+
+**Beta**
+- feat: add attack protection CAPTCHA policies, client grants search, anonymous session network binding, DPoP strict refresh token binding; move experiment & feature flag status transitions to PATCH (#1426)
+
 ## [v7.4.0-beta.2](https://github.com/auth0/node-auth0/tree/v7.4.0-beta.2) (2026-10-05)
 
 **Beta**
