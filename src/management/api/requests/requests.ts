@@ -2515,41 +2515,6 @@ export interface UpdateAttackProtectionCaptchaRequestContent {
 /**
  * @example
  *     {
- *         name: "name",
- *         priority: 1,
- *         match: {},
- *         action: {}
- *     }
- */
-export interface CreateAttackProtectionCaptchaPolicyRequestContent {
-    /** Human-readable policy name. */
-    name: string;
-    /** Description of the attack protection policy. */
-    description?: string;
-    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
-    priority: number;
-    match: Management.AttackProtectionCaptchaPolicyMatch;
-    action: Management.AttackProtectionCaptchaPolicyActionInput;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateAttackProtectionCaptchaPolicyRequestContent {
-    /** Human-readable policy name. */
-    name?: string;
-    /** Description of the policy's purpose. */
-    description?: string;
-    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
-    priority?: number;
-    match?: Management.AttackProtectionCaptchaPolicyMatch;
-    action?: Management.AttackProtectionCaptchaPolicyActionInput;
-}
-
-/**
- * @example
- *     {
  *         type: "exponential"
  *     }
  */
@@ -3164,7 +3129,8 @@ export interface ListExperimentsRequestParameters {
  *     {
  *         name: "name",
  *         feature_flag_id: "feature_flag_id",
- *         authentication_flow: "authentication"
+ *         authentication_flow: "authentication",
+ *         allocation_strategy: "percentage"
  *     }
  */
 export interface CreateExperimentRequestContent {
@@ -3178,7 +3144,7 @@ export interface CreateExperimentRequestContent {
     /** Applies only to Auth0-managed flags. Controls where non-overridden config keys resolve from: 'tenant' inherits the tenant's live config so the experiment overlays only its changes, 'flag' uses the flag's frozen defaults for a complete config. Optional; defaults to 'tenant' when omitted. Rejected for customer-defined flags. */
     default_config?: Management.DefaultConfigEnum;
     /** The traffic allocation strategy for this experiment */
-    allocation_strategy?: Management.AllocationStrategyEnum;
+    allocation_strategy: Management.AllocationStrategyEnum;
     /** Traffic allocations mapping variations to weights or segments */
     allocations?: Management.AllocationRequestItem[];
     /** Ramp experiment levels configuration. A strictly-increasing sequence of exposure percentages, each an integer in [0, 100]. */
@@ -3340,7 +3306,7 @@ export interface UpdateVariationRequestContent {
     name?: string;
     /** A description of what this variation controls */
     description?: string | null;
-    overrides?: Management.UpdateVariationOverridesMap;
+    overrides?: (Management.UpdateVariationOverridesMap | undefined) | null;
 }
 
 /**
