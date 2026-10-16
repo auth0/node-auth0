@@ -32,6 +32,8 @@ export class AuthenticatorsClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticators.deleteAll("id")
@@ -55,7 +57,7 @@ export class AuthenticatorsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authenticators`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authenticators`,
             ),
             method: "DELETE",
             headers: _headers,

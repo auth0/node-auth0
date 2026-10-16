@@ -55,7 +55,7 @@ describe("SelfServiceProfilesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/self-service-profiles")
             .respondWith()
             .statusCode(401)
@@ -74,7 +74,7 @@ describe("SelfServiceProfilesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/self-service-profiles")
             .respondWith()
             .statusCode(403)
@@ -93,7 +93,7 @@ describe("SelfServiceProfilesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/self-service-profiles")
             .respondWith()
             .statusCode(429)
@@ -112,7 +112,7 @@ describe("SelfServiceProfilesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/self-service-profiles")
             .respondWith()
             .statusCode(500)
