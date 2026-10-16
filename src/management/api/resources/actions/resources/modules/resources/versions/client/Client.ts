@@ -37,6 +37,8 @@ export class VersionsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.actions.modules.versions.list("id", {
@@ -69,7 +71,7 @@ export class VersionsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `actions/modules/${core.url.encodePathParam(id)}/versions`,
+                        `actions/modules/${core.url.encodePathParam(id, errors.ManagementError)}/versions`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -137,8 +139,15 @@ export class VersionsClient {
                 (request?.per_page == null || (response?.versions ?? []).length >= request?.per_page),
             getItems: (response) => response?.versions ?? [],
             loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
+                const _nextOffset = _offset + 1;
+                return core.HttpResponsePromise.fromPromise(
+                    list(core.setObjectProperty(request, "page", _nextOffset))
+                        .withRawResponse()
+                        .then((_pageResponse) => {
+                            _offset = _nextOffset;
+                            return _pageResponse;
+                        }),
+                );
             },
         });
     }
@@ -155,6 +164,8 @@ export class VersionsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.PreconditionFailedError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.actions.modules.versions.create("id")
@@ -181,7 +192,7 @@ export class VersionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `actions/modules/${core.url.encodePathParam(id)}/versions`,
+                `actions/modules/${core.url.encodePathParam(id, errors.ManagementError)}/versions`,
             ),
             method: "POST",
             headers: _headers,
@@ -245,6 +256,8 @@ export class VersionsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.actions.modules.versions.get("id", "versionId")
@@ -273,7 +286,7 @@ export class VersionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `actions/modules/${core.url.encodePathParam(id)}/versions/${core.url.encodePathParam(versionId)}`,
+                `actions/modules/${core.url.encodePathParam(id, errors.ManagementError)}/versions/${core.url.encodePathParam(versionId, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,

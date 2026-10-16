@@ -7,6 +7,7 @@ import {
 } from "../../../../../../../../BaseClient.js";
 import * as core from "../../../../../../../../core/index.js";
 import { mergeHeaders } from "../../../../../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../../../../../core/requestBody.js";
 import * as environments from "../../../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../../../errors/index.js";
@@ -33,6 +34,8 @@ export class TokensClient {
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.tokens.get("id")
@@ -59,7 +62,7 @@ export class TokensClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/tokens`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/tokens`,
             ),
             method: "GET",
             headers: _headers,
@@ -110,6 +113,8 @@ export class TokensClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.tokens.create("id")
@@ -138,14 +143,14 @@ export class TokensClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/tokens`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/tokens`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -193,6 +198,8 @@ export class TokensClient {
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.tokens.delete("id", "tokenId")
@@ -221,7 +228,7 @@ export class TokensClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/tokens/${core.url.encodePathParam(tokenId)}`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/tokens/${core.url.encodePathParam(tokenId, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
