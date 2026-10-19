@@ -38,6 +38,8 @@ export class GroupsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.organizations.members.effectiveRoles.sources.groups.list("id", "user_id", {
@@ -73,7 +75,7 @@ export class GroupsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `organizations/${core.url.encodePathParam(id)}/members/${core.url.encodePathParam(user_id)}/effective-roles/sources/groups`,
+                        `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/members/${core.url.encodePathParam(user_id, errors.ManagementError)}/effective-roles/sources/groups`,
                     ),
                     method: "GET",
                     headers: _headers,

@@ -37,6 +37,8 @@ export class RolesClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.effectivePermissions.sources.roles.list("id", {
@@ -83,7 +85,7 @@ export class RolesClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/effective-permissions/sources/effective-roles`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/effective-permissions/sources/effective-roles`,
                     ),
                     method: "GET",
                     headers: _headers,

@@ -1528,64 +1528,6 @@ export interface AttackProtectionCaptchaHcaptchaResponseContent {
     [key: string]: any;
 }
 
-/**
- * An attack protection policy override for CAPTCHA.
- */
-export interface AttackProtectionCaptchaPolicy {
-    /** System-generated identifier for the policy. */
-    id: string;
-    /** Human-readable policy name. */
-    name: string;
-    /** Description of the policy's purpose. */
-    description?: string | undefined;
-    /** Conflict resolution order. Lower number takes higher precedence. */
-    priority: number;
-    match: Management.AttackProtectionCaptchaPolicyMatch;
-    action: Management.AttackProtectionCaptchaPolicyAction;
-    /** ISO 8601 timestamp when the policy was created. */
-    created_at: string;
-    /** ISO 8601 timestamp when the policy was last updated. */
-    updated_at: string;
-}
-
-/**
- * CAPTCHA configuration override stored for this policy.
- */
-export interface AttackProtectionCaptchaPolicyAction {
-    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
-    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
-    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
-    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2 | undefined;
-    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterprise | undefined;
-    hcaptcha?: Management.CaptchaPolicyActionHcaptcha | undefined;
-    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptcha | undefined;
-    arkose?: Management.CaptchaPolicyActionArkose | undefined;
-}
-
-/**
- * CAPTCHA configuration override for this policy.
- */
-export interface AttackProtectionCaptchaPolicyActionInput {
-    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
-    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
-    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
-    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2Input | undefined;
-    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterpriseInput | undefined;
-    hcaptcha?: Management.CaptchaPolicyActionHcaptchaInput | undefined;
-    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptchaInput | undefined;
-    arkose?: Management.CaptchaPolicyActionArkoseInput | undefined;
-}
-
-/**
- * Traffic matching criteria for the policy. Exactly one of auth0_managed or geo_country_codes must be specified.
- */
-export interface AttackProtectionCaptchaPolicyMatch {
-    /** Match by Auth0-managed traffic identifiers. */
-    auth0_managed?: string[] | undefined;
-    /** Match by ISO 3166-1 alpha-2 country codes. */
-    geo_country_codes?: string[] | undefined;
-}
-
 /** The id of the active provider for the CAPTCHA. */
 export const AttackProtectionCaptchaProviderId = {
     Arkose: "arkose",
@@ -2188,137 +2130,6 @@ export interface BulkUpdateAculResponseContent {
     /** Accepts any additional properties */
     [key: string]: any;
 }
-
-/** The CAPTCHA provider type. */
-export const CaptchaActiveProviderEnum = {
-    SimpleCaptcha: "simple_captcha",
-    AuthChallenge: "auth_challenge",
-    RecaptchaV2: "recaptcha_v2",
-    RecaptchaEnterprise: "recaptcha_enterprise",
-    Hcaptcha: "hcaptcha",
-    FriendlyCaptcha: "friendly_captcha",
-    Arkose: "arkose",
-} as const;
-export type CaptchaActiveProviderEnum = (typeof CaptchaActiveProviderEnum)[keyof typeof CaptchaActiveProviderEnum];
-
-/**
- * Arkose Labs provider configuration.
- */
-export interface CaptchaPolicyActionArkose {
-    /** The Arkose Labs site key. */
-    site_key?: string | undefined;
-    /** The Arkose Labs client subdomain. */
-    client_subdomain?: string | undefined;
-    /** The Arkose Labs verify subdomain. */
-    verify_subdomain?: string | undefined;
-    /** Whether to allow access when Arkose Labs is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Arkose Labs provider configuration.
- */
-export interface CaptchaPolicyActionArkoseInput {
-    /** The Arkose Labs site key. */
-    site_key?: string | undefined;
-    /** The Arkose Labs private key. Encrypted at rest. */
-    secret?: string | undefined;
-    /** The Arkose Labs client subdomain. */
-    client_subdomain?: string | undefined;
-    /** The Arkose Labs verify subdomain. */
-    verify_subdomain?: string | undefined;
-    /** Whether to allow access when Arkose Labs is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Auth Challenge CAPTCHA provider configuration.
- */
-export interface CaptchaPolicyActionAuthChallenge {
-    /** Whether to allow access when the challenge provider is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Friendly Captcha provider configuration.
- */
-export interface CaptchaPolicyActionFriendlyCaptcha {
-    /** The Friendly Captcha site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * Friendly Captcha provider configuration.
- */
-export interface CaptchaPolicyActionFriendlyCaptchaInput {
-    /** The Friendly Captcha site key. */
-    site_key?: string | undefined;
-    /** The Friendly Captcha secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * hCaptcha provider configuration.
- */
-export interface CaptchaPolicyActionHcaptcha {
-    /** The hCaptcha site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * hCaptcha provider configuration.
- */
-export interface CaptchaPolicyActionHcaptchaInput {
-    /** The hCaptcha site key. */
-    site_key?: string | undefined;
-    /** The hCaptcha secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * reCAPTCHA Enterprise provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaEnterprise {
-    /** The reCAPTCHA Enterprise site key. */
-    site_key?: string | undefined;
-    /** The Google Cloud project ID. */
-    project_id?: string | undefined;
-}
-
-/**
- * reCAPTCHA Enterprise provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaEnterpriseInput {
-    /** The reCAPTCHA Enterprise site key. */
-    site_key?: string | undefined;
-    /** The Google Cloud project ID. */
-    project_id?: string | undefined;
-    /** The reCAPTCHA Enterprise API key. Encrypted at rest. */
-    api_key?: string | undefined;
-}
-
-/**
- * reCAPTCHA v2 provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaV2 {
-    /** The reCAPTCHA v2 site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * reCAPTCHA v2 provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaV2Input {
-    /** The reCAPTCHA v2 site key. */
-    site_key?: string | undefined;
-    /** The reCAPTCHA v2 secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * Simple CAPTCHA provider configuration.
- */
-export interface CaptchaPolicyActionSimpleCaptcha {}
 
 export interface CertificateSubjectDnCredential {
     credential_type: Management.CertificateSubjectDnCredentialTypeEnum;
@@ -7032,7 +6843,7 @@ export interface ConnectionPropertiesOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, string | null> | null) | undefined;
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
@@ -8623,7 +8434,7 @@ export type ConnectionUpstreamAliasEnum =
  * Options for adding parameters in the request to the upstream IdP
  */
 export type ConnectionUpstreamParams =
-    | (Record<string, Management.ConnectionUpstreamAdditionalProperties | null> | null)
+    | (Record<string, (Management.ConnectionUpstreamAdditionalProperties | null) | undefined> | null)
     | undefined;
 
 /**
@@ -8721,7 +8532,7 @@ export type ConnectionsDiscoveryUrl = (string | null) | undefined;
 /**
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
  */
-export type ConnectionsMetadata = Record<string, string | null>;
+export type ConnectionsMetadata = Record<string, (string | null) | undefined>;
 
 /**
  * Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp.
@@ -10180,6 +9991,7 @@ export interface CreateExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -11907,7 +11719,7 @@ export type DomainCertificateStatusEnum =
 /**
  * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
  */
-export type DomainMetadata = Record<string, string | null>;
+export type DomainMetadata = Record<string, (string | null) | undefined>;
 
 /**
  * Domain verification settings.
@@ -22272,6 +22084,7 @@ export interface EventStreamCloudEventContext {
     connection?: Management.EventStreamCloudEventContextConnection | undefined;
     request?: Management.EventStreamCloudEventContextRequest | undefined;
     tenant: Management.EventStreamCloudEventContextTenant;
+    transaction?: Management.EventStreamCloudEventContextTransaction | undefined;
 }
 
 /**
@@ -22350,6 +22163,71 @@ export interface EventStreamCloudEventContextTenant {
     /** User-provided tenant identifier. */
     id: string;
 }
+
+/**
+ * An auth transaction.
+ */
+export interface EventStreamCloudEventContextTransaction {
+    /** acr_values in the request. */
+    acr_values: string[];
+    /** The locale used for this transaction. */
+    locale: string;
+    /** Hint about the login identifier the user might use in this transaction. */
+    login_hint?: string | undefined;
+    /** Instructions indicating whether the user may be prompted for re-authentication and consent. */
+    prompt?: string[] | undefined;
+    protocol?: Management.EventStreamCloudEventContextTransactionProtocolEnum | undefined;
+    /** The URL to which the client will be redirected when the transaction completes. */
+    redirect_uri?: string | undefined;
+    /** The scopes requested. */
+    requested_scopes: string[];
+    response_mode?: Management.EventStreamCloudEventContextTransactionResponseModeEnum | undefined;
+    /** The kind of credential issued by this transaction. */
+    response_type?: Management.EventStreamCloudEventContextTransactionResponseTypeItemEnum[] | undefined;
+    /** The OAuth state parameter for this transaction. */
+    state?: string | undefined;
+    /** The ui_locales requested for this transaction. */
+    ui_locales: string[];
+}
+
+/** The protocol used for this transaction. */
+export const EventStreamCloudEventContextTransactionProtocolEnum = {
+    OidcBasicProfile: "oidc-basic-profile",
+    OidcImplicitProfile: "oidc-implicit-profile",
+    Oauth2DeviceCode: "oauth2-device-code",
+    Oauth2ResourceOwner: "oauth2-resource-owner",
+    Oauth2ResourceOwnerJwtBearer: "oauth2-resource-owner-jwt-bearer",
+    Oauth2Password: "oauth2-password",
+    Oauth2Webauthn: "oauth2-webauthn",
+    Oauth2AccessToken: "oauth2-access-token",
+    Oauth2RefreshToken: "oauth2-refresh-token",
+    Oauth2TokenExchange: "oauth2-token-exchange",
+    OidcHybridProfile: "oidc-hybrid-profile",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+    WstrustUsernamemixed: "wstrust-usernamemixed",
+} as const;
+export type EventStreamCloudEventContextTransactionProtocolEnum =
+    (typeof EventStreamCloudEventContextTransactionProtocolEnum)[keyof typeof EventStreamCloudEventContextTransactionProtocolEnum];
+
+/** This transaction's method for returning parameters from the Authorization Endpoint. */
+export const EventStreamCloudEventContextTransactionResponseModeEnum = {
+    Query: "query",
+    Fragment: "fragment",
+    FormPost: "form_post",
+    WebMessage: "web_message",
+} as const;
+export type EventStreamCloudEventContextTransactionResponseModeEnum =
+    (typeof EventStreamCloudEventContextTransactionResponseModeEnum)[keyof typeof EventStreamCloudEventContextTransactionResponseModeEnum];
+
+/** OAuth/OIDC response types. */
+export const EventStreamCloudEventContextTransactionResponseTypeItemEnum = {
+    Code: "code",
+    Token: "token",
+    IdToken: "id_token",
+} as const;
+export type EventStreamCloudEventContextTransactionResponseTypeItemEnum =
+    (typeof EventStreamCloudEventContextTransactionResponseTypeItemEnum)[keyof typeof EventStreamCloudEventContextTransactionResponseTypeItemEnum];
 
 /**
  * Event contents.
@@ -28992,6 +28870,7 @@ export interface ExperimentListItem {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -29533,7 +29412,7 @@ export type FlowActionAuth0SendRequestParamsPayloadObject = Record<string, unkno
 
 export type FlowActionAuth0SendRequestParamsQueryParams = Record<
     string,
-    FlowActionAuth0SendRequestParamsQueryParams.Value | null
+    (FlowActionAuth0SendRequestParamsQueryParams.Value | null) | undefined
 >;
 
 export namespace FlowActionAuth0SendRequestParamsQueryParams {
@@ -30039,7 +29918,7 @@ export type FlowActionHttpSendRequestParamsPayloadObject = Record<string, unknow
 
 export type FlowActionHttpSendRequestParamsQueryParams = Record<
     string,
-    FlowActionHttpSendRequestParamsQueryParams.Value | null
+    (FlowActionHttpSendRequestParamsQueryParams.Value | null) | undefined
 >;
 
 export namespace FlowActionHttpSendRequestParamsQueryParams {
@@ -33298,6 +33177,7 @@ export interface GetExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -34456,7 +34336,7 @@ export interface GuardianFactor {
     settings?: Management.GuardianFactorSettings | undefined;
 }
 
-/** Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`. */
+/** Factor name. Can be `sms`, `push-notification`, `email`, `duo`, `otp`, `webauthn-roaming`, `webauthn-platform`, `recovery-code`, or `passkey`. */
 export const GuardianFactorNameEnum = {
     PushNotification: "push-notification",
     Sms: "sms",
@@ -34466,6 +34346,7 @@ export const GuardianFactorNameEnum = {
     WebauthnRoaming: "webauthn-roaming",
     WebauthnPlatform: "webauthn-platform",
     RecoveryCode: "recovery-code",
+    Passkey: "passkey",
 } as const;
 export type GuardianFactorNameEnum = (typeof GuardianFactorNameEnum)[keyof typeof GuardianFactorNameEnum];
 
@@ -34856,11 +34737,6 @@ export interface ListAgentsResponseContent {
     /** A cursor to be used as the "from" query parameter for the next page of results. Omitted when there are no further results. */
     next?: string | undefined;
 }
-
-/**
- * List of CAPTCHA attack protection policies for the tenant, sorted by priority ascending.
- */
-export type ListAttackProtectionCaptchaPoliciesResponseContent = Management.AttackProtectionCaptchaPolicy[];
 
 export interface ListBrandingPhoneProvidersResponseContent {
     providers?: Management.PhoneProviderSchemaMasked[] | undefined;
@@ -36462,7 +36338,7 @@ export interface OrganizationMemberRole {
 /**
  * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
  */
-export type OrganizationMetadata = Record<string, string | null>;
+export type OrganizationMetadata = Record<string, (string | null) | undefined>;
 
 /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
 export const OrganizationSortFieldEnum = {
@@ -39627,7 +39503,7 @@ export interface UpdateConnectionOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, string | null> | null) | undefined;
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
@@ -40260,6 +40136,7 @@ export interface UpdateExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -40903,9 +40780,9 @@ export interface UpdateUserResponseContent {
 }
 
 /**
- * Configuration overrides for this variation; keys must exist in the parent flag parameters. Empty {} is the baseline (control) variation that overrides nothing.
+ * Top-level keys merge into the stored overrides. Set a key to `null` to remove it. Set `overrides` to `null` or `{}` to clear all. Keys must exist in the parent flag parameters.
  */
-export type UpdateVariationOverridesMap = Record<string, unknown>;
+export type UpdateVariationOverridesMap = (Record<string, unknown> | null) | undefined;
 
 export interface UpdateVariationResponseContent {
     id: string;

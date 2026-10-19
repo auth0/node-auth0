@@ -4,6 +4,7 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../../../Ba
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../../../BaseClient.js";
 import * as core from "../../../../../../core/index.js";
 import { mergeHeaders } from "../../../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../../../core/requestBody.js";
 import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../errors/index.js";
@@ -38,6 +39,8 @@ export class ScimConfigurationClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.list({
@@ -146,6 +149,8 @@ export class ScimConfigurationClient {
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.get("id")
@@ -172,7 +177,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "GET",
             headers: _headers,
@@ -223,6 +228,8 @@ export class ScimConfigurationClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.create("id")
@@ -251,14 +258,14 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -305,6 +312,8 @@ export class ScimConfigurationClient {
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.delete("id")
@@ -328,7 +337,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -375,6 +384,8 @@ export class ScimConfigurationClient {
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.update("id", {
@@ -406,14 +417,14 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -458,6 +469,8 @@ export class ScimConfigurationClient {
      *
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.NotFoundError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.scimConfiguration.getDefaultMapping("id")
@@ -484,7 +497,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/default-mapping`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/default-mapping`,
             ),
             method: "GET",
             headers: _headers,
