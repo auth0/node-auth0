@@ -1,7 +1,7 @@
 import { ManagementClient as FernClient } from "../Client.js";
 import * as core from "../core/index.js";
 import { withCustomDomainHeader } from "../request-options.js";
-import { createTelemetryHeaders, createTokenSupplier } from "./auth-helpers.js";
+import { buildManagementBaseUrl, createTelemetryHeaders, createTokenSupplier } from "./auth-helpers.js";
 
 /**
  * All supported configuration options for the ManagementClient.
@@ -25,7 +25,10 @@ export declare namespace ManagementClient {
         FernClient.Options,
         "token" | "environment" | "fetcher" | "baseUrl"
     > {
-        /** Auth0 domain (e.g., 'your-tenant.auth0.com') */
+        /**
+         * Auth0 domain as a bare hostname (e.g., 'your-tenant.auth0.com'), without a scheme or path.
+         * The client throws at construction if the domain is empty or is not a bare hostname.
+         */
         domain: string;
         /**
          * API audience. Defaults to https://{domain}/api/v2/
@@ -210,7 +213,8 @@ export class ManagementClient extends FernClient {
      * @group Management API
      */
     constructor(_options: ManagementClientConfig) {
-        const baseUrl = `https://${_options.domain}/api/v2`;
+        // Validates the domain before anything else, so a static token is covered as well as client credentials.
+        const baseUrl = buildManagementBaseUrl(_options.domain);
         const headers = createTelemetryHeaders(_options);
         const token = createTokenSupplier(_options);
 
