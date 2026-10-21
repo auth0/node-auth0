@@ -56,7 +56,7 @@ describe("ConnectionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/connections")
             .respondWith()
             .statusCode(400)
@@ -75,7 +75,7 @@ describe("ConnectionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/connections")
             .respondWith()
             .statusCode(401)
@@ -94,7 +94,7 @@ describe("ConnectionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/connections")
             .respondWith()
             .statusCode(403)
@@ -113,7 +113,7 @@ describe("ConnectionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/connections")
             .respondWith()
             .statusCode(429)

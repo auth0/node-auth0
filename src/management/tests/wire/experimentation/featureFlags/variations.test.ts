@@ -451,25 +451,6 @@ describe("VariationsClient", () => {
             .mockEndpoint()
             .delete("/experimentation/feature-flags/id/variations/vid")
             .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.featureFlags.variations.delete("id", "vid");
-        }).rejects.toThrow(Management.BadRequestError);
-    });
-
-    test("delete (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .delete("/experimentation/feature-flags/id/variations/vid")
-            .respondWith()
             .statusCode(403)
             .jsonBody(rawResponseBody)
             .build();
@@ -479,7 +460,7 @@ describe("VariationsClient", () => {
         }).rejects.toThrow(Management.ForbiddenError);
     });
 
-    test("delete (4)", async () => {
+    test("delete (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -498,7 +479,7 @@ describe("VariationsClient", () => {
         }).rejects.toThrow(Management.NotFoundError);
     });
 
-    test("delete (5)", async () => {
+    test("delete (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
@@ -517,7 +498,7 @@ describe("VariationsClient", () => {
         }).rejects.toThrow(Management.ConflictError);
     });
 
-    test("delete (6)", async () => {
+    test("delete (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 

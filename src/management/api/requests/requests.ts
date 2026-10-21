@@ -214,6 +214,35 @@ export interface CreateClientGrantRequestContent {
 
 /**
  * @example
+ *     {
+ *         q: "q",
+ *         parser: "scim",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         take: 1,
+ *         from: "from",
+ *         sort: "audience"
+ *     }
+ */
+export interface SearchClientGrantsRequestParameters {
+    /** Filter expression in SCIM or Lucene syntax (depending on parser parameter). SCIM examples: `audience eq "https://api.example.com"`, `client_id eq "cli_abc"`, `subject_type eq "client"`, `allow_any_organization eq true`, `default_for eq "third_party_clients"`, `audience co "example" and organization_id eq "org_123"`. SCIM operators: eq, ne, sw, ew, co, pr, gt, ge, lt, le, and, or. <br /><br /><b>Supported Fields</b>:<ul><li><i>audience</i> - Filter by audience (eq, ne, sw, co, ew, pr)</li><li><i>client_id</i> - Filter by client ID (eq, ne, sw, pr)</li><li><i>subject_type</i> - Filter by subject type (eq, ne, sw, pr)</li><li><i>allow_any_organization</i> - Filter by allow_any_organization (eq, ne, pr)</li><li><i>organization_id</i> - Filter by organization ID (eq, ne, sw, pr)</li><li><i>updated_at</i> - Filter by last update date (eq, ne, gt, ge, lt, le, pr)</li><li><i>default_for</i> - Filter by default grant group (eq, ne, sw, pr)</li></ul>Maximum 5 filter operations per query. Results are eventually consistent and may not reflect recent updates. */
+    q?: string | null;
+    /** Query parser to use for the filter expression. Use "scim" for SCIM filter syntax or "lucene" for Lucene query syntax (default). */
+    parser?: Management.SearchParserEnum | null;
+    /** Comma-separated list of fields to include or exclude in the response. Works with the include_fields parameter to control projection mode. */
+    fields?: string | null;
+    /** Controls field projection mode. Set to true to include only fields specified in the fields parameter. Set to false to exclude fields specified in the fields parameter. Defaults to true if not specified. */
+    include_fields?: boolean | null;
+    /** Maximum number of results to return per page (1-100). Defaults to 50. */
+    take?: number | null;
+    /** Cursor for the next page of results. Use the value from the next field in the previous response. */
+    from?: string | null;
+    /** Field name to sort results by in ascending order. Defaults to insertion order (oldest first) if not provided. */
+    sort?: Management.ClientGrantSortFieldEnum | null;
+}
+
+/**
+ * @example
  *     {}
  */
 export interface UpdateClientGrantRequestContent {
@@ -226,6 +255,49 @@ export interface UpdateClientGrantRequestContent {
     authorization_details_types?: string[];
     /** If enabled, all scopes configured on the resource server are allowed for this grant. */
     allow_all_scopes?: boolean | null;
+}
+
+/**
+ * @example
+ *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListClientProfilesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         client_configuration: {},
+ *         apply_policy: {
+ *             external_metadata_type: "cimd",
+ *             external_metadata_created_by: "client"
+ *         }
+ *     }
+ */
+export interface CreateClientProfileRequestContent {
+    name: Management.ClientProfileName;
+    description?: (Management.ClientProfileDescription | undefined) | null;
+    client_configuration: Management.ClientProfileClientConfiguration;
+    apply_policy: Management.ClientProfileApplyPolicy;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateClientProfileRequestContent {
+    name?: Management.ClientProfileName;
+    description?: (Management.ClientProfileDescription | undefined) | null;
+    client_configuration?: Management.ClientProfileClientConfiguration;
+    apply_policy?: Management.ClientProfileApplyPolicy;
 }
 
 /**
@@ -358,6 +430,7 @@ export interface CreateClientRequestContent {
     resource_server_identifier?: string;
     identity_assertion_authorization_grant?: Management.CreateIdentityAssertionAuthorizationGrant;
     anonymous_sessions?: Management.CreateAnonymousSessions;
+    enforce_anon_session_transfer_network_binding?: Management.ClientAnonymousSessionTransferNetworkBindingEnum;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
     redirection_policy?: Management.ClientRedirectionPolicyEnum;
     express_configuration?: Management.ExpressConfiguration;
@@ -387,6 +460,35 @@ export interface PreviewCimdMetadataRequestContent {
 export interface RegisterCimdClientRequestContent {
     /** URL to the Client ID Metadata Document. Acts as the unique identifier for upsert operations. */
     external_client_id: string;
+}
+
+/**
+ * @example
+ *     {
+ *         q: "q",
+ *         parser: "scim",
+ *         fields: "fields",
+ *         include_fields: true,
+ *         take: 1,
+ *         from: "from",
+ *         sort: "name"
+ *     }
+ */
+export interface SearchClientsRequestParameters {
+    /** Filter expression in SCIM or Lucene syntax (depending on parser parameter). SCIM examples: `name eq "Auth0"`, `name sw "auth" and app_type eq "spa"`. SCIM operators: eq, ne, sw, ew, co, pr, gt, ge, lt, le, and, or. <br /><br /><b>Supported Fields</b>:<br /><ul><li><i>client_id</i> - Auth0 client ID (case-sensitive, exact match)</li><li><i>external_client_id</i> - URL of the Client ID Metadata Document (CIMD); case-sensitive, exact match</li><li><i>name</i> - Client name (supports contains, starts-with, ends-with operators; sortable)</li><li><i>app_type</i> - Application type (e.g. "spa", "native", "non_interactive")</li><li><i>is_first_party</i> - Whether the client is first-party (boolean)</li><li><i>updated_at</i> - Last update timestamp (supports date range operators; sortable)</li><li><i>metadata.{key}</i> - Filter by client metadata key-value pairs (max 2-level key depth, values indexed up to 64 characters)</li><li><i>client_grant.organization_id</i> - Filter by associated organization ID</li><li><i>client_grant.allow_any_organization</i> - Filter by allow any organization setting</li></ul>Maximum 5 filter operations per query. Results are eventually consistent and may not reflect recent updates. */
+    q?: string | null;
+    /** Query parser to use for the filter expression. Use "scim" for SCIM filter syntax or "lucene" for Lucene query syntax (default). */
+    parser?: Management.SearchParserEnum | null;
+    /** Comma-separated list of fields to include or exclude in the response. Works with the include_fields parameter to control projection mode. Maximum 50 fields. */
+    fields?: string | null;
+    /** Controls field projection mode. Set to true to include only fields specified in the fields parameter. Set to false to exclude fields specified in the fields parameter. Defaults to true if not specified. */
+    include_fields?: boolean | null;
+    /** Maximum number of results to return per page (1-100). Defaults to 50. */
+    take?: number | null;
+    /** Cursor for the next page of results. Use the value from the next field in the previous response. */
+    from?: string | null;
+    /** Field name to sort results by in ascending order. Defaults to insertion order (oldest first) if not provided. */
+    sort?: Management.ClientSortFieldEnum | null;
 }
 
 /**
@@ -462,6 +564,7 @@ export interface UpdateClientRequestContent {
     token_quota?: Management.UpdateTokenQuota | null;
     identity_assertion_authorization_grant?: Management.UpdateIdentityAssertionAuthorizationGrant | null;
     anonymous_sessions?: Management.UpdateAnonymousSessions | null;
+    enforce_anon_session_transfer_network_binding?: Management.ClientAnonymousSessionTransferNetworkBindingEnum;
     /** Form template for WS-Federation protocol */
     form_template?: string;
     addons?: Management.ClientAddons;
@@ -503,6 +606,7 @@ export interface UpdateClientRequestContent {
         | null;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
     redirection_policy?: Management.ClientRedirectionPolicyEnum;
+    oidc_support?: Management.ClientOidcSupportPatch | null;
 }
 
 /**
@@ -1084,7 +1188,7 @@ export interface ListGroupsRequestParameters {
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean | null;
-    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). The returned total reflects at most 1,000 results. */
     include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
@@ -1667,8 +1771,8 @@ export interface ListRolesRequestParameters {
     name_filter?: string | null;
     /** Optional filter on the type of the role */
     type?: Management.RoleTypeEnum | null;
-    /** Filter organization-level roles by owner ID. Required when type is "organization". */
-    owner_id?: string | null;
+    /** Filter organization-level roles by owner ID. Use an organization ID to filter that organization's roles, or "auth0" to retrieve Auth0-managed System Roles. Required when type is "organization". */
+    owner_id?: Management.RoleOwnerIdFilter | null;
 }
 
 /**
@@ -2390,6 +2494,7 @@ export interface UpdateBruteForceSettingsRequestContent {
     mode?: Management.BruteForceProtectionModeEnum;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum;
 }
 
 /**
@@ -3024,7 +3129,8 @@ export interface ListExperimentsRequestParameters {
  *     {
  *         name: "name",
  *         feature_flag_id: "feature_flag_id",
- *         authentication_flow: "authentication"
+ *         authentication_flow: "authentication",
+ *         allocation_strategy: "percentage"
  *     }
  */
 export interface CreateExperimentRequestContent {
@@ -3038,7 +3144,7 @@ export interface CreateExperimentRequestContent {
     /** Applies only to Auth0-managed flags. Controls where non-overridden config keys resolve from: 'tenant' inherits the tenant's live config so the experiment overlays only its changes, 'flag' uses the flag's frozen defaults for a complete config. Optional; defaults to 'tenant' when omitted. Rejected for customer-defined flags. */
     default_config?: Management.DefaultConfigEnum;
     /** The traffic allocation strategy for this experiment */
-    allocation_strategy?: Management.AllocationStrategyEnum;
+    allocation_strategy: Management.AllocationStrategyEnum;
     /** Traffic allocations mapping variations to weights or segments */
     allocations?: Management.AllocationRequestItem[];
     /** Ramp experiment levels configuration. A strictly-increasing sequence of exposure percentages, each an integer in [0, 100]. */
@@ -3062,6 +3168,7 @@ export interface UpdateExperimentRequestParameters {
     default_config?: Management.DefaultConfigEnum;
     /** Ramp experiment levels configuration. A strictly-increasing sequence of exposure percentages, each an integer in [0, 100]. Can only be modified on draft experiments. */
     levels?: number[];
+    status?: Management.ExperimentTransitionStatusEnum;
 }
 
 /**
@@ -3073,16 +3180,6 @@ export interface UpdateExperimentRequestParameters {
 export interface AdvanceRampRequestContent {
     /** The target percentage level from the experiment schedule. Must be the immediate next level. */
     target_level: number;
-}
-
-/**
- * @example
- *     {
- *         status: "active"
- *     }
- */
-export interface UpdateExperimentStatusRequestContent {
-    status: Management.ExperimentTransitionStatusEnum;
 }
 
 /**
@@ -3130,17 +3227,8 @@ export interface UpdateFeatureFlagRequestContent {
     /** A description of what this feature flag controls */
     description?: string | null;
     parameters?: Management.UpdateFeatureFlagParameters;
-}
-
-/**
- * @example
- *     {
- *         status: "draft"
- *     }
- */
-export interface UpdateFeatureFlagStatusRequestContent {
-    /** The target status to transition the feature flag to. */
-    status: Management.FeatureFlagStatusEnum;
+    /** Target lifecycle status (draft → active, draft → archived, active → archived). Activating a flag requires at least 2 variations. When combined with field edits, the edits and the transition are applied together; if the transition is rejected, no edits are applied. */
+    status?: Management.FeatureFlagStatusEnum;
 }
 
 /**
@@ -3187,6 +3275,8 @@ export interface UpdateSegmentRequestContent {
     description?: string | null;
     /** Replaces the entire rules array. Each rule is limited to 4KB and the whole segment to 10KB (serialized). */
     rules?: Management.SegmentRule[];
+    /** Target lifecycle status. Archiving removes the segment from the active pool and is terminal (an archived segment cannot return to active). When combined with field edits, the edits apply first and the transition follows. */
+    status?: Management.SegmentStatusEnum;
 }
 
 /**
@@ -3216,7 +3306,7 @@ export interface UpdateVariationRequestContent {
     name?: string;
     /** A description of what this variation controls */
     description?: string | null;
-    overrides?: Management.UpdateVariationOverridesMap;
+    overrides?: (Management.UpdateVariationOverridesMap | undefined) | null;
 }
 
 /**
@@ -4497,6 +4587,8 @@ export interface UpdateTenantSettingsRequestContent {
     pushed_authorization_requests_supported?: boolean | null;
     /** Supports iss parameter in authorization responses */
     authorization_response_iss_parameter_supported?: boolean | null;
+    /** Enables strict DPoP refresh token binding per RFC 9449: all refresh tokens issued to public clients that present a DPoP proof are bound to the sender's key, and the binding is validated on every subsequent exchange. When disabled, DPoP refresh token binding may still apply for specific audiences for backwards compatibility. */
+    dpop_strict_refresh_token_binding?: boolean | null;
     /**
      * Controls whether a confirmation prompt is shown during login flows when the redirect URI uses non-verifiable callback URIs (for example, a custom URI schema such as `myapp://`, or `localhost`).
      * If set to true, a confirmation prompt will not be shown. We recommend that this is set to false for improved protection from malicious apps.
@@ -4506,6 +4598,8 @@ export interface UpdateTenantSettingsRequestContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
     /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
     client_id_metadata_document_supported?: boolean;
+    /** Whether the authorization server supports registering clients dynamically from a client_id URL. Requires client_id_metadata_document_supported to be enabled. */
+    client_id_metadata_document_dynamic_registration_supported?: boolean;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
