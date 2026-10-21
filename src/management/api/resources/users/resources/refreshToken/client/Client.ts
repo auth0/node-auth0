@@ -33,6 +33,8 @@ export class RefreshTokenClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.refreshToken.list("user_id", {
@@ -69,7 +71,7 @@ export class RefreshTokenClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(user_id)}/refresh-tokens`,
+                        `users/${core.url.encodePathParam(user_id, errors.ManagementError)}/refresh-tokens`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -149,6 +151,8 @@ export class RefreshTokenClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.refreshToken.delete("user_id")
@@ -172,7 +176,7 @@ export class RefreshTokenClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(user_id)}/refresh-tokens`,
+                `users/${core.url.encodePathParam(user_id, errors.ManagementError)}/refresh-tokens`,
             ),
             method: "DELETE",
             headers: _headers,

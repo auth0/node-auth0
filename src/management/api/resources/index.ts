@@ -4,6 +4,7 @@ export * as anomaly from "./anomaly/index.js";
 export * as attackProtection from "./attackProtection/index.js";
 export * as branding from "./branding/index.js";
 export * as clientGrants from "./clientGrants/index.js";
+export * as clientProfiles from "./clientProfiles/index.js";
 export * as clients from "./clients/index.js";
 export * as connectionProfiles from "./connectionProfiles/index.js";
 export * as connections from "./connections/index.js";

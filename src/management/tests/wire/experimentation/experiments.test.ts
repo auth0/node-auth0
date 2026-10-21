@@ -142,6 +142,7 @@ describe("ExperimentsClient", () => {
             name: "name",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = {
             id: "id",
@@ -191,6 +192,7 @@ describe("ExperimentsClient", () => {
             name: "name",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -202,6 +204,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -219,6 +222,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.BadRequestError);
     });
@@ -230,6 +234,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -247,6 +252,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.UnauthorizedError);
     });
@@ -258,6 +264,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -275,6 +282,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });
@@ -286,6 +294,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -303,6 +312,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.NotFoundError);
     });
@@ -314,6 +324,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -331,6 +342,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.ConflictError);
     });
@@ -342,6 +354,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -359,6 +372,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.UnprocessableEntityError);
     });
@@ -370,6 +384,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -387,6 +402,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
@@ -926,214 +942,6 @@ describe("ExperimentsClient", () => {
         await expect(async () => {
             return await client.experimentation.experiments.advanceRamp("id", {
                 target_level: 100,
-            });
-        }).rejects.toThrow(Management.TooManyRequestsError);
-    });
-
-    test("updateStatus (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = {
-            id: "id",
-            name: "name",
-            description: "description",
-            feature_flag_id: "feature_flag_id",
-            feature_flag_name: "feature_flag_name",
-            authentication_flow: "authentication_flow",
-            allocation_strategy: "percentage",
-            status: "draft",
-            is_valid: true,
-            default_config: "tenant",
-            feature_flag_snapshot: { key: "value" },
-            allocations: [
-                {
-                    variation_id: "variation_id",
-                    variation_name: "variation_name",
-                    segment_id: "segment_id",
-                    segment_name: "segment_name",
-                    weight: 1,
-                    priority: 1,
-                    is_control: true,
-                    is_fallback: true,
-                    variation_snapshot: { key: "value" },
-                    segment_snapshot: { key: "value" },
-                },
-            ],
-            editable_fields: ["editable_fields"],
-            levels: [1],
-            current_level: 1,
-            started_at: "2024-01-15T09:30:00Z",
-            ended_at: "2024-01-15T09:30:00Z",
-            created_at: "2024-01-15T09:30:00Z",
-            updated_at: "2024-01-15T09:30:00Z",
-        };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.experimentation.experiments.updateStatus("id", {
-            status: "active",
-        });
-        expect(response).toEqual(rawResponseBody);
-    });
-
-    test("updateStatus (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.experiments.updateStatus("id", {
-                status: "active",
-            });
-        }).rejects.toThrow(Management.BadRequestError);
-    });
-
-    test("updateStatus (3)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.experiments.updateStatus("id", {
-                status: "active",
-            });
-        }).rejects.toThrow(Management.UnauthorizedError);
-    });
-
-    test("updateStatus (4)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.experiments.updateStatus("id", {
-                status: "active",
-            });
-        }).rejects.toThrow(Management.ForbiddenError);
-    });
-
-    test("updateStatus (5)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(404)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.experiments.updateStatus("id", {
-                status: "active",
-            });
-        }).rejects.toThrow(Management.NotFoundError);
-    });
-
-    test("updateStatus (6)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(409)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.experiments.updateStatus("id", {
-                status: "active",
-            });
-        }).rejects.toThrow(Management.ConflictError);
-    });
-
-    test("updateStatus (7)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(422)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.experiments.updateStatus("id", {
-                status: "active",
-            });
-        }).rejects.toThrow(Management.UnprocessableEntityError);
-    });
-
-    test("updateStatus (8)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { status: "active" };
-        const rawResponseBody = { key: "value" };
-
-        server
-            .mockEndpoint()
-            .post("/experimentation/experiments/id/status")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.experimentation.experiments.updateStatus("id", {
-                status: "active",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
