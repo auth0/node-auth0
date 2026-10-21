@@ -1,5 +1,13 @@
 # Change Log
 
+## [v7.6.0](https://github.com/auth0/node-auth0/tree/v7.6.0) (2026-10-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.5.0...v7.6.0)
+
+**Added**
+
+- feat: add SSE reconnection, passkey guardian factor, and additionalBodyParameters; reject dot-segment path params [\#1428](https://github.com/auth0/node-auth0/pull/1428) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.5.0](https://github.com/auth0/node-auth0/tree/v7.5.0) (2026-10-14)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.4.0...v7.5.0)

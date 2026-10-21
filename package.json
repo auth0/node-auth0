@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "7.5.0",
+    "version": "7.6.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -605,17 +605,6 @@
                 "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
-        },
-        "./attackProtection/captchaPolicies": {
-            "import": {
-                "types": "./dist/esm/management/api/resources/attackProtection/resources/captchaPolicies/exports.d.mts",
-                "default": "./dist/esm/management/api/resources/attackProtection/resources/captchaPolicies/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/management/api/resources/attackProtection/resources/captchaPolicies/exports.d.ts",
-                "default": "./dist/cjs/management/api/resources/attackProtection/resources/captchaPolicies/exports.js"
-            },
-            "default": "./dist/cjs/management/api/resources/attackProtection/resources/captchaPolicies/exports.js"
         },
         "./attackProtection/phoneProviderProtection": {
             "import": {
