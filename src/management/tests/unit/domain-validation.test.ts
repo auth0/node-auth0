@@ -66,8 +66,8 @@ describe("domain validation", () => {
                 expect(() => new ManagementClient({ domain, ...auth })).toThrow(INVALID_DOMAIN_ERROR);
             });
 
-            it("accepts a bare hostname", () => {
-                expect(new ManagementClient({ domain: "tenant.auth0.com", ...auth })).toBeInstanceOf(ManagementClient);
+            it.each(VALID_DOMAINS)("accepts %j", (domain) => {
+                expect(new ManagementClient({ domain, ...auth })).toBeInstanceOf(ManagementClient);
             });
         });
 
@@ -97,6 +97,12 @@ describe("domain validation", () => {
                     "https://tenant.auth0.com/api/v2",
                 );
             });
+
+            it("keeps a port in the base URL", () => {
+                expect(createManagementAuth({ domain: "tenant.auth0.com:443", ...auth }).baseUrl).toBe(
+                    "https://tenant.auth0.com:443/api/v2",
+                );
+            });
         });
     });
 
@@ -111,8 +117,8 @@ describe("domain validation", () => {
             expect(() => new TokenProvider({ domain, ...options })).toThrow(INVALID_DOMAIN_ERROR);
         });
 
-        it("accepts a bare hostname", () => {
-            expect(new TokenProvider({ domain: "tenant.auth0.com", ...options })).toBeInstanceOf(TokenProvider);
+        it.each(VALID_DOMAINS)("accepts %j", (domain) => {
+            expect(new TokenProvider({ domain, ...options })).toBeInstanceOf(TokenProvider);
         });
     });
 });

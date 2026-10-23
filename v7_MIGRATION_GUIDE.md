@@ -54,22 +54,21 @@ If you need the old clients unchanged as a stopgap, they still ship from the [le
 
 The following symbols were exported from the main entrypoint in v6 and are removed in v7. Each moves to `@auth0/auth0-auth-js`, or remains available from the `auth0/legacy` entrypoint at its v4.x shape.
 
-<!-- prettier-ignore -->
-| Removed export (v6)          | Replacement in v7                                                                     |
-| ---------------------------- | ------------------------------------------------------------------------------------- |
-| `AuthenticationClient`       | `AuthClient` from `@auth0/auth0-auth-js`                                               |
-| `UserInfoClient`             | `AuthClient.getUserInfo()` from `@auth0/auth0-auth-js`, or read `TokenResponse.claims` |
-| `AuthApiError`               | Per-operation typed errors from `@auth0/auth0-auth-js` (`TokenByCodeError`, `TokenByRefreshTokenError`, …); use their `.cause` |
-| `AuthenticationClientOptions`| `AuthClientOptions` from `@auth0/auth0-auth-js`                                        |
-| `IDTokenValidateOptions`     | Validation is internal to the grant call; pass `organization` / `nonce` / `maxAge` to the grant and read `TokenResponse.claims` |
-| `IdTokenValidatorError`      | Thrown internally by the grant as a typed error on claim mismatch                      |
-| `TokenSet`                   | `TokenResponse` from `@auth0/auth0-auth-js` (camelCase fields; `expiresAt` is absolute) |
-| `SUBJECT_TOKEN_TYPES`        | Pass the token-type URN string directly to `exchangeToken` in `@auth0/auth0-auth-js`   |
-| `UserInfoResponse`           | Return type of `AuthClient.getUserInfo()` in `@auth0/auth0-auth-js`                    |
-| `UserInfoError`              | Typed error from `AuthClient.getUserInfo()` in `@auth0/auth0-auth-js`                   |
-| `ResponseError`              | Management API calls throw `ManagementError`                                          |
-| `FetchError`                 | Management API calls throw `ManagementError`                                          |
-| `JSONApiResponse`            | Responses return the data directly (no wrapper)                                        |
+| Removed export (v6)           | Replacement in v7                                                                                                               |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationClient`        | `AuthClient` from `@auth0/auth0-auth-js`                                                                                        |
+| `UserInfoClient`              | `AuthClient.getUserInfo()` from `@auth0/auth0-auth-js`, or read `TokenResponse.claims`                                          |
+| `AuthApiError`                | Per-operation typed errors from `@auth0/auth0-auth-js` (`TokenByCodeError`, `TokenByRefreshTokenError`, …); use their `.cause`  |
+| `AuthenticationClientOptions` | `AuthClientOptions` from `@auth0/auth0-auth-js`                                                                                 |
+| `IDTokenValidateOptions`      | Validation is internal to the grant call; pass `organization` / `nonce` / `maxAge` to the grant and read `TokenResponse.claims` |
+| `IdTokenValidatorError`       | Thrown internally by the grant as a typed error on claim mismatch                                                               |
+| `TokenSet`                    | `TokenResponse` from `@auth0/auth0-auth-js` (camelCase fields; `expiresAt` is absolute)                                         |
+| `SUBJECT_TOKEN_TYPES`         | Pass the token-type URN string directly to `exchangeToken` in `@auth0/auth0-auth-js`                                            |
+| `UserInfoResponse`            | Return type of `AuthClient.getUserInfo()` in `@auth0/auth0-auth-js`                                                             |
+| `UserInfoError`               | Typed error from `AuthClient.getUserInfo()` in `@auth0/auth0-auth-js`                                                           |
+| `ResponseError`               | Management API calls throw `ManagementError`                                                                                    |
+| `FetchError`                  | Management API calls throw `ManagementError`                                                                                    |
+| `JSONApiResponse`             | Responses return the data directly (no wrapper)                                                                                 |
 
 `ManagementClient`, the `Management` namespace, and `ManagementError` are unchanged and still exported.
 
