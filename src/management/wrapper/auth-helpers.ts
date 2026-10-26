@@ -1,6 +1,7 @@
 import * as core from "../core/index.js";
 import type { ManagementClient } from "./ManagementClient.js";
 import { TokenProvider } from "./token-provider.js";
+import { validateDomain } from "./domain.js";
 import { Auth0ClientTelemetry } from "../../lib/middleware/auth0-client-telemetry.js";
 
 /**
@@ -25,10 +26,14 @@ export type ManagementAuthConfig =
 /**
  * Builds the Management API v2 base URL for a tenant domain.
  *
+ * The domain is validated first, so every caller rejects a domain that is not a bare hostname,
+ * whichever authentication mode is in use.
+ *
  * @group Management API
  * @internal
  */
 export function buildManagementBaseUrl(domain: string): string {
+    validateDomain(domain);
     return `https://${domain}/api/v2`;
 }
 

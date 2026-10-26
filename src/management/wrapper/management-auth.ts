@@ -75,7 +75,8 @@ export interface ManagementAuth {
  *
  * When client credentials are provided, tokens are obtained via the client credentials grant
  * and cached until shortly before they expire. When a static `token` is provided, it is used
- * as-is.
+ * as-is. In both cases, `domain` must be a bare hostname such as `tenant.auth0.com`; anything
+ * else throws.
  *
  * The returned {@link ManagementAuth.clientOptions} carry the same telemetry headers, request
  * timeouts, retry counts, logging, and custom domain behaviour that the full `ManagementClient`
