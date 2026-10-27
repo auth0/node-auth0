@@ -37,7 +37,8 @@ export class SegmentsClient {
      *     await client.experimentation.segments.list({
      *         from: "from",
      *         take: 1,
-     *         type: "auth0"
+     *         type: "auth0",
+     *         status: "active"
      *     })
      */
     public async list(
@@ -48,11 +49,12 @@ export class SegmentsClient {
             async (
                 request: Management.ListSegmentsRequestParameters,
             ): Promise<core.WithRawResponse<Management.ListSegmentsResponseContent>> => {
-                const { from: from_, take = 50, type: type_ } = request;
+                const { from: from_, take = 50, type: type_, status } = request;
                 const _queryParams: Record<string, unknown> = {
                     from: from_,
                     take,
                     type: type_ !== undefined ? type_ : undefined,
+                    status: status !== undefined ? status : undefined,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
                 let _headers: core.Fetcher.Args["headers"] = mergeHeaders(

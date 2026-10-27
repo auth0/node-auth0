@@ -6,6 +6,7 @@ import { AnomalyClient } from "./api/resources/anomaly/client/Client.js";
 import { AttackProtectionClient } from "./api/resources/attackProtection/client/Client.js";
 import { BrandingClient } from "./api/resources/branding/client/Client.js";
 import { ClientGrantsClient } from "./api/resources/clientGrants/client/Client.js";
+import { ClientProfilesClient } from "./api/resources/clientProfiles/client/Client.js";
 import { ClientsClient } from "./api/resources/clients/client/Client.js";
 import { ConnectionProfilesClient } from "./api/resources/connectionProfiles/client/Client.js";
 import { ConnectionsClient } from "./api/resources/connections/client/Client.js";
@@ -64,6 +65,7 @@ export class ManagementClient {
     protected _agents: AgentsClient | undefined;
     protected _branding: BrandingClient | undefined;
     protected _clientGrants: ClientGrantsClient | undefined;
+    protected _clientProfiles: ClientProfilesClient | undefined;
     protected _clients: ClientsClient | undefined;
     protected _connectionProfiles: ConnectionProfilesClient | undefined;
     protected _connections: ConnectionsClient | undefined;
@@ -126,6 +128,10 @@ export class ManagementClient {
 
     public get clientGrants(): ClientGrantsClient {
         return (this._clientGrants ??= new ClientGrantsClient(this._options));
+    }
+
+    public get clientProfiles(): ClientProfilesClient {
+        return (this._clientProfiles ??= new ClientProfilesClient(this._options));
     }
 
     public get clients(): ClientsClient {
