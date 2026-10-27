@@ -40,6 +40,7 @@ describe("ResourceServersClient", () => {
                     proof_of_possession: { mechanism: "mtls", required: true },
                     authorization_policy: { policy_id: "policy_id" },
                     client_id: "client_id",
+                    type: "universal_commerce_protocol_server",
                 },
             ],
         };
@@ -180,6 +181,7 @@ describe("ResourceServersClient", () => {
             },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
+            type: "universal_commerce_protocol_server",
         };
 
         server
@@ -338,6 +340,7 @@ describe("ResourceServersClient", () => {
                     proof_of_possession: { mechanism: "mtls", required: true },
                     authorization_policy: { policy_id: "policy_id" },
                     client_id: "client_id",
+                    type: "universal_commerce_protocol_server",
                 },
             ],
             next: "next",
@@ -538,6 +541,7 @@ describe("ResourceServersClient", () => {
             },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
+            type: "universal_commerce_protocol_server",
         };
 
         server
@@ -772,6 +776,7 @@ describe("ResourceServersClient", () => {
             },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
+            type: "universal_commerce_protocol_server",
         };
 
         server

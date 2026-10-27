@@ -120,7 +120,7 @@ export class FactorsClient {
     /**
      * Update the status (i.e., enabled or disabled) of a specific multi-factor authentication factor.
      *
-     * @param {Management.GuardianFactorNameEnum} name - Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
+     * @param {Management.GuardianFactorNameEnum} name - Factor name. Can be `sms`, `push-notification`, `email`, `duo`, `otp`, `webauthn-roaming`, `webauthn-platform`, `recovery-code`, or `passkey`.
      * @param {Management.SetGuardianFactorRequestContent} request
      * @param {FactorsClient.RequestOptions} requestOptions - Request-specific configuration.
      *

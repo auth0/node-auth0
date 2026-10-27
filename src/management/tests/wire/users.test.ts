@@ -762,6 +762,311 @@ describe("UsersClient", () => {
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
 
+    test("listConsentSigningKeys (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = [
+            {
+                kid: "kid",
+                device_identifier: "device_identifier",
+                created_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+            },
+        ];
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.users.listConsentSigningKeys("id");
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("listConsentSigningKeys (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.listConsentSigningKeys("id");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("listConsentSigningKeys (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.listConsentSigningKeys("id");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("listConsentSigningKeys (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.listConsentSigningKeys("id");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("listConsentSigningKeys (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.listConsentSigningKeys("id");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("getConsentSigningKey (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            kid: "kid",
+            device_identifier: "device_identifier",
+            created_at: "2024-01-15T09:30:00Z",
+            expires_at: "2024-01-15T09:30:00Z",
+        };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.users.getConsentSigningKey("id", "kid");
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("getConsentSigningKey (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.getConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("getConsentSigningKey (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.getConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("getConsentSigningKey (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.getConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("getConsentSigningKey (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.getConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.NotFoundError);
+    });
+
+    test("getConsentSigningKey (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .get("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.getConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
+    test("deleteConsentSigningKey (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        server.mockEndpoint().delete("/users/id/consent-signing-keys/kid").respondWith().statusCode(200).build();
+
+        const response = await client.users.deleteConsentSigningKey("id", "kid");
+        expect(response).toEqual(undefined);
+    });
+
+    test("deleteConsentSigningKey (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.deleteConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.BadRequestError);
+    });
+
+    test("deleteConsentSigningKey (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.deleteConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.UnauthorizedError);
+    });
+
+    test("deleteConsentSigningKey (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.deleteConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.ForbiddenError);
+    });
+
+    test("deleteConsentSigningKey (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .delete("/users/id/consent-signing-keys/kid")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.users.deleteConsentSigningKey("id", "kid");
+        }).rejects.toThrow(Management.TooManyRequestsError);
+    });
+
     test("regenerateRecoveryCode (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
