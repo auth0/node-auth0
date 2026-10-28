@@ -38,6 +38,7 @@ describe("SegmentsClient", () => {
             from: "from",
             take: 1,
             type: "auth0",
+            status: "active",
         });
 
         expect(expected.segments).toEqual(page.data);

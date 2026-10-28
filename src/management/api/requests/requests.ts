@@ -1669,6 +1669,7 @@ export interface CreateResourceServerRequestContent {
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
     authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
+    type?: Management.ResourceServerTypeEnum | null;
 }
 
 /**
@@ -1747,6 +1748,7 @@ export interface UpdateResourceServerRequestContent {
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
     authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
+    type?: Management.ResourceServerTypeEnum | null;
 }
 
 /**
@@ -2492,9 +2494,9 @@ export interface UpdateBruteForceSettingsRequestContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[];
     mode?: Management.BruteForceProtectionModeEnum;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum;
 }
 
 /**
@@ -3236,7 +3238,8 @@ export interface UpdateFeatureFlagRequestContent {
  *     {
  *         from: "from",
  *         take: 1,
- *         type: "auth0"
+ *         type: "auth0",
+ *         status: "active"
  *     }
  */
 export interface ListSegmentsRequestParameters {
@@ -3246,6 +3249,8 @@ export interface ListSegmentsRequestParameters {
     take?: number | null;
     /** Filter by type. Exact match. */
     type?: Management.SegmentTypeFilterEnum | null;
+    /** Filter by status. Exact match. */
+    status?: Management.SegmentStatusEnum | null;
 }
 
 /**
