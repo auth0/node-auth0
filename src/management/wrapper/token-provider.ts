@@ -2,6 +2,7 @@ import { base64url, importPKCS8, SignJWT } from "jose";
 import type { ManagementClient } from "./ManagementClient.js";
 import { generateClientInfo } from "../../utils.js";
 import { ManagementError } from "../errors/ManagementError.js";
+import { validateDomain } from "./domain.js";
 
 const LEEWAY = 10 * 1000; // 10s refresh-ahead in ms
 
@@ -20,12 +21,9 @@ export class TokenProvider {
     constructor(
         private readonly options: ManagementClient.ManagementClientOptionsWithClientCredentials & { audience: string },
     ) {
-        // Validate domain: must be a bare hostname, no slashes or query strings.
-        if (/[/?#]/.test(options.domain)) {
-            throw new Error(
-                `ManagementClient: invalid domain "${options.domain}". Provide a bare hostname, e.g. "tenant.auth0.com".`,
-            );
-        }
+        // TokenProvider is exported and can be constructed directly, so it validates the domain itself
+        // rather than relying on ManagementClient or createManagementAuth having done so.
+        validateDomain(options.domain);
 
         if (options.useMTLS) {
             const { fetch: customFetch } = options as typeof options & { fetch?: typeof fetch };

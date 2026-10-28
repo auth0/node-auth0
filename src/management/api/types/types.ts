@@ -2346,6 +2346,7 @@ export interface Client {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -3287,6 +3288,17 @@ export interface ClientOidcBackchannelLogoutSettings {
     [key: string]: any;
 }
 
+/**
+ * OIDC support configuration for this client.
+ */
+export interface ClientOidcSupport {
+    is_allowed?: boolean | undefined;
+    allow_all_scopes?: boolean | undefined;
+    allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export const ClientOidcSupportAllowedScopesEnum = {
     Profile: "profile",
     Email: "email",
@@ -3636,6 +3648,7 @@ export interface ClientSearchResponse {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -4128,6 +4141,11 @@ export type ConnectionClientIdOidc = string;
 export type ConnectionClientIdPaypal = string;
 
 /**
+ * OIDC client identifier issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging SAML Assertions for Refresh Tokens.
+ */
+export type ConnectionClientIdSamlxaaRequestingApp = Management.ConnectionClientIdOidc;
+
+/**
  * The OAuth 2.0 client identifier
  */
 export type ConnectionClientIdSalesforce = string;
@@ -4211,6 +4229,11 @@ export type ConnectionClientSecretOidc = string;
  * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
 export type ConnectionClientSecretPaypal = string;
+
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
+ */
+export type ConnectionClientSecretSamlxaaRequestingApp = string;
 
 /**
  * The OAuth 2.0 client secret
@@ -5159,6 +5182,7 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
     enabledDatabaseCustomization?: Management.ConnectionEnabledDatabaseCustomization | undefined;
     import_mode?: Management.ConnectionImportMode | undefined;
     mfa?: Management.ConnectionMfa | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
     password_complexity_options?: (Management.ConnectionPasswordComplexityOptions | null) | undefined;
@@ -6123,6 +6147,8 @@ export type ConnectionOptionsProtocolEnumTwitter =
  */
 export interface ConnectionOptionsSaml
     extends Management.ConnectionOptionsCommonSaml, Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdSamlxaaRequestingApp | undefined;
+    client_secret?: Management.ConnectionClientSecretSamlxaaRequestingApp | undefined;
     debug?: Management.ConnectionDebugSaml | undefined;
     deflate?: Management.ConnectionOptionsDeflateSaml | undefined;
     destinationUrl?: Management.ConnectionDestinationUrlSaml | undefined;
@@ -6444,6 +6470,24 @@ export interface ConnectionOptionsYahoo extends Management.ConnectionOptionsOAut
 export interface ConnectionOptionsYandex extends Management.ConnectionOptionsOAuth2Common {
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+/**
+ * OTP settings for a delivery channel.
+ */
+export interface ConnectionOtpChannelSettings {
+    /** Number of digits in the generated one-time password. */
+    otp_length?: number | undefined;
+    /** Number of seconds before the one-time password expires. */
+    otp_expiry?: number | undefined;
+}
+
+/**
+ * One-time password settings, configurable per delivery channel.
+ */
+export interface ConnectionOtpSettings {
+    email?: Management.ConnectionOtpChannelSettings | undefined;
+    phone?: Management.ConnectionOtpChannelSettings | undefined;
 }
 
 /**
@@ -6845,6 +6889,7 @@ export interface ConnectionPropertiesOptions {
     /** Stores encrypted string only configurations for connections */
     configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
@@ -7625,6 +7670,7 @@ export namespace ConnectionResponseContentPlanningCenter {
 export interface ConnectionResponseContentSaml
     extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSaml.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
@@ -8620,6 +8666,17 @@ export interface ConnectionsOidcMetadata {
     [key: string]: any;
 }
 
+export interface ConsentSigningKey {
+    /** The key identifier of the consent signing key. */
+    kid: string;
+    /** A human-readable label for the device holding the corresponding private key. */
+    device_identifier: string;
+    /** The ISO 8601 timestamp at which the key was registered. */
+    created_at: string;
+    /** The ISO 8601 timestamp at which the key expires and can no longer be used to verify consent decisions. */
+    expires_at: string;
+}
+
 /**
  * Content Security Policy configuration with multi-policy support.
  */
@@ -8880,6 +8937,7 @@ export interface CreateClientResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -9496,6 +9554,7 @@ export namespace CreateConnectionRequestContentPlanningCenter {
  */
 export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSaml.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
@@ -10913,6 +10972,7 @@ export interface CreateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface CreateRoleResponseContent {
@@ -32770,9 +32830,9 @@ export interface GetBruteForceSettingsResponseContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[] | undefined;
     mode?: Management.BruteForceProtectionModeEnum | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface GetClientCredentialResponseContent {
@@ -32922,6 +32982,7 @@ export interface GetClientResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -33819,6 +33880,7 @@ export interface GetResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface GetRiskAssessmentsSettingsNewDeviceResponseContent {
@@ -35149,6 +35211,8 @@ export interface ListUserConnectedAccountsResponseContent {
     /** The token to retrieve the next page of connected accounts (if there is one) */
     next?: string | undefined;
 }
+
+export type ListUserConsentSigningKeysResponseContent = Management.ConsentSigningKey[];
 
 export interface ListUserEffectivePermissionRoleSourcesResponseContent {
     /** Roles with the specified permission assigned to the user, both directly and via groups. */
@@ -37060,6 +37124,7 @@ export interface ResourceServer {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 /**
@@ -37176,6 +37241,7 @@ export interface ResourceServerSearchResponse {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
@@ -37298,6 +37364,12 @@ export interface ResourceServerTokenEncryptionKey {
     /** PEM-formatted public key. Must be JSON escaped. */
     pem: string;
 }
+
+/** The type of the resource server. */
+export const ResourceServerTypeEnum = {
+    UniversalCommerceProtocolServer: "universal_commerce_protocol_server",
+} as const;
+export type ResourceServerTypeEnum = (typeof ResourceServerTypeEnum)[keyof typeof ResourceServerTypeEnum];
 
 /**
  * PEM-encoded certificate
@@ -37513,6 +37585,7 @@ export interface RotateClientSecretResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -37874,6 +37947,7 @@ export interface SegmentStartsWithExpression {
     starts_with: string[];
 }
 
+/** Filter by status. Exact match. */
 export const SegmentStatusEnum = {
     Active: "active",
     Archived: "archived",
@@ -38811,7 +38885,7 @@ export interface TenantSettingsFlags {
     revoke_refresh_token_grant?: boolean | undefined;
     /** Enables beta access to log streaming changes */
     dashboard_log_streams_next?: boolean | undefined;
-    /** Enables new insights activity page view */
+    /** Deprecated. This flag has no effect and is retained only for backward compatibility */
     dashboard_insights_view?: boolean | undefined;
     /** Disables SAML fields map fix for bad mappings with repeated attributes */
     disable_fields_map_fix?: boolean | undefined;
@@ -39340,9 +39414,9 @@ export interface UpdateBruteForceSettingsResponseContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[] | undefined;
     mode?: Management.BruteForceProtectionModeEnum | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface UpdateClientGrantResponseContent {
@@ -39469,6 +39543,7 @@ export interface UpdateClientResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -39505,6 +39580,7 @@ export interface UpdateConnectionOptions {
     /** Stores encrypted string only configurations for connections */
     configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
@@ -39837,6 +39913,7 @@ export interface UpdateConnectionRequestContentPlanningCenter extends Management
  */
 export interface UpdateConnectionRequestContentSaml extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsSaml | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -40470,6 +40547,7 @@ export interface UpdateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface UpdateRiskAssessmentsSettingsNewDeviceResponseContent {
