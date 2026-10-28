@@ -13285,6 +13285,211 @@ await client.users.update("id");
 </dl>
 </details>
 
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">listConsentSigningKeys</a>(id) -> Management.ListUserConsentSigningKeysResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all consent signing keys registered for a user. Returns an empty array when the user has no keys registered.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.listConsentSigningKeys("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">getConsentSigningKey</a>(id, kid) -> Management.ConsentSigningKey</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a single consent signing key for a user by its key identifier (kid). Returns 404 if the key does not exist.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.getConsentSigningKey("id", "kid");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**kid:** `string` — The key identifier of the consent signing key.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">deleteConsentSigningKey</a>(id, kid) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove a single consent signing key for a user by its key identifier (kid). The operation is idempotent and returns 204 whether or not the key existed.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.deleteConsentSigningKey("id", "kid");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**kid:** `string` — The key identifier of the consent signing key.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">regenerateRecoveryCode</a>(id) -> Management.RegenerateUsersRecoveryCodeResponseContent</code></summary>
 <dl>
 <dd>
@@ -20797,6 +21002,7 @@ const pageableResponse = await client.experimentation.segments.list({
     from: "from",
     take: 1,
     type: "auth0",
+    status: "active",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -20807,6 +21013,7 @@ let page = await client.experimentation.segments.list({
     from: "from",
     take: 1,
     type: "auth0",
+    status: "active",
 });
 while (page.hasNextPage()) {
     page = await page.getNextPage();
