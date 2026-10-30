@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "7.3.0",
+    "version": "7.6.1",
     "private": false,
     "repository": {
         "type": "git",
@@ -66,6 +66,17 @@
                 "default": "./dist/cjs/management/api/resources/clientGrants/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/clientGrants/exports.js"
+        },
+        "./clientProfiles": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/clientProfiles/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/clientProfiles/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/clientProfiles/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/clientProfiles/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/clientProfiles/exports.js"
         },
         "./clients": {
             "import": {

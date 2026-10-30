@@ -34,6 +34,11 @@ Using [npm](https://npmjs.org) in your project directory run the following comma
 npm install auth0
 ```
 
+> [!NOTE]
+> **Release channels.** Endpoints move through three maturity tiers: Generally Available, Early Access, and Beta. This package is published on two channels. The stable channel (`npm install auth0`) includes the Generally Available and Early Access endpoints. The beta channel (`npm install auth0@beta`) is a superset that includes all three tiers.
+>
+> Beta prereleases can introduce breaking changes between versions, so pin an exact version if you need reproducible installs.
+
 ### Configure the SDK
 
 #### Authentication

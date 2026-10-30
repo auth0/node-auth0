@@ -33,6 +33,8 @@ export class EnrollmentsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.enrollments.get("id")
@@ -59,7 +61,7 @@ export class EnrollmentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/enrollments`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/enrollments`,
             ),
             method: "GET",
             headers: _headers,

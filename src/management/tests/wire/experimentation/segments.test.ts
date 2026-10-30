@@ -16,6 +16,7 @@ describe("SegmentsClient", () => {
                     name: "name",
                     description: "description",
                     type: "self",
+                    status: "active",
                     rules: [{}],
                     created_at: "2024-01-15T09:30:00Z",
                     updated_at: "2024-01-15T09:30:00Z",
@@ -37,6 +38,7 @@ describe("SegmentsClient", () => {
             from: "from",
             take: 1,
             type: "auth0",
+            status: "active",
         });
 
         expect(expected.segments).toEqual(page.data);
@@ -130,6 +132,7 @@ describe("SegmentsClient", () => {
             name: "name",
             description: "description",
             type: "self",
+            status: "active",
             rules: [{}],
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
@@ -298,6 +301,7 @@ describe("SegmentsClient", () => {
             name: "name",
             description: "description",
             type: "self",
+            status: "active",
             rules: [{}],
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",
@@ -467,6 +471,7 @@ describe("SegmentsClient", () => {
             name: "name",
             description: "description",
             type: "self",
+            status: "active",
             rules: [{}],
             created_at: "2024-01-15T09:30:00Z",
             updated_at: "2024-01-15T09:30:00Z",

@@ -1,5 +1,29 @@
 # Change Log
 
+## [v7.6.0](https://github.com/auth0/node-auth0/tree/v7.6.0) (2026-10-19)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.5.0...v7.6.0)
+
+**Added**
+
+- feat: add SSE reconnection, passkey guardian factor, and additionalBodyParameters; reject dot-segment path params [\#1428](https://github.com/auth0/node-auth0/pull/1428) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v7.5.0](https://github.com/auth0/node-auth0/tree/v7.5.0) (2026-10-14)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.4.0...v7.5.0)
+
+**Added**
+
+- feat: add client profiles, attack protection CAPTCHA policies, client grants search, and CIMD external metadata status / dynamic registration [\#1425](https://github.com/auth0/node-auth0/pull/1425) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+## [v7.4.0](https://github.com/auth0/node-auth0/tree/v7.4.0) (2026-10-09)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.3.0...v7.4.0)
+
+**Added**
+
+- feat: add clients.search, anonymous session network binding, brute-force form submission mode, DPoP strict refresh token binding; move experiment & feature flag status transitions to PATCH [\#1423](https://github.com/auth0/node-auth0/pull/1423) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.3.0](https://github.com/auth0/node-auth0/tree/v7.3.0) (2026-09-30)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.2.0...v7.3.0)

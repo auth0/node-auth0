@@ -14,6 +14,7 @@ describe("BruteForceProtectionClient", () => {
             shields: ["block"],
             allowlist: ["allowlist"],
             mode: "count_per_identifier_and_ip",
+            form_submission_mode: "auto",
             max_attempts: 1,
         };
 
@@ -95,6 +96,7 @@ describe("BruteForceProtectionClient", () => {
             shields: ["block"],
             allowlist: ["allowlist"],
             mode: "count_per_identifier_and_ip",
+            form_submission_mode: "auto",
             max_attempts: 1,
         };
 

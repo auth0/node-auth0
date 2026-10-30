@@ -40,6 +40,8 @@ export class GroupsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.organizations.groups.list("organization_id", {
@@ -72,7 +74,7 @@ export class GroupsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `organizations/${core.url.encodePathParam(organization_id)}/groups`,
+                        `organizations/${core.url.encodePathParam(organization_id, errors.ManagementError)}/groups`,
                     ),
                     method: "GET",
                     headers: _headers,
