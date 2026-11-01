@@ -59,7 +59,7 @@ jobs:
              startsWith(github.event.pull_request.head.ref, 'release/'))
         uses: ./.github/workflows/npm-release.yml
         with:
-            node-version: 22.23.1
+            node-version: 24.21.0
             require-build: true
         secrets:
             github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
              github.event.pull_request.base.ref == 'beta')
         uses: ./.github/workflows/npm-release-beta.yml
         with:
-            node-version: 22.23.1
+            node-version: 24.21.0
             require-build: true
         secrets:
             github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -86,9 +86,9 @@ jobs:
         permissions:
             contents: write
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
 
             - uses: ./.github/actions/deploy-docs
               with:
-                  node-version: 22.23.1
+                  node-version: 24.21.0
                   token: ${{ secrets.GITHUB_TOKEN }}
