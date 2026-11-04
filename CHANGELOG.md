@@ -1,5 +1,19 @@
 # Change Log
 
+## [v7.7.0](https://github.com/auth0/node-auth0/tree/v7.7.0) (2026-11-04)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.6.0...v7.7.0)
+
+**Added**
+
+- feat: add Universal Portals, agent ID on clients, agent subject claims, and SAML Private Key JWT; fix consent signing keys response [\#1437](https://github.com/auth0/node-auth0/pull/1437) ([fern-api[bot]](https://github.com/apps/fern-api))
+- feat: add user consent signing keys, client oidc_support, connection otp_settings, and resource server type [\#1436](https://github.com/auth0/node-auth0/pull/1436) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Fixed**
+
+- Remove links to non-existing FAQ and examples docs in GitHub issue and bug templates [\#1388](https://github.com/auth0/node-auth0/pull/1388) ([lukaselmer](https://github.com/lukaselmer))
+- fix: validate domain for every auth mode [\#1429](https://github.com/auth0/node-auth0/pull/1429) ([amitsingh05667](https://github.com/amitsingh05667))
+
 ## [v7.6.0](https://github.com/auth0/node-auth0/tree/v7.6.0) (2026-10-19)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.5.0...v7.6.0)
