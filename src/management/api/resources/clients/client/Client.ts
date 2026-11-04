@@ -83,6 +83,7 @@ export class ClientsClient {
      *         is_first_party: true,
      *         app_type: "app_type",
      *         external_client_id: "external_client_id",
+     *         agent_id: "agent_id",
      *         q: "q"
      *     })
      */
@@ -104,6 +105,7 @@ export class ClientsClient {
                     is_first_party: isFirstParty,
                     app_type: appType,
                     external_client_id: externalClientId,
+                    agent_id: agentId,
                     q,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
@@ -116,6 +118,7 @@ export class ClientsClient {
                     is_first_party: isFirstParty,
                     app_type: appType,
                     external_client_id: externalClientId,
+                    agent_id: agentId,
                     q,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();

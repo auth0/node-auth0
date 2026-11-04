@@ -736,14 +736,16 @@ describe("UsersClient", () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
-        const rawResponseBody = [
-            {
-                kid: "kid",
-                device_identifier: "device_identifier",
-                created_at: "2024-01-15T09:30:00Z",
-                expires_at: "2024-01-15T09:30:00Z",
-            },
-        ];
+        const rawResponseBody = {
+            keys: [
+                {
+                    kid: "kid",
+                    device_identifier: "device_identifier",
+                    created_at: "2024-01-15T09:30:00Z",
+                    expires_at: "2024-01-15T09:30:00Z",
+                },
+            ],
+        };
 
         server
             .mockEndpoint()
