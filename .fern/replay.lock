@@ -78,14 +78,20 @@ generations:
     cli_version: unknown
     generator_versions:
       fernapi/fern-typescript-sdk: 3.107.6
-current_generation: bf8d20b878899a53ca83287309f3bb649ca46f72
+  - commit_sha: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
+    tree_hash: c3a683a03a65f5900002204b2a708d7310ebd881
+    timestamp: 2026-11-04T04:04:40.557Z
+    cli_version: unknown
+    generator_versions:
+      fernapi/fern-typescript-sdk: 3.107.6
+current_generation: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
 patches:
   - id: patch-066ff9e0
     content_hash: sha256:5b87ec9a63fc57aba4840d0d335d472c621e838fc1d61515b30660df39d0dbc2
     original_commit: 066ff9e02c45f4abf46791a3f070c762f7ecd924
     original_message: "docs: add v6 migration guide for breaking changes in v6.0.0 (#1368)"
     original_author: Ankita Tripathi <51994119+ankita10119@users.noreply.github.com>
-    base_generation: bf8d20b878899a53ca83287309f3bb649ca46f72
+    base_generation: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
     files:
       - v6_MIGRATION_GUIDE.md
     patch_content: |
@@ -419,7 +425,7 @@ patches:
     original_commit: d8faf7a21efbed3bd75a0f36ff0d190bb9dd986b
     original_message: "docs: update v6 migration guide with federatedConnectionsTokensets and federated_connections_access_tokens breaking changes (#1370)"
     original_author: Ankita Tripathi <51994119+ankita10119@users.noreply.github.com>
-    base_generation: bf8d20b878899a53ca83287309f3bb649ca46f72
+    base_generation: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
     files:
       - v6_MIGRATION_GUIDE.md
     patch_content: |
@@ -8261,7 +8267,7 @@ patches:
     original_commit: 0f7baa6fa58a2944cd9e39abbfd8caf7be8d7e8c
     original_message: "fix: auto-stamp SDK_VERSION from package.json during build (#1382)"
     original_author: Ankita Tripathi <51994119+ankita10119@users.noreply.github.com>
-    base_generation: bf8d20b878899a53ca83287309f3bb649ca46f72
+    base_generation: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
     files:
       - .shiprc
     patch_content: |
@@ -13738,7 +13744,7 @@ patches:
     original_commit: b942f5d6b1b5f3e565f3315f12421c58ae005bec
     original_message: "docs: add Authentication API migration guide (auth0-auth-js / auth0-server-js) (#1395)"
     original_author: tusharpandey13 <tushar.pandey@okta.com>
-    base_generation: bf8d20b878899a53ca83287309f3bb649ca46f72
+    base_generation: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
     files:
       - AUTH_MIGRATION_GUIDE.md
       - auth-migration/authentication-flows.md
@@ -16138,7 +16144,7 @@ patches:
     original_commit: 842d2f5189493b78e420c17c968c80bc239e143a
     original_message: "docs: add v7 migration guide (v6 → v7) (#1396)"
     original_author: tusharpandey13 <tushar.pandey@okta.com>
-    base_generation: bf8d20b878899a53ca83287309f3bb649ca46f72
+    base_generation: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
     files:
       - v7_MIGRATION_GUIDE.md
     patch_content: |
@@ -27649,7 +27655,7 @@ patches:
     original_commit: 456afefce9a6ae6305f65307b3a19e7b2a801199
     original_message: "feat: enhance domain validation for ManagementClient and related components"
     original_author: Amit Singh <amitk.singh@okta.com>
-    base_generation: bf8d20b878899a53ca83287309f3bb649ca46f72
+    base_generation: 2bb5f2071a6e3f8e7d3fd0698a2f73544d1231f1
     files:
       - v7_MIGRATION_GUIDE.md
     patch_content: |
@@ -27953,6 +27959,7 @@ patches:
         ```
 
         Plan the move to `@auth0/auth0-auth-js` / `@auth0/auth0-server-js` rather than treating the legacy entrypoint as permanent.
+    user_owned: true
   - id: patch-185ac064
     content_hash: sha256:eae25ca4d648887ccd0dbf85d55f52be8e3112bf613809c6b74c1e61499f424f
     original_commit: 185ac0645e47f85eba6a6369f820b304bce27d4c

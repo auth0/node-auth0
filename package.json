@@ -1,6 +1,6 @@
 {
     "name": "auth0",
-    "version": "7.6.1",
+    "version": "7.6.0",
     "private": false,
     "repository": {
         "type": "git",
@@ -286,6 +286,17 @@
                 "default": "./dist/cjs/management/api/resources/organizations/exports.js"
             },
             "default": "./dist/cjs/management/api/resources/organizations/exports.js"
+        },
+        "./portals": {
+            "import": {
+                "types": "./dist/esm/management/api/resources/portals/exports.d.mts",
+                "default": "./dist/esm/management/api/resources/portals/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/management/api/resources/portals/exports.d.ts",
+                "default": "./dist/cjs/management/api/resources/portals/exports.js"
+            },
+            "default": "./dist/cjs/management/api/resources/portals/exports.js"
         },
         "./prompts": {
             "import": {
