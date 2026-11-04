@@ -802,7 +802,7 @@ export class UsersClient {
     }
 
     /**
-     * Retrieve all consent signing keys registered for a user. Returns an empty array when the user has no keys registered.
+     * Retrieve all consent signing keys registered for a user. Returns an empty `keys` array when the user has no keys registered.
      *
      * @param {string} id - The ID of the user.
      * @param {UsersClient.RequestOptions} requestOptions - Request-specific configuration.

@@ -1544,7 +1544,7 @@ describe("Stream", () => {
     describe("SSE stream reconnection - null reconnect body", () => {
         it("should treat null reconnect body as a failed attempt", async () => {
             let reconnectCallCount = 0;
-            const reconnect = async (_lastEventId: string): Promise<ReadableStream> => {
+            const reconnect = async (_lastEventId: string) => {
                 reconnectCallCount++;
                 // @ts-expect-error Intentionally returning null to test null-body handling
                 return null;

@@ -82,6 +82,7 @@ describe("ClientsClient", () => {
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
                     external_metadata_status: "available",
+                    agent_id: "agent_id",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -107,6 +108,7 @@ describe("ClientsClient", () => {
             is_first_party: true,
             app_type: "app_type",
             external_client_id: "external_client_id",
+            agent_id: "agent_id",
             q: "q",
         });
 
@@ -392,6 +394,7 @@ describe("ClientsClient", () => {
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
             external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -935,6 +938,7 @@ describe("ClientsClient", () => {
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
                     external_metadata_status: "available",
+                    agent_id: "agent_id",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -1282,6 +1286,7 @@ describe("ClientsClient", () => {
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
             external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -1646,6 +1651,7 @@ describe("ClientsClient", () => {
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
             external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -1987,6 +1993,7 @@ describe("ClientsClient", () => {
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
             external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };

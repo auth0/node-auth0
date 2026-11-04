@@ -760,6 +760,18 @@ export const OauthScope = {
      * Delete Organization Client Associations */
     DeleteOrganizationClients: "delete:organization_clients",
     /**
+     * Create Universal Portals */
+    CreatePortals: "create:portals",
+    /**
+     * Read Universal Portals */
+    ReadPortals: "read:portals",
+    /**
+     * Update Universal Portals */
+    UpdatePortals: "update:portals",
+    /**
+     * Delete Universal Portals */
+    DeletePortals: "delete:portals",
+    /**
      * Create Network ACL Keys */
     CreateNetworkAclKeys: "create:network_acl_keys",
     /**
@@ -793,6 +805,19 @@ export interface TooManyRequestsErrorBody {
 export namespace TooManyRequestsErrorBody {
     export const Error_ = {
         TooManyRequests: "Too Many Requests",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
+export interface InternalServerErrorBody {
+    message: string;
+    statusCode: string;
+    error: InternalServerErrorBody.Error_;
+}
+
+export namespace InternalServerErrorBody {
+    export const Error_ = {
+        InternalServerError: "Internal Server Error",
     } as const;
     export type Error_ = (typeof Error_)[keyof typeof Error_];
 }
@@ -2356,6 +2381,8 @@ export interface Client {
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
     external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -3415,6 +3442,36 @@ export interface ClientProfileClientConfiguration {
         | Management.ClientProfileClientConfigurationOrganizationDiscoveryMethods
         | undefined;
     require_proof_of_possession?: Management.ClientProfileClientConfigurationRequireProofOfPossession | undefined;
+    oidc_support?: Management.ClientProfileClientConfigurationOidcSupport | undefined;
+}
+
+/**
+ * Default OIDC support applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOidcSupport {
+    default_value: Management.ClientProfileClientConfigurationOidcSupportDefaultValue;
+}
+
+/** Optional OIDC scope that matched clients may be granted. */
+export const ClientProfileClientConfigurationOidcSupportAllowedScopesEnum = {
+    Profile: "profile",
+    Email: "email",
+    Address: "address",
+    Phone: "phone",
+} as const;
+export type ClientProfileClientConfigurationOidcSupportAllowedScopesEnum =
+    (typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum)[keyof typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum];
+
+/**
+ * OIDC support settings applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOidcSupportDefaultValue {
+    /** Whether matched clients may use OIDC. */
+    is_allowed: boolean;
+    /** Whether matched clients may request all optional OIDC scopes. Cannot be combined with allowed_scopes. */
+    allow_all_scopes?: boolean | undefined;
+    /** Optional OIDC scopes that matched clients may request. */
+    allowed_scopes?: Management.ClientProfileClientConfigurationOidcSupportAllowedScopesEnum[] | undefined;
 }
 
 /** A method used to discover a user's organization. */
@@ -3658,6 +3715,8 @@ export interface ClientSearchResponse {
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
     external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -6166,6 +6225,9 @@ export interface ConnectionOptionsSaml
     signingCert?: Management.ConnectionSigningCertSaml | undefined;
     signing_key?: Management.ConnectionSigningKeySaml | undefined;
     signOutEndpoint?: Management.ConnectionSignOutEndpointSaml | undefined;
+    token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
+    token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
+    token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     user_id_attribute?: Management.ConnectionUserIdAttributeSaml | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -8372,7 +8434,7 @@ export type ConnectionTokenEndpointAuthSigningAlgEnum =
  */
 export type ConnectionTokenEndpointAuthSigningAlgValuesSupported = string[];
 
-/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the identity provider's issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
 export const ConnectionTokenEndpointJwtcaAudFormatEnumOidc = {
     Issuer: "issuer",
     TokenEndpoint: "token_endpoint",
@@ -8947,6 +9009,8 @@ export interface CreateClientResponseContent {
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
     external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -10972,6 +11036,7 @@ export interface CreateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
     type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
@@ -32992,6 +33057,8 @@ export interface GetClientResponseContent {
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
     external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -33880,6 +33947,7 @@ export interface GetResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
     type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
@@ -35084,6 +35152,10 @@ export interface ListPhoneTemplatesResponseContent {
     templates?: Management.PhoneTemplate[] | undefined;
 }
 
+export interface ListPortalsResponseContent {
+    portals: Management.PortalSummary[];
+}
+
 export interface ListRateLimitPoliciesPaginatedResponseContent {
     rate_limit_policies?: Management.RateLimitPolicy[] | undefined;
     /** A cursor to be used as the "from" query parameter for the next page of results. */
@@ -35212,7 +35284,10 @@ export interface ListUserConnectedAccountsResponseContent {
     next?: string | undefined;
 }
 
-export type ListUserConsentSigningKeysResponseContent = Management.ConsentSigningKey[];
+export interface ListUserConsentSigningKeysResponseContent {
+    /** The consent signing keys registered for the user. */
+    keys: Management.ConsentSigningKey[];
+}
 
 export interface ListUserEffectivePermissionRoleSourcesResponseContent {
     /** Roles with the specified permission assigned to the user, both directly and via groups. */
@@ -36428,6 +36503,253 @@ export const OrganizationUsageEnum = {
 } as const;
 export type OrganizationUsageEnum = (typeof OrganizationUsageEnum)[keyof typeof OrganizationUsageEnum];
 
+export type PageComponent =
+    | Management.PageComponent.PageComponentAuth0Form
+    | Management.PageComponent.PageComponentAuth0TypographyHeading
+    | Management.PageComponent.PageComponentAuth0MediaImage
+    | Management.PageComponent.PageComponentAuth0TypographyRichText
+    | Management.PageComponent.PageComponentAuth0StructureSection
+    | Management.PageComponent.PageComponentAuth0StructureSeparator
+    | Management.PageComponent.PageComponentAuth0MyOrganizationDomainTable
+    | Management.PageComponent.PageComponentAuth0MyOrganizationMemberManagement
+    | Management.PageComponent.PageComponentAuth0MyOrganizationDetailsEdit
+    | Management.PageComponent.PageComponentAuth0MyAccountPasskeyManagement
+    | Management.PageComponent.PageComponentAuth0MyAccountMfaManagement;
+
+export namespace PageComponent {
+    export interface PageComponentAuth0Form extends Management.PageComponentAuth0Form {
+        type: "page:component:auth0:form";
+    }
+
+    export interface PageComponentAuth0TypographyHeading extends Management.PageComponentAuth0TypographyHeading {
+        type: "page:component:auth0:typography:heading";
+    }
+
+    export interface PageComponentAuth0MediaImage extends Management.PageComponentAuth0MediaImage {
+        type: "page:component:auth0:media:image";
+    }
+
+    export interface PageComponentAuth0TypographyRichText extends Management.PageComponentAuth0TypographyRichText {
+        type: "page:component:auth0:typography:rich_text";
+    }
+
+    export interface PageComponentAuth0StructureSection extends Management.PageComponentAuth0StructureSection {
+        type: "page:component:auth0:structure:section";
+    }
+
+    export interface PageComponentAuth0StructureSeparator extends Management.PageComponentAuth0StructureSeparator {
+        type: "page:component:auth0:structure:separator";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDomainTable
+        extends Management.PageComponentAuth0MyOrganizationDomainTable {
+        type: "page:component:auth0:my_organization:domain_table";
+    }
+
+    export interface PageComponentAuth0MyOrganizationMemberManagement
+        extends Management.PageComponentAuth0MyOrganizationMemberManagement {
+        type: "page:component:auth0:my_organization:member_management";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDetailsEdit
+        extends Management.PageComponentAuth0MyOrganizationDetailsEdit {
+        type: "page:component:auth0:my_organization:details_edit";
+    }
+
+    export interface PageComponentAuth0MyAccountPasskeyManagement
+        extends Management.PageComponentAuth0MyAccountPasskeyManagement {
+        type: "page:component:auth0:my_account:passkey_management";
+    }
+
+    export interface PageComponentAuth0MyAccountMfaManagement
+        extends Management.PageComponentAuth0MyAccountMfaManagement {
+        type: "page:component:auth0:my_account:mfa_management";
+    }
+}
+
+export interface PageComponentAuth0Form {
+    config: Management.PageComponentAuth0FormConfig;
+}
+
+export interface PageComponentAuth0FormConfig {
+    /** The identifier of the form you want to render. */
+    form_id: string;
+    /** Toast message displayed after successful form submission. */
+    completion_message: string;
+}
+
+export interface PageComponentAuth0MediaImage {
+    config: Management.PageComponentAuth0MediaImageConfig;
+}
+
+export interface PageComponentAuth0MediaImageConfig {
+    /** URL of the image to display. */
+    src: string;
+    position?: Management.Position | undefined;
+    /** Height of the image in pixels. Width scales automatically to preserve aspect ratio. */
+    height?: number | undefined;
+}
+
+/** Horizontal alignment of the image within its container. */
+export const Position = {
+    Left: "left",
+    Center: "center",
+    Right: "right",
+} as const;
+export type Position = (typeof Position)[keyof typeof Position];
+
+export interface PageComponentAuth0MyAccountMfaManagement {
+    config?: Management.PageComponentAuth0MyAccountMfaManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyAccountMfaManagementConfig {}
+
+export interface PageComponentAuth0MyAccountPasskeyManagement {
+    config?: Management.PageComponentAuth0MyAccountPasskeyManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyAccountPasskeyManagementConfig {}
+
+export interface PageComponentAuth0MyOrganizationDetailsEdit {
+    config?: Management.PageComponentAuth0MyOrganizationDetailsEditConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationDetailsEditConfig {}
+
+export interface PageComponentAuth0MyOrganizationDomainTable {
+    config?: Management.PageComponentAuth0MyOrganizationDomainTableConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationDomainTableConfig {}
+
+export interface PageComponentAuth0MyOrganizationMemberManagement {
+    config?: Management.PageComponentAuth0MyOrganizationMemberManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationMemberManagementConfig {}
+
+export interface PageComponentAuth0StructureSection {
+    config: Management.PageComponentAuth0StructureSectionConfig;
+}
+
+export interface PageComponentAuth0StructureSectionConfig {
+    /** Heading displayed at the top of the section. */
+    title?: string | undefined;
+    /** Optional description displayed below the title. */
+    description?: string | undefined;
+    variant: Management.PageComponentAuth0StructureSectionVariantEnum;
+    /** Components to render inside the section. */
+    children: Management.PageComponentNoChildren[];
+}
+
+/** Controls the section container style. */
+export const PageComponentAuth0StructureSectionVariantEnum = {
+    Card: "card",
+    None: "none",
+} as const;
+export type PageComponentAuth0StructureSectionVariantEnum =
+    (typeof PageComponentAuth0StructureSectionVariantEnum)[keyof typeof PageComponentAuth0StructureSectionVariantEnum];
+
+export interface PageComponentAuth0StructureSeparator {
+    config?: Management.PageComponentAuth0StructureSeparatorConfig | undefined;
+}
+
+export interface PageComponentAuth0StructureSeparatorConfig {
+    variant?: Management.PageComponentAuth0StructureSeparatorVariantEnum | undefined;
+    /** Optional label centered within the separator line (ignored when variant is "none"). */
+    text?: string | undefined;
+}
+
+/** Controls the line style. Defaults to "solid". */
+export const PageComponentAuth0StructureSeparatorVariantEnum = {
+    Dashed: "dashed",
+    None: "none",
+    Solid: "solid",
+} as const;
+export type PageComponentAuth0StructureSeparatorVariantEnum =
+    (typeof PageComponentAuth0StructureSeparatorVariantEnum)[keyof typeof PageComponentAuth0StructureSeparatorVariantEnum];
+
+export interface PageComponentAuth0TypographyHeading {
+    config: Management.PageComponentAuth0TypographyHeadingConfig;
+}
+
+export interface PageComponentAuth0TypographyHeadingConfig {
+    /** Heading displayed. */
+    title: string;
+    /** Optional description displayed below the title. Supports basic HTML formatting: links, bold, italic, and underline. */
+    description?: string | undefined;
+}
+
+export interface PageComponentAuth0TypographyRichText {
+    config: Management.PageComponentAuth0TypographyRichTextConfig;
+}
+
+export interface PageComponentAuth0TypographyRichTextConfig {
+    /** HTML content to render. Supports headings, bold, italic, underline, links, text alignment, and lists. */
+    content: string;
+}
+
+export type PageComponentNoChildren =
+    | Management.PageComponentNoChildren.PageComponentAuth0Form
+    | Management.PageComponentNoChildren.PageComponentAuth0TypographyHeading
+    | Management.PageComponentNoChildren.PageComponentAuth0MediaImage
+    | Management.PageComponentNoChildren.PageComponentAuth0TypographyRichText
+    | Management.PageComponentNoChildren.PageComponentAuth0StructureSeparator
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationDomainTable
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationMemberManagement
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationDetailsEdit
+    | Management.PageComponentNoChildren.PageComponentAuth0MyAccountPasskeyManagement
+    | Management.PageComponentNoChildren.PageComponentAuth0MyAccountMfaManagement;
+
+export namespace PageComponentNoChildren {
+    export interface PageComponentAuth0Form extends Management.PageComponentAuth0Form {
+        type: "page:component:auth0:form";
+    }
+
+    export interface PageComponentAuth0TypographyHeading extends Management.PageComponentAuth0TypographyHeading {
+        type: "page:component:auth0:typography:heading";
+    }
+
+    export interface PageComponentAuth0MediaImage extends Management.PageComponentAuth0MediaImage {
+        type: "page:component:auth0:media:image";
+    }
+
+    export interface PageComponentAuth0TypographyRichText extends Management.PageComponentAuth0TypographyRichText {
+        type: "page:component:auth0:typography:rich_text";
+    }
+
+    export interface PageComponentAuth0StructureSeparator extends Management.PageComponentAuth0StructureSeparator {
+        type: "page:component:auth0:structure:separator";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDomainTable
+        extends Management.PageComponentAuth0MyOrganizationDomainTable {
+        type: "page:component:auth0:my_organization:domain_table";
+    }
+
+    export interface PageComponentAuth0MyOrganizationMemberManagement
+        extends Management.PageComponentAuth0MyOrganizationMemberManagement {
+        type: "page:component:auth0:my_organization:member_management";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDetailsEdit
+        extends Management.PageComponentAuth0MyOrganizationDetailsEdit {
+        type: "page:component:auth0:my_organization:details_edit";
+    }
+
+    export interface PageComponentAuth0MyAccountPasskeyManagement
+        extends Management.PageComponentAuth0MyAccountPasskeyManagement {
+        type: "page:component:auth0:my_account:passkey_management";
+    }
+
+    export interface PageComponentAuth0MyAccountMfaManagement
+        extends Management.PageComponentAuth0MyAccountMfaManagement {
+        type: "page:component:auth0:my_account:mfa_management";
+    }
+}
+
+export type PageSlug = string;
+
 /** Name of the prompt. */
 export const PartialGroupsEnum = {
     Login: "login",
@@ -36671,6 +36993,85 @@ export const PhoneTemplateNotificationTypeEnum = {
 } as const;
 export type PhoneTemplateNotificationTypeEnum =
     (typeof PhoneTemplateNotificationTypeEnum)[keyof typeof PhoneTemplateNotificationTypeEnum];
+
+export interface Portal {
+    id: Management.PortalId;
+    name: Management.PortalName;
+    navigation?: Management.PortalNavigation | undefined;
+    pages?: Management.PortalPagesByType | undefined;
+    slug: Management.PortalSlug;
+    client?: Management.PortalClientSecretPost | undefined;
+    custom_code?: Management.PortalCustomCode | undefined;
+    created_at: Management.PortalDateTime;
+    updated_at: Management.PortalDateTime;
+}
+
+export interface PortalClientSecretPost {
+    token_endpoint_auth_method: PortalClientSecretPost.TokenEndpointAuthMethod;
+    client_id: string;
+}
+
+export namespace PortalClientSecretPost {
+    export const TokenEndpointAuthMethod = {
+        ClientSecretPost: "client_secret_post",
+    } as const;
+    export type TokenEndpointAuthMethod = (typeof TokenEndpointAuthMethod)[keyof typeof TokenEndpointAuthMethod];
+}
+
+export interface PortalClientSecretPostRequest {
+    token_endpoint_auth_method: PortalClientSecretPostRequest.TokenEndpointAuthMethod;
+    client_id: string;
+    client_secret: string;
+}
+
+export namespace PortalClientSecretPostRequest {
+    export const TokenEndpointAuthMethod = {
+        ClientSecretPost: "client_secret_post",
+    } as const;
+    export type TokenEndpointAuthMethod = (typeof TokenEndpointAuthMethod)[keyof typeof TokenEndpointAuthMethod];
+}
+
+export interface PortalCustomCode {
+    /** Custom code injected into the <head> of the portal. Only injected when the portal is accessed via a custom domain; it is not injected on canonical domains. */
+    head?: string | undefined;
+}
+
+export type PortalCustomCodeNullable = (Management.PortalCustomCode | null) | undefined;
+
+export type PortalDateTime = string;
+
+export type PortalId = string;
+
+export type PortalName = string;
+
+export interface PortalNavigation {
+    sidebar?: Management.Sidebar | undefined;
+}
+
+export type PortalNavigationNullable = (Management.PortalNavigation | null) | undefined;
+
+export interface PortalPage {
+    title: string;
+    slug: Management.PageSlug;
+    components?: Management.PageComponent[] | undefined;
+}
+
+export interface PortalPagesByType {
+    default?: Management.PageSlug | undefined;
+    standard?: Management.PortalPage[] | undefined;
+}
+
+export type PortalPagesByTypeNullable = (Management.PortalPagesByType | null) | undefined;
+
+export type PortalSlug = string;
+
+export interface PortalSummary {
+    id: Management.PortalId;
+    name: Management.PortalName;
+    slug: Management.PortalSlug;
+    created_at: Management.PortalDateTime;
+    updated_at: Management.PortalDateTime;
+}
 
 export interface PostClientCredentialResponseContent {
     /** ID of the credential. Generated on creation. */
@@ -37124,6 +37525,7 @@ export interface ResourceServer {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
     type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
@@ -37153,6 +37555,22 @@ export interface ResourceServerAccessTokenCustomClaimsMappingRule {
     /** Restricted dot-path expression read from the anonymous-session context (e.g. `anonymous_session.metadata.country`). */
     expression: string;
 }
+
+/** Controls whether access tokens issued for this API include agent subject claims. With <code>auth0-v1</code>, access tokens include additional claims that identify whether the subject is a <code>user</code>, <code>service</code>, or <code>ai_agent</code>. The <code>sub</code> claim can reference an agent ID, and the <code>@clients</code> suffix is no longer appended to client IDs. With <code>off</code>, these claims are not included and the <code>@clients</code> suffix is still appended. When not set, the API behaves as <code>off</code>. */
+export const ResourceServerAgentSubjectClaimsResponseEnum = {
+    Off: "off",
+    Auth0V1: "auth0-v1",
+} as const;
+export type ResourceServerAgentSubjectClaimsResponseEnum =
+    (typeof ResourceServerAgentSubjectClaimsResponseEnum)[keyof typeof ResourceServerAgentSubjectClaimsResponseEnum];
+
+/** Controls whether access tokens issued for this API include agent subject claims. With <code>auth0-v1</code>, access tokens include additional claims that identify whether the subject is a <code>user</code>, <code>service</code>, or <code>ai_agent</code>. The <code>sub</code> claim can reference an agent ID, and the <code>@clients</code> suffix is no longer appended to client IDs. With <code>off</code>, these claims are not included and the <code>@clients</code> suffix is still appended. When not set, the API behaves as <code>off</code>. */
+export const ResourceServerAgentSubjectClaimsSchemaEnum = {
+    Off: "off",
+    Auth0V1: "auth0-v1",
+} as const;
+export type ResourceServerAgentSubjectClaimsSchemaEnum =
+    (typeof ResourceServerAgentSubjectClaimsSchemaEnum)[keyof typeof ResourceServerAgentSubjectClaimsSchemaEnum];
 
 /**
  * Authorization policy for the resource server.
@@ -37241,6 +37659,7 @@ export interface ResourceServerSearchResponse {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
     type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
@@ -37595,6 +38014,8 @@ export interface RotateClientSecretResponseContent {
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
     external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -38534,6 +38955,92 @@ export type SetUserAuthenticationMethodsRequestContent = Management.SetUserAuthe
  * An object containing custom dictionaries for a group of screens.
  */
 export type SetsCustomTextsByLanguageRequestContent = Record<string, unknown>;
+
+export interface Sidebar {
+    components?: Management.SidebarComponent[] | undefined;
+}
+
+export type SidebarComponent =
+    | Management.SidebarComponent.SidebarComponentAuth0ExternalLink
+    | Management.SidebarComponent.SidebarComponentAuth0InternalLink
+    | Management.SidebarComponent.SidebarComponentAuth0ExternalLinkV2
+    | Management.SidebarComponent.SidebarComponentAuth0InternalLinkV2;
+
+export namespace SidebarComponent {
+    export interface SidebarComponentAuth0ExternalLink extends Management.SidebarComponentAuth0ExternalLink {
+        type: "sidebar:component:auth0:external_link";
+    }
+
+    export interface SidebarComponentAuth0InternalLink extends Management.SidebarComponentAuth0InternalLink {
+        type: "sidebar:component:auth0:internal_link";
+    }
+
+    export interface SidebarComponentAuth0ExternalLinkV2 extends Management.SidebarComponentAuth0ExternalLinkV2 {
+        type: "sidebar:component:auth0:external_link:v2";
+    }
+
+    export interface SidebarComponentAuth0InternalLinkV2 extends Management.SidebarComponentAuth0InternalLinkV2 {
+        type: "sidebar:component:auth0:internal_link:v2";
+    }
+}
+
+/**
+ * Deprecated. Use "sidebar:component:auth0:external_link:v2" instead.
+ */
+export interface SidebarComponentAuth0ExternalLink {
+    config: Management.SidebarComponentAuth0ExternalLinkConfig;
+}
+
+export interface SidebarComponentAuth0ExternalLinkConfig {
+    /** Text shown for the link. */
+    label: string;
+    /** External URL to navigate to. */
+    url: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+export interface SidebarComponentAuth0ExternalLinkV2 {
+    config: Management.SidebarComponentAuth0ExternalLinkV2Config;
+}
+
+export interface SidebarComponentAuth0ExternalLinkV2Config {
+    /** Text shown for the link. */
+    label: string;
+    /** External URL to navigate to. */
+    href: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+/**
+ * Deprecated. Use "sidebar:component:auth0:internal_link:v2" instead.
+ */
+export interface SidebarComponentAuth0InternalLink {
+    config: Management.SidebarComponentAuth0InternalLinkConfig;
+}
+
+export interface SidebarComponentAuth0InternalLinkConfig {
+    /** Text shown for the link. */
+    label: string;
+    /** Slug of the internal portal page to navigate to. */
+    to: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+export interface SidebarComponentAuth0InternalLinkV2 {
+    config: Management.SidebarComponentAuth0InternalLinkV2Config;
+}
+
+export interface SidebarComponentAuth0InternalLinkV2Config {
+    /** Text shown for the link. */
+    label: string;
+    /** Slug of the internal portal page to navigate to. */
+    page_slug: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
 
 /** Algorithm used to sign JWTs. Can be `HS256` (default) or `RS256`. `PS256` available via addon. */
 export const SigningAlgorithmEnum = {
@@ -39553,6 +40060,8 @@ export interface UpdateClientResponseContent {
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
     external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -40547,6 +41056,7 @@ export interface UpdateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
     type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
