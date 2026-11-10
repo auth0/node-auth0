@@ -4,6 +4,7 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../../../Ba
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../../../BaseClient.js";
 import * as core from "../../../../../../core/index.js";
 import { mergeHeaders } from "../../../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../../../core/requestBody.js";
 import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../errors/index.js";
@@ -38,6 +39,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.list({
@@ -149,6 +152,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.get("id")
@@ -175,7 +180,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "GET",
             headers: _headers,
@@ -235,6 +240,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.create("id")
@@ -263,14 +270,14 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -326,6 +333,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.delete("id")
@@ -352,7 +361,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -408,6 +417,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.update("id")
@@ -436,14 +447,14 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -497,6 +508,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.getDefaultMapping("id")
@@ -523,7 +536,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/default-mapping`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/default-mapping`,
             ),
             method: "GET",
             headers: _headers,
@@ -582,6 +595,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.listSynchronizedGroups("id", {
@@ -616,7 +631,7 @@ export class DirectoryProvisioningClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+                        `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronized-groups`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -699,6 +714,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.addSynchronizedGroupSelections("id", {
@@ -731,14 +748,14 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronized-groups`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -791,6 +808,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.set("id", {
@@ -823,14 +842,14 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronized-groups`,
             ),
             method: "PUT",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -884,6 +903,8 @@ export class DirectoryProvisioningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.deleteSynchronizedGroupSelections("id", {
@@ -918,14 +939,14 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronized-groups`,
             ),
             method: "DELETE",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

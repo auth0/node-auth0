@@ -7,6 +7,7 @@ import {
 } from "../../../../../../../../BaseClient.js";
 import * as core from "../../../../../../../../core/index.js";
 import { mergeHeaders } from "../../../../../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../../../../../core/requestBody.js";
 import * as environments from "../../../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../../../errors/index.js";
@@ -36,6 +37,8 @@ export class VariationsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.variations.list("id")
@@ -62,7 +65,7 @@ export class VariationsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/feature-flags/${core.url.encodePathParam(id)}/variations`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id, errors.ManagementError)}/variations`,
             ),
             method: "GET",
             headers: _headers,
@@ -122,6 +125,8 @@ export class VariationsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.variations.create("id", {
@@ -155,14 +160,14 @@ export class VariationsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/feature-flags/${core.url.encodePathParam(id)}/variations`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id, errors.ManagementError)}/variations`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -218,6 +223,8 @@ export class VariationsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.variations.get("id", "vid")
@@ -246,7 +253,7 @@ export class VariationsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/feature-flags/${core.url.encodePathParam(id)}/variations/${core.url.encodePathParam(vid)}`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id, errors.ManagementError)}/variations/${core.url.encodePathParam(vid, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -302,6 +309,8 @@ export class VariationsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.variations.delete("id", "vid")
@@ -330,7 +339,7 @@ export class VariationsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/feature-flags/${core.url.encodePathParam(id)}/variations/${core.url.encodePathParam(vid)}`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id, errors.ManagementError)}/variations/${core.url.encodePathParam(vid, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -386,6 +395,8 @@ export class VariationsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.experimentation.featureFlags.variations.update("id", "vid")
@@ -416,14 +427,14 @@ export class VariationsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `experimentation/feature-flags/${core.url.encodePathParam(id)}/variations/${core.url.encodePathParam(vid)}`,
+                `experimentation/feature-flags/${core.url.encodePathParam(id, errors.ManagementError)}/variations/${core.url.encodePathParam(vid, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

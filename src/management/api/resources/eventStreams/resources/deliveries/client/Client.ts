@@ -32,6 +32,8 @@ export class DeliveriesClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.eventStreams.deliveries.list("id", {
@@ -79,7 +81,7 @@ export class DeliveriesClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `event-streams/${core.url.encodePathParam(id)}/deliveries`,
+                        `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}/deliveries`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -159,6 +161,8 @@ export class DeliveriesClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.eventStreams.deliveries.getHistory("id", "event_id")
@@ -187,7 +191,7 @@ export class DeliveriesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `event-streams/${core.url.encodePathParam(id)}/deliveries/${core.url.encodePathParam(event_id)}`,
+                `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}/deliveries/${core.url.encodePathParam(event_id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,

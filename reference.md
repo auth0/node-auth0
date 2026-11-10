@@ -52,7 +52,7 @@ let page = await client.actions.list({
     installed: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -550,7 +550,7 @@ let page = await client.agents.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -1027,7 +1027,7 @@ let page = await client.clientGrants.list({
     default_for: "third_party_clients",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -1184,7 +1184,7 @@ let page = await client.clientGrants.search({
     sort: "audience",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -1421,6 +1421,356 @@ await client.clientGrants.update("id");
 </dl>
 </details>
 
+## ClientProfiles
+
+<details><summary><code>client.clientProfiles.<a href="/src/management/api/resources/clientProfiles/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.ClientProfile, Management.ListClientProfilesPaginatedResponseContent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a paginated list of client profiles for the tenant. Uses checkpoint pagination: pass the <code>next</code> cursor from a previous response as the <code>from</code> query parameter to retrieve the following page.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const pageableResponse = await client.clientProfiles.list({
+    from: "from",
+    take: 1,
+});
+for await (const item of pageableResponse) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+let page = await client.clientProfiles.list({
+    from: "from",
+    take: 1,
+});
+while (page.hasNextPage()) {
+    page = await page.getNextPage();
+}
+
+// You can also access the underlying response
+const response = page.response;
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.ListClientProfilesRequestParameters`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientProfilesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.clientProfiles.<a href="/src/management/api/resources/clientProfiles/client/Client.ts">create</a>({ ...params }) -> Management.ClientProfile</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a client profile. At most one profile is allowed per tenant in this release; attempting to create a second returns <code>409 Conflict</code>. The profile governs Dynamic CIMD clients matched by its <code>apply_policy</code> at runtime.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.clientProfiles.create({
+    name: "name",
+    client_configuration: {},
+    apply_policy: {
+        external_metadata_type: "cimd",
+        external_metadata_created_by: "client",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreateClientProfileRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientProfilesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.clientProfiles.<a href="/src/management/api/resources/clientProfiles/client/Client.ts">get</a>(id) -> Management.ClientProfile</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a single client profile by its identifier. Returns <code>404</code> if no profile with the given ID exists for the tenant.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.clientProfiles.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.ClientProfileId` — ID of the client profile.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientProfilesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.clientProfiles.<a href="/src/management/api/resources/clientProfiles/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a client profile. Idempotent: returns <code>204 No Content</code> whether or not a profile with the given ID existed. Deleting the profile removes fleet governance for matched clients immediately.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.clientProfiles.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.ClientProfileId` — ID of the client profile.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientProfilesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.clientProfiles.<a href="/src/management/api/resources/clientProfiles/client/Client.ts">update</a>(id, { ...params }) -> Management.ClientProfile</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a client profile. Supports partial updates at the top level (JSON Merge Patch); omitted top-level fields remain unchanged. Nested objects such as <code>client_configuration</code> must be supplied in full.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.clientProfiles.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.ClientProfileId` — ID of the client profile.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdateClientProfileRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `ClientProfilesClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Clients
 
 <details><summary><code>client.clients.<a href="/src/management/api/resources/clients/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;Management.Client, Management.ListClientsOffsetPaginatedResponseContent&gt;</code></summary>
@@ -1484,6 +1834,7 @@ const pageableResponse = await client.clients.list({
     is_first_party: true,
     app_type: "app_type",
     external_client_id: "external_client_id",
+    agent_id: "agent_id",
     q: "q",
 });
 for await (const item of pageableResponse) {
@@ -1501,10 +1852,11 @@ let page = await client.clients.list({
     is_first_party: true,
     app_type: "app_type",
     external_client_id: "external_client_id",
+    agent_id: "agent_id",
     q: "q",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -1826,7 +2178,7 @@ let page = await client.clients.search({
     sort: "name",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -2214,7 +2566,7 @@ let page = await client.connectionProfiles.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -2703,7 +3055,7 @@ let page = await client.connections.list({
     include_fields: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -3768,7 +4120,7 @@ let page = await client.deviceCredentials.list({
     type: "public_key",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -4243,7 +4595,7 @@ let page = await client.eventStreams.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -4658,7 +5010,7 @@ let page = await client.flows.list({
     synchronous: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -4942,7 +5294,7 @@ let page = await client.forms.list({
     hydrate: ["flow_count"],
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -5245,7 +5597,7 @@ let page = await client.userGrants.list({
     audience: "audience",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -5470,7 +5822,7 @@ let page = await client.groups.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -5812,7 +6164,7 @@ let page = await client.hooks.list({
     triggerId: "credentials-exchange",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -7095,7 +7447,7 @@ let page = await client.logs.list({
     search: "search",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -7243,7 +7595,7 @@ let page = await client.networkAcls.list({
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -7693,7 +8045,7 @@ let page = await client.organizations.list({
     include_client_association_for: "include_client_association_for",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -7922,7 +8274,7 @@ let page = await client.organizations.search({
     sort: "name",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -8160,6 +8512,256 @@ await client.organizations.update("id");
 </dl>
 </details>
 
+## Portals
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">list</a>() -> Management.ListPortalsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">create</a>({ ...params }) -> Management.Portal</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.create({
+    slug: "slug",
+    name: "name",
+    client: {
+        token_endpoint_auth_method: "client_secret_post",
+        client_id: "client_id",
+        client_secret: "client_secret",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreatePortalRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">get</a>(id) -> Management.Portal</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.PortalId`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.PortalId`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">update</a>(id, { ...params }) -> Management.Portal</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.PortalId`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdatePortalRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Prompts
 
 <details><summary><code>client.prompts.<a href="/src/management/api/resources/prompts/client/Client.ts">getSettings</a>() -> Management.GetSettingsResponseContent</code></summary>
@@ -8315,7 +8917,7 @@ let page = await client.rateLimitPolicies.list({
     from: "from",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -8617,7 +9219,7 @@ let page = await client.refreshTokens.list({
     include_fields: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -8966,7 +9568,7 @@ let page = await client.resourceServers.list({
     include_fields: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -9125,7 +9727,7 @@ let page = await client.resourceServers.search({
     sort: "identifier",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -9425,7 +10027,7 @@ let page = await client.roles.list({
     owner_id: "owner_id",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -9780,7 +10382,7 @@ let page = await client.rules.list({
     include_fields: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -10336,7 +10938,7 @@ let page = await client.selfServiceProfiles.list({
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -11329,7 +11931,7 @@ let page = await client.tokenExchangeProfiles.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -11685,7 +12287,7 @@ let page = await client.userAttributeProfiles.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -12460,7 +13062,7 @@ let page = await client.users.list({
     primary_order: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -12935,6 +13537,211 @@ await client.users.update("id");
 </dl>
 </details>
 
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">listConsentSigningKeys</a>(id) -> Management.ListUserConsentSigningKeysResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all consent signing keys registered for a user. Returns an empty `keys` array when the user has no keys registered.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.listConsentSigningKeys("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">getConsentSigningKey</a>(id, kid) -> Management.ConsentSigningKey</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a single consent signing key for a user by its key identifier (kid). Returns 404 if the key does not exist.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.getConsentSigningKey("id", "kid");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**kid:** `string` — The key identifier of the consent signing key.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">deleteConsentSigningKey</a>(id, kid) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove a single consent signing key for a user by its key identifier (kid). The operation is idempotent and returns 204 whether or not the key existed.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.deleteConsentSigningKey("id", "kid");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**kid:** `string` — The key identifier of the consent signing key.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">regenerateRecoveryCode</a>(id) -> Management.RegenerateUsersRecoveryCodeResponseContent</code></summary>
 <dl>
 <dd>
@@ -13113,7 +13920,7 @@ let page = await client.actions.versions.list("actionId", {
     per_page: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -13419,7 +14226,7 @@ let page = await client.actions.modules.list({
     per_page: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -13763,7 +14570,7 @@ let page = await client.actions.modules.listActions("id", {
     per_page: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -13984,7 +14791,7 @@ let page = await client.actions.modules.versions.list("id", {
     per_page: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -14209,7 +15016,7 @@ let page = await client.actions.triggers.bindings.list("post-login", {
     per_page: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -14925,328 +15732,6 @@ await client.attackProtection.captcha.update();
 <dd>
 
 **requestOptions:** `CaptchaClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## AttackProtection CaptchaPolicies
-
-<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">list</a>() -> Management.ListAttackProtectionCaptchaPoliciesResponseContent</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve all CAPTCHA attack protection policies for the tenant, sorted by priority ascending.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.attackProtection.captchaPolicies.list();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">create</a>({ ...params }) -> Management.AttackProtectionCaptchaPolicy</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new CAPTCHA attack protection policy for the tenant. The maximum number of policies per tenant is determined by the tenant's subscription.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.attackProtection.captchaPolicies.create({
-    name: "name",
-    priority: 1,
-    match: {},
-    action: {},
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Management.CreateAttackProtectionCaptchaPolicyRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">get</a>(id) -> Management.AttackProtectionCaptchaPolicy</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a single CAPTCHA attack protection policy for the tenant by ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.attackProtection.captchaPolicies.get("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the CAPTCHA attack protection policy.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">delete</a>(id) -> void</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete a CAPTCHA attack protection policy for the tenant.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.attackProtection.captchaPolicies.delete("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the CAPTCHA attack protection policy.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.attackProtection.captchaPolicies.<a href="/src/management/api/resources/attackProtection/resources/captchaPolicies/client/Client.ts">update</a>(id, { ...params }) -> Management.AttackProtectionCaptchaPolicy</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Partially update a CAPTCHA attack protection policy. Only the provided fields are modified. A provided match or action replaces the stored value in full rather than merging with it; within action, a provider secret or API key that is omitted from a provided provider block keeps its stored value.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.attackProtection.captchaPolicies.update("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — ID of the CAPTCHA attack protection policy.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Management.UpdateAttackProtectionCaptchaPolicyRequestContent`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `CaptchaPoliciesClient.RequestOptions`
 
 </dd>
 </dl>
@@ -16917,7 +17402,7 @@ let page = await client.clientGrants.organizations.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -17434,7 +17919,7 @@ let page = await client.clients.connections.get("id", {
     include_fields: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -17525,7 +18010,7 @@ let page = await client.connections.directoryProvisioning.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -17939,7 +18424,7 @@ let page = await client.connections.directoryProvisioning.listSynchronizedGroups
     q: "q",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -18261,7 +18746,7 @@ let page = await client.connections.scimConfiguration.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -18680,7 +19165,7 @@ let page = await client.connections.clients.get("id", {
     from: "from",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -18802,7 +19287,7 @@ await client.connections.clients.update("id", [
 <dl>
 <dd>
 
-Gets the connection keys for the Okta or OIDC connection strategy.
+Gets the connection keys for the Okta, OIDC, or SAML (samlp) connection strategy.
 
 </dd>
 </dl>
@@ -18865,7 +19350,7 @@ await client.connections.keys.get("id");
 <dl>
 <dd>
 
-Provision initial connection keys for Okta or OIDC connection strategies. This endpoint allows you to create keys before configuring the connection to use Private Key JWT authentication, enabling zero-downtime transitions.
+Provision initial connection keys for Okta, OIDC, or SAML (samlp) connection strategies. This endpoint allows you to create keys before configuring the connection to use Private Key JWT authentication, enabling zero-downtime transitions.
 
 </dd>
 </dl>
@@ -18936,7 +19421,7 @@ await client.connections.keys.create("id");
 <dl>
 <dd>
 
-Rotates the connection keys for the Okta or OIDC connection strategies.
+Rotates the connection keys for the Okta, OIDC, or SAML (samlp) connection strategies.
 
 </dd>
 </dl>
@@ -19678,7 +20163,7 @@ let page = await client.eventStreams.deliveries.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -19945,7 +20430,7 @@ let page = await client.experimentation.experiments.list({
     feature_flag_id: "feature_flag_id",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -20016,6 +20501,7 @@ await client.experimentation.experiments.create({
     name: "name",
     feature_flag_id: "feature_flag_id",
     authentication_flow: "authentication",
+    allocation_strategy: "percentage",
 });
 ```
 
@@ -20432,7 +20918,7 @@ let page = await client.experimentation.featureFlags.list({
     status: "draft",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -20768,6 +21254,7 @@ const pageableResponse = await client.experimentation.segments.list({
     from: "from",
     take: 1,
     type: "auth0",
+    status: "active",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -20778,9 +21265,10 @@ let page = await client.experimentation.segments.list({
     from: "from",
     take: 1,
     type: "auth0",
+    status: "active",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -21475,7 +21963,7 @@ let page = await client.flows.executions.list("flow_id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -21675,7 +22163,7 @@ let page = await client.flows.vault.connections.list({
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -21970,7 +22458,7 @@ let page = await client.groups.members.get("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -22061,7 +22549,7 @@ let page = await client.groups.roles.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -22550,7 +23038,7 @@ await client.guardian.factors.set("push-notification", {
 <dl>
 <dd>
 
-**name:** `Management.GuardianFactorNameEnum` — Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`.
+**name:** `Management.GuardianFactorNameEnum` — Factor name. Can be `sms`, `push-notification`, `email`, `duo`, `otp`, `webauthn-roaming`, `webauthn-platform`, `recovery-code`, or `passkey`.
 
 </dd>
 </dl>
@@ -25474,7 +25962,7 @@ let page = await client.keys.encryption.list({
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -26420,7 +26908,7 @@ let page = await client.organizations.clientGrants.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -26630,7 +27118,7 @@ let page = await client.organizations.clients.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -27011,7 +27499,7 @@ let page = await client.organizations.connections.list("id", {
     is_enabled: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -27337,7 +27825,7 @@ let page = await client.organizations.discoveryDomains.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -27797,7 +28285,7 @@ let page = await client.organizations.enabledConnections.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -28194,7 +28682,7 @@ let page = await client.organizations.invitations.list("id", {
     sort: "sort",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -28508,7 +28996,7 @@ let page = await client.organizations.members.list("id", {
     include_fields: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -28732,7 +29220,7 @@ let page = await client.organizations.groups.list("organization_id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -28823,7 +29311,7 @@ let page = await client.organizations.groups.roles.list("organization_id", "grou
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -29084,7 +29572,7 @@ let page = await client.organizations.members.effectiveRoles.list("id", "user_id
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -29189,7 +29677,7 @@ let page = await client.organizations.members.roles.list("id", "user_id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -29456,7 +29944,7 @@ let page = await client.organizations.members.effectiveRoles.sources.groups.list
     role_id: "role_id",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -29564,7 +30052,7 @@ let page = await client.organizations.roles.members.list("id", "role_id", {
     include_fields: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -29663,7 +30151,7 @@ let page = await client.organizations.roles.groups.list("organization_id", "role
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -29774,7 +30262,7 @@ let page = await client.prompts.rendering.list({
     rendering_mode: "advanced",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -30613,7 +31101,7 @@ let page = await client.roles.groups.get("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -30852,7 +31340,7 @@ let page = await client.roles.permissions.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -31119,7 +31607,7 @@ let page = await client.roles.users.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -31733,7 +32221,7 @@ let page = await client.users.authenticationMethods.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -32308,7 +32796,7 @@ let page = await client.users.connectedAccounts.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -32401,7 +32889,7 @@ let page = await client.users.effectivePermissions.list("id", {
     resource_server_identifier: "resource_server_identifier",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -32492,7 +32980,7 @@ let page = await client.users.effectiveRoles.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -32654,7 +33142,7 @@ let page = await client.users.groups.get("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -32936,7 +33424,7 @@ let page = await client.users.logs.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -33181,7 +33669,7 @@ let page = await client.users.organizations.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -33276,7 +33764,7 @@ let page = await client.users.permissions.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -33605,7 +34093,7 @@ let page = await client.users.roles.list("id", {
     include_totals: true,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -33848,7 +34336,7 @@ let page = await client.users.refreshToken.list("user_id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -34004,7 +34492,7 @@ let page = await client.users.sessions.list("user_id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -34162,7 +34650,7 @@ let page = await client.users.effectivePermissions.sources.roles.list("id", {
     permission_name: "permission_name",
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -34255,7 +34743,7 @@ let page = await client.users.effectiveRoles.sources.groups.list("id", {
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
@@ -34346,7 +34834,7 @@ let page = await client.verifiableCredentials.verification.templates.list({
     take: 1,
 });
 while (page.hasNextPage()) {
-    page = page.getNextPage();
+    page = await page.getNextPage();
 }
 
 // You can also access the underlying response
