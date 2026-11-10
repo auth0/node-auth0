@@ -37,6 +37,8 @@ export class SynchronizationsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.directoryProvisioning.synchronizations.create("id")
@@ -63,7 +65,7 @@ export class SynchronizationsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronizations`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronizations`,
             ),
             method: "POST",
             headers: _headers,

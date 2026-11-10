@@ -736,6 +736,18 @@ export const OauthScope = {
      * Delete Vdcs Templates */
     DeleteVdcsTemplates: "delete:vdcs_templates",
     /**
+     * Create Client Profiles */
+    CreateClientProfiles: "create:client_profiles",
+    /**
+     * Read Client Profiles */
+    ReadClientProfiles: "read:client_profiles",
+    /**
+     * Update Client Profiles */
+    UpdateClientProfiles: "update:client_profiles",
+    /**
+     * Delete Client Profiles */
+    DeleteClientProfiles: "delete:client_profiles",
+    /**
      * Create Organization Client Associations */
     CreateOrganizationClients: "create:organization_clients",
     /**
@@ -747,6 +759,18 @@ export const OauthScope = {
     /**
      * Delete Organization Client Associations */
     DeleteOrganizationClients: "delete:organization_clients",
+    /**
+     * Create Universal Portals */
+    CreatePortals: "create:portals",
+    /**
+     * Read Universal Portals */
+    ReadPortals: "read:portals",
+    /**
+     * Update Universal Portals */
+    UpdatePortals: "update:portals",
+    /**
+     * Delete Universal Portals */
+    DeletePortals: "delete:portals",
     /**
      * Create Network ACL Keys */
     CreateNetworkAclKeys: "create:network_acl_keys",
@@ -781,6 +805,19 @@ export interface TooManyRequestsErrorBody {
 export namespace TooManyRequestsErrorBody {
     export const Error_ = {
         TooManyRequests: "Too Many Requests",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
+export interface InternalServerErrorBody {
+    message: string;
+    statusCode: string;
+    error: InternalServerErrorBody.Error_;
+}
+
+export namespace InternalServerErrorBody {
+    export const Error_ = {
+        InternalServerError: "Internal Server Error",
     } as const;
     export type Error_ = (typeof Error_)[keyof typeof Error_];
 }
@@ -1516,64 +1553,6 @@ export interface AttackProtectionCaptchaHcaptchaResponseContent {
     [key: string]: any;
 }
 
-/**
- * An attack protection policy override for CAPTCHA.
- */
-export interface AttackProtectionCaptchaPolicy {
-    /** System-generated identifier for the policy. */
-    id: string;
-    /** Human-readable policy name. */
-    name: string;
-    /** Description of the policy's purpose. */
-    description?: string | undefined;
-    /** Conflict resolution order. Lower number takes higher precedence. */
-    priority: number;
-    match: Management.AttackProtectionCaptchaPolicyMatch;
-    action: Management.AttackProtectionCaptchaPolicyAction;
-    /** ISO 8601 timestamp when the policy was created. */
-    created_at: string;
-    /** ISO 8601 timestamp when the policy was last updated. */
-    updated_at: string;
-}
-
-/**
- * CAPTCHA configuration override stored for this policy.
- */
-export interface AttackProtectionCaptchaPolicyAction {
-    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
-    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
-    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
-    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2 | undefined;
-    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterprise | undefined;
-    hcaptcha?: Management.CaptchaPolicyActionHcaptcha | undefined;
-    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptcha | undefined;
-    arkose?: Management.CaptchaPolicyActionArkose | undefined;
-}
-
-/**
- * CAPTCHA configuration override for this policy.
- */
-export interface AttackProtectionCaptchaPolicyActionInput {
-    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
-    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
-    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
-    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2Input | undefined;
-    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterpriseInput | undefined;
-    hcaptcha?: Management.CaptchaPolicyActionHcaptchaInput | undefined;
-    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptchaInput | undefined;
-    arkose?: Management.CaptchaPolicyActionArkoseInput | undefined;
-}
-
-/**
- * Traffic matching criteria for the policy. Exactly one of auth0_managed or geo_country_codes must be specified.
- */
-export interface AttackProtectionCaptchaPolicyMatch {
-    /** Match by Auth0-managed traffic identifiers. */
-    auth0_managed?: string[] | undefined;
-    /** Match by ISO 3166-1 alpha-2 country codes. */
-    geo_country_codes?: string[] | undefined;
-}
-
 /** The id of the active provider for the CAPTCHA. */
 export const AttackProtectionCaptchaProviderId = {
     Arkose: "arkose",
@@ -2177,137 +2156,6 @@ export interface BulkUpdateAculResponseContent {
     [key: string]: any;
 }
 
-/** The CAPTCHA provider type. */
-export const CaptchaActiveProviderEnum = {
-    SimpleCaptcha: "simple_captcha",
-    AuthChallenge: "auth_challenge",
-    RecaptchaV2: "recaptcha_v2",
-    RecaptchaEnterprise: "recaptcha_enterprise",
-    Hcaptcha: "hcaptcha",
-    FriendlyCaptcha: "friendly_captcha",
-    Arkose: "arkose",
-} as const;
-export type CaptchaActiveProviderEnum = (typeof CaptchaActiveProviderEnum)[keyof typeof CaptchaActiveProviderEnum];
-
-/**
- * Arkose Labs provider configuration.
- */
-export interface CaptchaPolicyActionArkose {
-    /** The Arkose Labs site key. */
-    site_key?: string | undefined;
-    /** The Arkose Labs client subdomain. */
-    client_subdomain?: string | undefined;
-    /** The Arkose Labs verify subdomain. */
-    verify_subdomain?: string | undefined;
-    /** Whether to allow access when Arkose Labs is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Arkose Labs provider configuration.
- */
-export interface CaptchaPolicyActionArkoseInput {
-    /** The Arkose Labs site key. */
-    site_key?: string | undefined;
-    /** The Arkose Labs private key. Encrypted at rest. */
-    secret?: string | undefined;
-    /** The Arkose Labs client subdomain. */
-    client_subdomain?: string | undefined;
-    /** The Arkose Labs verify subdomain. */
-    verify_subdomain?: string | undefined;
-    /** Whether to allow access when Arkose Labs is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Auth Challenge CAPTCHA provider configuration.
- */
-export interface CaptchaPolicyActionAuthChallenge {
-    /** Whether to allow access when the challenge provider is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Friendly Captcha provider configuration.
- */
-export interface CaptchaPolicyActionFriendlyCaptcha {
-    /** The Friendly Captcha site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * Friendly Captcha provider configuration.
- */
-export interface CaptchaPolicyActionFriendlyCaptchaInput {
-    /** The Friendly Captcha site key. */
-    site_key?: string | undefined;
-    /** The Friendly Captcha secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * hCaptcha provider configuration.
- */
-export interface CaptchaPolicyActionHcaptcha {
-    /** The hCaptcha site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * hCaptcha provider configuration.
- */
-export interface CaptchaPolicyActionHcaptchaInput {
-    /** The hCaptcha site key. */
-    site_key?: string | undefined;
-    /** The hCaptcha secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * reCAPTCHA Enterprise provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaEnterprise {
-    /** The reCAPTCHA Enterprise site key. */
-    site_key?: string | undefined;
-    /** The Google Cloud project ID. */
-    project_id?: string | undefined;
-}
-
-/**
- * reCAPTCHA Enterprise provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaEnterpriseInput {
-    /** The reCAPTCHA Enterprise site key. */
-    site_key?: string | undefined;
-    /** The Google Cloud project ID. */
-    project_id?: string | undefined;
-    /** The reCAPTCHA Enterprise API key. Encrypted at rest. */
-    api_key?: string | undefined;
-}
-
-/**
- * reCAPTCHA v2 provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaV2 {
-    /** The reCAPTCHA v2 site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * reCAPTCHA v2 provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaV2Input {
-    /** The reCAPTCHA v2 site key. */
-    site_key?: string | undefined;
-    /** The reCAPTCHA v2 secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * Simple CAPTCHA provider configuration.
- */
-export interface CaptchaPolicyActionSimpleCaptcha {}
-
 export interface CertificateSubjectDnCredential {
     credential_type: Management.CertificateSubjectDnCredentialTypeEnum;
     /** Friendly name for a credential. */
@@ -2341,6 +2189,14 @@ export interface ChangePasswordTicketResponseContent {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/** Indicates who created the client. The value <code>admin</code> indicates the client was registered via the Management API. The value <code>client</code> indicates the client was registered dynamically. */
+export const CimdExternalMetadataCreatedByEnum = {
+    Admin: "admin",
+    Client: "client",
+} as const;
+export type CimdExternalMetadataCreatedByEnum =
+    (typeof CimdExternalMetadataCreatedByEnum)[keyof typeof CimdExternalMetadataCreatedByEnum];
 
 /**
  * Client authentication methods derived from the JWKS document
@@ -2515,6 +2371,7 @@ export interface Client {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -2523,6 +2380,9 @@ export interface Client {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -3154,6 +3014,14 @@ export const ClientExternalMetadataCreatedByEnum = {
 export type ClientExternalMetadataCreatedByEnum =
     (typeof ClientExternalMetadataCreatedByEnum)[keyof typeof ClientExternalMetadataCreatedByEnum];
 
+/** Indicates whether the Client ID Metadata Document at <code>external_client_id</code> is currently reachable. For clients with <code>external_metadata_created_by</code> set to <code>client</code> the status is calculated from the document; for <code>admin</code> it is always <code>available</code>. When absent, the status is assumed to be <code>available</code>. */
+export const ClientExternalMetadataStatusEnum = {
+    Available: "available",
+    Unavailable: "unavailable",
+} as const;
+export type ClientExternalMetadataStatusEnum =
+    (typeof ClientExternalMetadataStatusEnum)[keyof typeof ClientExternalMetadataStatusEnum];
+
 /** Indicates the type of external metadata used to register the client. This field is omitted for regular clients. The value <code>cimd</code> identifies clients registered via a Client ID Metadata Document. The value <code>dcr</code> identifies clients registered via Dynamic Client Registration. */
 export const ClientExternalMetadataTypeEnum = {
     Cimd: "cimd",
@@ -3447,6 +3315,20 @@ export interface ClientOidcBackchannelLogoutSettings {
     [key: string]: any;
 }
 
+/**
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
+ */
+export interface ClientOidcSupport {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
+    is_allowed?: boolean | undefined;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
+    allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
+    allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export const ClientOidcSupportAllowedScopesEnum = {
     Profile: "profile",
     Email: "email",
@@ -3457,20 +3339,26 @@ export type ClientOidcSupportAllowedScopesEnum =
     (typeof ClientOidcSupportAllowedScopesEnum)[keyof typeof ClientOidcSupportAllowedScopesEnum];
 
 /**
- * OIDC support configuration for a client. Replaces the stored object entirely; send null to unset it.
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
  */
 export interface ClientOidcSupportPatch {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed: boolean;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
 }
 
 /**
- * OIDC support configuration for a client. Controls whether OIDC flows are allowed and which scopes the client may request.
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
  */
 export interface ClientOidcSupportPost {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed: boolean;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
 }
 
@@ -3517,6 +3405,182 @@ export const ClientOrganizationUsagePatchEnum = {
 } as const;
 export type ClientOrganizationUsagePatchEnum =
     (typeof ClientOrganizationUsagePatchEnum)[keyof typeof ClientOrganizationUsagePatchEnum];
+
+export interface ClientProfile {
+    id: Management.ClientProfileId;
+    name: Management.ClientProfileName;
+    description?: ((Management.ClientProfileDescription | undefined) | null) | undefined;
+    client_configuration: Management.ClientProfileClientConfiguration;
+    apply_policy: Management.ClientProfileApplyPolicy;
+    /** Timestamp of creation. */
+    created_at?: string | undefined;
+    /** Timestamp of last update. */
+    updated_at?: string | undefined;
+}
+
+/**
+ * Runtime matching rules that determine which clients this profile governs.
+ */
+export interface ClientProfileApplyPolicy {
+    external_metadata_type: Management.ClientProfileApplyPolicyExternalMetadataTypeEnum;
+    external_metadata_created_by: Management.ClientProfileApplyPolicyExternalMetadataCreatedByEnum;
+}
+
+/** The external metadata client's creator to match. The value <code>client</code> indicates the client was registered dynamically. */
+export const ClientProfileApplyPolicyExternalMetadataCreatedByEnum = {
+    Client: "client",
+} as const;
+export type ClientProfileApplyPolicyExternalMetadataCreatedByEnum =
+    (typeof ClientProfileApplyPolicyExternalMetadataCreatedByEnum)[keyof typeof ClientProfileApplyPolicyExternalMetadataCreatedByEnum];
+
+/** The client's type of external metadata to match. The value <code>cimd</code> identifies clients registered via a Client ID Metadata Document. */
+export const ClientProfileApplyPolicyExternalMetadataTypeEnum = {
+    Cimd: "cimd",
+} as const;
+export type ClientProfileApplyPolicyExternalMetadataTypeEnum =
+    (typeof ClientProfileApplyPolicyExternalMetadataTypeEnum)[keyof typeof ClientProfileApplyPolicyExternalMetadataTypeEnum];
+
+/**
+ * Runtime policy applied to matched clients. Omitted fields fall back to each client's own setting.
+ */
+export interface ClientProfileClientConfiguration {
+    refresh_token?: Management.ClientProfileClientConfigurationRefreshToken | undefined;
+    organization_usage?: Management.ClientProfileClientConfigurationOrganizationUsage | undefined;
+    organization_require_behavior?: Management.ClientProfileClientConfigurationOrganizationRequireBehavior | undefined;
+    organization_discovery_methods?:
+        | Management.ClientProfileClientConfigurationOrganizationDiscoveryMethods
+        | undefined;
+    require_proof_of_possession?: Management.ClientProfileClientConfigurationRequireProofOfPossession | undefined;
+    oidc_support?: Management.ClientProfileClientConfigurationOidcSupport | undefined;
+}
+
+/**
+ * Default OIDC support configuration applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOidcSupport {
+    default_value: Management.ClientProfileClientConfigurationOidcSupportDefaultValue;
+}
+
+/** Optional OIDC scope that matched clients may be granted. */
+export const ClientProfileClientConfigurationOidcSupportAllowedScopesEnum = {
+    Profile: "profile",
+    Email: "email",
+    Address: "address",
+    Phone: "phone",
+} as const;
+export type ClientProfileClientConfigurationOidcSupportAllowedScopesEnum =
+    (typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum)[keyof typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum];
+
+/**
+ * Controls whether matched clients can receive ID tokens and use the UserInfo endpoint, and which user profile information they can request through OIDC scopes.
+ */
+export interface ClientProfileClientConfigurationOidcSupportDefaultValue {
+    /** Allows matched clients to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
+    is_allowed: boolean;
+    /** Allows matched clients to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
+    allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes matched clients may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information they can access. Mutually exclusive with allow_all_scopes. */
+    allowed_scopes?: Management.ClientProfileClientConfigurationOidcSupportAllowedScopesEnum[] | undefined;
+}
+
+/** A method used to discover a user's organization. */
+export const ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum = {
+    Email: "email",
+    OrganizationName: "organization_name",
+} as const;
+export type ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum =
+    (typeof ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum)[keyof typeof ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum];
+
+/**
+ * Default organization discovery methods applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOrganizationDiscoveryMethods {
+    default_value?: Management.ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum[] | undefined;
+}
+
+/**
+ * Default organization prompt behavior applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOrganizationRequireBehavior {
+    default_value?: Management.ClientProfileClientConfigurationOrganizationRequireBehaviorEnum | undefined;
+}
+
+/** When an organization is required, how matched clients prompt for it. */
+export const ClientProfileClientConfigurationOrganizationRequireBehaviorEnum = {
+    NoPrompt: "no_prompt",
+    PreLoginPrompt: "pre_login_prompt",
+    PostLoginPrompt: "post_login_prompt",
+} as const;
+export type ClientProfileClientConfigurationOrganizationRequireBehaviorEnum =
+    (typeof ClientProfileClientConfigurationOrganizationRequireBehaviorEnum)[keyof typeof ClientProfileClientConfigurationOrganizationRequireBehaviorEnum];
+
+/**
+ * Default organization usage applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOrganizationUsage {
+    default_value?: Management.ClientProfileClientConfigurationOrganizationUsageEnum | undefined;
+}
+
+/** How matched clients handle organizations. */
+export const ClientProfileClientConfigurationOrganizationUsageEnum = {
+    Deny: "deny",
+    Allow: "allow",
+    Require: "require",
+} as const;
+export type ClientProfileClientConfigurationOrganizationUsageEnum =
+    (typeof ClientProfileClientConfigurationOrganizationUsageEnum)[keyof typeof ClientProfileClientConfigurationOrganizationUsageEnum];
+
+/**
+ * Refresh token settings. Omit any sub-field to use the client's own value.
+ */
+export interface ClientProfileClientConfigurationRefreshToken {
+    token_lifetime?: Management.ClientProfileRefreshTokenTokenLifetime | undefined;
+    idle_token_lifetime?: Management.ClientProfileRefreshTokenIdleTokenLifetime | undefined;
+    leeway?: Management.ClientProfileRefreshTokenLeeway | undefined;
+}
+
+/**
+ * Whether matched clients default to requiring proof of possession.
+ */
+export interface ClientProfileClientConfigurationRequireProofOfPossession {
+    default_value?: boolean | undefined;
+}
+
+/**
+ * Optional description of the client profile.
+ */
+export type ClientProfileDescription = (string | null) | undefined;
+
+/**
+ * Client Profile identifier.
+ */
+export type ClientProfileId = string;
+
+/**
+ * Display name of the client profile.
+ */
+export type ClientProfileName = string;
+
+/**
+ * Default idle refresh token lifetime, in seconds, applied to matched clients.
+ */
+export interface ClientProfileRefreshTokenIdleTokenLifetime {
+    default_value?: number | undefined;
+}
+
+/**
+ * Default refresh token rotation leeway, in seconds, applied to matched clients.
+ */
+export interface ClientProfileRefreshTokenLeeway {
+    default_value?: number | undefined;
+}
+
+/**
+ * Default refresh token lifetime, in seconds, applied to matched clients.
+ */
+export interface ClientProfileRefreshTokenTokenLifetime {
+    default_value?: number | undefined;
+}
 
 /** Controls whether Auth0 redirects users to the application's callback URL on authentication errors or in email verification flows. `open_redirect_protection` shows an error page instead of redirecting, and hides the callback domain from email templates. `allow_always` enables standard redirect behavior. Defaults to `open_redirect_protection` for third-party clients. Only applies when `is_first_party` is `false` and `third_party_security_mode` is `strict`. To learn more, read <a href="https://auth0.com/docs/get-started/applications/third-party-applications/security-controls#redirect-protection">Redirect protection</a>. */
 export const ClientRedirectionPolicyEnum = {
@@ -3650,6 +3714,7 @@ export interface ClientSearchResponse {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -3658,6 +3723,9 @@ export interface ClientSearchResponse {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -4141,6 +4209,11 @@ export type ConnectionClientIdOidc = string;
 export type ConnectionClientIdPaypal = string;
 
 /**
+ * OIDC client identifier issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging SAML Assertions for Refresh Tokens.
+ */
+export type ConnectionClientIdSamlxaaRequestingApp = Management.ConnectionClientIdOidc;
+
+/**
  * The OAuth 2.0 client identifier
  */
 export type ConnectionClientIdSalesforce = string;
@@ -4224,6 +4297,11 @@ export type ConnectionClientSecretOidc = string;
  * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
  */
 export type ConnectionClientSecretPaypal = string;
+
+/**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
+ */
+export type ConnectionClientSecretSamlxaaRequestingApp = string;
 
 /**
  * The OAuth 2.0 client secret
@@ -5172,6 +5250,7 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
     enabledDatabaseCustomization?: Management.ConnectionEnabledDatabaseCustomization | undefined;
     import_mode?: Management.ConnectionImportMode | undefined;
     mfa?: Management.ConnectionMfa | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
     password_complexity_options?: (Management.ConnectionPasswordComplexityOptions | null) | undefined;
@@ -6136,6 +6215,8 @@ export type ConnectionOptionsProtocolEnumTwitter =
  */
 export interface ConnectionOptionsSaml
     extends Management.ConnectionOptionsCommonSaml, Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdSamlxaaRequestingApp | undefined;
+    client_secret?: Management.ConnectionClientSecretSamlxaaRequestingApp | undefined;
     debug?: Management.ConnectionDebugSaml | undefined;
     deflate?: Management.ConnectionOptionsDeflateSaml | undefined;
     destinationUrl?: Management.ConnectionDestinationUrlSaml | undefined;
@@ -6153,6 +6234,9 @@ export interface ConnectionOptionsSaml
     signingCert?: Management.ConnectionSigningCertSaml | undefined;
     signing_key?: Management.ConnectionSigningKeySaml | undefined;
     signOutEndpoint?: Management.ConnectionSignOutEndpointSaml | undefined;
+    token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
+    token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
+    token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     user_id_attribute?: Management.ConnectionUserIdAttributeSaml | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -6460,11 +6544,31 @@ export interface ConnectionOptionsYandex extends Management.ConnectionOptionsOAu
 }
 
 /**
+ * OTP settings for a delivery channel.
+ */
+export interface ConnectionOtpChannelSettings {
+    /** Number of digits in the generated one-time password. */
+    otp_length?: number | undefined;
+    /** Number of seconds before the one-time password expires. */
+    otp_expiry?: number | undefined;
+}
+
+/**
+ * One-time password settings, configurable per delivery channel.
+ */
+export interface ConnectionOtpSettings {
+    email?: Management.ConnectionOtpChannelSettings | undefined;
+    phone?: Management.ConnectionOtpChannelSettings | undefined;
+}
+
+/**
  * Passkey authentication enablement
  */
 export interface ConnectionPasskeyAuthenticationMethod {
     /** Determines whether passkeys are enabled */
     enabled?: boolean | undefined;
+    /** Specifies the signup behavior for passkey authentication */
+    signup_behavior?: Management.ConnectionSignupBehaviorEnum | undefined;
 }
 
 /** Controls the UI used to challenge the user for their passkey. */
@@ -6856,8 +6960,9 @@ export interface ConnectionPropertiesOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, string | null> | null) | undefined;
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
@@ -7638,6 +7743,7 @@ export namespace ConnectionResponseContentPlanningCenter {
 export interface ConnectionResponseContentSaml
     extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSaml.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
@@ -8339,7 +8445,7 @@ export type ConnectionTokenEndpointAuthSigningAlgEnum =
  */
 export type ConnectionTokenEndpointAuthSigningAlgValuesSupported = string[];
 
-/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the identity provider's issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
 export const ConnectionTokenEndpointJwtcaAudFormatEnumOidc = {
     Issuer: "issuer",
     TokenEndpoint: "token_endpoint",
@@ -8447,7 +8553,7 @@ export type ConnectionUpstreamAliasEnum =
  * Options for adding parameters in the request to the upstream IdP
  */
 export type ConnectionUpstreamParams =
-    | (Record<string, Management.ConnectionUpstreamAdditionalProperties | null> | null)
+    | (Record<string, (Management.ConnectionUpstreamAdditionalProperties | null) | undefined> | null)
     | undefined;
 
 /**
@@ -8545,7 +8651,7 @@ export type ConnectionsDiscoveryUrl = (string | null) | undefined;
 /**
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
  */
-export type ConnectionsMetadata = Record<string, string | null>;
+export type ConnectionsMetadata = Record<string, (string | null) | undefined>;
 
 /**
  * Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp.
@@ -8631,6 +8737,17 @@ export interface ConnectionsOidcMetadata {
     dpop_signing_alg_values_supported?: string[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface ConsentSigningKey {
+    /** The key identifier of the consent signing key. */
+    kid: string;
+    /** A human-readable label for the device holding the corresponding private key. */
+    device_identifier: string;
+    /** The ISO 8601 timestamp at which the key was registered. */
+    created_at: string;
+    /** The ISO 8601 timestamp at which the key expires and can no longer be used to verify consent decisions. */
+    expires_at: string;
 }
 
 /**
@@ -8893,6 +9010,7 @@ export interface CreateClientResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -8901,6 +9019,9 @@ export interface CreateClientResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -9508,6 +9629,7 @@ export namespace CreateConnectionRequestContentPlanningCenter {
  */
 export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSaml.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
@@ -10003,6 +10125,7 @@ export interface CreateExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -10984,6 +11107,8 @@ export interface CreateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface CreateRoleResponseContent {
@@ -11349,7 +11474,7 @@ export type CspPolicyMode = (typeof CspPolicyMode)[keyof typeof CspPolicyMode];
 export interface CspPolicyReporting {
     /** HTTPS endpoint for CSP violation reports. */
     report_uri?: string | undefined;
-    /** Report-To group name for modern reporting. */
+    /** Report-To group name for modern reporting. Letters, digits, underscores and hyphens only; enforced on write by the request validator. */
     report_to_group?: string | undefined;
 }
 
@@ -11790,7 +11915,7 @@ export type DomainCertificateStatusEnum =
 /**
  * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
  */
-export type DomainMetadata = Record<string, string | null>;
+export type DomainMetadata = Record<string, (string | null) | undefined>;
 
 /**
  * Domain verification settings.
@@ -22311,6 +22436,7 @@ export interface EventStreamCloudEventContext {
     connection?: Management.EventStreamCloudEventContextConnection | undefined;
     request?: Management.EventStreamCloudEventContextRequest | undefined;
     tenant: Management.EventStreamCloudEventContextTenant;
+    transaction?: Management.EventStreamCloudEventContextTransaction | undefined;
 }
 
 /**
@@ -22389,6 +22515,71 @@ export interface EventStreamCloudEventContextTenant {
     /** User-provided tenant identifier. */
     id: string;
 }
+
+/**
+ * An auth transaction.
+ */
+export interface EventStreamCloudEventContextTransaction {
+    /** acr_values in the request. */
+    acr_values: string[];
+    /** The locale used for this transaction. */
+    locale: string;
+    /** Hint about the login identifier the user might use in this transaction. */
+    login_hint?: string | undefined;
+    /** Instructions indicating whether the user may be prompted for re-authentication and consent. */
+    prompt?: string[] | undefined;
+    protocol?: Management.EventStreamCloudEventContextTransactionProtocolEnum | undefined;
+    /** The URL to which the client will be redirected when the transaction completes. */
+    redirect_uri?: string | undefined;
+    /** The scopes requested. */
+    requested_scopes: string[];
+    response_mode?: Management.EventStreamCloudEventContextTransactionResponseModeEnum | undefined;
+    /** The kind of credential issued by this transaction. */
+    response_type?: Management.EventStreamCloudEventContextTransactionResponseTypeItemEnum[] | undefined;
+    /** The OAuth state parameter for this transaction. */
+    state?: string | undefined;
+    /** The ui_locales requested for this transaction. */
+    ui_locales: string[];
+}
+
+/** The protocol used for this transaction. */
+export const EventStreamCloudEventContextTransactionProtocolEnum = {
+    OidcBasicProfile: "oidc-basic-profile",
+    OidcImplicitProfile: "oidc-implicit-profile",
+    Oauth2DeviceCode: "oauth2-device-code",
+    Oauth2ResourceOwner: "oauth2-resource-owner",
+    Oauth2ResourceOwnerJwtBearer: "oauth2-resource-owner-jwt-bearer",
+    Oauth2Password: "oauth2-password",
+    Oauth2Webauthn: "oauth2-webauthn",
+    Oauth2AccessToken: "oauth2-access-token",
+    Oauth2RefreshToken: "oauth2-refresh-token",
+    Oauth2TokenExchange: "oauth2-token-exchange",
+    OidcHybridProfile: "oidc-hybrid-profile",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+    WstrustUsernamemixed: "wstrust-usernamemixed",
+} as const;
+export type EventStreamCloudEventContextTransactionProtocolEnum =
+    (typeof EventStreamCloudEventContextTransactionProtocolEnum)[keyof typeof EventStreamCloudEventContextTransactionProtocolEnum];
+
+/** This transaction's method for returning parameters from the Authorization Endpoint. */
+export const EventStreamCloudEventContextTransactionResponseModeEnum = {
+    Query: "query",
+    Fragment: "fragment",
+    FormPost: "form_post",
+    WebMessage: "web_message",
+} as const;
+export type EventStreamCloudEventContextTransactionResponseModeEnum =
+    (typeof EventStreamCloudEventContextTransactionResponseModeEnum)[keyof typeof EventStreamCloudEventContextTransactionResponseModeEnum];
+
+/** OAuth/OIDC response types. */
+export const EventStreamCloudEventContextTransactionResponseTypeItemEnum = {
+    Code: "code",
+    Token: "token",
+    IdToken: "id_token",
+} as const;
+export type EventStreamCloudEventContextTransactionResponseTypeItemEnum =
+    (typeof EventStreamCloudEventContextTransactionResponseTypeItemEnum)[keyof typeof EventStreamCloudEventContextTransactionResponseTypeItemEnum];
 
 /**
  * Event contents.
@@ -29281,6 +29472,7 @@ export interface ExperimentListItem {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -29826,7 +30018,7 @@ export type FlowActionAuth0SendRequestParamsPayloadObject = Record<string, unkno
 
 export type FlowActionAuth0SendRequestParamsQueryParams = Record<
     string,
-    FlowActionAuth0SendRequestParamsQueryParams.Value | null
+    (FlowActionAuth0SendRequestParamsQueryParams.Value | null) | undefined
 >;
 
 export namespace FlowActionAuth0SendRequestParamsQueryParams {
@@ -30317,7 +30509,7 @@ export type FlowActionHttpSendRequestParamsPayloadObject = Record<string, unknow
 
 export type FlowActionHttpSendRequestParamsQueryParams = Record<
     string,
-    FlowActionHttpSendRequestParamsQueryParams.Value | null
+    (FlowActionHttpSendRequestParamsQueryParams.Value | null) | undefined
 >;
 
 export namespace FlowActionHttpSendRequestParamsQueryParams {
@@ -33263,9 +33455,9 @@ export interface GetBruteForceSettingsResponseContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[] | undefined;
     mode?: Management.BruteForceProtectionModeEnum | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface GetClientCredentialResponseContent {
@@ -33415,6 +33607,7 @@ export interface GetClientResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -33423,6 +33616,9 @@ export interface GetClientResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -33669,6 +33865,7 @@ export interface GetExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -34344,6 +34541,8 @@ export interface GetResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface GetRiskAssessmentsSettingsNewDeviceResponseContent {
@@ -34583,6 +34782,8 @@ export interface GetTenantSettingsResponseContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
     /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
     client_id_metadata_document_supported?: boolean | undefined;
+    /** Whether the authorization server supports registering clients dynamically from a client_id URL. Requires client_id_metadata_document_supported to be enabled. */
+    client_id_metadata_document_dynamic_registration_supported?: boolean | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
@@ -34859,7 +35060,7 @@ export interface GuardianFactor {
     settings?: Management.GuardianFactorSettings | undefined;
 }
 
-/** Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`. */
+/** Factor name. Can be `sms`, `push-notification`, `email`, `duo`, `otp`, `webauthn-roaming`, `webauthn-platform`, `recovery-code`, or `passkey`. */
 export const GuardianFactorNameEnum = {
     PushNotification: "push-notification",
     Sms: "sms",
@@ -34869,6 +35070,7 @@ export const GuardianFactorNameEnum = {
     WebauthnRoaming: "webauthn-roaming",
     WebauthnPlatform: "webauthn-platform",
     RecoveryCode: "recovery-code",
+    Passkey: "passkey",
 } as const;
 export type GuardianFactorNameEnum = (typeof GuardianFactorNameEnum)[keyof typeof GuardianFactorNameEnum];
 
@@ -35260,11 +35462,6 @@ export interface ListAgentsResponseContent {
     next?: string | undefined;
 }
 
-/**
- * List of CAPTCHA attack protection policies for the tenant, sorted by priority ascending.
- */
-export type ListAttackProtectionCaptchaPoliciesResponseContent = Management.AttackProtectionCaptchaPolicy[];
-
 export interface ListBrandingPhoneProvidersResponseContent {
     providers?: Management.PhoneProviderSchemaMasked[] | undefined;
 }
@@ -35287,6 +35484,15 @@ export interface ListClientGrantPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
     next?: string | undefined;
     client_grants?: Management.ClientGrantResponseContent[] | undefined;
+}
+
+/**
+ * Checkpoint paginated list of client profiles.
+ */
+export interface ListClientProfilesPaginatedResponseContent {
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+    client_profiles: Management.ClientProfile[];
 }
 
 export interface ListClientsOffsetPaginatedResponseContent {
@@ -35540,6 +35746,10 @@ export interface ListPhoneTemplatesResponseContent {
     templates?: Management.PhoneTemplate[] | undefined;
 }
 
+export interface ListPortalsResponseContent {
+    portals: Management.PortalSummary[];
+}
+
 export interface ListRateLimitPoliciesPaginatedResponseContent {
     rate_limit_policies?: Management.RateLimitPolicy[] | undefined;
     /** A cursor to be used as the "from" query parameter for the next page of results. */
@@ -35666,6 +35876,11 @@ export interface ListUserConnectedAccountsResponseContent {
     connected_accounts: Management.ConnectedAccount[];
     /** The token to retrieve the next page of connected accounts (if there is one) */
     next?: string | undefined;
+}
+
+export interface ListUserConsentSigningKeysResponseContent {
+    /** The consent signing keys registered for the user. */
+    keys: Management.ConsentSigningKey[];
 }
 
 export interface ListUserEffectivePermissionRoleSourcesResponseContent {
@@ -36882,7 +37097,7 @@ export interface OrganizationMemberRole {
 /**
  * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
  */
-export type OrganizationMetadata = Record<string, string | null>;
+export type OrganizationMetadata = Record<string, (string | null) | undefined>;
 
 /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
 export const OrganizationSortFieldEnum = {
@@ -36907,6 +37122,254 @@ export const OrganizationUsageEnum = {
     Require: "require",
 } as const;
 export type OrganizationUsageEnum = (typeof OrganizationUsageEnum)[keyof typeof OrganizationUsageEnum];
+
+export type PageComponent =
+    | Management.PageComponent.PageComponentAuth0Form
+    | Management.PageComponent.PageComponentAuth0TypographyHeading
+    | Management.PageComponent.PageComponentAuth0MediaImage
+    | Management.PageComponent.PageComponentAuth0TypographyRichText
+    | Management.PageComponent.PageComponentAuth0StructureSection
+    | Management.PageComponent.PageComponentAuth0StructureSeparator
+    | Management.PageComponent.PageComponentAuth0MyOrganizationDomainTable
+    | Management.PageComponent.PageComponentAuth0MyOrganizationMemberManagement
+    | Management.PageComponent.PageComponentAuth0MyOrganizationDetailsEdit
+    | Management.PageComponent.PageComponentAuth0MyAccountPasskeyManagement
+    | Management.PageComponent.PageComponentAuth0MyAccountMfaManagement;
+
+export namespace PageComponent {
+    export interface PageComponentAuth0Form extends Management.PageComponentAuth0Form {
+        type: "page:component:auth0:form";
+    }
+
+    export interface PageComponentAuth0TypographyHeading extends Management.PageComponentAuth0TypographyHeading {
+        type: "page:component:auth0:typography:heading";
+    }
+
+    export interface PageComponentAuth0MediaImage extends Management.PageComponentAuth0MediaImage {
+        type: "page:component:auth0:media:image";
+    }
+
+    export interface PageComponentAuth0TypographyRichText extends Management.PageComponentAuth0TypographyRichText {
+        type: "page:component:auth0:typography:rich_text";
+    }
+
+    export interface PageComponentAuth0StructureSection extends Management.PageComponentAuth0StructureSection {
+        type: "page:component:auth0:structure:section";
+    }
+
+    export interface PageComponentAuth0StructureSeparator extends Management.PageComponentAuth0StructureSeparator {
+        type: "page:component:auth0:structure:separator";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDomainTable
+        extends Management.PageComponentAuth0MyOrganizationDomainTable {
+        type: "page:component:auth0:my_organization:domain_table";
+    }
+
+    export interface PageComponentAuth0MyOrganizationMemberManagement
+        extends Management.PageComponentAuth0MyOrganizationMemberManagement {
+        type: "page:component:auth0:my_organization:member_management";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDetailsEdit
+        extends Management.PageComponentAuth0MyOrganizationDetailsEdit {
+        type: "page:component:auth0:my_organization:details_edit";
+    }
+
+    export interface PageComponentAuth0MyAccountPasskeyManagement
+        extends Management.PageComponentAuth0MyAccountPasskeyManagement {
+        type: "page:component:auth0:my_account:passkey_management";
+    }
+
+    export interface PageComponentAuth0MyAccountMfaManagement
+        extends Management.PageComponentAuth0MyAccountMfaManagement {
+        type: "page:component:auth0:my_account:mfa_management";
+    }
+}
+
+export interface PageComponentAuth0Form {
+    config: Management.PageComponentAuth0FormConfig;
+}
+
+export interface PageComponentAuth0FormConfig {
+    /** The identifier of the form you want to render. */
+    form_id: string;
+    /** Toast message displayed after successful form submission. */
+    completion_message: string;
+}
+
+export interface PageComponentAuth0MediaImage {
+    config: Management.PageComponentAuth0MediaImageConfig;
+}
+
+export interface PageComponentAuth0MediaImageConfig {
+    /** URL of the image to display. */
+    src: string;
+    position?: Management.PageComponentAuth0MediaImagePositionEnum | undefined;
+    /** Height of the image in pixels. Width scales automatically to preserve aspect ratio. */
+    height?: number | undefined;
+}
+
+/** Horizontal alignment of the image within its container. */
+export const PageComponentAuth0MediaImagePositionEnum = {
+    Left: "left",
+    Center: "center",
+    Right: "right",
+} as const;
+export type PageComponentAuth0MediaImagePositionEnum =
+    (typeof PageComponentAuth0MediaImagePositionEnum)[keyof typeof PageComponentAuth0MediaImagePositionEnum];
+
+export interface PageComponentAuth0MyAccountMfaManagement {
+    config?: Management.PageComponentAuth0MyAccountMfaManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyAccountMfaManagementConfig {}
+
+export interface PageComponentAuth0MyAccountPasskeyManagement {
+    config?: Management.PageComponentAuth0MyAccountPasskeyManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyAccountPasskeyManagementConfig {}
+
+export interface PageComponentAuth0MyOrganizationDetailsEdit {
+    config?: Management.PageComponentAuth0MyOrganizationDetailsEditConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationDetailsEditConfig {}
+
+export interface PageComponentAuth0MyOrganizationDomainTable {
+    config?: Management.PageComponentAuth0MyOrganizationDomainTableConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationDomainTableConfig {}
+
+export interface PageComponentAuth0MyOrganizationMemberManagement {
+    config?: Management.PageComponentAuth0MyOrganizationMemberManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationMemberManagementConfig {}
+
+export interface PageComponentAuth0StructureSection {
+    config: Management.PageComponentAuth0StructureSectionConfig;
+}
+
+export interface PageComponentAuth0StructureSectionConfig {
+    /** Heading displayed at the top of the section. */
+    title?: string | undefined;
+    /** Optional description displayed below the title. */
+    description?: string | undefined;
+    variant: Management.PageComponentAuth0StructureSectionVariantEnum;
+    /** Components to render inside the section. */
+    children: Management.PageComponentNoChildren[];
+}
+
+/** Controls the section container style. */
+export const PageComponentAuth0StructureSectionVariantEnum = {
+    Card: "card",
+    None: "none",
+} as const;
+export type PageComponentAuth0StructureSectionVariantEnum =
+    (typeof PageComponentAuth0StructureSectionVariantEnum)[keyof typeof PageComponentAuth0StructureSectionVariantEnum];
+
+export interface PageComponentAuth0StructureSeparator {
+    config?: Management.PageComponentAuth0StructureSeparatorConfig | undefined;
+}
+
+export interface PageComponentAuth0StructureSeparatorConfig {
+    variant?: Management.PageComponentAuth0StructureSeparatorVariantEnum | undefined;
+    /** Optional label centered within the separator line (ignored when variant is "none"). */
+    text?: string | undefined;
+}
+
+/** Controls the line style. Defaults to "solid". */
+export const PageComponentAuth0StructureSeparatorVariantEnum = {
+    Dashed: "dashed",
+    None: "none",
+    Solid: "solid",
+} as const;
+export type PageComponentAuth0StructureSeparatorVariantEnum =
+    (typeof PageComponentAuth0StructureSeparatorVariantEnum)[keyof typeof PageComponentAuth0StructureSeparatorVariantEnum];
+
+export interface PageComponentAuth0TypographyHeading {
+    config: Management.PageComponentAuth0TypographyHeadingConfig;
+}
+
+export interface PageComponentAuth0TypographyHeadingConfig {
+    /** Heading displayed. */
+    title: string;
+    /** Optional description displayed below the title. Supports basic HTML formatting: links, bold, italic, and underline. */
+    description?: string | undefined;
+}
+
+export interface PageComponentAuth0TypographyRichText {
+    config: Management.PageComponentAuth0TypographyRichTextConfig;
+}
+
+export interface PageComponentAuth0TypographyRichTextConfig {
+    /** HTML content to render. Supports headings, bold, italic, underline, links, text alignment, and lists. */
+    content: string;
+}
+
+export type PageComponentNoChildren =
+    | Management.PageComponentNoChildren.PageComponentAuth0Form
+    | Management.PageComponentNoChildren.PageComponentAuth0TypographyHeading
+    | Management.PageComponentNoChildren.PageComponentAuth0MediaImage
+    | Management.PageComponentNoChildren.PageComponentAuth0TypographyRichText
+    | Management.PageComponentNoChildren.PageComponentAuth0StructureSeparator
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationDomainTable
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationMemberManagement
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationDetailsEdit
+    | Management.PageComponentNoChildren.PageComponentAuth0MyAccountPasskeyManagement
+    | Management.PageComponentNoChildren.PageComponentAuth0MyAccountMfaManagement;
+
+export namespace PageComponentNoChildren {
+    export interface PageComponentAuth0Form extends Management.PageComponentAuth0Form {
+        type: "page:component:auth0:form";
+    }
+
+    export interface PageComponentAuth0TypographyHeading extends Management.PageComponentAuth0TypographyHeading {
+        type: "page:component:auth0:typography:heading";
+    }
+
+    export interface PageComponentAuth0MediaImage extends Management.PageComponentAuth0MediaImage {
+        type: "page:component:auth0:media:image";
+    }
+
+    export interface PageComponentAuth0TypographyRichText extends Management.PageComponentAuth0TypographyRichText {
+        type: "page:component:auth0:typography:rich_text";
+    }
+
+    export interface PageComponentAuth0StructureSeparator extends Management.PageComponentAuth0StructureSeparator {
+        type: "page:component:auth0:structure:separator";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDomainTable
+        extends Management.PageComponentAuth0MyOrganizationDomainTable {
+        type: "page:component:auth0:my_organization:domain_table";
+    }
+
+    export interface PageComponentAuth0MyOrganizationMemberManagement
+        extends Management.PageComponentAuth0MyOrganizationMemberManagement {
+        type: "page:component:auth0:my_organization:member_management";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDetailsEdit
+        extends Management.PageComponentAuth0MyOrganizationDetailsEdit {
+        type: "page:component:auth0:my_organization:details_edit";
+    }
+
+    export interface PageComponentAuth0MyAccountPasskeyManagement
+        extends Management.PageComponentAuth0MyAccountPasskeyManagement {
+        type: "page:component:auth0:my_account:passkey_management";
+    }
+
+    export interface PageComponentAuth0MyAccountMfaManagement
+        extends Management.PageComponentAuth0MyAccountMfaManagement {
+        type: "page:component:auth0:my_account:mfa_management";
+    }
+}
+
+export type PageSlug = string;
 
 /** Name of the prompt. */
 export const PartialGroupsEnum = {
@@ -37152,6 +37615,85 @@ export const PhoneTemplateNotificationTypeEnum = {
 export type PhoneTemplateNotificationTypeEnum =
     (typeof PhoneTemplateNotificationTypeEnum)[keyof typeof PhoneTemplateNotificationTypeEnum];
 
+export interface Portal {
+    id: Management.PortalId;
+    name: Management.PortalName;
+    navigation?: Management.PortalNavigation | undefined;
+    pages?: Management.PortalPagesByType | undefined;
+    slug: Management.PortalSlug;
+    client?: Management.PortalClientSecretPost | undefined;
+    custom_code?: Management.PortalCustomCode | undefined;
+    created_at: Management.PortalDateTime;
+    updated_at: Management.PortalDateTime;
+}
+
+export interface PortalClientSecretPost {
+    token_endpoint_auth_method: PortalClientSecretPost.TokenEndpointAuthMethod;
+    client_id: string;
+}
+
+export namespace PortalClientSecretPost {
+    export const TokenEndpointAuthMethod = {
+        ClientSecretPost: "client_secret_post",
+    } as const;
+    export type TokenEndpointAuthMethod = (typeof TokenEndpointAuthMethod)[keyof typeof TokenEndpointAuthMethod];
+}
+
+export interface PortalClientSecretPostRequest {
+    token_endpoint_auth_method: PortalClientSecretPostRequest.TokenEndpointAuthMethod;
+    client_id: string;
+    client_secret: string;
+}
+
+export namespace PortalClientSecretPostRequest {
+    export const TokenEndpointAuthMethod = {
+        ClientSecretPost: "client_secret_post",
+    } as const;
+    export type TokenEndpointAuthMethod = (typeof TokenEndpointAuthMethod)[keyof typeof TokenEndpointAuthMethod];
+}
+
+export interface PortalCustomCode {
+    /** Custom code injected into the <head> of the portal. Only injected when the portal is accessed via a custom domain; it is not injected on canonical domains. */
+    head?: string | undefined;
+}
+
+export type PortalCustomCodeNullable = (Management.PortalCustomCode | null) | undefined;
+
+export type PortalDateTime = string;
+
+export type PortalId = string;
+
+export type PortalName = string;
+
+export interface PortalNavigation {
+    sidebar?: Management.Sidebar | undefined;
+}
+
+export type PortalNavigationNullable = (Management.PortalNavigation | null) | undefined;
+
+export interface PortalPage {
+    title: string;
+    slug: Management.PageSlug;
+    components?: Management.PageComponent[] | undefined;
+}
+
+export interface PortalPagesByType {
+    default?: Management.PageSlug | undefined;
+    standard?: Management.PortalPage[] | undefined;
+}
+
+export type PortalPagesByTypeNullable = (Management.PortalPagesByType | null) | undefined;
+
+export type PortalSlug = string;
+
+export interface PortalSummary {
+    id: Management.PortalId;
+    name: Management.PortalName;
+    slug: Management.PortalSlug;
+    created_at: Management.PortalDateTime;
+    updated_at: Management.PortalDateTime;
+}
+
 export interface PostClientCredentialResponseContent {
     /** ID of the credential. Generated on creation. */
     id?: string | undefined;
@@ -37229,6 +37771,7 @@ export type PreferredAuthenticationMethodEnum =
 export interface PreviewCimdMetadataResponseContent {
     /** The client_id of an existing client registered with this external_client_id, if one exists. */
     client_id?: string | undefined;
+    external_metadata_created_by?: Management.CimdExternalMetadataCreatedByEnum | undefined;
     /** Array of retrieval errors (populated when the metadata document could not be fetched). When present, validation is omitted. */
     errors?: string[] | undefined;
     validation?: Management.CimdValidationResult | undefined;
@@ -37603,6 +38146,8 @@ export interface ResourceServer {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 /**
@@ -37631,6 +38176,22 @@ export interface ResourceServerAccessTokenCustomClaimsMappingRule {
     /** Restricted dot-path expression read from the anonymous-session context (e.g. `anonymous_session.metadata.country`). */
     expression: string;
 }
+
+/** Controls whether access tokens issued for this API include agent subject claims. With <code>auth0-v1</code>, access tokens include additional claims that identify whether the subject is a <code>user</code>, <code>service</code>, or <code>ai_agent</code>. The <code>sub</code> claim can reference an agent ID, and the <code>@clients</code> suffix is no longer appended to client IDs. With <code>off</code>, these claims are not included and the <code>@clients</code> suffix is still appended. When not set, the API behaves as <code>off</code>. */
+export const ResourceServerAgentSubjectClaimsResponseEnum = {
+    Off: "off",
+    Auth0V1: "auth0-v1",
+} as const;
+export type ResourceServerAgentSubjectClaimsResponseEnum =
+    (typeof ResourceServerAgentSubjectClaimsResponseEnum)[keyof typeof ResourceServerAgentSubjectClaimsResponseEnum];
+
+/** Controls whether access tokens issued for this API include agent subject claims. With <code>auth0-v1</code>, access tokens include additional claims that identify whether the subject is a <code>user</code>, <code>service</code>, or <code>ai_agent</code>. The <code>sub</code> claim can reference an agent ID, and the <code>@clients</code> suffix is no longer appended to client IDs. With <code>off</code>, these claims are not included and the <code>@clients</code> suffix is still appended. When not set, the API behaves as <code>off</code>. */
+export const ResourceServerAgentSubjectClaimsSchemaEnum = {
+    Off: "off",
+    Auth0V1: "auth0-v1",
+} as const;
+export type ResourceServerAgentSubjectClaimsSchemaEnum =
+    (typeof ResourceServerAgentSubjectClaimsSchemaEnum)[keyof typeof ResourceServerAgentSubjectClaimsSchemaEnum];
 
 /**
  * Authorization policy for the resource server.
@@ -37719,6 +38280,8 @@ export interface ResourceServerSearchResponse {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
@@ -37841,6 +38404,12 @@ export interface ResourceServerTokenEncryptionKey {
     /** PEM-formatted public key. Must be JSON escaped. */
     pem: string;
 }
+
+/** The type of the resource server. */
+export const ResourceServerTypeEnum = {
+    UniversalCommerceProtocolServer: "universal_commerce_protocol_server",
+} as const;
+export type ResourceServerTypeEnum = (typeof ResourceServerTypeEnum)[keyof typeof ResourceServerTypeEnum];
 
 /**
  * PEM-encoded certificate
@@ -38056,6 +38625,7 @@ export interface RotateClientSecretResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -38064,6 +38634,9 @@ export interface RotateClientSecretResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -38216,6 +38789,7 @@ export const ScreenGroupNameEnum = {
     CustomForm: "custom-form",
     Consent: "consent",
     ConsentTenantScopes: "consent-tenant-scopes",
+    PendingConsent: "pending-consent",
     CustomizedConsent: "customized-consent",
     Logout: "logout",
     LogoutComplete: "logout-complete",
@@ -38416,6 +38990,7 @@ export interface SegmentStartsWithExpression {
     starts_with: string[];
 }
 
+/** Filter by status. Exact match. */
 export const SegmentStatusEnum = {
     Active: "active",
     Archived: "archived",
@@ -39003,6 +39578,92 @@ export type SetUserAuthenticationMethodsRequestContent = Management.SetUserAuthe
  */
 export type SetsCustomTextsByLanguageRequestContent = Record<string, unknown>;
 
+export interface Sidebar {
+    components?: Management.SidebarComponent[] | undefined;
+}
+
+export type SidebarComponent =
+    | Management.SidebarComponent.SidebarComponentAuth0ExternalLink
+    | Management.SidebarComponent.SidebarComponentAuth0InternalLink
+    | Management.SidebarComponent.SidebarComponentAuth0ExternalLinkV2
+    | Management.SidebarComponent.SidebarComponentAuth0InternalLinkV2;
+
+export namespace SidebarComponent {
+    export interface SidebarComponentAuth0ExternalLink extends Management.SidebarComponentAuth0ExternalLink {
+        type: "sidebar:component:auth0:external_link";
+    }
+
+    export interface SidebarComponentAuth0InternalLink extends Management.SidebarComponentAuth0InternalLink {
+        type: "sidebar:component:auth0:internal_link";
+    }
+
+    export interface SidebarComponentAuth0ExternalLinkV2 extends Management.SidebarComponentAuth0ExternalLinkV2 {
+        type: "sidebar:component:auth0:external_link:v2";
+    }
+
+    export interface SidebarComponentAuth0InternalLinkV2 extends Management.SidebarComponentAuth0InternalLinkV2 {
+        type: "sidebar:component:auth0:internal_link:v2";
+    }
+}
+
+/**
+ * Deprecated. Use "sidebar:component:auth0:external_link:v2" instead.
+ */
+export interface SidebarComponentAuth0ExternalLink {
+    config: Management.SidebarComponentAuth0ExternalLinkConfig;
+}
+
+export interface SidebarComponentAuth0ExternalLinkConfig {
+    /** Text shown for the link. */
+    label: string;
+    /** External URL to navigate to. */
+    url: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+export interface SidebarComponentAuth0ExternalLinkV2 {
+    config: Management.SidebarComponentAuth0ExternalLinkV2Config;
+}
+
+export interface SidebarComponentAuth0ExternalLinkV2Config {
+    /** Text shown for the link. */
+    label: string;
+    /** External URL to navigate to. */
+    href: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+/**
+ * Deprecated. Use "sidebar:component:auth0:internal_link:v2" instead.
+ */
+export interface SidebarComponentAuth0InternalLink {
+    config: Management.SidebarComponentAuth0InternalLinkConfig;
+}
+
+export interface SidebarComponentAuth0InternalLinkConfig {
+    /** Text shown for the link. */
+    label: string;
+    /** Slug of the internal portal page to navigate to. */
+    to: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+export interface SidebarComponentAuth0InternalLinkV2 {
+    config: Management.SidebarComponentAuth0InternalLinkV2Config;
+}
+
+export interface SidebarComponentAuth0InternalLinkV2Config {
+    /** Text shown for the link. */
+    label: string;
+    /** Slug of the internal portal page to navigate to. */
+    page_slug: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
 /** Algorithm used to sign JWTs. Can be `HS256` (default) or `RS256`. `PS256` available via addon. */
 export const SigningAlgorithmEnum = {
     Hs256: "HS256",
@@ -39353,7 +40014,7 @@ export interface TenantSettingsFlags {
     revoke_refresh_token_grant?: boolean | undefined;
     /** Enables beta access to log streaming changes */
     dashboard_log_streams_next?: boolean | undefined;
-    /** Enables new insights activity page view */
+    /** Deprecated. This flag has no effect and is retained only for backward compatibility */
     dashboard_insights_view?: boolean | undefined;
     /** Disables SAML fields map fix for bad mappings with repeated attributes */
     disable_fields_map_fix?: boolean | undefined;
@@ -39882,9 +40543,9 @@ export interface UpdateBruteForceSettingsResponseContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[] | undefined;
     mode?: Management.BruteForceProtectionModeEnum | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface UpdateClientGrantResponseContent {
@@ -40011,6 +40672,7 @@ export interface UpdateClientResponseContent {
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -40019,6 +40681,9 @@ export interface UpdateClientResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -40044,8 +40709,9 @@ export interface UpdateConnectionOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, string | null> | null) | undefined;
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
@@ -40378,6 +41044,7 @@ export interface UpdateConnectionRequestContentPlanningCenter extends Management
  */
 export interface UpdateConnectionRequestContentSaml extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsSaml | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -40677,6 +41344,7 @@ export interface UpdateExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -41044,6 +41712,8 @@ export interface UpdateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface UpdateRiskAssessmentsSettingsNewDeviceResponseContent {
@@ -41242,6 +41912,8 @@ export interface UpdateTenantSettingsResponseContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
     /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
     client_id_metadata_document_supported?: boolean | undefined;
+    /** Whether the authorization server supports registering clients dynamically from a client_id URL. Requires client_id_metadata_document_supported to be enabled. */
+    client_id_metadata_document_dynamic_registration_supported?: boolean | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
@@ -41352,9 +42024,9 @@ export interface UpdateUserResponseContent {
 }
 
 /**
- * Configuration overrides for this variation; keys must exist in the parent flag parameters. Empty {} is the baseline (control) variation that overrides nothing.
+ * Top-level keys merge into the stored overrides. Set a key to `null` to remove it. Set `overrides` to `null` or `{}` to clear all. Keys must exist in the parent flag parameters.
  */
-export type UpdateVariationOverridesMap = Record<string, unknown>;
+export type UpdateVariationOverridesMap = (Record<string, unknown> | null) | undefined;
 
 export interface UpdateVariationResponseContent {
     id: string;

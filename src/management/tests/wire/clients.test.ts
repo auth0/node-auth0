@@ -81,6 +81,8 @@ describe("ClientsClient", () => {
                     async_approval_notification_channels: ["guardian-push"],
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
+                    external_metadata_status: "available",
+                    agent_id: "agent_id",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -106,6 +108,7 @@ describe("ClientsClient", () => {
             is_first_party: true,
             app_type: "app_type",
             external_client_id: "external_client_id",
+            agent_id: "agent_id",
             q: "q",
         });
 
@@ -121,13 +124,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -140,13 +137,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -159,13 +150,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -178,13 +163,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -408,11 +387,14 @@ describe("ClientsClient", () => {
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -570,6 +552,7 @@ describe("ClientsClient", () => {
         const rawRequestBody = { external_client_id: "external_client_id" };
         const rawResponseBody = {
             client_id: "client_id",
+            external_metadata_created_by: "admin",
             errors: ["errors"],
             validation: { valid: true, violations: ["violations"], warnings: ["warnings"] },
             mapped_fields: {
@@ -954,6 +937,8 @@ describe("ClientsClient", () => {
                     async_approval_notification_channels: ["guardian-push"],
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
+                    external_metadata_status: "available",
+                    agent_id: "agent_id",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -1294,11 +1279,14 @@ describe("ClientsClient", () => {
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -1656,11 +1644,14 @@ describe("ClientsClient", () => {
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -1995,11 +1986,14 @@ describe("ClientsClient", () => {
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };

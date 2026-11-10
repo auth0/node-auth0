@@ -32,6 +32,8 @@ export class OrganizationsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.clientGrants.organizations.list("id", {
@@ -66,7 +68,7 @@ export class OrganizationsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `client-grants/${core.url.encodePathParam(id)}/organizations`,
+                        `client-grants/${core.url.encodePathParam(id, errors.ManagementError)}/organizations`,
                     ),
                     method: "GET",
                     headers: _headers,
