@@ -3316,11 +3316,14 @@ export interface ClientOidcBackchannelLogoutSettings {
 }
 
 /**
- * OIDC support configuration for this client.
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
  */
 export interface ClientOidcSupport {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed?: boolean | undefined;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -3336,20 +3339,26 @@ export type ClientOidcSupportAllowedScopesEnum =
     (typeof ClientOidcSupportAllowedScopesEnum)[keyof typeof ClientOidcSupportAllowedScopesEnum];
 
 /**
- * OIDC support configuration for a client. Replaces the stored object entirely; send null to unset it.
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
  */
 export interface ClientOidcSupportPatch {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed: boolean;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
 }
 
 /**
- * OIDC support configuration for a client. Controls whether OIDC flows are allowed and which scopes the client may request.
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
  */
 export interface ClientOidcSupportPost {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed: boolean;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
 }
 
@@ -3446,7 +3455,7 @@ export interface ClientProfileClientConfiguration {
 }
 
 /**
- * Default OIDC support applied to matched clients.
+ * Default OIDC support configuration applied to matched clients.
  */
 export interface ClientProfileClientConfigurationOidcSupport {
     default_value: Management.ClientProfileClientConfigurationOidcSupportDefaultValue;
@@ -3463,14 +3472,14 @@ export type ClientProfileClientConfigurationOidcSupportAllowedScopesEnum =
     (typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum)[keyof typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum];
 
 /**
- * OIDC support settings applied to matched clients.
+ * Controls whether matched clients can receive ID tokens and use the UserInfo endpoint, and which user profile information they can request through OIDC scopes.
  */
 export interface ClientProfileClientConfigurationOidcSupportDefaultValue {
-    /** Whether matched clients may use OIDC. */
+    /** Allows matched clients to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed: boolean;
-    /** Whether matched clients may request all optional OIDC scopes. Cannot be combined with allowed_scopes. */
+    /** Allows matched clients to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
-    /** Optional OIDC scopes that matched clients may request. */
+    /** OIDC scopes matched clients may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information they can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientProfileClientConfigurationOidcSupportAllowedScopesEnum[] | undefined;
 }
 
@@ -6558,6 +6567,8 @@ export interface ConnectionOtpSettings {
 export interface ConnectionPasskeyAuthenticationMethod {
     /** Determines whether passkeys are enabled */
     enabled?: boolean | undefined;
+    /** Specifies the signup behavior for passkey authentication */
+    signup_behavior?: Management.ConnectionSignupBehaviorEnum | undefined;
 }
 
 /** Controls the UI used to challenge the user for their passkey. */
@@ -11403,7 +11414,7 @@ export type CspPolicyMode = (typeof CspPolicyMode)[keyof typeof CspPolicyMode];
 export interface CspPolicyReporting {
     /** HTTPS endpoint for CSP violation reports. */
     report_uri?: string | undefined;
-    /** Report-To group name for modern reporting. */
+    /** Report-To group name for modern reporting. Letters, digits, underscores and hyphens only; enforced on write by the request validator. */
     report_to_group?: string | undefined;
 }
 
@@ -38168,6 +38179,7 @@ export const ScreenGroupNameEnum = {
     CustomForm: "custom-form",
     Consent: "consent",
     ConsentTenantScopes: "consent-tenant-scopes",
+    PendingConsent: "pending-consent",
     CustomizedConsent: "customized-consent",
     Logout: "logout",
     LogoutComplete: "logout-complete",
