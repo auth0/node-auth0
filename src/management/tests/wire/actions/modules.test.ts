@@ -55,13 +55,7 @@ describe("ModulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/actions/modules")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/actions/modules").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.actions.modules.list();
@@ -74,13 +68,7 @@ describe("ModulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/actions/modules")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/actions/modules").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.actions.modules.list();
@@ -93,13 +81,7 @@ describe("ModulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/actions/modules")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/actions/modules").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.actions.modules.list();
@@ -112,13 +94,7 @@ describe("ModulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/actions/modules")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/actions/modules").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.actions.modules.list();
@@ -741,7 +717,7 @@ describe("ModulesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/modules/id/actions")
             .respondWith()
             .statusCode(400)
@@ -760,7 +736,7 @@ describe("ModulesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/modules/id/actions")
             .respondWith()
             .statusCode(401)
@@ -779,7 +755,7 @@ describe("ModulesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/modules/id/actions")
             .respondWith()
             .statusCode(403)
@@ -798,7 +774,7 @@ describe("ModulesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/modules/id/actions")
             .respondWith()
             .statusCode(404)
@@ -817,7 +793,7 @@ describe("ModulesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/modules/id/actions")
             .respondWith()
             .statusCode(429)

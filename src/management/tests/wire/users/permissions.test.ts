@@ -51,7 +51,7 @@ describe("PermissionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/permissions")
             .respondWith()
             .statusCode(400)
@@ -70,7 +70,7 @@ describe("PermissionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/permissions")
             .respondWith()
             .statusCode(401)
@@ -89,7 +89,7 @@ describe("PermissionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/permissions")
             .respondWith()
             .statusCode(403)
@@ -108,7 +108,7 @@ describe("PermissionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/permissions")
             .respondWith()
             .statusCode(404)
@@ -127,7 +127,7 @@ describe("PermissionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/permissions")
             .respondWith()
             .statusCode(429)

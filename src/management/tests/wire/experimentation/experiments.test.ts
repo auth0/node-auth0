@@ -142,6 +142,7 @@ describe("ExperimentsClient", () => {
             name: "name",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = {
             id: "id",
@@ -191,6 +192,7 @@ describe("ExperimentsClient", () => {
             name: "name",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -202,6 +204,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -219,6 +222,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.BadRequestError);
     });
@@ -230,6 +234,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -247,6 +252,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.UnauthorizedError);
     });
@@ -258,6 +264,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -275,6 +282,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });
@@ -286,6 +294,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -303,6 +312,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.NotFoundError);
     });
@@ -314,6 +324,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -331,6 +342,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.ConflictError);
     });
@@ -342,6 +354,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -359,6 +372,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.UnprocessableEntityError);
     });
@@ -370,6 +384,7 @@ describe("ExperimentsClient", () => {
             name: "foo",
             feature_flag_id: "feature_flag_id",
             authentication_flow: "authentication",
+            allocation_strategy: "percentage",
         };
         const rawResponseBody = { key: "value" };
 
@@ -387,6 +402,7 @@ describe("ExperimentsClient", () => {
                 name: "foo",
                 feature_flag_id: "feature_flag_id",
                 authentication_flow: "authentication",
+                allocation_strategy: "percentage",
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });

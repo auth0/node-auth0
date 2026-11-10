@@ -260,6 +260,49 @@ export interface UpdateClientGrantRequestContent {
 /**
  * @example
  *     {
+ *         from: "from",
+ *         take: 1
+ *     }
+ */
+export interface ListClientProfilesRequestParameters {
+    /** Optional Id from which to start selection. */
+    from?: string | null;
+    /** Number of results per page. Defaults to 50. */
+    take?: number | null;
+}
+
+/**
+ * @example
+ *     {
+ *         name: "name",
+ *         client_configuration: {},
+ *         apply_policy: {
+ *             external_metadata_type: "cimd",
+ *             external_metadata_created_by: "client"
+ *         }
+ *     }
+ */
+export interface CreateClientProfileRequestContent {
+    name: Management.ClientProfileName;
+    description?: (Management.ClientProfileDescription | undefined) | null;
+    client_configuration: Management.ClientProfileClientConfiguration;
+    apply_policy: Management.ClientProfileApplyPolicy;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdateClientProfileRequestContent {
+    name?: Management.ClientProfileName;
+    description?: (Management.ClientProfileDescription | undefined) | null;
+    client_configuration?: Management.ClientProfileClientConfiguration;
+    apply_policy?: Management.ClientProfileApplyPolicy;
+}
+
+/**
+ * @example
+ *     {
  *         fields: "fields",
  *         include_fields: true,
  *         page: 1,
@@ -269,6 +312,7 @@ export interface UpdateClientGrantRequestContent {
  *         is_first_party: true,
  *         app_type: "app_type",
  *         external_client_id: "external_client_id",
+ *         agent_id: "agent_id",
  *         q: "q"
  *     }
  */
@@ -291,6 +335,8 @@ export interface ListClientsRequestParameters {
     app_type?: string | null;
     /** Optional filter by the <a href="https://drafts.oauth.net/draft-ietf-oauth-client-id-metadata-document/draft-ietf-oauth-client-id-metadata-document.html">Client ID Metadata Document</a> URI for CIMD-registered clients. */
     external_client_id?: string | null;
+    /** Optional filter by the agent associated with the client.<br /><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Only <i>fields</i>, <i>include_fields</i>, <i>page</i>, <i>per_page</i>, and <i>include_totals</i> are supported alongside it</li><li>Checkpoint pagination (<i>from</i>, <i>take</i>) is not supported</li></ul> */
+    agent_id?: string | null;
     /** Advanced Query in <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene</a> syntax.<br /><b>Permitted Queries</b>:<br /><ul><li><i>client_grant.organization_id:{organization_id}</i></li><li><i>client_grant.allow_any_organization:true</i></li></ul><b>Additional Restrictions</b>:<br /><ul><li>Cannot be used in combination with other filters</li><li>Requires use of the <i>from</i> and <i>take</i> paging parameters (checkpoint paginatinon)</li><li>Reduced rate limits apply. See <a href="https://auth0.com/docs/troubleshoot/customer-support/operational-policies/rate-limit-policy/rate-limit-configurations/enterprise-public">Rate Limit Configurations</a></li></ul><i><b>Note</b>: Recent updates may not be immediately reflected in query results</i> */
     q?: string | null;
 }
@@ -394,6 +440,8 @@ export interface CreateClientRequestContent {
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration;
     my_organization_configuration?: Management.ClientMyOrganizationPostConfiguration;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
+    /** ID of the agent to associate with this client. */
+    agent_id?: string | null;
     oidc_support?: Management.ClientOidcSupportPost;
 }
 
@@ -563,6 +611,8 @@ export interface UpdateClientRequestContent {
         | null;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum;
     redirection_policy?: Management.ClientRedirectionPolicyEnum;
+    /** ID of the agent to associate with this client, or null to remove the association. */
+    agent_id?: string | null;
     oidc_support?: Management.ClientOidcSupportPatch | null;
 }
 
@@ -1449,6 +1499,40 @@ export interface UpdateOrganizationRequestContent {
 
 /**
  * @example
+ *     {
+ *         slug: "slug",
+ *         name: "name",
+ *         client: {
+ *             token_endpoint_auth_method: "client_secret_post",
+ *             client_id: "client_id",
+ *             client_secret: "client_secret"
+ *         }
+ *     }
+ */
+export interface CreatePortalRequestContent {
+    slug: Management.PortalSlug;
+    name: Management.PortalName;
+    client: Management.PortalClientSecretPostRequest;
+    navigation?: Management.PortalNavigation;
+    pages?: Management.PortalPagesByType;
+    custom_code?: Management.PortalCustomCode;
+}
+
+/**
+ * @example
+ *     {}
+ */
+export interface UpdatePortalRequestContent {
+    slug?: Management.PortalSlug;
+    name?: Management.PortalName;
+    client?: Management.PortalClientSecretPostRequest;
+    navigation?: (Management.PortalNavigationNullable | undefined) | null;
+    pages?: (Management.PortalPagesByTypeNullable | undefined) | null;
+    custom_code?: (Management.PortalCustomCodeNullable | undefined) | null;
+}
+
+/**
+ * @example
  *     {}
  */
 export interface UpdateSettingsRequestContent {
@@ -1626,6 +1710,8 @@ export interface CreateResourceServerRequestContent {
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
     authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsSchemaEnum;
+    type?: Management.ResourceServerTypeEnum | null;
 }
 
 /**
@@ -1704,6 +1790,8 @@ export interface UpdateResourceServerRequestContent {
     proof_of_possession?: Management.ResourceServerProofOfPossession | null;
     subject_type_authorization?: Management.ResourceServerSubjectTypeAuthorization;
     authorization_policy?: Management.ResourceServerAuthorizationPolicy | null;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsSchemaEnum;
+    type?: Management.ResourceServerTypeEnum | null;
 }
 
 /**
@@ -2449,9 +2537,9 @@ export interface UpdateBruteForceSettingsRequestContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[];
     mode?: Management.BruteForceProtectionModeEnum;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum;
 }
 
 /**
@@ -2467,41 +2555,6 @@ export interface UpdateAttackProtectionCaptchaRequestContent {
     recaptcha_enterprise?: Management.AttackProtectionUpdateCaptchaRecaptchaEnterprise;
     recaptcha_v2?: Management.AttackProtectionUpdateCaptchaRecaptchaV2;
     simple_captcha?: Management.AttackProtectionCaptchaSimpleCaptchaResponseContent;
-}
-
-/**
- * @example
- *     {
- *         name: "name",
- *         priority: 1,
- *         match: {},
- *         action: {}
- *     }
- */
-export interface CreateAttackProtectionCaptchaPolicyRequestContent {
-    /** Human-readable policy name. */
-    name: string;
-    /** Description of the attack protection policy. */
-    description?: string;
-    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
-    priority: number;
-    match: Management.AttackProtectionCaptchaPolicyMatch;
-    action: Management.AttackProtectionCaptchaPolicyActionInput;
-}
-
-/**
- * @example
- *     {}
- */
-export interface UpdateAttackProtectionCaptchaPolicyRequestContent {
-    /** Human-readable policy name. */
-    name?: string;
-    /** Description of the policy's purpose. */
-    description?: string;
-    /** Conflict resolution order. Lower number takes higher precedence. Must be unique per tenant. */
-    priority?: number;
-    match?: Management.AttackProtectionCaptchaPolicyMatch;
-    action?: Management.AttackProtectionCaptchaPolicyActionInput;
 }
 
 /**
@@ -3121,7 +3174,8 @@ export interface ListExperimentsRequestParameters {
  *     {
  *         name: "name",
  *         feature_flag_id: "feature_flag_id",
- *         authentication_flow: "authentication"
+ *         authentication_flow: "authentication",
+ *         allocation_strategy: "percentage"
  *     }
  */
 export interface CreateExperimentRequestContent {
@@ -3135,7 +3189,7 @@ export interface CreateExperimentRequestContent {
     /** Applies only to Auth0-managed flags. Controls where non-overridden config keys resolve from: 'tenant' inherits the tenant's live config so the experiment overlays only its changes, 'flag' uses the flag's frozen defaults for a complete config. Optional; defaults to 'tenant' when omitted. Rejected for customer-defined flags. */
     default_config?: Management.DefaultConfigEnum;
     /** The traffic allocation strategy for this experiment */
-    allocation_strategy?: Management.AllocationStrategyEnum;
+    allocation_strategy: Management.AllocationStrategyEnum;
     /** Traffic allocations mapping variations to weights or segments */
     allocations?: Management.AllocationRequestItem[];
     /** Ramp experiment levels configuration. A strictly-increasing sequence of exposure percentages, each an integer in [0, 100]. */
@@ -3227,7 +3281,8 @@ export interface UpdateFeatureFlagRequestContent {
  *     {
  *         from: "from",
  *         take: 1,
- *         type: "auth0"
+ *         type: "auth0",
+ *         status: "active"
  *     }
  */
 export interface ListSegmentsRequestParameters {
@@ -3237,6 +3292,8 @@ export interface ListSegmentsRequestParameters {
     take?: number | null;
     /** Filter by type. Exact match. */
     type?: Management.SegmentTypeFilterEnum | null;
+    /** Filter by status. Exact match. */
+    status?: Management.SegmentStatusEnum | null;
 }
 
 /**
@@ -3297,7 +3354,7 @@ export interface UpdateVariationRequestContent {
     name?: string;
     /** A description of what this variation controls */
     description?: string | null;
-    overrides?: Management.UpdateVariationOverridesMap;
+    overrides?: (Management.UpdateVariationOverridesMap | undefined) | null;
 }
 
 /**
@@ -4589,6 +4646,8 @@ export interface UpdateTenantSettingsRequestContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile;
     /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
     client_id_metadata_document_supported?: boolean;
+    /** Whether the authorization server supports registering clients dynamically from a client_id URL. Requires client_id_metadata_document_supported to be enabled. */
+    client_id_metadata_document_dynamic_registration_supported?: boolean;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
     enable_ai_guide?: boolean;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */

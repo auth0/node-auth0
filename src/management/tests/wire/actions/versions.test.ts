@@ -61,7 +61,7 @@ describe("VersionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/actions/actionId/versions")
             .respondWith()
             .statusCode(400)
@@ -80,7 +80,7 @@ describe("VersionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/actions/actionId/versions")
             .respondWith()
             .statusCode(401)
@@ -99,7 +99,7 @@ describe("VersionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/actions/actionId/versions")
             .respondWith()
             .statusCode(403)
@@ -118,7 +118,7 @@ describe("VersionsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/actions/actionId/versions")
             .respondWith()
             .statusCode(429)
