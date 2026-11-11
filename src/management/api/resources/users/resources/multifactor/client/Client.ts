@@ -57,7 +57,7 @@ export class MultifactorClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/multifactor/actions/invalidate-remember-browser`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/multifactor/actions/invalidate-remember-browser`,
             ),
             method: "POST",
             headers: _headers,
@@ -137,7 +137,7 @@ export class MultifactorClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/multifactor/${core.url.encodePathParam(provider)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/multifactor/${core.url.encodePathParam(provider, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

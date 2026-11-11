@@ -60,7 +60,7 @@ export class RedeliveriesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `event-streams/${core.url.encodePathParam(id)}/redeliver`,
+                `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}/redeliver`,
             ),
             method: "POST",
             headers: _headers,
@@ -148,7 +148,7 @@ export class RedeliveriesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `event-streams/${core.url.encodePathParam(id)}/redeliver/${core.url.encodePathParam(event_id)}`,
+                `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}/redeliver/${core.url.encodePathParam(event_id, errors.ManagementError)}`,
             ),
             method: "POST",
             headers: _headers,

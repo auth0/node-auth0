@@ -59,7 +59,7 @@ export class ExecutionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `actions/executions/${core.url.encodePathParam(id)}`,
+                `actions/executions/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,

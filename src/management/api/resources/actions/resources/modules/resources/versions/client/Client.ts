@@ -69,7 +69,7 @@ export class VersionsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `actions/modules/${core.url.encodePathParam(id)}/versions`,
+                        `actions/modules/${core.url.encodePathParam(id, errors.ManagementError)}/versions`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -179,7 +179,7 @@ export class VersionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `actions/modules/${core.url.encodePathParam(id)}/versions`,
+                `actions/modules/${core.url.encodePathParam(id, errors.ManagementError)}/versions`,
             ),
             method: "POST",
             headers: _headers,
@@ -271,7 +271,7 @@ export class VersionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `actions/modules/${core.url.encodePathParam(id)}/versions/${core.url.encodePathParam(versionId)}`,
+                `actions/modules/${core.url.encodePathParam(id, errors.ManagementError)}/versions/${core.url.encodePathParam(versionId, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,

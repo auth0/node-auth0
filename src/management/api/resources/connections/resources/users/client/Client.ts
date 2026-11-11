@@ -68,7 +68,7 @@ export class UsersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/users`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/users`,
             ),
             method: "DELETE",
             headers: _headers,

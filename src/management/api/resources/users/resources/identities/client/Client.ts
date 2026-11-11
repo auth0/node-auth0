@@ -90,7 +90,7 @@ export class IdentitiesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/identities`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/identities`,
             ),
             method: "POST",
             headers: _headers,
@@ -176,7 +176,7 @@ export class IdentitiesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/identities/${core.url.encodePathParam(provider)}/${core.url.encodePathParam(user_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/identities/${core.url.encodePathParam(provider, errors.ManagementError)}/${core.url.encodePathParam(user_id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

@@ -59,7 +59,7 @@ export class EnrollmentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/enrollments`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/enrollments`,
             ),
             method: "GET",
             headers: _headers,

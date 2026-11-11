@@ -70,7 +70,7 @@ export class RolesClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/roles`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/roles`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -181,7 +181,7 @@ export class RolesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/roles`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/roles`,
             ),
             method: "POST",
             headers: _headers,
@@ -266,7 +266,7 @@ export class RolesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/roles`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/roles`,
             ),
             method: "DELETE",
             headers: _headers,

@@ -63,7 +63,7 @@ export class SynchronizationsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronizations`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronizations`,
             ),
             method: "POST",
             headers: _headers,

@@ -79,7 +79,7 @@ export class EffectivePermissionsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/effective-permissions`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/effective-permissions`,
                     ),
                     method: "GET",
                     headers: _headers,

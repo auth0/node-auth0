@@ -97,7 +97,7 @@ export class MembersClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `organizations/${core.url.encodePathParam(id)}/members`,
+                        `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/members`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -213,7 +213,7 @@ export class MembersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/members`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/members`,
             ),
             method: "POST",
             headers: _headers,
@@ -292,7 +292,7 @@ export class MembersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/members`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/members`,
             ),
             method: "DELETE",
             headers: _headers,

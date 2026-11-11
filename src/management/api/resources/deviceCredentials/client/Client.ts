@@ -275,7 +275,7 @@ export class DeviceCredentialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `device-credentials/${core.url.encodePathParam(id)}`,
+                `device-credentials/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

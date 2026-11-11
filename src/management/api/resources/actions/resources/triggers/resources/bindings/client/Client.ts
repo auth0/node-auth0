@@ -68,7 +68,7 @@ export class BindingsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `actions/triggers/${core.url.encodePathParam(triggerId)}/bindings`,
+                        `actions/triggers/${core.url.encodePathParam(triggerId, errors.ManagementError)}/bindings`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -177,7 +177,7 @@ export class BindingsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `actions/triggers/${core.url.encodePathParam(triggerId)}/bindings`,
+                `actions/triggers/${core.url.encodePathParam(triggerId, errors.ManagementError)}/bindings`,
             ),
             method: "PATCH",
             headers: _headers,

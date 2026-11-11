@@ -197,7 +197,7 @@ export class SigningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/signing/${core.url.encodePathParam(kid)}`,
+                `keys/signing/${core.url.encodePathParam(kid, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -275,7 +275,7 @@ export class SigningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/signing/${core.url.encodePathParam(kid)}/revoke`,
+                `keys/signing/${core.url.encodePathParam(kid, errors.ManagementError)}/revoke`,
             ),
             method: "PUT",
             headers: _headers,

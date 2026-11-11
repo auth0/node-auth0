@@ -314,7 +314,7 @@ export class EncryptionClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/encryption/${core.url.encodePathParam(kid)}`,
+                `keys/encryption/${core.url.encodePathParam(kid, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -398,7 +398,7 @@ export class EncryptionClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/encryption/${core.url.encodePathParam(kid)}`,
+                `keys/encryption/${core.url.encodePathParam(kid, errors.ManagementError)}`,
             ),
             method: "POST",
             headers: _headers,
@@ -476,7 +476,7 @@ export class EncryptionClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/encryption/${core.url.encodePathParam(kid)}`,
+                `keys/encryption/${core.url.encodePathParam(kid, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -550,7 +550,7 @@ export class EncryptionClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/encryption/${core.url.encodePathParam(kid)}/wrapping-key`,
+                `keys/encryption/${core.url.encodePathParam(kid, errors.ManagementError)}/wrapping-key`,
             ),
             method: "POST",
             headers: _headers,

@@ -59,7 +59,7 @@ export class PartialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `prompts/${core.url.encodePathParam(prompt)}/partials`,
+                `prompts/${core.url.encodePathParam(prompt, errors.ManagementError)}/partials`,
             ),
             method: "GET",
             headers: _headers,
@@ -142,7 +142,7 @@ export class PartialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `prompts/${core.url.encodePathParam(prompt)}/partials`,
+                `prompts/${core.url.encodePathParam(prompt, errors.ManagementError)}/partials`,
             ),
             method: "PUT",
             headers: _headers,

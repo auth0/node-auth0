@@ -284,7 +284,7 @@ export class ThemesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `branding/themes/${core.url.encodePathParam(themeId)}`,
+                `branding/themes/${core.url.encodePathParam(themeId, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -357,7 +357,7 @@ export class ThemesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `branding/themes/${core.url.encodePathParam(themeId)}`,
+                `branding/themes/${core.url.encodePathParam(themeId, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -505,7 +505,7 @@ export class ThemesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `branding/themes/${core.url.encodePathParam(themeId)}`,
+                `branding/themes/${core.url.encodePathParam(themeId, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,

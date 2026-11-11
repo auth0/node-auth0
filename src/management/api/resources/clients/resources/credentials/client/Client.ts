@@ -60,7 +60,7 @@ export class CredentialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `clients/${core.url.encodePathParam(client_id)}/credentials`,
+                `clients/${core.url.encodePathParam(client_id, errors.ManagementError)}/credentials`,
             ),
             method: "GET",
             headers: _headers,
@@ -200,7 +200,7 @@ export class CredentialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `clients/${core.url.encodePathParam(client_id)}/credentials`,
+                `clients/${core.url.encodePathParam(client_id, errors.ManagementError)}/credentials`,
             ),
             method: "POST",
             headers: _headers,
@@ -291,7 +291,7 @@ export class CredentialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `clients/${core.url.encodePathParam(client_id)}/credentials/${core.url.encodePathParam(credential_id)}`,
+                `clients/${core.url.encodePathParam(client_id, errors.ManagementError)}/credentials/${core.url.encodePathParam(credential_id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -375,7 +375,7 @@ export class CredentialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `clients/${core.url.encodePathParam(client_id)}/credentials/${core.url.encodePathParam(credential_id)}`,
+                `clients/${core.url.encodePathParam(client_id, errors.ManagementError)}/credentials/${core.url.encodePathParam(credential_id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -460,7 +460,7 @@ export class CredentialsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `clients/${core.url.encodePathParam(client_id)}/credentials/${core.url.encodePathParam(credential_id)}`,
+                `clients/${core.url.encodePathParam(client_id, errors.ManagementError)}/credentials/${core.url.encodePathParam(credential_id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,

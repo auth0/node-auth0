@@ -151,7 +151,7 @@ export class FactorsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `guardian/factors/${core.url.encodePathParam(name)}`,
+                `guardian/factors/${core.url.encodePathParam(name, errors.ManagementError)}`,
             ),
             method: "PUT",
             headers: _headers,

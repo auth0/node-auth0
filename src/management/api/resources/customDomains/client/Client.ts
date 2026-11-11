@@ -390,7 +390,7 @@ export class CustomDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `custom-domains/${core.url.encodePathParam(id)}`,
+                `custom-domains/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -466,7 +466,7 @@ export class CustomDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `custom-domains/${core.url.encodePathParam(id)}`,
+                `custom-domains/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -575,7 +575,7 @@ export class CustomDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `custom-domains/${core.url.encodePathParam(id)}`,
+                `custom-domains/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,
@@ -655,7 +655,7 @@ export class CustomDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `custom-domains/${core.url.encodePathParam(id)}/test`,
+                `custom-domains/${core.url.encodePathParam(id, errors.ManagementError)}/test`,
             ),
             method: "POST",
             headers: _headers,
@@ -741,7 +741,7 @@ export class CustomDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `custom-domains/${core.url.encodePathParam(id)}/verify`,
+                `custom-domains/${core.url.encodePathParam(id, errors.ManagementError)}/verify`,
             ),
             method: "POST",
             headers: _headers,

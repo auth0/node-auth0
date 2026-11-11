@@ -59,7 +59,7 @@ export class SecretsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `hooks/${core.url.encodePathParam(id)}/secrets`,
+                `hooks/${core.url.encodePathParam(id, errors.ManagementError)}/secrets`,
             ),
             method: "GET",
             headers: _headers,
@@ -143,7 +143,7 @@ export class SecretsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `hooks/${core.url.encodePathParam(id)}/secrets`,
+                `hooks/${core.url.encodePathParam(id, errors.ManagementError)}/secrets`,
             ),
             method: "POST",
             headers: _headers,
@@ -224,7 +224,7 @@ export class SecretsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `hooks/${core.url.encodePathParam(id)}/secrets`,
+                `hooks/${core.url.encodePathParam(id, errors.ManagementError)}/secrets`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -307,7 +307,7 @@ export class SecretsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `hooks/${core.url.encodePathParam(id)}/secrets`,
+                `hooks/${core.url.encodePathParam(id, errors.ManagementError)}/secrets`,
             ),
             method: "PATCH",
             headers: _headers,

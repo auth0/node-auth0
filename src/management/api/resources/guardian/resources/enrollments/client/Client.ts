@@ -138,7 +138,7 @@ export class EnrollmentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `guardian/enrollments/${core.url.encodePathParam(id)}`,
+                `guardian/enrollments/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -208,7 +208,7 @@ export class EnrollmentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `guardian/enrollments/${core.url.encodePathParam(id)}`,
+                `guardian/enrollments/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

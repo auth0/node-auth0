@@ -257,7 +257,7 @@ export class NetworkAclsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `network-acls/${core.url.encodePathParam(id)}`,
+                `network-acls/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -344,7 +344,7 @@ export class NetworkAclsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `network-acls/${core.url.encodePathParam(id)}`,
+                `network-acls/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "PUT",
             headers: _headers,
@@ -423,7 +423,7 @@ export class NetworkAclsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `network-acls/${core.url.encodePathParam(id)}`,
+                `network-acls/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -502,7 +502,7 @@ export class NetworkAclsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `network-acls/${core.url.encodePathParam(id)}`,
+                `network-acls/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,

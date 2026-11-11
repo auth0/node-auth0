@@ -79,7 +79,7 @@ export class ConnectionsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `clients/${core.url.encodePathParam(id)}/connections`,
+                        `clients/${core.url.encodePathParam(id, errors.ManagementError)}/connections`,
                     ),
                     method: "GET",
                     headers: _headers,

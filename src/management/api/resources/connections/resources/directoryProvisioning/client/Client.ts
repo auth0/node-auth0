@@ -175,7 +175,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "GET",
             headers: _headers,
@@ -263,7 +263,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "POST",
             headers: _headers,
@@ -352,7 +352,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -436,7 +436,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning`,
             ),
             method: "PATCH",
             headers: _headers,
@@ -523,7 +523,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/default-mapping`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/default-mapping`,
             ),
             method: "GET",
             headers: _headers,
@@ -614,7 +614,7 @@ export class DirectoryProvisioningClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+                        `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronized-groups`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -730,7 +730,7 @@ export class DirectoryProvisioningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/directory-provisioning/synchronized-groups`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/directory-provisioning/synchronized-groups`,
             ),
             method: "PUT",
             headers: _headers,

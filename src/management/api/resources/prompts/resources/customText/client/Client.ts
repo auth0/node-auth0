@@ -62,7 +62,7 @@ export class CustomTextClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `prompts/${core.url.encodePathParam(prompt)}/custom-text/${core.url.encodePathParam(language)}`,
+                `prompts/${core.url.encodePathParam(prompt, errors.ManagementError)}/custom-text/${core.url.encodePathParam(language, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -153,7 +153,7 @@ export class CustomTextClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `prompts/${core.url.encodePathParam(prompt)}/custom-text/${core.url.encodePathParam(language)}`,
+                `prompts/${core.url.encodePathParam(prompt, errors.ManagementError)}/custom-text/${core.url.encodePathParam(language, errors.ManagementError)}`,
             ),
             method: "PUT",
             headers: _headers,

@@ -75,7 +75,7 @@ export class AuthenticationMethodsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -193,7 +193,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
             ),
             method: "POST",
             headers: _headers,
@@ -289,7 +289,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
             ),
             method: "PUT",
             headers: _headers,
@@ -375,7 +375,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -455,7 +455,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods/${core.url.encodePathParam(authentication_method_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods/${core.url.encodePathParam(authentication_method_id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -542,7 +542,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods/${core.url.encodePathParam(authentication_method_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods/${core.url.encodePathParam(authentication_method_id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -631,7 +631,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods/${core.url.encodePathParam(authentication_method_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods/${core.url.encodePathParam(authentication_method_id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,
