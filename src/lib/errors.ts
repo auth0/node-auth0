@@ -42,3 +42,13 @@ export class RequiredError extends Error {
     super(msg);
   }
 }
+
+/**
+ * Error thrown when a path parameter is "." or "..", which would change the request path.
+ */
+export class InvalidPathParameterError extends Error {
+  override name = 'InvalidPathParameterError' as const;
+  constructor(msg?: string) {
+    super(msg);
+  }
+}

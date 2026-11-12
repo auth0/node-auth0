@@ -1,5 +1,5 @@
 import { retry } from './retry.js';
-import { FetchError, RequiredError, TimeoutError } from './errors.js';
+import { FetchError, InvalidPathParameterError, RequiredError, TimeoutError } from './errors.js';
 import {
   RequestOpts,
   InitOverrideFunction,
@@ -10,6 +10,17 @@ import {
 } from './models.js';
 
 export * from './models.js';
+
+// "." and ".." are dot segments: URL resolution would remove them and send the request to a different path.
+function validatePathSegments(path: string) {
+  for (const segment of path.split('/')) {
+    if (segment === '.' || segment === '..') {
+      throw new InvalidPathParameterError(
+        `Invalid path parameter "${segment}": "." and ".." are not allowed because they change the request path.`
+      );
+    }
+  }
+}
 
 /**
  * @private
@@ -55,6 +66,7 @@ export class BaseAPI {
     context: RequestOpts,
     initOverrides?: RequestInit | InitOverrideFunction
   ) {
+    validatePathSegments(context.path);
     let url = this.configuration.baseUrl + context.path;
     if (context.query !== undefined && Object.keys(context.query).length !== 0) {
       // only add the querystring to the URL if there are query parameters.

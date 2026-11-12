@@ -8,6 +8,7 @@ import {
   ResponseError,
   ManagementApiError,
   AuthApiError,
+  InvalidPathParameterError,
 } from '../../src/index.js';
 import { InitOverrideFunction, RequestOpts } from '../../src/lib/models.js';
 import { BaseAPI, applyQueryParams, CustomDomainHeader } from '../../src/lib/runtime.js';
@@ -405,6 +406,39 @@ describe('Runtime for ManagementClient', () => {
   afterEach(() => {
     nock.cleanAll();
     jest.clearAllMocks();
+  });
+
+  it.each(['..', '.'])(
+    'should reject "%s" as a path parameter without sending a request',
+    async (id) => {
+      const request = nock(URL).get(/.*/).reply(200, []);
+      const client = new ManagementClient({ domain: 'tenant.auth0.com', token: 'TOKEN' });
+
+      await expect(client.users.getRoles({ id })).rejects.toThrow(InvalidPathParameterError);
+      expect(request.isDone()).toBe(false);
+    }
+  );
+
+  it('should not request a token when the path parameter is rejected', async () => {
+    const tokenRequest = nock('https://tenant.auth0.com')
+      .post('/oauth/token')
+      .reply(200, { access_token: 'TOKEN', expires_in: 86400 });
+    const client = new ManagementClient({
+      domain: 'tenant.auth0.com',
+      clientId: 'cid',
+      clientSecret: 'csecret',
+    });
+
+    await expect(client.users.getRoles({ id: '..' })).rejects.toThrow(InvalidPathParameterError);
+    expect(tokenRequest.isDone()).toBe(false);
+  });
+
+  it.each(['...', 'a.b'])('should allow "%s" as a path parameter', async (id) => {
+    const request = nock(URL).get(`/users/${id}/roles`).reply(200, []);
+    const client = new ManagementClient({ domain: 'tenant.auth0.com', token: 'TOKEN' });
+
+    await client.users.getRoles({ id });
+    expect(request.isDone()).toBe(true);
   });
 
   it('should retry if enabled', async () => {
