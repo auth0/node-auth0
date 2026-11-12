@@ -45,6 +45,8 @@ export interface ManagementAuthClientOptions {
     maxRetries?: number;
     /** Logging configuration for the client. */
     logging?: core.logging.LogConfig | core.logging.Logger;
+    /** Custom fetch implementation used for Management API requests. */
+    fetch?: typeof fetch;
     /** Custom fetcher, set automatically when a custom domain header is configured. */
     fetcher?: (args: any) => Promise<any>;
 }
@@ -79,7 +81,7 @@ export interface ManagementAuth {
  * else throws.
  *
  * The returned {@link ManagementAuth.clientOptions} carry the same telemetry headers, request
- * timeouts, retry counts, logging, and custom domain behaviour that the full `ManagementClient`
+ * timeouts, retry counts, logging, custom `fetch`, and custom domain behaviour that the full `ManagementClient`
  * applies, so individually imported sub-clients behave consistently.
  *
  * @group Management API
@@ -134,6 +136,7 @@ export function createManagementAuth(options: ManagementAuthOptions): Management
         ...(options.timeoutInSeconds !== undefined ? { timeoutInSeconds: options.timeoutInSeconds } : {}),
         ...(options.maxRetries !== undefined ? { maxRetries: options.maxRetries } : {}),
         ...(options.logging !== undefined ? { logging: options.logging } : {}),
+        ...(options.fetch !== undefined ? { fetch: options.fetch } : {}),
     };
 
     // Apply custom domain header configuration if provided, matching the full ManagementClient.
