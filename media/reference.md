@@ -1834,6 +1834,7 @@ const pageableResponse = await client.clients.list({
     is_first_party: true,
     app_type: "app_type",
     external_client_id: "external_client_id",
+    agent_id: "agent_id",
     q: "q",
 });
 for await (const item of pageableResponse) {
@@ -1851,6 +1852,7 @@ let page = await client.clients.list({
     is_first_party: true,
     app_type: "app_type",
     external_client_id: "external_client_id",
+    agent_id: "agent_id",
     q: "q",
 });
 while (page.hasNextPage()) {
@@ -8510,6 +8512,256 @@ await client.organizations.update("id");
 </dl>
 </details>
 
+## Portals
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">list</a>() -> Management.ListPortalsResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">create</a>({ ...params }) -> Management.Portal</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.create({
+    slug: "slug",
+    name: "name",
+    client: {
+        token_endpoint_auth_method: "client_secret_post",
+        client_id: "client_id",
+        client_secret: "client_secret",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Management.CreatePortalRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">get</a>(id) -> Management.Portal</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.PortalId`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.PortalId`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.portals.<a href="/src/management/api/resources/portals/client/Client.ts">update</a>(id, { ...params }) -> Management.Portal</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.portals.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `Management.PortalId`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Management.UpdatePortalRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PortalsClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Prompts
 
 <details><summary><code>client.prompts.<a href="/src/management/api/resources/prompts/client/Client.ts">getSettings</a>() -> Management.GetSettingsResponseContent</code></summary>
@@ -13267,6 +13519,211 @@ await client.users.update("id");
 <dd>
 
 **request:** `Management.UpdateUserRequestContent`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">listConsentSigningKeys</a>(id) -> Management.ListUserConsentSigningKeysResponseContent</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve all consent signing keys registered for a user. Returns an empty `keys` array when the user has no keys registered.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.listConsentSigningKeys("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">getConsentSigningKey</a>(id, kid) -> Management.ConsentSigningKey</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a single consent signing key for a user by its key identifier (kid). Returns 404 if the key does not exist.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.getConsentSigningKey("id", "kid");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**kid:** `string` — The key identifier of the consent signing key.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `UsersClient.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/management/api/resources/users/client/Client.ts">deleteConsentSigningKey</a>(id, kid) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove a single consent signing key for a user by its key identifier (kid). The operation is idempotent and returns 204 whether or not the key existed.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.deleteConsentSigningKey("id", "kid");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — The ID of the user.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**kid:** `string` — The key identifier of the consent signing key.
 
 </dd>
 </dl>
@@ -18830,7 +19287,7 @@ await client.connections.clients.update("id", [
 <dl>
 <dd>
 
-Gets the connection keys for the Okta or OIDC connection strategy.
+Gets the connection keys for the Okta, OIDC, or SAML (samlp) connection strategy.
 
 </dd>
 </dl>
@@ -18893,7 +19350,7 @@ await client.connections.keys.get("id");
 <dl>
 <dd>
 
-Provision initial connection keys for Okta or OIDC connection strategies. This endpoint allows you to create keys before configuring the connection to use Private Key JWT authentication, enabling zero-downtime transitions.
+Provision initial connection keys for Okta, OIDC, or SAML (samlp) connection strategies. This endpoint allows you to create keys before configuring the connection to use Private Key JWT authentication, enabling zero-downtime transitions.
 
 </dd>
 </dl>
@@ -18964,7 +19421,7 @@ await client.connections.keys.create("id");
 <dl>
 <dd>
 
-Rotates the connection keys for the Okta or OIDC connection strategies.
+Rotates the connection keys for the Okta, OIDC, or SAML (samlp) connection strategies.
 
 </dd>
 </dl>
@@ -20797,6 +21254,7 @@ const pageableResponse = await client.experimentation.segments.list({
     from: "from",
     take: 1,
     type: "auth0",
+    status: "active",
 });
 for await (const item of pageableResponse) {
     console.log(item);
@@ -20807,6 +21265,7 @@ let page = await client.experimentation.segments.list({
     from: "from",
     take: 1,
     type: "auth0",
+    status: "active",
 });
 while (page.hasNextPage()) {
     page = await page.getNextPage();
