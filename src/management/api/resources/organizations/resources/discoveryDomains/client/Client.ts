@@ -69,7 +69,7 @@ export class DiscoveryDomainsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `organizations/${core.url.encodePathParam(id)}/discovery-domains`,
+                        `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/discovery-domains`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -186,7 +186,7 @@ export class DiscoveryDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/discovery-domains`,
             ),
             method: "POST",
             headers: _headers,
@@ -279,7 +279,7 @@ export class DiscoveryDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/name/${core.url.encodePathParam(discovery_domain)}`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/discovery-domains/name/${core.url.encodePathParam(discovery_domain, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -367,7 +367,7 @@ export class DiscoveryDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id)}`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -453,7 +453,7 @@ export class DiscoveryDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id)}`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -535,7 +535,7 @@ export class DiscoveryDomainsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id)}`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/discovery-domains/${core.url.encodePathParam(discovery_domain_id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,

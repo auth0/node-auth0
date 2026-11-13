@@ -75,7 +75,7 @@ export class RolesClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `organizations/${core.url.encodePathParam(id)}/members/${core.url.encodePathParam(user_id)}/roles`,
+                        `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/members/${core.url.encodePathParam(user_id, errors.ManagementError)}/roles`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -194,7 +194,7 @@ export class RolesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/members/${core.url.encodePathParam(user_id)}/roles`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/members/${core.url.encodePathParam(user_id, errors.ManagementError)}/roles`,
             ),
             method: "POST",
             headers: _headers,
@@ -287,7 +287,7 @@ export class RolesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `organizations/${core.url.encodePathParam(id)}/members/${core.url.encodePathParam(user_id)}/roles`,
+                `organizations/${core.url.encodePathParam(id, errors.ManagementError)}/members/${core.url.encodePathParam(user_id, errors.ManagementError)}/roles`,
             ),
             method: "DELETE",
             headers: _headers,

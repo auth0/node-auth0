@@ -322,7 +322,7 @@ export class ConnectionProfilesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connection-profiles/templates/${core.url.encodePathParam(id)}`,
+                `connection-profiles/templates/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -403,7 +403,7 @@ export class ConnectionProfilesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connection-profiles/${core.url.encodePathParam(id)}`,
+                `connection-profiles/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -478,7 +478,7 @@ export class ConnectionProfilesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connection-profiles/${core.url.encodePathParam(id)}`,
+                `connection-profiles/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -553,7 +553,7 @@ export class ConnectionProfilesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connection-profiles/${core.url.encodePathParam(id)}`,
+                `connection-profiles/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,

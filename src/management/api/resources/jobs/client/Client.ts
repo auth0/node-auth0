@@ -83,7 +83,7 @@ export class JobsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `jobs/${core.url.encodePathParam(id)}`,
+                `jobs/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,

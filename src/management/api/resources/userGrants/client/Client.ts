@@ -249,7 +249,7 @@ export class UserGrantsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `grants/${core.url.encodePathParam(id)}`,
+                `grants/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

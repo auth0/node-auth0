@@ -68,7 +68,7 @@ export class ClientsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `connections/${core.url.encodePathParam(id)}/clients`,
+                        `connections/${core.url.encodePathParam(id, errors.ManagementError)}/clients`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -182,7 +182,7 @@ export class ClientsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/clients`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/clients`,
             ),
             method: "PATCH",
             headers: _headers,

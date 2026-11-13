@@ -59,7 +59,7 @@ export class TokensClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/tokens`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/tokens`,
             ),
             method: "GET",
             headers: _headers,
@@ -138,7 +138,7 @@ export class TokensClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/tokens`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/tokens`,
             ),
             method: "POST",
             headers: _headers,
@@ -221,7 +221,7 @@ export class TokensClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/tokens/${core.url.encodePathParam(tokenId)}`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/tokens/${core.url.encodePathParam(tokenId, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

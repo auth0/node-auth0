@@ -82,7 +82,7 @@ export class UsersClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `roles/${core.url.encodePathParam(id)}/users`,
+                        `roles/${core.url.encodePathParam(id, errors.ManagementError)}/users`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -192,7 +192,7 @@ export class UsersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `roles/${core.url.encodePathParam(id)}/users`,
+                `roles/${core.url.encodePathParam(id, errors.ManagementError)}/users`,
             ),
             method: "POST",
             headers: _headers,

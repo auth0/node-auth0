@@ -131,7 +131,7 @@ export class RulesConfigsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `rules-configs/${core.url.encodePathParam(key)}`,
+                `rules-configs/${core.url.encodePathParam(key, errors.ManagementError)}`,
             ),
             method: "PUT",
             headers: _headers,
@@ -204,7 +204,7 @@ export class RulesConfigsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `rules-configs/${core.url.encodePathParam(key)}`,
+                `rules-configs/${core.url.encodePathParam(key, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

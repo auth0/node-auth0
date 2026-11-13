@@ -142,7 +142,7 @@ export class EmailTemplatesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `email-templates/${core.url.encodePathParam(templateName)}`,
+                `email-templates/${core.url.encodePathParam(templateName, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -229,7 +229,7 @@ export class EmailTemplatesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `email-templates/${core.url.encodePathParam(templateName)}`,
+                `email-templates/${core.url.encodePathParam(templateName, errors.ManagementError)}`,
             ),
             method: "PUT",
             headers: _headers,
@@ -319,7 +319,7 @@ export class EmailTemplatesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `email-templates/${core.url.encodePathParam(templateName)}`,
+                `email-templates/${core.url.encodePathParam(templateName, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,

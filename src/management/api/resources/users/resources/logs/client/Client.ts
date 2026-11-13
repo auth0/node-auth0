@@ -75,7 +75,7 @@ export class LogsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/logs`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/logs`,
                     ),
                     method: "GET",
                     headers: _headers,

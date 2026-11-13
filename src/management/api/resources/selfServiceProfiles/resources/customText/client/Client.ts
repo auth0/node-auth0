@@ -64,7 +64,7 @@ export class CustomTextClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `self-service-profiles/${core.url.encodePathParam(id)}/custom-text/${core.url.encodePathParam(language)}/${core.url.encodePathParam(page)}`,
+                `self-service-profiles/${core.url.encodePathParam(id, errors.ManagementError)}/custom-text/${core.url.encodePathParam(language, errors.ManagementError)}/${core.url.encodePathParam(page, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -156,7 +156,7 @@ export class CustomTextClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `self-service-profiles/${core.url.encodePathParam(id)}/custom-text/${core.url.encodePathParam(language)}/${core.url.encodePathParam(page)}`,
+                `self-service-profiles/${core.url.encodePathParam(id, errors.ManagementError)}/custom-text/${core.url.encodePathParam(language, errors.ManagementError)}/${core.url.encodePathParam(page, errors.ManagementError)}`,
             ),
             method: "PUT",
             headers: _headers,

@@ -172,7 +172,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "GET",
             headers: _headers,
@@ -250,7 +250,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "POST",
             headers: _headers,
@@ -325,7 +325,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -403,7 +403,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration`,
             ),
             method: "PATCH",
             headers: _headers,
@@ -481,7 +481,7 @@ export class ScimConfigurationClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/scim-configuration/default-mapping`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/scim-configuration/default-mapping`,
             ),
             method: "GET",
             headers: _headers,

@@ -59,7 +59,7 @@ export class BlocksClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `anomaly/blocks/ips/${core.url.encodePathParam(id)}`,
+                `anomaly/blocks/ips/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -134,7 +134,7 @@ export class BlocksClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `anomaly/blocks/ips/${core.url.encodePathParam(id)}`,
+                `anomaly/blocks/ips/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

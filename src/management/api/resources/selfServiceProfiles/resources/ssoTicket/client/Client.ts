@@ -62,7 +62,7 @@ export class SsoTicketClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `self-service-profiles/${core.url.encodePathParam(id)}/sso-ticket`,
+                `self-service-profiles/${core.url.encodePathParam(id, errors.ManagementError)}/sso-ticket`,
             ),
             method: "POST",
             headers: _headers,
@@ -151,7 +151,7 @@ export class SsoTicketClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `self-service-profiles/${core.url.encodePathParam(profileId)}/sso-ticket/${core.url.encodePathParam(id)}/revoke`,
+                `self-service-profiles/${core.url.encodePathParam(profileId, errors.ManagementError)}/sso-ticket/${core.url.encodePathParam(id, errors.ManagementError)}/revoke`,
             ),
             method: "POST",
             headers: _headers,

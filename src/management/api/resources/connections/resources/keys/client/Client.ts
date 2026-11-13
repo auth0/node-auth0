@@ -59,7 +59,7 @@ export class KeysClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/keys`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/keys`,
             ),
             method: "GET",
             headers: _headers,
@@ -139,7 +139,7 @@ export class KeysClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/keys`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/keys`,
             ),
             method: "POST",
             headers: _headers,
@@ -226,7 +226,7 @@ export class KeysClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/keys/rotate`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/keys/rotate`,
             ),
             method: "POST",
             headers: _headers,

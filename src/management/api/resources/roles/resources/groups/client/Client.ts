@@ -66,7 +66,7 @@ export class GroupsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `roles/${core.url.encodePathParam(id)}/groups`,
+                        `roles/${core.url.encodePathParam(id, errors.ManagementError)}/groups`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -174,7 +174,7 @@ export class GroupsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `roles/${core.url.encodePathParam(id)}/groups`,
+                `roles/${core.url.encodePathParam(id, errors.ManagementError)}/groups`,
             ),
             method: "POST",
             headers: _headers,
@@ -258,7 +258,7 @@ export class GroupsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `roles/${core.url.encodePathParam(id)}/groups`,
+                `roles/${core.url.encodePathParam(id, errors.ManagementError)}/groups`,
             ),
             method: "DELETE",
             headers: _headers,

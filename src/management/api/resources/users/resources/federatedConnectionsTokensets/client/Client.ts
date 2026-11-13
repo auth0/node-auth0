@@ -58,7 +58,7 @@ export class FederatedConnectionsTokensetsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/federated-connections-tokensets`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/federated-connections-tokensets`,
             ),
             method: "GET",
             headers: _headers,
@@ -140,7 +140,7 @@ export class FederatedConnectionsTokensetsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/federated-connections-tokensets/${core.url.encodePathParam(tokenset_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/federated-connections-tokensets/${core.url.encodePathParam(tokenset_id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

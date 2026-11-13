@@ -83,7 +83,7 @@ export class RolesClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/effective-permissions/sources/effective-roles`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/effective-permissions/sources/effective-roles`,
                     ),
                     method: "GET",
                     headers: _headers,

@@ -241,7 +241,7 @@ export class UserBlocksClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `user-blocks/${core.url.encodePathParam(id)}`,
+                `user-blocks/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -323,7 +323,7 @@ export class UserBlocksClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `user-blocks/${core.url.encodePathParam(id)}`,
+                `user-blocks/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

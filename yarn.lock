@@ -1307,10 +1307,10 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-"auth0-legacy@npm:auth0@^4.37.1":
-  version "4.37.1"
-  resolved "https://registry.yarnpkg.com/auth0/-/auth0-4.37.1.tgz#988f737360f0bfe0699c22b3deda7f74424beb78"
-  integrity sha512-o9ca0P+hHSUbiwOSFW+DS2GmCA5c6T6E1UJZhWcgKmjAI2Aid16wLzY4/y+XNFb7Im1rM+wQc5YkkNZuTy5FOw==
+"auth0-legacy@npm:auth0@^4.37.2":
+  version "4.37.2"
+  resolved "https://registry.yarnpkg.com/auth0/-/auth0-4.37.2.tgz#d10ca96f1baf5943ff5682007c135ec529bcdd05"
+  integrity sha512-NRs0Qp9KsbrVIT+ysk8TOi4YbdIhtHqRl83Q6QRzncoiUjlmKr6YbyJ5TQf+UJ9Vb6iCAlQmi5MGeJ7m5iNW9Q==
   dependencies:
     jose "^4.13.2"
     undici-types "^6.15.0"
@@ -2801,6 +2801,11 @@ jest@^29.7.0:
     "@jest/types" "^29.6.3"
     import-local "^3.0.2"
     jest-cli "^29.7.0"
+
+jose@^4.13.2:
+  version "4.15.9"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.15.9.tgz#9b68eda29e9a0614c042fa29387196c7dd800100"
+  integrity sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==
 
 jose@^5.0.0:
   version "5.10.0"

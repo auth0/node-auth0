@@ -64,7 +64,7 @@ export class RiskAssessmentsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/risk-assessments/clear`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/risk-assessments/clear`,
             ),
             method: "POST",
             headers: _headers,

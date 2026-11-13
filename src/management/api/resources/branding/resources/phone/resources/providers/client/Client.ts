@@ -236,7 +236,7 @@ export class ProvidersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `branding/phone/providers/${core.url.encodePathParam(id)}`,
+                `branding/phone/providers/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -316,7 +316,7 @@ export class ProvidersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `branding/phone/providers/${core.url.encodePathParam(id)}`,
+                `branding/phone/providers/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -400,7 +400,7 @@ export class ProvidersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `branding/phone/providers/${core.url.encodePathParam(id)}`,
+                `branding/phone/providers/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,
@@ -493,7 +493,7 @@ export class ProvidersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `branding/phone/providers/${core.url.encodePathParam(id)}/try`,
+                `branding/phone/providers/${core.url.encodePathParam(id, errors.ManagementError)}/try`,
             ),
             method: "POST",
             headers: _headers,

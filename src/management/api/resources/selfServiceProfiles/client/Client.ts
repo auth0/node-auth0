@@ -275,7 +275,7 @@ export class SelfServiceProfilesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `self-service-profiles/${core.url.encodePathParam(id)}`,
+                `self-service-profiles/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -356,7 +356,7 @@ export class SelfServiceProfilesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `self-service-profiles/${core.url.encodePathParam(id)}`,
+                `self-service-profiles/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -441,7 +441,7 @@ export class SelfServiceProfilesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `self-service-profiles/${core.url.encodePathParam(id)}`,
+                `self-service-profiles/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,

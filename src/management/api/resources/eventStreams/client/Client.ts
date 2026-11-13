@@ -262,7 +262,7 @@ export class EventStreamsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `event-streams/${core.url.encodePathParam(id)}`,
+                `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -333,7 +333,7 @@ export class EventStreamsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `event-streams/${core.url.encodePathParam(id)}`,
+                `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -407,7 +407,7 @@ export class EventStreamsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `event-streams/${core.url.encodePathParam(id)}`,
+                `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,
@@ -488,7 +488,7 @@ export class EventStreamsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `event-streams/${core.url.encodePathParam(id)}/test`,
+                `event-streams/${core.url.encodePathParam(id, errors.ManagementError)}/test`,
             ),
             method: "POST",
             headers: _headers,
