@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.14.2](https://github.com/auth0/node-auth0/tree/v5.14.2) (2026-11-13)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v5.14.1...v5.14.2)
+
+**Security**
+
+- fix: reject dot-segment path parameters [\#1441](https://github.com/auth0/node-auth0/pull/1441)
+
 ## [v5.14.1](https://github.com/auth0/node-auth0/tree/v5.14.1) (2026-07-29)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v5.14.0...v5.14.1)
