@@ -156,10 +156,7 @@ export class ProviderClient {
      *
      * @example
      *     await client.emails.provider.create({
-     *         name: "mailgun",
-     *         credentials: {
-     *             api_key: "api_key"
-     *         }
+     *         name: "mailgun"
      *     })
      */
     public create(
