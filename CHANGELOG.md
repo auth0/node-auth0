@@ -1,5 +1,13 @@
 # Change Log
 
+## [v7.8.0](https://github.com/auth0/node-auth0/tree/v7.8.0) (2026-11-12)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.7.0...v7.8.0)
+
+**Added**
+
+- feat: add passkey signup behavior on connections and pending-consent ACUL screen; improve OIDC support docs [\#1439](https://github.com/auth0/node-auth0/pull/1439) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.7.0](https://github.com/auth0/node-auth0/tree/v7.7.0) (2026-11-04)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.6.0...v7.7.0)
