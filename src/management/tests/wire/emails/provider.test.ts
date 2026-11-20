@@ -100,7 +100,7 @@ describe("ProviderClient", () => {
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "mailgun", credentials: { api_key: "api_key" } };
+        const rawRequestBody = { name: "mailgun" };
         const rawResponseBody = {
             name: "name",
             enabled: true,
@@ -126,9 +126,6 @@ describe("ProviderClient", () => {
 
         const response = await client.emails.provider.create({
             name: "mailgun",
-            credentials: {
-                api_key: "api_key",
-            },
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -136,7 +133,7 @@ describe("ProviderClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
+        const rawRequestBody = { name: "mailgun" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -151,9 +148,6 @@ describe("ProviderClient", () => {
         await expect(async () => {
             return await client.emails.provider.create({
                 name: "mailgun",
-                credentials: {
-                    api_key: "x",
-                },
             });
         }).rejects.toThrow(Management.BadRequestError);
     });
@@ -161,7 +155,7 @@ describe("ProviderClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
+        const rawRequestBody = { name: "mailgun" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -176,9 +170,6 @@ describe("ProviderClient", () => {
         await expect(async () => {
             return await client.emails.provider.create({
                 name: "mailgun",
-                credentials: {
-                    api_key: "x",
-                },
             });
         }).rejects.toThrow(Management.UnauthorizedError);
     });
@@ -186,7 +177,7 @@ describe("ProviderClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
+        const rawRequestBody = { name: "mailgun" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -201,9 +192,6 @@ describe("ProviderClient", () => {
         await expect(async () => {
             return await client.emails.provider.create({
                 name: "mailgun",
-                credentials: {
-                    api_key: "x",
-                },
             });
         }).rejects.toThrow(Management.ForbiddenError);
     });
@@ -211,7 +199,7 @@ describe("ProviderClient", () => {
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
+        const rawRequestBody = { name: "mailgun" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -226,9 +214,6 @@ describe("ProviderClient", () => {
         await expect(async () => {
             return await client.emails.provider.create({
                 name: "mailgun",
-                credentials: {
-                    api_key: "x",
-                },
             });
         }).rejects.toThrow(Management.ConflictError);
     });
@@ -236,7 +221,7 @@ describe("ProviderClient", () => {
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "mailgun", credentials: { api_key: "x" } };
+        const rawRequestBody = { name: "mailgun" };
         const rawResponseBody = { key: "value" };
 
         server
@@ -251,9 +236,6 @@ describe("ProviderClient", () => {
         await expect(async () => {
             return await client.emails.provider.create({
                 name: "mailgun",
-                credentials: {
-                    api_key: "x",
-                },
             });
         }).rejects.toThrow(Management.TooManyRequestsError);
     });
