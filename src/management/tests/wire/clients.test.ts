@@ -371,6 +371,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -383,6 +384,7 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
@@ -1263,6 +1265,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -1275,6 +1278,7 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
@@ -1628,6 +1632,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -1640,6 +1645,7 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
@@ -1970,6 +1976,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -1982,6 +1989,7 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",

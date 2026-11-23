@@ -439,6 +439,7 @@ export interface CreateClientRequestContent {
     express_configuration?: Management.ExpressConfiguration;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration;
     my_organization_configuration?: Management.ClientMyOrganizationPostConfiguration;
+    google_account_linking?: Management.GoogleAccountLinkingConfigurationCreate;
     async_approval_notification_channels?: Management.ClientAsyncApprovalNotificationsChannelsApiPostConfiguration;
     /** ID of the agent to associate with this client. */
     agent_id?: string | null;
@@ -606,6 +607,7 @@ export interface UpdateClientRequestContent {
     express_configuration?: Management.ExpressConfigurationOrNull | null;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration;
     my_organization_configuration?: Management.ClientMyOrganizationPatchConfiguration | null;
+    google_account_linking?: Management.GoogleAccountLinkingConfigurationOrNull | null;
     async_approval_notification_channels?:
         | (Management.ClientAsyncApprovalNotificationsChannelsApiPatchConfiguration | undefined)
         | null;
@@ -3075,10 +3077,7 @@ export interface GetEmailProviderRequestParameters {
 /**
  * @example
  *     {
- *         name: "mailgun",
- *         credentials: {
- *             api_key: "api_key"
- *         }
+ *         name: "mailgun"
  *     }
  */
 export interface CreateEmailProviderRequestContent {
@@ -3087,7 +3086,7 @@ export interface CreateEmailProviderRequestContent {
     enabled?: boolean;
     /** Email address to use as "from" when no other address specified. */
     default_from_address?: string;
-    credentials: Management.EmailProviderCredentialsSchema;
+    credentials?: Management.EmailProviderCredentialsSchema;
     settings?: (Management.EmailSpecificProviderSettingsWithAdditionalProperties | undefined) | null;
 }
 
@@ -4552,6 +4551,7 @@ export interface CreateSelfServiceProfileSsoTicketRequestContent {
     /** Indicates whether a verified domain should be used for organization discovery during authentication. */
     use_for_organization_discovery?: boolean;
     third_party_client_access_config?: Management.ThirdPartyClientAccessConfig;
+    universal_logout_config?: Management.SelfServiceProfileSsoTicketUniversalLogoutConfig;
     enabled_features?: Management.SelfServiceProfileSsoTicketEnabledFeatures;
 }
 
@@ -4784,7 +4784,7 @@ export interface GetUserGroupsRequestParameters {
     fields?: string | null;
     /** Whether specified fields are to be included (true) or excluded (false). */
     include_fields?: boolean | null;
-    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). */
+    /** Return results inside an object that contains the total result count (true) or as a direct array of results (false, default). The returned total reflects at most 1,000 results. */
     include_totals?: boolean | null;
     /** Optional Id from which to start selection. */
     from?: string | null;
