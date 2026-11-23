@@ -1,5 +1,17 @@
 # Change Log
 
+## [v7.9.0](https://github.com/auth0/node-auth0/tree/v7.9.0) (2026-11-23)
+
+[Full Changelog](https://github.com/auth0/node-auth0/compare/v7.8.0...v7.9.0)
+
+**⚠️ Breaking Changes**
+
+- Removed `genai_trial` from `TenantSettingsFlags` (no longer in the API spec); TypeScript code referencing it will no longer compile [\#1447](https://github.com/auth0/node-auth0/pull/1447) ([fern-api[bot]](https://github.com/apps/fern-api))
+
+**Added**
+
+- feat: add Google account linking, SSEC Universal Logout, and connection encryption keys [\#1447](https://github.com/auth0/node-auth0/pull/1447) ([fern-api[bot]](https://github.com/apps/fern-api))
+
 ## [v7.8.0](https://github.com/auth0/node-auth0/tree/v7.8.0) (2026-11-12)
 
 [Full Changelog](https://github.com/auth0/node-auth0/compare/v7.7.0...v7.8.0)
