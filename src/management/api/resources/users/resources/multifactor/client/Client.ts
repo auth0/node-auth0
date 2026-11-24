@@ -31,6 +31,8 @@ export class MultifactorClient {
      * @throws {@link Management.BadRequestError}
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.multifactor.invalidateRememberBrowser("id")
@@ -57,7 +59,7 @@ export class MultifactorClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/multifactor/actions/invalidate-remember-browser`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/multifactor/actions/invalidate-remember-browser`,
             ),
             method: "POST",
             headers: _headers,
@@ -109,6 +111,8 @@ export class MultifactorClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.multifactor.deleteProvider("id", "duo")
@@ -137,7 +141,7 @@ export class MultifactorClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/multifactor/${core.url.encodePathParam(provider)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/multifactor/${core.url.encodePathParam(provider, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,

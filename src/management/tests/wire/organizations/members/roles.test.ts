@@ -44,7 +44,7 @@ describe("RolesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members/user_id/roles")
             .respondWith()
             .statusCode(400)
@@ -63,7 +63,7 @@ describe("RolesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members/user_id/roles")
             .respondWith()
             .statusCode(401)
@@ -82,7 +82,7 @@ describe("RolesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members/user_id/roles")
             .respondWith()
             .statusCode(403)
@@ -101,7 +101,7 @@ describe("RolesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members/user_id/roles")
             .respondWith()
             .statusCode(404)
@@ -120,7 +120,7 @@ describe("RolesClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/members/user_id/roles")
             .respondWith()
             .statusCode(429)

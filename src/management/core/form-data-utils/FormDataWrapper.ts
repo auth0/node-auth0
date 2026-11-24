@@ -19,11 +19,20 @@ export class FormDataWrapper {
         // noop
     }
 
-    public append(key: string, value: unknown): void {
+    public append(key: string, value: unknown, contentType?: string): void {
+        if (contentType != null) {
+            this.fd.append(key, new Blob([String(value)], { type: contentType }), "");
+            return;
+        }
         this.fd.append(key, String(value));
     }
 
     public async appendFile(key: string, value: Uploadable): Promise<void> {
+        if (value == null) {
+            throw new Error(
+                `File upload for "${key}" received ${value === null ? "null" : "undefined"}. The generated code should not call appendFile with null/undefined — check that optional file fields are guarded before this call.`,
+            );
+        }
         const { data, filename, contentType } = await toMultipartDataPart(value);
         const blob = await convertToBlob(data, contentType);
         if (filename) {

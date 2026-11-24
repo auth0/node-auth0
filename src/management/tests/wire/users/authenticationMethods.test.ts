@@ -69,7 +69,7 @@ describe("AuthenticationMethodsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/authentication-methods")
             .respondWith()
             .statusCode(400)
@@ -88,7 +88,7 @@ describe("AuthenticationMethodsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/authentication-methods")
             .respondWith()
             .statusCode(401)
@@ -107,7 +107,7 @@ describe("AuthenticationMethodsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/authentication-methods")
             .respondWith()
             .statusCode(403)
@@ -126,7 +126,7 @@ describe("AuthenticationMethodsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/authentication-methods")
             .respondWith()
             .statusCode(404)
@@ -145,7 +145,7 @@ describe("AuthenticationMethodsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/users/id/authentication-methods")
             .respondWith()
             .statusCode(429)

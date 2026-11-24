@@ -59,13 +59,7 @@ describe("RenderingClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/prompts/rendering")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -78,13 +72,7 @@ describe("RenderingClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/prompts/rendering")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -97,13 +85,7 @@ describe("RenderingClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/prompts/rendering")
-            .respondWith()
-            .statusCode(402)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(402).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -116,13 +98,7 @@ describe("RenderingClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/prompts/rendering")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();
@@ -135,13 +111,7 @@ describe("RenderingClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/prompts/rendering")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/prompts/rendering").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.prompts.rendering.list();

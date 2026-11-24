@@ -736,6 +736,18 @@ export const OauthScope = {
      * Delete Vdcs Templates */
     DeleteVdcsTemplates: "delete:vdcs_templates",
     /**
+     * Create Client Profiles */
+    CreateClientProfiles: "create:client_profiles",
+    /**
+     * Read Client Profiles */
+    ReadClientProfiles: "read:client_profiles",
+    /**
+     * Update Client Profiles */
+    UpdateClientProfiles: "update:client_profiles",
+    /**
+     * Delete Client Profiles */
+    DeleteClientProfiles: "delete:client_profiles",
+    /**
      * Create Organization Client Associations */
     CreateOrganizationClients: "create:organization_clients",
     /**
@@ -747,6 +759,18 @@ export const OauthScope = {
     /**
      * Delete Organization Client Associations */
     DeleteOrganizationClients: "delete:organization_clients",
+    /**
+     * Create Universal Portals */
+    CreatePortals: "create:portals",
+    /**
+     * Read Universal Portals */
+    ReadPortals: "read:portals",
+    /**
+     * Update Universal Portals */
+    UpdatePortals: "update:portals",
+    /**
+     * Delete Universal Portals */
+    DeletePortals: "delete:portals",
     /**
      * Create Network ACL Keys */
     CreateNetworkAclKeys: "create:network_acl_keys",
@@ -781,6 +805,19 @@ export interface TooManyRequestsErrorBody {
 export namespace TooManyRequestsErrorBody {
     export const Error_ = {
         TooManyRequests: "Too Many Requests",
+    } as const;
+    export type Error_ = (typeof Error_)[keyof typeof Error_];
+}
+
+export interface InternalServerErrorBody {
+    message: string;
+    statusCode: string;
+    error: InternalServerErrorBody.Error_;
+}
+
+export namespace InternalServerErrorBody {
+    export const Error_ = {
+        InternalServerError: "Internal Server Error",
     } as const;
     export type Error_ = (typeof Error_)[keyof typeof Error_];
 }
@@ -1215,7 +1252,9 @@ export interface AculClientFilterByMetadata {
 /**
  * Client metadata key/value pairs
  */
-export type AculClientMetadata = Record<string, unknown>;
+export type AculClientMetadata = {
+    [key: string]: unknown;
+};
 
 export interface AculConfigsItem {
     prompt: Management.PromptGroupNameEnum;
@@ -1289,7 +1328,9 @@ export interface AculDomainFilterByMetadata {
 /**
  * Domain metadata key/value pairs
  */
-export type AculDomainMetadata = Record<string, unknown>;
+export type AculDomainMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Optional filters to apply rendering rules to specific entities
@@ -1316,7 +1357,9 @@ export interface AculHeadTag {
 /**
  * Attributes of the HTML tag. See <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes"> MDN documentation</a> for valid attributes.
  */
-export type AculHeadTagAttributes = Record<string, unknown>;
+export type AculHeadTagAttributes = {
+    [key: string]: unknown;
+};
 
 /**
  * Text or markup between the element’s opening and closing tags.
@@ -1350,7 +1393,9 @@ export interface AculOrganizationFilterByMetadata {
 /**
  * Organization metadata key/value pairs
  */
-export type AculOrganizationMetadata = Record<string, unknown>;
+export type AculOrganizationMetadata = {
+    [key: string]: unknown;
+};
 
 /** Rendering mode to filter by */
 export const AculRenderingModeEnum = {
@@ -1381,7 +1426,9 @@ export interface AdvanceRampResponseContent {
 /**
  * Arbitrary key-value metadata for the agent
  */
-export type AgentMetadata = Record<string, unknown>;
+export type AgentMetadata = {
+    [key: string]: unknown;
+};
 
 export interface AgentResponseContent {
     /** The agent ID */
@@ -1447,7 +1494,9 @@ export interface AnonymousSessions {
 /**
  * Data related to the user that does affect the application's core functionality.
  */
-export type AppMetadata = Record<string, unknown>;
+export type AppMetadata = {
+    [key: string]: unknown;
+};
 
 /** Assessors to clear. */
 export const AssessorsTypeEnum = {
@@ -1457,7 +1506,7 @@ export type AssessorsTypeEnum = (typeof AssessorsTypeEnum)[keyof typeof Assessor
 
 export interface AssociateOrganizationClientGrantResponseContent {
     /** ID of the client grant. */
-    id?: string | undefined;
+    grant_id?: string | undefined;
     /** ID of the client. */
     client_id?: string | undefined;
     /** The audience (API identifier) of this client grant */
@@ -1516,64 +1565,6 @@ export interface AttackProtectionCaptchaHcaptchaResponseContent {
     [key: string]: any;
 }
 
-/**
- * An attack protection policy override for CAPTCHA.
- */
-export interface AttackProtectionCaptchaPolicy {
-    /** System-generated identifier for the policy. */
-    id: string;
-    /** Human-readable policy name. */
-    name: string;
-    /** Description of the policy's purpose. */
-    description?: string | undefined;
-    /** Conflict resolution order. Lower number takes higher precedence. */
-    priority: number;
-    match: Management.AttackProtectionCaptchaPolicyMatch;
-    action: Management.AttackProtectionCaptchaPolicyAction;
-    /** ISO 8601 timestamp when the policy was created. */
-    created_at: string;
-    /** ISO 8601 timestamp when the policy was last updated. */
-    updated_at: string;
-}
-
-/**
- * CAPTCHA configuration override stored for this policy.
- */
-export interface AttackProtectionCaptchaPolicyAction {
-    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
-    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
-    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
-    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2 | undefined;
-    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterprise | undefined;
-    hcaptcha?: Management.CaptchaPolicyActionHcaptcha | undefined;
-    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptcha | undefined;
-    arkose?: Management.CaptchaPolicyActionArkose | undefined;
-}
-
-/**
- * CAPTCHA configuration override for this policy.
- */
-export interface AttackProtectionCaptchaPolicyActionInput {
-    active_provider_id?: Management.CaptchaActiveProviderEnum | undefined;
-    simple_captcha?: Management.CaptchaPolicyActionSimpleCaptcha | undefined;
-    auth_challenge?: Management.CaptchaPolicyActionAuthChallenge | undefined;
-    recaptcha_v2?: Management.CaptchaPolicyActionRecaptchaV2Input | undefined;
-    recaptcha_enterprise?: Management.CaptchaPolicyActionRecaptchaEnterpriseInput | undefined;
-    hcaptcha?: Management.CaptchaPolicyActionHcaptchaInput | undefined;
-    friendly_captcha?: Management.CaptchaPolicyActionFriendlyCaptchaInput | undefined;
-    arkose?: Management.CaptchaPolicyActionArkoseInput | undefined;
-}
-
-/**
- * Traffic matching criteria for the policy. Exactly one of auth0_managed or geo_country_codes must be specified.
- */
-export interface AttackProtectionCaptchaPolicyMatch {
-    /** Match by Auth0-managed traffic identifiers. */
-    auth0_managed?: string[] | undefined;
-    /** Match by ISO 3166-1 alpha-2 country codes. */
-    geo_country_codes?: string[] | undefined;
-}
-
 /** The id of the active provider for the CAPTCHA. */
 export const AttackProtectionCaptchaProviderId = {
     Arkose: "arkose",
@@ -1603,7 +1594,9 @@ export interface AttackProtectionCaptchaRecaptchaV2ResponseContent {
     [key: string]: any;
 }
 
-export type AttackProtectionCaptchaSimpleCaptchaResponseContent = Record<string, unknown>;
+export type AttackProtectionCaptchaSimpleCaptchaResponseContent = {
+    [key: string]: unknown;
+};
 
 export interface AttackProtectionUpdateCaptchaArkose {
     /** The site key for the Arkose captcha provider. */
@@ -2177,137 +2170,6 @@ export interface BulkUpdateAculResponseContent {
     [key: string]: any;
 }
 
-/** The CAPTCHA provider type. */
-export const CaptchaActiveProviderEnum = {
-    SimpleCaptcha: "simple_captcha",
-    AuthChallenge: "auth_challenge",
-    RecaptchaV2: "recaptcha_v2",
-    RecaptchaEnterprise: "recaptcha_enterprise",
-    Hcaptcha: "hcaptcha",
-    FriendlyCaptcha: "friendly_captcha",
-    Arkose: "arkose",
-} as const;
-export type CaptchaActiveProviderEnum = (typeof CaptchaActiveProviderEnum)[keyof typeof CaptchaActiveProviderEnum];
-
-/**
- * Arkose Labs provider configuration.
- */
-export interface CaptchaPolicyActionArkose {
-    /** The Arkose Labs site key. */
-    site_key?: string | undefined;
-    /** The Arkose Labs client subdomain. */
-    client_subdomain?: string | undefined;
-    /** The Arkose Labs verify subdomain. */
-    verify_subdomain?: string | undefined;
-    /** Whether to allow access when Arkose Labs is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Arkose Labs provider configuration.
- */
-export interface CaptchaPolicyActionArkoseInput {
-    /** The Arkose Labs site key. */
-    site_key?: string | undefined;
-    /** The Arkose Labs private key. Encrypted at rest. */
-    secret?: string | undefined;
-    /** The Arkose Labs client subdomain. */
-    client_subdomain?: string | undefined;
-    /** The Arkose Labs verify subdomain. */
-    verify_subdomain?: string | undefined;
-    /** Whether to allow access when Arkose Labs is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Auth Challenge CAPTCHA provider configuration.
- */
-export interface CaptchaPolicyActionAuthChallenge {
-    /** Whether to allow access when the challenge provider is unavailable. */
-    fail_open?: boolean | undefined;
-}
-
-/**
- * Friendly Captcha provider configuration.
- */
-export interface CaptchaPolicyActionFriendlyCaptcha {
-    /** The Friendly Captcha site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * Friendly Captcha provider configuration.
- */
-export interface CaptchaPolicyActionFriendlyCaptchaInput {
-    /** The Friendly Captcha site key. */
-    site_key?: string | undefined;
-    /** The Friendly Captcha secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * hCaptcha provider configuration.
- */
-export interface CaptchaPolicyActionHcaptcha {
-    /** The hCaptcha site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * hCaptcha provider configuration.
- */
-export interface CaptchaPolicyActionHcaptchaInput {
-    /** The hCaptcha site key. */
-    site_key?: string | undefined;
-    /** The hCaptcha secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * reCAPTCHA Enterprise provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaEnterprise {
-    /** The reCAPTCHA Enterprise site key. */
-    site_key?: string | undefined;
-    /** The Google Cloud project ID. */
-    project_id?: string | undefined;
-}
-
-/**
- * reCAPTCHA Enterprise provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaEnterpriseInput {
-    /** The reCAPTCHA Enterprise site key. */
-    site_key?: string | undefined;
-    /** The Google Cloud project ID. */
-    project_id?: string | undefined;
-    /** The reCAPTCHA Enterprise API key. Encrypted at rest. */
-    api_key?: string | undefined;
-}
-
-/**
- * reCAPTCHA v2 provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaV2 {
-    /** The reCAPTCHA v2 site key. */
-    site_key?: string | undefined;
-}
-
-/**
- * reCAPTCHA v2 provider configuration.
- */
-export interface CaptchaPolicyActionRecaptchaV2Input {
-    /** The reCAPTCHA v2 site key. */
-    site_key?: string | undefined;
-    /** The reCAPTCHA v2 secret key. Encrypted at rest. */
-    secret?: string | undefined;
-}
-
-/**
- * Simple CAPTCHA provider configuration.
- */
-export interface CaptchaPolicyActionSimpleCaptcha {}
-
 export interface CertificateSubjectDnCredential {
     credential_type: Management.CertificateSubjectDnCredentialTypeEnum;
     /** Friendly name for a credential. */
@@ -2341,6 +2203,14 @@ export interface ChangePasswordTicketResponseContent {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/** Indicates who created the client. The value <code>admin</code> indicates the client was registered via the Management API. The value <code>client</code> indicates the client was registered dynamically. */
+export const CimdExternalMetadataCreatedByEnum = {
+    Admin: "admin",
+    Client: "client",
+} as const;
+export type CimdExternalMetadataCreatedByEnum =
+    (typeof CimdExternalMetadataCreatedByEnum)[keyof typeof CimdExternalMetadataCreatedByEnum];
 
 /**
  * Client authentication methods derived from the JWKS document
@@ -2493,6 +2363,7 @@ export interface Client {
     require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
+    allow_personal_agent_browser_join?: Management.ClientAllowPersonalAgentBrowserJoin | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
     token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
@@ -2509,12 +2380,14 @@ export interface Client {
     express_configuration?: Management.ExpressConfiguration | undefined;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    google_account_linking?: Management.GoogleAccountLinkingConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
     enforce_anon_session_transfer_network_binding?:
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -2523,6 +2396,9 @@ export interface Client {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -2600,22 +2476,30 @@ export interface ClientAddonAzureSb {
 /**
  * Box SSO indicator (no configuration settings needed for Box SSO).
  */
-export type ClientAddonBox = Record<string, unknown>;
+export type ClientAddonBox = {
+    [key: string]: unknown;
+};
 
 /**
  * CloudBees SSO indicator (no configuration settings needed for CloudBees SSO).
  */
-export type ClientAddonCloudBees = Record<string, unknown>;
+export type ClientAddonCloudBees = {
+    [key: string]: unknown;
+};
 
 /**
  * Concur SSO indicator (no configuration settings needed for Concur SSO).
  */
-export type ClientAddonConcur = Record<string, unknown>;
+export type ClientAddonConcur = {
+    [key: string]: unknown;
+};
 
 /**
  * Dropbox SSO indicator (no configuration settings needed for Dropbox SSO).
  */
-export type ClientAddonDropbox = Record<string, unknown>;
+export type ClientAddonDropbox = {
+    [key: string]: unknown;
+};
 
 /**
  * Adobe EchoSign SSO configuration.
@@ -2744,7 +2628,9 @@ export interface ClientAddonSaml {
     [key: string]: any;
 }
 
-export type ClientAddonSamlMapping = Record<string, unknown>;
+export type ClientAddonSamlMapping = {
+    [key: string]: unknown;
+};
 
 /**
  * SAP API addon configuration.
@@ -2878,7 +2764,9 @@ export interface ClientAddonWams {
 /**
  * WS-Fed (WIF) addon indicator. Actual configuration is stored in `callback` and `client_aliases` properties on the client.
  */
-export type ClientAddonWsFed = Record<string, unknown>;
+export type ClientAddonWsFed = {
+    [key: string]: unknown;
+};
 
 /**
  * Zendesk SSO configuration.
@@ -2935,6 +2823,16 @@ export interface ClientAddons {
     sso_integration?: Management.ClientAddonSsoIntegration | undefined;
     oag?: (Management.ClientAddonOag | null) | undefined;
 }
+
+/**
+ * Whether the client can be used as the target application of a Personal Agent Protocol browser join.
+ */
+export type ClientAllowPersonalAgentBrowserJoin = boolean;
+
+/**
+ * Whether the client can be used as the target application of a Personal Agent Protocol browser join.
+ */
+export type ClientAllowPersonalAgentBrowserJoinOrNull = (boolean | null) | undefined;
 
 /** Indicates whether network binding should be enforced when consuming an anonymous session transfer token. If set to 'ip', consumption must happen from the same IP as the issuer. If set to 'asn', consumption must happen from the same ASN as the issuer. If set to 'none', binding is not enforced. Default value is `ip`. */
 export const ClientAnonymousSessionTransferNetworkBindingEnum = {
@@ -3104,6 +3002,8 @@ export const ClientCredentialAlgorithmEnum = {
     Rs256: "RS256",
     Rs384: "RS384",
     Ps256: "PS256",
+    Es256: "ES256",
+    Ps384: "PS384",
 } as const;
 export type ClientCredentialAlgorithmEnum =
     (typeof ClientCredentialAlgorithmEnum)[keyof typeof ClientCredentialAlgorithmEnum];
@@ -3153,6 +3053,14 @@ export const ClientExternalMetadataCreatedByEnum = {
 } as const;
 export type ClientExternalMetadataCreatedByEnum =
     (typeof ClientExternalMetadataCreatedByEnum)[keyof typeof ClientExternalMetadataCreatedByEnum];
+
+/** Indicates whether the Client ID Metadata Document at <code>external_client_id</code> is currently reachable. For clients with <code>external_metadata_created_by</code> set to <code>client</code> the status is calculated from the document; for <code>admin</code> it is always <code>available</code>. When absent, the status is assumed to be <code>available</code>. */
+export const ClientExternalMetadataStatusEnum = {
+    Available: "available",
+    Unavailable: "unavailable",
+} as const;
+export type ClientExternalMetadataStatusEnum =
+    (typeof ClientExternalMetadataStatusEnum)[keyof typeof ClientExternalMetadataStatusEnum];
 
 /** Indicates the type of external metadata used to register the client. This field is omitted for regular clients. The value <code>cimd</code> identifies clients registered via a Client ID Metadata Document. The value <code>dcr</code> identifies clients registered via Dynamic Client Registration. */
 export const ClientExternalMetadataTypeEnum = {
@@ -3245,12 +3153,16 @@ export interface ClientJwtConfiguration {
 /**
  * Configuration related to id token claims for the client.
  */
-export type ClientJwtConfigurationScopes = Record<string, unknown>;
+export type ClientJwtConfigurationScopes = {
+    [key: string]: unknown;
+};
 
 /**
  * Metadata associated with the client, in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.  Field names (max 255 chars) are alphanumeric and may only include the following special characters:  :,-+=_*?"/\()<>@	[Tab] [Space]
  */
-export type ClientMetadata = Record<string, unknown>;
+export type ClientMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Additional configuration for native mobile apps.
@@ -3447,6 +3359,20 @@ export interface ClientOidcBackchannelLogoutSettings {
     [key: string]: any;
 }
 
+/**
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
+ */
+export interface ClientOidcSupport {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
+    is_allowed?: boolean | undefined;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
+    allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
+    allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
 export const ClientOidcSupportAllowedScopesEnum = {
     Profile: "profile",
     Email: "email",
@@ -3457,20 +3383,26 @@ export type ClientOidcSupportAllowedScopesEnum =
     (typeof ClientOidcSupportAllowedScopesEnum)[keyof typeof ClientOidcSupportAllowedScopesEnum];
 
 /**
- * OIDC support configuration for a client. Replaces the stored object entirely; send null to unset it.
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
  */
 export interface ClientOidcSupportPatch {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed: boolean;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
 }
 
 /**
- * OIDC support configuration for a client. Controls whether OIDC flows are allowed and which scopes the client may request.
+ * Controls whether the client can receive ID tokens and use the UserInfo endpoint, and which user profile information it can request through OIDC scopes.
  */
 export interface ClientOidcSupportPost {
+    /** Allows the client to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
     is_allowed: boolean;
+    /** Allows the client to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
     allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes the client may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information it can access. Mutually exclusive with allow_all_scopes. */
     allowed_scopes?: Management.ClientOidcSupportAllowedScopesEnum[] | undefined;
 }
 
@@ -3517,6 +3449,182 @@ export const ClientOrganizationUsagePatchEnum = {
 } as const;
 export type ClientOrganizationUsagePatchEnum =
     (typeof ClientOrganizationUsagePatchEnum)[keyof typeof ClientOrganizationUsagePatchEnum];
+
+export interface ClientProfile {
+    id: Management.ClientProfileId;
+    name: Management.ClientProfileName;
+    description?: ((Management.ClientProfileDescription | undefined) | null) | undefined;
+    client_configuration: Management.ClientProfileClientConfiguration;
+    apply_policy: Management.ClientProfileApplyPolicy;
+    /** Timestamp of creation. */
+    created_at?: string | undefined;
+    /** Timestamp of last update. */
+    updated_at?: string | undefined;
+}
+
+/**
+ * Runtime matching rules that determine which clients this profile governs.
+ */
+export interface ClientProfileApplyPolicy {
+    external_metadata_type: Management.ClientProfileApplyPolicyExternalMetadataTypeEnum;
+    external_metadata_created_by: Management.ClientProfileApplyPolicyExternalMetadataCreatedByEnum;
+}
+
+/** The external metadata client's creator to match. The value <code>client</code> indicates the client was registered dynamically. */
+export const ClientProfileApplyPolicyExternalMetadataCreatedByEnum = {
+    Client: "client",
+} as const;
+export type ClientProfileApplyPolicyExternalMetadataCreatedByEnum =
+    (typeof ClientProfileApplyPolicyExternalMetadataCreatedByEnum)[keyof typeof ClientProfileApplyPolicyExternalMetadataCreatedByEnum];
+
+/** The client's type of external metadata to match. The value <code>cimd</code> identifies clients registered via a Client ID Metadata Document. */
+export const ClientProfileApplyPolicyExternalMetadataTypeEnum = {
+    Cimd: "cimd",
+} as const;
+export type ClientProfileApplyPolicyExternalMetadataTypeEnum =
+    (typeof ClientProfileApplyPolicyExternalMetadataTypeEnum)[keyof typeof ClientProfileApplyPolicyExternalMetadataTypeEnum];
+
+/**
+ * Runtime policy applied to matched clients. Omitted fields fall back to each client's own setting.
+ */
+export interface ClientProfileClientConfiguration {
+    refresh_token?: Management.ClientProfileClientConfigurationRefreshToken | undefined;
+    organization_usage?: Management.ClientProfileClientConfigurationOrganizationUsage | undefined;
+    organization_require_behavior?: Management.ClientProfileClientConfigurationOrganizationRequireBehavior | undefined;
+    organization_discovery_methods?:
+        | Management.ClientProfileClientConfigurationOrganizationDiscoveryMethods
+        | undefined;
+    require_proof_of_possession?: Management.ClientProfileClientConfigurationRequireProofOfPossession | undefined;
+    oidc_support?: Management.ClientProfileClientConfigurationOidcSupport | undefined;
+}
+
+/**
+ * Default OIDC support configuration applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOidcSupport {
+    default_value: Management.ClientProfileClientConfigurationOidcSupportDefaultValue;
+}
+
+/** Optional OIDC scope that matched clients may be granted. */
+export const ClientProfileClientConfigurationOidcSupportAllowedScopesEnum = {
+    Profile: "profile",
+    Email: "email",
+    Address: "address",
+    Phone: "phone",
+} as const;
+export type ClientProfileClientConfigurationOidcSupportAllowedScopesEnum =
+    (typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum)[keyof typeof ClientProfileClientConfigurationOidcSupportAllowedScopesEnum];
+
+/**
+ * Controls whether matched clients can receive ID tokens and use the UserInfo endpoint, and which user profile information they can request through OIDC scopes.
+ */
+export interface ClientProfileClientConfigurationOidcSupportDefaultValue {
+    /** Allows matched clients to use OIDC, including receiving ID tokens and calling the UserInfo endpoint. */
+    is_allowed: boolean;
+    /** Allows matched clients to request all supported OIDC scopes. Mutually exclusive with allowed_scopes. */
+    allow_all_scopes?: boolean | undefined;
+    /** OIDC scopes matched clients may request (`profile`, `email`, `address`, and `phone`), which determine the user profile information they can access. Mutually exclusive with allow_all_scopes. */
+    allowed_scopes?: Management.ClientProfileClientConfigurationOidcSupportAllowedScopesEnum[] | undefined;
+}
+
+/** A method used to discover a user's organization. */
+export const ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum = {
+    Email: "email",
+    OrganizationName: "organization_name",
+} as const;
+export type ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum =
+    (typeof ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum)[keyof typeof ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum];
+
+/**
+ * Default organization discovery methods applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOrganizationDiscoveryMethods {
+    default_value?: Management.ClientProfileClientConfigurationOrganizationDiscoveryMethodEnum[] | undefined;
+}
+
+/**
+ * Default organization prompt behavior applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOrganizationRequireBehavior {
+    default_value?: Management.ClientProfileClientConfigurationOrganizationRequireBehaviorEnum | undefined;
+}
+
+/** When an organization is required, how matched clients prompt for it. */
+export const ClientProfileClientConfigurationOrganizationRequireBehaviorEnum = {
+    NoPrompt: "no_prompt",
+    PreLoginPrompt: "pre_login_prompt",
+    PostLoginPrompt: "post_login_prompt",
+} as const;
+export type ClientProfileClientConfigurationOrganizationRequireBehaviorEnum =
+    (typeof ClientProfileClientConfigurationOrganizationRequireBehaviorEnum)[keyof typeof ClientProfileClientConfigurationOrganizationRequireBehaviorEnum];
+
+/**
+ * Default organization usage applied to matched clients.
+ */
+export interface ClientProfileClientConfigurationOrganizationUsage {
+    default_value?: Management.ClientProfileClientConfigurationOrganizationUsageEnum | undefined;
+}
+
+/** How matched clients handle organizations. */
+export const ClientProfileClientConfigurationOrganizationUsageEnum = {
+    Deny: "deny",
+    Allow: "allow",
+    Require: "require",
+} as const;
+export type ClientProfileClientConfigurationOrganizationUsageEnum =
+    (typeof ClientProfileClientConfigurationOrganizationUsageEnum)[keyof typeof ClientProfileClientConfigurationOrganizationUsageEnum];
+
+/**
+ * Refresh token settings. Omit any sub-field to use the client's own value.
+ */
+export interface ClientProfileClientConfigurationRefreshToken {
+    token_lifetime?: Management.ClientProfileRefreshTokenTokenLifetime | undefined;
+    idle_token_lifetime?: Management.ClientProfileRefreshTokenIdleTokenLifetime | undefined;
+    leeway?: Management.ClientProfileRefreshTokenLeeway | undefined;
+}
+
+/**
+ * Whether matched clients default to requiring proof of possession.
+ */
+export interface ClientProfileClientConfigurationRequireProofOfPossession {
+    default_value?: boolean | undefined;
+}
+
+/**
+ * Optional description of the client profile.
+ */
+export type ClientProfileDescription = (string | null) | undefined;
+
+/**
+ * Client Profile identifier.
+ */
+export type ClientProfileId = string;
+
+/**
+ * Display name of the client profile.
+ */
+export type ClientProfileName = string;
+
+/**
+ * Default idle refresh token lifetime, in seconds, applied to matched clients.
+ */
+export interface ClientProfileRefreshTokenIdleTokenLifetime {
+    default_value?: number | undefined;
+}
+
+/**
+ * Default refresh token rotation leeway, in seconds, applied to matched clients.
+ */
+export interface ClientProfileRefreshTokenLeeway {
+    default_value?: number | undefined;
+}
+
+/**
+ * Default refresh token lifetime, in seconds, applied to matched clients.
+ */
+export interface ClientProfileRefreshTokenTokenLifetime {
+    default_value?: number | undefined;
+}
 
 /** Controls whether Auth0 redirects users to the application's callback URL on authentication errors or in email verification flows. `open_redirect_protection` shows an error page instead of redirecting, and hides the callback domain from email templates. `allow_always` enables standard redirect behavior. Defaults to `open_redirect_protection` for third-party clients. Only applies when `is_first_party` is `false` and `third_party_security_mode` is `strict`. To learn more, read <a href="https://auth0.com/docs/get-started/applications/third-party-applications/security-controls#redirect-protection">Redirect protection</a>. */
 export const ClientRedirectionPolicyEnum = {
@@ -3628,6 +3736,7 @@ export interface ClientSearchResponse {
     require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
+    allow_personal_agent_browser_join?: Management.ClientAllowPersonalAgentBrowserJoin | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
     token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
@@ -3644,12 +3753,14 @@ export interface ClientSearchResponse {
     express_configuration?: Management.ExpressConfiguration | undefined;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    google_account_linking?: Management.GoogleAccountLinkingConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
     enforce_anon_session_transfer_network_binding?:
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -3658,6 +3769,9 @@ export interface ClientSearchResponse {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -3911,7 +4025,7 @@ export type ConnectionAgentModeAd = boolean;
 export type ConnectionAgentVersionAd = string;
 
 /**
- * List of allowed audiences in the ID token for Google Native Social Login
+ * Additional Google client IDs accepted as the `aud` (audience) of Google ID tokens, used by Google native login and Google Streamlined Linking.
  */
 export type ConnectionAllowedAudiencesGoogleOAuth2 = string[];
 
@@ -3960,7 +4074,9 @@ export interface ConnectionAssertionDecryptionSettings {
 /**
  * Object containing mapping details for incoming claims
  */
-export type ConnectionAttributeMapAttributes = Record<string, unknown>;
+export type ConnectionAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for mapping claims from the identity provider to Auth0 user profile attributes. Allows customizing which IdP claims populate user fields and how they are transformed.
@@ -4007,12 +4123,16 @@ export type ConnectionAuthParamsEmail = string;
 /**
  * Maps parameter names from Auth0's /authorize endpoint to the identity provider's authorization endpoint parameters. For example, mapping 'audience' to 'resource' transforms the parameter name during authorization requests. Applied after authParams merging. See https://auth0.com/docs/authenticate/identity-providers/social-identity-providers/oauth2#pass-dynamic-parameters
  */
-export type ConnectionAuthParamsMap = Record<string, string>;
+export type ConnectionAuthParamsMap = {
+    [key: string]: string;
+};
 
 /**
  * Additional static parameters included in every authorization request to the identity provider. These parameters are merged with runtime parameters before the authorization redirect. Keys and values are passed as-is to the identity provider's authorization endpoint. See https://auth0.com/docs/authenticate/identity-providers/social-identity-providers/oauth2#pass-static-parameters
  */
-export type ConnectionAuthParamsOAuth2 = Record<string, Management.ConnectionAuthParamsAdditionalPropertiesOAuth2>;
+export type ConnectionAuthParamsOAuth2 = {
+    [key: string]: Management.ConnectionAuthParamsAdditionalPropertiesOAuth2;
+};
 
 /**
  * Options for enabling authentication methods.
@@ -4141,6 +4261,11 @@ export type ConnectionClientIdOidc = string;
 export type ConnectionClientIdPaypal = string;
 
 /**
+ * OIDC client identifier issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging SAML Assertions for Refresh Tokens.
+ */
+export type ConnectionClientIdSamlxaaRequestingApp = Management.ConnectionClientIdOidc;
+
+/**
  * The OAuth 2.0 client identifier
  */
 export type ConnectionClientIdSalesforce = string;
@@ -4226,6 +4351,11 @@ export type ConnectionClientSecretOidc = string;
 export type ConnectionClientSecretPaypal = string;
 
 /**
+ * OAuth 2.0 client secret issued by the identity provider during application registration. Used to authenticate your Auth0 connection when exchanging authorization codes for tokens. May be null for public clients.
+ */
+export type ConnectionClientSecretSamlxaaRequestingApp = string;
+
+/**
  * The OAuth 2.0 client secret
  */
 export type ConnectionClientSecretSalesforce = string;
@@ -4250,7 +4380,9 @@ export type ConnectionCommunityBaseUrlSalesforce = Management.ConnectionHttpsUrl
 /**
  * A hash of configuration key/value pairs.
  */
-export type ConnectionConfiguration = Record<string, string>;
+export type ConnectionConfiguration = {
+    [key: string]: string;
+};
 
 /**
  * Configure the purpose of a connection to be used for connected accounts and Token Vault.
@@ -4307,7 +4439,9 @@ export type ConnectionCrossAppAccessResourceAppStatusEnum =
 /**
  * Custom HTTP headers sent with token exchange requests to the identity provider's token endpoint. Provided as key-value pairs (e.g., {'X-Custom-Header': 'value'}). Auth0's User-Agent header is always included by default.
  */
-export type ConnectionCustomHeadersOAuth2 = Record<string, string>;
+export type ConnectionCustomHeadersOAuth2 = {
+    [key: string]: string;
+};
 
 /**
  * A map of scripts used to integrate with a custom database.
@@ -4574,12 +4708,16 @@ export type ConnectionExtProfile = boolean;
 /**
  * Mapping of user profile fields returned from the OAuth2 provider to Auth0 user attributes
  */
-export type ConnectionFieldsMap = Record<string, string>;
+export type ConnectionFieldsMap = {
+    [key: string]: string;
+};
 
 /**
  * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
  */
-export type ConnectionFieldsMapSaml = Record<string, ConnectionFieldsMapSaml.Value>;
+export type ConnectionFieldsMapSaml = {
+    [key: string]: ConnectionFieldsMapSaml.Value;
+};
 
 export namespace ConnectionFieldsMapSaml {
     export type Value = string | string[];
@@ -4776,6 +4914,36 @@ export type ConnectionIconUrlSaml = Management.ConnectionIconUrl;
  */
 export type ConnectionId = string;
 
+/** Key-management algorithm the upstream IdP uses to encrypt the ID token. Also the algorithm of the encryption keys Auth0 creates or rotates when no algorithm is selected. */
+export const ConnectionIdTokenEncryptedResponseAlgEnum = {
+    RsaOaep256: "RSA-OAEP-256",
+    RsaOaep384: "RSA-OAEP-384",
+    RsaOaep512: "RSA-OAEP-512",
+    EcdhEs: "ECDH-ES",
+    EcdhEsA128Kw: "ECDH-ES+A128KW",
+    EcdhEsA192Kw: "ECDH-ES+A192KW",
+    EcdhEsA256Kw: "ECDH-ES+A256KW",
+} as const;
+export type ConnectionIdTokenEncryptedResponseAlgEnum =
+    (typeof ConnectionIdTokenEncryptedResponseAlgEnum)[keyof typeof ConnectionIdTokenEncryptedResponseAlgEnum];
+
+/** Content-encryption algorithm accepted from the upstream IdP. */
+export const ConnectionIdTokenEncryptedResponseEncEnum = {
+    A128CbcHs256: "A128CBC-HS256",
+    A192CbcHs384: "A192CBC-HS384",
+    A256CbcHs512: "A256CBC-HS512",
+    A128Gcm: "A128GCM",
+    A192Gcm: "A192GCM",
+    A256Gcm: "A256GCM",
+} as const;
+export type ConnectionIdTokenEncryptedResponseEncEnum =
+    (typeof ConnectionIdTokenEncryptedResponseEncEnum)[keyof typeof ConnectionIdTokenEncryptedResponseEncEnum];
+
+/**
+ * Allowlist of content-encryption algorithms accepted from the upstream IdP. If unset or empty, any supported content-encryption algorithm sent by the upstream IdP is accepted. Applicable when strategy=oidc or okta.
+ */
+export type ConnectionIdTokenEncryptedResponseEncs = Management.ConnectionIdTokenEncryptedResponseEncEnum[];
+
 /**
  * JSON array containing a list of the JWE encryption algorithms (alg values) supported by the OP for the ID Token to encode the Claims in a JWT
  */
@@ -4939,11 +5107,11 @@ export type ConnectionIssuer = string;
 export type ConnectionJwksUri = string;
 
 export interface ConnectionKey {
-    /** The key id of the signing key */
+    /** The key id of the signing or encryption key */
     kid: string;
-    /** The public certificate of the signing key */
+    /** The public certificate of the signing or encryption key */
     cert: string;
-    /** The public certificate of the signing key in pkcs7 format */
+    /** The public certificate of the signing or encryption key in pkcs7 format */
     pkcs?: string | undefined;
     /** True if the key is the the current key */
     current?: boolean | undefined;
@@ -4957,7 +5125,7 @@ export interface ConnectionKey {
     fingerprint: string;
     /** The cert thumbprint */
     thumbprint: string;
-    /** Signing key algorithm */
+    /** Key algorithm: a signing algorithm for signing keys, or a key-management algorithm for encryption keys */
     algorithm?: string | undefined;
     key_use?: Management.ConnectionKeyUseEnum | undefined;
     subject_dn?: string | undefined;
@@ -4965,7 +5133,7 @@ export interface ConnectionKey {
     [key: string]: any;
 }
 
-/** Signing key use, whether for encryption or signing */
+/** Key use, whether for encryption or signing */
 export const ConnectionKeyUseEnum = {
     Encryption: "encryption",
     Signing: "signing",
@@ -5056,7 +5224,9 @@ export type ConnectionOpTosUri = string;
 /**
  * In order to return options in the response, the `read:connections_options` scope must be present
  */
-export type ConnectionOptions = Record<string, unknown>;
+export type ConnectionOptions = {
+    [key: string]: unknown;
+};
 
 /**
  * Options for the 'ad' connection
@@ -5172,6 +5342,7 @@ export interface ConnectionOptionsAuth0 extends Management.ConnectionOptionsComm
     enabledDatabaseCustomization?: Management.ConnectionEnabledDatabaseCustomization | undefined;
     import_mode?: Management.ConnectionImportMode | undefined;
     mfa?: Management.ConnectionMfa | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
     password_complexity_options?: (Management.ConnectionPasswordComplexityOptions | null) | undefined;
@@ -5392,6 +5563,8 @@ export interface ConnectionOptionsCommonOidc {
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
     enable_pushed_authorization_requests?: Management.ConnectionEnablePushedAuthorizationRequests | undefined;
     icon_url?: Management.ConnectionIconUrl | undefined;
+    id_token_encrypted_response_alg?: Management.ConnectionIdTokenEncryptedResponseAlgEnum | undefined;
+    id_token_encrypted_response_encs?: Management.ConnectionIdTokenEncryptedResponseEncs | undefined;
     id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     issuer?: Management.ConnectionIssuer | undefined;
@@ -5439,7 +5612,9 @@ export interface ConnectionOptionsCommonSaml {
 /**
  * Options for 'custom' connections
  */
-export type ConnectionOptionsCustom = Record<string, unknown>;
+export type ConnectionOptionsCustom = {
+    [key: string]: unknown;
+};
 
 /**
  * Options for the 'daccount' connection
@@ -5857,7 +6032,9 @@ export interface ConnectionOptionsGoogleOAuth2 extends Management.ConnectionOpti
 /**
  * Options for the 'ip' connection
  */
-export type ConnectionOptionsIp = Record<string, unknown>;
+export type ConnectionOptionsIp = {
+    [key: string]: unknown;
+};
 
 /** The response protocol used to communicate with the default application. */
 export const ConnectionOptionsIdpInitiatedClientProtocolEnumSaml = {
@@ -6136,6 +6313,8 @@ export type ConnectionOptionsProtocolEnumTwitter =
  */
 export interface ConnectionOptionsSaml
     extends Management.ConnectionOptionsCommonSaml, Management.ConnectionOptionsCommon {
+    client_id?: Management.ConnectionClientIdSamlxaaRequestingApp | undefined;
+    client_secret?: Management.ConnectionClientSecretSamlxaaRequestingApp | undefined;
     debug?: Management.ConnectionDebugSaml | undefined;
     deflate?: Management.ConnectionOptionsDeflateSaml | undefined;
     destinationUrl?: Management.ConnectionDestinationUrlSaml | undefined;
@@ -6153,6 +6332,9 @@ export interface ConnectionOptionsSaml
     signingCert?: Management.ConnectionSigningCertSaml | undefined;
     signing_key?: Management.ConnectionSigningKeySaml | undefined;
     signOutEndpoint?: Management.ConnectionSignOutEndpointSaml | undefined;
+    token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
+    token_endpoint_auth_signing_alg?: (Management.ConnectionTokenEndpointAuthSigningAlgEnum | null) | undefined;
+    token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     user_id_attribute?: Management.ConnectionUserIdAttributeSaml | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
@@ -6460,11 +6642,31 @@ export interface ConnectionOptionsYandex extends Management.ConnectionOptionsOAu
 }
 
 /**
+ * OTP settings for a delivery channel.
+ */
+export interface ConnectionOtpChannelSettings {
+    /** Number of digits in the generated one-time password. */
+    otp_length?: number | undefined;
+    /** Number of seconds before the one-time password expires. */
+    otp_expiry?: number | undefined;
+}
+
+/**
+ * One-time password settings, configurable per delivery channel.
+ */
+export interface ConnectionOtpSettings {
+    email?: Management.ConnectionOtpChannelSettings | undefined;
+    phone?: Management.ConnectionOtpChannelSettings | undefined;
+}
+
+/**
  * Passkey authentication enablement
  */
 export interface ConnectionPasskeyAuthenticationMethod {
     /** Determines whether passkeys are enabled */
     enabled?: boolean | undefined;
+    /** Specifies the signup behavior for passkey authentication */
+    signup_behavior?: Management.ConnectionSignupBehaviorEnum | undefined;
 }
 
 /** Controls the UI used to challenge the user for their passkey. */
@@ -6559,8 +6761,9 @@ export interface ConnectionPasswordOptionsComplexity {
 export interface ConnectionPasswordOptionsDictionary {
     /** Enables dictionary checking to prevent use of common passwords and custom blocked words */
     active?: boolean | undefined;
-    /** Array of custom words to block in passwords. Maximum 200 items, each up to 50 characters */
+    /** Array of custom words to block in passwords */
     custom?: string[] | undefined;
+    match_type?: Management.PasswordDictionaryMatchTypeEnum | undefined;
     default?: Management.PasswordDefaultDictionariesEnum | undefined;
 }
 
@@ -6856,8 +7059,9 @@ export interface ConnectionPropertiesOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, string | null> | null) | undefined;
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
@@ -6882,6 +7086,8 @@ export interface ConnectionPropertiesOptions {
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
+    id_token_encrypted_response_alg?: Management.ConnectionIdTokenEncryptedResponseAlgEnum | undefined;
+    id_token_encrypted_response_encs?: Management.ConnectionIdTokenEncryptedResponseEncs | undefined;
     enable_pushed_authorization_requests?: Management.ConnectionEnablePushedAuthorizationRequests | undefined;
     pushed_authorization_request_endpoint?: Management.ConnectionPushedAuthorizationRequestEndpoint | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
@@ -6889,6 +7095,10 @@ export interface ConnectionPropertiesOptions {
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     useOauthSpecScope?: Management.ConnectionUseOauthSpecScope | undefined;
+    /** The client ID registered with the identity provider */
+    client_id?: (string | null) | undefined;
+    /** Additional Google client IDs accepted as the `aud` (audience) of Google ID tokens, used by Google native login and Google Streamlined Linking. */
+    allowed_audiences?: (string[] | null) | undefined;
     discovery_url?: ((Management.ConnectionsDiscoveryUrl | undefined) | null) | undefined;
     oidc_metadata?: (Management.ConnectionsOidcMetadata | null) | undefined;
     thumbprints?: Management.ConnectionThumbprints | undefined;
@@ -7638,6 +7848,7 @@ export namespace ConnectionResponseContentPlanningCenter {
 export interface ConnectionResponseContentSaml
     extends Management.ConnectionPurposes, Management.ConnectionResponseCommon {
     strategy: ConnectionResponseContentSaml.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     provisioning_ticket_url?: Management.ConnectionProvisioningTicketUrl | undefined;
@@ -8339,7 +8550,7 @@ export type ConnectionTokenEndpointAuthSigningAlgEnum =
  */
 export type ConnectionTokenEndpointAuthSigningAlgValuesSupported = string[];
 
-/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the OIDC issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
+/** Specifies the format of the aud (audience) claim included in the JWT used for client authentication at the token endpoint. Accepted values are: 'issuer' (the aud claim is set to the identity provider's issuer URL) or 'token_endpoint' (the aud claim is set to the token endpoint URL). */
 export const ConnectionTokenEndpointJwtcaAudFormatEnumOidc = {
     Issuer: "issuer",
     TokenEndpoint: "token_endpoint",
@@ -8447,13 +8658,15 @@ export type ConnectionUpstreamAliasEnum =
  * Options for adding parameters in the request to the upstream IdP
  */
 export type ConnectionUpstreamParams =
-    | (Record<string, Management.ConnectionUpstreamAdditionalProperties | null> | null)
+    | (Record<string, (Management.ConnectionUpstreamAdditionalProperties | null) | undefined> | null)
     | undefined;
 
 /**
  * Options for adding parameters in the request to the upstream IdP. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type ConnectionUpstreamParamsFacebook = Record<string, Management.ConnectionUpstreamAdditionalProperties>;
+export type ConnectionUpstreamParamsFacebook = {
+    [key: string]: Management.ConnectionUpstreamAdditionalProperties;
+};
 
 export interface ConnectionUpstreamValue {
     value?: string | undefined;
@@ -8545,7 +8758,9 @@ export type ConnectionsDiscoveryUrl = (string | null) | undefined;
 /**
  * Metadata associated with the connection in the form of an object with string values (max 255 chars).  Maximum of 10 metadata properties allowed.
  */
-export type ConnectionsMetadata = Record<string, string | null>;
+export type ConnectionsMetadata = {
+    [key: string]: (string | null) | undefined;
+};
 
 /**
  * Additional OIDC metadata to include in the discovery document. Only applicable when strategy=oidc, okta, or samlp.
@@ -8631,6 +8846,17 @@ export interface ConnectionsOidcMetadata {
     dpop_signing_alg_values_supported?: string[] | undefined;
     /** Accepts any additional properties */
     [key: string]: any;
+}
+
+export interface ConsentSigningKey {
+    /** The key identifier of the consent signing key. */
+    kid: string;
+    /** A human-readable label for the device holding the corresponding private key. */
+    device_identifier: string;
+    /** The ISO 8601 timestamp at which the key was registered. */
+    created_at: string;
+    /** The ISO 8601 timestamp at which the key expires and can no longer be used to verify consent decisions. */
+    expires_at: string;
 }
 
 /**
@@ -8871,6 +9097,7 @@ export interface CreateClientResponseContent {
     require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
+    allow_personal_agent_browser_join?: Management.ClientAllowPersonalAgentBrowserJoin | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
     token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
@@ -8887,12 +9114,14 @@ export interface CreateClientResponseContent {
     express_configuration?: Management.ExpressConfiguration | undefined;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    google_account_linking?: Management.GoogleAccountLinkingConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
     enforce_anon_session_transfer_network_binding?:
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -8901,6 +9130,9 @@ export interface CreateClientResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -9508,6 +9740,7 @@ export namespace CreateConnectionRequestContentPlanningCenter {
  */
 export interface CreateConnectionRequestContentSaml extends Management.CreateConnectionCommon {
     strategy: CreateConnectionRequestContentSaml.Strategy;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     options?: Management.ConnectionOptionsSaml | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
@@ -10003,6 +10236,7 @@ export interface CreateExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -10049,7 +10283,9 @@ export interface CreateExportUsersResponseContent {
 /**
  * Configuration parameters for this feature flag
  */
-export type CreateFeatureFlagParameters = Record<string, Management.FeatureFlagConfigParam>;
+export type CreateFeatureFlagParameters = {
+    [key: string]: Management.FeatureFlagConfigParam;
+};
 
 export interface CreateFeatureFlagResponseContent {
     id: string;
@@ -10579,7 +10815,9 @@ export interface CreateHookResponseContent {
 /**
  * Hashmap of key-value pairs where the value must be a string.
  */
-export type CreateHookSecretRequestContent = Record<string, string>;
+export type CreateHookSecretRequestContent = {
+    [key: string]: string;
+};
 
 /**
  * Configuration on the use of ID-JAGs for Cross App Access.
@@ -10696,36 +10934,48 @@ export type CreateLogStreamRequestContent =
     | Management.CreateLogStreamRequestContent.Mixpanel;
 
 export namespace CreateLogStreamRequestContent {
-    export interface Http extends Management.CreateLogStreamHttpRequestBody {
+    export interface Http extends Management.CreateLogStreamHttpRequestBody, _Base {
         type: "http";
     }
 
-    export interface Eventbridge extends Management.CreateLogStreamEventBridgeRequestBody {
+    export interface Eventbridge extends Management.CreateLogStreamEventBridgeRequestBody, _Base {
         type: "eventbridge";
     }
 
-    export interface Eventgrid extends Management.CreateLogStreamEventGridRequestBody {
+    export interface Eventgrid extends Management.CreateLogStreamEventGridRequestBody, _Base {
         type: "eventgrid";
     }
 
-    export interface Datadog extends Management.CreateLogStreamDatadogRequestBody {
+    export interface Datadog extends Management.CreateLogStreamDatadogRequestBody, _Base {
         type: "datadog";
     }
 
-    export interface Splunk extends Management.CreateLogStreamSplunkRequestBody {
+    export interface Splunk extends Management.CreateLogStreamSplunkRequestBody, _Base {
         type: "splunk";
     }
 
-    export interface Sumo extends Management.CreateLogStreamSumoRequestBody {
+    export interface Sumo extends Management.CreateLogStreamSumoRequestBody, _Base {
         type: "sumo";
     }
 
-    export interface Segment extends Management.CreateLogStreamSegmentRequestBody {
+    export interface Segment extends Management.CreateLogStreamSegmentRequestBody, _Base {
         type: "segment";
     }
 
-    export interface Mixpanel extends Management.CreateLogStreamMixpanelRequestBody {
+    export interface Mixpanel extends Management.CreateLogStreamMixpanelRequestBody, _Base {
         type: "mixpanel";
+    }
+
+    export interface _Base {
+        /** log stream name */
+        name?: string;
+        /** True for priority log streams, false for non-priority */
+        isPriority?: boolean;
+        /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
+        filters?: Management.LogStreamFilter[];
+        pii_config?: Management.LogStreamPiiConfig;
+        /** The optional datetime (ISO 8601) to start streaming logs from */
+        startFrom?: string;
     }
 }
 
@@ -10740,36 +10990,49 @@ export type CreateLogStreamResponseContent =
     | Management.CreateLogStreamResponseContent.Mixpanel;
 
 export namespace CreateLogStreamResponseContent {
-    export interface Http extends Management.LogStreamHttpResponseSchema {
+    export interface Http extends Management.LogStreamHttpResponseSchema, _Base {
         type: "http";
     }
 
-    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema, _Base {
         type: "eventbridge";
     }
 
-    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema, _Base {
         type: "eventgrid";
     }
 
-    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema, _Base {
         type: "datadog";
     }
 
-    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema, _Base {
         type: "splunk";
     }
 
-    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+    export interface Sumo extends Management.LogStreamSumoResponseSchema, _Base {
         type: "sumo";
     }
 
-    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+    export interface Segment extends Management.LogStreamSegmentResponseSchema, _Base {
         type: "segment";
     }
 
-    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema, _Base {
         type: "mixpanel";
+    }
+
+    export interface _Base {
+        /** The id of the log stream */
+        id?: string;
+        /** log stream name */
+        name?: string;
+        status?: Management.LogStreamStatusEnum;
+        /** True for priority log streams, false for non-priority */
+        isPriority?: boolean;
+        /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
+        filters?: Management.LogStreamFilter[];
+        pii_config?: Management.LogStreamPiiConfig;
     }
 }
 
@@ -10984,6 +11247,9 @@ export interface CreateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    use_for_personal_agent_protocol?: Management.ResourceServerUseForPersonalAgentProtocol | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface CreateRoleResponseContent {
@@ -11308,7 +11574,9 @@ export type CrossAppAccessResourceAppStatusEnum =
 /**
  * CSP directives map. Keys are directive names, values are arrays of directive values.
  */
-export type CspDirectives = Record<string, string[]>;
+export type CspDirectives = {
+    [key: string]: string[];
+};
 
 export const CspFlag = {
     UpgradeInsecureRequests: "upgrade-insecure-requests",
@@ -11349,7 +11617,7 @@ export type CspPolicyMode = (typeof CspPolicyMode)[keyof typeof CspPolicyMode];
 export interface CspPolicyReporting {
     /** HTTPS endpoint for CSP violation reports. */
     report_uri?: string | undefined;
-    /** Report-To group name for modern reporting. */
+    /** Report-To group name for modern reporting. Letters, digits, underscores and hyphens only; enforced on write by the request validator. */
     report_to_group?: string | undefined;
 }
 
@@ -11380,7 +11648,9 @@ export type CspReportToEndpoints = Management.CspReportToEndpoint[];
 /**
  * Reporting-Endpoints header configuration (key-value pairs).
  */
-export type CspReportingEndpoints = Record<string, string>;
+export type CspReportingEndpoints = {
+    [key: string]: string;
+};
 
 /**
  * Global reporting infrastructure configuration.
@@ -11790,7 +12060,9 @@ export type DomainCertificateStatusEnum =
 /**
  * Domain metadata associated with the custom domain, in the form of an object with string values (max 255 chars). Maximum of 10 domain metadata properties allowed.
  */
-export type DomainMetadata = Record<string, string | null>;
+export type DomainMetadata = {
+    [key: string]: (string | null) | undefined;
+};
 
 /**
  * Domain verification settings.
@@ -11926,7 +12198,9 @@ export type EmailProviderNameEnum = (typeof EmailProviderNameEnum)[keyof typeof 
 /**
  * Specific provider setting
  */
-export type EmailProviderSettings = Record<string, unknown>;
+export type EmailProviderSettings = {
+    [key: string]: unknown;
+};
 
 /**
  * SMTP host.
@@ -12138,36 +12412,51 @@ export type EventStreamCloudEventConnectionCreatedObject =
     | Management.EventStreamCloudEventConnectionCreatedObject.Waad;
 
 export namespace EventStreamCloudEventConnectionCreatedObject {
-    export interface Oidc extends Management.EventStreamCloudEventConnectionCreatedObject0 {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionCreatedObject0, _Base {
         strategy: "oidc";
     }
 
-    export interface Okta extends Management.EventStreamCloudEventConnectionCreatedObject1 {
+    export interface Okta extends Management.EventStreamCloudEventConnectionCreatedObject1, _Base {
         strategy: "okta";
     }
 
-    export interface Samlp extends Management.EventStreamCloudEventConnectionCreatedObject2 {
+    export interface Samlp extends Management.EventStreamCloudEventConnectionCreatedObject2, _Base {
         strategy: "samlp";
     }
 
-    export interface Pingfederate extends Management.EventStreamCloudEventConnectionCreatedObject3 {
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionCreatedObject3, _Base {
         strategy: "pingfederate";
     }
 
-    export interface Adfs extends Management.EventStreamCloudEventConnectionCreatedObject4 {
+    export interface Adfs extends Management.EventStreamCloudEventConnectionCreatedObject4, _Base {
         strategy: "adfs";
     }
 
-    export interface Ad extends Management.EventStreamCloudEventConnectionCreatedObject5 {
+    export interface Ad extends Management.EventStreamCloudEventConnectionCreatedObject5, _Base {
         strategy: "ad";
     }
 
-    export interface GoogleApps extends Management.EventStreamCloudEventConnectionCreatedObject6 {
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionCreatedObject6, _Base {
         strategy: "google-apps";
     }
 
-    export interface Waad extends Management.EventStreamCloudEventConnectionCreatedObject7 {
+    export interface Waad extends Management.EventStreamCloudEventConnectionCreatedObject7, _Base {
         strategy: "waad";
+    }
+
+    export interface _Base {
+        /** Connection name used in the new universal login experience */
+        display_name?: string;
+        /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+        enabled_clients?: string[];
+        /** The connection's identifier */
+        id: string;
+        /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+        is_domain_connection?: boolean;
+        /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+        name: string;
+        /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+        realms?: string[];
     }
 }
 
@@ -12289,7 +12578,9 @@ export interface EventStreamCloudEventConnectionCreatedObject0OptionsAttributeMa
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionCreatedObject0OptionsAttributeMapAttributes = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject0OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=oidc. */
 export const EventStreamCloudEventConnectionCreatedObject0OptionsAttributeMapMappingModeEnum = {
@@ -12486,7 +12777,9 @@ export type EventStreamCloudEventConnectionCreatedObject0OptionsTypeEnum =
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject0OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject0OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedObject0StrategyEnum = {
@@ -12612,7 +12905,9 @@ export interface EventStreamCloudEventConnectionCreatedObject1OptionsAttributeMa
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionCreatedObject1OptionsAttributeMapAttributes = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject1OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=okta. */
 export const EventStreamCloudEventConnectionCreatedObject1OptionsAttributeMapMappingModeEnum = {
@@ -12808,7 +13103,9 @@ export type EventStreamCloudEventConnectionCreatedObject1OptionsTypeEnum =
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject1OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject1OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedObject1StrategyEnum = {
@@ -12958,7 +13255,9 @@ export type EventStreamCloudEventConnectionCreatedObject2OptionsDigestAlgorithmE
 /**
  * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
  */
-export type EventStreamCloudEventConnectionCreatedObject2OptionsFieldsMap = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject2OptionsFieldsMap = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
@@ -13099,7 +13398,9 @@ export interface EventStreamCloudEventConnectionCreatedObject2OptionsSubject {}
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject2OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject2OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedObject2StrategyEnum = {
@@ -13275,7 +13576,9 @@ export interface EventStreamCloudEventConnectionCreatedObject3OptionsSubject {}
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject3OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject3OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedObject3StrategyEnum = {
@@ -13381,7 +13684,9 @@ export type EventStreamCloudEventConnectionCreatedObject4OptionsShouldTrustEmail
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject4OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject4OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedObject4StrategyEnum = {
@@ -13484,7 +13789,9 @@ export type EventStreamCloudEventConnectionCreatedObject5OptionsSetUserRootAttri
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject5OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject5OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedObject5StrategyEnum = {
@@ -13606,7 +13913,9 @@ export type EventStreamCloudEventConnectionCreatedObject6OptionsSetUserRootAttri
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject6OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject6OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedObject6StrategyEnum = {
@@ -13756,7 +14065,9 @@ export type EventStreamCloudEventConnectionCreatedObject7OptionsTenantDomainOne 
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedObject7OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedObject7OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
 export const EventStreamCloudEventConnectionCreatedObject7OptionsUseridAttributeEnum = {
@@ -13795,36 +14106,51 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject =
     | Management.EventStreamCloudEventConnectionCreatedPreviousObject.Waad;
 
 export namespace EventStreamCloudEventConnectionCreatedPreviousObject {
-    export interface Oidc extends Management.EventStreamCloudEventConnectionCreatedPreviousObject0 {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionCreatedPreviousObject0, _Base {
         strategy: "oidc";
     }
 
-    export interface Okta extends Management.EventStreamCloudEventConnectionCreatedPreviousObject1 {
+    export interface Okta extends Management.EventStreamCloudEventConnectionCreatedPreviousObject1, _Base {
         strategy: "okta";
     }
 
-    export interface Samlp extends Management.EventStreamCloudEventConnectionCreatedPreviousObject2 {
+    export interface Samlp extends Management.EventStreamCloudEventConnectionCreatedPreviousObject2, _Base {
         strategy: "samlp";
     }
 
-    export interface Pingfederate extends Management.EventStreamCloudEventConnectionCreatedPreviousObject3 {
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionCreatedPreviousObject3, _Base {
         strategy: "pingfederate";
     }
 
-    export interface Adfs extends Management.EventStreamCloudEventConnectionCreatedPreviousObject4 {
+    export interface Adfs extends Management.EventStreamCloudEventConnectionCreatedPreviousObject4, _Base {
         strategy: "adfs";
     }
 
-    export interface Ad extends Management.EventStreamCloudEventConnectionCreatedPreviousObject5 {
+    export interface Ad extends Management.EventStreamCloudEventConnectionCreatedPreviousObject5, _Base {
         strategy: "ad";
     }
 
-    export interface GoogleApps extends Management.EventStreamCloudEventConnectionCreatedPreviousObject6 {
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionCreatedPreviousObject6, _Base {
         strategy: "google-apps";
     }
 
-    export interface Waad extends Management.EventStreamCloudEventConnectionCreatedPreviousObject7 {
+    export interface Waad extends Management.EventStreamCloudEventConnectionCreatedPreviousObject7, _Base {
         strategy: "waad";
+    }
+
+    export interface _Base {
+        /** Connection name used in the new universal login experience */
+        display_name?: string;
+        /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+        enabled_clients?: string[];
+        /** The connection's identifier */
+        id: string;
+        /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+        is_domain_connection?: boolean;
+        /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+        name: string;
+        /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+        realms?: string[];
     }
 }
 
@@ -13954,10 +14280,9 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAtt
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapAttributes = Record<
-    string,
-    unknown
->;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=oidc. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject0OptionsAttributeMapMappingModeEnum = {
@@ -14156,7 +14481,9 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsTypeEnum
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject0OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject0StrategyEnum = {
@@ -14290,10 +14617,9 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAtt
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapAttributes = Record<
-    string,
-    unknown
->;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=okta. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject1OptionsAttributeMapMappingModeEnum = {
@@ -14491,7 +14817,9 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsTypeEnum
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject1OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject1StrategyEnum = {
@@ -14646,7 +14974,9 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsDigestAl
 /**
  * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsFieldsMap = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsFieldsMap = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
@@ -14787,7 +15117,9 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject2OptionsSub
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject2OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject2StrategyEnum = {
@@ -14968,7 +15300,9 @@ export interface EventStreamCloudEventConnectionCreatedPreviousObject3OptionsSub
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject3OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject3StrategyEnum = {
@@ -15074,7 +15408,9 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject4OptionsShouldTr
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject4OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject4OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject4StrategyEnum = {
@@ -15177,7 +15513,9 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject5OptionsSetUserR
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject5OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject5OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject5StrategyEnum = {
@@ -15299,7 +15637,9 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject6OptionsSetUserR
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject6OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject6OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject6StrategyEnum = {
@@ -15451,7 +15791,9 @@ export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsTenantDo
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
 export const EventStreamCloudEventConnectionCreatedPreviousObject7OptionsUseridAttributeEnum = {
@@ -15546,36 +15888,51 @@ export type EventStreamCloudEventConnectionDeletedObject =
     | Management.EventStreamCloudEventConnectionDeletedObject.Waad;
 
 export namespace EventStreamCloudEventConnectionDeletedObject {
-    export interface Oidc extends Management.EventStreamCloudEventConnectionDeletedObject0 {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionDeletedObject0, _Base {
         strategy: "oidc";
     }
 
-    export interface Okta extends Management.EventStreamCloudEventConnectionDeletedObject1 {
+    export interface Okta extends Management.EventStreamCloudEventConnectionDeletedObject1, _Base {
         strategy: "okta";
     }
 
-    export interface Samlp extends Management.EventStreamCloudEventConnectionDeletedObject2 {
+    export interface Samlp extends Management.EventStreamCloudEventConnectionDeletedObject2, _Base {
         strategy: "samlp";
     }
 
-    export interface Pingfederate extends Management.EventStreamCloudEventConnectionDeletedObject3 {
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionDeletedObject3, _Base {
         strategy: "pingfederate";
     }
 
-    export interface Adfs extends Management.EventStreamCloudEventConnectionDeletedObject4 {
+    export interface Adfs extends Management.EventStreamCloudEventConnectionDeletedObject4, _Base {
         strategy: "adfs";
     }
 
-    export interface Ad extends Management.EventStreamCloudEventConnectionDeletedObject5 {
+    export interface Ad extends Management.EventStreamCloudEventConnectionDeletedObject5, _Base {
         strategy: "ad";
     }
 
-    export interface GoogleApps extends Management.EventStreamCloudEventConnectionDeletedObject6 {
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionDeletedObject6, _Base {
         strategy: "google-apps";
     }
 
-    export interface Waad extends Management.EventStreamCloudEventConnectionDeletedObject7 {
+    export interface Waad extends Management.EventStreamCloudEventConnectionDeletedObject7, _Base {
         strategy: "waad";
+    }
+
+    export interface _Base {
+        /** Connection name used in the new universal login experience */
+        display_name?: string;
+        /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+        enabled_clients?: string[];
+        /** The connection's identifier */
+        id: string;
+        /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+        is_domain_connection?: boolean;
+        /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+        name: string;
+        /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+        realms?: string[];
     }
 }
 
@@ -15697,7 +16054,9 @@ export interface EventStreamCloudEventConnectionDeletedObject0OptionsAttributeMa
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionDeletedObject0OptionsAttributeMapAttributes = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject0OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=oidc. */
 export const EventStreamCloudEventConnectionDeletedObject0OptionsAttributeMapMappingModeEnum = {
@@ -15894,7 +16253,9 @@ export type EventStreamCloudEventConnectionDeletedObject0OptionsTypeEnum =
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject0OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject0OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedObject0StrategyEnum = {
@@ -16020,7 +16381,9 @@ export interface EventStreamCloudEventConnectionDeletedObject1OptionsAttributeMa
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionDeletedObject1OptionsAttributeMapAttributes = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject1OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=okta. */
 export const EventStreamCloudEventConnectionDeletedObject1OptionsAttributeMapMappingModeEnum = {
@@ -16216,7 +16579,9 @@ export type EventStreamCloudEventConnectionDeletedObject1OptionsTypeEnum =
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject1OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject1OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedObject1StrategyEnum = {
@@ -16366,7 +16731,9 @@ export type EventStreamCloudEventConnectionDeletedObject2OptionsDigestAlgorithmE
 /**
  * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
  */
-export type EventStreamCloudEventConnectionDeletedObject2OptionsFieldsMap = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject2OptionsFieldsMap = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
@@ -16507,7 +16874,9 @@ export interface EventStreamCloudEventConnectionDeletedObject2OptionsSubject {}
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject2OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject2OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedObject2StrategyEnum = {
@@ -16683,7 +17052,9 @@ export interface EventStreamCloudEventConnectionDeletedObject3OptionsSubject {}
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject3OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject3OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedObject3StrategyEnum = {
@@ -16789,7 +17160,9 @@ export type EventStreamCloudEventConnectionDeletedObject4OptionsShouldTrustEmail
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject4OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject4OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedObject4StrategyEnum = {
@@ -16892,7 +17265,9 @@ export type EventStreamCloudEventConnectionDeletedObject5OptionsSetUserRootAttri
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject5OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject5OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedObject5StrategyEnum = {
@@ -17014,7 +17389,9 @@ export type EventStreamCloudEventConnectionDeletedObject6OptionsSetUserRootAttri
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject6OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject6OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedObject6StrategyEnum = {
@@ -17164,7 +17541,9 @@ export type EventStreamCloudEventConnectionDeletedObject7OptionsTenantDomainOne 
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedObject7OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedObject7OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
 export const EventStreamCloudEventConnectionDeletedObject7OptionsUseridAttributeEnum = {
@@ -17203,36 +17582,51 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject =
     | Management.EventStreamCloudEventConnectionDeletedPreviousObject.Waad;
 
 export namespace EventStreamCloudEventConnectionDeletedPreviousObject {
-    export interface Oidc extends Management.EventStreamCloudEventConnectionDeletedPreviousObject0 {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionDeletedPreviousObject0, _Base {
         strategy: "oidc";
     }
 
-    export interface Okta extends Management.EventStreamCloudEventConnectionDeletedPreviousObject1 {
+    export interface Okta extends Management.EventStreamCloudEventConnectionDeletedPreviousObject1, _Base {
         strategy: "okta";
     }
 
-    export interface Samlp extends Management.EventStreamCloudEventConnectionDeletedPreviousObject2 {
+    export interface Samlp extends Management.EventStreamCloudEventConnectionDeletedPreviousObject2, _Base {
         strategy: "samlp";
     }
 
-    export interface Pingfederate extends Management.EventStreamCloudEventConnectionDeletedPreviousObject3 {
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionDeletedPreviousObject3, _Base {
         strategy: "pingfederate";
     }
 
-    export interface Adfs extends Management.EventStreamCloudEventConnectionDeletedPreviousObject4 {
+    export interface Adfs extends Management.EventStreamCloudEventConnectionDeletedPreviousObject4, _Base {
         strategy: "adfs";
     }
 
-    export interface Ad extends Management.EventStreamCloudEventConnectionDeletedPreviousObject5 {
+    export interface Ad extends Management.EventStreamCloudEventConnectionDeletedPreviousObject5, _Base {
         strategy: "ad";
     }
 
-    export interface GoogleApps extends Management.EventStreamCloudEventConnectionDeletedPreviousObject6 {
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionDeletedPreviousObject6, _Base {
         strategy: "google-apps";
     }
 
-    export interface Waad extends Management.EventStreamCloudEventConnectionDeletedPreviousObject7 {
+    export interface Waad extends Management.EventStreamCloudEventConnectionDeletedPreviousObject7, _Base {
         strategy: "waad";
+    }
+
+    export interface _Base {
+        /** Connection name used in the new universal login experience */
+        display_name?: string;
+        /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+        enabled_clients?: string[];
+        /** The connection's identifier */
+        id: string;
+        /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+        is_domain_connection?: boolean;
+        /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+        name: string;
+        /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+        realms?: string[];
     }
 }
 
@@ -17362,10 +17756,9 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAtt
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapAttributes = Record<
-    string,
-    unknown
->;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=oidc. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject0OptionsAttributeMapMappingModeEnum = {
@@ -17564,7 +17957,9 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsTypeEnum
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject0OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject0StrategyEnum = {
@@ -17698,10 +18093,9 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAtt
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapAttributes = Record<
-    string,
-    unknown
->;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=okta. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject1OptionsAttributeMapMappingModeEnum = {
@@ -17899,7 +18293,9 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsTypeEnum
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject1OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject1StrategyEnum = {
@@ -18054,7 +18450,9 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsDigestAl
 /**
  * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsFieldsMap = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsFieldsMap = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
@@ -18195,7 +18593,9 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject2OptionsSub
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject2OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject2StrategyEnum = {
@@ -18376,7 +18776,9 @@ export interface EventStreamCloudEventConnectionDeletedPreviousObject3OptionsSub
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject3OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject3StrategyEnum = {
@@ -18482,7 +18884,9 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject4OptionsShouldTr
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject4OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject4OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject4StrategyEnum = {
@@ -18585,7 +18989,9 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject5OptionsSetUserR
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject5OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject5OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject5StrategyEnum = {
@@ -18707,7 +19113,9 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject6OptionsSetUserR
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject6OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject6OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject6StrategyEnum = {
@@ -18859,7 +19267,9 @@ export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsTenantDo
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
 export const EventStreamCloudEventConnectionDeletedPreviousObject7OptionsUseridAttributeEnum = {
@@ -18954,36 +19364,51 @@ export type EventStreamCloudEventConnectionUpdatedObject =
     | Management.EventStreamCloudEventConnectionUpdatedObject.Waad;
 
 export namespace EventStreamCloudEventConnectionUpdatedObject {
-    export interface Oidc extends Management.EventStreamCloudEventConnectionUpdatedObject0 {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionUpdatedObject0, _Base {
         strategy: "oidc";
     }
 
-    export interface Okta extends Management.EventStreamCloudEventConnectionUpdatedObject1 {
+    export interface Okta extends Management.EventStreamCloudEventConnectionUpdatedObject1, _Base {
         strategy: "okta";
     }
 
-    export interface Samlp extends Management.EventStreamCloudEventConnectionUpdatedObject2 {
+    export interface Samlp extends Management.EventStreamCloudEventConnectionUpdatedObject2, _Base {
         strategy: "samlp";
     }
 
-    export interface Pingfederate extends Management.EventStreamCloudEventConnectionUpdatedObject3 {
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionUpdatedObject3, _Base {
         strategy: "pingfederate";
     }
 
-    export interface Adfs extends Management.EventStreamCloudEventConnectionUpdatedObject4 {
+    export interface Adfs extends Management.EventStreamCloudEventConnectionUpdatedObject4, _Base {
         strategy: "adfs";
     }
 
-    export interface Ad extends Management.EventStreamCloudEventConnectionUpdatedObject5 {
+    export interface Ad extends Management.EventStreamCloudEventConnectionUpdatedObject5, _Base {
         strategy: "ad";
     }
 
-    export interface GoogleApps extends Management.EventStreamCloudEventConnectionUpdatedObject6 {
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionUpdatedObject6, _Base {
         strategy: "google-apps";
     }
 
-    export interface Waad extends Management.EventStreamCloudEventConnectionUpdatedObject7 {
+    export interface Waad extends Management.EventStreamCloudEventConnectionUpdatedObject7, _Base {
         strategy: "waad";
+    }
+
+    export interface _Base {
+        /** Connection name used in the new universal login experience */
+        display_name?: string;
+        /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+        enabled_clients?: string[];
+        /** The connection's identifier */
+        id: string;
+        /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+        is_domain_connection?: boolean;
+        /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+        name: string;
+        /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+        realms?: string[];
     }
 }
 
@@ -19105,7 +19530,9 @@ export interface EventStreamCloudEventConnectionUpdatedObject0OptionsAttributeMa
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionUpdatedObject0OptionsAttributeMapAttributes = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject0OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=oidc. */
 export const EventStreamCloudEventConnectionUpdatedObject0OptionsAttributeMapMappingModeEnum = {
@@ -19302,7 +19729,9 @@ export type EventStreamCloudEventConnectionUpdatedObject0OptionsTypeEnum =
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject0OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject0OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedObject0StrategyEnum = {
@@ -19428,7 +19857,9 @@ export interface EventStreamCloudEventConnectionUpdatedObject1OptionsAttributeMa
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionUpdatedObject1OptionsAttributeMapAttributes = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject1OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=okta. */
 export const EventStreamCloudEventConnectionUpdatedObject1OptionsAttributeMapMappingModeEnum = {
@@ -19624,7 +20055,9 @@ export type EventStreamCloudEventConnectionUpdatedObject1OptionsTypeEnum =
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject1OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject1OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedObject1StrategyEnum = {
@@ -19774,7 +20207,9 @@ export type EventStreamCloudEventConnectionUpdatedObject2OptionsDigestAlgorithmE
 /**
  * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
  */
-export type EventStreamCloudEventConnectionUpdatedObject2OptionsFieldsMap = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject2OptionsFieldsMap = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
@@ -19915,7 +20350,9 @@ export interface EventStreamCloudEventConnectionUpdatedObject2OptionsSubject {}
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject2OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject2OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedObject2StrategyEnum = {
@@ -20091,7 +20528,9 @@ export interface EventStreamCloudEventConnectionUpdatedObject3OptionsSubject {}
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject3OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject3OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedObject3StrategyEnum = {
@@ -20197,7 +20636,9 @@ export type EventStreamCloudEventConnectionUpdatedObject4OptionsShouldTrustEmail
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject4OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject4OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedObject4StrategyEnum = {
@@ -20300,7 +20741,9 @@ export type EventStreamCloudEventConnectionUpdatedObject5OptionsSetUserRootAttri
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject5OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject5OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedObject5StrategyEnum = {
@@ -20422,7 +20865,9 @@ export type EventStreamCloudEventConnectionUpdatedObject6OptionsSetUserRootAttri
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject6OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject6OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedObject6StrategyEnum = {
@@ -20572,7 +21017,9 @@ export type EventStreamCloudEventConnectionUpdatedObject7OptionsTenantDomainOne 
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedObject7OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedObject7OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
 export const EventStreamCloudEventConnectionUpdatedObject7OptionsUseridAttributeEnum = {
@@ -20611,36 +21058,51 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject =
     | Management.EventStreamCloudEventConnectionUpdatedPreviousObject.Waad;
 
 export namespace EventStreamCloudEventConnectionUpdatedPreviousObject {
-    export interface Oidc extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject0 {
+    export interface Oidc extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject0, _Base {
         strategy: "oidc";
     }
 
-    export interface Okta extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject1 {
+    export interface Okta extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject1, _Base {
         strategy: "okta";
     }
 
-    export interface Samlp extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject2 {
+    export interface Samlp extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject2, _Base {
         strategy: "samlp";
     }
 
-    export interface Pingfederate extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject3 {
+    export interface Pingfederate extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject3, _Base {
         strategy: "pingfederate";
     }
 
-    export interface Adfs extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject4 {
+    export interface Adfs extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject4, _Base {
         strategy: "adfs";
     }
 
-    export interface Ad extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject5 {
+    export interface Ad extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject5, _Base {
         strategy: "ad";
     }
 
-    export interface GoogleApps extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject6 {
+    export interface GoogleApps extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject6, _Base {
         strategy: "google-apps";
     }
 
-    export interface Waad extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject7 {
+    export interface Waad extends Management.EventStreamCloudEventConnectionUpdatedPreviousObject7, _Base {
         strategy: "waad";
+    }
+
+    export interface _Base {
+        /** Connection name used in the new universal login experience */
+        display_name?: string;
+        /** Use of this property is NOT RECOMMENDED. Use the PATCH /v2/connections/{id}/clients endpoint to enable the connection for a set of clients. */
+        enabled_clients?: string[];
+        /** The connection's identifier */
+        id: string;
+        /** <code>true</code> promotes to a domain-level connection so that third-party applications can use it. <code>false</code> does not promote the connection, so only first-party applications with the connection enabled can use it. (Defaults to <code>false</code>.) */
+        is_domain_connection?: boolean;
+        /** The name of the connection. Must start and end with an alphanumeric character and can only contain alphanumeric characters and '-'. Max length 128 */
+        name: string;
+        /** Defines the realms for which the connection will be used (ie: email domains). If the array is empty or the property is not specified, the connection name will be added as realm. */
+        realms?: string[];
     }
 }
 
@@ -20770,10 +21232,9 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAtt
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapAttributes = Record<
-    string,
-    unknown
->;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=oidc. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsAttributeMapMappingModeEnum = {
@@ -20972,7 +21433,9 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsTypeEnum
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject0OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject0StrategyEnum = {
@@ -21106,10 +21569,9 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAtt
 /**
  * Object containing mapping details for incoming claims
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapAttributes = Record<
-    string,
-    unknown
->;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapAttributes = {
+    [key: string]: unknown;
+};
 
 /** Method used to map incoming claims when strategy=okta. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsAttributeMapMappingModeEnum = {
@@ -21307,7 +21769,9 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsTypeEnum
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject1OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject1StrategyEnum = {
@@ -21462,7 +21926,9 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsDigestAl
 /**
  * Maps SAML assertion attributes from the identity provider to Auth0 user profile attributes. Format: { 'auth0_field': 'saml_attribute' } or { 'auth0_field': ['saml_attr1', 'saml_attr2'] } for fallback options. Merged with default mappings for email, name, given_name, family_name, and groups.
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsFieldsMap = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsFieldsMap = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for IdP-Initiated SAML Single Sign-On. When enabled, allows users to initiate login directly from their SAML identity provider without first visiting Auth0. The IdP must include the connection parameter in the post-back URL (Assertion Consumer Service URL).
@@ -21603,7 +22069,9 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsSub
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject2OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject2StrategyEnum = {
@@ -21784,7 +22252,9 @@ export interface EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsSub
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject3OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject3StrategyEnum = {
@@ -21890,7 +22360,9 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsShouldTr
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject4OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject4StrategyEnum = {
@@ -21993,7 +22465,9 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsSetUserR
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject5OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject5StrategyEnum = {
@@ -22115,7 +22589,9 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsSetUserR
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject6OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The connection strategy. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject6StrategyEnum = {
@@ -22267,7 +22743,9 @@ export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsTenantDo
 /**
  * Additional parameters to include in authorization requests sent to the identity provider. Useful for passing custom claims, selecting specific identity sources, or configuring provider-specific behavior. See https://auth0.com/docs/authenticate/identity-providers/pass-parameters-to-idps
  */
-export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUpstreamParams = Record<string, unknown>;
+export type EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUpstreamParams = {
+    [key: string]: unknown;
+};
 
 /** The Azure AD claim to use as the unique user identifier. 'oid' (Object ID) is recommended for single-tenant connections and required for SCIM. 'sub' (Subject) is required for multi-tenant/common endpoint. Only applies with OpenID Connect protocol. */
 export const EventStreamCloudEventConnectionUpdatedPreviousObject7OptionsUseridAttributeEnum = {
@@ -22311,6 +22789,7 @@ export interface EventStreamCloudEventContext {
     connection?: Management.EventStreamCloudEventContextConnection | undefined;
     request?: Management.EventStreamCloudEventContextRequest | undefined;
     tenant: Management.EventStreamCloudEventContextTenant;
+    transaction?: Management.EventStreamCloudEventContextTransaction | undefined;
 }
 
 /**
@@ -22327,7 +22806,9 @@ export interface EventStreamCloudEventContextClient {
 /**
  * Client metadata.
  */
-export type EventStreamCloudEventContextClientMetadata = Record<string, unknown>;
+export type EventStreamCloudEventContextClientMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * The Auth0 Connection used for the authentication transaction that generated the event.
@@ -22391,9 +22872,76 @@ export interface EventStreamCloudEventContextTenant {
 }
 
 /**
+ * An auth transaction.
+ */
+export interface EventStreamCloudEventContextTransaction {
+    /** acr_values in the request. */
+    acr_values: string[];
+    /** The locale used for this transaction. */
+    locale: string;
+    /** Hint about the login identifier the user might use in this transaction. */
+    login_hint?: string | undefined;
+    /** Instructions indicating whether the user may be prompted for re-authentication and consent. */
+    prompt?: string[] | undefined;
+    protocol?: Management.EventStreamCloudEventContextTransactionProtocolEnum | undefined;
+    /** The URL to which the client will be redirected when the transaction completes. */
+    redirect_uri?: string | undefined;
+    /** The scopes requested. */
+    requested_scopes: string[];
+    response_mode?: Management.EventStreamCloudEventContextTransactionResponseModeEnum | undefined;
+    /** The kind of credential issued by this transaction. */
+    response_type?: Management.EventStreamCloudEventContextTransactionResponseTypeItemEnum[] | undefined;
+    /** The OAuth state parameter for this transaction. */
+    state?: string | undefined;
+    /** The ui_locales requested for this transaction. */
+    ui_locales: string[];
+}
+
+/** The protocol used for this transaction. */
+export const EventStreamCloudEventContextTransactionProtocolEnum = {
+    OidcBasicProfile: "oidc-basic-profile",
+    OidcImplicitProfile: "oidc-implicit-profile",
+    Oauth2DeviceCode: "oauth2-device-code",
+    Oauth2ResourceOwner: "oauth2-resource-owner",
+    Oauth2ResourceOwnerJwtBearer: "oauth2-resource-owner-jwt-bearer",
+    Oauth2Password: "oauth2-password",
+    Oauth2Webauthn: "oauth2-webauthn",
+    Oauth2AccessToken: "oauth2-access-token",
+    Oauth2RefreshToken: "oauth2-refresh-token",
+    Oauth2TokenExchange: "oauth2-token-exchange",
+    OidcHybridProfile: "oidc-hybrid-profile",
+    Samlp: "samlp",
+    Wsfed: "wsfed",
+    WstrustUsernamemixed: "wstrust-usernamemixed",
+} as const;
+export type EventStreamCloudEventContextTransactionProtocolEnum =
+    (typeof EventStreamCloudEventContextTransactionProtocolEnum)[keyof typeof EventStreamCloudEventContextTransactionProtocolEnum];
+
+/** This transaction's method for returning parameters from the Authorization Endpoint. */
+export const EventStreamCloudEventContextTransactionResponseModeEnum = {
+    Query: "query",
+    Fragment: "fragment",
+    FormPost: "form_post",
+    WebMessage: "web_message",
+} as const;
+export type EventStreamCloudEventContextTransactionResponseModeEnum =
+    (typeof EventStreamCloudEventContextTransactionResponseModeEnum)[keyof typeof EventStreamCloudEventContextTransactionResponseModeEnum];
+
+/** OAuth/OIDC response types. */
+export const EventStreamCloudEventContextTransactionResponseTypeItemEnum = {
+    Code: "code",
+    Token: "token",
+    IdToken: "id_token",
+} as const;
+export type EventStreamCloudEventContextTransactionResponseTypeItemEnum =
+    (typeof EventStreamCloudEventContextTransactionResponseTypeItemEnum)[keyof typeof EventStreamCloudEventContextTransactionResponseTypeItemEnum];
+
+/**
  * Event contents.
  */
-export type EventStreamCloudEventData = Record<string, unknown>;
+export type EventStreamCloudEventData = {
+    [key: string]: unknown;
+};
 
 /** Machine-readable error code. */
 export const EventStreamCloudEventErrorCodeEnum = {
@@ -22490,16 +23038,27 @@ export type EventStreamCloudEventGroupCreatedObject =
     | Management.EventStreamCloudEventGroupCreatedObject.Tenant;
 
 export namespace EventStreamCloudEventGroupCreatedObject {
-    export interface Connection extends Management.EventStreamCloudEventGroupCreatedObject0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupCreatedObject0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupCreatedObject1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupCreatedObject1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupCreatedObject2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupCreatedObject2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The name of the group. */
+        name: string;
+        /** The external identifier for the group. */
+        external_id?: string;
+        /** Date and time when this entity was created (ISO_8601 format). */
+        created_at: string;
     }
 }
 
@@ -22579,16 +23138,27 @@ export type EventStreamCloudEventGroupCreatedPreviousObject =
     | Management.EventStreamCloudEventGroupCreatedPreviousObject.Tenant;
 
 export namespace EventStreamCloudEventGroupCreatedPreviousObject {
-    export interface Connection extends Management.EventStreamCloudEventGroupCreatedPreviousObject0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupCreatedPreviousObject0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupCreatedPreviousObject1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupCreatedPreviousObject1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupCreatedPreviousObject2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupCreatedPreviousObject2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The name of the group. */
+        name: string;
+        /** The external identifier for the group. */
+        external_id?: string;
+        /** Date and time when this entity was created (ISO_8601 format). */
+        created_at: string;
     }
 }
 
@@ -22724,16 +23294,29 @@ export type EventStreamCloudEventGroupDeletedObject =
     | Management.EventStreamCloudEventGroupDeletedObject.Tenant;
 
 export namespace EventStreamCloudEventGroupDeletedObject {
-    export interface Connection extends Management.EventStreamCloudEventGroupDeletedObject0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupDeletedObject0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupDeletedObject1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupDeletedObject1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupDeletedObject2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupDeletedObject2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The name of the group. */
+        name: string;
+        /** The external identifier for the group. */
+        external_id?: string;
+        /** Date and time when this entity was created (ISO_8601 format). */
+        created_at: string;
+        /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+        updated_at: string;
     }
 }
 
@@ -22819,16 +23402,29 @@ export type EventStreamCloudEventGroupDeletedPreviousObject =
     | Management.EventStreamCloudEventGroupDeletedPreviousObject.Tenant;
 
 export namespace EventStreamCloudEventGroupDeletedPreviousObject {
-    export interface Connection extends Management.EventStreamCloudEventGroupDeletedPreviousObject0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupDeletedPreviousObject0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupDeletedPreviousObject1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupDeletedPreviousObject1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupDeletedPreviousObject2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupDeletedPreviousObject2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The name of the group. */
+        name: string;
+        /** The external identifier for the group. */
+        external_id?: string;
+        /** Date and time when this entity was created (ISO_8601 format). */
+        created_at: string;
+        /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+        updated_at: string;
     }
 }
 
@@ -22978,16 +23574,23 @@ export type EventStreamCloudEventGroupMemberAddedObjectGroup =
     | Management.EventStreamCloudEventGroupMemberAddedObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupMemberAddedObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberAddedObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -23054,12 +23657,17 @@ export type EventStreamCloudEventGroupMemberAddedObjectMember =
     | Management.EventStreamCloudEventGroupMemberAddedObjectMember.Connection;
 
 export namespace EventStreamCloudEventGroupMemberAddedObjectMember {
-    export interface User extends Management.EventStreamCloudEventGroupMemberAddedObjectMember0 {
+    export interface User extends Management.EventStreamCloudEventGroupMemberAddedObjectMember0, _Base {
         member_type: "user";
     }
 
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedObjectMember1 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedObjectMember1, _Base {
         member_type: "connection";
+    }
+
+    export interface _Base {
+        /** The user's unique identifier */
+        id: string;
     }
 }
 
@@ -23114,16 +23722,23 @@ export type EventStreamCloudEventGroupMemberAddedPreviousObjectGroup =
     | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupMemberAddedPreviousObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -23190,12 +23805,17 @@ export type EventStreamCloudEventGroupMemberAddedPreviousObjectMember =
     | Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember.Connection;
 
 export namespace EventStreamCloudEventGroupMemberAddedPreviousObjectMember {
-    export interface User extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember0 {
+    export interface User extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember0, _Base {
         member_type: "user";
     }
 
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember1 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberAddedPreviousObjectMember1, _Base {
         member_type: "connection";
+    }
+
+    export interface _Base {
+        /** The user's unique identifier */
+        id: string;
     }
 }
 
@@ -23306,16 +23926,23 @@ export type EventStreamCloudEventGroupMemberDeletedObjectGroup =
     | Management.EventStreamCloudEventGroupMemberDeletedObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupMemberDeletedObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberDeletedObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -23382,12 +24009,17 @@ export type EventStreamCloudEventGroupMemberDeletedObjectMember =
     | Management.EventStreamCloudEventGroupMemberDeletedObjectMember.Connection;
 
 export namespace EventStreamCloudEventGroupMemberDeletedObjectMember {
-    export interface User extends Management.EventStreamCloudEventGroupMemberDeletedObjectMember0 {
+    export interface User extends Management.EventStreamCloudEventGroupMemberDeletedObjectMember0, _Base {
         member_type: "user";
     }
 
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedObjectMember1 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedObjectMember1, _Base {
         member_type: "connection";
+    }
+
+    export interface _Base {
+        /** The user's unique identifier */
+        id: string;
     }
 }
 
@@ -23442,16 +24074,24 @@ export type EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup =
     | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1 {
+    export interface Organization
+        extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -23518,12 +24158,17 @@ export type EventStreamCloudEventGroupMemberDeletedPreviousObjectMember =
     | Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember.Connection;
 
 export namespace EventStreamCloudEventGroupMemberDeletedPreviousObjectMember {
-    export interface User extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0 {
+    export interface User extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember0, _Base {
         member_type: "user";
     }
 
-    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1 {
+    export interface Connection extends Management.EventStreamCloudEventGroupMemberDeletedPreviousObjectMember1, _Base {
         member_type: "connection";
+    }
+
+    export interface _Base {
+        /** The user's unique identifier */
+        id: string;
     }
 }
 
@@ -23636,16 +24281,23 @@ export type EventStreamCloudEventGroupRoleAssignedObjectGroup =
     | Management.EventStreamCloudEventGroupRoleAssignedObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupRoleAssignedObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleAssignedObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -23733,16 +24385,23 @@ export type EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup =
     | Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleAssignedPreviousObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -23886,16 +24545,23 @@ export type EventStreamCloudEventGroupRoleDeletedObjectGroup =
     | Management.EventStreamCloudEventGroupRoleDeletedObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupRoleDeletedObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleDeletedObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -23981,16 +24647,23 @@ export type EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup =
     | Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupRoleDeletedPreviousObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -24124,16 +24797,29 @@ export type EventStreamCloudEventGroupUpdatedObject =
     | Management.EventStreamCloudEventGroupUpdatedObject.Tenant;
 
 export namespace EventStreamCloudEventGroupUpdatedObject {
-    export interface Connection extends Management.EventStreamCloudEventGroupUpdatedObject0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupUpdatedObject0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupUpdatedObject1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupUpdatedObject1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupUpdatedObject2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupUpdatedObject2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The name of the group. */
+        name: string;
+        /** The external identifier for the group. */
+        external_id?: string;
+        /** Date and time when this entity was created (ISO_8601 format). */
+        created_at: string;
+        /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+        updated_at: string;
     }
 }
 
@@ -24219,16 +24905,29 @@ export type EventStreamCloudEventGroupUpdatedPreviousObject =
     | Management.EventStreamCloudEventGroupUpdatedPreviousObject.Tenant;
 
 export namespace EventStreamCloudEventGroupUpdatedPreviousObject {
-    export interface Connection extends Management.EventStreamCloudEventGroupUpdatedPreviousObject0 {
+    export interface Connection extends Management.EventStreamCloudEventGroupUpdatedPreviousObject0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventGroupUpdatedPreviousObject1 {
+    export interface Organization extends Management.EventStreamCloudEventGroupUpdatedPreviousObject1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventGroupUpdatedPreviousObject2 {
+    export interface Tenant extends Management.EventStreamCloudEventGroupUpdatedPreviousObject2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The name of the group. */
+        name: string;
+        /** The external identifier for the group. */
+        external_id?: string;
+        /** Date and time when this entity was created (ISO_8601 format). */
+        created_at: string;
+        /** Date and time when this entity was last updated/modified (ISO_8601 format). */
+        updated_at: string;
     }
 }
 
@@ -25078,7 +25777,9 @@ export interface EventStreamCloudEventOrgCreatedObjectBrandingColors {
 /**
  * The metadata associated with the organization.
  */
-export type EventStreamCloudEventOrgCreatedObjectMetadata = Record<string, unknown>;
+export type EventStreamCloudEventOrgCreatedObjectMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * The event content as it was prior to the change described by this event, when applicable.
@@ -25116,7 +25817,9 @@ export interface EventStreamCloudEventOrgCreatedPreviousObjectBrandingColors {
 /**
  * The metadata associated with the organization.
  */
-export type EventStreamCloudEventOrgCreatedPreviousObjectMetadata = Record<string, unknown>;
+export type EventStreamCloudEventOrgCreatedPreviousObjectMetadata = {
+    [key: string]: unknown;
+};
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgCreatedTypeEnum = {
@@ -25190,7 +25893,9 @@ export interface EventStreamCloudEventOrgDeletedObject {
 /**
  * The metadata associated with the organization.
  */
-export type EventStreamCloudEventOrgDeletedObjectMetadata = Record<string, unknown>;
+export type EventStreamCloudEventOrgDeletedObjectMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * The event content as it was prior to the change described by this event, when applicable.
@@ -25208,7 +25913,9 @@ export interface EventStreamCloudEventOrgDeletedPreviousObject {
 /**
  * The metadata associated with the organization.
  */
-export type EventStreamCloudEventOrgDeletedPreviousObjectMetadata = Record<string, unknown>;
+export type EventStreamCloudEventOrgDeletedPreviousObjectMetadata = {
+    [key: string]: unknown;
+};
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgDeletedTypeEnum = {
@@ -25286,16 +25993,23 @@ export type EventStreamCloudEventOrgGroupRoleAssignedObjectGroup =
     | Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventOrgGroupRoleAssignedObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleAssignedObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -25392,16 +26106,25 @@ export type EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup =
     | Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0 {
+    export interface Connection
+        extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1 {
+    export interface Organization
+        extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleAssignedPreviousObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -25554,16 +26277,23 @@ export type EventStreamCloudEventOrgGroupRoleDeletedObjectGroup =
     | Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventOrgGroupRoleDeletedObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup1 {
+    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleDeletedObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -25658,16 +26388,24 @@ export type EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup =
     | Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup.Tenant;
 
 export namespace EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup {
-    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0 {
+    export interface Connection extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup0, _Base {
         type: "connection";
     }
 
-    export interface Organization extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1 {
+    export interface Organization
+        extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup1, _Base {
         type: "organization";
     }
 
-    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2 {
+    export interface Tenant extends Management.EventStreamCloudEventOrgGroupRoleDeletedPreviousObjectGroup2, _Base {
         type: "tenant";
+    }
+
+    export interface _Base {
+        /** The unique identifier for the group. */
+        id: string;
+        /** The external identifier for the group. */
+        external_id?: string;
     }
 }
 
@@ -26320,7 +27058,9 @@ export interface EventStreamCloudEventOrgUpdatedObjectBrandingColors {
 /**
  * The metadata associated with the organization.
  */
-export type EventStreamCloudEventOrgUpdatedObjectMetadata = Record<string, unknown>;
+export type EventStreamCloudEventOrgUpdatedObjectMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * The event content as it was prior to the change described by this event, when applicable.
@@ -26358,7 +27098,9 @@ export interface EventStreamCloudEventOrgUpdatedPreviousObjectBrandingColors {
 /**
  * The metadata associated with the organization.
  */
-export type EventStreamCloudEventOrgUpdatedPreviousObjectMetadata = Record<string, unknown>;
+export type EventStreamCloudEventOrgUpdatedPreviousObjectMetadata = {
+    [key: string]: unknown;
+};
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventOrgUpdatedTypeEnum = {
@@ -26474,7 +27216,9 @@ export interface EventStreamCloudEventUserCreatedObject {
 /**
  * User metadata to which this user has read-only access.
  */
-export type EventStreamCloudEventUserCreatedObjectAppMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserCreatedObjectAppMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Identity object when accounts are linked.
@@ -26788,7 +27532,9 @@ export type EventStreamCloudEventUserCreatedObjectIdentitiesItemSocialUserId = s
 /**
  * User metadata to which this user has read/write access.
  */
-export type EventStreamCloudEventUserCreatedObjectUserMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserCreatedObjectUserMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * The event content as it was prior to the change described by this event, when applicable.
@@ -26841,7 +27587,9 @@ export interface EventStreamCloudEventUserCreatedPreviousObject {
 /**
  * User metadata to which this user has read-only access.
  */
-export type EventStreamCloudEventUserCreatedPreviousObjectAppMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserCreatedPreviousObjectAppMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Identity object when accounts are linked.
@@ -27161,7 +27909,9 @@ export type EventStreamCloudEventUserCreatedPreviousObjectIdentitiesItemSocialUs
 /**
  * User metadata to which this user has read/write access.
  */
-export type EventStreamCloudEventUserCreatedPreviousObjectUserMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserCreatedPreviousObjectUserMetadata = {
+    [key: string]: unknown;
+};
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventUserCreatedTypeEnum = {
@@ -27272,7 +28022,9 @@ export interface EventStreamCloudEventUserDeletedObject {
 /**
  * User metadata to which this user has read-only access.
  */
-export type EventStreamCloudEventUserDeletedObjectAppMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserDeletedObjectAppMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Identity object when accounts are linked.
@@ -27586,7 +28338,9 @@ export type EventStreamCloudEventUserDeletedObjectIdentitiesItemSocialUserId = s
 /**
  * User metadata to which this user has read/write access.
  */
-export type EventStreamCloudEventUserDeletedObjectUserMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserDeletedObjectUserMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * The event content as it was prior to the change described by this event, when applicable.
@@ -27639,7 +28393,9 @@ export interface EventStreamCloudEventUserDeletedPreviousObject {
 /**
  * User metadata to which this user has read-only access.
  */
-export type EventStreamCloudEventUserDeletedPreviousObjectAppMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserDeletedPreviousObjectAppMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Identity object when accounts are linked.
@@ -27959,7 +28715,9 @@ export type EventStreamCloudEventUserDeletedPreviousObjectIdentitiesItemSocialUs
 /**
  * User metadata to which this user has read/write access.
  */
-export type EventStreamCloudEventUserDeletedPreviousObjectUserMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserDeletedPreviousObjectUserMetadata = {
+    [key: string]: unknown;
+};
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventUserDeletedTypeEnum = {
@@ -28068,7 +28826,9 @@ export interface EventStreamCloudEventUserUpdatedObject {
 /**
  * User metadata to which this user has read-only access.
  */
-export type EventStreamCloudEventUserUpdatedObjectAppMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserUpdatedObjectAppMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Identity object when accounts are linked.
@@ -28382,7 +29142,9 @@ export type EventStreamCloudEventUserUpdatedObjectIdentitiesItemSocialUserId = s
 /**
  * User metadata to which this user has read/write access.
  */
-export type EventStreamCloudEventUserUpdatedObjectUserMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserUpdatedObjectUserMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * The event content as it was prior to the change described by this event, when applicable.
@@ -28435,7 +29197,9 @@ export interface EventStreamCloudEventUserUpdatedPreviousObject {
 /**
  * User metadata to which this user has read-only access.
  */
-export type EventStreamCloudEventUserUpdatedPreviousObjectAppMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserUpdatedPreviousObjectAppMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * Identity object when accounts are linked.
@@ -28755,7 +29519,9 @@ export type EventStreamCloudEventUserUpdatedPreviousObjectIdentitiesItemSocialUs
 /**
  * User metadata to which this user has read/write access.
  */
-export type EventStreamCloudEventUserUpdatedPreviousObjectUserMetadata = Record<string, unknown>;
+export type EventStreamCloudEventUserUpdatedPreviousObjectUserMetadata = {
+    [key: string]: unknown;
+};
 
 /** The event type (injected from the SSE event field). */
 export const EventStreamCloudEventUserUpdatedTypeEnum = {
@@ -29281,6 +30047,7 @@ export interface ExperimentListItem {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -29346,6 +30113,8 @@ export interface ExpressConfiguration {
     admin_login_domain: string;
     /** The identifier of the published application in the OKTA OIN. */
     oin_submission_id?: string | undefined;
+    /** URL of the application's listing in the Okta Integration Network (OIN) catalog, used to redirect customers into OIN Express Configuration. Must be an https URL on an okta.com domain with no query string or fragment. */
+    okta_oin_listing_url?: string | undefined;
 }
 
 /**
@@ -29370,6 +30139,8 @@ export interface ExpressConfigurationOrNull {
     admin_login_domain: string;
     /** The identifier of the published application in the OKTA OIN. */
     oin_submission_id?: string | undefined;
+    /** URL of the application's listing in the Okta Integration Network (OIN) catalog, used to redirect customers into OIN Express Configuration. Must be an https URL on an okta.com domain with no query string or fragment. */
+    okta_oin_listing_url?: string | undefined;
 }
 
 export interface ExtensibilityEmailProviderCredentials {}
@@ -29406,7 +30177,9 @@ export type FeatureFlagConfigParamTypeEnum =
 /**
  * Configuration parameters for this feature flag
  */
-export type FeatureFlagConfigParams = Record<string, Management.FeatureFlagConfigParam>;
+export type FeatureFlagConfigParams = {
+    [key: string]: Management.FeatureFlagConfigParam;
+};
 
 /** Filter by status. Exact match. */
 export const FeatureFlagStatusEnum = {
@@ -29485,12 +30258,20 @@ export type FlowActionActivecampaign =
     | Management.FlowActionActivecampaign.UpsertContact;
 
 export namespace FlowActionActivecampaign {
-    export interface ListContacts extends Management.FlowActionActivecampaignListContacts {
+    export interface ListContacts extends Management.FlowActionActivecampaignListContacts, _Base {
         action: "LIST_CONTACTS";
     }
 
-    export interface UpsertContact extends Management.FlowActionActivecampaignUpsertContact {
+    export interface UpsertContact extends Management.FlowActionActivecampaignUpsertContact, _Base {
         action: "UPSERT_CONTACT";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionActivecampaignListContactsType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -29540,7 +30321,9 @@ export interface FlowActionActivecampaignUpsertContactParams {
     custom_fields?: Management.FlowActionActivecampaignUpsertContactParamsCustomFields | undefined;
 }
 
-export type FlowActionActivecampaignUpsertContactParamsCustomFields = Record<string, unknown>;
+export type FlowActionActivecampaignUpsertContactParamsCustomFields = {
+    [key: string]: unknown;
+};
 
 export type FlowActionAirtable =
     | Management.FlowActionAirtable.CreateRecord
@@ -29548,16 +30331,24 @@ export type FlowActionAirtable =
     | Management.FlowActionAirtable.UpdateRecord;
 
 export namespace FlowActionAirtable {
-    export interface CreateRecord extends Management.FlowActionAirtableCreateRecord {
+    export interface CreateRecord extends Management.FlowActionAirtableCreateRecord, _Base {
         action: "CREATE_RECORD";
     }
 
-    export interface ListRecords extends Management.FlowActionAirtableListRecords {
+    export interface ListRecords extends Management.FlowActionAirtableListRecords, _Base {
         action: "LIST_RECORDS";
     }
 
-    export interface UpdateRecord extends Management.FlowActionAirtableUpdateRecord {
+    export interface UpdateRecord extends Management.FlowActionAirtableUpdateRecord, _Base {
         action: "UPDATE_RECORD";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionAirtableCreateRecordType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -29584,7 +30375,9 @@ export interface FlowActionAirtableCreateRecordParams {
     fields?: Management.FlowActionAirtableCreateRecordParamsFields | undefined;
 }
 
-export type FlowActionAirtableCreateRecordParamsFields = Record<string, unknown>;
+export type FlowActionAirtableCreateRecordParamsFields = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionAirtableListRecords {
     id: string;
@@ -29634,7 +30427,9 @@ export interface FlowActionAirtableUpdateRecordParams {
     fields?: Management.FlowActionAirtableUpdateRecordParamsFields | undefined;
 }
 
-export type FlowActionAirtableUpdateRecordParamsFields = Record<string, unknown>;
+export type FlowActionAirtableUpdateRecordParamsFields = {
+    [key: string]: unknown;
+};
 
 export type FlowActionAuth0 =
     | Management.FlowActionAuth0.CreateUser
@@ -29646,32 +30441,40 @@ export type FlowActionAuth0 =
     | Management.FlowActionAuth0.MakeCall;
 
 export namespace FlowActionAuth0 {
-    export interface CreateUser extends Management.FlowActionAuth0CreateUser {
+    export interface CreateUser extends Management.FlowActionAuth0CreateUser, _Base {
         action: "CREATE_USER";
     }
 
-    export interface GetUser extends Management.FlowActionAuth0GetUser {
+    export interface GetUser extends Management.FlowActionAuth0GetUser, _Base {
         action: "GET_USER";
     }
 
-    export interface UpdateUser extends Management.FlowActionAuth0UpdateUser {
+    export interface UpdateUser extends Management.FlowActionAuth0UpdateUser, _Base {
         action: "UPDATE_USER";
     }
 
-    export interface SendRequest extends Management.FlowActionAuth0SendRequest {
+    export interface SendRequest extends Management.FlowActionAuth0SendRequest, _Base {
         action: "SEND_REQUEST";
     }
 
-    export interface SendEmail extends Management.FlowActionAuth0SendEmail {
+    export interface SendEmail extends Management.FlowActionAuth0SendEmail, _Base {
         action: "SEND_EMAIL";
     }
 
-    export interface SendSms extends Management.FlowActionAuth0SendSms {
+    export interface SendSms extends Management.FlowActionAuth0SendSms, _Base {
         action: "SEND_SMS";
     }
 
-    export interface MakeCall extends Management.FlowActionAuth0MakeCall {
+    export interface MakeCall extends Management.FlowActionAuth0MakeCall, _Base {
         action: "MAKE_CALL";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionAuth0CreateUserType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -29696,7 +30499,9 @@ export interface FlowActionAuth0CreateUserParams {
     payload: Management.FlowActionAuth0CreateUserParamsPayload;
 }
 
-export type FlowActionAuth0CreateUserParamsPayload = Record<string, unknown>;
+export type FlowActionAuth0CreateUserParamsPayload = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionAuth0GetUser {
     id: string;
@@ -29742,7 +30547,9 @@ export interface FlowActionAuth0MakeCallParams {
     custom_vars?: Management.FlowActionAuth0MakeCallParamsCustomVars | undefined;
 }
 
-export type FlowActionAuth0MakeCallParamsCustomVars = Record<string, unknown>;
+export type FlowActionAuth0MakeCallParamsCustomVars = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionAuth0SendEmail {
     id: string;
@@ -29813,21 +30620,26 @@ export namespace FlowActionAuth0SendRequestParams {
     export type Method = (typeof Method)[keyof typeof Method];
 }
 
-export type FlowActionAuth0SendRequestParamsCustomVars = Record<string, unknown>;
+export type FlowActionAuth0SendRequestParamsCustomVars = {
+    [key: string]: unknown;
+};
 
-export type FlowActionAuth0SendRequestParamsHeaders = Record<string, unknown>;
+export type FlowActionAuth0SendRequestParamsHeaders = {
+    [key: string]: unknown;
+};
 
 export type FlowActionAuth0SendRequestParamsPayload =
     | string
     | unknown[]
     | Management.FlowActionAuth0SendRequestParamsPayloadObject;
 
-export type FlowActionAuth0SendRequestParamsPayloadObject = Record<string, unknown>;
+export type FlowActionAuth0SendRequestParamsPayloadObject = {
+    [key: string]: unknown;
+};
 
-export type FlowActionAuth0SendRequestParamsQueryParams = Record<
-    string,
-    FlowActionAuth0SendRequestParamsQueryParams.Value | null
->;
+export type FlowActionAuth0SendRequestParamsQueryParams = {
+    [key: string]: (FlowActionAuth0SendRequestParamsQueryParams.Value | null) | undefined;
+};
 
 export namespace FlowActionAuth0SendRequestParamsQueryParams {
     export type Value = number | string;
@@ -29856,7 +30668,9 @@ export interface FlowActionAuth0SendSmsParams {
     custom_vars?: Management.FlowActionAuth0SendSmsParamsCustomVars | undefined;
 }
 
-export type FlowActionAuth0SendSmsParamsCustomVars = Record<string, unknown>;
+export type FlowActionAuth0SendSmsParamsCustomVars = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionAuth0UpdateUser {
     id: string;
@@ -29880,7 +30694,9 @@ export interface FlowActionAuth0UpdateUserParams {
     changes: Management.FlowActionAuth0UpdateUserParamsChanges;
 }
 
-export type FlowActionAuth0UpdateUserParamsChanges = Record<string, unknown>;
+export type FlowActionAuth0UpdateUserParamsChanges = {
+    [key: string]: unknown;
+};
 
 export type FlowActionBigquery = Management.FlowActionBigqueryInsertRows;
 
@@ -29912,17 +30728,27 @@ export interface FlowActionBigqueryInsertRowsParams {
     data?: Management.FlowActionBigqueryInsertRowsParamsData | undefined;
 }
 
-export type FlowActionBigqueryInsertRowsParamsData = Record<string, unknown>;
+export type FlowActionBigqueryInsertRowsParamsData = {
+    [key: string]: unknown;
+};
 
 export type FlowActionClearbit = Management.FlowActionClearbit.FindPerson | Management.FlowActionClearbit.FindCompany;
 
 export namespace FlowActionClearbit {
-    export interface FindPerson extends Management.FlowActionClearbitFindPerson {
+    export interface FindPerson extends Management.FlowActionClearbitFindPerson, _Base {
         action: "FIND_PERSON";
     }
 
-    export interface FindCompany extends Management.FlowActionClearbitFindCompany {
+    export interface FindCompany extends Management.FlowActionClearbitFindCompany, _Base {
         action: "FIND_COMPANY";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionClearbitFindPersonType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30015,32 +30841,40 @@ export type FlowActionFlow =
     | Management.FlowActionFlow.StoreVars;
 
 export namespace FlowActionFlow {
-    export interface BooleanCondition extends Management.FlowActionFlowBooleanCondition {
+    export interface BooleanCondition extends Management.FlowActionFlowBooleanCondition, _Base {
         action: "BOOLEAN_CONDITION";
     }
 
-    export interface DelayFlow extends Management.FlowActionFlowDelayFlow {
+    export interface DelayFlow extends Management.FlowActionFlowDelayFlow, _Base {
         action: "DELAY_FLOW";
     }
 
-    export interface DoNothing extends Management.FlowActionFlowDoNothing {
+    export interface DoNothing extends Management.FlowActionFlowDoNothing, _Base {
         action: "DO_NOTHING";
     }
 
-    export interface ErrorMessage extends Management.FlowActionFlowErrorMessage {
+    export interface ErrorMessage extends Management.FlowActionFlowErrorMessage, _Base {
         action: "ERROR_MESSAGE";
     }
 
-    export interface MapValue extends Management.FlowActionFlowMapValue {
+    export interface MapValue extends Management.FlowActionFlowMapValue, _Base {
         action: "MAP_VALUE";
     }
 
-    export interface ReturnJson extends Management.FlowActionFlowReturnJson {
+    export interface ReturnJson extends Management.FlowActionFlowReturnJson, _Base {
         action: "RETURN_JSON";
     }
 
-    export interface StoreVars extends Management.FlowActionFlowStoreVars {
+    export interface StoreVars extends Management.FlowActionFlowStoreVars, _Base {
         action: "STORE_VARS";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionFlowBooleanConditionType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30158,7 +30992,9 @@ export interface FlowActionFlowMapValueParams {
     fallback?: (Management.FlowActionFlowMapValueParamsFallback | null) | undefined;
 }
 
-export type FlowActionFlowMapValueParamsCases = Record<string, unknown>;
+export type FlowActionFlowMapValueParamsCases = {
+    [key: string]: unknown;
+};
 
 export type FlowActionFlowMapValueParamsFallback =
     | string
@@ -30166,7 +31002,9 @@ export type FlowActionFlowMapValueParamsFallback =
     | Management.FlowActionFlowMapValueParamsFallbackObject
     | unknown[];
 
-export type FlowActionFlowMapValueParamsFallbackObject = Record<string, unknown>;
+export type FlowActionFlowMapValueParamsFallbackObject = {
+    [key: string]: unknown;
+};
 
 export type FlowActionFlowMapValueParamsInput = string | number;
 
@@ -30192,7 +31030,9 @@ export interface FlowActionFlowReturnJsonParams {
 
 export type FlowActionFlowReturnJsonParamsPayload = Management.FlowActionFlowReturnJsonParamsPayloadObject | string;
 
-export type FlowActionFlowReturnJsonParamsPayloadObject = Record<string, unknown>;
+export type FlowActionFlowReturnJsonParamsPayloadObject = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionFlowStoreVars {
     id: string;
@@ -30214,7 +31054,9 @@ export interface FlowActionFlowStoreVarsParams {
     vars: Management.FlowActionFlowStoreVarsParamsVars;
 }
 
-export type FlowActionFlowStoreVarsParamsVars = Record<string, unknown>;
+export type FlowActionFlowStoreVarsParamsVars = {
+    [key: string]: unknown;
+};
 
 export type FlowActionGoogleSheets = Management.FlowActionGoogleSheetsAddRow;
 
@@ -30306,19 +31148,22 @@ export interface FlowActionHttpSendRequestParamsBasicAuth {
     password?: string | undefined;
 }
 
-export type FlowActionHttpSendRequestParamsHeaders = Record<string, unknown>;
+export type FlowActionHttpSendRequestParamsHeaders = {
+    [key: string]: unknown;
+};
 
 export type FlowActionHttpSendRequestParamsPayload =
     | string
     | unknown[]
     | Management.FlowActionHttpSendRequestParamsPayloadObject;
 
-export type FlowActionHttpSendRequestParamsPayloadObject = Record<string, unknown>;
+export type FlowActionHttpSendRequestParamsPayloadObject = {
+    [key: string]: unknown;
+};
 
-export type FlowActionHttpSendRequestParamsQueryParams = Record<
-    string,
-    FlowActionHttpSendRequestParamsQueryParams.Value | null
->;
+export type FlowActionHttpSendRequestParamsQueryParams = {
+    [key: string]: (FlowActionHttpSendRequestParamsQueryParams.Value | null) | undefined;
+};
 
 export namespace FlowActionHttpSendRequestParamsQueryParams {
     export type Value = number | string;
@@ -30330,16 +31175,24 @@ export type FlowActionHubspot =
     | Management.FlowActionHubspot.UpsertContact;
 
 export namespace FlowActionHubspot {
-    export interface EnrollContact extends Management.FlowActionHubspotEnrollContact {
+    export interface EnrollContact extends Management.FlowActionHubspotEnrollContact, _Base {
         action: "ENROLL_CONTACT";
     }
 
-    export interface GetContact extends Management.FlowActionHubspotGetContact {
+    export interface GetContact extends Management.FlowActionHubspotGetContact, _Base {
         action: "GET_CONTACT";
     }
 
-    export interface UpsertContact extends Management.FlowActionHubspotUpsertContact {
+    export interface UpsertContact extends Management.FlowActionHubspotUpsertContact, _Base {
         action: "UPSERT_CONTACT";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionHubspotEnrollContactType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30422,16 +31275,24 @@ export type FlowActionJson =
     | Management.FlowActionJson.SerializeJson;
 
 export namespace FlowActionJson {
-    export interface CreateJson extends Management.FlowActionJsonCreateJson {
+    export interface CreateJson extends Management.FlowActionJsonCreateJson, _Base {
         action: "CREATE_JSON";
     }
 
-    export interface ParseJson extends Management.FlowActionJsonParseJson {
+    export interface ParseJson extends Management.FlowActionJsonParseJson, _Base {
         action: "PARSE_JSON";
     }
 
-    export interface SerializeJson extends Management.FlowActionJsonSerializeJson {
+    export interface SerializeJson extends Management.FlowActionJsonSerializeJson, _Base {
         action: "SERIALIZE_JSON";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionJsonCreateJsonType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30455,7 +31316,9 @@ export interface FlowActionJsonCreateJsonParams {
     object: Management.FlowActionJsonCreateJsonParamsObject;
 }
 
-export type FlowActionJsonCreateJsonParamsObject = Record<string, unknown>;
+export type FlowActionJsonCreateJsonParamsObject = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionJsonParseJson {
     id: string;
@@ -30499,7 +31362,9 @@ export interface FlowActionJsonSerializeJsonParams {
 
 export type FlowActionJsonSerializeJsonParamsObject = string | Management.FlowActionJsonSerializeJsonParamsObjectObject;
 
-export type FlowActionJsonSerializeJsonParamsObjectObject = Record<string, unknown>;
+export type FlowActionJsonSerializeJsonParamsObjectObject = {
+    [key: string]: unknown;
+};
 
 export type FlowActionJwt =
     | Management.FlowActionJwt.DecodeJwt
@@ -30507,16 +31372,24 @@ export type FlowActionJwt =
     | Management.FlowActionJwt.VerifyJwt;
 
 export namespace FlowActionJwt {
-    export interface DecodeJwt extends Management.FlowActionJwtDecodeJwt {
+    export interface DecodeJwt extends Management.FlowActionJwtDecodeJwt, _Base {
         action: "DECODE_JWT";
     }
 
-    export interface SignJwt extends Management.FlowActionJwtSignJwt {
+    export interface SignJwt extends Management.FlowActionJwtSignJwt, _Base {
         action: "SIGN_JWT";
     }
 
-    export interface VerifyJwt extends Management.FlowActionJwtVerifyJwt {
+    export interface VerifyJwt extends Management.FlowActionJwtVerifyJwt, _Base {
         action: "VERIFY_JWT";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionJwtDecodeJwtType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30565,7 +31438,9 @@ export interface FlowActionJwtSignJwtParams {
     expires_in?: string | undefined;
 }
 
-export type FlowActionJwtSignJwtParamsPayload = Record<string, unknown>;
+export type FlowActionJwtSignJwtParamsPayload = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionJwtVerifyJwt {
     id: string;
@@ -30625,7 +31500,9 @@ export interface FlowActionMailchimpUpsertMemberParamsMember {
     merge_fields?: Management.FlowActionMailchimpUpsertMemberParamsMemberMergeFields | undefined;
 }
 
-export type FlowActionMailchimpUpsertMemberParamsMemberMergeFields = Record<string, unknown>;
+export type FlowActionMailchimpUpsertMemberParamsMemberMergeFields = {
+    [key: string]: unknown;
+};
 
 export type FlowActionMailjet = Management.FlowActionMailjetSendEmail;
 
@@ -30664,12 +31541,20 @@ export type FlowActionMailjetSendEmailParams =
 export type FlowActionOtp = Management.FlowActionOtp.GenerateCode | Management.FlowActionOtp.VerifyCode;
 
 export namespace FlowActionOtp {
-    export interface GenerateCode extends Management.FlowActionOtpGenerateCode {
+    export interface GenerateCode extends Management.FlowActionOtpGenerateCode, _Base {
         action: "GENERATE_CODE";
     }
 
-    export interface VerifyCode extends Management.FlowActionOtpVerifyCode {
+    export interface VerifyCode extends Management.FlowActionOtpVerifyCode, _Base {
         action: "VERIFY_CODE";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionOtpGenerateCodeType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30723,16 +31608,24 @@ export type FlowActionPipedrive =
     | Management.FlowActionPipedrive.AddPerson;
 
 export namespace FlowActionPipedrive {
-    export interface AddDeal extends Management.FlowActionPipedriveAddDeal {
+    export interface AddDeal extends Management.FlowActionPipedriveAddDeal, _Base {
         action: "ADD_DEAL";
     }
 
-    export interface AddOrganization extends Management.FlowActionPipedriveAddOrganization {
+    export interface AddOrganization extends Management.FlowActionPipedriveAddOrganization, _Base {
         action: "ADD_ORGANIZATION";
     }
 
-    export interface AddPerson extends Management.FlowActionPipedriveAddPerson {
+    export interface AddPerson extends Management.FlowActionPipedriveAddPerson, _Base {
         action: "ADD_PERSON";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionPipedriveAddDealType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30763,7 +31656,9 @@ export interface FlowActionPipedriveAddDealParams {
     fields?: Management.FlowActionPipedriveAddDealParamsFields | undefined;
 }
 
-export type FlowActionPipedriveAddDealParamsFields = Record<string, unknown>;
+export type FlowActionPipedriveAddDealParamsFields = {
+    [key: string]: unknown;
+};
 
 export type FlowActionPipedriveAddDealParamsOrganizationId = string | number;
 
@@ -30796,7 +31691,9 @@ export interface FlowActionPipedriveAddOrganizationParams {
     fields?: Management.FlowActionPipedriveAddOrganizationParamsFields | undefined;
 }
 
-export type FlowActionPipedriveAddOrganizationParamsFields = Record<string, unknown>;
+export type FlowActionPipedriveAddOrganizationParamsFields = {
+    [key: string]: unknown;
+};
 
 export type FlowActionPipedriveAddOrganizationParamsOwnerId = string | number;
 
@@ -30826,7 +31723,9 @@ export interface FlowActionPipedriveAddPersonParams {
     fields?: Management.FlowActionPipedriveAddPersonParamsFields | undefined;
 }
 
-export type FlowActionPipedriveAddPersonParamsFields = Record<string, unknown>;
+export type FlowActionPipedriveAddPersonParamsFields = {
+    [key: string]: unknown;
+};
 
 export type FlowActionPipedriveAddPersonParamsOrganizationId = string | number;
 
@@ -30839,20 +31738,28 @@ export type FlowActionSalesforce =
     | Management.FlowActionSalesforce.UpdateLead;
 
 export namespace FlowActionSalesforce {
-    export interface CreateLead extends Management.FlowActionSalesforceCreateLead {
+    export interface CreateLead extends Management.FlowActionSalesforceCreateLead, _Base {
         action: "CREATE_LEAD";
     }
 
-    export interface GetLead extends Management.FlowActionSalesforceGetLead {
+    export interface GetLead extends Management.FlowActionSalesforceGetLead, _Base {
         action: "GET_LEAD";
     }
 
-    export interface SearchLeads extends Management.FlowActionSalesforceSearchLeads {
+    export interface SearchLeads extends Management.FlowActionSalesforceSearchLeads, _Base {
         action: "SEARCH_LEADS";
     }
 
-    export interface UpdateLead extends Management.FlowActionSalesforceUpdateLead {
+    export interface UpdateLead extends Management.FlowActionSalesforceUpdateLead, _Base {
         action: "UPDATE_LEAD";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionSalesforceCreateLeadType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -30882,7 +31789,9 @@ export interface FlowActionSalesforceCreateLeadParams {
     payload?: Management.FlowActionSalesforceCreateLeadParamsPayload | undefined;
 }
 
-export type FlowActionSalesforceCreateLeadParamsPayload = Record<string, unknown>;
+export type FlowActionSalesforceCreateLeadParamsPayload = {
+    [key: string]: unknown;
+};
 
 export interface FlowActionSalesforceGetLead {
     id: string;
@@ -30960,7 +31869,9 @@ export interface FlowActionSalesforceUpdateLeadParams {
     payload?: Management.FlowActionSalesforceUpdateLeadParamsPayload | undefined;
 }
 
-export type FlowActionSalesforceUpdateLeadParamsPayload = Record<string, unknown>;
+export type FlowActionSalesforceUpdateLeadParamsPayload = {
+    [key: string]: unknown;
+};
 
 export type FlowActionSendgrid = Management.FlowActionSendgridSendEmail;
 
@@ -31059,32 +31970,40 @@ export type FlowActionStripe =
     | Management.FlowActionStripe.UpdateCustomer;
 
 export namespace FlowActionStripe {
-    export interface AddTaxId extends Management.FlowActionStripeAddTaxId {
+    export interface AddTaxId extends Management.FlowActionStripeAddTaxId, _Base {
         action: "ADD_TAX_ID";
     }
 
-    export interface CreateCustomer extends Management.FlowActionStripeCreateCustomer {
+    export interface CreateCustomer extends Management.FlowActionStripeCreateCustomer, _Base {
         action: "CREATE_CUSTOMER";
     }
 
-    export interface CreatePortalSession extends Management.FlowActionStripeCreatePortalSession {
+    export interface CreatePortalSession extends Management.FlowActionStripeCreatePortalSession, _Base {
         action: "CREATE_PORTAL_SESSION";
     }
 
-    export interface DeleteTaxId extends Management.FlowActionStripeDeleteTaxId {
+    export interface DeleteTaxId extends Management.FlowActionStripeDeleteTaxId, _Base {
         action: "DELETE_TAX_ID";
     }
 
-    export interface FindCustomers extends Management.FlowActionStripeFindCustomers {
+    export interface FindCustomers extends Management.FlowActionStripeFindCustomers, _Base {
         action: "FIND_CUSTOMERS";
     }
 
-    export interface GetCustomer extends Management.FlowActionStripeGetCustomer {
+    export interface GetCustomer extends Management.FlowActionStripeGetCustomer, _Base {
         action: "GET_CUSTOMER";
     }
 
-    export interface UpdateCustomer extends Management.FlowActionStripeUpdateCustomer {
+    export interface UpdateCustomer extends Management.FlowActionStripeUpdateCustomer, _Base {
         action: "UPDATE_CUSTOMER";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionStripeAddTaxIdType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -31234,7 +32153,9 @@ export interface FlowActionStripeGetCustomerParams {
     id: string;
 }
 
-export type FlowActionStripeMetadata = Record<string, string>;
+export type FlowActionStripeMetadata = {
+    [key: string]: string;
+};
 
 export interface FlowActionStripeTaxId {
     type: string;
@@ -31301,12 +32222,20 @@ export interface FlowActionTelegramSendMessageParams {
 export type FlowActionTwilio = Management.FlowActionTwilio.MakeCall | Management.FlowActionTwilio.SendSms;
 
 export namespace FlowActionTwilio {
-    export interface MakeCall extends Management.FlowActionTwilioMakeCall {
+    export interface MakeCall extends Management.FlowActionTwilioMakeCall, _Base {
         action: "MAKE_CALL";
     }
 
-    export interface SendSms extends Management.FlowActionTwilioSendSms {
+    export interface SendSms extends Management.FlowActionTwilioSendSms, _Base {
         action: "SEND_SMS";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionTwilioMakeCallType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -31406,17 +32335,27 @@ export type FlowActionWhatsappSendMessageParamsPayload =
     | Management.FlowActionWhatsappSendMessageParamsPayloadObject
     | string;
 
-export type FlowActionWhatsappSendMessageParamsPayloadObject = Record<string, unknown>;
+export type FlowActionWhatsappSendMessageParamsPayloadObject = {
+    [key: string]: unknown;
+};
 
 export type FlowActionXml = Management.FlowActionXml.ParseXml | Management.FlowActionXml.SerializeXml;
 
 export namespace FlowActionXml {
-    export interface ParseXml extends Management.FlowActionXmlParseXml {
+    export interface ParseXml extends Management.FlowActionXmlParseXml, _Base {
         action: "PARSE_XML";
     }
 
-    export interface SerializeXml extends Management.FlowActionXmlSerializeXml {
+    export interface SerializeXml extends Management.FlowActionXmlSerializeXml, _Base {
         action: "SERIALIZE_XML";
+    }
+
+    export interface _Base {
+        id: string;
+        alias?: string;
+        type: Management.FlowActionXmlParseXmlType;
+        allow_failure?: boolean;
+        mask_output?: boolean;
     }
 }
 
@@ -31462,7 +32401,9 @@ export interface FlowActionXmlSerializeXmlParams {
 
 export type FlowActionXmlSerializeXmlParamsObject = string | Management.FlowActionXmlSerializeXmlParamsObjectObject;
 
-export type FlowActionXmlSerializeXmlParamsObjectObject = Record<string, unknown>;
+export type FlowActionXmlSerializeXmlParamsObjectObject = {
+    [key: string]: unknown;
+};
 
 export type FlowActionZapier = Management.FlowActionZapierTriggerWebhook;
 
@@ -31506,7 +32447,9 @@ export namespace FlowActionZapierTriggerWebhookParams {
 /**
  * Flow execution debug.
  */
-export type FlowExecutionDebug = Record<string, unknown>;
+export type FlowExecutionDebug = {
+    [key: string]: unknown;
+};
 
 export interface FlowExecutionSummary {
     /** Flow execution identifier */
@@ -31926,36 +32869,41 @@ export type FormBlock =
     | Management.FormBlock.RichText;
 
 export namespace FormBlock {
-    export interface Divider extends Management.FormBlockDivider {
+    export interface Divider extends Management.FormBlockDivider, _Base {
         type: "DIVIDER";
     }
 
-    export interface Html extends Management.FormBlockHtml {
+    export interface Html extends Management.FormBlockHtml, _Base {
         type: "HTML";
     }
 
-    export interface Image extends Management.FormBlockImage {
+    export interface Image extends Management.FormBlockImage, _Base {
         type: "IMAGE";
     }
 
-    export interface JumpButton extends Management.FormBlockJumpButton {
+    export interface JumpButton extends Management.FormBlockJumpButton, _Base {
         type: "JUMP_BUTTON";
     }
 
-    export interface ResendButton extends Management.FormBlockResendButton {
+    export interface ResendButton extends Management.FormBlockResendButton, _Base {
         type: "RESEND_BUTTON";
     }
 
-    export interface NextButton extends Management.FormBlockNextButton {
+    export interface NextButton extends Management.FormBlockNextButton, _Base {
         type: "NEXT_BUTTON";
     }
 
-    export interface PreviousButton extends Management.FormBlockPreviousButton {
+    export interface PreviousButton extends Management.FormBlockPreviousButton, _Base {
         type: "PREVIOUS_BUTTON";
     }
 
-    export interface RichText extends Management.FormBlockRichText {
+    export interface RichText extends Management.FormBlockRichText, _Base {
         type: "RICH_TEXT";
+    }
+
+    export interface _Base {
+        id: string;
+        category: Management.FormComponentCategoryBlockConst;
     }
 }
 
@@ -32177,68 +33125,77 @@ export type FormField =
     | Management.FormField.Url;
 
 export namespace FormField {
-    export interface Boolean extends Management.FormFieldBoolean {
+    export interface Boolean extends Management.FormFieldBoolean, _Base {
         type: "BOOLEAN";
     }
 
-    export interface Cards extends Management.FormFieldCards {
+    export interface Cards extends Management.FormFieldCards, _Base {
         type: "CARDS";
     }
 
-    export interface Choice extends Management.FormFieldChoice {
+    export interface Choice extends Management.FormFieldChoice, _Base {
         type: "CHOICE";
     }
 
-    export interface Custom extends Management.FormFieldCustom {
+    export interface Custom extends Management.FormFieldCustom, _Base {
         type: "CUSTOM";
     }
 
-    export interface Date extends Management.FormFieldDate {
+    export interface Date extends Management.FormFieldDate, _Base {
         type: "DATE";
     }
 
-    export interface Dropdown extends Management.FormFieldDropdown {
+    export interface Dropdown extends Management.FormFieldDropdown, _Base {
         type: "DROPDOWN";
     }
 
-    export interface Email extends Management.FormFieldEmail {
+    export interface Email extends Management.FormFieldEmail, _Base {
         type: "EMAIL";
     }
 
-    export interface File extends Management.FormFieldFile {
+    export interface File extends Management.FormFieldFile, _Base {
         type: "FILE";
     }
 
-    export interface Legal extends Management.FormFieldLegal {
+    export interface Legal extends Management.FormFieldLegal, _Base {
         type: "LEGAL";
     }
 
-    export interface Number extends Management.FormFieldNumber {
+    export interface Number extends Management.FormFieldNumber, _Base {
         type: "NUMBER";
     }
 
-    export interface Password extends Management.FormFieldPassword {
+    export interface Password extends Management.FormFieldPassword, _Base {
         type: "PASSWORD";
     }
 
-    export interface Payment extends Management.FormFieldPayment {
+    export interface Payment extends Management.FormFieldPayment, _Base {
         type: "PAYMENT";
     }
 
-    export interface Social extends Management.FormFieldSocial {
+    export interface Social extends Management.FormFieldSocial, _Base {
         type: "SOCIAL";
     }
 
-    export interface Tel extends Management.FormFieldTel {
+    export interface Tel extends Management.FormFieldTel, _Base {
         type: "TEL";
     }
 
-    export interface Text extends Management.FormFieldText {
+    export interface Text extends Management.FormFieldText, _Base {
         type: "TEXT";
     }
 
-    export interface Url extends Management.FormFieldUrl {
+    export interface Url extends Management.FormFieldUrl, _Base {
         type: "URL";
+    }
+
+    export interface _Base {
+        id: string;
+        category: Management.FormComponentCategoryFieldConst;
+        label?: string;
+        hint?: string;
+        required?: boolean;
+        sensitive?: boolean;
     }
 }
 
@@ -32330,9 +33287,13 @@ export interface FormFieldCustomConfig {
     params?: Management.FormFieldCustomConfigParams | undefined;
 }
 
-export type FormFieldCustomConfigParams = Record<string, string>;
+export type FormFieldCustomConfigParams = {
+    [key: string]: string;
+};
 
-export type FormFieldCustomConfigSchema = Record<string, unknown>;
+export type FormFieldCustomConfigSchema = {
+    [key: string]: unknown;
+};
 
 export interface FormFieldDate {
     id: string;
@@ -32572,7 +33533,9 @@ export interface FormFieldPaymentConfigCredentials {
     private_key: string;
 }
 
-export type FormFieldPaymentConfigCustomer = Record<string, unknown>;
+export type FormFieldPaymentConfigCustomer = {
+    [key: string]: unknown;
+};
 
 export interface FormFieldPaymentConfigFieldProperties {
     label?: string | undefined;
@@ -32592,7 +33555,9 @@ export const FormFieldPaymentConfigProviderEnum = {
 export type FormFieldPaymentConfigProviderEnum =
     (typeof FormFieldPaymentConfigProviderEnum)[keyof typeof FormFieldPaymentConfigProviderEnum];
 
-export type FormFieldPaymentConfigSubscription = Record<string, unknown>;
+export type FormFieldPaymentConfigSubscription = {
+    [key: string]: unknown;
+};
 
 export interface FormFieldSocial {
     id: string;
@@ -32771,25 +33736,35 @@ export interface FormMessages {
     custom?: Management.FormMessagesCustom | undefined;
 }
 
-export type FormMessagesCustom = Record<string, string>;
+export type FormMessagesCustom = {
+    [key: string]: string;
+};
 
-export type FormMessagesError = Record<string, string>;
+export type FormMessagesError = {
+    [key: string]: string;
+};
 
 export type FormMessagesNullable = (Management.FormMessages | null) | undefined;
 
 export type FormNode = Management.FormNode.Flow | Management.FormNode.Router | Management.FormNode.Step;
 
 export namespace FormNode {
-    export interface Flow extends Management.FormFlow {
+    export interface Flow extends Management.FormFlow, _Base {
         type: "FLOW";
     }
 
-    export interface Router extends Management.FormRouter {
+    export interface Router extends Management.FormRouter, _Base {
         type: "ROUTER";
     }
 
-    export interface Step extends Management.FormStep {
+    export interface Step extends Management.FormStep, _Base {
         type: "STEP";
+    }
+
+    export interface _Base {
+        id: string;
+        coordinates?: Management.FormNodeCoordinates;
+        alias?: string;
     }
 }
 
@@ -32874,7 +33849,9 @@ export interface FormSummary {
     submitted_at?: string | undefined;
 }
 
-export type FormTranslations = Record<string, Record<string, unknown>>;
+export type FormTranslations = {
+    [key: string]: Record<string, unknown>;
+};
 
 export type FormTranslationsNullable = (Management.FormTranslations | null) | undefined;
 
@@ -32884,16 +33861,25 @@ export type FormWidget =
     | Management.FormWidget.Recaptcha;
 
 export namespace FormWidget {
-    export interface Auth0VerifiableCredentials extends Management.FormWidgetAuth0VerifiableCredentials {
+    export interface Auth0VerifiableCredentials extends Management.FormWidgetAuth0VerifiableCredentials, _Base {
         type: "AUTH0_VERIFIABLE_CREDENTIALS";
     }
 
-    export interface GmapsAddress extends Management.FormWidgetGMapsAddress {
+    export interface GmapsAddress extends Management.FormWidgetGMapsAddress, _Base {
         type: "GMAPS_ADDRESS";
     }
 
-    export interface Recaptcha extends Management.FormWidgetRecaptcha {
+    export interface Recaptcha extends Management.FormWidgetRecaptcha, _Base {
         type: "RECAPTCHA";
+    }
+
+    export interface _Base {
+        id: string;
+        category: Management.FormComponentCategoryWidgetConst;
+        label?: string;
+        hint?: string;
+        required?: boolean;
+        sensitive?: boolean;
     }
 }
 
@@ -33263,9 +34249,9 @@ export interface GetBruteForceSettingsResponseContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[] | undefined;
     mode?: Management.BruteForceProtectionModeEnum | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface GetClientCredentialResponseContent {
@@ -33393,6 +34379,7 @@ export interface GetClientResponseContent {
     require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
+    allow_personal_agent_browser_join?: Management.ClientAllowPersonalAgentBrowserJoin | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
     token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
@@ -33409,12 +34396,14 @@ export interface GetClientResponseContent {
     express_configuration?: Management.ExpressConfiguration | undefined;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    google_account_linking?: Management.GoogleAccountLinkingConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
     enforce_anon_session_transfer_network_binding?:
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -33423,6 +34412,9 @@ export interface GetClientResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -33520,7 +34512,9 @@ export interface GetCustomSigningKeysResponseContent {
 /**
  * An object containing custom dictionaries for a group of screens.
  */
-export type GetCustomTextsByLanguageResponseContent = Record<string, unknown>;
+export type GetCustomTextsByLanguageResponseContent = {
+    [key: string]: unknown;
+};
 
 export interface GetDefaultCanonicalDomainResponseContent {
     /** Domain name. */
@@ -33669,6 +34663,7 @@ export interface GetExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -33919,7 +34914,9 @@ export interface GetHookResponseContent {
 /**
  * Hashmap of key-value pairs where the value must be a string.
  */
-export type GetHookSecretResponseContent = Record<string, string>;
+export type GetHookSecretResponseContent = {
+    [key: string]: string;
+};
 
 export interface GetJobErrorResponseContent {
     user?: Management.GetJobUserError | undefined;
@@ -33999,7 +34996,9 @@ export interface GetJobSummary {
 /**
  * User, as provided in the import file
  */
-export type GetJobUserError = Record<string, unknown>;
+export type GetJobUserError = {
+    [key: string]: unknown;
+};
 
 export interface GetLogResponseContent {
     date?: Management.LogDate | undefined;
@@ -34055,36 +35054,49 @@ export type GetLogStreamResponseContent =
     | Management.GetLogStreamResponseContent.Mixpanel;
 
 export namespace GetLogStreamResponseContent {
-    export interface Http extends Management.LogStreamHttpResponseSchema {
+    export interface Http extends Management.LogStreamHttpResponseSchema, _Base {
         type: "http";
     }
 
-    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema, _Base {
         type: "eventbridge";
     }
 
-    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema, _Base {
         type: "eventgrid";
     }
 
-    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema, _Base {
         type: "datadog";
     }
 
-    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema, _Base {
         type: "splunk";
     }
 
-    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+    export interface Sumo extends Management.LogStreamSumoResponseSchema, _Base {
         type: "sumo";
     }
 
-    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+    export interface Segment extends Management.LogStreamSegmentResponseSchema, _Base {
         type: "segment";
     }
 
-    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema, _Base {
         type: "mixpanel";
+    }
+
+    export interface _Base {
+        /** The id of the log stream */
+        id?: string;
+        /** log stream name */
+        name?: string;
+        status?: Management.LogStreamStatusEnum;
+        /** True for priority log streams, false for non-priority */
+        isPriority?: boolean;
+        /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
+        filters?: Management.LogStreamFilter[];
+        pii_config?: Management.LogStreamPiiConfig;
     }
 }
 
@@ -34232,7 +35244,9 @@ export interface GetOrganizationResponseContent {
 /**
  * An object containing template partials for a group of screens.
  */
-export type GetPartialsResponseContent = Record<string, unknown>;
+export type GetPartialsResponseContent = {
+    [key: string]: unknown;
+};
 
 export interface GetPhoneFactorSettingsResponseContent {
     /** The length of the OTP code. */
@@ -34344,6 +35358,9 @@ export interface GetResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    use_for_personal_agent_protocol?: Management.ResourceServerUseForPersonalAgentProtocol | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface GetRiskAssessmentsSettingsNewDeviceResponseContent {
@@ -34583,6 +35600,8 @@ export interface GetTenantSettingsResponseContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
     /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
     client_id_metadata_document_supported?: boolean | undefined;
+    /** Whether the authorization server supports registering clients dynamically from a client_id URL. Requires client_id_metadata_document_supported to be enabled. */
+    client_id_metadata_document_dynamic_registration_supported?: boolean | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
@@ -34593,6 +35612,9 @@ export interface GetTenantSettingsResponseContent {
         | Management.TenantSettingsDynamicClientRegistrationSecurityMode
         | undefined;
     country_codes?: Management.TenantSettingsCountryCodesResponse | undefined;
+    personal_agent_protocol_company_domains?:
+        | Management.TenantSettingsPersonalAgentProtocolCompanyDomainsResponse
+        | undefined;
 }
 
 export interface GetTokenExchangeProfileResponseContent {
@@ -34774,6 +35796,39 @@ export interface GetVerifiableCredentialTemplateResponseContent {
 }
 
 /**
+ * A webtask in the tenant's container, as returned by the webtask platform's GET. Code and decrypted secrets are only included when requested.
+ */
+export interface GetWebtaskResponseContent extends Management.Webtask {
+    /** JavaScript code of the webtask. Only returned with <code>fetch_code=true</code>. */
+    code?: string | undefined;
+    secrets?: Management.WebtaskResponseSecrets | undefined;
+}
+
+/**
+ * Configuration for Google account linking.
+ */
+export interface GoogleAccountLinkingConfiguration {
+    /** Enables the Google streamlined account linking flow for this client. */
+    allow_streamlined_linking?: boolean | undefined;
+}
+
+/**
+ * Configuration for Google account linking.
+ */
+export interface GoogleAccountLinkingConfigurationCreate {
+    /** Enables the Google streamlined account linking flow for this client. */
+    allow_streamlined_linking?: boolean | undefined;
+}
+
+/**
+ * Configuration for Google account linking.
+ */
+export interface GoogleAccountLinkingConfigurationOrNull {
+    /** Enables the Google streamlined account linking flow for this client. */
+    allow_streamlined_linking?: boolean | undefined;
+}
+
+/**
  * Represents the metadata of a group. Member lists are retrieved via a separate endpoint.
  */
 export interface Group {
@@ -34859,7 +35914,7 @@ export interface GuardianFactor {
     settings?: Management.GuardianFactorSettings | undefined;
 }
 
-/** Factor name. Can be `sms`, `push-notification`, `email`, `duo` `otp` `webauthn-roaming`, `webauthn-platform`, or `recovery-code`. */
+/** Factor name. Can be `sms`, `push-notification`, `email`, `duo`, `otp`, `webauthn-roaming`, `webauthn-platform`, `recovery-code`, or `passkey`. */
 export const GuardianFactorNameEnum = {
     PushNotification: "push-notification",
     Sms: "sms",
@@ -34869,6 +35924,7 @@ export const GuardianFactorNameEnum = {
     WebauthnRoaming: "webauthn-roaming",
     WebauthnPlatform: "webauthn-platform",
     RecoveryCode: "recovery-code",
+    Passkey: "passkey",
 } as const;
 export type GuardianFactorNameEnum = (typeof GuardianFactorNameEnum)[keyof typeof GuardianFactorNameEnum];
 
@@ -34924,7 +35980,9 @@ export interface Hook {
 /**
  * Dependencies of this hook used by webtask server.
  */
-export type HookDependencies = Record<string, string>;
+export type HookDependencies = {
+    [key: string]: string;
+};
 
 /** Retrieves hooks that match the trigger */
 export const HookTriggerIdEnum = {
@@ -35048,6 +36106,13 @@ export interface ImportEncryptionKeyResponseContent {
     /** Public key in PEM format */
     public_key?: (string | null) | undefined;
 }
+
+/** Optional. When set to the exact string `true`, the server computes the stored BSON size of the full user profile and returns it in the `Auth0-User-Profile-Size` response header. When omitted, no size computation occurs and the response header is not emitted. Any present value other than `true` (including `false`, `1`, or an empty string) is rejected with `400 validation_error`. */
+export const IncludeUserProfileSizeHeaderEnum = {
+    True: "true",
+} as const;
+export type IncludeUserProfileSizeHeaderEnum =
+    (typeof IncludeUserProfileSizeHeaderEnum)[keyof typeof IncludeUserProfileSizeHeaderEnum];
 
 /**
  * Integration defines a self contained functioning unit which partners
@@ -35260,11 +36325,6 @@ export interface ListAgentsResponseContent {
     next?: string | undefined;
 }
 
-/**
- * List of CAPTCHA attack protection policies for the tenant, sorted by priority ascending.
- */
-export type ListAttackProtectionCaptchaPoliciesResponseContent = Management.AttackProtectionCaptchaPolicy[];
-
 export interface ListBrandingPhoneProvidersResponseContent {
     providers?: Management.PhoneProviderSchemaMasked[] | undefined;
 }
@@ -35287,6 +36347,15 @@ export interface ListClientGrantPaginatedResponseContent {
     /** Opaque identifier for use with the <i>from</i> query parameter for the next page of results.<br/>This identifier is valid for 24 hours. */
     next?: string | undefined;
     client_grants?: Management.ClientGrantResponseContent[] | undefined;
+}
+
+/**
+ * Checkpoint paginated list of client profiles.
+ */
+export interface ListClientProfilesPaginatedResponseContent {
+    /** A cursor to be used as the "from" query parameter for the next page of results. */
+    next?: string | undefined;
+    client_profiles: Management.ClientProfile[];
 }
 
 export interface ListClientsOffsetPaginatedResponseContent {
@@ -35540,6 +36609,10 @@ export interface ListPhoneTemplatesResponseContent {
     templates?: Management.PhoneTemplate[] | undefined;
 }
 
+export interface ListPortalsResponseContent {
+    portals: Management.PortalSummary[];
+}
+
 export interface ListRateLimitPoliciesPaginatedResponseContent {
     rate_limit_policies?: Management.RateLimitPolicy[] | undefined;
     /** A cursor to be used as the "from" query parameter for the next page of results. */
@@ -35609,7 +36682,9 @@ export interface ListSegmentsResponseContent {
 /**
  * The list of custom text keys and values.
  */
-export type ListSelfServiceProfileCustomTextResponseContent = Record<string, string>;
+export type ListSelfServiceProfileCustomTextResponseContent = {
+    [key: string]: string;
+};
 
 export interface ListSelfServiceProfilesPaginatedResponseContent {
     start?: number | undefined;
@@ -35666,6 +36741,11 @@ export interface ListUserConnectedAccountsResponseContent {
     connected_accounts: Management.ConnectedAccount[];
     /** The token to retrieve the next page of connected accounts (if there is one) */
     next?: string | undefined;
+}
+
+export interface ListUserConsentSigningKeysResponseContent {
+    /** The consent signing keys registered for the user. */
+    keys: Management.ConsentSigningKey[];
 }
 
 export interface ListUserEffectivePermissionRoleSourcesResponseContent {
@@ -35799,12 +36879,16 @@ export type LogDate =
 /**
  * Date when the event occurred in ISO 8601 format.
  */
-export type LogDateObject = Record<string, unknown>;
+export type LogDateObject = {
+    [key: string]: unknown;
+};
 
 /**
  * Additional useful details about this event (structure is dependent upon event type).
  */
-export type LogDetails = Record<string, unknown>;
+export type LogDetails = {
+    [key: string]: unknown;
+};
 
 /**
  * Information about the location that triggered this event based on the `ip`.
@@ -36048,6 +37132,9 @@ export const LogStreamFilterGroupNameEnum = {
     UserNotification: "user.notification",
     UserSuccess: "user.success",
     Actions: "actions",
+    AgentGatewayAuthenticationFail: "agent_gateway.authentication.fail",
+    AgentGatewayOperationFail: "agent_gateway.operation.fail",
+    AgentGatewayOperationSuccess: "agent_gateway.operation.success",
     Other: "other",
 } as const;
 export type LogStreamFilterGroupNameEnum =
@@ -36188,36 +37275,49 @@ export type LogStreamResponseSchema =
     | Management.LogStreamResponseSchema.Mixpanel;
 
 export namespace LogStreamResponseSchema {
-    export interface Http extends Management.LogStreamHttpResponseSchema {
+    export interface Http extends Management.LogStreamHttpResponseSchema, _Base {
         type: "http";
     }
 
-    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema, _Base {
         type: "eventbridge";
     }
 
-    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema, _Base {
         type: "eventgrid";
     }
 
-    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema, _Base {
         type: "datadog";
     }
 
-    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema, _Base {
         type: "splunk";
     }
 
-    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+    export interface Sumo extends Management.LogStreamSumoResponseSchema, _Base {
         type: "sumo";
     }
 
-    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+    export interface Segment extends Management.LogStreamSegmentResponseSchema, _Base {
         type: "segment";
     }
 
-    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema, _Base {
         type: "mixpanel";
+    }
+
+    export interface _Base {
+        /** The id of the log stream */
+        id?: string;
+        /** log stream name */
+        name?: string;
+        status?: Management.LogStreamStatusEnum;
+        /** True for priority log streams, false for non-priority */
+        isPriority?: boolean;
+        /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
+        filters?: Management.LogStreamFilter[];
+        pii_config?: Management.LogStreamPiiConfig;
     }
 }
 
@@ -36882,7 +37982,9 @@ export interface OrganizationMemberRole {
 /**
  * Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 25 metadata properties allowed.
  */
-export type OrganizationMetadata = Record<string, string | null>;
+export type OrganizationMetadata = {
+    [key: string]: (string | null) | undefined;
+};
 
 /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
 export const OrganizationSortFieldEnum = {
@@ -36907,6 +38009,254 @@ export const OrganizationUsageEnum = {
     Require: "require",
 } as const;
 export type OrganizationUsageEnum = (typeof OrganizationUsageEnum)[keyof typeof OrganizationUsageEnum];
+
+export type PageComponent =
+    | Management.PageComponent.PageComponentAuth0Form
+    | Management.PageComponent.PageComponentAuth0TypographyHeading
+    | Management.PageComponent.PageComponentAuth0MediaImage
+    | Management.PageComponent.PageComponentAuth0TypographyRichText
+    | Management.PageComponent.PageComponentAuth0StructureSection
+    | Management.PageComponent.PageComponentAuth0StructureSeparator
+    | Management.PageComponent.PageComponentAuth0MyOrganizationDomainTable
+    | Management.PageComponent.PageComponentAuth0MyOrganizationMemberManagement
+    | Management.PageComponent.PageComponentAuth0MyOrganizationDetailsEdit
+    | Management.PageComponent.PageComponentAuth0MyAccountPasskeyManagement
+    | Management.PageComponent.PageComponentAuth0MyAccountMfaManagement;
+
+export namespace PageComponent {
+    export interface PageComponentAuth0Form extends Management.PageComponentAuth0Form {
+        type: "page:component:auth0:form";
+    }
+
+    export interface PageComponentAuth0TypographyHeading extends Management.PageComponentAuth0TypographyHeading {
+        type: "page:component:auth0:typography:heading";
+    }
+
+    export interface PageComponentAuth0MediaImage extends Management.PageComponentAuth0MediaImage {
+        type: "page:component:auth0:media:image";
+    }
+
+    export interface PageComponentAuth0TypographyRichText extends Management.PageComponentAuth0TypographyRichText {
+        type: "page:component:auth0:typography:rich_text";
+    }
+
+    export interface PageComponentAuth0StructureSection extends Management.PageComponentAuth0StructureSection {
+        type: "page:component:auth0:structure:section";
+    }
+
+    export interface PageComponentAuth0StructureSeparator extends Management.PageComponentAuth0StructureSeparator {
+        type: "page:component:auth0:structure:separator";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDomainTable
+        extends Management.PageComponentAuth0MyOrganizationDomainTable {
+        type: "page:component:auth0:my_organization:domain_table";
+    }
+
+    export interface PageComponentAuth0MyOrganizationMemberManagement
+        extends Management.PageComponentAuth0MyOrganizationMemberManagement {
+        type: "page:component:auth0:my_organization:member_management";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDetailsEdit
+        extends Management.PageComponentAuth0MyOrganizationDetailsEdit {
+        type: "page:component:auth0:my_organization:details_edit";
+    }
+
+    export interface PageComponentAuth0MyAccountPasskeyManagement
+        extends Management.PageComponentAuth0MyAccountPasskeyManagement {
+        type: "page:component:auth0:my_account:passkey_management";
+    }
+
+    export interface PageComponentAuth0MyAccountMfaManagement
+        extends Management.PageComponentAuth0MyAccountMfaManagement {
+        type: "page:component:auth0:my_account:mfa_management";
+    }
+}
+
+export interface PageComponentAuth0Form {
+    config: Management.PageComponentAuth0FormConfig;
+}
+
+export interface PageComponentAuth0FormConfig {
+    /** The identifier of the form you want to render. */
+    form_id: string;
+    /** Toast message displayed after successful form submission. */
+    completion_message: string;
+}
+
+export interface PageComponentAuth0MediaImage {
+    config: Management.PageComponentAuth0MediaImageConfig;
+}
+
+export interface PageComponentAuth0MediaImageConfig {
+    /** URL of the image to display. */
+    src: string;
+    position?: Management.PageComponentAuth0MediaImagePositionEnum | undefined;
+    /** Height of the image in pixels. Width scales automatically to preserve aspect ratio. */
+    height?: number | undefined;
+}
+
+/** Horizontal alignment of the image within its container. */
+export const PageComponentAuth0MediaImagePositionEnum = {
+    Left: "left",
+    Center: "center",
+    Right: "right",
+} as const;
+export type PageComponentAuth0MediaImagePositionEnum =
+    (typeof PageComponentAuth0MediaImagePositionEnum)[keyof typeof PageComponentAuth0MediaImagePositionEnum];
+
+export interface PageComponentAuth0MyAccountMfaManagement {
+    config?: Management.PageComponentAuth0MyAccountMfaManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyAccountMfaManagementConfig {}
+
+export interface PageComponentAuth0MyAccountPasskeyManagement {
+    config?: Management.PageComponentAuth0MyAccountPasskeyManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyAccountPasskeyManagementConfig {}
+
+export interface PageComponentAuth0MyOrganizationDetailsEdit {
+    config?: Management.PageComponentAuth0MyOrganizationDetailsEditConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationDetailsEditConfig {}
+
+export interface PageComponentAuth0MyOrganizationDomainTable {
+    config?: Management.PageComponentAuth0MyOrganizationDomainTableConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationDomainTableConfig {}
+
+export interface PageComponentAuth0MyOrganizationMemberManagement {
+    config?: Management.PageComponentAuth0MyOrganizationMemberManagementConfig | undefined;
+}
+
+export interface PageComponentAuth0MyOrganizationMemberManagementConfig {}
+
+export interface PageComponentAuth0StructureSection {
+    config: Management.PageComponentAuth0StructureSectionConfig;
+}
+
+export interface PageComponentAuth0StructureSectionConfig {
+    /** Heading displayed at the top of the section. */
+    title?: string | undefined;
+    /** Optional description displayed below the title. */
+    description?: string | undefined;
+    variant: Management.PageComponentAuth0StructureSectionVariantEnum;
+    /** Components to render inside the section. */
+    children: Management.PageComponentNoChildren[];
+}
+
+/** Controls the section container style. */
+export const PageComponentAuth0StructureSectionVariantEnum = {
+    Card: "card",
+    None: "none",
+} as const;
+export type PageComponentAuth0StructureSectionVariantEnum =
+    (typeof PageComponentAuth0StructureSectionVariantEnum)[keyof typeof PageComponentAuth0StructureSectionVariantEnum];
+
+export interface PageComponentAuth0StructureSeparator {
+    config?: Management.PageComponentAuth0StructureSeparatorConfig | undefined;
+}
+
+export interface PageComponentAuth0StructureSeparatorConfig {
+    variant?: Management.PageComponentAuth0StructureSeparatorVariantEnum | undefined;
+    /** Optional label centered within the separator line (ignored when variant is "none"). */
+    text?: string | undefined;
+}
+
+/** Controls the line style. Defaults to "solid". */
+export const PageComponentAuth0StructureSeparatorVariantEnum = {
+    Dashed: "dashed",
+    None: "none",
+    Solid: "solid",
+} as const;
+export type PageComponentAuth0StructureSeparatorVariantEnum =
+    (typeof PageComponentAuth0StructureSeparatorVariantEnum)[keyof typeof PageComponentAuth0StructureSeparatorVariantEnum];
+
+export interface PageComponentAuth0TypographyHeading {
+    config: Management.PageComponentAuth0TypographyHeadingConfig;
+}
+
+export interface PageComponentAuth0TypographyHeadingConfig {
+    /** Heading displayed. */
+    title: string;
+    /** Optional description displayed below the title. Supports basic HTML formatting: links, bold, italic, and underline. */
+    description?: string | undefined;
+}
+
+export interface PageComponentAuth0TypographyRichText {
+    config: Management.PageComponentAuth0TypographyRichTextConfig;
+}
+
+export interface PageComponentAuth0TypographyRichTextConfig {
+    /** HTML content to render. Supports headings, bold, italic, underline, links, text alignment, and lists. */
+    content: string;
+}
+
+export type PageComponentNoChildren =
+    | Management.PageComponentNoChildren.PageComponentAuth0Form
+    | Management.PageComponentNoChildren.PageComponentAuth0TypographyHeading
+    | Management.PageComponentNoChildren.PageComponentAuth0MediaImage
+    | Management.PageComponentNoChildren.PageComponentAuth0TypographyRichText
+    | Management.PageComponentNoChildren.PageComponentAuth0StructureSeparator
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationDomainTable
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationMemberManagement
+    | Management.PageComponentNoChildren.PageComponentAuth0MyOrganizationDetailsEdit
+    | Management.PageComponentNoChildren.PageComponentAuth0MyAccountPasskeyManagement
+    | Management.PageComponentNoChildren.PageComponentAuth0MyAccountMfaManagement;
+
+export namespace PageComponentNoChildren {
+    export interface PageComponentAuth0Form extends Management.PageComponentAuth0Form {
+        type: "page:component:auth0:form";
+    }
+
+    export interface PageComponentAuth0TypographyHeading extends Management.PageComponentAuth0TypographyHeading {
+        type: "page:component:auth0:typography:heading";
+    }
+
+    export interface PageComponentAuth0MediaImage extends Management.PageComponentAuth0MediaImage {
+        type: "page:component:auth0:media:image";
+    }
+
+    export interface PageComponentAuth0TypographyRichText extends Management.PageComponentAuth0TypographyRichText {
+        type: "page:component:auth0:typography:rich_text";
+    }
+
+    export interface PageComponentAuth0StructureSeparator extends Management.PageComponentAuth0StructureSeparator {
+        type: "page:component:auth0:structure:separator";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDomainTable
+        extends Management.PageComponentAuth0MyOrganizationDomainTable {
+        type: "page:component:auth0:my_organization:domain_table";
+    }
+
+    export interface PageComponentAuth0MyOrganizationMemberManagement
+        extends Management.PageComponentAuth0MyOrganizationMemberManagement {
+        type: "page:component:auth0:my_organization:member_management";
+    }
+
+    export interface PageComponentAuth0MyOrganizationDetailsEdit
+        extends Management.PageComponentAuth0MyOrganizationDetailsEdit {
+        type: "page:component:auth0:my_organization:details_edit";
+    }
+
+    export interface PageComponentAuth0MyAccountPasskeyManagement
+        extends Management.PageComponentAuth0MyAccountPasskeyManagement {
+        type: "page:component:auth0:my_account:passkey_management";
+    }
+
+    export interface PageComponentAuth0MyAccountMfaManagement
+        extends Management.PageComponentAuth0MyAccountMfaManagement {
+        type: "page:component:auth0:my_account:mfa_management";
+    }
+}
+
+export type PageSlug = string;
 
 /** Name of the prompt. */
 export const PartialGroupsEnum = {
@@ -36952,6 +38302,14 @@ export const PasswordDefaultDictionariesEnum = {
 } as const;
 export type PasswordDefaultDictionariesEnum =
     (typeof PasswordDefaultDictionariesEnum)[keyof typeof PasswordDefaultDictionariesEnum];
+
+/** How custom entries are compared against a password. "exact": a password is rejected if it equals an entry. "substring": a password is rejected if it contains an entry (every entry must then be at least 3 characters). */
+export const PasswordDictionaryMatchTypeEnum = {
+    Exact: "exact",
+    Substring: "substring",
+} as const;
+export type PasswordDictionaryMatchTypeEnum =
+    (typeof PasswordDictionaryMatchTypeEnum)[keyof typeof PasswordDictionaryMatchTypeEnum];
 
 /** Controls whether identical consecutive characters are allowed in passwords */
 export const PasswordIdenticalCharactersPolicyEnum = {
@@ -37152,6 +38510,85 @@ export const PhoneTemplateNotificationTypeEnum = {
 export type PhoneTemplateNotificationTypeEnum =
     (typeof PhoneTemplateNotificationTypeEnum)[keyof typeof PhoneTemplateNotificationTypeEnum];
 
+export interface Portal {
+    id: Management.PortalId;
+    name: Management.PortalName;
+    navigation?: Management.PortalNavigation | undefined;
+    pages?: Management.PortalPagesByType | undefined;
+    slug: Management.PortalSlug;
+    client?: Management.PortalClientSecretPost | undefined;
+    custom_code?: Management.PortalCustomCode | undefined;
+    created_at: Management.PortalDateTime;
+    updated_at: Management.PortalDateTime;
+}
+
+export interface PortalClientSecretPost {
+    token_endpoint_auth_method: PortalClientSecretPost.TokenEndpointAuthMethod;
+    client_id: string;
+}
+
+export namespace PortalClientSecretPost {
+    export const TokenEndpointAuthMethod = {
+        ClientSecretPost: "client_secret_post",
+    } as const;
+    export type TokenEndpointAuthMethod = (typeof TokenEndpointAuthMethod)[keyof typeof TokenEndpointAuthMethod];
+}
+
+export interface PortalClientSecretPostRequest {
+    token_endpoint_auth_method: PortalClientSecretPostRequest.TokenEndpointAuthMethod;
+    client_id: string;
+    client_secret: string;
+}
+
+export namespace PortalClientSecretPostRequest {
+    export const TokenEndpointAuthMethod = {
+        ClientSecretPost: "client_secret_post",
+    } as const;
+    export type TokenEndpointAuthMethod = (typeof TokenEndpointAuthMethod)[keyof typeof TokenEndpointAuthMethod];
+}
+
+export interface PortalCustomCode {
+    /** Custom code injected into the <head> of the portal. Only injected when the portal is accessed via a custom domain; it is not injected on canonical domains. */
+    head?: string | undefined;
+}
+
+export type PortalCustomCodeNullable = (Management.PortalCustomCode | null) | undefined;
+
+export type PortalDateTime = string;
+
+export type PortalId = string;
+
+export type PortalName = string;
+
+export interface PortalNavigation {
+    sidebar?: Management.Sidebar | undefined;
+}
+
+export type PortalNavigationNullable = (Management.PortalNavigation | null) | undefined;
+
+export interface PortalPage {
+    title: string;
+    slug: Management.PageSlug;
+    components?: Management.PageComponent[] | undefined;
+}
+
+export interface PortalPagesByType {
+    default?: Management.PageSlug | undefined;
+    standard?: Management.PortalPage[] | undefined;
+}
+
+export type PortalPagesByTypeNullable = (Management.PortalPagesByType | null) | undefined;
+
+export type PortalSlug = string;
+
+export interface PortalSummary {
+    id: Management.PortalId;
+    name: Management.PortalName;
+    slug: Management.PortalSlug;
+    created_at: Management.PortalDateTime;
+    updated_at: Management.PortalDateTime;
+}
+
 export interface PostClientCredentialResponseContent {
     /** ID of the credential. Generated on creation. */
     id?: string | undefined;
@@ -37175,7 +38612,7 @@ export interface PostClientCredentialResponseContent {
     [key: string]: any;
 }
 
-/** Selected Signing Algorithm */
+/** Selected Signing Algorithm. Only applicable when key_use is "signing". */
 export const PostConnectionKeysAlgEnum = {
     Rs256: "RS256",
     Rs384: "RS384",
@@ -37188,15 +38625,19 @@ export const PostConnectionKeysAlgEnum = {
 export type PostConnectionKeysAlgEnum = (typeof PostConnectionKeysAlgEnum)[keyof typeof PostConnectionKeysAlgEnum];
 
 export interface PostConnectionKeysRequestContent {
+    /** Whether to provision a signing key (default) or an encryption key for the connection. */
+    key_use?: Management.ConnectionKeyUseEnum | undefined;
     signing_alg?: Management.PostConnectionKeysAlgEnum | undefined;
+    /** Selected key-management algorithm for the encryption key. Only applicable when key_use is "encryption". */
+    encryption_alg?: Management.ConnectionIdTokenEncryptedResponseAlgEnum | undefined;
 }
 
 export interface PostConnectionsKeysResponseContentItem {
-    /** The key id of the signing key */
+    /** The key id of the signing or encryption key */
     kid: string;
-    /** The public certificate of the signing key */
+    /** The public certificate of the signing or encryption key */
     cert: string;
-    /** The public certificate of the signing key in pkcs7 format */
+    /** The public certificate of the signing or encryption key in pkcs7 format */
     pkcs?: string | undefined;
     /** True if the key is the current key */
     current?: boolean | undefined;
@@ -37208,7 +38649,7 @@ export interface PostConnectionsKeysResponseContentItem {
     fingerprint: string;
     /** The cert thumbprint */
     thumbprint: string;
-    /** Signing key algorithm */
+    /** Key algorithm: a signing algorithm for signing keys, or a key-management algorithm for encryption keys */
     algorithm?: string | undefined;
     key_use?: Management.ConnectionKeyUseEnum | undefined;
     subject_dn?: string | undefined;
@@ -37229,6 +38670,7 @@ export type PreferredAuthenticationMethodEnum =
 export interface PreviewCimdMetadataResponseContent {
     /** The client_id of an existing client registered with this external_client_id, if one exists. */
     client_id?: string | undefined;
+    external_metadata_created_by?: Management.CimdExternalMetadataCreatedByEnum | undefined;
     /** Array of retrieval errors (populated when the metadata document could not be fetched). When present, validation is omitted. */
     errors?: string[] | undefined;
     validation?: Management.CimdValidationResult | undefined;
@@ -37450,7 +38892,9 @@ export type RefreshTokenDate =
 /**
  * The date and time when the refresh token was created
  */
-export type RefreshTokenDateObject = Record<string, unknown>;
+export type RefreshTokenDateObject = {
+    [key: string]: unknown;
+};
 
 /**
  * Device used while issuing/exchanging the refresh token
@@ -37603,6 +39047,9 @@ export interface ResourceServer {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    use_for_personal_agent_protocol?: Management.ResourceServerUseForPersonalAgentProtocol | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 /**
@@ -37631,6 +39078,22 @@ export interface ResourceServerAccessTokenCustomClaimsMappingRule {
     /** Restricted dot-path expression read from the anonymous-session context (e.g. `anonymous_session.metadata.country`). */
     expression: string;
 }
+
+/** Controls whether access tokens issued for this API include agent subject claims. With <code>auth0-v1</code>, access tokens include additional claims that identify whether the subject is a <code>user</code>, <code>service</code>, or <code>ai_agent</code>. The <code>sub</code> claim can reference an agent ID, and the <code>@clients</code> suffix is no longer appended to client IDs. With <code>off</code>, these claims are not included and the <code>@clients</code> suffix is still appended. When not set, the API behaves as <code>off</code>. */
+export const ResourceServerAgentSubjectClaimsResponseEnum = {
+    Off: "off",
+    Auth0V1: "auth0-v1",
+} as const;
+export type ResourceServerAgentSubjectClaimsResponseEnum =
+    (typeof ResourceServerAgentSubjectClaimsResponseEnum)[keyof typeof ResourceServerAgentSubjectClaimsResponseEnum];
+
+/** Controls whether access tokens issued for this API include agent subject claims. With <code>auth0-v1</code>, access tokens include additional claims that identify whether the subject is a <code>user</code>, <code>service</code>, or <code>ai_agent</code>. The <code>sub</code> claim can reference an agent ID, and the <code>@clients</code> suffix is no longer appended to client IDs. With <code>off</code>, these claims are not included and the <code>@clients</code> suffix is still appended. When not set, the API behaves as <code>off</code>. */
+export const ResourceServerAgentSubjectClaimsSchemaEnum = {
+    Off: "off",
+    Auth0V1: "auth0-v1",
+} as const;
+export type ResourceServerAgentSubjectClaimsSchemaEnum =
+    (typeof ResourceServerAgentSubjectClaimsSchemaEnum)[keyof typeof ResourceServerAgentSubjectClaimsSchemaEnum];
 
 /**
  * Authorization policy for the resource server.
@@ -37719,6 +39182,9 @@ export interface ResourceServerSearchResponse {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    use_for_personal_agent_protocol?: Management.ResourceServerUseForPersonalAgentProtocol | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 /** Field name to sort results by in ascending order only. Defaults to insertion order (oldest first) if not provided. */
@@ -37841,6 +39307,18 @@ export interface ResourceServerTokenEncryptionKey {
     /** PEM-formatted public key. Must be JSON escaped. */
     pem: string;
 }
+
+/** The type of the resource server. */
+export const ResourceServerTypeEnum = {
+    UniversalCommerceProtocolServer: "universal_commerce_protocol_server",
+    ModelContextProtocolServer: "model_context_protocol_server",
+} as const;
+export type ResourceServerTypeEnum = (typeof ResourceServerTypeEnum)[keyof typeof ResourceServerTypeEnum];
+
+/**
+ * Whether this resource server is used for the Personal Agent Protocol.
+ */
+export type ResourceServerUseForPersonalAgentProtocol = boolean;
 
 /**
  * PEM-encoded certificate
@@ -38034,6 +39512,7 @@ export interface RotateClientSecretResponseContent {
     require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
+    allow_personal_agent_browser_join?: Management.ClientAllowPersonalAgentBrowserJoin | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
     token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
@@ -38050,12 +39529,14 @@ export interface RotateClientSecretResponseContent {
     express_configuration?: Management.ExpressConfiguration | undefined;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    google_account_linking?: Management.GoogleAccountLinkingConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
     enforce_anon_session_transfer_network_binding?:
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -38064,6 +39545,9 @@ export interface RotateClientSecretResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -38073,10 +39557,14 @@ export interface RotateClientSecretResponseContent {
 }
 
 export interface RotateConnectionKeysRequestContent {
+    /** Whether to rotate the signing key (default) or the encryption key for the connection. */
+    key_use?: Management.ConnectionKeyUseEnum | undefined;
     signing_alg?: Management.RotateConnectionKeysSigningAlgEnum | undefined;
+    /** Selected key-management algorithm for the encryption key. Only applicable when key_use is "encryption". */
+    encryption_alg?: Management.ConnectionIdTokenEncryptedResponseAlgEnum | undefined;
 }
 
-/** Selected Signing Algorithm */
+/** Selected Signing Algorithm. Only applicable when key_use is "signing". */
 export const RotateConnectionKeysSigningAlgEnum = {
     Rs256: "RS256",
     Rs384: "RS384",
@@ -38090,11 +39578,11 @@ export type RotateConnectionKeysSigningAlgEnum =
     (typeof RotateConnectionKeysSigningAlgEnum)[keyof typeof RotateConnectionKeysSigningAlgEnum];
 
 export interface RotateConnectionsKeysResponseContent {
-    /** The key id of the signing key */
+    /** The key id of the signing or encryption key */
     kid: string;
-    /** The public certificate of the signing key */
+    /** The public certificate of the signing or encryption key */
     cert: string;
-    /** The public certificate of the signing key in pkcs7 format */
+    /** The public certificate of the signing or encryption key in pkcs7 format */
     pkcs?: string | undefined;
     /** True if the key is the the next key */
     next?: boolean | undefined;
@@ -38102,7 +39590,7 @@ export interface RotateConnectionsKeysResponseContent {
     fingerprint: string;
     /** The cert thumbprint */
     thumbprint: string;
-    /** Signing key algorithm */
+    /** Key algorithm: a signing algorithm for signing keys, or a key-management algorithm for encryption keys */
     algorithm?: string | undefined;
     key_use?: Management.ConnectionKeyUseEnum | undefined;
     subject_dn?: string | undefined;
@@ -38216,6 +39704,7 @@ export const ScreenGroupNameEnum = {
     CustomForm: "custom-form",
     Consent: "consent",
     ConsentTenantScopes: "consent-tenant-scopes",
+    PendingConsent: "pending-consent",
     CustomizedConsent: "customized-consent",
     Logout: "logout",
     LogoutComplete: "logout-complete",
@@ -38416,6 +39905,7 @@ export interface SegmentStartsWithExpression {
     starts_with: string[];
 }
 
+/** Filter by status. Exact match. */
 export const SegmentStatusEnum = {
     Active: "active",
     Archived: "archived",
@@ -38627,6 +40117,14 @@ export const SelfServiceProfileSsoTicketProvisioningScopeEnum = {
 } as const;
 export type SelfServiceProfileSsoTicketProvisioningScopeEnum =
     (typeof SelfServiceProfileSsoTicketProvisioningScopeEnum)[keyof typeof SelfServiceProfileSsoTicketProvisioningScopeEnum];
+
+/**
+ * Configuration for the setup of Universal Logout in the Self-Service Enterprise Configuration flow.
+ */
+export interface SelfServiceProfileSsoTicketUniversalLogoutConfig {
+    /** Whether the end user can set up Universal Logout during the Self-Service Enterprise Configuration flow. */
+    allow_configuration: boolean;
+}
 
 export interface SelfServiceProfileUserAttribute {
     /** Identifier of this attribute. */
@@ -38862,9 +40360,13 @@ export interface SetGuardianFactorsProviderPushNotificationApnsResponseContent {
     bundle_id?: (string | null) | undefined;
 }
 
-export type SetGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
+export type SetGuardianFactorsProviderPushNotificationFcmResponseContent = {
+    [key: string]: unknown;
+};
 
-export type SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
+export type SetGuardianFactorsProviderPushNotificationFcmv1ResponseContent = {
+    [key: string]: unknown;
+};
 
 export interface SetGuardianFactorsProviderPushNotificationResponseContent {
     provider?: Management.GuardianFactorsProviderPushNotificationProviderDataEnum | undefined;
@@ -38925,7 +40427,9 @@ export interface SetNetworkAclsResponseContent {
 /**
  * An object containing template partials for a group of screens.
  */
-export type SetPartialsRequestContent = Record<string, unknown>;
+export type SetPartialsRequestContent = {
+    [key: string]: unknown;
+};
 
 export interface SetPhoneFactorSettingsResponseContent {
     /** The length of the OTP code. */
@@ -38946,12 +40450,16 @@ export interface SetRulesConfigResponseContent {
 /**
  * The list of text keys and values to customize the Self-Service Enterprise Configuration flow page. Values can be plain text or rich HTML content limited to basic styling tags and hyperlinks.
  */
-export type SetSelfServiceProfileCustomTextRequestContent = Record<string, string>;
+export type SetSelfServiceProfileCustomTextRequestContent = {
+    [key: string]: string;
+};
 
 /**
  * The resulting list of custom text keys and values.
  */
-export type SetSelfServiceProfileCustomTextResponseContent = Record<string, string>;
+export type SetSelfServiceProfileCustomTextResponseContent = {
+    [key: string]: string;
+};
 
 /**
  * The successfully created authentication method.
@@ -39001,7 +40509,95 @@ export type SetUserAuthenticationMethodsRequestContent = Management.SetUserAuthe
 /**
  * An object containing custom dictionaries for a group of screens.
  */
-export type SetsCustomTextsByLanguageRequestContent = Record<string, unknown>;
+export type SetsCustomTextsByLanguageRequestContent = {
+    [key: string]: unknown;
+};
+
+export interface Sidebar {
+    components?: Management.SidebarComponent[] | undefined;
+}
+
+export type SidebarComponent =
+    | Management.SidebarComponent.SidebarComponentAuth0ExternalLink
+    | Management.SidebarComponent.SidebarComponentAuth0InternalLink
+    | Management.SidebarComponent.SidebarComponentAuth0ExternalLinkV2
+    | Management.SidebarComponent.SidebarComponentAuth0InternalLinkV2;
+
+export namespace SidebarComponent {
+    export interface SidebarComponentAuth0ExternalLink extends Management.SidebarComponentAuth0ExternalLink {
+        type: "sidebar:component:auth0:external_link";
+    }
+
+    export interface SidebarComponentAuth0InternalLink extends Management.SidebarComponentAuth0InternalLink {
+        type: "sidebar:component:auth0:internal_link";
+    }
+
+    export interface SidebarComponentAuth0ExternalLinkV2 extends Management.SidebarComponentAuth0ExternalLinkV2 {
+        type: "sidebar:component:auth0:external_link:v2";
+    }
+
+    export interface SidebarComponentAuth0InternalLinkV2 extends Management.SidebarComponentAuth0InternalLinkV2 {
+        type: "sidebar:component:auth0:internal_link:v2";
+    }
+}
+
+/**
+ * Deprecated. Use "sidebar:component:auth0:external_link:v2" instead.
+ */
+export interface SidebarComponentAuth0ExternalLink {
+    config: Management.SidebarComponentAuth0ExternalLinkConfig;
+}
+
+export interface SidebarComponentAuth0ExternalLinkConfig {
+    /** Text shown for the link. */
+    label: string;
+    /** External URL to navigate to. */
+    url: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+export interface SidebarComponentAuth0ExternalLinkV2 {
+    config: Management.SidebarComponentAuth0ExternalLinkV2Config;
+}
+
+export interface SidebarComponentAuth0ExternalLinkV2Config {
+    /** Text shown for the link. */
+    label: string;
+    /** External URL to navigate to. */
+    href: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+/**
+ * Deprecated. Use "sidebar:component:auth0:internal_link:v2" instead.
+ */
+export interface SidebarComponentAuth0InternalLink {
+    config: Management.SidebarComponentAuth0InternalLinkConfig;
+}
+
+export interface SidebarComponentAuth0InternalLinkConfig {
+    /** Text shown for the link. */
+    label: string;
+    /** Slug of the internal portal page to navigate to. */
+    to: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
+
+export interface SidebarComponentAuth0InternalLinkV2 {
+    config: Management.SidebarComponentAuth0InternalLinkV2Config;
+}
+
+export interface SidebarComponentAuth0InternalLinkV2Config {
+    /** Text shown for the link. */
+    label: string;
+    /** Slug of the internal portal page to navigate to. */
+    page_slug: string;
+    /** Name of the icon displayed next to the link label. */
+    icon?: string | undefined;
+}
 
 /** Algorithm used to sign JWTs. Can be `HS256` (default) or `RS256`. `PS256` available via addon. */
 export const SigningAlgorithmEnum = {
@@ -39325,7 +40921,7 @@ export interface TenantSettingsFlags {
     enable_client_connections?: boolean | undefined;
     /** Whether advanced API Authorization scenarios are enabled (true) or disabled (false). */
     enable_pipeline2?: boolean | undefined;
-    /** If enabled, clients are able to add legacy delegation grants. */
+    /** DEPRECATED property. If enabled, first-party applications can add the legacy delegation grant types. It does not enable the /delegation endpoint. */
     allow_legacy_delegation_grant_types?: boolean | undefined;
     /** If enabled, clients are able to add legacy RO grants. */
     allow_legacy_ro_grant_types?: boolean | undefined;
@@ -39353,7 +40949,7 @@ export interface TenantSettingsFlags {
     revoke_refresh_token_grant?: boolean | undefined;
     /** Enables beta access to log streaming changes */
     dashboard_log_streams_next?: boolean | undefined;
-    /** Enables new insights activity page view */
+    /** Deprecated. This flag has no effect and is retained only for backward compatibility */
     dashboard_insights_view?: boolean | undefined;
     /** Disables SAML fields map fix for bad mappings with repeated attributes */
     disable_fields_map_fix?: boolean | undefined;
@@ -39363,8 +40959,6 @@ export interface TenantSettingsFlags {
     remove_alg_from_jwks?: boolean | undefined;
     /** Improves bot detection during signup in classic universal login */
     improved_signup_bot_detection_in_classic?: boolean | undefined;
-    /** This tenant signed up for the Auth4GenAI trail */
-    genai_trial?: boolean | undefined;
     /** Whether the Local Resource Discovery endpoint is enabled (true) or disabled (false). */
     local_resource_discovery?: boolean | undefined;
     /** Whether third-party developers can <a href="https://auth0.com/docs/api-auth/dynamic-client-registration">dynamically register</a> applications for your APIs (true) or not (false). This flag enables dynamic client registration. */
@@ -39412,6 +41006,16 @@ export interface TenantSettingsPasswordPage {
     /** Custom change password HTML (<a href='https://github.com/Shopify/liquid/wiki/Liquid-for-Designers'>Liquid syntax</a> supported). */
     html?: string | undefined;
 }
+
+/**
+ * Company domains associated with the Personal Agent Protocol. Each entry must be a bare, lowercase hostname (no scheme, port, path, or trailing slash). The array must contain at most 5 unique entries.
+ */
+export type TenantSettingsPersonalAgentProtocolCompanyDomains = (string[] | null) | undefined;
+
+/**
+ * Company domains associated with the Personal Agent Protocol.
+ */
+export type TenantSettingsPersonalAgentProtocolCompanyDomainsResponse = string[];
 
 /** Profile that determines how the identity of the protected resource (i.e., API) can be specified in the OAuth endpoints when access is being requested. When set to audience (default), the audience parameter is used to specify the resource server. When set to compatibility, the audience parameter is still checked first, but if it not provided, then the resource parameter can be used to specify the resource server. */
 export const TenantSettingsResourceParameterProfile = {
@@ -39530,7 +41134,9 @@ export type TenantSettingsSupportedLocalesEnum =
 /**
  * The payload for the action.
  */
-export type TestActionPayload = Record<string, unknown>;
+export type TestActionPayload = {
+    [key: string]: unknown;
+};
 
 export interface TestActionResponseContent {
     payload?: Management.TestActionResultPayload | undefined;
@@ -39539,7 +41145,9 @@ export interface TestActionResponseContent {
 /**
  * The resulting payload after an action was executed.
  */
-export type TestActionResultPayload = Record<string, unknown>;
+export type TestActionResultPayload = {
+    [key: string]: unknown;
+};
 
 export interface TestCustomDomainResponseContent {
     /** Result of the operation. */
@@ -39551,7 +41159,9 @@ export interface TestCustomDomainResponseContent {
 /**
  * The raw payload of the test event.
  */
-export type TestEventDataContent = Record<string, unknown>;
+export type TestEventDataContent = {
+    [key: string]: unknown;
+};
 
 /**
  * Configuration for Third Party Client Access during the Self-Service Enterprise Configuration flow.
@@ -39882,9 +41492,9 @@ export interface UpdateBruteForceSettingsResponseContent {
     /** List of trusted IP addresses that will not have attack protection enforced against them. */
     allowlist?: string[] | undefined;
     mode?: Management.BruteForceProtectionModeEnum | undefined;
+    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
     /** Maximum number of unsuccessful attempts. */
     max_attempts?: number | undefined;
-    form_submission_mode?: Management.BruteForceProtectionFormSubmissionModeEnum | undefined;
 }
 
 export interface UpdateClientGrantResponseContent {
@@ -39989,6 +41599,7 @@ export interface UpdateClientResponseContent {
     require_pushed_authorization_requests?: boolean | undefined;
     /** Makes the use of Proof-of-Possession mandatory for this client */
     require_proof_of_possession?: boolean | undefined;
+    allow_personal_agent_browser_join?: Management.ClientAllowPersonalAgentBrowserJoin | undefined;
     signed_request_object?: Management.ClientSignedRequestObjectWithCredentialId | undefined;
     token_vault_privileged_access?: Management.ClientTokenVaultPrivilegedAccessWithCredentialId | undefined;
     compliance_level?: (Management.ClientComplianceLevelEnum | null) | undefined;
@@ -40005,12 +41616,14 @@ export interface UpdateClientResponseContent {
     express_configuration?: Management.ExpressConfiguration | undefined;
     b2b_integration_configuration?: Management.B2BIntegrationConfiguration | undefined;
     my_organization_configuration?: Management.ClientMyOrganizationResponseConfiguration | undefined;
+    google_account_linking?: Management.GoogleAccountLinkingConfiguration | undefined;
     identity_assertion_authorization_grant?: Management.IdentityAssertionAuthorizationGrant | undefined;
     anonymous_sessions?: Management.AnonymousSessions | undefined;
     enforce_anon_session_transfer_network_binding?:
         | Management.ClientAnonymousSessionTransferNetworkBindingEnum
         | undefined;
     third_party_security_mode?: Management.ClientThirdPartySecurityModeEnum | undefined;
+    oidc_support?: Management.ClientOidcSupport | undefined;
     redirection_policy?: Management.ClientRedirectionPolicyEnum | undefined;
     /** The identifier of the resource server that this client is linked to. */
     resource_server_identifier?: string | undefined;
@@ -40019,6 +41632,9 @@ export interface UpdateClientResponseContent {
         | undefined;
     external_metadata_type?: Management.ClientExternalMetadataTypeEnum | undefined;
     external_metadata_created_by?: Management.ClientExternalMetadataCreatedByEnum | undefined;
+    external_metadata_status?: Management.ClientExternalMetadataStatusEnum | undefined;
+    /** ID of the agent associated with this client. */
+    agent_id?: string | undefined;
     /** An alternate client identifier to be used during authorization flows. Only supports CIMD-based client identifiers. */
     external_client_id?: string | undefined;
     /** URL for the JSON Web Key Set (JWKS) containing the public keys used for private_key_jwt authentication. Only present for CIMD clients using private_key_jwt authentication. */
@@ -40044,8 +41660,9 @@ export interface UpdateConnectionOptions {
     /** Enable this if you have a legacy user store and you want to gradually migrate those users to the Auth0 user store */
     import_mode?: boolean | undefined;
     /** Stores encrypted string only configurations for connections */
-    configuration?: (Record<string, string | null> | null) | undefined;
+    configuration?: (Record<string, (string | null) | undefined> | null) | undefined;
     customScripts?: Management.ConnectionCustomScripts | undefined;
+    otp_settings?: Management.ConnectionOtpSettings | undefined;
     authentication_methods?: (Management.ConnectionAuthenticationMethods | null) | undefined;
     passkey_options?: (Management.ConnectionPasskeyOptions | null) | undefined;
     passwordPolicy?: (Management.ConnectionPasswordPolicyEnum | null) | undefined;
@@ -40070,6 +41687,8 @@ export interface UpdateConnectionOptions {
     assertion_decryption_settings?: Management.ConnectionAssertionDecryptionSettings | undefined;
     id_token_signed_response_algs?: ((Management.ConnectionIdTokenSignedResponseAlgs | undefined) | null) | undefined;
     dpop_signing_alg?: Management.ConnectionDpopSigningAlgEnum | undefined;
+    id_token_encrypted_response_alg?: Management.ConnectionIdTokenEncryptedResponseAlgEnum | undefined;
+    id_token_encrypted_response_encs?: Management.ConnectionIdTokenEncryptedResponseEncs | undefined;
     enable_pushed_authorization_requests?: Management.ConnectionEnablePushedAuthorizationRequests | undefined;
     pushed_authorization_request_endpoint?: Management.ConnectionPushedAuthorizationRequestEndpoint | undefined;
     token_endpoint_auth_method?: (Management.ConnectionTokenEndpointAuthMethodEnum | null) | undefined;
@@ -40077,6 +41696,10 @@ export interface UpdateConnectionOptions {
     token_endpoint_jwtca_aud_format?: Management.ConnectionTokenEndpointJwtcaAudFormatEnumOidc | undefined;
     id_token_session_expiry_supported?: Management.ConnectionIdTokenSessionExpirySupported | undefined;
     useOauthSpecScope?: Management.ConnectionUseOauthSpecScope | undefined;
+    /** The client ID registered with the identity provider */
+    client_id?: (string | null) | undefined;
+    /** Additional Google client IDs accepted as the `aud` (audience) of Google ID tokens, used by Google native login and Google Streamlined Linking. */
+    allowed_audiences?: (string[] | null) | undefined;
     discovery_url?: ((Management.ConnectionsDiscoveryUrl | undefined) | null) | undefined;
     oidc_metadata?: (Management.ConnectionsOidcMetadata | null) | undefined;
     thumbprints?: Management.ConnectionThumbprints | undefined;
@@ -40378,6 +42001,7 @@ export interface UpdateConnectionRequestContentPlanningCenter extends Management
  */
 export interface UpdateConnectionRequestContentSaml extends Management.ConnectionCommon {
     options?: Management.ConnectionOptionsSaml | undefined;
+    cross_app_access_requesting_app?: Management.CrossAppAccessRequestingApp | undefined;
     cross_app_access_resource_app?: (Management.ConnectionCrossAppAccessResourceApp | null) | undefined;
     show_as_button?: Management.ConnectionShowAsButton | undefined;
 }
@@ -40677,6 +42301,7 @@ export interface UpdateExperimentResponseContent {
     authentication_flow: string;
     allocation_strategy: Management.AllocationStrategyEnum;
     status: Management.ExperimentStatusEnum;
+    /** Whether the experiment is valid and ready to activate, as of its last update. It can lag changes made later to related entities. Call POST /experiments/{id}/validate for the current result. */
     is_valid: boolean;
     default_config?: Management.DefaultConfigEnum | undefined;
     feature_flag_snapshot?: (Record<string, unknown> | null) | undefined;
@@ -40696,7 +42321,9 @@ export interface UpdateExperimentResponseContent {
 /**
  * Configuration parameters for this feature flag
  */
-export type UpdateFeatureFlagParameters = Record<string, Management.FeatureFlagConfigParam>;
+export type UpdateFeatureFlagParameters = {
+    [key: string]: Management.FeatureFlagConfigParam;
+};
 
 export interface UpdateFeatureFlagResponseContent {
     id: string;
@@ -40788,9 +42415,13 @@ export interface UpdateGuardianFactorsProviderPushNotificationApnsResponseConten
     bundle_id?: (string | null) | undefined;
 }
 
-export type UpdateGuardianFactorsProviderPushNotificationFcmResponseContent = Record<string, unknown>;
+export type UpdateGuardianFactorsProviderPushNotificationFcmResponseContent = {
+    [key: string]: unknown;
+};
 
-export type UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent = Record<string, unknown>;
+export type UpdateGuardianFactorsProviderPushNotificationFcmv1ResponseContent = {
+    [key: string]: unknown;
+};
 
 export interface UpdateGuardianFactorsProviderPushNotificationSnsResponseContent {
     aws_access_key_id?: (string | null) | undefined;
@@ -40817,7 +42448,9 @@ export interface UpdateHookResponseContent {
 /**
  * Hashmap of key-value pairs where the value must be a string.
  */
-export type UpdateHookSecretRequestContent = Record<string, string>;
+export type UpdateHookSecretRequestContent = {
+    [key: string]: string;
+};
 
 /**
  * Configuration on the use of ID-JAGs for Cross App Access.
@@ -40838,36 +42471,49 @@ export type UpdateLogStreamResponseContent =
     | Management.UpdateLogStreamResponseContent.Mixpanel;
 
 export namespace UpdateLogStreamResponseContent {
-    export interface Http extends Management.LogStreamHttpResponseSchema {
+    export interface Http extends Management.LogStreamHttpResponseSchema, _Base {
         type: "http";
     }
 
-    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema {
+    export interface Eventbridge extends Management.LogStreamEventBridgeResponseSchema, _Base {
         type: "eventbridge";
     }
 
-    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema {
+    export interface Eventgrid extends Management.LogStreamEventGridResponseSchema, _Base {
         type: "eventgrid";
     }
 
-    export interface Datadog extends Management.LogStreamDatadogResponseSchema {
+    export interface Datadog extends Management.LogStreamDatadogResponseSchema, _Base {
         type: "datadog";
     }
 
-    export interface Splunk extends Management.LogStreamSplunkResponseSchema {
+    export interface Splunk extends Management.LogStreamSplunkResponseSchema, _Base {
         type: "splunk";
     }
 
-    export interface Sumo extends Management.LogStreamSumoResponseSchema {
+    export interface Sumo extends Management.LogStreamSumoResponseSchema, _Base {
         type: "sumo";
     }
 
-    export interface Segment extends Management.LogStreamSegmentResponseSchema {
+    export interface Segment extends Management.LogStreamSegmentResponseSchema, _Base {
         type: "segment";
     }
 
-    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema {
+    export interface Mixpanel extends Management.LogStreamMixpanelResponseSchema, _Base {
         type: "mixpanel";
+    }
+
+    export interface _Base {
+        /** The id of the log stream */
+        id?: string;
+        /** log stream name */
+        name?: string;
+        status?: Management.LogStreamStatusEnum;
+        /** True for priority log streams, false for non-priority */
+        isPriority?: boolean;
+        /** Only logs events matching these filters will be delivered by the stream. If omitted or empty, all events will be delivered. */
+        filters?: Management.LogStreamFilter[];
+        pii_config?: Management.LogStreamPiiConfig;
     }
 }
 
@@ -41044,6 +42690,9 @@ export interface UpdateResourceServerResponseContent {
     authorization_policy?: (Management.ResourceServerAuthorizationPolicy | null) | undefined;
     /** The client ID of the client that this resource server is linked to */
     client_id?: string | undefined;
+    agent_subject_claims?: Management.ResourceServerAgentSubjectClaimsResponseEnum | undefined;
+    use_for_personal_agent_protocol?: Management.ResourceServerUseForPersonalAgentProtocol | undefined;
+    type?: (Management.ResourceServerTypeEnum | null) | undefined;
 }
 
 export interface UpdateRiskAssessmentsSettingsNewDeviceResponseContent {
@@ -41242,6 +42891,8 @@ export interface UpdateTenantSettingsResponseContent {
     resource_parameter_profile?: Management.TenantSettingsResourceParameterProfile | undefined;
     /** Whether the authorization server supports retrieving client metadata from a client_id URL. */
     client_id_metadata_document_supported?: boolean | undefined;
+    /** Whether the authorization server supports registering clients dynamically from a client_id URL. Requires client_id_metadata_document_supported to be enabled. */
+    client_id_metadata_document_dynamic_registration_supported?: boolean | undefined;
     /** Whether Phone Consolidated Experience is enabled for this tenant. */
     phone_consolidated_experience?: boolean | undefined;
     /** Whether Auth0 Guide (AI-powered assistance) is enabled for this tenant. */
@@ -41252,6 +42903,9 @@ export interface UpdateTenantSettingsResponseContent {
         | Management.TenantSettingsDynamicClientRegistrationSecurityMode
         | undefined;
     country_codes?: Management.TenantSettingsCountryCodesResponse | undefined;
+    personal_agent_protocol_company_domains?:
+        | Management.TenantSettingsPersonalAgentProtocolCompanyDomainsResponse
+        | undefined;
 }
 
 export interface UpdateTokenQuota {
@@ -41352,9 +43006,9 @@ export interface UpdateUserResponseContent {
 }
 
 /**
- * Configuration overrides for this variation; keys must exist in the parent flag parameters. Empty {} is the baseline (control) variation that overrides nothing.
+ * Top-level keys merge into the stored overrides. Set a key to `null` to remove it. Set `overrides` to `null` or `{}` to clear all. Keys must exist in the parent flag parameters.
  */
-export type UpdateVariationOverridesMap = Record<string, unknown>;
+export type UpdateVariationOverridesMap = (Record<string, unknown> | null) | undefined;
 
 export interface UpdateVariationResponseContent {
     id: string;
@@ -41391,7 +43045,9 @@ export interface UpdateVerifiableCredentialTemplateResponseContent {
 /**
  * User metadata to which this user has read-only access.
  */
-export type UserAppMetadataSchema = Record<string, unknown>;
+export type UserAppMetadataSchema = {
+    [key: string]: unknown;
+};
 
 export interface UserAttributeProfile {
     id?: Management.UserAttributeProfileId | undefined;
@@ -41507,10 +43163,9 @@ export interface UserAttributeProfileUserAttributeAdditionalProperties {
 /**
  * User attributes configuration map. Keys are attribute names, values are the mapping configuration for each attribute.
  */
-export type UserAttributeProfileUserAttributes = Record<
-    string,
-    Management.UserAttributeProfileUserAttributeAdditionalProperties
->;
+export type UserAttributeProfileUserAttributes = {
+    [key: string]: Management.UserAttributeProfileUserAttributeAdditionalProperties;
+};
 
 /**
  * User ID mapping configuration
@@ -41822,12 +43477,16 @@ export interface UserListLogOffsetPaginatedResponseContent {
 /**
  * Data related to the user that does not affect the application's core functionality.
  */
-export type UserMetadata = Record<string, unknown>;
+export type UserMetadata = {
+    [key: string]: unknown;
+};
 
 /**
  * User metadata to which this user has read/write access.
  */
-export type UserMetadataSchema = Record<string, unknown>;
+export type UserMetadataSchema = {
+    [key: string]: unknown;
+};
 
 /** The multi-factor provider. Supported values 'duo' or 'google-authenticator' */
 export const UserMultifactorProviderEnum = {
@@ -41988,7 +43647,9 @@ export interface Variation {
 /**
  * Configuration overrides for this variation
  */
-export type VariationOverridesMap = Record<string, unknown>;
+export type VariationOverridesMap = {
+    [key: string]: unknown;
+};
 
 export interface VerifiableCredentialTemplateResponse {
     /** The id of the template. */
@@ -42046,6 +43707,53 @@ export interface VerifyEmailTicketResponseContent {
     /** Accepts any additional properties */
     [key: string]: any;
 }
+
+/**
+ * A webtask in the tenant's container, as returned by the webtask platform.
+ */
+export interface Webtask {
+    container: Management.WebtaskContainer;
+    name: Management.WebtaskName;
+    token?: Management.WebtaskToken | undefined;
+    meta: Management.WebtaskResponseMeta;
+    webtask_url?: Management.WebtaskUrl | undefined;
+    /** Accepts any additional properties */
+    [key: string]: any;
+}
+
+/**
+ * Webtask container of the tenant. Hooks run in the same container.
+ */
+export type WebtaskContainer = string;
+
+/**
+ * Name of the webtask. It is part of the webtask URL.
+ */
+export type WebtaskName = string;
+
+/**
+ * Metadata of the webtask, as returned by the webtask platform. Values have no length limit, since webtasks written by other tools are returned too.
+ */
+export type WebtaskResponseMeta = {
+    [key: string]: string;
+};
+
+/**
+ * Secrets of the webtask, decrypted. Only returned by <code>GET /api/v2/webtasks/{name}</code> with <code>decrypt=true</code>. Values have no length limit, since webtasks written by other tools are returned too.
+ */
+export type WebtaskResponseSecrets = {
+    [key: string]: string;
+};
+
+/**
+ * Webtask token issued by the webtask platform for this webtask.
+ */
+export type WebtaskToken = string;
+
+/**
+ * URL the webtask runs at.
+ */
+export type WebtaskUrl = string;
 
 export interface X509CertificateCredential {
     credential_type: Management.X509CertificateCredentialTypeEnum;

@@ -35,6 +35,8 @@ export class UsersImportsClient {
      * @throws {@link Management.ContentTooLargeError}
      * @throws {@link Management.TooManyRequestsError}
      * @throws {@link Management.InternalServerError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     import { createReadStream } from "fs";

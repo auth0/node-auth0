@@ -40,6 +40,9 @@ describe("ResourceServersClient", () => {
                     proof_of_possession: { mechanism: "mtls", required: true },
                     authorization_policy: { policy_id: "policy_id" },
                     client_id: "client_id",
+                    agent_subject_claims: "off",
+                    use_for_personal_agent_protocol: true,
+                    type: "universal_commerce_protocol_server",
                 },
             ],
         };
@@ -73,13 +76,7 @@ describe("ResourceServersClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/resource-servers")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/resource-servers").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.resourceServers.list();
@@ -92,13 +89,7 @@ describe("ResourceServersClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/resource-servers")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/resource-servers").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.resourceServers.list();
@@ -111,13 +102,7 @@ describe("ResourceServersClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/resource-servers")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/resource-servers").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.resourceServers.list();
@@ -130,13 +115,7 @@ describe("ResourceServersClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/resource-servers")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/resource-servers").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.resourceServers.list();
@@ -180,6 +159,9 @@ describe("ResourceServersClient", () => {
             },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
+            agent_subject_claims: "off",
+            use_for_personal_agent_protocol: true,
+            type: "universal_commerce_protocol_server",
         };
 
         server
@@ -338,6 +320,9 @@ describe("ResourceServersClient", () => {
                     proof_of_possession: { mechanism: "mtls", required: true },
                     authorization_policy: { policy_id: "policy_id" },
                     client_id: "client_id",
+                    agent_subject_claims: "off",
+                    use_for_personal_agent_protocol: true,
+                    type: "universal_commerce_protocol_server",
                 },
             ],
             next: "next",
@@ -538,6 +523,9 @@ describe("ResourceServersClient", () => {
             },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
+            agent_subject_claims: "off",
+            use_for_personal_agent_protocol: true,
+            type: "universal_commerce_protocol_server",
         };
 
         server
@@ -772,6 +760,9 @@ describe("ResourceServersClient", () => {
             },
             authorization_policy: { policy_id: "policy_id" },
             client_id: "client_id",
+            agent_subject_claims: "off",
+            use_for_personal_agent_protocol: true,
+            type: "universal_commerce_protocol_server",
         };
 
         server

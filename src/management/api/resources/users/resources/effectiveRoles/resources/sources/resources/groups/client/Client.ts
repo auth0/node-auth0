@@ -37,6 +37,8 @@ export class GroupsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.effectiveRoles.sources.groups.list("id", {
@@ -71,7 +73,7 @@ export class GroupsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/effective-roles/sources/groups`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/effective-roles/sources/groups`,
                     ),
                     method: "GET",
                     headers: _headers,

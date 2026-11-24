@@ -50,6 +50,8 @@ export class OrganizationsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.organizations.list("id", {
@@ -84,7 +86,7 @@ export class OrganizationsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/organizations`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/organizations`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -152,8 +154,15 @@ export class OrganizationsClient {
                 (request?.per_page == null || (response?.organizations ?? []).length >= request?.per_page),
             getItems: (response) => response?.organizations ?? [],
             loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
+                const _nextOffset = _offset + 1;
+                return core.HttpResponsePromise.fromPromise(
+                    list(core.setObjectProperty(request, "page", _nextOffset))
+                        .withRawResponse()
+                        .then((_pageResponse) => {
+                            _offset = _nextOffset;
+                            return _pageResponse;
+                        }),
+                );
             },
         });
     }
