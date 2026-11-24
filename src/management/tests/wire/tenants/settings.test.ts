@@ -42,7 +42,6 @@ describe("SettingsClient", () => {
                 mfa_show_factor_list_on_enrollment: true,
                 remove_alg_from_jwks: true,
                 improved_signup_bot_detection_in_classic: true,
-                genai_trial: true,
                 local_resource_discovery: true,
                 enable_dynamic_client_registration: true,
                 disable_management_api_sms_obfuscation: true,
@@ -84,11 +83,13 @@ describe("SettingsClient", () => {
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             resource_parameter_profile: "audience",
             client_id_metadata_document_supported: true,
+            client_id_metadata_document_dynamic_registration_supported: true,
             phone_consolidated_experience: true,
             enable_ai_guide: true,
             include_session_metadata_in_tenant_logs: true,
             dynamic_client_registration_security_mode: "strict",
             country_codes: { list: ["list"], mode: "allow" },
+            personal_agent_protocol_company_domains: ["personal_agent_protocol_company_domains"],
         };
 
         server.mockEndpoint().get("/tenants/settings").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -189,7 +190,6 @@ describe("SettingsClient", () => {
                 mfa_show_factor_list_on_enrollment: true,
                 remove_alg_from_jwks: true,
                 improved_signup_bot_detection_in_classic: true,
-                genai_trial: true,
                 local_resource_discovery: true,
                 enable_dynamic_client_registration: true,
                 disable_management_api_sms_obfuscation: true,
@@ -231,11 +231,13 @@ describe("SettingsClient", () => {
             skip_non_verifiable_callback_uri_confirmation_prompt: true,
             resource_parameter_profile: "audience",
             client_id_metadata_document_supported: true,
+            client_id_metadata_document_dynamic_registration_supported: true,
             phone_consolidated_experience: true,
             enable_ai_guide: true,
             include_session_metadata_in_tenant_logs: true,
             dynamic_client_registration_security_mode: "strict",
             country_codes: { list: ["list"], mode: "allow" },
+            personal_agent_protocol_company_domains: ["personal_agent_protocol_company_domains"],
         };
 
         server

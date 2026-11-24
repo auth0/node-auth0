@@ -4,6 +4,7 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../../../Ba
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../../../BaseClient.js";
 import * as core from "../../../../../../core/index.js";
 import { mergeHeaders } from "../../../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../../../core/requestBody.js";
 import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../errors/index.js";
@@ -34,6 +35,8 @@ export class AuthenticationMethodsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticationMethods.list("id", {
@@ -75,7 +78,7 @@ export class AuthenticationMethodsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
                     ),
                     method: "GET",
                     headers: _headers,
@@ -146,8 +149,15 @@ export class AuthenticationMethodsClient {
                 (request?.per_page == null || (response?.authenticators ?? []).length >= request?.per_page),
             getItems: (response) => response?.authenticators ?? [],
             loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
+                const _nextOffset = _offset + 1;
+                return core.HttpResponsePromise.fromPromise(
+                    list(core.setObjectProperty(request, "page", _nextOffset))
+                        .withRawResponse()
+                        .then((_pageResponse) => {
+                            _offset = _nextOffset;
+                            return _pageResponse;
+                        }),
+                );
             },
         });
     }
@@ -165,6 +175,8 @@ export class AuthenticationMethodsClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticationMethods.create("id", {
@@ -195,14 +207,14 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -261,6 +273,8 @@ export class AuthenticationMethodsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticationMethods.set("id", [{
@@ -291,14 +305,14 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
             ),
             method: "PUT",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -351,6 +365,8 @@ export class AuthenticationMethodsClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticationMethods.deleteAll("id")
@@ -377,7 +393,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -429,6 +445,8 @@ export class AuthenticationMethodsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticationMethods.get("id", "authentication_method_id")
@@ -457,7 +475,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods/${core.url.encodePathParam(authentication_method_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods/${core.url.encodePathParam(authentication_method_id, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -516,6 +534,8 @@ export class AuthenticationMethodsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticationMethods.delete("id", "authentication_method_id")
@@ -544,7 +564,7 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods/${core.url.encodePathParam(authentication_method_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods/${core.url.encodePathParam(authentication_method_id, errors.ManagementError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -601,6 +621,8 @@ export class AuthenticationMethodsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.authenticationMethods.update("id", "authentication_method_id")
@@ -633,14 +655,14 @@ export class AuthenticationMethodsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `users/${core.url.encodePathParam(id)}/authentication-methods/${core.url.encodePathParam(authentication_method_id)}`,
+                `users/${core.url.encodePathParam(id, errors.ManagementError)}/authentication-methods/${core.url.encodePathParam(authentication_method_id, errors.ManagementError)}`,
             ),
             method: "PATCH",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

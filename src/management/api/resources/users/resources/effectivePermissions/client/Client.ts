@@ -40,6 +40,8 @@ export class EffectivePermissionsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.users.effectivePermissions.list("id", {
@@ -79,7 +81,7 @@ export class EffectivePermissionsClient {
                         (await core.Supplier.get(this._options.baseUrl)) ??
                             (await core.Supplier.get(this._options.environment)) ??
                             environments.ManagementEnvironment.Default,
-                        `users/${core.url.encodePathParam(id)}/effective-permissions`,
+                        `users/${core.url.encodePathParam(id, errors.ManagementError)}/effective-permissions`,
                     ),
                     method: "GET",
                     headers: _headers,

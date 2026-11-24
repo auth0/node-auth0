@@ -46,13 +46,7 @@ describe("RulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/rules")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/rules").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.rules.list();
@@ -65,13 +59,7 @@ describe("RulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/rules")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/rules").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.rules.list();
@@ -84,13 +72,7 @@ describe("RulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/rules")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/rules").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.rules.list();
@@ -103,13 +85,7 @@ describe("RulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/rules")
-            .respondWith()
-            .statusCode(404)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/rules").respondWith().statusCode(404).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.rules.list();
@@ -122,13 +98,7 @@ describe("RulesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/rules")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/rules").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.rules.list();

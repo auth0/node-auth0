@@ -6,6 +6,7 @@ import { AnomalyClient } from "./api/resources/anomaly/client/Client.js";
 import { AttackProtectionClient } from "./api/resources/attackProtection/client/Client.js";
 import { BrandingClient } from "./api/resources/branding/client/Client.js";
 import { ClientGrantsClient } from "./api/resources/clientGrants/client/Client.js";
+import { ClientProfilesClient } from "./api/resources/clientProfiles/client/Client.js";
 import { ClientsClient } from "./api/resources/clients/client/Client.js";
 import { ConnectionProfilesClient } from "./api/resources/connectionProfiles/client/Client.js";
 import { ConnectionsClient } from "./api/resources/connections/client/Client.js";
@@ -27,6 +28,7 @@ import { LogsClient } from "./api/resources/logs/client/Client.js";
 import { LogStreamsClient } from "./api/resources/logStreams/client/Client.js";
 import { NetworkAclsClient } from "./api/resources/networkAcls/client/Client.js";
 import { OrganizationsClient } from "./api/resources/organizations/client/Client.js";
+import { PortalsClient } from "./api/resources/portals/client/Client.js";
 import { PromptsClient } from "./api/resources/prompts/client/Client.js";
 import { RateLimitPoliciesClient } from "./api/resources/rateLimitPolicies/client/Client.js";
 import { RefreshTokensClient } from "./api/resources/refreshTokens/client/Client.js";
@@ -64,6 +66,7 @@ export class ManagementClient {
     protected _agents: AgentsClient | undefined;
     protected _branding: BrandingClient | undefined;
     protected _clientGrants: ClientGrantsClient | undefined;
+    protected _clientProfiles: ClientProfilesClient | undefined;
     protected _clients: ClientsClient | undefined;
     protected _connectionProfiles: ConnectionProfilesClient | undefined;
     protected _connections: ConnectionsClient | undefined;
@@ -83,6 +86,7 @@ export class ManagementClient {
     protected _logs: LogsClient | undefined;
     protected _networkAcls: NetworkAclsClient | undefined;
     protected _organizations: OrganizationsClient | undefined;
+    protected _portals: PortalsClient | undefined;
     protected _prompts: PromptsClient | undefined;
     protected _rateLimitPolicies: RateLimitPoliciesClient | undefined;
     protected _refreshTokens: RefreshTokensClient | undefined;
@@ -126,6 +130,10 @@ export class ManagementClient {
 
     public get clientGrants(): ClientGrantsClient {
         return (this._clientGrants ??= new ClientGrantsClient(this._options));
+    }
+
+    public get clientProfiles(): ClientProfilesClient {
+        return (this._clientProfiles ??= new ClientProfilesClient(this._options));
     }
 
     public get clients(): ClientsClient {
@@ -202,6 +210,10 @@ export class ManagementClient {
 
     public get organizations(): OrganizationsClient {
         return (this._organizations ??= new OrganizationsClient(this._options));
+    }
+
+    public get portals(): PortalsClient {
+        return (this._portals ??= new PortalsClient(this._options));
     }
 
     public get prompts(): PromptsClient {

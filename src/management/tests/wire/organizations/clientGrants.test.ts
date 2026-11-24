@@ -56,7 +56,7 @@ describe("ClientGrantsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/client-grants")
             .respondWith()
             .statusCode(400)
@@ -75,7 +75,7 @@ describe("ClientGrantsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/client-grants")
             .respondWith()
             .statusCode(401)
@@ -94,7 +94,7 @@ describe("ClientGrantsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/client-grants")
             .respondWith()
             .statusCode(403)
@@ -113,7 +113,7 @@ describe("ClientGrantsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/organizations/id/client-grants")
             .respondWith()
             .statusCode(429)
@@ -130,7 +130,7 @@ describe("ClientGrantsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
         const rawRequestBody = { grant_id: "grant_id" };
         const rawResponseBody = {
-            id: "id",
+            grant_id: "grant_id",
             client_id: "client_id",
             audience: "audience",
             scope: ["scope"],

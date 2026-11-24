@@ -46,13 +46,7 @@ describe("RolesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/roles")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/roles").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.roles.list();
@@ -65,13 +59,7 @@ describe("RolesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/roles")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/roles").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.roles.list();
@@ -84,13 +72,7 @@ describe("RolesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/roles")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/roles").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.roles.list();
@@ -103,13 +85,7 @@ describe("RolesClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/roles")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/roles").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.roles.list();

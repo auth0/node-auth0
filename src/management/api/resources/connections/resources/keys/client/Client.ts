@@ -4,6 +4,7 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../../../Ba
 import { normalizeClientOptionsWithAuth, type NormalizedClientOptionsWithAuth } from "../../../../../../BaseClient.js";
 import * as core from "../../../../../../core/index.js";
 import { mergeHeaders } from "../../../../../../core/headers.js";
+import { mergeAdditionalBodyParameters } from "../../../../../../core/requestBody.js";
 import * as environments from "../../../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../../../errors/index.js";
@@ -23,7 +24,7 @@ export class KeysClient {
     }
 
     /**
-     * Gets the connection keys for the Okta or OIDC connection strategy.
+     * Gets the connection keys for the Okta, OIDC, or SAML (samlp) connection strategy. The response includes both signing keys and encryption keys, told apart by `key_use`. Encryption keys apply only to OIDC and Okta connections.
      *
      * @param {string} id - ID of the connection
      * @param {KeysClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -33,6 +34,8 @@ export class KeysClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.keys.get("id")
@@ -59,7 +62,7 @@ export class KeysClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/keys`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/keys`,
             ),
             method: "GET",
             headers: _headers,
@@ -99,7 +102,9 @@ export class KeysClient {
     }
 
     /**
-     * Provision initial connection keys for Okta or OIDC connection strategies. This endpoint allows you to create keys before configuring the connection to use Private Key JWT authentication, enabling zero-downtime transitions.
+     * Provision initial connection keys for Okta, OIDC, or SAML (samlp) connection strategies. This endpoint allows you to create keys before configuring the connection to use Private Key JWT authentication or encrypted ID tokens, enabling zero-downtime transitions.
+     *
+     * Set `key_use` to `signing` (default) to provision signing keys, optionally choosing `signing_alg`, or to `encryption` to provision encryption keys, optionally choosing `encryption_alg`. `signing_alg` and `encryption_alg` each apply only to their own key use. Encryption keys and encrypted ID tokens apply only to OIDC and Okta connections. The response lists all of the connection's keys.
      *
      * @param {string} id - ID of the connection
      * @param {Management.PostConnectionKeysRequestContent | null} request
@@ -111,6 +116,8 @@ export class KeysClient {
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.ConflictError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.keys.create("id")
@@ -139,14 +146,14 @@ export class KeysClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/keys`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/keys`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -187,7 +194,9 @@ export class KeysClient {
     }
 
     /**
-     * Rotates the connection keys for the Okta or OIDC connection strategies.
+     * Rotates the connection keys for the Okta, OIDC, or SAML (samlp) connection strategies.
+     *
+     * Set `key_use` to `signing` (default) to rotate the signing key, optionally choosing `signing_alg`, or to `encryption` to rotate the encryption key, optionally choosing `encryption_alg`. Rotating signing keys requires the connection to be configured to use JWT Client Authentication. Rotating encryption keys requires the connection to be configured to use encrypted ID tokens (`id_token_encrypted_response_alg` set), which applies only to OIDC and Okta connections. When `encryption_alg` is omitted, the new encryption key uses `id_token_encrypted_response_alg`.
      *
      * @param {string} id - ID of the connection
      * @param {Management.RotateConnectionKeysRequestContent | null} request
@@ -198,6 +207,8 @@ export class KeysClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.keys.rotate("id")
@@ -226,14 +237,14 @@ export class KeysClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/keys/rotate`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/keys/rotate`,
             ),
             method: "POST",
             headers: _headers,
             contentType: "application/json",
             queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
             requestType: "json",
-            body: request,
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

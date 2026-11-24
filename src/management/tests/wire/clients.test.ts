@@ -54,6 +54,7 @@ describe("ClientsClient", () => {
                     organization_discovery_methods: ["email"],
                     require_pushed_authorization_requests: true,
                     require_proof_of_possession: true,
+                    allow_personal_agent_browser_join: true,
                     token_vault_privileged_access: { credentials: [{ id: "id" }] },
                     compliance_level: "none",
                     skip_non_verifiable_callback_uri_confirmation_prompt: true,
@@ -81,6 +82,8 @@ describe("ClientsClient", () => {
                     async_approval_notification_channels: ["guardian-push"],
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
+                    external_metadata_status: "available",
+                    agent_id: "agent_id",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -106,6 +109,7 @@ describe("ClientsClient", () => {
             is_first_party: true,
             app_type: "app_type",
             external_client_id: "external_client_id",
+            agent_id: "agent_id",
             q: "q",
         });
 
@@ -121,13 +125,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -140,13 +138,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -159,13 +151,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -178,13 +164,7 @@ describe("ClientsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/clients")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/clients").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.clients.list();
@@ -371,6 +351,7 @@ describe("ClientsClient", () => {
             },
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
+            allow_personal_agent_browser_join: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             token_vault_privileged_access: {
                 credentials: [{ id: "id" }],
@@ -392,6 +373,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -404,15 +386,19 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -570,6 +556,7 @@ describe("ClientsClient", () => {
         const rawRequestBody = { external_client_id: "external_client_id" };
         const rawResponseBody = {
             client_id: "client_id",
+            external_metadata_created_by: "admin",
             errors: ["errors"],
             validation: { valid: true, violations: ["violations"], warnings: ["warnings"] },
             mapped_fields: {
@@ -927,6 +914,7 @@ describe("ClientsClient", () => {
                     organization_discovery_methods: ["email"],
                     require_pushed_authorization_requests: true,
                     require_proof_of_possession: true,
+                    allow_personal_agent_browser_join: true,
                     token_vault_privileged_access: { credentials: [{ id: "id" }] },
                     compliance_level: "none",
                     skip_non_verifiable_callback_uri_confirmation_prompt: true,
@@ -954,6 +942,8 @@ describe("ClientsClient", () => {
                     async_approval_notification_channels: ["guardian-push"],
                     external_metadata_type: "cimd",
                     external_metadata_created_by: "admin",
+                    external_metadata_status: "available",
+                    agent_id: "agent_id",
                     external_client_id: "external_client_id",
                     jwks_uri: "jwks_uri",
                 },
@@ -1257,6 +1247,7 @@ describe("ClientsClient", () => {
             },
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
+            allow_personal_agent_browser_join: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             token_vault_privileged_access: {
                 credentials: [{ id: "id" }],
@@ -1278,6 +1269,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -1290,15 +1282,19 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -1619,6 +1615,7 @@ describe("ClientsClient", () => {
             },
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
+            allow_personal_agent_browser_join: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             token_vault_privileged_access: {
                 credentials: [{ id: "id" }],
@@ -1640,6 +1637,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -1652,15 +1650,19 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };
@@ -1958,6 +1960,7 @@ describe("ClientsClient", () => {
             },
             require_pushed_authorization_requests: true,
             require_proof_of_possession: true,
+            allow_personal_agent_browser_join: true,
             signed_request_object: { required: true, credentials: [{ id: "id" }] },
             token_vault_privileged_access: {
                 credentials: [{ id: "id" }],
@@ -1979,6 +1982,7 @@ describe("ClientsClient", () => {
                 okta_oin_client_id: "okta_oin_client_id",
                 admin_login_domain: "admin_login_domain",
                 oin_submission_id: "oin_submission_id",
+                okta_oin_listing_url: "okta_oin_listing_url",
             },
             b2b_integration_configuration: { sso_profiles: ["sso_profiles"], integration_type: "custom_auth_server" },
             my_organization_configuration: {
@@ -1991,15 +1995,19 @@ describe("ClientsClient", () => {
                 enforce_permission_ceiling: true,
                 enforce_self_assignment_restriction: true,
             },
+            google_account_linking: { allow_streamlined_linking: true },
             identity_assertion_authorization_grant: { active: true },
             anonymous_sessions: { active: true },
             enforce_anon_session_transfer_network_binding: "ip",
             third_party_security_mode: "strict",
+            oidc_support: { is_allowed: true, allow_all_scopes: true, allowed_scopes: ["profile"] },
             redirection_policy: "allow_always",
             resource_server_identifier: "resource_server_identifier",
             async_approval_notification_channels: ["guardian-push"],
             external_metadata_type: "cimd",
             external_metadata_created_by: "admin",
+            external_metadata_status: "available",
+            agent_id: "agent_id",
             external_client_id: "external_client_id",
             jwks_uri: "jwks_uri",
         };

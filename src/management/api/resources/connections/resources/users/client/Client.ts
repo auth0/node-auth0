@@ -34,6 +34,8 @@ export class UsersClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.connections.users.deleteByEmail("id", {
@@ -68,7 +70,7 @@ export class UsersClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `connections/${core.url.encodePathParam(id)}/users`,
+                `connections/${core.url.encodePathParam(id, errors.ManagementError)}/users`,
             ),
             method: "DELETE",
             headers: _headers,

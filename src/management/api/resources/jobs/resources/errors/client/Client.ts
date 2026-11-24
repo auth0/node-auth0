@@ -33,6 +33,8 @@ export class ErrorsClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.jobs.errors.get("id")
@@ -59,7 +61,7 @@ export class ErrorsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `jobs/${core.url.encodePathParam(id)}/errors`,
+                `jobs/${core.url.encodePathParam(id, errors.ManagementError)}/errors`,
             ),
             method: "GET",
             headers: _headers,

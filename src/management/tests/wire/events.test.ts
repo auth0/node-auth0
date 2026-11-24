@@ -10,7 +10,7 @@ describe("EventsClient", () => {
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
 
         const rawResponseBody =
-            'event: connection.created\ndata: {"offset":"offset","event":{"specversion":"1.0","type":"connection.created","source":"source","id":"id","time":"2024-01-15T09:30:00Z","data":{"object":{"id":"id","name":"name","strategy":"oidc"},"previous_object":{"id":"id","name":"name","strategy":"oidc"},"context":{"tenant":{"id":"id"}}},"a0tenant":"a0tenant","a0stream":"a0stream","a0purpose":"test"}}\n\n';
+            'event: connection.created\ndata: {"offset":"offset","event":{"specversion":"1.0","type":"connection.created","source":"source","id":"id","time":"2024-01-15T09:30:00Z","data":{"object":{"id":"object","name":"object","strategy":"oidc"},"previous_object":{"id":"previous_object","name":"previous_object","strategy":"oidc"},"context":{"tenant":{"id":"id"}}},"a0tenant":"a0tenant","a0stream":"a0stream","a0purpose":"test"}}\n\n';
 
         server.mockEndpoint().get("/events").respondWith().statusCode(200).sseBody(rawResponseBody).build();
 
@@ -36,13 +36,17 @@ describe("EventsClient", () => {
                     data: {
                         object: {
                             strategy: "oidc",
-                            id: "id",
-                            name: "name",
+                            id: "object",
+                            name: "object",
+                            id: "object",
+                            name: "object",
                         },
                         previous_object: {
                             strategy: "oidc",
-                            id: "id",
-                            name: "name",
+                            id: "previous_object",
+                            name: "previous_object",
+                            id: "previous_object",
+                            name: "previous_object",
                         },
                         context: {
                             tenant: {

@@ -53,13 +53,7 @@ describe("FormsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/forms")
-            .respondWith()
-            .statusCode(400)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/forms").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.forms.list();
@@ -72,13 +66,7 @@ describe("FormsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/forms")
-            .respondWith()
-            .statusCode(401)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/forms").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.forms.list();
@@ -91,13 +79,7 @@ describe("FormsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/forms")
-            .respondWith()
-            .statusCode(403)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/forms").respondWith().statusCode(403).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.forms.list();
@@ -110,13 +92,7 @@ describe("FormsClient", () => {
 
         const rawResponseBody = { key: "value" };
 
-        server
-            .mockEndpoint({ once: false })
-            .get("/forms")
-            .respondWith()
-            .statusCode(429)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/forms").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
             return await client.forms.list();
@@ -134,7 +110,13 @@ describe("FormsClient", () => {
             languages: { primary: "primary", default: "default" },
             translations: { key: { key: "value" } },
             nodes: [
-                { type: "FLOW", id: "id", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
+                {
+                    type: "FLOW",
+                    id: "nodes",
+                    coordinates: { x: 1, y: 1 },
+                    alias: "nodes",
+                    config: { flow_id: "flow_id" },
+                },
             ],
             start: { hidden_fields: [{ key: "key" }], next_node: "$ending", coordinates: { x: 1, y: 1 } },
             ending: {
@@ -264,7 +246,13 @@ describe("FormsClient", () => {
             languages: { primary: "primary", default: "default" },
             translations: { key: { key: "value" } },
             nodes: [
-                { type: "FLOW", id: "id", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
+                {
+                    type: "FLOW",
+                    id: "nodes",
+                    coordinates: { x: 1, y: 1 },
+                    alias: "nodes",
+                    config: { flow_id: "flow_id" },
+                },
             ],
             start: { hidden_fields: [{ key: "key" }], next_node: "$ending", coordinates: { x: 1, y: 1 } },
             ending: {
@@ -426,7 +414,13 @@ describe("FormsClient", () => {
             languages: { primary: "primary", default: "default" },
             translations: { key: { key: "value" } },
             nodes: [
-                { type: "FLOW", id: "id", coordinates: { x: 1, y: 1 }, alias: "alias", config: { flow_id: "flow_id" } },
+                {
+                    type: "FLOW",
+                    id: "nodes",
+                    coordinates: { x: 1, y: 1 },
+                    alias: "nodes",
+                    config: { flow_id: "flow_id" },
+                },
             ],
             start: { hidden_fields: [{ key: "key" }], next_node: "$ending", coordinates: { x: 1, y: 1 } },
             ending: {

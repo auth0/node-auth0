@@ -51,7 +51,7 @@ describe("BindingsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/triggers/post-login/bindings")
             .respondWith()
             .statusCode(400)
@@ -70,7 +70,7 @@ describe("BindingsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/triggers/post-login/bindings")
             .respondWith()
             .statusCode(401)
@@ -89,7 +89,7 @@ describe("BindingsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/triggers/post-login/bindings")
             .respondWith()
             .statusCode(403)
@@ -108,7 +108,7 @@ describe("BindingsClient", () => {
         const rawResponseBody = { key: "value" };
 
         server
-            .mockEndpoint({ once: false })
+            .mockEndpoint()
             .get("/actions/triggers/post-login/bindings")
             .respondWith()
             .statusCode(429)

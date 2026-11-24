@@ -31,6 +31,8 @@ export class SigningClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.list()
@@ -98,6 +100,8 @@ export class SigningClient {
      * @throws {@link Management.UnauthorizedError}
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.rotate()
@@ -171,6 +175,8 @@ export class SigningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.get("kid")
@@ -197,7 +203,7 @@ export class SigningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/signing/${core.url.encodePathParam(kid)}`,
+                `keys/signing/${core.url.encodePathParam(kid, errors.ManagementError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -249,6 +255,8 @@ export class SigningClient {
      * @throws {@link Management.ForbiddenError}
      * @throws {@link Management.NotFoundError}
      * @throws {@link Management.TooManyRequestsError}
+     * @throws {@link errors.ManagementError}
+     * @throws {@link errors.ManagementTimeoutError}
      *
      * @example
      *     await client.keys.signing.revoke("kid")
@@ -275,7 +283,7 @@ export class SigningClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ManagementEnvironment.Default,
-                `keys/signing/${core.url.encodePathParam(kid)}/revoke`,
+                `keys/signing/${core.url.encodePathParam(kid, errors.ManagementError)}/revoke`,
             ),
             method: "PUT",
             headers: _headers,

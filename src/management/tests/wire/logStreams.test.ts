@@ -12,8 +12,8 @@ describe("LogStreamsClient", () => {
         const rawResponseBody = [
             {
                 type: "http",
-                id: "id",
-                name: "name",
+                id: "string",
+                name: "string",
                 status: "active",
                 isPriority: true,
                 filters: [{}],
@@ -92,8 +92,8 @@ describe("LogStreamsClient", () => {
         const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
         const rawResponseBody = {
             type: "http",
-            id: "id",
-            name: "name",
+            id: "string",
+            name: "string",
             status: "active",
             isPriority: true,
             filters: [{ type: "category", name: "auth.login.fail" }],
@@ -128,7 +128,15 @@ describe("LogStreamsClient", () => {
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
+        const rawRequestBody = {
+            type: "http",
+            name: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            startFrom: undefined,
+            sink: { httpEndpoint: "httpEndpoint" },
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -143,6 +151,11 @@ describe("LogStreamsClient", () => {
         await expect(async () => {
             return await client.logStreams.create({
                 type: "http",
+                name: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                startFrom: undefined,
                 sink: {
                     httpEndpoint: "httpEndpoint",
                 },
@@ -153,7 +166,15 @@ describe("LogStreamsClient", () => {
     test("create (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
+        const rawRequestBody = {
+            type: "http",
+            name: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            startFrom: undefined,
+            sink: { httpEndpoint: "httpEndpoint" },
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -168,6 +189,11 @@ describe("LogStreamsClient", () => {
         await expect(async () => {
             return await client.logStreams.create({
                 type: "http",
+                name: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                startFrom: undefined,
                 sink: {
                     httpEndpoint: "httpEndpoint",
                 },
@@ -178,7 +204,15 @@ describe("LogStreamsClient", () => {
     test("create (4)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
+        const rawRequestBody = {
+            type: "http",
+            name: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            startFrom: undefined,
+            sink: { httpEndpoint: "httpEndpoint" },
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -193,6 +227,11 @@ describe("LogStreamsClient", () => {
         await expect(async () => {
             return await client.logStreams.create({
                 type: "http",
+                name: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                startFrom: undefined,
                 sink: {
                     httpEndpoint: "httpEndpoint",
                 },
@@ -203,7 +242,15 @@ describe("LogStreamsClient", () => {
     test("create (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
+        const rawRequestBody = {
+            type: "http",
+            name: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            startFrom: undefined,
+            sink: { httpEndpoint: "httpEndpoint" },
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -218,6 +265,11 @@ describe("LogStreamsClient", () => {
         await expect(async () => {
             return await client.logStreams.create({
                 type: "http",
+                name: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                startFrom: undefined,
                 sink: {
                     httpEndpoint: "httpEndpoint",
                 },
@@ -228,7 +280,15 @@ describe("LogStreamsClient", () => {
     test("create (6)", async () => {
         const server = mockServerPool.createServer();
         const client = new ManagementClient({ maxRetries: 0, token: "test", environment: server.baseUrl });
-        const rawRequestBody = { type: "http", sink: { httpEndpoint: "httpEndpoint" } };
+        const rawRequestBody = {
+            type: "http",
+            name: undefined,
+            isPriority: undefined,
+            filters: undefined,
+            pii_config: undefined,
+            startFrom: undefined,
+            sink: { httpEndpoint: "httpEndpoint" },
+        };
         const rawResponseBody = { key: "value" };
 
         server
@@ -243,6 +303,11 @@ describe("LogStreamsClient", () => {
         await expect(async () => {
             return await client.logStreams.create({
                 type: "http",
+                name: undefined,
+                isPriority: undefined,
+                filters: undefined,
+                pii_config: undefined,
+                startFrom: undefined,
                 sink: {
                     httpEndpoint: "httpEndpoint",
                 },
@@ -256,8 +321,8 @@ describe("LogStreamsClient", () => {
 
         const rawResponseBody = {
             type: "http",
-            id: "id",
-            name: "name",
+            id: "string",
+            name: "string",
             status: "active",
             isPriority: true,
             filters: [{ type: "category", name: "auth.login.fail" }],
@@ -410,8 +475,8 @@ describe("LogStreamsClient", () => {
         const rawRequestBody = {};
         const rawResponseBody = {
             type: "http",
-            id: "id",
-            name: "name",
+            id: "string",
+            name: "string",
             status: "active",
             isPriority: true,
             filters: [{ type: "category", name: "auth.login.fail" }],
