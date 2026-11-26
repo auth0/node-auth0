@@ -96,14 +96,20 @@ generations:
     cli_version: unknown
     generator_versions:
       fernapi/fern-typescript-sdk: 3.108.17
-current_generation: 33e21ba09b5b8a9ccf35c58834f5aa8ac6d23bec
+  - commit_sha: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
+    tree_hash: 8c04b22de9ee011fcded6312fa842d89ac5a2858
+    timestamp: 2026-11-26T11:30:13.163Z
+    cli_version: unknown
+    generator_versions:
+      fernapi/fern-typescript-sdk: 3.107.6
+current_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
 patches:
   - id: patch-066ff9e0
     content_hash: sha256:5b87ec9a63fc57aba4840d0d335d472c621e838fc1d61515b30660df39d0dbc2
     original_commit: 066ff9e02c45f4abf46791a3f070c762f7ecd924
     original_message: "docs: add v6 migration guide for breaking changes in v6.0.0 (#1368)"
     original_author: Ankita Tripathi <51994119+ankita10119@users.noreply.github.com>
-    base_generation: 33e21ba09b5b8a9ccf35c58834f5aa8ac6d23bec
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - v6_MIGRATION_GUIDE.md
     patch_content: |
@@ -437,7 +443,7 @@ patches:
     original_commit: d8faf7a21efbed3bd75a0f36ff0d190bb9dd986b
     original_message: "docs: update v6 migration guide with federatedConnectionsTokensets and federated_connections_access_tokens breaking changes (#1370)"
     original_author: Ankita Tripathi <51994119+ankita10119@users.noreply.github.com>
-    base_generation: 33e21ba09b5b8a9ccf35c58834f5aa8ac6d23bec
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - v6_MIGRATION_GUIDE.md
     patch_content: |
@@ -771,7 +777,7 @@ patches:
     original_commit: 490e563447ab0be5c1203cb7551b13ac3169b658
     original_message: "feat(management): add sub-package exports and management auth helper (#1373)"
     original_author: Kunal Dawar <35455566+developerkunal@users.noreply.github.com>
-    base_generation: 8cb0b2008edb9a32cd08e8a7c9549f194e8d0fed
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - package.json
       - src/management/api/resources/actions/exports.ts
@@ -920,7 +926,7 @@ patches:
       - src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.ts
     patch_content: |
       diff --git a/package.json b/package.json
-      index 893c28695..d30fc657d 100644
+      index f13beb40b2..f15150bb28 100644
       --- a/package.json
       +++ b/package.json
       @@ -23,6 +23,1601 @@
@@ -2527,7 +2533,7 @@ patches:
                    "types": "./legacy/exports/index.d.ts",
       diff --git a/src/management/api/resources/actions/exports.ts b/src/management/api/resources/actions/exports.ts
       new file mode 100644
-      index 000000000..4b0253c03
+      index 0000000000..4b0253c038
       --- /dev/null
       +++ b/src/management/api/resources/actions/exports.ts
       @@ -0,0 +1,5 @@
@@ -2538,7 +2544,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/actions/resources/executions/exports.ts b/src/management/api/resources/actions/resources/executions/exports.ts
       new file mode 100644
-      index 000000000..07cde92cf
+      index 0000000000..07cde92cff
       --- /dev/null
       +++ b/src/management/api/resources/actions/resources/executions/exports.ts
       @@ -0,0 +1,4 @@
@@ -2548,7 +2554,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/actions/resources/modules/exports.ts b/src/management/api/resources/actions/resources/modules/exports.ts
       new file mode 100644
-      index 000000000..d96c8d570
+      index 0000000000..d96c8d5703
       --- /dev/null
       +++ b/src/management/api/resources/actions/resources/modules/exports.ts
       @@ -0,0 +1,5 @@
@@ -2559,7 +2565,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/actions/resources/modules/resources/versions/exports.ts b/src/management/api/resources/actions/resources/modules/resources/versions/exports.ts
       new file mode 100644
-      index 000000000..49e3ffd9d
+      index 0000000000..49e3ffd9d1
       --- /dev/null
       +++ b/src/management/api/resources/actions/resources/modules/resources/versions/exports.ts
       @@ -0,0 +1,4 @@
@@ -2569,7 +2575,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/actions/resources/triggers/exports.ts b/src/management/api/resources/actions/resources/triggers/exports.ts
       new file mode 100644
-      index 000000000..68df02ff1
+      index 0000000000..68df02ff1c
       --- /dev/null
       +++ b/src/management/api/resources/actions/resources/triggers/exports.ts
       @@ -0,0 +1,5 @@
@@ -2580,7 +2586,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/actions/resources/triggers/resources/bindings/exports.ts b/src/management/api/resources/actions/resources/triggers/resources/bindings/exports.ts
       new file mode 100644
-      index 000000000..7756e0bc9
+      index 0000000000..7756e0bc9a
       --- /dev/null
       +++ b/src/management/api/resources/actions/resources/triggers/resources/bindings/exports.ts
       @@ -0,0 +1,4 @@
@@ -2590,7 +2596,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/actions/resources/versions/exports.ts b/src/management/api/resources/actions/resources/versions/exports.ts
       new file mode 100644
-      index 000000000..49e3ffd9d
+      index 0000000000..49e3ffd9d1
       --- /dev/null
       +++ b/src/management/api/resources/actions/resources/versions/exports.ts
       @@ -0,0 +1,4 @@
@@ -2600,7 +2606,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/anomaly/exports.ts b/src/management/api/resources/anomaly/exports.ts
       new file mode 100644
-      index 000000000..4bb486826
+      index 0000000000..4bb4868269
       --- /dev/null
       +++ b/src/management/api/resources/anomaly/exports.ts
       @@ -0,0 +1,5 @@
@@ -2611,7 +2617,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/anomaly/resources/blocks/exports.ts b/src/management/api/resources/anomaly/resources/blocks/exports.ts
       new file mode 100644
-      index 000000000..d16818b0b
+      index 0000000000..d16818b0b6
       --- /dev/null
       +++ b/src/management/api/resources/anomaly/resources/blocks/exports.ts
       @@ -0,0 +1,4 @@
@@ -2621,7 +2627,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/attackProtection/exports.ts b/src/management/api/resources/attackProtection/exports.ts
       new file mode 100644
-      index 000000000..1cb2bb3c6
+      index 0000000000..1cb2bb3c63
       --- /dev/null
       +++ b/src/management/api/resources/attackProtection/exports.ts
       @@ -0,0 +1,5 @@
@@ -2632,7 +2638,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/attackProtection/resources/botDetection/exports.ts b/src/management/api/resources/attackProtection/resources/botDetection/exports.ts
       new file mode 100644
-      index 000000000..db4f1c965
+      index 0000000000..db4f1c965c
       --- /dev/null
       +++ b/src/management/api/resources/attackProtection/resources/botDetection/exports.ts
       @@ -0,0 +1,4 @@
@@ -2642,7 +2648,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.ts b/src/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.ts
       new file mode 100644
-      index 000000000..1532f2ef6
+      index 0000000000..1532f2ef64
       --- /dev/null
       +++ b/src/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.ts
       @@ -0,0 +1,4 @@
@@ -2652,7 +2658,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/attackProtection/resources/bruteForceProtection/exports.ts b/src/management/api/resources/attackProtection/resources/bruteForceProtection/exports.ts
       new file mode 100644
-      index 000000000..02eca94e9
+      index 0000000000..02eca94e9e
       --- /dev/null
       +++ b/src/management/api/resources/attackProtection/resources/bruteForceProtection/exports.ts
       @@ -0,0 +1,4 @@
@@ -2662,7 +2668,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/attackProtection/resources/captcha/exports.ts b/src/management/api/resources/attackProtection/resources/captcha/exports.ts
       new file mode 100644
-      index 000000000..4b019791b
+      index 0000000000..4b019791bb
       --- /dev/null
       +++ b/src/management/api/resources/attackProtection/resources/captcha/exports.ts
       @@ -0,0 +1,4 @@
@@ -2672,7 +2678,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.ts b/src/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.ts
       new file mode 100644
-      index 000000000..b25658a40
+      index 0000000000..b25658a407
       --- /dev/null
       +++ b/src/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.ts
       @@ -0,0 +1,4 @@
@@ -2682,7 +2688,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.ts b/src/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.ts
       new file mode 100644
-      index 000000000..1c8833b7b
+      index 0000000000..1c8833b7b0
       --- /dev/null
       +++ b/src/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.ts
       @@ -0,0 +1,4 @@
@@ -2692,7 +2698,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/branding/exports.ts b/src/management/api/resources/branding/exports.ts
       new file mode 100644
-      index 000000000..71da07a0d
+      index 0000000000..71da07a0d2
       --- /dev/null
       +++ b/src/management/api/resources/branding/exports.ts
       @@ -0,0 +1,5 @@
@@ -2703,7 +2709,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/branding/resources/phone/exports.ts b/src/management/api/resources/branding/resources/phone/exports.ts
       new file mode 100644
-      index 000000000..63647e11b
+      index 0000000000..63647e11b2
       --- /dev/null
       +++ b/src/management/api/resources/branding/resources/phone/exports.ts
       @@ -0,0 +1,5 @@
@@ -2714,7 +2720,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/branding/resources/phone/resources/providers/exports.ts b/src/management/api/resources/branding/resources/phone/resources/providers/exports.ts
       new file mode 100644
-      index 000000000..ef0c482ca
+      index 0000000000..ef0c482ca6
       --- /dev/null
       +++ b/src/management/api/resources/branding/resources/phone/resources/providers/exports.ts
       @@ -0,0 +1,4 @@
@@ -2724,7 +2730,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/branding/resources/phone/resources/templates/exports.ts b/src/management/api/resources/branding/resources/phone/resources/templates/exports.ts
       new file mode 100644
-      index 000000000..3d66c02d7
+      index 0000000000..3d66c02d76
       --- /dev/null
       +++ b/src/management/api/resources/branding/resources/phone/resources/templates/exports.ts
       @@ -0,0 +1,4 @@
@@ -2734,7 +2740,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/branding/resources/templates/exports.ts b/src/management/api/resources/branding/resources/templates/exports.ts
       new file mode 100644
-      index 000000000..3d66c02d7
+      index 0000000000..3d66c02d76
       --- /dev/null
       +++ b/src/management/api/resources/branding/resources/templates/exports.ts
       @@ -0,0 +1,4 @@
@@ -2744,7 +2750,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/branding/resources/themes/exports.ts b/src/management/api/resources/branding/resources/themes/exports.ts
       new file mode 100644
-      index 000000000..2280c51fd
+      index 0000000000..2280c51fdf
       --- /dev/null
       +++ b/src/management/api/resources/branding/resources/themes/exports.ts
       @@ -0,0 +1,4 @@
@@ -2754,7 +2760,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/clientGrants/exports.ts b/src/management/api/resources/clientGrants/exports.ts
       new file mode 100644
-      index 000000000..3f2a25d7a
+      index 0000000000..3f2a25d7a2
       --- /dev/null
       +++ b/src/management/api/resources/clientGrants/exports.ts
       @@ -0,0 +1,5 @@
@@ -2765,7 +2771,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/clientGrants/resources/organizations/exports.ts b/src/management/api/resources/clientGrants/resources/organizations/exports.ts
       new file mode 100644
-      index 000000000..15329b91b
+      index 0000000000..15329b91bd
       --- /dev/null
       +++ b/src/management/api/resources/clientGrants/resources/organizations/exports.ts
       @@ -0,0 +1,4 @@
@@ -2775,7 +2781,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/clients/exports.ts b/src/management/api/resources/clients/exports.ts
       new file mode 100644
-      index 000000000..93a57edfa
+      index 0000000000..93a57edfae
       --- /dev/null
       +++ b/src/management/api/resources/clients/exports.ts
       @@ -0,0 +1,5 @@
@@ -2786,7 +2792,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/clients/resources/connections/exports.ts b/src/management/api/resources/clients/resources/connections/exports.ts
       new file mode 100644
-      index 000000000..6bbb96c4c
+      index 0000000000..6bbb96c4c5
       --- /dev/null
       +++ b/src/management/api/resources/clients/resources/connections/exports.ts
       @@ -0,0 +1,4 @@
@@ -2796,7 +2802,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/clients/resources/credentials/exports.ts b/src/management/api/resources/clients/resources/credentials/exports.ts
       new file mode 100644
-      index 000000000..4b39da599
+      index 0000000000..4b39da599f
       --- /dev/null
       +++ b/src/management/api/resources/clients/resources/credentials/exports.ts
       @@ -0,0 +1,4 @@
@@ -2806,7 +2812,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/connectionProfiles/exports.ts b/src/management/api/resources/connectionProfiles/exports.ts
       new file mode 100644
-      index 000000000..354a820b1
+      index 0000000000..354a820b12
       --- /dev/null
       +++ b/src/management/api/resources/connectionProfiles/exports.ts
       @@ -0,0 +1,4 @@
@@ -2816,7 +2822,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/connections/exports.ts b/src/management/api/resources/connections/exports.ts
       new file mode 100644
-      index 000000000..336f3117d
+      index 0000000000..336f3117df
       --- /dev/null
       +++ b/src/management/api/resources/connections/exports.ts
       @@ -0,0 +1,5 @@
@@ -2827,7 +2833,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/connections/resources/clients/exports.ts b/src/management/api/resources/connections/resources/clients/exports.ts
       new file mode 100644
-      index 000000000..9fa83201a
+      index 0000000000..9fa83201ae
       --- /dev/null
       +++ b/src/management/api/resources/connections/resources/clients/exports.ts
       @@ -0,0 +1,4 @@
@@ -2837,7 +2843,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/connections/resources/directoryProvisioning/exports.ts b/src/management/api/resources/connections/resources/directoryProvisioning/exports.ts
       new file mode 100644
-      index 000000000..79b7a9286
+      index 0000000000..79b7a92867
       --- /dev/null
       +++ b/src/management/api/resources/connections/resources/directoryProvisioning/exports.ts
       @@ -0,0 +1,5 @@
@@ -2848,7 +2854,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.ts b/src/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.ts
       new file mode 100644
-      index 000000000..ff2728526
+      index 0000000000..ff27285269
       --- /dev/null
       +++ b/src/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.ts
       @@ -0,0 +1,4 @@
@@ -2858,7 +2864,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/connections/resources/keys/exports.ts b/src/management/api/resources/connections/resources/keys/exports.ts
       new file mode 100644
-      index 000000000..53b74685a
+      index 0000000000..53b74685a2
       --- /dev/null
       +++ b/src/management/api/resources/connections/resources/keys/exports.ts
       @@ -0,0 +1,4 @@
@@ -2868,7 +2874,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/connections/resources/scimConfiguration/exports.ts b/src/management/api/resources/connections/resources/scimConfiguration/exports.ts
       new file mode 100644
-      index 000000000..70df40e60
+      index 0000000000..70df40e605
       --- /dev/null
       +++ b/src/management/api/resources/connections/resources/scimConfiguration/exports.ts
       @@ -0,0 +1,5 @@
@@ -2879,7 +2885,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.ts b/src/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.ts
       new file mode 100644
-      index 000000000..6b51ec13f
+      index 0000000000..6b51ec13fd
       --- /dev/null
       +++ b/src/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.ts
       @@ -0,0 +1,4 @@
@@ -2889,7 +2895,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/connections/resources/users/exports.ts b/src/management/api/resources/connections/resources/users/exports.ts
       new file mode 100644
-      index 000000000..788add4ed
+      index 0000000000..788add4edb
       --- /dev/null
       +++ b/src/management/api/resources/connections/resources/users/exports.ts
       @@ -0,0 +1,4 @@
@@ -2899,7 +2905,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/customDomains/exports.ts b/src/management/api/resources/customDomains/exports.ts
       new file mode 100644
-      index 000000000..f33cd45ec
+      index 0000000000..f33cd45ec6
       --- /dev/null
       +++ b/src/management/api/resources/customDomains/exports.ts
       @@ -0,0 +1,4 @@
@@ -2909,7 +2915,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/deviceCredentials/exports.ts b/src/management/api/resources/deviceCredentials/exports.ts
       new file mode 100644
-      index 000000000..6c353a325
+      index 0000000000..6c353a3253
       --- /dev/null
       +++ b/src/management/api/resources/deviceCredentials/exports.ts
       @@ -0,0 +1,4 @@
@@ -2919,7 +2925,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/emailTemplates/exports.ts b/src/management/api/resources/emailTemplates/exports.ts
       new file mode 100644
-      index 000000000..bc4a2373b
+      index 0000000000..bc4a2373be
       --- /dev/null
       +++ b/src/management/api/resources/emailTemplates/exports.ts
       @@ -0,0 +1,4 @@
@@ -2929,7 +2935,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/emails/exports.ts b/src/management/api/resources/emails/exports.ts
       new file mode 100644
-      index 000000000..0bca3fd17
+      index 0000000000..0bca3fd179
       --- /dev/null
       +++ b/src/management/api/resources/emails/exports.ts
       @@ -0,0 +1,5 @@
@@ -2940,7 +2946,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/emails/resources/provider/exports.ts b/src/management/api/resources/emails/resources/provider/exports.ts
       new file mode 100644
-      index 000000000..938a97344
+      index 0000000000..938a973442
       --- /dev/null
       +++ b/src/management/api/resources/emails/resources/provider/exports.ts
       @@ -0,0 +1,4 @@
@@ -2950,7 +2956,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/eventStreams/exports.ts b/src/management/api/resources/eventStreams/exports.ts
       new file mode 100644
-      index 000000000..2a599f4f2
+      index 0000000000..2a599f4f21
       --- /dev/null
       +++ b/src/management/api/resources/eventStreams/exports.ts
       @@ -0,0 +1,5 @@
@@ -2961,7 +2967,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/eventStreams/resources/deliveries/exports.ts b/src/management/api/resources/eventStreams/resources/deliveries/exports.ts
       new file mode 100644
-      index 000000000..45678fede
+      index 0000000000..45678fede7
       --- /dev/null
       +++ b/src/management/api/resources/eventStreams/resources/deliveries/exports.ts
       @@ -0,0 +1,4 @@
@@ -2971,7 +2977,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/eventStreams/resources/redeliveries/exports.ts b/src/management/api/resources/eventStreams/resources/redeliveries/exports.ts
       new file mode 100644
-      index 000000000..7501d1ba4
+      index 0000000000..7501d1ba45
       --- /dev/null
       +++ b/src/management/api/resources/eventStreams/resources/redeliveries/exports.ts
       @@ -0,0 +1,4 @@
@@ -2981,7 +2987,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/events/exports.ts b/src/management/api/resources/events/exports.ts
       new file mode 100644
-      index 000000000..64c4a0462
+      index 0000000000..64c4a04629
       --- /dev/null
       +++ b/src/management/api/resources/events/exports.ts
       @@ -0,0 +1,4 @@
@@ -2991,7 +2997,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/flows/exports.ts b/src/management/api/resources/flows/exports.ts
       new file mode 100644
-      index 000000000..53ca059dd
+      index 0000000000..53ca059ddb
       --- /dev/null
       +++ b/src/management/api/resources/flows/exports.ts
       @@ -0,0 +1,5 @@
@@ -3002,7 +3008,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/flows/resources/executions/exports.ts b/src/management/api/resources/flows/resources/executions/exports.ts
       new file mode 100644
-      index 000000000..07cde92cf
+      index 0000000000..07cde92cff
       --- /dev/null
       +++ b/src/management/api/resources/flows/resources/executions/exports.ts
       @@ -0,0 +1,4 @@
@@ -3012,7 +3018,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/flows/resources/vault/exports.ts b/src/management/api/resources/flows/resources/vault/exports.ts
       new file mode 100644
-      index 000000000..edd191584
+      index 0000000000..edd1915847
       --- /dev/null
       +++ b/src/management/api/resources/flows/resources/vault/exports.ts
       @@ -0,0 +1,5 @@
@@ -3023,7 +3029,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/flows/resources/vault/resources/connections/exports.ts b/src/management/api/resources/flows/resources/vault/resources/connections/exports.ts
       new file mode 100644
-      index 000000000..6bbb96c4c
+      index 0000000000..6bbb96c4c5
       --- /dev/null
       +++ b/src/management/api/resources/flows/resources/vault/resources/connections/exports.ts
       @@ -0,0 +1,4 @@
@@ -3033,7 +3039,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/forms/exports.ts b/src/management/api/resources/forms/exports.ts
       new file mode 100644
-      index 000000000..0a0bf328d
+      index 0000000000..0a0bf328dd
       --- /dev/null
       +++ b/src/management/api/resources/forms/exports.ts
       @@ -0,0 +1,4 @@
@@ -3043,7 +3049,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/groups/exports.ts b/src/management/api/resources/groups/exports.ts
       new file mode 100644
-      index 000000000..4b2f90693
+      index 0000000000..4b2f906937
       --- /dev/null
       +++ b/src/management/api/resources/groups/exports.ts
       @@ -0,0 +1,5 @@
@@ -3054,7 +3060,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/groups/resources/members/exports.ts b/src/management/api/resources/groups/resources/members/exports.ts
       new file mode 100644
-      index 000000000..e078fdc2e
+      index 0000000000..e078fdc2e6
       --- /dev/null
       +++ b/src/management/api/resources/groups/resources/members/exports.ts
       @@ -0,0 +1,4 @@
@@ -3064,7 +3070,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/groups/resources/roles/exports.ts b/src/management/api/resources/groups/resources/roles/exports.ts
       new file mode 100644
-      index 000000000..9be4df57c
+      index 0000000000..9be4df57ce
       --- /dev/null
       +++ b/src/management/api/resources/groups/resources/roles/exports.ts
       @@ -0,0 +1,4 @@
@@ -3074,7 +3080,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/guardian/exports.ts b/src/management/api/resources/guardian/exports.ts
       new file mode 100644
-      index 000000000..509239b77
+      index 0000000000..509239b77c
       --- /dev/null
       +++ b/src/management/api/resources/guardian/exports.ts
       @@ -0,0 +1,5 @@
@@ -3085,7 +3091,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/guardian/resources/enrollments/exports.ts b/src/management/api/resources/guardian/resources/enrollments/exports.ts
       new file mode 100644
-      index 000000000..504cae587
+      index 0000000000..504cae587c
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/enrollments/exports.ts
       @@ -0,0 +1,4 @@
@@ -3095,7 +3101,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/guardian/resources/factors/exports.ts b/src/management/api/resources/guardian/resources/factors/exports.ts
       new file mode 100644
-      index 000000000..63833c459
+      index 0000000000..63833c4596
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/factors/exports.ts
       @@ -0,0 +1,5 @@
@@ -3106,7 +3112,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/guardian/resources/factors/resources/duo/exports.ts b/src/management/api/resources/guardian/resources/factors/resources/duo/exports.ts
       new file mode 100644
-      index 000000000..58902e8c5
+      index 0000000000..58902e8c5c
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/factors/resources/duo/exports.ts
       @@ -0,0 +1,5 @@
@@ -3117,7 +3123,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.ts b/src/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.ts
       new file mode 100644
-      index 000000000..a6d715ac6
+      index 0000000000..a6d715ac62
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.ts
       @@ -0,0 +1,4 @@
@@ -3127,7 +3133,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/guardian/resources/factors/resources/phone/exports.ts b/src/management/api/resources/guardian/resources/factors/resources/phone/exports.ts
       new file mode 100644
-      index 000000000..694f09799
+      index 0000000000..694f097998
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/factors/resources/phone/exports.ts
       @@ -0,0 +1,4 @@
@@ -3137,7 +3143,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.ts b/src/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.ts
       new file mode 100644
-      index 000000000..654acf5da
+      index 0000000000..654acf5da4
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.ts
       @@ -0,0 +1,4 @@
@@ -3147,7 +3153,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/guardian/resources/factors/resources/sms/exports.ts b/src/management/api/resources/guardian/resources/factors/resources/sms/exports.ts
       new file mode 100644
-      index 000000000..24208cb75
+      index 0000000000..24208cb757
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/factors/resources/sms/exports.ts
       @@ -0,0 +1,4 @@
@@ -3157,7 +3163,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/guardian/resources/policies/exports.ts b/src/management/api/resources/guardian/resources/policies/exports.ts
       new file mode 100644
-      index 000000000..493ce56e0
+      index 0000000000..493ce56e03
       --- /dev/null
       +++ b/src/management/api/resources/guardian/resources/policies/exports.ts
       @@ -0,0 +1,4 @@
@@ -3167,7 +3173,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/hooks/exports.ts b/src/management/api/resources/hooks/exports.ts
       new file mode 100644
-      index 000000000..74a86a6b5
+      index 0000000000..74a86a6b55
       --- /dev/null
       +++ b/src/management/api/resources/hooks/exports.ts
       @@ -0,0 +1,5 @@
@@ -3178,7 +3184,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/hooks/resources/secrets/exports.ts b/src/management/api/resources/hooks/resources/secrets/exports.ts
       new file mode 100644
-      index 000000000..f1bfdadde
+      index 0000000000..f1bfdadde3
       --- /dev/null
       +++ b/src/management/api/resources/hooks/resources/secrets/exports.ts
       @@ -0,0 +1,4 @@
@@ -3188,7 +3194,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/jobs/exports.ts b/src/management/api/resources/jobs/exports.ts
       new file mode 100644
-      index 000000000..c85c9f577
+      index 0000000000..c85c9f5778
       --- /dev/null
       +++ b/src/management/api/resources/jobs/exports.ts
       @@ -0,0 +1,5 @@
@@ -3199,7 +3205,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/jobs/resources/errors/exports.ts b/src/management/api/resources/jobs/resources/errors/exports.ts
       new file mode 100644
-      index 000000000..dc240bda9
+      index 0000000000..dc240bda90
       --- /dev/null
       +++ b/src/management/api/resources/jobs/resources/errors/exports.ts
       @@ -0,0 +1,4 @@
@@ -3209,7 +3215,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/jobs/resources/usersExports/exports.ts b/src/management/api/resources/jobs/resources/usersExports/exports.ts
       new file mode 100644
-      index 000000000..cd318d811
+      index 0000000000..cd318d8112
       --- /dev/null
       +++ b/src/management/api/resources/jobs/resources/usersExports/exports.ts
       @@ -0,0 +1,4 @@
@@ -3219,7 +3225,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/jobs/resources/usersImports/exports.ts b/src/management/api/resources/jobs/resources/usersImports/exports.ts
       new file mode 100644
-      index 000000000..5b81de590
+      index 0000000000..5b81de5903
       --- /dev/null
       +++ b/src/management/api/resources/jobs/resources/usersImports/exports.ts
       @@ -0,0 +1,4 @@
@@ -3229,7 +3235,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/jobs/resources/verificationEmail/exports.ts b/src/management/api/resources/jobs/resources/verificationEmail/exports.ts
       new file mode 100644
-      index 000000000..fa9a18466
+      index 0000000000..fa9a184666
       --- /dev/null
       +++ b/src/management/api/resources/jobs/resources/verificationEmail/exports.ts
       @@ -0,0 +1,4 @@
@@ -3239,7 +3245,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/keys/exports.ts b/src/management/api/resources/keys/exports.ts
       new file mode 100644
-      index 000000000..d73c8b7d3
+      index 0000000000..d73c8b7d36
       --- /dev/null
       +++ b/src/management/api/resources/keys/exports.ts
       @@ -0,0 +1,5 @@
@@ -3250,7 +3256,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/keys/resources/customSigning/exports.ts b/src/management/api/resources/keys/resources/customSigning/exports.ts
       new file mode 100644
-      index 000000000..3c682fa97
+      index 0000000000..3c682fa971
       --- /dev/null
       +++ b/src/management/api/resources/keys/resources/customSigning/exports.ts
       @@ -0,0 +1,4 @@
@@ -3260,7 +3266,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/keys/resources/encryption/exports.ts b/src/management/api/resources/keys/resources/encryption/exports.ts
       new file mode 100644
-      index 000000000..fd5d22893
+      index 0000000000..fd5d228939
       --- /dev/null
       +++ b/src/management/api/resources/keys/resources/encryption/exports.ts
       @@ -0,0 +1,4 @@
@@ -3270,7 +3276,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/keys/resources/signing/exports.ts b/src/management/api/resources/keys/resources/signing/exports.ts
       new file mode 100644
-      index 000000000..0e8a05b32
+      index 0000000000..0e8a05b329
       --- /dev/null
       +++ b/src/management/api/resources/keys/resources/signing/exports.ts
       @@ -0,0 +1,4 @@
@@ -3280,7 +3286,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/logStreams/exports.ts b/src/management/api/resources/logStreams/exports.ts
       new file mode 100644
-      index 000000000..091008507
+      index 0000000000..0910085073
       --- /dev/null
       +++ b/src/management/api/resources/logStreams/exports.ts
       @@ -0,0 +1,4 @@
@@ -3290,7 +3296,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/logs/exports.ts b/src/management/api/resources/logs/exports.ts
       new file mode 100644
-      index 000000000..99a6fbb71
+      index 0000000000..99a6fbb713
       --- /dev/null
       +++ b/src/management/api/resources/logs/exports.ts
       @@ -0,0 +1,4 @@
@@ -3300,7 +3306,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/networkAcls/exports.ts b/src/management/api/resources/networkAcls/exports.ts
       new file mode 100644
-      index 000000000..d8815fb95
+      index 0000000000..d8815fb95e
       --- /dev/null
       +++ b/src/management/api/resources/networkAcls/exports.ts
       @@ -0,0 +1,4 @@
@@ -3310,7 +3316,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/exports.ts b/src/management/api/resources/organizations/exports.ts
       new file mode 100644
-      index 000000000..73c32ccf7
+      index 0000000000..73c32ccf77
       --- /dev/null
       +++ b/src/management/api/resources/organizations/exports.ts
       @@ -0,0 +1,5 @@
@@ -3321,7 +3327,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/organizations/resources/clientGrants/exports.ts b/src/management/api/resources/organizations/resources/clientGrants/exports.ts
       new file mode 100644
-      index 000000000..5457a2b91
+      index 0000000000..5457a2b91a
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/clientGrants/exports.ts
       @@ -0,0 +1,4 @@
@@ -3331,7 +3337,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/connections/exports.ts b/src/management/api/resources/organizations/resources/connections/exports.ts
       new file mode 100644
-      index 000000000..6bbb96c4c
+      index 0000000000..6bbb96c4c5
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/connections/exports.ts
       @@ -0,0 +1,4 @@
@@ -3341,7 +3347,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/discoveryDomains/exports.ts b/src/management/api/resources/organizations/resources/discoveryDomains/exports.ts
       new file mode 100644
-      index 000000000..8975ba340
+      index 0000000000..8975ba340f
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/discoveryDomains/exports.ts
       @@ -0,0 +1,4 @@
@@ -3351,7 +3357,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/enabledConnections/exports.ts b/src/management/api/resources/organizations/resources/enabledConnections/exports.ts
       new file mode 100644
-      index 000000000..be023333c
+      index 0000000000..be023333c4
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/enabledConnections/exports.ts
       @@ -0,0 +1,4 @@
@@ -3361,7 +3367,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/groups/exports.ts b/src/management/api/resources/organizations/resources/groups/exports.ts
       new file mode 100644
-      index 000000000..4b2f90693
+      index 0000000000..4b2f906937
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/groups/exports.ts
       @@ -0,0 +1,5 @@
@@ -3372,7 +3378,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/organizations/resources/groups/resources/roles/exports.ts b/src/management/api/resources/organizations/resources/groups/resources/roles/exports.ts
       new file mode 100644
-      index 000000000..9be4df57c
+      index 0000000000..9be4df57ce
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/groups/resources/roles/exports.ts
       @@ -0,0 +1,4 @@
@@ -3382,7 +3388,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/invitations/exports.ts b/src/management/api/resources/organizations/resources/invitations/exports.ts
       new file mode 100644
-      index 000000000..912df7e34
+      index 0000000000..912df7e345
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/invitations/exports.ts
       @@ -0,0 +1,4 @@
@@ -3392,7 +3398,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/members/exports.ts b/src/management/api/resources/organizations/resources/members/exports.ts
       new file mode 100644
-      index 000000000..648c2b3e2
+      index 0000000000..648c2b3e2e
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/members/exports.ts
       @@ -0,0 +1,5 @@
@@ -3403,7 +3409,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.ts b/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.ts
       new file mode 100644
-      index 000000000..4da46c652
+      index 0000000000..4da46c652f
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.ts
       @@ -0,0 +1,5 @@
@@ -3414,7 +3420,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.ts b/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.ts
       new file mode 100644
-      index 000000000..684deea38
+      index 0000000000..684deea389
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.ts
       @@ -0,0 +1,5 @@
@@ -3425,7 +3431,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.ts b/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.ts
       new file mode 100644
-      index 000000000..35ab81e43
+      index 0000000000..35ab81e434
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.ts
       @@ -0,0 +1,4 @@
@@ -3435,7 +3441,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/members/resources/roles/exports.ts b/src/management/api/resources/organizations/resources/members/resources/roles/exports.ts
       new file mode 100644
-      index 000000000..9be4df57c
+      index 0000000000..9be4df57ce
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/members/resources/roles/exports.ts
       @@ -0,0 +1,4 @@
@@ -3445,7 +3451,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/organizations/resources/roles/exports.ts b/src/management/api/resources/organizations/resources/roles/exports.ts
       new file mode 100644
-      index 000000000..45a7efa85
+      index 0000000000..45a7efa852
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/roles/exports.ts
       @@ -0,0 +1,5 @@
@@ -3456,7 +3462,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/organizations/resources/roles/resources/members/exports.ts b/src/management/api/resources/organizations/resources/roles/resources/members/exports.ts
       new file mode 100644
-      index 000000000..e078fdc2e
+      index 0000000000..e078fdc2e6
       --- /dev/null
       +++ b/src/management/api/resources/organizations/resources/roles/resources/members/exports.ts
       @@ -0,0 +1,4 @@
@@ -3466,7 +3472,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/prompts/exports.ts b/src/management/api/resources/prompts/exports.ts
       new file mode 100644
-      index 000000000..6c5b4bf4d
+      index 0000000000..6c5b4bf4d5
       --- /dev/null
       +++ b/src/management/api/resources/prompts/exports.ts
       @@ -0,0 +1,5 @@
@@ -3477,7 +3483,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/prompts/resources/customText/exports.ts b/src/management/api/resources/prompts/resources/customText/exports.ts
       new file mode 100644
-      index 000000000..67e8d4148
+      index 0000000000..67e8d4148f
       --- /dev/null
       +++ b/src/management/api/resources/prompts/resources/customText/exports.ts
       @@ -0,0 +1,4 @@
@@ -3487,7 +3493,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/prompts/resources/partials/exports.ts b/src/management/api/resources/prompts/resources/partials/exports.ts
       new file mode 100644
-      index 000000000..73f64c2e1
+      index 0000000000..73f64c2e15
       --- /dev/null
       +++ b/src/management/api/resources/prompts/resources/partials/exports.ts
       @@ -0,0 +1,4 @@
@@ -3497,7 +3503,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/prompts/resources/rendering/exports.ts b/src/management/api/resources/prompts/resources/rendering/exports.ts
       new file mode 100644
-      index 000000000..75ccfde7d
+      index 0000000000..75ccfde7d1
       --- /dev/null
       +++ b/src/management/api/resources/prompts/resources/rendering/exports.ts
       @@ -0,0 +1,4 @@
@@ -3507,7 +3513,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/rateLimitPolicies/exports.ts b/src/management/api/resources/rateLimitPolicies/exports.ts
       new file mode 100644
-      index 000000000..224a3fe83
+      index 0000000000..224a3fe83e
       --- /dev/null
       +++ b/src/management/api/resources/rateLimitPolicies/exports.ts
       @@ -0,0 +1,4 @@
@@ -3517,7 +3523,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/refreshTokens/exports.ts b/src/management/api/resources/refreshTokens/exports.ts
       new file mode 100644
-      index 000000000..39f6b165f
+      index 0000000000..39f6b165f8
       --- /dev/null
       +++ b/src/management/api/resources/refreshTokens/exports.ts
       @@ -0,0 +1,4 @@
@@ -3527,7 +3533,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/resourceServers/exports.ts b/src/management/api/resources/resourceServers/exports.ts
       new file mode 100644
-      index 000000000..bc58971c7
+      index 0000000000..bc58971c7c
       --- /dev/null
       +++ b/src/management/api/resources/resourceServers/exports.ts
       @@ -0,0 +1,4 @@
@@ -3537,7 +3543,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/riskAssessments/exports.ts b/src/management/api/resources/riskAssessments/exports.ts
       new file mode 100644
-      index 000000000..524a62c21
+      index 0000000000..524a62c218
       --- /dev/null
       +++ b/src/management/api/resources/riskAssessments/exports.ts
       @@ -0,0 +1,5 @@
@@ -3548,7 +3554,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/riskAssessments/resources/settings/exports.ts b/src/management/api/resources/riskAssessments/resources/settings/exports.ts
       new file mode 100644
-      index 000000000..9de5d6aea
+      index 0000000000..9de5d6aeab
       --- /dev/null
       +++ b/src/management/api/resources/riskAssessments/resources/settings/exports.ts
       @@ -0,0 +1,5 @@
@@ -3559,7 +3565,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.ts b/src/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.ts
       new file mode 100644
-      index 000000000..9577a6eed
+      index 0000000000..9577a6eedc
       --- /dev/null
       +++ b/src/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.ts
       @@ -0,0 +1,4 @@
@@ -3569,7 +3575,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/roles/exports.ts b/src/management/api/resources/roles/exports.ts
       new file mode 100644
-      index 000000000..45a7efa85
+      index 0000000000..45a7efa852
       --- /dev/null
       +++ b/src/management/api/resources/roles/exports.ts
       @@ -0,0 +1,5 @@
@@ -3580,7 +3586,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/roles/resources/groups/exports.ts b/src/management/api/resources/roles/resources/groups/exports.ts
       new file mode 100644
-      index 000000000..35ab81e43
+      index 0000000000..35ab81e434
       --- /dev/null
       +++ b/src/management/api/resources/roles/resources/groups/exports.ts
       @@ -0,0 +1,4 @@
@@ -3590,7 +3596,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/roles/resources/permissions/exports.ts b/src/management/api/resources/roles/resources/permissions/exports.ts
       new file mode 100644
-      index 000000000..4691acb6b
+      index 0000000000..4691acb6ba
       --- /dev/null
       +++ b/src/management/api/resources/roles/resources/permissions/exports.ts
       @@ -0,0 +1,4 @@
@@ -3600,7 +3606,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/roles/resources/users/exports.ts b/src/management/api/resources/roles/resources/users/exports.ts
       new file mode 100644
-      index 000000000..788add4ed
+      index 0000000000..788add4edb
       --- /dev/null
       +++ b/src/management/api/resources/roles/resources/users/exports.ts
       @@ -0,0 +1,4 @@
@@ -3610,7 +3616,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/rules/exports.ts b/src/management/api/resources/rules/exports.ts
       new file mode 100644
-      index 000000000..818b33428
+      index 0000000000..818b33428f
       --- /dev/null
       +++ b/src/management/api/resources/rules/exports.ts
       @@ -0,0 +1,4 @@
@@ -3620,7 +3626,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/rulesConfigs/exports.ts b/src/management/api/resources/rulesConfigs/exports.ts
       new file mode 100644
-      index 000000000..06a24153c
+      index 0000000000..06a24153c7
       --- /dev/null
       +++ b/src/management/api/resources/rulesConfigs/exports.ts
       @@ -0,0 +1,4 @@
@@ -3630,7 +3636,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/selfServiceProfiles/exports.ts b/src/management/api/resources/selfServiceProfiles/exports.ts
       new file mode 100644
-      index 000000000..d97b34eb7
+      index 0000000000..d97b34eb77
       --- /dev/null
       +++ b/src/management/api/resources/selfServiceProfiles/exports.ts
       @@ -0,0 +1,5 @@
@@ -3641,7 +3647,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/selfServiceProfiles/resources/customText/exports.ts b/src/management/api/resources/selfServiceProfiles/resources/customText/exports.ts
       new file mode 100644
-      index 000000000..67e8d4148
+      index 0000000000..67e8d4148f
       --- /dev/null
       +++ b/src/management/api/resources/selfServiceProfiles/resources/customText/exports.ts
       @@ -0,0 +1,4 @@
@@ -3651,7 +3657,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.ts b/src/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.ts
       new file mode 100644
-      index 000000000..9f2dc8da4
+      index 0000000000..9f2dc8da46
       --- /dev/null
       +++ b/src/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.ts
       @@ -0,0 +1,4 @@
@@ -3661,7 +3667,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/sessions/exports.ts b/src/management/api/resources/sessions/exports.ts
       new file mode 100644
-      index 000000000..989fb8a75
+      index 0000000000..989fb8a75f
       --- /dev/null
       +++ b/src/management/api/resources/sessions/exports.ts
       @@ -0,0 +1,4 @@
@@ -3671,7 +3677,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/stats/exports.ts b/src/management/api/resources/stats/exports.ts
       new file mode 100644
-      index 000000000..e0ff35f5e
+      index 0000000000..e0ff35f5e5
       --- /dev/null
       +++ b/src/management/api/resources/stats/exports.ts
       @@ -0,0 +1,4 @@
@@ -3681,7 +3687,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/supplementalSignals/exports.ts b/src/management/api/resources/supplementalSignals/exports.ts
       new file mode 100644
-      index 000000000..4a9aa493e
+      index 0000000000..4a9aa493e4
       --- /dev/null
       +++ b/src/management/api/resources/supplementalSignals/exports.ts
       @@ -0,0 +1,4 @@
@@ -3691,7 +3697,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/tenants/exports.ts b/src/management/api/resources/tenants/exports.ts
       new file mode 100644
-      index 000000000..e163288e2
+      index 0000000000..e163288e2f
       --- /dev/null
       +++ b/src/management/api/resources/tenants/exports.ts
       @@ -0,0 +1,5 @@
@@ -3702,7 +3708,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/tenants/resources/settings/exports.ts b/src/management/api/resources/tenants/resources/settings/exports.ts
       new file mode 100644
-      index 000000000..a6d715ac6
+      index 0000000000..a6d715ac62
       --- /dev/null
       +++ b/src/management/api/resources/tenants/resources/settings/exports.ts
       @@ -0,0 +1,4 @@
@@ -3712,7 +3718,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/tickets/exports.ts b/src/management/api/resources/tickets/exports.ts
       new file mode 100644
-      index 000000000..6b2593b85
+      index 0000000000..6b2593b859
       --- /dev/null
       +++ b/src/management/api/resources/tickets/exports.ts
       @@ -0,0 +1,4 @@
@@ -3722,7 +3728,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/tokenExchangeProfiles/exports.ts b/src/management/api/resources/tokenExchangeProfiles/exports.ts
       new file mode 100644
-      index 000000000..cba38caff
+      index 0000000000..cba38caff2
       --- /dev/null
       +++ b/src/management/api/resources/tokenExchangeProfiles/exports.ts
       @@ -0,0 +1,4 @@
@@ -3732,7 +3738,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/userAttributeProfiles/exports.ts b/src/management/api/resources/userAttributeProfiles/exports.ts
       new file mode 100644
-      index 000000000..f9e751d39
+      index 0000000000..f9e751d39e
       --- /dev/null
       +++ b/src/management/api/resources/userAttributeProfiles/exports.ts
       @@ -0,0 +1,4 @@
@@ -3742,7 +3748,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/userBlocks/exports.ts b/src/management/api/resources/userBlocks/exports.ts
       new file mode 100644
-      index 000000000..759020928
+      index 0000000000..7590209287
       --- /dev/null
       +++ b/src/management/api/resources/userBlocks/exports.ts
       @@ -0,0 +1,4 @@
@@ -3752,7 +3758,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/userGrants/exports.ts b/src/management/api/resources/userGrants/exports.ts
       new file mode 100644
-      index 000000000..b1a306c72
+      index 0000000000..b1a306c72a
       --- /dev/null
       +++ b/src/management/api/resources/userGrants/exports.ts
       @@ -0,0 +1,4 @@
@@ -3762,7 +3768,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/exports.ts b/src/management/api/resources/users/exports.ts
       new file mode 100644
-      index 000000000..10da7ffd0
+      index 0000000000..10da7ffd02
       --- /dev/null
       +++ b/src/management/api/resources/users/exports.ts
       @@ -0,0 +1,5 @@
@@ -3773,7 +3779,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/users/resources/authenticationMethods/exports.ts b/src/management/api/resources/users/resources/authenticationMethods/exports.ts
       new file mode 100644
-      index 000000000..c07b0a38b
+      index 0000000000..c07b0a38bb
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/authenticationMethods/exports.ts
       @@ -0,0 +1,4 @@
@@ -3783,7 +3789,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/authenticators/exports.ts b/src/management/api/resources/users/resources/authenticators/exports.ts
       new file mode 100644
-      index 000000000..2ce53cd09
+      index 0000000000..2ce53cd091
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/authenticators/exports.ts
       @@ -0,0 +1,4 @@
@@ -3793,7 +3799,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/connectedAccounts/exports.ts b/src/management/api/resources/users/resources/connectedAccounts/exports.ts
       new file mode 100644
-      index 000000000..506c92351
+      index 0000000000..506c92351e
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/connectedAccounts/exports.ts
       @@ -0,0 +1,4 @@
@@ -3803,7 +3809,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/effectivePermissions/exports.ts b/src/management/api/resources/users/resources/effectivePermissions/exports.ts
       new file mode 100644
-      index 000000000..b8e8487dd
+      index 0000000000..b8e8487dd3
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/effectivePermissions/exports.ts
       @@ -0,0 +1,5 @@
@@ -3814,7 +3820,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.ts b/src/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.ts
       new file mode 100644
-      index 000000000..684deea38
+      index 0000000000..684deea389
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.ts
       @@ -0,0 +1,5 @@
@@ -3825,7 +3831,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.ts b/src/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.ts
       new file mode 100644
-      index 000000000..9be4df57c
+      index 0000000000..9be4df57ce
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.ts
       @@ -0,0 +1,4 @@
@@ -3835,7 +3841,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/effectiveRoles/exports.ts b/src/management/api/resources/users/resources/effectiveRoles/exports.ts
       new file mode 100644
-      index 000000000..4da46c652
+      index 0000000000..4da46c652f
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/effectiveRoles/exports.ts
       @@ -0,0 +1,5 @@
@@ -3846,7 +3852,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.ts b/src/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.ts
       new file mode 100644
-      index 000000000..684deea38
+      index 0000000000..684deea389
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.ts
       @@ -0,0 +1,5 @@
@@ -3857,7 +3863,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.ts b/src/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.ts
       new file mode 100644
-      index 000000000..35ab81e43
+      index 0000000000..35ab81e434
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.ts
       @@ -0,0 +1,4 @@
@@ -3867,7 +3873,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/enrollments/exports.ts b/src/management/api/resources/users/resources/enrollments/exports.ts
       new file mode 100644
-      index 000000000..504cae587
+      index 0000000000..504cae587c
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/enrollments/exports.ts
       @@ -0,0 +1,4 @@
@@ -3877,7 +3883,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/groups/exports.ts b/src/management/api/resources/users/resources/groups/exports.ts
       new file mode 100644
-      index 000000000..35ab81e43
+      index 0000000000..35ab81e434
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/groups/exports.ts
       @@ -0,0 +1,4 @@
@@ -3887,7 +3893,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/identities/exports.ts b/src/management/api/resources/users/resources/identities/exports.ts
       new file mode 100644
-      index 000000000..b015cb57c
+      index 0000000000..b015cb57ce
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/identities/exports.ts
       @@ -0,0 +1,4 @@
@@ -3897,7 +3903,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/logs/exports.ts b/src/management/api/resources/users/resources/logs/exports.ts
       new file mode 100644
-      index 000000000..99a6fbb71
+      index 0000000000..99a6fbb713
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/logs/exports.ts
       @@ -0,0 +1,4 @@
@@ -3907,7 +3913,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/multifactor/exports.ts b/src/management/api/resources/users/resources/multifactor/exports.ts
       new file mode 100644
-      index 000000000..f21a8f5e3
+      index 0000000000..f21a8f5e36
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/multifactor/exports.ts
       @@ -0,0 +1,4 @@
@@ -3917,7 +3923,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/organizations/exports.ts b/src/management/api/resources/users/resources/organizations/exports.ts
       new file mode 100644
-      index 000000000..15329b91b
+      index 0000000000..15329b91bd
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/organizations/exports.ts
       @@ -0,0 +1,4 @@
@@ -3927,7 +3933,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/permissions/exports.ts b/src/management/api/resources/users/resources/permissions/exports.ts
       new file mode 100644
-      index 000000000..4691acb6b
+      index 0000000000..4691acb6ba
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/permissions/exports.ts
       @@ -0,0 +1,4 @@
@@ -3937,7 +3943,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/refreshToken/exports.ts b/src/management/api/resources/users/resources/refreshToken/exports.ts
       new file mode 100644
-      index 000000000..0d48014d3
+      index 0000000000..0d48014d30
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/refreshToken/exports.ts
       @@ -0,0 +1,4 @@
@@ -3947,7 +3953,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/riskAssessments/exports.ts b/src/management/api/resources/users/resources/riskAssessments/exports.ts
       new file mode 100644
-      index 000000000..7b0a6f04f
+      index 0000000000..7b0a6f04f1
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/riskAssessments/exports.ts
       @@ -0,0 +1,4 @@
@@ -3957,7 +3963,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/roles/exports.ts b/src/management/api/resources/users/resources/roles/exports.ts
       new file mode 100644
-      index 000000000..9be4df57c
+      index 0000000000..9be4df57ce
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/roles/exports.ts
       @@ -0,0 +1,4 @@
@@ -3967,7 +3973,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/users/resources/sessions/exports.ts b/src/management/api/resources/users/resources/sessions/exports.ts
       new file mode 100644
-      index 000000000..989fb8a75
+      index 0000000000..989fb8a75f
       --- /dev/null
       +++ b/src/management/api/resources/users/resources/sessions/exports.ts
       @@ -0,0 +1,4 @@
@@ -3977,7 +3983,7 @@ patches:
       +export * from "./client/index.js";
       diff --git a/src/management/api/resources/verifiableCredentials/exports.ts b/src/management/api/resources/verifiableCredentials/exports.ts
       new file mode 100644
-      index 000000000..dd0ffc6f8
+      index 0000000000..dd0ffc6f82
       --- /dev/null
       +++ b/src/management/api/resources/verifiableCredentials/exports.ts
       @@ -0,0 +1,5 @@
@@ -3988,7 +3994,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/verifiableCredentials/resources/verification/exports.ts b/src/management/api/resources/verifiableCredentials/resources/verification/exports.ts
       new file mode 100644
-      index 000000000..3743e5a75
+      index 0000000000..3743e5a75d
       --- /dev/null
       +++ b/src/management/api/resources/verifiableCredentials/resources/verification/exports.ts
       @@ -0,0 +1,5 @@
@@ -3999,7 +4005,7 @@ patches:
       +export * from "./resources/index.js";
       diff --git a/src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.ts b/src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.ts
       new file mode 100644
-      index 000000000..3d66c02d7
+      index 0000000000..3d66c02d76
       --- /dev/null
       +++ b/src/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.ts
       @@ -0,0 +1,4 @@
@@ -4011,7 +4017,7 @@ patches:
       package.json: |
         {
             "name": "auth0",
-            "version": "6.0.0",
+            "version": "7.9.0",
             "private": false,
             "repository": {
                 "type": "git",
@@ -5640,6 +5646,17 @@ patches:
                         "types": "./legacy/exports/index.d.ts",
                         "default": "./legacy/exports/index.js"
                     }
+                },
+                "./management": {
+                    "import": {
+                        "types": "./dist/esm/management/index.d.mts",
+                        "default": "./dist/esm/management/index.mjs"
+                    },
+                    "require": {
+                        "types": "./dist/cjs/management/index.d.ts",
+                        "default": "./dist/cjs/management/index.js"
+                    },
+                    "default": "./dist/cjs/management/index.js"
                 }
             },
             "files": [
@@ -6505,7 +6522,6 @@ patches:
 
         export { TemplatesClient } from "./client/Client.js";
         export * from "./client/index.js";
-    status: unresolved
   - id: patch-74170bb0
     content_hash: sha256:a625af4233f0553a1dd43855453b1e03807f4d3526809f2765e17e9ee7dc3968
     original_commit: 74170bb0a59981fb32da389ac8d21b61e75d921d
@@ -8279,7 +8295,7 @@ patches:
     original_commit: 0f7baa6fa58a2944cd9e39abbfd8caf7be8d7e8c
     original_message: "fix: auto-stamp SDK_VERSION from package.json during build (#1382)"
     original_author: Ankita Tripathi <51994119+ankita10119@users.noreply.github.com>
-    base_generation: 33e21ba09b5b8a9ccf35c58834f5aa8ac6d23bec
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - .shiprc
     patch_content: |
@@ -13756,7 +13772,7 @@ patches:
     original_commit: b942f5d6b1b5f3e565f3315f12421c58ae005bec
     original_message: "docs: add Authentication API migration guide (auth0-auth-js / auth0-server-js) (#1395)"
     original_author: tusharpandey13 <tushar.pandey@okta.com>
-    base_generation: 33e21ba09b5b8a9ccf35c58834f5aa8ac6d23bec
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - AUTH_MIGRATION_GUIDE.md
       - auth-migration/authentication-flows.md
@@ -16156,7 +16172,7 @@ patches:
     original_commit: 842d2f5189493b78e420c17c968c80bc239e143a
     original_message: "docs: add v7 migration guide (v6 → v7) (#1396)"
     original_author: tusharpandey13 <tushar.pandey@okta.com>
-    base_generation: 33e21ba09b5b8a9ccf35c58834f5aa8ac6d23bec
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - v7_MIGRATION_GUIDE.md
     patch_content: |
@@ -16462,39 +16478,1626 @@ patches:
         Plan the move to `@auth0/auth0-auth-js` / `@auth0/auth0-server-js` rather than treating the legacy entrypoint as permanent.
     user_owned: true
   - id: patch-d4614ec0
-    content_hash: sha256:3bddaebb2f4f87e69acb89d72b12d9ebf5886dd366e08365f64ff967b7278633
+    content_hash: sha256:12df5e7b6deec4c4c671897e0a1b527a918d12585d2341ee5b420c8b37105b00
     original_commit: d4614ec0d8d599523f7637eb6feb4e190c3bbffd
     original_message: Release v7.0.0 (#1402)
     original_author: tusharpandey13 <tushar.pandey@okta.com>
-    base_generation: a4c40be61ad5d92ccd75fcc353dd2d968b26e767
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - package.json
       - src/management/version.ts
     patch_content: |
       diff --git a/package.json b/package.json
-      index 8d52ba6d3..0b9a0baa6 100644
+      index f13beb40b2..f15150bb28 100644
       --- a/package.json
       +++ b/package.json
-      @@ -1,6 +1,6 @@
-       {
-           "name": "auth0",
-      -    "version": "6.4.0",
-      +    "version": "7.0.0",
-           "private": false,
-           "repository": {
-               "type": "git",
-      diff --git a/src/management/version.ts b/src/management/version.ts
-      index 1420c1686..6bb53d57b 100644
-      --- a/src/management/version.ts
-      +++ b/src/management/version.ts
-      @@ -1 +1 @@
-      -export const SDK_VERSION = "6.4.0";
-      +export const SDK_VERSION = "7.0.0";
+      @@ -23,6 +23,1601 @@
+                   },
+                   "default": "./dist/cjs/index.js"
+               },
+      +        "./management": {
+      +            "import": {
+      +                "types": "./dist/esm/management/index.d.mts",
+      +                "default": "./dist/esm/management/index.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/index.d.ts",
+      +                "default": "./dist/cjs/management/index.js"
+      +            },
+      +            "default": "./dist/cjs/management/index.js"
+      +        },
+      +        "./actions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/actions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/actions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/actions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/actions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/actions/exports.js"
+      +        },
+      +        "./branding": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/branding/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/branding/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/branding/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/branding/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/branding/exports.js"
+      +        },
+      +        "./clientGrants": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/clientGrants/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/clientGrants/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/clientGrants/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/clientGrants/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/clientGrants/exports.js"
+      +        },
+      +        "./clients": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/clients/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/clients/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/clients/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/clients/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/clients/exports.js"
+      +        },
+      +        "./connectionProfiles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connectionProfiles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connectionProfiles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connectionProfiles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connectionProfiles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connectionProfiles/exports.js"
+      +        },
+      +        "./connections": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/exports.js"
+      +        },
+      +        "./customDomains": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/customDomains/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/customDomains/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/customDomains/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/customDomains/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/customDomains/exports.js"
+      +        },
+      +        "./deviceCredentials": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/deviceCredentials/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/deviceCredentials/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/deviceCredentials/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/deviceCredentials/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/deviceCredentials/exports.js"
+      +        },
+      +        "./emailTemplates": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/emailTemplates/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/emailTemplates/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/emailTemplates/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/emailTemplates/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/emailTemplates/exports.js"
+      +        },
+      +        "./eventStreams": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/eventStreams/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/eventStreams/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/eventStreams/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/eventStreams/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/eventStreams/exports.js"
+      +        },
+      +        "./events": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/events/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/events/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/events/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/events/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/events/exports.js"
+      +        },
+      +        "./flows": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/flows/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/flows/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/flows/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/flows/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/flows/exports.js"
+      +        },
+      +        "./forms": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/forms/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/forms/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/forms/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/forms/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/forms/exports.js"
+      +        },
+      +        "./userGrants": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/userGrants/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/userGrants/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/userGrants/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/userGrants/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/userGrants/exports.js"
+      +        },
+      +        "./groups": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/groups/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/groups/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/groups/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/groups/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/groups/exports.js"
+      +        },
+      +        "./hooks": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/hooks/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/hooks/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/hooks/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/hooks/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/hooks/exports.js"
+      +        },
+      +        "./jobs": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/jobs/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/jobs/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/jobs/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/jobs/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/jobs/exports.js"
+      +        },
+      +        "./logStreams": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/logStreams/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/logStreams/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/logStreams/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/logStreams/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/logStreams/exports.js"
+      +        },
+      +        "./logs": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/logs/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/logs/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/logs/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/logs/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/logs/exports.js"
+      +        },
+      +        "./networkAcls": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/networkAcls/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/networkAcls/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/networkAcls/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/networkAcls/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/networkAcls/exports.js"
+      +        },
+      +        "./organizations": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/exports.js"
+      +        },
+      +        "./prompts": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/prompts/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/prompts/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/prompts/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/prompts/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/prompts/exports.js"
+      +        },
+      +        "./rateLimitPolicies": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/rateLimitPolicies/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/rateLimitPolicies/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/rateLimitPolicies/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/rateLimitPolicies/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/rateLimitPolicies/exports.js"
+      +        },
+      +        "./refreshTokens": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/refreshTokens/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/refreshTokens/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/refreshTokens/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/refreshTokens/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/refreshTokens/exports.js"
+      +        },
+      +        "./resourceServers": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/resourceServers/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/resourceServers/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/resourceServers/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/resourceServers/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/resourceServers/exports.js"
+      +        },
+      +        "./roles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/roles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/roles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/roles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/roles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/roles/exports.js"
+      +        },
+      +        "./rules": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/rules/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/rules/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/rules/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/rules/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/rules/exports.js"
+      +        },
+      +        "./rulesConfigs": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/rulesConfigs/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/rulesConfigs/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/rulesConfigs/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/rulesConfigs/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/rulesConfigs/exports.js"
+      +        },
+      +        "./selfServiceProfiles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/selfServiceProfiles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/selfServiceProfiles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/selfServiceProfiles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/selfServiceProfiles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/selfServiceProfiles/exports.js"
+      +        },
+      +        "./sessions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/sessions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/sessions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/sessions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/sessions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/sessions/exports.js"
+      +        },
+      +        "./stats": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/stats/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/stats/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/stats/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/stats/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/stats/exports.js"
+      +        },
+      +        "./supplementalSignals": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/supplementalSignals/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/supplementalSignals/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/supplementalSignals/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/supplementalSignals/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/supplementalSignals/exports.js"
+      +        },
+      +        "./tickets": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/tickets/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/tickets/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/tickets/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/tickets/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/tickets/exports.js"
+      +        },
+      +        "./tokenExchangeProfiles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/tokenExchangeProfiles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/tokenExchangeProfiles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/tokenExchangeProfiles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/tokenExchangeProfiles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/tokenExchangeProfiles/exports.js"
+      +        },
+      +        "./userAttributeProfiles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/userAttributeProfiles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/userAttributeProfiles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/userAttributeProfiles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/userAttributeProfiles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/userAttributeProfiles/exports.js"
+      +        },
+      +        "./userBlocks": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/userBlocks/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/userBlocks/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/userBlocks/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/userBlocks/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/userBlocks/exports.js"
+      +        },
+      +        "./users": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/exports.js"
+      +        },
+      +        "./actions/versions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/actions/resources/versions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/actions/resources/versions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/actions/resources/versions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/actions/resources/versions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/actions/resources/versions/exports.js"
+      +        },
+      +        "./actions/executions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/actions/resources/executions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/actions/resources/executions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/actions/resources/executions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/actions/resources/executions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/actions/resources/executions/exports.js"
+      +        },
+      +        "./actions/modules": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/actions/resources/modules/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/actions/resources/modules/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/actions/resources/modules/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/actions/resources/modules/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/actions/resources/modules/exports.js"
+      +        },
+      +        "./actions/triggers": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/actions/resources/triggers/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/actions/resources/triggers/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/actions/resources/triggers/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/actions/resources/triggers/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/actions/resources/triggers/exports.js"
+      +        },
+      +        "./actions/modules/versions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/actions/resources/modules/resources/versions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/actions/resources/modules/resources/versions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/actions/resources/modules/resources/versions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/actions/resources/modules/resources/versions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/actions/resources/modules/resources/versions/exports.js"
+      +        },
+      +        "./actions/triggers/bindings": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/actions/resources/triggers/resources/bindings/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/actions/resources/triggers/resources/bindings/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/actions/resources/triggers/resources/bindings/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/actions/resources/triggers/resources/bindings/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/actions/resources/triggers/resources/bindings/exports.js"
+      +        },
+      +        "./anomaly": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/anomaly/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/anomaly/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/anomaly/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/anomaly/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/anomaly/exports.js"
+      +        },
+      +        "./anomaly/blocks": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/anomaly/resources/blocks/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/anomaly/resources/blocks/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/anomaly/resources/blocks/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/anomaly/resources/blocks/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/anomaly/resources/blocks/exports.js"
+      +        },
+      +        "./attackProtection": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/attackProtection/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/attackProtection/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/attackProtection/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/attackProtection/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/attackProtection/exports.js"
+      +        },
+      +        "./attackProtection/botDetection": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/attackProtection/resources/botDetection/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/attackProtection/resources/botDetection/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/attackProtection/resources/botDetection/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/attackProtection/resources/botDetection/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/attackProtection/resources/botDetection/exports.js"
+      +        },
+      +        "./attackProtection/breachedPasswordDetection": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/attackProtection/resources/breachedPasswordDetection/exports.js"
+      +        },
+      +        "./attackProtection/bruteForceProtection": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/attackProtection/resources/bruteForceProtection/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/attackProtection/resources/bruteForceProtection/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/attackProtection/resources/bruteForceProtection/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/attackProtection/resources/bruteForceProtection/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/attackProtection/resources/bruteForceProtection/exports.js"
+      +        },
+      +        "./attackProtection/captcha": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/attackProtection/resources/captcha/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/attackProtection/resources/captcha/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/attackProtection/resources/captcha/exports.js"
+      +        },
+      +        "./attackProtection/phoneProviderProtection": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/attackProtection/resources/phoneProviderProtection/exports.js"
+      +        },
+      +        "./attackProtection/suspiciousIpThrottling": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/attackProtection/resources/suspiciousIpThrottling/exports.js"
+      +        },
+      +        "./branding/templates": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/branding/resources/templates/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/branding/resources/templates/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/branding/resources/templates/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/branding/resources/templates/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/branding/resources/templates/exports.js"
+      +        },
+      +        "./branding/themes": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/branding/resources/themes/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/branding/resources/themes/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/branding/resources/themes/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/branding/resources/themes/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/branding/resources/themes/exports.js"
+      +        },
+      +        "./branding/phone": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/branding/resources/phone/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/branding/resources/phone/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/branding/resources/phone/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/branding/resources/phone/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/branding/resources/phone/exports.js"
+      +        },
+      +        "./branding/phone/providers": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/branding/resources/phone/resources/providers/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/branding/resources/phone/resources/providers/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/branding/resources/phone/resources/providers/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/providers/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/providers/exports.js"
+      +        },
+      +        "./branding/phone/templates": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/branding/resources/phone/resources/templates/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/branding/resources/phone/resources/templates/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/branding/resources/phone/resources/templates/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/templates/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/branding/resources/phone/resources/templates/exports.js"
+      +        },
+      +        "./clientGrants/organizations": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/clientGrants/resources/organizations/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/clientGrants/resources/organizations/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/clientGrants/resources/organizations/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/clientGrants/resources/organizations/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/clientGrants/resources/organizations/exports.js"
+      +        },
+      +        "./clients/credentials": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/clients/resources/credentials/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/clients/resources/credentials/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/clients/resources/credentials/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/clients/resources/credentials/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/clients/resources/credentials/exports.js"
+      +        },
+      +        "./clients/connections": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/clients/resources/connections/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/clients/resources/connections/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/clients/resources/connections/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/clients/resources/connections/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/clients/resources/connections/exports.js"
+      +        },
+      +        "./connections/directoryProvisioning": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/exports.js"
+      +        },
+      +        "./connections/scimConfiguration": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/exports.js"
+      +        },
+      +        "./connections/clients": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/resources/clients/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/resources/clients/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/resources/clients/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/resources/clients/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/resources/clients/exports.js"
+      +        },
+      +        "./connections/keys": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/resources/keys/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/resources/keys/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/resources/keys/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/resources/keys/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/resources/keys/exports.js"
+      +        },
+      +        "./connections/users": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/resources/users/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/resources/users/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/resources/users/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/resources/users/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/resources/users/exports.js"
+      +        },
+      +        "./connections/directoryProvisioning/synchronizations": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/resources/directoryProvisioning/resources/synchronizations/exports.js"
+      +        },
+      +        "./connections/scimConfiguration/tokens": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/connections/resources/scimConfiguration/resources/tokens/exports.js"
+      +        },
+      +        "./emails": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/emails/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/emails/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/emails/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/emails/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/emails/exports.js"
+      +        },
+      +        "./emails/provider": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/emails/resources/provider/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/emails/resources/provider/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/emails/resources/provider/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/emails/resources/provider/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/emails/resources/provider/exports.js"
+      +        },
+      +        "./eventStreams/deliveries": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/eventStreams/resources/deliveries/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/eventStreams/resources/deliveries/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/eventStreams/resources/deliveries/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/eventStreams/resources/deliveries/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/eventStreams/resources/deliveries/exports.js"
+      +        },
+      +        "./eventStreams/redeliveries": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/eventStreams/resources/redeliveries/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/eventStreams/resources/redeliveries/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/eventStreams/resources/redeliveries/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/eventStreams/resources/redeliveries/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/eventStreams/resources/redeliveries/exports.js"
+      +        },
+      +        "./flows/executions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/flows/resources/executions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/flows/resources/executions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/flows/resources/executions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/flows/resources/executions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/flows/resources/executions/exports.js"
+      +        },
+      +        "./flows/vault": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/flows/resources/vault/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/flows/resources/vault/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/flows/resources/vault/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/flows/resources/vault/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/flows/resources/vault/exports.js"
+      +        },
+      +        "./flows/vault/connections": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/flows/resources/vault/resources/connections/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/flows/resources/vault/resources/connections/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/flows/resources/vault/resources/connections/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/flows/resources/vault/resources/connections/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/flows/resources/vault/resources/connections/exports.js"
+      +        },
+      +        "./groups/members": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/groups/resources/members/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/groups/resources/members/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/groups/resources/members/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/groups/resources/members/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/groups/resources/members/exports.js"
+      +        },
+      +        "./groups/roles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/groups/resources/roles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/groups/resources/roles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/groups/resources/roles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/groups/resources/roles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/groups/resources/roles/exports.js"
+      +        },
+      +        "./guardian": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/exports.js"
+      +        },
+      +        "./guardian/enrollments": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/enrollments/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/enrollments/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/enrollments/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/enrollments/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/enrollments/exports.js"
+      +        },
+      +        "./guardian/factors": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/factors/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/factors/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/exports.js"
+      +        },
+      +        "./guardian/policies": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/policies/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/policies/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/policies/exports.js"
+      +        },
+      +        "./guardian/factors/phone": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/phone/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/phone/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/phone/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/phone/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/phone/exports.js"
+      +        },
+      +        "./guardian/factors/pushNotification": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/pushNotification/exports.js"
+      +        },
+      +        "./guardian/factors/sms": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/sms/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/sms/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/sms/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/sms/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/sms/exports.js"
+      +        },
+      +        "./guardian/factors/duo": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/exports.js"
+      +        },
+      +        "./guardian/factors/duo/settings": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/guardian/resources/factors/resources/duo/resources/settings/exports.js"
+      +        },
+      +        "./hooks/secrets": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/hooks/resources/secrets/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/hooks/resources/secrets/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/hooks/resources/secrets/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/hooks/resources/secrets/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/hooks/resources/secrets/exports.js"
+      +        },
+      +        "./jobs/usersExports": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/jobs/resources/usersExports/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/jobs/resources/usersExports/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/jobs/resources/usersExports/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/jobs/resources/usersExports/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/jobs/resources/usersExports/exports.js"
+      +        },
+      +        "./jobs/usersImports": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/jobs/resources/usersImports/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/jobs/resources/usersImports/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/jobs/resources/usersImports/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/jobs/resources/usersImports/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/jobs/resources/usersImports/exports.js"
+      +        },
+      +        "./jobs/verificationEmail": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/jobs/resources/verificationEmail/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/jobs/resources/verificationEmail/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/jobs/resources/verificationEmail/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/jobs/resources/verificationEmail/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/jobs/resources/verificationEmail/exports.js"
+      +        },
+      +        "./jobs/errors": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/jobs/resources/errors/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/jobs/resources/errors/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/jobs/resources/errors/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/jobs/resources/errors/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/jobs/resources/errors/exports.js"
+      +        },
+      +        "./keys": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/keys/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/keys/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/keys/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/keys/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/keys/exports.js"
+      +        },
+      +        "./keys/customSigning": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/keys/resources/customSigning/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/keys/resources/customSigning/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/keys/resources/customSigning/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/keys/resources/customSigning/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/keys/resources/customSigning/exports.js"
+      +        },
+      +        "./keys/encryption": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/keys/resources/encryption/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/keys/resources/encryption/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.js"
+      +        },
+      +        "./keys/signing": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/keys/resources/signing/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/keys/resources/signing/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/keys/resources/signing/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/keys/resources/signing/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/keys/resources/signing/exports.js"
+      +        },
+      +        "./organizations/clientGrants": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/clientGrants/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/clientGrants/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.js"
+      +        },
+      +        "./organizations/connections": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/connections/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/connections/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/connections/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/connections/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/connections/exports.js"
+      +        },
+      +        "./organizations/discoveryDomains": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/discoveryDomains/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/discoveryDomains/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/discoveryDomains/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/discoveryDomains/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/discoveryDomains/exports.js"
+      +        },
+      +        "./organizations/enabledConnections": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/enabledConnections/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/enabledConnections/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/enabledConnections/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/enabledConnections/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/enabledConnections/exports.js"
+      +        },
+      +        "./organizations/invitations": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/invitations/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/invitations/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/invitations/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/invitations/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/invitations/exports.js"
+      +        },
+      +        "./organizations/members": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/members/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/members/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/members/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
+      +        },
+      +        "./organizations/groups": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/groups/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/groups/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/groups/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/groups/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/groups/exports.js"
+      +        },
+      +        "./organizations/groups/roles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/groups/resources/roles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/groups/resources/roles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/groups/resources/roles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/groups/resources/roles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/groups/resources/roles/exports.js"
+      +        },
+      +        "./organizations/members/effectiveRoles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/exports.js"
+      +        },
+      +        "./organizations/members/roles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/members/resources/roles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/members/resources/roles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/members/resources/roles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/roles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/roles/exports.js"
+      +        },
+      +        "./organizations/members/effectiveRoles/sources": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/exports.js"
+      +        },
+      +        "./organizations/members/effectiveRoles/sources/groups": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/members/resources/effectiveRoles/resources/sources/resources/groups/exports.js"
+      +        },
+      +        "./organizations/roles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/roles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/roles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/roles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/roles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/roles/exports.js"
+      +        },
+      +        "./organizations/roles/members": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/organizations/resources/roles/resources/members/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/organizations/resources/roles/resources/members/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/members/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/members/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/members/exports.js"
+      +        },
+      +        "./prompts/rendering": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/prompts/resources/rendering/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/prompts/resources/rendering/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/prompts/resources/rendering/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/prompts/resources/rendering/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/prompts/resources/rendering/exports.js"
+      +        },
+      +        "./prompts/customText": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/prompts/resources/customText/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/prompts/resources/customText/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/prompts/resources/customText/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/prompts/resources/customText/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/prompts/resources/customText/exports.js"
+      +        },
+      +        "./prompts/partials": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/prompts/resources/partials/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/prompts/resources/partials/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/prompts/resources/partials/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/prompts/resources/partials/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/prompts/resources/partials/exports.js"
+      +        },
+      +        "./riskAssessments": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/riskAssessments/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/riskAssessments/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/riskAssessments/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/riskAssessments/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/riskAssessments/exports.js"
+      +        },
+      +        "./riskAssessments/settings": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/riskAssessments/resources/settings/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/riskAssessments/resources/settings/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/exports.js"
+      +        },
+      +        "./riskAssessments/settings/newDevice": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/riskAssessments/resources/settings/resources/newDevice/exports.js"
+      +        },
+      +        "./roles/groups": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/roles/resources/groups/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/roles/resources/groups/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/roles/resources/groups/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/roles/resources/groups/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/roles/resources/groups/exports.js"
+      +        },
+      +        "./roles/permissions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/roles/resources/permissions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/roles/resources/permissions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/roles/resources/permissions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/roles/resources/permissions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/roles/resources/permissions/exports.js"
+      +        },
+      +        "./roles/users": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/roles/resources/users/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/roles/resources/users/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/roles/resources/users/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/roles/resources/users/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/roles/resources/users/exports.js"
+      +        },
+      +        "./selfServiceProfiles/customText": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/selfServiceProfiles/resources/customText/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/selfServiceProfiles/resources/customText/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/customText/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/customText/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/customText/exports.js"
+      +        },
+      +        "./selfServiceProfiles/ssoTicket": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/selfServiceProfiles/resources/ssoTicket/exports.js"
+      +        },
+      +        "./tenants": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/tenants/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/tenants/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/tenants/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/tenants/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/tenants/exports.js"
+      +        },
+      +        "./tenants/settings": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/tenants/resources/settings/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/tenants/resources/settings/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/tenants/resources/settings/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/tenants/resources/settings/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/tenants/resources/settings/exports.js"
+      +        },
+      +        "./users/authenticationMethods": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/authenticationMethods/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/authenticationMethods/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/authenticationMethods/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/authenticationMethods/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/authenticationMethods/exports.js"
+      +        },
+      +        "./users/authenticators": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/authenticators/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/authenticators/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/authenticators/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/authenticators/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/authenticators/exports.js"
+      +        },
+      +        "./users/connectedAccounts": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/connectedAccounts/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/connectedAccounts/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/connectedAccounts/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/connectedAccounts/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/connectedAccounts/exports.js"
+      +        },
+      +        "./users/effectivePermissions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/effectivePermissions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/effectivePermissions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/exports.js"
+      +        },
+      +        "./users/effectiveRoles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/effectiveRoles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/effectiveRoles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/exports.js"
+      +        },
+      +        "./users/enrollments": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/enrollments/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/enrollments/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/enrollments/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/enrollments/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/enrollments/exports.js"
+      +        },
+      +        "./users/groups": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/groups/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/groups/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/groups/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/groups/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/groups/exports.js"
+      +        },
+      +        "./users/identities": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/identities/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/identities/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/identities/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/identities/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/identities/exports.js"
+      +        },
+      +        "./users/logs": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/logs/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/logs/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/logs/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/logs/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/logs/exports.js"
+      +        },
+      +        "./users/multifactor": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/multifactor/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/multifactor/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/multifactor/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/multifactor/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/multifactor/exports.js"
+      +        },
+      +        "./users/organizations": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/organizations/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/organizations/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/organizations/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/organizations/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/organizations/exports.js"
+      +        },
+      +        "./users/permissions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/permissions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/permissions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/permissions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/permissions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/permissions/exports.js"
+      +        },
+      +        "./users/riskAssessments": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/riskAssessments/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/riskAssessments/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/riskAssessments/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/riskAssessments/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/riskAssessments/exports.js"
+      +        },
+      +        "./users/roles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/roles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/roles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/roles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/roles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/roles/exports.js"
+      +        },
+      +        "./users/refreshToken": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/refreshToken/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/refreshToken/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/refreshToken/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/refreshToken/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/refreshToken/exports.js"
+      +        },
+      +        "./users/sessions": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/sessions/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/sessions/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/sessions/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/sessions/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/sessions/exports.js"
+      +        },
+      +        "./users/effectivePermissions/sources": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/resources/sources/exports.js"
+      +        },
+      +        "./users/effectivePermissions/sources/roles": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/effectivePermissions/resources/sources/resources/roles/exports.js"
+      +        },
+      +        "./users/effectiveRoles/sources": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/resources/sources/exports.js"
+      +        },
+      +        "./users/effectiveRoles/sources/groups": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/users/resources/effectiveRoles/resources/sources/resources/groups/exports.js"
+      +        },
+      +        "./verifiableCredentials": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/verifiableCredentials/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/verifiableCredentials/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/verifiableCredentials/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/verifiableCredentials/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/verifiableCredentials/exports.js"
+      +        },
+      +        "./verifiableCredentials/verification": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/exports.js"
+      +        },
+      +        "./verifiableCredentials/verification/templates": {
+      +            "import": {
+      +                "types": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.d.mts",
+      +                "default": "./dist/esm/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.mjs"
+      +            },
+      +            "require": {
+      +                "types": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.d.ts",
+      +                "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.js"
+      +            },
+      +            "default": "./dist/cjs/management/api/resources/verifiableCredentials/resources/verification/resources/templates/exports.js"
+      +        },
+               "./package.json": "./package.json",
+               "./legacy": {
+                   "types": "./legacy/exports/index.d.ts",
     theirs_snapshot:
       package.json: |
         {
             "name": "auth0",
-            "version": "7.0.0",
+            "version": "7.9.0",
             "private": false,
             "repository": {
                 "type": "git",
@@ -16517,6 +18120,17 @@ patches:
                     },
                     "default": "./dist/cjs/index.js"
                 },
+                "./management": {
+                    "import": {
+                        "types": "./dist/esm/management/index.d.mts",
+                        "default": "./dist/esm/management/index.mjs"
+                    },
+                    "require": {
+                        "types": "./dist/cjs/management/index.d.ts",
+                        "default": "./dist/cjs/management/index.js"
+                    },
+                    "default": "./dist/cjs/management/index.js"
+                },
                 "./actions": {
                     "import": {
                         "types": "./dist/esm/management/api/resources/actions/exports.d.mts",
@@ -16527,17 +18141,6 @@ patches:
                         "default": "./dist/cjs/management/api/resources/actions/exports.js"
                     },
                     "default": "./dist/cjs/management/api/resources/actions/exports.js"
-                },
-                "./agents": {
-                    "import": {
-                        "types": "./dist/esm/management/api/resources/agents/exports.d.mts",
-                        "default": "./dist/esm/management/api/resources/agents/exports.mjs"
-                    },
-                    "require": {
-                        "types": "./dist/cjs/management/api/resources/agents/exports.d.ts",
-                        "default": "./dist/cjs/management/api/resources/agents/exports.js"
-                    },
-                    "default": "./dist/cjs/management/api/resources/agents/exports.js"
                 },
                 "./branding": {
                     "import": {
@@ -16747,17 +18350,6 @@ patches:
                         "default": "./dist/cjs/management/api/resources/networkAcls/exports.js"
                     },
                     "default": "./dist/cjs/management/api/resources/networkAcls/exports.js"
-                },
-                "./organizationTemplates": {
-                    "import": {
-                        "types": "./dist/esm/management/api/resources/organizationTemplates/exports.d.mts",
-                        "default": "./dist/esm/management/api/resources/organizationTemplates/exports.mjs"
-                    },
-                    "require": {
-                        "types": "./dist/cjs/management/api/resources/organizationTemplates/exports.d.ts",
-                        "default": "./dist/cjs/management/api/resources/organizationTemplates/exports.js"
-                    },
-                    "default": "./dist/cjs/management/api/resources/organizationTemplates/exports.js"
                 },
                 "./organizations": {
                     "import": {
@@ -17562,17 +19154,6 @@ patches:
                     },
                     "default": "./dist/cjs/management/api/resources/keys/resources/encryption/exports.js"
                 },
-                "./keys/networkAcls": {
-                    "import": {
-                        "types": "./dist/esm/management/api/resources/keys/resources/networkAcls/exports.d.mts",
-                        "default": "./dist/esm/management/api/resources/keys/resources/networkAcls/exports.mjs"
-                    },
-                    "require": {
-                        "types": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.d.ts",
-                        "default": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.js"
-                    },
-                    "default": "./dist/cjs/management/api/resources/keys/resources/networkAcls/exports.js"
-                },
                 "./keys/signing": {
                     "import": {
                         "types": "./dist/esm/management/api/resources/keys/resources/signing/exports.d.mts",
@@ -17594,17 +19175,6 @@ patches:
                         "default": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.js"
                     },
                     "default": "./dist/cjs/management/api/resources/organizations/resources/clientGrants/exports.js"
-                },
-                "./organizations/clients": {
-                    "import": {
-                        "types": "./dist/esm/management/api/resources/organizations/resources/clients/exports.d.mts",
-                        "default": "./dist/esm/management/api/resources/organizations/resources/clients/exports.mjs"
-                    },
-                    "require": {
-                        "types": "./dist/cjs/management/api/resources/organizations/resources/clients/exports.d.ts",
-                        "default": "./dist/cjs/management/api/resources/organizations/resources/clients/exports.js"
-                    },
-                    "default": "./dist/cjs/management/api/resources/organizations/resources/clients/exports.js"
                 },
                 "./organizations/connections": {
                     "import": {
@@ -17660,17 +19230,6 @@ patches:
                         "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
                     },
                     "default": "./dist/cjs/management/api/resources/organizations/resources/members/exports.js"
-                },
-                "./organizations/organizationTemplate": {
-                    "import": {
-                        "types": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.d.mts",
-                        "default": "./dist/esm/management/api/resources/organizations/resources/organizationTemplate/exports.mjs"
-                    },
-                    "require": {
-                        "types": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.d.ts",
-                        "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
-                    },
-                    "default": "./dist/cjs/management/api/resources/organizations/resources/organizationTemplate/exports.js"
                 },
                 "./organizations/groups": {
                     "import": {
@@ -17759,17 +19318,6 @@ patches:
                         "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/members/exports.js"
                     },
                     "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/members/exports.js"
-                },
-                "./organizations/roles/groups": {
-                    "import": {
-                        "types": "./dist/esm/management/api/resources/organizations/resources/roles/resources/groups/exports.d.mts",
-                        "default": "./dist/esm/management/api/resources/organizations/resources/roles/resources/groups/exports.mjs"
-                    },
-                    "require": {
-                        "types": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/groups/exports.d.ts",
-                        "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/groups/exports.js"
-                    },
-                    "default": "./dist/cjs/management/api/resources/organizations/resources/roles/resources/groups/exports.js"
                 },
                 "./prompts/rendering": {
                     "import": {
@@ -18226,6 +19774,7 @@ patches:
                 "validate": "yarn lint:check && yarn format --check && yarn build && yarn test && yarn lint:package"
             },
             "dependencies": {
+                "uuid": "^11.1.1",
                 "jose": "^5.0.0",
                 "auth0-legacy": "npm:auth0@^4.37.1"
             },
@@ -18292,8 +19841,7 @@ patches:
             }
         }
       src/management/version.ts: |
-        export const SDK_VERSION = "7.0.0";
-    status: unresolved
+        export const SDK_VERSION = "7.9.0";
   - id: patch-e1e90b89
     content_hash: sha256:782bc97057fa4ab960e1ff03f9f052fd6152e4b7f9371ca9ac7452c2ed298cd7
     original_commit: e1e90b89a0a8bfc8c1b69c93d5d8c89dfa2966f1
@@ -27667,7 +29215,7 @@ patches:
     original_commit: 456afefce9a6ae6305f65307b3a19e7b2a801199
     original_message: "feat: enhance domain validation for ManagementClient and related components"
     original_author: Amit Singh <amitk.singh@okta.com>
-    base_generation: 33e21ba09b5b8a9ccf35c58834f5aa8ac6d23bec
+    base_generation: 6e86bf4a135ffa65fc6c7c1517e41b3289e27f43
     files:
       - v7_MIGRATION_GUIDE.md
     patch_content: |
